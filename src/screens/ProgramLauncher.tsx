@@ -98,14 +98,16 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   <Text style={styles.confirmButtonText}>Confirm</Text>
                 </TouchableOpacity>
               </View>
-              <DateTimePicker
-                value={startDate}
-                mode="date"
-                display="spinner"
-                onChange={handleDateChange}
-                minimumDate={new Date()}
-                style={styles.datePicker}
-              />
+              <View style={styles.datePickerWrapper}>
+                <DateTimePicker
+                  value={startDate}
+                  mode="date"
+                  display="spinner"
+                  onChange={handleDateChange}
+                  minimumDate={new Date()}
+                  style={styles.datePicker}
+                />
+              </View>
             </View>
           )}
           {Platform.OS === 'android' && (
@@ -200,6 +202,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#2A2A2A',
     paddingBottom: 40,
+    alignItems: 'center',
   },
   datePickerHeader: {
     flexDirection: 'row',
@@ -232,8 +235,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
   },
+  datePickerWrapper: {
+    alignItems: 'center',
+    width: '100%',
+  },
   datePicker: {
     backgroundColor: '#1E1E1E',
+    alignSelf: 'center',
   },
 });
 
