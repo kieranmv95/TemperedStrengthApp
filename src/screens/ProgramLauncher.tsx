@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Platform,
+  Modal,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { programs, Program } from '../utils/program';
@@ -20,11 +21,17 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   onProgramSelected,
 }) => {
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+  const [showProgramDetails, setShowProgramDetails] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
 
   const handleSelectProgram = (program: Program) => {
     setSelectedProgram(program);
+    setShowProgramDetails(true);
+  };
+
+  const handleStartProgram = () => {
+    setShowProgramDetails(false);
     setShowDatePicker(true);
   };
 
@@ -78,6 +85,62 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           </TouchableOpacity>
         ))}
       </ScrollView>
+
+      <Modal
+        visible={showProgramDetails}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowProgramDetails(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.programDetailsModal}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>
+                {selectedProgram?.name || 'Program Details'}
+              </Text>
+              <TouchableOpacity
+                onPress={() => setShowProgramDetails(false)}
+                style={styles.closeButton}
+              >
+                <Text style={styles.closeButtonText}>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={styles.modalContent}>
+              <Text style={styles.programDescription}>
+                {selectedProgram?.description}
+              </Text>
+
+              <Text style={styles.sectionTitle}>Program Overview</Text>
+              <View style={styles.statsContainer}>
+                <View style={styles.statItem}>
+                  <Text style={styles.statValue}>{selectedProgram?.workouts.length}</Text>
+                  <Text style={styles.statLabel}>Workouts</Text>
+                </View>
+              </View>
+
+              <Text style={styles.sectionTitle}>Workouts</Text>
+              {selectedProgram?.workouts.map((workout, index) => (
+                <View key={index} style={styles.workoutItem}>
+                  <Text style={styles.workoutLabel}>{workout.label}</Text>
+                  <Text style={styles.workoutExercises}>
+                    {workout.exercises.length} exercises
+                  </Text>
+                </View>
+              ))}
+            </ScrollView>
+
+            <View style={styles.modalFooter}>
+              <TouchableOpacity
+                style={styles.startProgramButton}
+                onPress={handleStartProgram}
+              >
+                <Text style={styles.startProgramButtonText}>Start Program</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       {showDatePicker && (
         <>
@@ -242,6 +305,123 @@ const styles = StyleSheet.create({
   datePicker: {
     backgroundColor: '#1E1E1E',
     alignSelf: 'center',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'flex-end',
+  },
+  programDetailsModal: {
+    backgroundColor: '#1E1E1E',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 24,
+    maxHeight: '90%',
+    borderWidth: 1,
+    borderColor: '#2A2A2A',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalTitle: {
+    color: '#FFFFFF',
+    fontSize: 24,
+    fontWeight: '700',
+    flex: 1,
+  },
+  closeButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#2A2A2A',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closeButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  modalContent: {
+    maxHeight: 400,
+  },
+  programDescription: {
+    color: '#CCC',
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 16,
+    marginTop: 8,
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 24,
+  },
+  statItem: {
+    backgroundColor: '#2A2A2A',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    minWidth: 100,
+  },
+  statValue: {
+    color: '#00E676',
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  statLabel: {
+    color: '#888',
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  workoutItem: {
+    backgroundColor: '#2A2A2A',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#333',
+  },
+  workoutLabel: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  workoutExercises: {
+    color: '#888',
+    fontSize: 14,
+  },
+  modalFooter: {
+    marginTop: 24,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#2A2A2A',
+  },
+  startProgramButton: {
+    backgroundColor: '#00E676',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+  },
+  startProgramButtonText: {
+    color: '#121212',
+    fontSize: 16,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
 });
 
