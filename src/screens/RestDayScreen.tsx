@@ -1,20 +1,35 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Workout } from '../utils/program';
+import { DaySelector } from '../components/DaySelector';
 
 interface RestDayScreenProps {
   nextWorkout: Workout | null;
+  startDate: string;
+  workoutDayIndices: number[];
+  currentDayIndex: number;
   onViewNextWorkout: () => void;
   onSkipToNextWorkout: () => void;
+  onDaySelect: (dayIndex: number) => void;
 }
 
 export const RestDayScreen: React.FC<RestDayScreenProps> = ({
   nextWorkout,
+  startDate,
+  workoutDayIndices,
+  currentDayIndex,
   onViewNextWorkout,
   onSkipToNextWorkout,
+  onDaySelect,
 }) => {
   return (
     <SafeAreaView style={styles.container}>
+      <DaySelector
+        startDate={startDate}
+        workoutDayIndices={workoutDayIndices}
+        currentDayIndex={currentDayIndex}
+        onDaySelect={onDaySelect}
+      />
       <View style={styles.content}>
         <View style={styles.iconContainer}>
           <Text style={styles.icon}>💤</Text>

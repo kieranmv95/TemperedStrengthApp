@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import { CoachFeedback } from "../components/CoachFeedback";
+import { DaySelector } from "../components/DaySelector";
 import { ExerciseCard } from "../components/ExerciseCard";
 import { SettingsModal } from "../components/SettingsModal";
 import { SwapModal } from "../components/SwapModal";
@@ -41,6 +42,11 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [currentWorkout, setCurrentWorkout] = useState<Workout | null>(null);
   const [nextWorkout, setNextWorkout] = useState<Workout | null>(null);
   const [dayIndex, setDayIndex] = useState<number | null>(null);
+  const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null);
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [program, setProgram] = useState<ReturnType<
+    typeof getProgramById
+  > | null>(null);
   const [isRestDay, setIsRestDay] = useState(false);
   const [loading, setLoading] = useState(true);
   const [swapModalVisible, setSwapModalVisible] = useState(false);
@@ -61,55 +67,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
   };
-
-  const loadWorkoutData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const programId = await getActiveProgramId();
-      const startDate = await getProgramStartDate();
-
-      if (!programId || !startDate) {
-        // No program selected, should show ProgramLauncher
-        setLoading(false);
-        return;
-      }
-
-      const program = getProgramById(programId);
-      if (!program) {
-        console.error("Program not found:", programId);
-        setLoading(false);
-        return;
-      }
-
-      const daysSinceStart = calculateDaysSinceStart(startDate);
-      setDayIndex(daysSinceStart);
-
-      // Find workout for today
-      const workout = program.workouts.find(
-        (w) => w.dayIndex === daysSinceStart
-      );
-
-      if (workout) {
-        setCurrentWorkout(workout);
-        setIsRestDay(false);
-        await loadExerciseSlots(workout, daysSinceStart);
-      } else {
-        setIsRestDay(true);
-        // Find next workout
-        const next = program.workouts.find((w) => w.dayIndex > daysSinceStart);
-        setNextWorkout(next || null);
-      }
-
-      setLoading(false);
-    } catch (error) {
-      console.error("Error loading workout data:", error);
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadWorkoutData();
-  }, [loadWorkoutData]);
 
   const loadExerciseSlots = async (workout: Workout, dayIdx: number) => {
     try {
@@ -132,13 +89,82 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     }
   };
 
+  const loadWorkoutForDay = useCallback(
+    async (dayIdx: number, programData?: ReturnType<typeof getProgramById>) => {
+      const programToUse = programData || program;
+      if (!programToUse) return;
+
+      // Find workout for the selected day
+      const workout = programToUse.workouts.find((w) => w.dayIndex === dayIdx);
+
+      if (workout) {
+        setCurrentWorkout(workout);
+        setIsRestDay(false);
+        await loadExerciseSlots(workout, dayIdx);
+      } else {
+        setIsRestDay(true);
+        // Find next workout
+        const next = programToUse.workouts.find((w) => w.dayIndex > dayIdx);
+        setNextWorkout(next || null);
+        setCurrentWorkout(null);
+        setSlots([]);
+      }
+    },
+    [program]
+  );
+
+  const loadWorkoutData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const programId = await getActiveProgramId();
+      const savedStartDate = await getProgramStartDate();
+
+      if (!programId || !savedStartDate) {
+        // No program selected, should show ProgramLauncher
+        setLoading(false);
+        return;
+      }
+
+      const loadedProgram = getProgramById(programId);
+      if (!loadedProgram) {
+        console.error("Program not found:", programId);
+        setLoading(false);
+        return;
+      }
+
+      setProgram(loadedProgram);
+      setStartDate(savedStartDate);
+
+      const daysSinceStart = calculateDaysSinceStart(savedStartDate);
+      setDayIndex(daysSinceStart);
+      setSelectedDayIndex(daysSinceStart);
+
+      // Load workout for today
+      await loadWorkoutForDay(daysSinceStart, loadedProgram);
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error loading workout data:", error);
+      setLoading(false);
+    }
+  }, [loadWorkoutForDay]);
+
+  useEffect(() => {
+    loadWorkoutData();
+  }, [loadWorkoutData]);
+
+  const handleDaySelect = async (dayIdx: number) => {
+    setSelectedDayIndex(dayIdx);
+    await loadWorkoutForDay(dayIdx);
+  };
+
   const handleSwapClick = (slotNumber: number) => {
     setCurrentSwapSlot(slotNumber);
     setSwapModalVisible(true);
   };
 
   const handleSelectExercise = async (exerciseId: string) => {
-    if (currentSwapSlot !== null && dayIndex !== null) {
+    if (currentSwapSlot !== null && selectedDayIndex !== null) {
       const newSlots = [...slots];
       newSlots[currentSwapSlot - 1] = {
         ...newSlots[currentSwapSlot - 1],
@@ -147,7 +173,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       setSlots(newSlots);
 
       // Save the swap
-      await saveExerciseSwap(dayIndex, currentSwapSlot - 1, exerciseId);
+      await saveExerciseSwap(selectedDayIndex, currentSwapSlot - 1, exerciseId);
     }
   };
 
@@ -187,15 +213,21 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     );
   }
 
+  const workoutDayIndices = program?.workouts.map((w) => w.dayIndex) || [];
+
   if (isRestDay) {
     return (
       <RestDayScreen
         nextWorkout={nextWorkout}
+        startDate={startDate || ""}
+        workoutDayIndices={workoutDayIndices}
+        currentDayIndex={selectedDayIndex || dayIndex || 0}
         onViewNextWorkout={() => {
           // For now, just show the next workout info
           // Could implement a preview modal
         }}
         onSkipToNextWorkout={handleSkipToNextWorkout}
+        onDaySelect={handleDaySelect}
       />
     );
   }
@@ -212,6 +244,14 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
   return (
     <SafeAreaView style={styles.container}>
+      {startDate && dayIndex !== null && (
+        <DaySelector
+          startDate={startDate}
+          workoutDayIndices={workoutDayIndices}
+          currentDayIndex={selectedDayIndex || dayIndex}
+          onDaySelect={handleDaySelect}
+        />
+      )}
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.content}
@@ -239,7 +279,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             exerciseId={slot.exerciseId}
             programExercise={slot.programExercise}
             slotNumber={index + 1}
-            dayIndex={dayIndex}
+            dayIndex={selectedDayIndex}
             slotIndex={index}
             onSwap={() => handleSwapClick(index + 1)}
             onSetLogged={handleSetLogged}
