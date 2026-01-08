@@ -9,7 +9,13 @@ import {
 } from "react-native";
 import { getExerciseById } from "../data/exercises";
 import { Exercise as ProgramExercise } from "../utils/program";
-import { getLoggedSets, hasLoggedSets, saveLoggedSet } from "../utils/storage";
+import {
+  clearLoggedSet,
+  getCustomSetCount,
+  getLoggedSets,
+  saveCustomSetCount,
+  saveLoggedSet,
+} from "../utils/storage";
 
 interface ExerciseCardProps {
   exerciseId: string | null;
@@ -34,22 +40,25 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     Map<number, "completed" | "failed">
   >(new Map());
   const [loading, setLoading] = useState(false);
-  const [hasAnyLoggedSets, setHasAnyLoggedSets] = useState(false);
   const saveTimersRef = useRef<{
     [key: number]: ReturnType<typeof setTimeout>;
   }>({});
 
   const exercise = exerciseId ? getExerciseById(exerciseId) : null;
-  const numberOfSets = programExercise?.sets || 1;
+  const defaultNumberOfSets = programExercise?.sets || 1;
+  const [numberOfSets, setNumberOfSets] = useState(defaultNumberOfSets);
 
-  // Load logged sets from storage
+  // Load custom set count and logged sets from storage
   useEffect(() => {
-    const loadLoggedSets = async () => {
+    const loadData = async () => {
       if (dayIndex !== null && programExercise) {
         try {
+          // Load custom set count
+          const customCount = await getCustomSetCount(dayIndex, slotIndex);
+          const actualSetCount = customCount ?? defaultNumberOfSets;
+          setNumberOfSets(actualSetCount);
+
           const savedSets = await getLoggedSets(dayIndex, slotIndex);
-          const hasLogged = await hasLoggedSets(dayIndex, slotIndex);
-          setHasAnyLoggedSets(hasLogged);
 
           // Initialize arrays with saved data or empty strings
           const initialWeights: string[] = [];
@@ -57,7 +66,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           const initialSetStates: Map<number, "completed" | "failed"> =
             new Map();
 
-          for (let i = 0; i < numberOfSets; i++) {
+          for (let i = 0; i < actualSetCount; i++) {
             if (savedSets[i]) {
               initialWeights[i] = savedSets[i].weight.toString();
               initialReps[i] = savedSets[i].reps.toString();
@@ -78,21 +87,23 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           setReps(initialReps);
           setSetStates(initialSetStates);
         } catch (error) {
-          console.error("Error loading logged sets:", error);
+          console.error("Error loading data:", error);
           // Initialize with empty arrays if error
-          setWeights(Array(numberOfSets).fill(""));
-          setReps(Array(numberOfSets).fill(""));
+          setWeights(Array(defaultNumberOfSets).fill(""));
+          setReps(Array(defaultNumberOfSets).fill(""));
+          setNumberOfSets(defaultNumberOfSets);
         }
       } else {
         // Initialize arrays for sets
-        setWeights(Array(numberOfSets).fill(""));
-        setReps(Array(numberOfSets).fill(""));
+        setWeights(Array(defaultNumberOfSets).fill(""));
+        setReps(Array(defaultNumberOfSets).fill(""));
         setSetStates(new Map());
+        setNumberOfSets(defaultNumberOfSets);
       }
     };
 
-    loadLoggedSets();
-  }, [programExercise, numberOfSets, dayIndex, slotIndex]);
+    loadData();
+  }, [programExercise, defaultNumberOfSets, dayIndex, slotIndex]);
 
   // Cleanup timers on unmount
   useEffect(() => {
@@ -131,7 +142,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         repsNum,
         currentState
       );
-      setHasAnyLoggedSets(true);
     } catch (error) {
       console.error("Error auto-saving set:", error);
     }
@@ -203,7 +213,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           repsNum,
           "completed"
         );
-        setHasAnyLoggedSets(true);
       } else if (currentState === "completed") {
         // Completed -> Failed (red)
         newSetStates.set(setIndex, "failed");
@@ -249,8 +258,10 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     );
   }
 
-  const repRangeText = programExercise?.isAmrap
-    ? "MAX REPS"
+  const repRangeText = programExercise?.hideReps
+    ? null
+    : programExercise?.isAmrap
+    ? "MAX REPS (AMRAP)"
     : programExercise?.repRange
     ? `${programExercise.repRange[0]}-${programExercise.repRange[1]} reps`
     : null;
@@ -259,7 +270,14 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     <View style={styles.card}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Text style={styles.exerciseName}>{exercise.name}</Text>
+          <Text style={styles.exerciseName}>
+            {exercise.name}
+            {programExercise?.additionalHeader && (
+              <Text style={styles.additionalHeader}>
+                {programExercise.additionalHeader}
+              </Text>
+            )}
+          </Text>
           {repRangeText && (
             <Text
               style={[
@@ -275,6 +293,65 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
       <View style={styles.setsHeader}>
         <Text style={styles.setsLabel}>Sets</Text>
+        <View style={styles.setControls}>
+          <TouchableOpacity
+            style={[
+              styles.setControlButton,
+              numberOfSets <= 1 && styles.setControlButtonDisabled,
+            ]}
+            onPress={async () => {
+              if (numberOfSets > 1 && dayIndex !== null) {
+                const newCount = numberOfSets - 1;
+                setNumberOfSets(newCount);
+                setWeights((prev) => prev.slice(0, newCount));
+                setReps((prev) => prev.slice(0, newCount));
+
+                // Remove set states for removed sets
+                const newSetStates = new Map(setStates);
+                for (let i = newCount; i < numberOfSets; i++) {
+                  newSetStates.delete(i);
+                }
+                setSetStates(newSetStates);
+
+                // Save custom set count
+                await saveCustomSetCount(dayIndex, slotIndex, newCount);
+
+                // Clear logged sets for removed set indices
+                try {
+                  for (let i = newCount; i < numberOfSets; i++) {
+                    await clearLoggedSet(dayIndex, slotIndex, i);
+                  }
+                } catch (error) {
+                  console.error("Error clearing removed sets:", error);
+                }
+              }
+            }}
+            disabled={numberOfSets <= 1}
+          >
+            <Ionicons
+              name="remove-circle-outline"
+              size={24}
+              color={numberOfSets <= 1 ? "#444" : "#00E676"}
+            />
+          </TouchableOpacity>
+          <Text style={styles.setCountText}>{numberOfSets}</Text>
+          <TouchableOpacity
+            style={styles.setControlButton}
+            onPress={async () => {
+              if (dayIndex !== null) {
+                const newCount = numberOfSets + 1;
+                setNumberOfSets(newCount);
+                setWeights((prev) => [...prev, ""]);
+                setReps((prev) => [...prev, ""]);
+
+                // Save custom set count
+                await saveCustomSetCount(dayIndex, slotIndex, newCount);
+              }
+            }}
+          >
+            <Ionicons name="add-circle-outline" size={24} color="#00E676" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {Array.from({ length: numberOfSets }).map((_, setIndex) => {
@@ -345,11 +422,13 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         );
       })}
 
-      <View style={styles.swapButtonContainer}>
-        <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
-          <Text style={styles.swapButtonText}>Swap Exercise</Text>
-        </TouchableOpacity>
-      </View>
+      {programExercise?.canSwap !== false && (
+        <View style={styles.swapButtonContainer}>
+          <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
+            <Text style={styles.swapButtonText}>Swap Exercise</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -375,6 +454,12 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 4,
   },
+  additionalHeader: {
+    color: "#CCC",
+    fontSize: 12,
+    fontWeight: "600",
+    marginBottom: 4,
+  },
   repRangeLabel: {
     color: "#CCC",
     fontSize: 14,
@@ -387,6 +472,9 @@ const styles = StyleSheet.create({
   },
   setsHeader: {
     marginBottom: 12,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   setsLabel: {
     color: "#888",
@@ -394,6 +482,24 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textTransform: "uppercase",
     letterSpacing: 0.5,
+  },
+  setControls: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  setControlButton: {
+    padding: 4,
+  },
+  setControlButtonDisabled: {
+    opacity: 0.3,
+  },
+  setCountText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "700",
+    minWidth: 24,
+    textAlign: "center",
   },
   setContainer: {
     marginBottom: 12,

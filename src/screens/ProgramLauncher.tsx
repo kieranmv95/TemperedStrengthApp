@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import DateTimePicker from "@react-native-community/datetimepicker";
+import React, { useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  TouchableOpacity,
-  Platform,
   Modal,
-} from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { programs, Program } from '../utils/program';
-import { setActiveProgramId, setProgramStartDate } from '../utils/storage';
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Program, programs } from "../utils/program";
+import { setActiveProgramId, setProgramStartDate } from "../utils/storage";
 
 interface ProgramLauncherProps {
   onProgramSelected: () => void;
@@ -36,12 +36,12 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   };
 
   const handleDateChange = (event: any, date?: Date) => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       setShowDatePicker(false);
     }
     if (date) {
       setStartDate(date);
-      if (Platform.OS === 'android') {
+      if (Platform.OS === "android") {
         handleConfirmDate(date);
       }
     }
@@ -56,34 +56,54 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
       setShowDatePicker(false);
       onProgramSelected();
     } catch (error) {
-      console.error('Error saving program selection:', error);
+      console.error("Error saving program selection:", error);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.content}
+      >
         <View style={styles.header}>
           <Text style={styles.title}>Select a Program</Text>
-          <Text style={styles.subtitle}>Choose your training program to get started</Text>
+          <Text style={styles.subtitle}>
+            Choose your training program to get started
+          </Text>
         </View>
 
-        {programs.map((program) => (
-          <TouchableOpacity
-            key={program.id}
-            style={styles.programCard}
-            onPress={() => handleSelectProgram(program)}
-          >
-            <View style={styles.programContent}>
-              <Text style={styles.programName}>{program.name}</Text>
-              <Text style={styles.programDescription}>{program.description}</Text>
-              <Text style={styles.programStats}>
-                {program.workouts.length} workouts
-              </Text>
-            </View>
-            <Text style={styles.selectArrow}>→</Text>
-          </TouchableOpacity>
-        ))}
+        {programs.map((program) => {
+          // Calculate number of weeks from the maximum dayIndex
+          const maxDayIndex = Math.max(
+            ...program.workouts.map((w) => w.dayIndex)
+          );
+          const weekCount = Math.ceil((maxDayIndex + 1) / 7);
+          const sessionsPerWeek = (program.workouts.length / weekCount)
+            .toFixed(1)
+            .replace(/\.0$/, "");
+
+          return (
+            <TouchableOpacity
+              key={program.id}
+              style={styles.programCard}
+              onPress={() => handleSelectProgram(program)}
+            >
+              <View style={styles.programContent}>
+                <Text style={styles.programName}>{program.name}</Text>
+                <Text style={styles.programDescription}>
+                  {program.description}
+                </Text>
+                <Text style={styles.programStats}>
+                  {program.workouts.length} workouts • {weekCount}{" "}
+                  {weekCount === 1 ? "week" : "weeks"} • {sessionsPerWeek}{" "}
+                  sessions/week
+                </Text>
+              </View>
+              <Text style={styles.selectArrow}>→</Text>
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
 
       <Modal
@@ -96,7 +116,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           <View style={styles.programDetailsModal}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>
-                {selectedProgram?.name || 'Program Details'}
+                {selectedProgram?.name || "Program Details"}
               </Text>
               <TouchableOpacity
                 onPress={() => setShowProgramDetails(false)}
@@ -114,9 +134,39 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
               <Text style={styles.sectionTitle}>Program Overview</Text>
               <View style={styles.statsContainer}>
                 <View style={styles.statItem}>
-                  <Text style={styles.statValue}>{selectedProgram?.workouts.length}</Text>
+                  <Text style={styles.statValue}>
+                    {selectedProgram?.workouts.length}
+                  </Text>
                   <Text style={styles.statLabel}>Workouts</Text>
                 </View>
+                {selectedProgram &&
+                  (() => {
+                    const maxDayIndex = Math.max(
+                      ...selectedProgram.workouts.map((w) => w.dayIndex)
+                    );
+                    const weekCount = Math.ceil((maxDayIndex + 1) / 7);
+                    const sessionsPerWeek = (
+                      selectedProgram.workouts.length / weekCount
+                    )
+                      .toFixed(1)
+                      .replace(/\.0$/, "");
+                    return (
+                      <>
+                        <View style={styles.statItem}>
+                          <Text style={styles.statValue}>{weekCount}</Text>
+                          <Text style={styles.statLabel}>
+                            {weekCount === 1 ? "Week" : "Weeks"}
+                          </Text>
+                        </View>
+                        <View style={styles.statItem}>
+                          <Text style={styles.statValue}>
+                            {sessionsPerWeek}
+                          </Text>
+                          <Text style={styles.statLabel}>Sessions/Week</Text>
+                        </View>
+                      </>
+                    );
+                  })()}
               </View>
 
               <Text style={styles.sectionTitle}>Workouts</Text>
@@ -133,19 +183,24 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       {workout.exercises.length} exercises
                     </Text>
                     <View style={styles.workoutIntensity}>
-                      <Text style={styles.workoutIntensityLabel}>Intensity:</Text>
+                      <Text style={styles.workoutIntensityLabel}>
+                        Intensity:
+                      </Text>
                       <View style={styles.workoutIntensityBar}>
                         {Array.from({ length: 10 }).map((_, i) => (
                           <View
                             key={i}
                             style={[
                               styles.workoutIntensityDot,
-                              i < workout.intensity && styles.workoutIntensityDotFilled,
+                              i < workout.intensity &&
+                                styles.workoutIntensityDotFilled,
                             ]}
                           />
                         ))}
                       </View>
-                      <Text style={styles.workoutIntensityValue}>{workout.intensity}/10</Text>
+                      <Text style={styles.workoutIntensityValue}>
+                        {workout.intensity}/10
+                      </Text>
                     </View>
                   </View>
                 </View>
@@ -166,7 +221,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 
       {showDatePicker && (
         <>
-          {Platform.OS === 'ios' && (
+          {Platform.OS === "ios" && (
             <View style={styles.datePickerContainer}>
               <View style={styles.datePickerHeader}>
                 <TouchableOpacity
@@ -195,7 +250,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
               </View>
             </View>
           )}
-          {Platform.OS === 'android' && (
+          {Platform.OS === "android" && (
             <DateTimePicker
               value={startDate}
               mode="date"
@@ -213,7 +268,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: "#121212",
   },
   scrollView: {
     flex: 1,
@@ -226,268 +281,261 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   title: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 32,
-    fontWeight: '800',
+    fontWeight: "800",
     marginBottom: 8,
     letterSpacing: -0.5,
   },
   subtitle: {
-    color: '#888',
+    color: "#888",
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   programCard: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: "#1E1E1E",
     borderRadius: 12,
     padding: 20,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    borderColor: "#2A2A2A",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   programContent: {
     flex: 1,
   },
   programName: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 8,
   },
   programDescription: {
-    color: '#CCC',
+    color: "#CCC",
     fontSize: 14,
     marginBottom: 8,
     lineHeight: 20,
   },
   programStats: {
-    color: '#00E676',
+    color: "#00E676",
     fontSize: 12,
-    fontWeight: '600',
-    textTransform: 'uppercase',
+    fontWeight: "600",
+    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   selectArrow: {
-    color: '#00E676',
+    color: "#00E676",
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: "600",
     marginLeft: 16,
   },
   datePickerContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#1E1E1E',
+    backgroundColor: "#1E1E1E",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: "#2A2A2A",
     paddingBottom: 40,
-    alignItems: 'center',
+    alignItems: "center",
   },
   datePickerHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#2A2A2A',
+    borderBottomColor: "#2A2A2A",
   },
   datePickerTitle: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     flex: 1,
-    textAlign: 'center',
+    textAlign: "center",
   },
   cancelButton: {
     padding: 8,
   },
   cancelButtonText: {
-    color: '#888',
+    color: "#888",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   confirmButton: {
     padding: 8,
   },
   confirmButtonText: {
-    color: '#00E676',
+    color: "#00E676",
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   datePickerWrapper: {
-    alignItems: 'center',
-    width: '100%',
+    alignItems: "center",
+    width: "100%",
   },
   datePicker: {
-    backgroundColor: '#1E1E1E',
-    alignSelf: 'center',
+    backgroundColor: "#1E1E1E",
+    alignSelf: "center",
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    justifyContent: 'flex-end',
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    justifyContent: "flex-end",
   },
   programDetailsModal: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: "#1E1E1E",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 24,
-    maxHeight: '90%',
+    maxHeight: "90%",
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: "#2A2A2A",
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 20,
   },
   modalTitle: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 24,
-    fontWeight: '700',
+    fontWeight: "700",
     flex: 1,
   },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#2A2A2A',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#2A2A2A",
+    alignItems: "center",
+    justifyContent: "center",
   },
   closeButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   modalContent: {
     maxHeight: 400,
   },
-  programDescription: {
-    color: '#CCC',
-    fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 24,
-  },
   sectionTitle: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 16,
     marginTop: 8,
   },
   statsContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 16,
     marginBottom: 24,
   },
   statItem: {
-    backgroundColor: '#2A2A2A',
+    backgroundColor: "#2A2A2A",
     borderRadius: 12,
     padding: 16,
-    alignItems: 'center',
+    alignItems: "center",
     minWidth: 100,
   },
   statValue: {
-    color: '#00E676',
+    color: "#00E676",
     fontSize: 24,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 4,
   },
   statLabel: {
-    color: '#888',
+    color: "#888",
     fontSize: 12,
-    fontWeight: '600',
-    textTransform: 'uppercase',
+    fontWeight: "600",
+    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   workoutItem: {
-    backgroundColor: '#2A2A2A',
+    backgroundColor: "#2A2A2A",
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#333',
+    borderColor: "#333",
   },
   workoutLabel: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 4,
   },
   workoutDescription: {
-    color: '#CCC',
+    color: "#CCC",
     fontSize: 14,
     lineHeight: 20,
     marginBottom: 12,
   },
   workoutMeta: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexWrap: "wrap",
     gap: 8,
   },
   workoutExercises: {
-    color: '#888',
+    color: "#888",
     fontSize: 14,
   },
   workoutIntensity: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 6,
   },
   workoutIntensityLabel: {
-    color: '#888',
+    color: "#888",
     fontSize: 12,
-    fontWeight: '600',
-    textTransform: 'uppercase',
+    fontWeight: "600",
+    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   workoutIntensityBar: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 3,
-    alignItems: 'center',
+    alignItems: "center",
   },
   workoutIntensityDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#333',
+    backgroundColor: "#333",
   },
   workoutIntensityDotFilled: {
-    backgroundColor: '#00E676',
+    backgroundColor: "#00E676",
   },
   workoutIntensityValue: {
-    color: '#888',
+    color: "#888",
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   modalFooter: {
     marginTop: 24,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#2A2A2A',
+    borderTopColor: "#2A2A2A",
   },
   startProgramButton: {
-    backgroundColor: '#00E676',
+    backgroundColor: "#00E676",
     borderRadius: 12,
     padding: 16,
-    alignItems: 'center',
+    alignItems: "center",
   },
   startProgramButtonText: {
-    color: '#121212',
+    color: "#121212",
     fontSize: 16,
-    fontWeight: '700',
-    textTransform: 'uppercase',
+    fontWeight: "700",
+    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
 });
-

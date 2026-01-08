@@ -5,6 +5,7 @@ const PROGRAM_STORAGE_KEY = "active_program";
 const PROGRAM_START_DATE_KEY = "program_start_date";
 const EXERCISE_SWAPS_KEY = "exercise_swaps";
 const WORKOUT_LOGS_KEY = "workout_logs";
+const CUSTOM_SET_COUNTS_KEY = "custom_set_counts";
 
 export interface ExerciseSwap {
   dayIndex: number;
@@ -22,7 +23,7 @@ export interface ExerciseSwaps {
 export interface LoggedSet {
   weight: number;
   reps: number;
-  state?: 'completed' | 'failed' | null;
+  state?: "completed" | "failed" | null;
 }
 
 export interface WorkoutLogs {
@@ -30,6 +31,12 @@ export interface WorkoutLogs {
     [slotIndex: number]: {
       [setIndex: number]: LoggedSet;
     };
+  };
+}
+
+export interface CustomSetCounts {
+  [dayIndex: number]: {
+    [slotIndex: number]: number; // custom set count
   };
 }
 
@@ -145,7 +152,7 @@ export const saveLoggedSet = async (
   setIndex: number,
   weight: number,
   reps: number,
-  state?: 'completed' | 'failed' | null
+  state?: "completed" | "failed" | null
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
@@ -157,7 +164,7 @@ export const saveLoggedSet = async (
     if (!logs[dayIndex][slotIndex]) {
       logs[dayIndex][slotIndex] = {};
     }
-    
+
     const setData: LoggedSet = { weight, reps };
     if (state !== undefined) {
       // Explicitly set the state (including null for unchecked)
@@ -169,7 +176,7 @@ export const saveLoggedSet = async (
         setData.state = existing.state;
       }
     }
-    
+
     logs[dayIndex][slotIndex][setIndex] = setData;
 
     await AsyncStorage.setItem(WORKOUT_LOGS_KEY, JSON.stringify(logs));
@@ -234,16 +241,99 @@ export const clearLoggedSetsForSlot = async (
     const logs: WorkoutLogs = JSON.parse(data);
     if (logs[dayIndex]?.[slotIndex]) {
       delete logs[dayIndex][slotIndex];
-      
+
       // Clean up empty day/slot objects
       if (Object.keys(logs[dayIndex]).length === 0) {
         delete logs[dayIndex];
       }
-      
+
       await AsyncStorage.setItem(WORKOUT_LOGS_KEY, JSON.stringify(logs));
     }
   } catch (error) {
     console.error("Error clearing logged sets for slot:", error);
+    throw error;
+  }
+};
+
+/**
+ * Save custom set count for a specific day and slot
+ * @param dayIndex - Day index in the program
+ * @param slotIndex - Slot index (0-based)
+ * @param setCount - Custom set count
+ */
+export const saveCustomSetCount = async (
+  dayIndex: number,
+  slotIndex: number,
+  setCount: number
+): Promise<void> => {
+  try {
+    const data = await AsyncStorage.getItem(CUSTOM_SET_COUNTS_KEY);
+    const counts: CustomSetCounts = data ? JSON.parse(data) : {};
+
+    if (!counts[dayIndex]) {
+      counts[dayIndex] = {};
+    }
+    counts[dayIndex][slotIndex] = setCount;
+
+    await AsyncStorage.setItem(CUSTOM_SET_COUNTS_KEY, JSON.stringify(counts));
+  } catch (error) {
+    console.error("Error saving custom set count:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get custom set count for a specific day and slot
+ * @param dayIndex - Day index in the program
+ * @param slotIndex - Slot index (0-based)
+ * @returns Custom set count or null if not set
+ */
+export const getCustomSetCount = async (
+  dayIndex: number,
+  slotIndex: number
+): Promise<number | null> => {
+  try {
+    const data = await AsyncStorage.getItem(CUSTOM_SET_COUNTS_KEY);
+    const counts: CustomSetCounts = data ? JSON.parse(data) : {};
+    return counts[dayIndex]?.[slotIndex] ?? null;
+  } catch (error) {
+    console.error("Error getting custom set count:", error);
+    return null;
+  }
+};
+
+/**
+ * Clear a specific logged set
+ * @param dayIndex - Day index in the program
+ * @param slotIndex - Slot index (0-based)
+ * @param setIndex - Set index (0-based)
+ */
+export const clearLoggedSet = async (
+  dayIndex: number,
+  slotIndex: number,
+  setIndex: number
+): Promise<void> => {
+  try {
+    const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
+    const logs: WorkoutLogs = data ? JSON.parse(data) : {};
+
+    if (logs[dayIndex]?.[slotIndex]?.[setIndex]) {
+      delete logs[dayIndex][slotIndex][setIndex];
+
+      // Clean up empty slot objects
+      if (Object.keys(logs[dayIndex][slotIndex]).length === 0) {
+        delete logs[dayIndex][slotIndex];
+      }
+
+      // Clean up empty day objects
+      if (Object.keys(logs[dayIndex]).length === 0) {
+        delete logs[dayIndex];
+      }
+
+      await AsyncStorage.setItem(WORKOUT_LOGS_KEY, JSON.stringify(logs));
+    }
+  } catch (error) {
+    console.error("Error clearing logged set:", error);
     throw error;
   }
 };
@@ -304,6 +394,7 @@ export const clearProgramData = async (): Promise<void> => {
     await AsyncStorage.removeItem(PROGRAM_START_DATE_KEY);
     await AsyncStorage.removeItem(EXERCISE_SWAPS_KEY);
     await AsyncStorage.removeItem(WORKOUT_LOGS_KEY);
+    await AsyncStorage.removeItem(CUSTOM_SET_COUNTS_KEY);
   } catch (error) {
     console.error("Error clearing program data:", error);
     throw error;

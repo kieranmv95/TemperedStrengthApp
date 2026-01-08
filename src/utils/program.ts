@@ -1,8 +1,12 @@
 export interface Exercise {
   id: string;
+  additionalHeader?: string | null;
+  additionalDescription?: string | null;
+  hideReps?: boolean;
   sets: number;
   repRange: [number, number];
-  isAmrap: boolean;
+  isAmrap?: boolean;
+  canSwap?: boolean;
 }
 
 export interface Workout {
@@ -38,10 +42,9 @@ export const ppl_01: Program = {
           id: week % 2 === 0 ? "1" : "2",
           sets: 3,
           repRange: [8, 10],
-          isAmrap: false,
         },
-        { id: "27", sets: 3, repRange: [10, 12], isAmrap: false },
-        { id: "36", sets: 3, repRange: [12, 15], isAmrap: false },
+        { id: "27", sets: 3, repRange: [10, 12] },
+        { id: "36", sets: 3, repRange: [12, 15] },
         { id: "33", sets: 3, repRange: [12, 15], isAmrap: week === 3 },
       ],
     },
@@ -55,10 +58,9 @@ export const ppl_01: Program = {
           id: week % 2 === 0 ? "7" : "8",
           sets: 3,
           repRange: [8, 10],
-          isAmrap: false,
         },
-        { id: "10", sets: 3, repRange: [6, 10], isAmrap: false },
-        { id: "35", sets: 3, repRange: [15, 20], isAmrap: false },
+        { id: "10", sets: 3, repRange: [6, 10] },
+        { id: "35", sets: 3, repRange: [15, 20] },
         { id: "32", sets: 3, repRange: [10, 12], isAmrap: true },
       ],
     },
@@ -72,10 +74,9 @@ export const ppl_01: Program = {
           id: week % 2 === 0 ? "4" : "19",
           sets: 3,
           repRange: [8, 10],
-          isAmrap: false,
         },
-        { id: "23", sets: 3, repRange: [10, 12], isAmrap: false },
-        { id: "39", sets: 3, repRange: [12, 15], isAmrap: false },
+        { id: "23", sets: 3, repRange: [10, 12] },
+        { id: "39", sets: 3, repRange: [12, 15] },
         { id: "31", sets: 3, repRange: [10, 15], isAmrap: true },
       ],
     },
@@ -102,10 +103,10 @@ export const strength_5day: Program = {
         description: "Primary upper body compound focus.",
         intensity: intensity,
         exercises: [
-          { id: "1", sets: 4, repRange: reps, isAmrap: false },
-          { id: "7", sets: 4, repRange: reps, isAmrap: false },
-          { id: "18", sets: 3, repRange: [10, 12], isAmrap: false },
-          { id: "30", sets: 3, repRange: [10, 12], isAmrap: false },
+          { id: "1", sets: 4, repRange: reps },
+          { id: "7", sets: 4, repRange: reps },
+          { id: "18", sets: 3, repRange: [10, 12] },
+          { id: "30", sets: 3, repRange: [10, 12] },
         ],
       },
       {
@@ -114,10 +115,10 @@ export const strength_5day: Program = {
         description: "Developing maximal leg power.",
         intensity: intensity + 1,
         exercises: [
-          { id: "4", sets: 5, repRange: reps, isAmrap: false },
-          { id: "19", sets: 3, repRange: [8, 10], isAmrap: false },
-          { id: "40", sets: 3, repRange: [12, 15], isAmrap: false },
-          { id: "13", sets: 3, repRange: [45, 60], isAmrap: false },
+          { id: "4", sets: 5, repRange: reps },
+          { id: "19", sets: 3, repRange: [8, 10] },
+          { id: "40", sets: 3, repRange: [12, 15] },
+          { id: "13", sets: 3, repRange: [45, 60] },
         ],
       },
       {
@@ -126,10 +127,10 @@ export const strength_5day: Program = {
         description: "Structural balance and arm hypertrophy.",
         intensity: intensity - 1,
         exercises: [
-          { id: "26", sets: 4, repRange: [6, 8], isAmrap: false },
-          { id: "34", sets: 4, repRange: [12, 15], isAmrap: false },
-          { id: "51", sets: 3, repRange: [10, 12], isAmrap: false },
-          { id: "54", sets: 3, repRange: [10, 12], isAmrap: false },
+          { id: "26", sets: 4, repRange: [6, 8] },
+          { id: "34", sets: 4, repRange: [12, 15] },
+          { id: "51", sets: 3, repRange: [10, 12] },
+          { id: "54", sets: 3, repRange: [10, 12] },
         ],
       },
       {
@@ -138,10 +139,10 @@ export const strength_5day: Program = {
         description: "Posterior chain and pulling power.",
         intensity: intensity + 1,
         exercises: [
-          { id: "14", sets: 3, repRange: [3, 5], isAmrap: false },
-          { id: "6", sets: 3, repRange: [8, 10], isAmrap: false },
-          { id: "41", sets: 3, repRange: [8, 12], isAmrap: false },
-          { id: "48", sets: 3, repRange: [12, 15], isAmrap: false },
+          { id: "14", sets: 3, repRange: [3, 5] },
+          { id: "6", sets: 3, repRange: [8, 10] },
+          { id: "41", sets: 3, repRange: [8, 12] },
+          { id: "48", sets: 3, repRange: [12, 15] },
         ],
       },
       {
@@ -150,10 +151,10 @@ export const strength_5day: Program = {
         description: "Focus on mind-muscle connection and pump.",
         intensity: intensity,
         exercises: [
-          { id: "2", sets: 3, repRange: [10, 12], isAmrap: false },
-          { id: "11", sets: 3, repRange: [10, 12], isAmrap: false },
+          { id: "2", sets: 3, repRange: [10, 12] },
+          { id: "11", sets: 3, repRange: [10, 12] },
           { id: "17", sets: 3, repRange: [8, 12], isAmrap: week === 5 },
-          { id: "56", sets: 3, repRange: [12, 15], isAmrap: false },
+          { id: "56", sets: 3, repRange: [12, 15] },
         ],
       },
     ];
@@ -181,14 +182,12 @@ export const full_body_2day: Program = {
             id: cycle === 1 ? "19" : "4",
             sets: 3,
             repRange: [8, 10],
-            isAmrap: false,
           },
-          { id: "1", sets: 3, repRange: [8, 10], isAmrap: false },
+          { id: "1", sets: 3, repRange: [8, 10] },
           {
             id: cycle === 2 ? "45" : "7",
             sets: 3,
             repRange: [8, 10],
-            isAmrap: false,
           },
           { id: "24", sets: 3, repRange: [15, 20], isAmrap: true },
         ],
@@ -199,15 +198,14 @@ export const full_body_2day: Program = {
         description: "Pulling and overhead pressing focus.",
         intensity: 7,
         exercises: [
-          { id: "14", sets: 3, repRange: [5, 8], isAmrap: false },
+          { id: "14", sets: 3, repRange: [5, 8] },
           {
             id: cycle === 1 ? "27" : "26",
             sets: 3,
             repRange: [8, 10],
-            isAmrap: false,
           },
           { id: "10", sets: 3, repRange: [8, 12], isAmrap: true },
-          { id: "5", sets: 3, repRange: [12, 15], isAmrap: false },
+          { id: "5", sets: 3, repRange: [12, 15] },
         ],
       },
     ];
@@ -239,11 +237,13 @@ export const powerlifting_3day: Program = {
             id: "4",
             sets: week < 4 ? 4 : 5,
             repRange: mainReps,
-            isAmrap: isTestingWeek,
+            hideReps: isTestingWeek ? true : false,
+            additionalHeader: isTestingWeek ? " 1RM Test" : null,
+            canSwap: isTestingWeek ? false : true,
           },
-          { id: "22", sets: 3, repRange: [8, 10], isAmrap: false },
-          { id: "19", sets: 3, repRange: [10, 12], isAmrap: false },
-          { id: "13", sets: 3, repRange: [45, 60], isAmrap: false },
+          { id: "22", sets: 3, repRange: [8, 10] },
+          { id: "19", sets: 3, repRange: [10, 12] },
+          { id: "13", sets: 3, repRange: [45, 60] },
         ],
       },
       {
@@ -258,11 +258,13 @@ export const powerlifting_3day: Program = {
             id: "1",
             sets: week < 4 ? 4 : 5,
             repRange: mainReps,
-            isAmrap: isTestingWeek,
+            hideReps: isTestingWeek ? true : false,
+            additionalHeader: isTestingWeek ? " 1RM Test" : null,
+            canSwap: isTestingWeek ? false : true,
           },
-          { id: "26", sets: 3, repRange: [6, 8], isAmrap: false },
-          { id: "30", sets: 3, repRange: [10, 12], isAmrap: false },
-          { id: "54", sets: 3, repRange: [10, 12], isAmrap: false },
+          { id: "26", sets: 3, repRange: [6, 8] },
+          { id: "30", sets: 3, repRange: [10, 12] },
+          { id: "54", sets: 3, repRange: [10, 12] },
         ],
       },
       {
@@ -273,10 +275,17 @@ export const powerlifting_3day: Program = {
           : "Max effort pulling and posterior chain work.",
         intensity: isTestingWeek ? 10 : baseIntensity + 1,
         exercises: [
-          { id: "14", sets: 3, repRange: mainReps, isAmrap: isTestingWeek },
-          { id: "6", sets: 3, repRange: [8, 10], isAmrap: false },
-          { id: "10", sets: 3, repRange: [8, 12], isAmrap: false },
-          { id: "48", sets: 3, repRange: [12, 15], isAmrap: false },
+          {
+            id: "14",
+            sets: 3,
+            repRange: mainReps,
+            hideReps: isTestingWeek ? true : false,
+            additionalHeader: isTestingWeek ? " 1RM Test" : null,
+            canSwap: isTestingWeek ? false : true,
+          },
+          { id: "6", sets: 3, repRange: [8, 10] },
+          { id: "10", sets: 3, repRange: [8, 12] },
+          { id: "48", sets: 3, repRange: [12, 15] },
         ],
       },
     ];

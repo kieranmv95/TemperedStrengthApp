@@ -281,6 +281,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         }}
         onSkipToNextWorkout={handleSkipToNextWorkout}
         onDaySelect={handleDaySelect}
+        onProgramReset={onProgramReset}
       />
     );
   }
