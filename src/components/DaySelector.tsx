@@ -23,16 +23,17 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   const start = new Date(startDate);
   start.setHours(0, 0, 0, 0);
 
-  // Calculate the last day index of the program
+  // Calculate the first and last day indices of the program
+  const firstDayIndex =
+    workoutDayIndices.length > 0 ? Math.min(...workoutDayIndices) : 0;
   const lastDayIndex =
     workoutDayIndices.length > 0
       ? Math.max(...workoutDayIndices)
       : currentDayIndex;
 
-  // Calculate the date range to show (e.g., 7 days before and after current day)
-  const minDayIndex = Math.max(0, currentDayIndex - 7);
-  // Never show dates after the last session
-  const maxDayIndex = Math.min(currentDayIndex + 14, lastDayIndex);
+  // Show all days from the first session to the last session
+  const minDayIndex = firstDayIndex;
+  const maxDayIndex = lastDayIndex;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
