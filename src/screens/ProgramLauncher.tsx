@@ -123,9 +123,31 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
               {selectedProgram?.workouts.map((workout, index) => (
                 <View key={index} style={styles.workoutItem}>
                   <Text style={styles.workoutLabel}>{workout.label}</Text>
-                  <Text style={styles.workoutExercises}>
-                    {workout.exercises.length} exercises
-                  </Text>
+                  {workout.description && (
+                    <Text style={styles.workoutDescription}>
+                      {workout.description}
+                    </Text>
+                  )}
+                  <View style={styles.workoutMeta}>
+                    <Text style={styles.workoutExercises}>
+                      {workout.exercises.length} exercises
+                    </Text>
+                    <View style={styles.workoutIntensity}>
+                      <Text style={styles.workoutIntensityLabel}>Intensity:</Text>
+                      <View style={styles.workoutIntensityBar}>
+                        {Array.from({ length: 10 }).map((_, i) => (
+                          <View
+                            key={i}
+                            style={[
+                              styles.workoutIntensityDot,
+                              i < workout.intensity && styles.workoutIntensityDotFilled,
+                            ]}
+                          />
+                        ))}
+                      </View>
+                      <Text style={styles.workoutIntensityValue}>{workout.intensity}/10</Text>
+                    </View>
+                  </View>
                 </View>
               ))}
             </ScrollView>
@@ -400,9 +422,53 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: 4,
   },
+  workoutDescription: {
+    color: '#CCC',
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  workoutMeta: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
   workoutExercises: {
     color: '#888',
     fontSize: 14,
+  },
+  workoutIntensity: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  workoutIntensityLabel: {
+    color: '#888',
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  workoutIntensityBar: {
+    flexDirection: 'row',
+    gap: 3,
+    alignItems: 'center',
+  },
+  workoutIntensityDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#333',
+  },
+  workoutIntensityDotFilled: {
+    backgroundColor: '#00E676',
+  },
+  workoutIntensityValue: {
+    color: '#888',
+    fontSize: 12,
+    fontWeight: '600',
   },
   modalFooter: {
     marginTop: 24,

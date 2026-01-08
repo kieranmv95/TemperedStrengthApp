@@ -313,9 +313,26 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           <View style={styles.headerTop}>
             <View style={styles.headerTextContainer}>
               <Text style={styles.title}>{currentWorkout.label}</Text>
-              <Text style={styles.subtitle}>
-                Track your sets, adapt your training
-              </Text>
+              {currentWorkout.description && (
+                <Text style={styles.description}>
+                  {currentWorkout.description}
+                </Text>
+              )}
+              <View style={styles.intensityContainer}>
+                <Text style={styles.intensityLabel}>Intensity:</Text>
+                <View style={styles.intensityBar}>
+                  {Array.from({ length: 10 }).map((_, i) => (
+                    <View
+                      key={i}
+                      style={[
+                        styles.intensityDot,
+                        i < currentWorkout.intensity && styles.intensityDotFilled,
+                      ]}
+                    />
+                  ))}
+                </View>
+                <Text style={styles.intensityValue}>{currentWorkout.intensity}/10</Text>
+              </View>
             </View>
             <TouchableOpacity
               style={styles.settingsButton}
@@ -418,6 +435,44 @@ const styles = StyleSheet.create({
     color: "#888",
     fontSize: 16,
     fontWeight: "500",
+  },
+  description: {
+    color: "#CCC",
+    fontSize: 14,
+    fontWeight: "500",
+    marginBottom: 12,
+    lineHeight: 20,
+  },
+  intensityContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  intensityLabel: {
+    color: "#888",
+    fontSize: 12,
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  intensityBar: {
+    flexDirection: "row",
+    gap: 4,
+    alignItems: "center",
+  },
+  intensityDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#333",
+  },
+  intensityDotFilled: {
+    backgroundColor: "#00E676",
+  },
+  intensityValue: {
+    color: "#888",
+    fontSize: 12,
+    fontWeight: "600",
   },
   settingsButton: {
     width: 40,
