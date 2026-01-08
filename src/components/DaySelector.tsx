@@ -23,9 +23,17 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   const start = new Date(startDate);
   start.setHours(0, 0, 0, 0);
 
+  // Calculate the last day index of the program
+  const lastDayIndex =
+    workoutDayIndices.length > 0
+      ? Math.max(...workoutDayIndices)
+      : currentDayIndex;
+
   // Calculate the date range to show (e.g., 7 days before and after current day)
   const minDayIndex = Math.max(0, currentDayIndex - 7);
-  const maxDayIndex = currentDayIndex + 14;
+  // If it's the last day (or past it), don't show future dates
+  const maxDayIndex =
+    currentDayIndex >= lastDayIndex ? currentDayIndex : currentDayIndex + 14;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -35,12 +43,29 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
     date.setDate(date.getDate() + dayIndex);
     const day = date.getDate();
 
+    // Get short month name (Jan, Feb, Mar, etc.)
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const month = monthNames[date.getMonth()];
+
     // Get ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
     const suffix = ["th", "st", "nd", "rd"][
       day % 10 > 3 || Math.floor((day % 100) / 10) === 1 ? 0 : day % 10
     ];
 
-    return `${day}${suffix}`;
+    return `${month} ${day}${suffix}`;
   };
 
   const isToday = (dayIndex: number): boolean => {

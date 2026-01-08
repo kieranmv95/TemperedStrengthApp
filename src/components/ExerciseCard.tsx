@@ -175,15 +175,16 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         </View>
       </View>
 
+      <View style={styles.setsHeader}>
+        <Text style={styles.setsLabel}>Sets</Text>
+      </View>
+
       {Array.from({ length: numberOfSets }).map((_, setIndex) => {
         const isLogged = loggedSets.has(setIndex);
         const canLog = weights[setIndex] && reps[setIndex] && !loading;
 
         return (
           <View key={setIndex} style={styles.setContainer}>
-            <View style={styles.setHeader}>
-              <Text style={styles.setLabel}>Set {setIndex + 1}</Text>
-            </View>
             <View style={styles.inputContainer}>
               <View style={styles.inputGroup}>
                 <Text style={styles.inputLabel}>Weight (kg)</Text>
@@ -279,21 +280,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
-  setContainer: {
-    marginBottom: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#2A2A2A',
-  },
-  setHeader: {
+  setsHeader: {
     marginBottom: 12,
   },
-  setLabel: {
+  setsLabel: {
     color: '#888',
     fontSize: 12,
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
+  },
+  setContainer: {
+    marginBottom: 16,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#2A2A2A',
   },
   inputContainer: {
     flexDirection: 'row',

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
+  Alert,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -18,6 +19,7 @@ import {
   Workout,
 } from "../utils/program";
 import {
+  clearFutureWorkoutData,
   getActiveProgramId,
   getExerciseSwapsForDay,
   getProgramStartDate,
@@ -154,8 +156,67 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   }, [loadWorkoutData]);
 
   const handleDaySelect = async (dayIdx: number) => {
+    // Always allow viewing any day
     setSelectedDayIndex(dayIdx);
     await loadWorkoutForDay(dayIdx);
+  };
+
+  const handleSetAsCurrentDay = async () => {
+    if (
+      selectedDayIndex === null ||
+      dayIndex === null ||
+      selectedDayIndex === dayIndex
+    ) {
+      return;
+    }
+
+    // Show confirmation dialog
+    Alert.alert(
+      "Set as Current Session?",
+      "Setting this workout as the current session will adjust the program start date so this session becomes day 0, and clear any completed days ahead of this date. Are you sure?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              // Calculate the date that corresponds to the selected day index
+              if (startDate) {
+                const currentStart = new Date(startDate);
+                currentStart.setHours(0, 0, 0, 0);
+
+                // Calculate the date of the selected day index
+                const selectedDayDate = new Date();
+                selectedDayDate.setDate(
+                  selectedDayDate.getDate() - selectedDayIndex
+                );
+                selectedDayDate.setHours(0, 0, 0, 0);
+
+                // Clear all future workout data (from selected day onwards)
+                await clearFutureWorkoutData(selectedDayIndex);
+
+                // Set the start date to the selected day's date so it becomes index 0
+                await setProgramStartDate(selectedDayDate.toISOString());
+                setStartDate(selectedDayDate.toISOString());
+
+                // Reload workout data
+                await loadWorkoutData();
+              }
+            } catch (error) {
+              console.error("Error setting current session:", error);
+              Alert.alert(
+                "Error",
+                "Failed to set current session. Please try again."
+              );
+            }
+          },
+        },
+      ]
+    );
   };
 
   const handleSwapClick = (slotNumber: number) => {
@@ -248,7 +309,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         <DaySelector
           startDate={startDate}
           workoutDayIndices={workoutDayIndices}
-          currentDayIndex={selectedDayIndex || dayIndex}
+          currentDayIndex={selectedDayIndex ?? dayIndex}
           onDaySelect={handleDaySelect}
         />
       )}
@@ -271,6 +332,16 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
               <Text style={styles.settingsButtonText}>⚙️</Text>
             </TouchableOpacity>
           </View>
+          {dayIndex !== null &&
+            selectedDayIndex !== null &&
+            selectedDayIndex !== dayIndex && (
+              <TouchableOpacity
+                style={styles.setCurrentDayButton}
+                onPress={handleSetAsCurrentDay}
+              >
+                <Text style={styles.setCurrentDayButtonText}>Set as Today</Text>
+              </TouchableOpacity>
+            )}
         </View>
 
         {slots.map((slot, index) => (
@@ -366,6 +437,20 @@ const styles = StyleSheet.create({
   },
   settingsButtonText: {
     fontSize: 20,
+  },
+  setCurrentDayButton: {
+    marginTop: 16,
+    backgroundColor: "#00E676",
+    borderRadius: 8,
+    padding: 12,
+    alignItems: "center",
+  },
+  setCurrentDayButtonText: {
+    color: "#121212",
+    fontSize: 14,
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   loadingContainer: {
     flex: 1,

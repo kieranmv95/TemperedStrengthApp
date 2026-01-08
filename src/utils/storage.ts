@@ -287,6 +287,53 @@ export const hasLoggedSets = async (
 };
 
 /**
+ * Clear workout logs and swaps from a specific day index onwards
+ * @param fromDayIndex - Day index to start clearing from (inclusive)
+ */
+export const clearFutureWorkoutData = async (
+  fromDayIndex: number
+): Promise<void> => {
+  try {
+    // Clear workout logs
+    const logsData = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
+    if (logsData) {
+      const logs: WorkoutLogs = JSON.parse(logsData);
+      const filteredLogs: WorkoutLogs = {};
+      Object.keys(logs).forEach((dayKey) => {
+        const dayIdx = parseInt(dayKey, 10);
+        if (dayIdx < fromDayIndex) {
+          filteredLogs[dayIdx] = logs[dayIdx];
+        }
+      });
+      await AsyncStorage.setItem(
+        WORKOUT_LOGS_KEY,
+        JSON.stringify(filteredLogs)
+      );
+    }
+
+    // Clear exercise swaps
+    const swapsData = await AsyncStorage.getItem(EXERCISE_SWAPS_KEY);
+    if (swapsData) {
+      const swaps: ExerciseSwaps = JSON.parse(swapsData);
+      const filteredSwaps: ExerciseSwaps = {};
+      Object.keys(swaps).forEach((dayKey) => {
+        const dayIdx = parseInt(dayKey, 10);
+        if (dayIdx < fromDayIndex) {
+          filteredSwaps[dayIdx] = swaps[dayIdx];
+        }
+      });
+      await AsyncStorage.setItem(
+        EXERCISE_SWAPS_KEY,
+        JSON.stringify(filteredSwaps)
+      );
+    }
+  } catch (error) {
+    console.error("Error clearing future workout data:", error);
+    throw error;
+  }
+};
+
+/**
  * Clear all program data (program ID, start date, swaps, workout logs)
  */
 export const clearProgramData = async (): Promise<void> => {
