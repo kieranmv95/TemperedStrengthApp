@@ -20,17 +20,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onClose,
   onProgramReset,
 }) => {
-  const handleResetProgram = () => {
+  const handleChangeProgram = () => {
     Alert.alert(
-      'Reset Program',
-      'Are you sure you want to reset your program? This will clear your program selection and start date. Your workout history will be preserved.',
+      'Change Program',
+      'Changing your program will lose all progress on your current program, including your workout logs and exercise swaps.\n\nFinishing a program to completion is the best approach for achieving your fitness goals.\n\nAre you sure you want to change programs?',
       [
         {
           text: 'Cancel',
           style: 'cancel',
         },
         {
-          text: 'Reset',
+          text: 'Change Program',
           style: 'destructive',
           onPress: async () => {
             try {
@@ -38,8 +38,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               onProgramReset();
               onClose();
             } catch (error) {
-              console.error('Error resetting program:', error);
-              Alert.alert('Error', 'Failed to reset program. Please try again.');
+              console.error('Error changing program:', error);
+              Alert.alert('Error', 'Failed to change program. Please try again.');
             }
           },
         },
@@ -66,12 +66,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           <View style={styles.settingsList}>
             <TouchableOpacity
               style={styles.settingItem}
-              onPress={handleResetProgram}
+              onPress={handleChangeProgram}
             >
               <View style={styles.settingContent}>
-                <Text style={styles.settingTitle}>Reset Program</Text>
+                <Text style={styles.settingTitle}>Change Program</Text>
                 <Text style={styles.settingDescription}>
-                  Clear program selection and start over
+                  Select a different program
                 </Text>
               </View>
               <Text style={styles.settingArrow}>→</Text>

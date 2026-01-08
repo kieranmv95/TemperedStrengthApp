@@ -7,7 +7,7 @@ export type Exercise = {
 };
 
 export const exercises: Exercise[] = [
-  // --- HORIZONTAL PUSH (Chest/Triceps) ---
+  // --- HORIZONTAL PUSH ---
   {
     id: "1",
     name: "Barbell Bench Press",
@@ -50,8 +50,22 @@ export const exercises: Exercise[] = [
     muscle: "Upper Chest",
     equipment: "Dumbbell",
   },
+  {
+    id: "36",
+    name: "Cable Flyes",
+    pattern: "Horizontal Push",
+    muscle: "Chest",
+    equipment: "Cable",
+  },
+  {
+    id: "37",
+    name: "Floor Press",
+    pattern: "Horizontal Push",
+    muscle: "Triceps/Chest",
+    equipment: "Dumbbell",
+  },
 
-  // --- KNEE DOMINANT (Quads) ---
+  // --- KNEE DOMINANT ---
   {
     id: "4",
     name: "Barbell Back Squat",
@@ -94,8 +108,22 @@ export const exercises: Exercise[] = [
     muscle: "Quadriceps",
     equipment: "Bodyweight",
   },
+  {
+    id: "38",
+    name: "Walking Lunges",
+    pattern: "Knee Dominant",
+    muscle: "Quadriceps/Glutes",
+    equipment: "Dumbbell",
+  },
+  {
+    id: "39",
+    name: "Leg Extensions",
+    pattern: "Knee Dominant",
+    muscle: "Quadriceps",
+    equipment: "Machine",
+  },
 
-  // --- HIP HINGE (Hamstrings/Glutes/Lower Back) ---
+  // --- HIP HINGE ---
   {
     id: "14",
     name: "Barbell Deadlift",
@@ -131,8 +159,29 @@ export const exercises: Exercise[] = [
     muscle: "Glutes",
     equipment: "Bodyweight",
   },
+  {
+    id: "40",
+    name: "Leg Curl",
+    pattern: "Hip Hinge",
+    muscle: "Hamstrings",
+    equipment: "Machine",
+  },
+  {
+    id: "41",
+    name: "Hip Thrust",
+    pattern: "Hip Hinge",
+    muscle: "Glutes",
+    equipment: "Barbell",
+  },
+  {
+    id: "42",
+    name: "Good Mornings",
+    pattern: "Hip Hinge",
+    muscle: "Hamstrings/Lower Back",
+    equipment: "Barbell",
+  },
 
-  // --- VERTICAL PUSH (Shoulders) ---
+  // --- VERTICAL PUSH ---
   {
     id: "26",
     name: "Barbell Overhead Press",
@@ -161,8 +210,15 @@ export const exercises: Exercise[] = [
     muscle: "Shoulders",
     equipment: "Bodyweight",
   },
+  {
+    id: "43",
+    name: "Arnold Press",
+    pattern: "Vertical Push",
+    muscle: "Shoulders",
+    equipment: "Dumbbell",
+  },
 
-  // --- HORIZONTAL PULL (Mid-Back/Lats) ---
+  // --- HORIZONTAL PULL ---
   {
     id: "7",
     name: "Barbell Row",
@@ -191,8 +247,22 @@ export const exercises: Exercise[] = [
     muscle: "Back",
     equipment: "Machine",
   },
+  {
+    id: "44",
+    name: "Single Arm Cable Row",
+    pattern: "Horizontal Pull",
+    muscle: "Back",
+    equipment: "Cable",
+  },
+  {
+    id: "45",
+    name: "T-Bar Row",
+    pattern: "Horizontal Pull",
+    muscle: "Back",
+    equipment: "Barbell",
+  },
 
-  // --- VERTICAL PULL (Lats) ---
+  // --- VERTICAL PULL ---
   {
     id: "10",
     name: "Pull-ups",
@@ -214,8 +284,22 @@ export const exercises: Exercise[] = [
     muscle: "Back",
     equipment: "Bodyweight",
   },
+  {
+    id: "46",
+    name: "Straight Arm Pulldown",
+    pattern: "Vertical Pull",
+    muscle: "Lats",
+    equipment: "Cable",
+  },
+  {
+    id: "47",
+    name: "Single Arm Lat Pulldown",
+    pattern: "Vertical Pull",
+    muscle: "Lats",
+    equipment: "Cable",
+  },
 
-  // --- CORE & ISOLATION ---
+  // --- CORE ---
   {
     id: "13",
     name: "Plank",
@@ -238,18 +322,69 @@ export const exercises: Exercise[] = [
     equipment: "Bodyweight",
   },
   {
+    id: "48",
+    name: "Cable Crunch",
+    pattern: "Core",
+    muscle: "Abs",
+    equipment: "Cable",
+  },
+  {
+    id: "49",
+    name: "Russian Twists",
+    pattern: "Core",
+    muscle: "Obliques",
+    equipment: "Dumbbell",
+  },
+  {
+    id: "50",
+    name: "Side Plank",
+    pattern: "Core",
+    muscle: "Obliques",
+    equipment: "Bodyweight",
+  },
+
+  // --- ISOLATION (Bicep/Tricep/Shoulder/Calves) ---
+  {
     id: "32",
-    name: "Bicep Curls",
+    name: "Dumbbell Bicep Curls",
     pattern: "Isolation",
     muscle: "Biceps",
     equipment: "Dumbbell",
+  },
+  {
+    id: "51",
+    name: "Hammer Curls",
+    pattern: "Isolation",
+    muscle: "Biceps/Forearms",
+    equipment: "Dumbbell",
+  },
+  {
+    id: "52",
+    name: "Preacher Curls",
+    pattern: "Isolation",
+    muscle: "Biceps",
+    equipment: "Barbell",
   },
   {
     id: "33",
     name: "Tricep Pushdowns",
     pattern: "Isolation",
     muscle: "Triceps",
-    equipment: "Machine",
+    equipment: "Cable",
+  },
+  {
+    id: "53",
+    name: "Overhead Tricep Extension",
+    pattern: "Isolation",
+    muscle: "Triceps",
+    equipment: "Dumbbell",
+  },
+  {
+    id: "54",
+    name: "Skull Crushers",
+    pattern: "Isolation",
+    muscle: "Triceps",
+    equipment: "Barbell",
   },
   {
     id: "34",
@@ -263,7 +398,21 @@ export const exercises: Exercise[] = [
     name: "Face Pulls",
     pattern: "Isolation",
     muscle: "Rear Delts",
+    equipment: "Cable",
+  },
+  {
+    id: "55",
+    name: "Calf Raises",
+    pattern: "Isolation",
+    muscle: "Calves",
     equipment: "Machine",
+  },
+  {
+    id: "56",
+    name: "Reverse Flyes",
+    pattern: "Isolation",
+    muscle: "Rear Delts",
+    equipment: "Dumbbell",
   },
 ];
 

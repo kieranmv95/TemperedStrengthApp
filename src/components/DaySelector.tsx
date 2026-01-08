@@ -31,9 +31,8 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
 
   // Calculate the date range to show (e.g., 7 days before and after current day)
   const minDayIndex = Math.max(0, currentDayIndex - 7);
-  // If it's the last day (or past it), don't show future dates
-  const maxDayIndex =
-    currentDayIndex >= lastDayIndex ? currentDayIndex : currentDayIndex + 14;
+  // Never show dates after the last session
+  const maxDayIndex = Math.min(currentDayIndex + 14, lastDayIndex);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
