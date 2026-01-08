@@ -1,7 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useRef, useState } from "react";
 import {
-  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -10,12 +9,7 @@ import {
 } from "react-native";
 import { getExerciseById } from "../data/exercises";
 import { Exercise as ProgramExercise } from "../utils/program";
-import {
-  clearLoggedSetsForSlot,
-  getLoggedSets,
-  hasLoggedSets,
-  saveLoggedSet,
-} from "../utils/storage";
+import { getLoggedSets, hasLoggedSets, saveLoggedSet } from "../utils/storage";
 
 interface ExerciseCardProps {
   exerciseId: string | null;
@@ -352,46 +346,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
       })}
 
       <View style={styles.swapButtonContainer}>
-        <TouchableOpacity
-          style={styles.swapButton}
-          onPress={async () => {
-            if (hasAnyLoggedSets && dayIndex !== null) {
-              Alert.alert(
-                "Clear Workout Data?",
-                "Swapping the exercise will clear all logged sets for this exercise. This cannot be undone.",
-                [
-                  {
-                    text: "Cancel",
-                    style: "cancel",
-                  },
-                  {
-                    text: "Clear and Swap",
-                    style: "destructive",
-                    onPress: async () => {
-                      try {
-                        await clearLoggedSetsForSlot(dayIndex, slotIndex);
-                        // Clear local state
-                        setWeights(Array(numberOfSets).fill(""));
-                        setReps(Array(numberOfSets).fill(""));
-                        setSetStates(new Map());
-                        setHasAnyLoggedSets(false);
-                        onSwap();
-                      } catch (error) {
-                        console.error("Error clearing logged sets:", error);
-                        Alert.alert(
-                          "Error",
-                          "Failed to clear workout data. Please try again."
-                        );
-                      }
-                    },
-                  },
-                ]
-              );
-            } else {
-              onSwap();
-            }
-          }}
-        >
+        <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
           <Text style={styles.swapButtonText}>Swap Exercise</Text>
         </TouchableOpacity>
       </View>

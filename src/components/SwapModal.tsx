@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Alert,
   Modal,
   ScrollView,
   StyleSheet,
@@ -9,19 +10,26 @@ import {
 } from "react-native";
 import { getAllExercises, getExerciseById } from "../data/exercises";
 import { findAlternatives } from "../utils/pivotEngine";
+import { hasLoggedSets, clearLoggedSetsForSlot } from "../utils/storage";
 
 interface SwapModalProps {
   visible: boolean;
   currentExerciseId: string | null;
+  dayIndex: number | null;
+  slotIndex: number;
   onClose: () => void;
   onSelectExercise: (exerciseId: string) => void;
+  onClearData?: () => void;
 }
 
 export const SwapModal: React.FC<SwapModalProps> = ({
   visible,
   currentExerciseId,
+  dayIndex,
+  slotIndex,
   onClose,
   onSelectExercise,
+  onClearData,
 }) => {
   const currentExercise = currentExerciseId
     ? getExerciseById(currentExerciseId)
@@ -30,7 +38,44 @@ export const SwapModal: React.FC<SwapModalProps> = ({
     ? findAlternatives(currentExerciseId, 3)
     : getAllExercises().slice(0, 15); // Show all exercises for empty slots
 
-  const handleSelect = (exerciseId: string) => {
+  const handleSelect = async (exerciseId: string) => {
+    // Check if there's logged data before swapping
+    if (dayIndex !== null) {
+      const hasLogged = await hasLoggedSets(dayIndex, slotIndex);
+      
+      if (hasLogged) {
+        Alert.alert(
+          'Clear Workout Data?',
+          'Swapping the exercise will clear all logged sets for this exercise. This cannot be undone.',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {
+              text: 'Clear and Swap',
+              style: 'destructive',
+              onPress: async () => {
+                try {
+                  await clearLoggedSetsForSlot(dayIndex, slotIndex);
+                  if (onClearData) {
+                    onClearData();
+                  }
+                  onSelectExercise(exerciseId);
+                  onClose();
+                } catch (error) {
+                  console.error('Error clearing logged sets:', error);
+                  Alert.alert('Error', 'Failed to clear workout data. Please try again.');
+                }
+              },
+            },
+          ]
+        );
+        return;
+      }
+    }
+    
+    // No logged data, swap immediately
     onSelectExercise(exerciseId);
     onClose();
   };

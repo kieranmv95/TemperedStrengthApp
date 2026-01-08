@@ -356,11 +356,19 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             ? slots[currentSwapSlot - 1]?.exerciseId || null
             : null
         }
+        dayIndex={selectedDayIndex}
+        slotIndex={currentSwapSlot !== null ? currentSwapSlot - 1 : 0}
         onClose={() => {
           setSwapModalVisible(false);
           setCurrentSwapSlot(null);
         }}
         onSelectExercise={handleSelectExercise}
+        onClearData={async () => {
+          // Reload workout data to refresh the exercise card
+          if (selectedDayIndex !== null) {
+            await loadWorkoutForDay(selectedDayIndex);
+          }
+        }}
       />
 
       <SettingsModal
