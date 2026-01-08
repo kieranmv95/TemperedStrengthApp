@@ -1,9 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { getExerciseById } from '../data/exercises';
-import { saveLoggedSet, getLoggedSets, hasLoggedSets } from '../utils/storage';
-import { Exercise as ProgramExercise } from '../utils/program';
+import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { getExerciseById } from "../data/exercises";
+import { Exercise as ProgramExercise } from "../utils/program";
+import {
+  clearLoggedSetsForSlot,
+  getLoggedSets,
+  hasLoggedSets,
+  saveLoggedSet,
+} from "../utils/storage";
 
 interface ExerciseCardProps {
   exerciseId: string | null;
@@ -24,10 +36,14 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 }) => {
   const [weights, setWeights] = useState<string[]>([]);
   const [reps, setReps] = useState<string[]>([]);
-  const [setStates, setSetStates] = useState<Map<number, 'completed' | 'failed'>>(new Map());
+  const [setStates, setSetStates] = useState<
+    Map<number, "completed" | "failed">
+  >(new Map());
   const [loading, setLoading] = useState(false);
   const [hasAnyLoggedSets, setHasAnyLoggedSets] = useState(false);
-  const saveTimersRef = useRef<{ [key: number]: NodeJS.Timeout }>({});
+  const saveTimersRef = useRef<{
+    [key: number]: ReturnType<typeof setTimeout>;
+  }>({});
 
   const exercise = exerciseId ? getExerciseById(exerciseId) : null;
   const numberOfSets = programExercise?.sets || 1;
@@ -44,7 +60,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           // Initialize arrays with saved data or empty strings
           const initialWeights: string[] = [];
           const initialReps: string[] = [];
-          const initialSetStates: Map<number, 'completed' | 'failed'> = new Map();
+          const initialSetStates: Map<number, "completed" | "failed"> =
+            new Map();
 
           for (let i = 0; i < numberOfSets; i++) {
             if (savedSets[i]) {
@@ -52,11 +69,14 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
               initialReps[i] = savedSets[i].reps.toString();
               // Restore state from storage if available (excluding null which means unchecked)
               if (savedSets[i].state && savedSets[i].state !== null) {
-                initialSetStates.set(i, savedSets[i].state);
+                const state = savedSets[i].state;
+                if (state === "completed" || state === "failed") {
+                  initialSetStates.set(i, state);
+                }
               }
             } else {
-              initialWeights[i] = '';
-              initialReps[i] = '';
+              initialWeights[i] = "";
+              initialReps[i] = "";
             }
           }
 
@@ -64,15 +84,15 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           setReps(initialReps);
           setSetStates(initialSetStates);
         } catch (error) {
-          console.error('Error loading logged sets:', error);
+          console.error("Error loading logged sets:", error);
           // Initialize with empty arrays if error
-          setWeights(Array(numberOfSets).fill(''));
-          setReps(Array(numberOfSets).fill(''));
+          setWeights(Array(numberOfSets).fill(""));
+          setReps(Array(numberOfSets).fill(""));
         }
       } else {
         // Initialize arrays for sets
-        setWeights(Array(numberOfSets).fill(''));
-        setReps(Array(numberOfSets).fill(''));
+        setWeights(Array(numberOfSets).fill(""));
+        setReps(Array(numberOfSets).fill(""));
         setSetStates(new Map());
       }
     };
@@ -82,14 +102,19 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
   // Cleanup timers on unmount
   useEffect(() => {
+    const timers = saveTimersRef.current;
     return () => {
-      Object.values(saveTimersRef.current).forEach(timer => {
+      Object.values(timers).forEach((timer) => {
         if (timer) clearTimeout(timer);
       });
     };
   }, []);
 
-  const autoSaveSet = async (setIndex: number, weightStr: string, repsStr: string) => {
+  const autoSaveSet = async (
+    setIndex: number,
+    weightStr: string,
+    repsStr: string
+  ) => {
     if (!exerciseId || dayIndex === null || !weightStr || !repsStr) {
       return;
     }
@@ -104,10 +129,17 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     try {
       // Preserve existing state when auto-saving
       const currentState = setStates.get(setIndex);
-      await saveLoggedSet(dayIndex, slotIndex, setIndex, weightNum, repsNum, currentState);
+      await saveLoggedSet(
+        dayIndex,
+        slotIndex,
+        setIndex,
+        weightNum,
+        repsNum,
+        currentState
+      );
       setHasAnyLoggedSets(true);
     } catch (error) {
-      console.error('Error auto-saving set:', error);
+      console.error("Error auto-saving set:", error);
     }
   };
 
@@ -123,7 +155,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
     // Auto-save after 500ms of no typing
     saveTimersRef.current[setIndex] = setTimeout(() => {
-      autoSaveSet(setIndex, value, reps[setIndex] || '');
+      autoSaveSet(setIndex, value, reps[setIndex] || "");
     }, 500);
   };
 
@@ -139,12 +171,17 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
     // Auto-save after 500ms of no typing
     saveTimersRef.current[setIndex] = setTimeout(() => {
-      autoSaveSet(setIndex, weights[setIndex] || '', value);
+      autoSaveSet(setIndex, weights[setIndex] || "", value);
     }, 500);
   };
 
   const handleToggleSetState = async (setIndex: number) => {
-    if (!exerciseId || !weights[setIndex] || !reps[setIndex] || dayIndex === null) {
+    if (
+      !exerciseId ||
+      !weights[setIndex] ||
+      !reps[setIndex] ||
+      dayIndex === null
+    ) {
       return;
     }
 
@@ -163,22 +200,43 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
       // Cycle through states: none -> completed -> failed -> none
       if (currentState === undefined) {
         // Default -> Completed (green)
-        newSetStates.set(setIndex, 'completed');
-        await saveLoggedSet(dayIndex, slotIndex, setIndex, weightNum, repsNum, 'completed');
+        newSetStates.set(setIndex, "completed");
+        await saveLoggedSet(
+          dayIndex,
+          slotIndex,
+          setIndex,
+          weightNum,
+          repsNum,
+          "completed"
+        );
         setHasAnyLoggedSets(true);
-      } else if (currentState === 'completed') {
+      } else if (currentState === "completed") {
         // Completed -> Failed (red)
-        newSetStates.set(setIndex, 'failed');
-        await saveLoggedSet(dayIndex, slotIndex, setIndex, weightNum, repsNum, 'failed');
-      } else if (currentState === 'failed') {
+        newSetStates.set(setIndex, "failed");
+        await saveLoggedSet(
+          dayIndex,
+          slotIndex,
+          setIndex,
+          weightNum,
+          repsNum,
+          "failed"
+        );
+      } else if (currentState === "failed") {
         // Failed -> Default (explicitly unchecked)
         newSetStates.delete(setIndex);
-        await saveLoggedSet(dayIndex, slotIndex, setIndex, weightNum, repsNum, null);
+        await saveLoggedSet(
+          dayIndex,
+          slotIndex,
+          setIndex,
+          weightNum,
+          repsNum,
+          null
+        );
       }
 
       setSetStates(newSetStates);
     } catch (error) {
-      console.error('Error toggling set state:', error);
+      console.error("Error toggling set state:", error);
     } finally {
       setLoading(false);
     }
@@ -198,7 +256,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   }
 
   const repRangeText = programExercise?.isAmrap
-    ? 'MAX REPS'
+    ? "MAX REPS"
     : programExercise?.repRange
     ? `${programExercise.repRange[0]}-${programExercise.repRange[1]} reps`
     : null;
@@ -209,7 +267,12 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         <View style={styles.headerLeft}>
           <Text style={styles.exerciseName}>{exercise.name}</Text>
           {repRangeText && (
-            <Text style={[styles.repRangeLabel, programExercise?.isAmrap && styles.amrapLabel]}>
+            <Text
+              style={[
+                styles.repRangeLabel,
+                programExercise?.isAmrap && styles.amrapLabel,
+              ]}
+            >
               {repRangeText}
             </Text>
           )}
@@ -222,8 +285,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
       {Array.from({ length: numberOfSets }).map((_, setIndex) => {
         const setState = setStates.get(setIndex);
-        const isCompleted = setState === 'completed';
-        const isFailed = setState === 'failed';
+        const isCompleted = setState === "completed";
+        const isFailed = setState === "failed";
         const canLog = weights[setIndex] && reps[setIndex] && !loading;
         const isFirstSet = setIndex === 0;
 
@@ -231,14 +294,16 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           <View key={setIndex} style={styles.setContainer}>
             <View style={styles.inputContainer}>
               <View style={styles.inputGroup}>
-                {isFirstSet && <Text style={styles.inputLabel}>Weight (kg)</Text>}
+                {isFirstSet && (
+                  <Text style={styles.inputLabel}>Weight (kg)</Text>
+                )}
                 <TextInput
                   style={[
                     styles.input,
                     isCompleted && styles.inputCompleted,
                     isFailed && styles.inputFailed,
                   ]}
-                  value={weights[setIndex] || ''}
+                  value={weights[setIndex] || ""}
                   onChangeText={(value) => handleWeightChange(setIndex, value)}
                   keyboardType="numeric"
                   placeholder="0"
@@ -255,7 +320,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                       isCompleted && styles.inputCompleted,
                       isFailed && styles.inputFailed,
                     ]}
-                    value={reps[setIndex] || ''}
+                    value={reps[setIndex] || ""}
                     onChangeText={(value) => handleRepsChange(setIndex, value)}
                     keyboardType="numeric"
                     placeholder="0"
@@ -263,19 +328,20 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                   />
                 </View>
                 <TouchableOpacity
-                  style={[styles.checkmarkButton, !canLog && styles.checkmarkButtonDisabled]}
+                  style={[
+                    styles.checkmarkButton,
+                    !canLog && styles.checkmarkButtonDisabled,
+                  ]}
                   onPress={() => handleToggleSetState(setIndex)}
                   disabled={!canLog}
                 >
                   <Ionicons
-                    name={setState ? 'checkmark-circle' : 'checkmark-circle-outline'}
+                    name={
+                      setState ? "checkmark-circle" : "checkmark-circle-outline"
+                    }
                     size={32}
                     color={
-                      isCompleted
-                        ? '#00E676'
-                        : isFailed
-                        ? '#FF6B6B'
-                        : '#666'
+                      isCompleted ? "#00E676" : isFailed ? "#FF6B6B" : "#666"
                     }
                   />
                 </TouchableOpacity>
@@ -287,13 +353,46 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
       <View style={styles.swapButtonContainer}>
         <TouchableOpacity
-          style={[styles.swapButton, hasAnyLoggedSets && styles.swapButtonDisabled]}
-          onPress={onSwap}
-          disabled={hasAnyLoggedSets}
+          style={styles.swapButton}
+          onPress={async () => {
+            if (hasAnyLoggedSets && dayIndex !== null) {
+              Alert.alert(
+                "Clear Workout Data?",
+                "Swapping the exercise will clear all logged sets for this exercise. This cannot be undone.",
+                [
+                  {
+                    text: "Cancel",
+                    style: "cancel",
+                  },
+                  {
+                    text: "Clear and Swap",
+                    style: "destructive",
+                    onPress: async () => {
+                      try {
+                        await clearLoggedSetsForSlot(dayIndex, slotIndex);
+                        // Clear local state
+                        setWeights(Array(numberOfSets).fill(""));
+                        setReps(Array(numberOfSets).fill(""));
+                        setSetStates(new Map());
+                        setHasAnyLoggedSets(false);
+                        onSwap();
+                      } catch (error) {
+                        console.error("Error clearing logged sets:", error);
+                        Alert.alert(
+                          "Error",
+                          "Failed to clear workout data. Please try again."
+                        );
+                      }
+                    },
+                  },
+                ]
+              );
+            } else {
+              onSwap();
+            }
+          }}
         >
-          <Text style={[styles.swapButtonText, hasAnyLoggedSets && styles.swapButtonTextDisabled]}>
-            Swap Exercise
-          </Text>
+          <Text style={styles.swapButtonText}>Swap Exercise</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -302,12 +401,12 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: "#1E1E1E",
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: "#2A2A2A",
   },
   header: {
     marginBottom: 16,
@@ -316,36 +415,36 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   exerciseName: {
-    color: '#00E676',
+    color: "#00E676",
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 4,
   },
   repRangeLabel: {
-    color: '#CCC',
+    color: "#CCC",
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 4,
   },
   amrapLabel: {
-    color: '#FF4444',
-    fontWeight: '800',
+    color: "#FF4444",
+    fontWeight: "800",
   },
   setsHeader: {
     marginBottom: 12,
   },
   setsLabel: {
-    color: '#888',
+    color: "#888",
     fontSize: 12,
-    fontWeight: '600',
-    textTransform: 'uppercase',
+    fontWeight: "600",
+    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   setContainer: {
     marginBottom: 12,
   },
   inputContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
     marginBottom: 0,
   },
@@ -354,40 +453,40 @@ const styles = StyleSheet.create({
   },
   inputGroupWithCheckmark: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
+    flexDirection: "row",
+    alignItems: "flex-end",
     gap: 8,
   },
   inputLabel: {
-    color: '#CCC',
+    color: "#CCC",
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 8,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   input: {
-    backgroundColor: '#2A2A2A',
+    backgroundColor: "#2A2A2A",
     borderRadius: 8,
     padding: 12,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     borderWidth: 1,
-    borderColor: '#333',
+    borderColor: "#333",
   },
   inputCompleted: {
-    borderColor: '#00E676',
+    borderColor: "#00E676",
     borderWidth: 2,
   },
   inputFailed: {
-    borderColor: '#FF6B6B',
+    borderColor: "#FF6B6B",
     borderWidth: 2,
   },
   checkmarkButton: {
     paddingBottom: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   checkmarkButtonDisabled: {
     opacity: 0.3,
@@ -399,34 +498,27 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#00E676',
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderColor: "#00E676",
+    alignItems: "center",
+    justifyContent: "center",
   },
   swapButtonText: {
-    color: '#00E676',
+    color: "#00E676",
     fontSize: 14,
-    fontWeight: '700',
-    textTransform: 'uppercase',
+    fontWeight: "700",
+    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
-  swapButtonDisabled: {
-    opacity: 0.5,
-    borderColor: '#666',
-  },
-  swapButtonTextDisabled: {
-    color: '#666',
-  },
   slotHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   slotLabel: {
-    color: '#00E676',
+    color: "#00E676",
     fontSize: 12,
-    fontWeight: '600',
-    textTransform: 'uppercase',
+    fontWeight: "600",
+    textTransform: "uppercase",
     letterSpacing: 0.5,
     marginBottom: 4,
   },

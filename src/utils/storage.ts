@@ -219,6 +219,36 @@ export const hasLoggedSets = async (
 };
 
 /**
+ * Clear logged sets for a specific day and slot
+ * @param dayIndex - Day index in the program
+ * @param slotIndex - Slot index (0-based)
+ */
+export const clearLoggedSetsForSlot = async (
+  dayIndex: number,
+  slotIndex: number
+): Promise<void> => {
+  try {
+    const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
+    if (!data) return;
+
+    const logs: WorkoutLogs = JSON.parse(data);
+    if (logs[dayIndex]?.[slotIndex]) {
+      delete logs[dayIndex][slotIndex];
+      
+      // Clean up empty day/slot objects
+      if (Object.keys(logs[dayIndex]).length === 0) {
+        delete logs[dayIndex];
+      }
+      
+      await AsyncStorage.setItem(WORKOUT_LOGS_KEY, JSON.stringify(logs));
+    }
+  } catch (error) {
+    console.error("Error clearing logged sets for slot:", error);
+    throw error;
+  }
+};
+
+/**
  * Clear workout logs and swaps from a specific day index onwards
  * @param fromDayIndex - Day index to start clearing from (inclusive)
  */
