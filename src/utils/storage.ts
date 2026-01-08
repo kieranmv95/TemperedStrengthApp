@@ -1,21 +1,10 @@
 // Storage utilities for AsyncStorage
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const STORAGE_KEY = "user_progress";
 const PROGRAM_STORAGE_KEY = "active_program";
 const PROGRAM_START_DATE_KEY = "program_start_date";
 const EXERCISE_SWAPS_KEY = "exercise_swaps";
 const WORKOUT_LOGS_KEY = "workout_logs";
-
-export interface ExerciseProgress {
-  weight: number;
-  reps: number;
-  date: string;
-}
-
-export interface UserProgress {
-  [exerciseId: string]: ExerciseProgress;
-}
 
 export interface ExerciseSwap {
   dayIndex: number;
@@ -33,6 +22,7 @@ export interface ExerciseSwaps {
 export interface LoggedSet {
   weight: number;
   reps: number;
+  state?: 'completed' | 'failed' | null;
 }
 
 export interface WorkoutLogs {
@@ -42,79 +32,6 @@ export interface WorkoutLogs {
     };
   };
 }
-
-/**
- * Get all user progress from storage
- * @returns User progress object
- */
-export const getUserProgress = async (): Promise<UserProgress> => {
-  try {
-    const data = await AsyncStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : {};
-  } catch (error) {
-    console.error("Error getting user progress:", error);
-    return {};
-  }
-};
-
-/**
- * Get progress for a specific exercise
- * @param exerciseId - Exercise ID
- * @returns Exercise progress or null
- */
-export const getExerciseProgress = async (
-  exerciseId: string
-): Promise<ExerciseProgress | null> => {
-  try {
-    const progress = await getUserProgress();
-    return progress[exerciseId] || null;
-  } catch (error) {
-    console.error("Error getting exercise progress:", error);
-    return null;
-  }
-};
-
-/**
- * Save a set for an exercise
- * @param exerciseId - Exercise ID
- * @param weight - Weight used
- * @param reps - Reps performed
- */
-export const saveSet = async (
-  exerciseId: string,
-  weight: number,
-  reps: number
-): Promise<void> => {
-  try {
-    const progress = await getUserProgress();
-    progress[exerciseId] = {
-      weight,
-      reps,
-      date: new Date().toISOString(),
-    };
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-  } catch (error) {
-    console.error("Error saving set:", error);
-    throw error;
-  }
-};
-
-/**
- * Get the last logged weight for an exercise
- * @param exerciseId - Exercise ID
- * @returns Last weight or null
- */
-export const getLastWeight = async (
-  exerciseId: string
-): Promise<number | null> => {
-  try {
-    const progress = await getExerciseProgress(exerciseId);
-    return progress ? progress.weight : null;
-  } catch (error) {
-    console.error("Error getting last weight:", error);
-    return null;
-  }
-};
 
 /**
  * Get the active program ID
@@ -220,13 +137,15 @@ export const getExerciseSwapsForDay = async (
  * @param setIndex - Set index (0-based)
  * @param weight - Weight used
  * @param reps - Reps performed
+ * @param state - Set state (completed, failed, null for unchecked, or undefined to preserve)
  */
 export const saveLoggedSet = async (
   dayIndex: number,
   slotIndex: number,
   setIndex: number,
   weight: number,
-  reps: number
+  reps: number,
+  state?: 'completed' | 'failed' | null
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
@@ -238,7 +157,20 @@ export const saveLoggedSet = async (
     if (!logs[dayIndex][slotIndex]) {
       logs[dayIndex][slotIndex] = {};
     }
-    logs[dayIndex][slotIndex][setIndex] = { weight, reps };
+    
+    const setData: LoggedSet = { weight, reps };
+    if (state !== undefined) {
+      // Explicitly set the state (including null for unchecked)
+      setData.state = state;
+    } else {
+      // If state is undefined, preserve the existing state (for auto-save)
+      const existing = logs[dayIndex][slotIndex][setIndex];
+      if (existing?.state !== undefined) {
+        setData.state = existing.state;
+      }
+    }
+    
+    logs[dayIndex][slotIndex][setIndex] = setData;
 
     await AsyncStorage.setItem(WORKOUT_LOGS_KEY, JSON.stringify(logs));
   } catch (error) {

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { getExerciseById } from '../data/exercises';
-import { getLastWeight, saveSet, saveLoggedSet, getLoggedSets, hasLoggedSets } from '../utils/storage';
+import { saveLoggedSet, getLoggedSets, hasLoggedSets } from '../utils/storage';
 import { Exercise as ProgramExercise } from '../utils/program';
 
 interface ExerciseCardProps {
@@ -12,7 +12,6 @@ interface ExerciseCardProps {
   dayIndex: number | null;
   slotIndex: number;
   onSwap: () => void;
-  onSetLogged: (weight: number) => void;
 }
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
@@ -22,14 +21,13 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   dayIndex,
   slotIndex,
   onSwap,
-  onSetLogged,
 }) => {
   const [weights, setWeights] = useState<string[]>([]);
   const [reps, setReps] = useState<string[]>([]);
-  const [loggedSets, setLoggedSets] = useState<Set<number>>(new Set());
-  const [previousWeight, setPreviousWeight] = useState<number | null>(null);
+  const [setStates, setSetStates] = useState<Map<number, 'completed' | 'failed'>>(new Map());
   const [loading, setLoading] = useState(false);
   const [hasAnyLoggedSets, setHasAnyLoggedSets] = useState(false);
+  const saveTimersRef = useRef<{ [key: number]: NodeJS.Timeout }>({});
 
   const exercise = exerciseId ? getExerciseById(exerciseId) : null;
   const numberOfSets = programExercise?.sets || 1;
@@ -46,13 +44,16 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           // Initialize arrays with saved data or empty strings
           const initialWeights: string[] = [];
           const initialReps: string[] = [];
-          const loggedSetIndices = new Set<number>();
+          const initialSetStates: Map<number, 'completed' | 'failed'> = new Map();
 
           for (let i = 0; i < numberOfSets; i++) {
             if (savedSets[i]) {
               initialWeights[i] = savedSets[i].weight.toString();
               initialReps[i] = savedSets[i].reps.toString();
-              loggedSetIndices.add(i);
+              // Restore state from storage if available (excluding null which means unchecked)
+              if (savedSets[i].state && savedSets[i].state !== null) {
+                initialSetStates.set(i, savedSets[i].state);
+              }
             } else {
               initialWeights[i] = '';
               initialReps[i] = '';
@@ -61,7 +62,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
           setWeights(initialWeights);
           setReps(initialReps);
-          setLoggedSets(loggedSetIndices);
+          setSetStates(initialSetStates);
         } catch (error) {
           console.error('Error loading logged sets:', error);
           // Initialize with empty arrays if error
@@ -72,28 +73,41 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         // Initialize arrays for sets
         setWeights(Array(numberOfSets).fill(''));
         setReps(Array(numberOfSets).fill(''));
-        setLoggedSets(new Set());
+        setSetStates(new Map());
       }
     };
 
     loadLoggedSets();
   }, [programExercise, numberOfSets, dayIndex, slotIndex]);
 
+  // Cleanup timers on unmount
   useEffect(() => {
-    if (exerciseId) {
-      loadPreviousWeight();
-    } else {
-      setPreviousWeight(null);
-    }
-  }, [exerciseId]);
+    return () => {
+      Object.values(saveTimersRef.current).forEach(timer => {
+        if (timer) clearTimeout(timer);
+      });
+    };
+  }, []);
 
-  const loadPreviousWeight = async () => {
-    if (!exerciseId) return;
+  const autoSaveSet = async (setIndex: number, weightStr: string, repsStr: string) => {
+    if (!exerciseId || dayIndex === null || !weightStr || !repsStr) {
+      return;
+    }
+
+    const weightNum = parseFloat(weightStr);
+    const repsNum = parseInt(repsStr, 10);
+
+    if (isNaN(weightNum) || isNaN(repsNum) || weightNum <= 0 || repsNum <= 0) {
+      return;
+    }
+
     try {
-      const lastWeight = await getLastWeight(exerciseId);
-      setPreviousWeight(lastWeight);
+      // Preserve existing state when auto-saving
+      const currentState = setStates.get(setIndex);
+      await saveLoggedSet(dayIndex, slotIndex, setIndex, weightNum, repsNum, currentState);
+      setHasAnyLoggedSets(true);
     } catch (error) {
-      console.error('Error loading previous weight:', error);
+      console.error('Error auto-saving set:', error);
     }
   };
 
@@ -101,15 +115,35 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     const newWeights = [...weights];
     newWeights[setIndex] = value;
     setWeights(newWeights);
+
+    // Clear existing timer for this set
+    if (saveTimersRef.current[setIndex]) {
+      clearTimeout(saveTimersRef.current[setIndex]);
+    }
+
+    // Auto-save after 500ms of no typing
+    saveTimersRef.current[setIndex] = setTimeout(() => {
+      autoSaveSet(setIndex, value, reps[setIndex] || '');
+    }, 500);
   };
 
   const handleRepsChange = (setIndex: number, value: string) => {
     const newReps = [...reps];
     newReps[setIndex] = value;
     setReps(newReps);
+
+    // Clear existing timer for this set
+    if (saveTimersRef.current[setIndex]) {
+      clearTimeout(saveTimersRef.current[setIndex]);
+    }
+
+    // Auto-save after 500ms of no typing
+    saveTimersRef.current[setIndex] = setTimeout(() => {
+      autoSaveSet(setIndex, weights[setIndex] || '', value);
+    }, 500);
   };
 
-  const handleLogSet = async (setIndex: number) => {
+  const handleToggleSetState = async (setIndex: number) => {
     if (!exerciseId || !weights[setIndex] || !reps[setIndex] || dayIndex === null) {
       return;
     }
@@ -123,18 +157,28 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
     setLoading(true);
     try {
-      // Save to both old storage (for backward compatibility) and new workout logs
-      await saveSet(exerciseId, weightNum, repsNum);
-      await saveLoggedSet(dayIndex, slotIndex, setIndex, weightNum, repsNum);
-      await loadPreviousWeight();
-      onSetLogged(weightNum);
-      
-      // Mark this set as logged, but keep the values
-      const newLoggedSets = new Set([...loggedSets, setIndex]);
-      setLoggedSets(newLoggedSets);
-      setHasAnyLoggedSets(true);
+      const currentState = setStates.get(setIndex);
+      const newSetStates = new Map(setStates);
+
+      // Cycle through states: none -> completed -> failed -> none
+      if (currentState === undefined) {
+        // Default -> Completed (green)
+        newSetStates.set(setIndex, 'completed');
+        await saveLoggedSet(dayIndex, slotIndex, setIndex, weightNum, repsNum, 'completed');
+        setHasAnyLoggedSets(true);
+      } else if (currentState === 'completed') {
+        // Completed -> Failed (red)
+        newSetStates.set(setIndex, 'failed');
+        await saveLoggedSet(dayIndex, slotIndex, setIndex, weightNum, repsNum, 'failed');
+      } else if (currentState === 'failed') {
+        // Failed -> Default (explicitly unchecked)
+        newSetStates.delete(setIndex);
+        await saveLoggedSet(dayIndex, slotIndex, setIndex, weightNum, repsNum, null);
+      }
+
+      setSetStates(newSetStates);
     } catch (error) {
-      console.error('Error logging set:', error);
+      console.error('Error toggling set state:', error);
     } finally {
       setLoading(false);
     }
@@ -169,9 +213,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
               {repRangeText}
             </Text>
           )}
-          {previousWeight !== null && (
-            <Text style={styles.previousLabel}>Previous: {previousWeight}kg</Text>
-          )}
         </View>
       </View>
 
@@ -180,47 +221,62 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
       </View>
 
       {Array.from({ length: numberOfSets }).map((_, setIndex) => {
-        const isLogged = loggedSets.has(setIndex);
+        const setState = setStates.get(setIndex);
+        const isCompleted = setState === 'completed';
+        const isFailed = setState === 'failed';
         const canLog = weights[setIndex] && reps[setIndex] && !loading;
+        const isFirstSet = setIndex === 0;
 
         return (
           <View key={setIndex} style={styles.setContainer}>
             <View style={styles.inputContainer}>
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Weight (kg)</Text>
+                {isFirstSet && <Text style={styles.inputLabel}>Weight (kg)</Text>}
                 <TextInput
-                  style={[styles.input, isLogged && styles.inputLogged]}
+                  style={[
+                    styles.input,
+                    isCompleted && styles.inputCompleted,
+                    isFailed && styles.inputFailed,
+                  ]}
                   value={weights[setIndex] || ''}
                   onChangeText={(value) => handleWeightChange(setIndex, value)}
                   keyboardType="numeric"
                   placeholder="0"
                   placeholderTextColor="#666"
-                  editable={!isLogged}
                 />
               </View>
 
               <View style={styles.inputGroupWithCheckmark}>
                 <View style={styles.inputGroup}>
-                  <Text style={styles.inputLabel}>Reps</Text>
+                  {isFirstSet && <Text style={styles.inputLabel}>Reps</Text>}
                   <TextInput
-                    style={[styles.input, isLogged && styles.inputLogged]}
+                    style={[
+                      styles.input,
+                      isCompleted && styles.inputCompleted,
+                      isFailed && styles.inputFailed,
+                    ]}
                     value={reps[setIndex] || ''}
                     onChangeText={(value) => handleRepsChange(setIndex, value)}
                     keyboardType="numeric"
                     placeholder="0"
                     placeholderTextColor="#666"
-                    editable={!isLogged}
                   />
                 </View>
                 <TouchableOpacity
                   style={[styles.checkmarkButton, !canLog && styles.checkmarkButtonDisabled]}
-                  onPress={() => handleLogSet(setIndex)}
-                  disabled={!canLog || isLogged}
+                  onPress={() => handleToggleSetState(setIndex)}
+                  disabled={!canLog}
                 >
                   <Ionicons
-                    name={isLogged ? 'checkmark-circle' : 'checkmark-circle-outline'}
+                    name={setState ? 'checkmark-circle' : 'checkmark-circle-outline'}
                     size={32}
-                    color={isLogged ? '#00E676' : canLog ? '#00E676' : '#666'}
+                    color={
+                      isCompleted
+                        ? '#00E676'
+                        : isFailed
+                        ? '#FF6B6B'
+                        : '#666'
+                    }
                   />
                 </TouchableOpacity>
               </View>
@@ -275,11 +331,6 @@ const styles = StyleSheet.create({
     color: '#FF4444',
     fontWeight: '800',
   },
-  previousLabel: {
-    color: '#888',
-    fontSize: 14,
-    fontWeight: '500',
-  },
   setsHeader: {
     marginBottom: 12,
   },
@@ -291,10 +342,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   setContainer: {
-    marginBottom: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#2A2A2A',
+    marginBottom: 12,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -328,10 +376,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333',
   },
-  inputLogged: {
+  inputCompleted: {
     borderColor: '#00E676',
     borderWidth: 2,
-    opacity: 0.7,
+  },
+  inputFailed: {
+    borderColor: '#FF6B6B',
+    borderWidth: 2,
   },
   checkmarkButton: {
     paddingBottom: 8,

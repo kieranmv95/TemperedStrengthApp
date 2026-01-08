@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { CoachFeedback } from "../components/CoachFeedback";
 import { DaySelector } from "../components/DaySelector";
 import { ExerciseCard } from "../components/ExerciseCard";
 import { SettingsModal } from "../components/SettingsModal";
@@ -53,9 +52,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [loading, setLoading] = useState(true);
   const [swapModalVisible, setSwapModalVisible] = useState(false);
   const [currentSwapSlot, setCurrentSwapSlot] = useState<number | null>(null);
-  const [coachModalVisible, setCoachModalVisible] = useState(false);
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
-  const [lastLoggedWeight, setLastLoggedWeight] = useState<number>(0);
 
   const calculateDaysSinceStart = (startDate: string): number => {
     const start = new Date(startDate);
@@ -238,11 +235,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     }
   };
 
-  const handleSetLogged = (weight: number) => {
-    setLastLoggedWeight(weight);
-    setCoachModalVisible(true);
-  };
-
   const handleSkipToNextWorkout = async () => {
     if (!nextWorkout) return;
 
@@ -353,7 +345,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             dayIndex={selectedDayIndex}
             slotIndex={index}
             onSwap={() => handleSwapClick(index + 1)}
-            onSetLogged={handleSetLogged}
           />
         ))}
       </ScrollView>
@@ -370,12 +361,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           setCurrentSwapSlot(null);
         }}
         onSelectExercise={handleSelectExercise}
-      />
-
-      <CoachFeedback
-        visible={coachModalVisible}
-        currentWeight={lastLoggedWeight}
-        onClose={() => setCoachModalVisible(false)}
       />
 
       <SettingsModal

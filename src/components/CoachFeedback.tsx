@@ -70,6 +70,12 @@ export const CoachFeedback: React.FC<CoachFeedbackProps> = ({
           {!showFeedback ? (
             <>
               <Text style={styles.title}>How did that feel?</Text>
+              <TouchableOpacity
+                style={styles.skipButton}
+                onPress={handleClose}
+              >
+                <Text style={styles.skipButtonText}>Skip</Text>
+              </TouchableOpacity>
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={[styles.feelButton, styles.easyButton]}
@@ -124,28 +130,41 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: '#1E1E1E',
-    borderRadius: 20,
-    padding: 32,
-    width: '85%',
-    maxWidth: 400,
+    borderRadius: 16,
+    padding: 20,
+    width: '80%',
+    maxWidth: 320,
     borderWidth: 1,
     borderColor: '#2A2A2A',
   },
   title: {
     color: '#FFFFFF',
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: '700',
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: 12,
+  },
+  skipButton: {
+    alignSelf: 'center',
+    marginBottom: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+  },
+  skipButtonText: {
+    color: '#888',
+    fontSize: 13,
+    fontWeight: '500',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   buttonContainer: {
-    gap: 16,
+    gap: 12,
   },
   feelButton: {
-    borderRadius: 12,
-    padding: 20,
+    borderRadius: 10,
+    padding: 14,
     alignItems: 'center',
-    borderWidth: 2,
+    borderWidth: 1.5,
   },
   easyButton: {
     backgroundColor: 'rgba(0, 230, 118, 0.1)',
@@ -161,36 +180,36 @@ const styles = StyleSheet.create({
   },
   feelButtonText: {
     color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 15,
+    fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   coachLabel: {
     color: '#888',
-    fontSize: 14,
+    fontSize: 11,
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
-    marginBottom: 16,
+    marginBottom: 12,
     textAlign: 'center',
   },
   feedbackText: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 16,
+    fontWeight: '600',
     textAlign: 'center',
-    marginBottom: 32,
-    lineHeight: 28,
+    marginBottom: 20,
+    lineHeight: 22,
   },
   doneButton: {
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 10,
+    padding: 12,
     alignItems: 'center',
-    borderWidth: 2,
+    borderWidth: 1.5,
   },
   doneButtonText: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 14,
+    fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
