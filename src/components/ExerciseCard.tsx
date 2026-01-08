@@ -1,27 +1,83 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { getExerciseById } from '../data/exercises';
-import { getLastWeight, saveSet } from '../utils/storage';
+import { getLastWeight, saveSet, saveLoggedSet, getLoggedSets, hasLoggedSets } from '../utils/storage';
+import { Exercise as ProgramExercise } from '../utils/program';
 
 interface ExerciseCardProps {
   exerciseId: string | null;
+  programExercise: ProgramExercise | null;
   slotNumber: number;
+  dayIndex: number | null;
+  slotIndex: number;
   onSwap: () => void;
   onSetLogged: (weight: number) => void;
 }
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   exerciseId,
+  programExercise,
   slotNumber,
+  dayIndex,
+  slotIndex,
   onSwap,
   onSetLogged,
 }) => {
-  const [weight, setWeight] = useState('');
-  const [reps, setReps] = useState('');
+  const [weights, setWeights] = useState<string[]>([]);
+  const [reps, setReps] = useState<string[]>([]);
+  const [loggedSets, setLoggedSets] = useState<Set<number>>(new Set());
   const [previousWeight, setPreviousWeight] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const [hasAnyLoggedSets, setHasAnyLoggedSets] = useState(false);
 
   const exercise = exerciseId ? getExerciseById(exerciseId) : null;
+  const numberOfSets = programExercise?.sets || 1;
+
+  // Load logged sets from storage
+  useEffect(() => {
+    const loadLoggedSets = async () => {
+      if (dayIndex !== null && programExercise) {
+        try {
+          const savedSets = await getLoggedSets(dayIndex, slotIndex);
+          const hasLogged = await hasLoggedSets(dayIndex, slotIndex);
+          setHasAnyLoggedSets(hasLogged);
+
+          // Initialize arrays with saved data or empty strings
+          const initialWeights: string[] = [];
+          const initialReps: string[] = [];
+          const loggedSetIndices = new Set<number>();
+
+          for (let i = 0; i < numberOfSets; i++) {
+            if (savedSets[i]) {
+              initialWeights[i] = savedSets[i].weight.toString();
+              initialReps[i] = savedSets[i].reps.toString();
+              loggedSetIndices.add(i);
+            } else {
+              initialWeights[i] = '';
+              initialReps[i] = '';
+            }
+          }
+
+          setWeights(initialWeights);
+          setReps(initialReps);
+          setLoggedSets(loggedSetIndices);
+        } catch (error) {
+          console.error('Error loading logged sets:', error);
+          // Initialize with empty arrays if error
+          setWeights(Array(numberOfSets).fill(''));
+          setReps(Array(numberOfSets).fill(''));
+        }
+      } else {
+        // Initialize arrays for sets
+        setWeights(Array(numberOfSets).fill(''));
+        setReps(Array(numberOfSets).fill(''));
+        setLoggedSets(new Set());
+      }
+    };
+
+    loadLoggedSets();
+  }, [programExercise, numberOfSets, dayIndex, slotIndex]);
 
   useEffect(() => {
     if (exerciseId) {
@@ -41,13 +97,25 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     }
   };
 
-  const handleLogSet = async () => {
-    if (!exerciseId || !weight || !reps) {
+  const handleWeightChange = (setIndex: number, value: string) => {
+    const newWeights = [...weights];
+    newWeights[setIndex] = value;
+    setWeights(newWeights);
+  };
+
+  const handleRepsChange = (setIndex: number, value: string) => {
+    const newReps = [...reps];
+    newReps[setIndex] = value;
+    setReps(newReps);
+  };
+
+  const handleLogSet = async (setIndex: number) => {
+    if (!exerciseId || !weights[setIndex] || !reps[setIndex] || dayIndex === null) {
       return;
     }
 
-    const weightNum = parseFloat(weight);
-    const repsNum = parseInt(reps, 10);
+    const weightNum = parseFloat(weights[setIndex]);
+    const repsNum = parseInt(reps[setIndex], 10);
 
     if (isNaN(weightNum) || isNaN(repsNum) || weightNum <= 0 || repsNum <= 0) {
       return;
@@ -55,11 +123,16 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
     setLoading(true);
     try {
+      // Save to both old storage (for backward compatibility) and new workout logs
       await saveSet(exerciseId, weightNum, repsNum);
+      await saveLoggedSet(dayIndex, slotIndex, setIndex, weightNum, repsNum);
       await loadPreviousWeight();
       onSetLogged(weightNum);
-      setWeight('');
-      setReps('');
+      
+      // Mark this set as logged, but keep the values
+      const newLoggedSets = new Set([...loggedSets, setIndex]);
+      setLoggedSets(newLoggedSets);
+      setHasAnyLoggedSets(true);
     } catch (error) {
       console.error('Error logging set:', error);
     } finally {
@@ -80,55 +153,90 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     );
   }
 
+  const repRangeText = programExercise?.isAmrap
+    ? 'MAX REPS'
+    : programExercise?.repRange
+    ? `${programExercise.repRange[0]}-${programExercise.repRange[1]} reps`
+    : null;
+
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Text style={styles.slotLabel}>Slot {slotNumber}: {exercise.pattern}</Text>
           <Text style={styles.exerciseName}>{exercise.name}</Text>
+          {repRangeText && (
+            <Text style={[styles.repRangeLabel, programExercise?.isAmrap && styles.amrapLabel]}>
+              {repRangeText}
+            </Text>
+          )}
           {previousWeight !== null && (
             <Text style={styles.previousLabel}>Previous: {previousWeight}kg</Text>
           )}
         </View>
       </View>
 
-      <View style={styles.inputContainer}>
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Weight (kg)</Text>
-          <TextInput
-            style={styles.input}
-            value={weight}
-            onChangeText={setWeight}
-            keyboardType="numeric"
-            placeholder="0"
-            placeholderTextColor="#666"
-          />
-        </View>
+      {Array.from({ length: numberOfSets }).map((_, setIndex) => {
+        const isLogged = loggedSets.has(setIndex);
+        const canLog = weights[setIndex] && reps[setIndex] && !loading;
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Reps</Text>
-          <TextInput
-            style={styles.input}
-            value={reps}
-            onChangeText={setReps}
-            keyboardType="numeric"
-            placeholder="0"
-            placeholderTextColor="#666"
-          />
-        </View>
-      </View>
+        return (
+          <View key={setIndex} style={styles.setContainer}>
+            <View style={styles.setHeader}>
+              <Text style={styles.setLabel}>Set {setIndex + 1}</Text>
+            </View>
+            <View style={styles.inputContainer}>
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>Weight (kg)</Text>
+                <TextInput
+                  style={[styles.input, isLogged && styles.inputLogged]}
+                  value={weights[setIndex] || ''}
+                  onChangeText={(value) => handleWeightChange(setIndex, value)}
+                  keyboardType="numeric"
+                  placeholder="0"
+                  placeholderTextColor="#666"
+                  editable={!isLogged}
+                />
+              </View>
 
-      <View style={styles.buttonContainer}>
+              <View style={styles.inputGroupWithCheckmark}>
+                <View style={styles.inputGroup}>
+                  <Text style={styles.inputLabel}>Reps</Text>
+                  <TextInput
+                    style={[styles.input, isLogged && styles.inputLogged]}
+                    value={reps[setIndex] || ''}
+                    onChangeText={(value) => handleRepsChange(setIndex, value)}
+                    keyboardType="numeric"
+                    placeholder="0"
+                    placeholderTextColor="#666"
+                    editable={!isLogged}
+                  />
+                </View>
+                <TouchableOpacity
+                  style={[styles.checkmarkButton, !canLog && styles.checkmarkButtonDisabled]}
+                  onPress={() => handleLogSet(setIndex)}
+                  disabled={!canLog || isLogged}
+                >
+                  <Ionicons
+                    name={isLogged ? 'checkmark-circle' : 'checkmark-circle-outline'}
+                    size={32}
+                    color={isLogged ? '#00E676' : canLog ? '#00E676' : '#666'}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        );
+      })}
+
+      <View style={styles.swapButtonContainer}>
         <TouchableOpacity
-          style={[styles.logButton, loading && styles.logButtonDisabled]}
-          onPress={handleLogSet}
-          disabled={loading || !weight || !reps}
+          style={[styles.swapButton, hasAnyLoggedSets && styles.swapButtonDisabled]}
+          onPress={onSwap}
+          disabled={hasAnyLoggedSets}
         >
-          <Text style={styles.logButtonText}>Log Set</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
-          <Text style={styles.swapButtonText}>Swap</Text>
+          <Text style={[styles.swapButtonText, hasAnyLoggedSets && styles.swapButtonTextDisabled]}>
+            Swap Exercise
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -150,32 +258,56 @@ const styles = StyleSheet.create({
   headerLeft: {
     flex: 1,
   },
-  slotLabel: {
-    color: '#00E676',
-    fontSize: 12,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    marginBottom: 4,
-  },
   exerciseName: {
-    color: '#FFFFFF',
+    color: '#00E676',
     fontSize: 20,
     fontWeight: '700',
     marginBottom: 4,
+  },
+  repRangeLabel: {
+    color: '#CCC',
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  amrapLabel: {
+    color: '#FF4444',
+    fontWeight: '800',
   },
   previousLabel: {
     color: '#888',
     fontSize: 14,
     fontWeight: '500',
   },
+  setContainer: {
+    marginBottom: 16,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#2A2A2A',
+  },
+  setHeader: {
+    marginBottom: 12,
+  },
+  setLabel: {
+    color: '#888',
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
   inputContainer: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 16,
+    marginBottom: 0,
   },
   inputGroup: {
     flex: 1,
+  },
+  inputGroupWithCheckmark: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 8,
   },
   inputLabel: {
     color: '#CCC',
@@ -195,30 +327,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333',
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    gap: 12,
+  inputLogged: {
+    borderColor: '#00E676',
+    borderWidth: 2,
+    opacity: 0.7,
   },
-  logButton: {
-    flex: 1,
-    backgroundColor: '#00E676',
-    borderRadius: 8,
-    padding: 16,
+  checkmarkButton: {
+    paddingBottom: 8,
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  logButtonDisabled: {
-    opacity: 0.5,
+  checkmarkButtonDisabled: {
+    opacity: 0.3,
   },
-  logButtonText: {
-    color: '#121212',
-    fontSize: 16,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+  swapButtonContainer: {
+    marginTop: 8,
   },
   swapButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#00E676',
@@ -227,10 +353,29 @@ const styles = StyleSheet.create({
   },
   swapButtonText: {
     color: '#00E676',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
+  swapButtonDisabled: {
+    opacity: 0.5,
+    borderColor: '#666',
+  },
+  swapButtonTextDisabled: {
+    color: '#666',
+  },
+  slotHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  slotLabel: {
+    color: '#00E676',
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 4,
+  },
 });
-

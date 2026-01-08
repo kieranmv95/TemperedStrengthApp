@@ -207,3 +207,12 @@ export const program: Program = {
 };
 
 export const programs: Program[] = [program];
+
+/**
+ * Get a program by ID
+ * @param id - Program ID
+ * @returns Program or undefined
+ */
+export const getProgramById = (id: string): Program | undefined => {
+  return programs.find((p) => p.id === id);
+};
