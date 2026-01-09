@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Alert,
+  KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -304,10 +306,16 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           onDaySelect={handleDaySelect}
         />
       )}
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.content}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.keyboardAvoidingView}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
       >
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.content}
+          keyboardShouldPersistTaps="handled"
+        >
         <View style={styles.header}>
           <View style={styles.headerTop}>
             <View style={styles.headerTextContainer}>
@@ -358,6 +366,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           />
         ))}
       </ScrollView>
+      </KeyboardAvoidingView>
 
       <SwapModal
         visible={swapModalVisible}
@@ -392,6 +401,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#121212",
+  },
+  keyboardAvoidingView: {
+    flex: 1,
   },
   scrollView: {
     flex: 1,
