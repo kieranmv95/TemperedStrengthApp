@@ -67,27 +67,30 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     return diffDays;
   };
 
-  const loadExerciseSlots = useCallback(async (workout: Workout, dayIdx: number) => {
-    try {
-      const swaps = await getExerciseSwapsForDay(dayIdx);
+  const loadExerciseSlots = useCallback(
+    async (workout: Workout, dayIdx: number) => {
+      try {
+        const swaps = await getExerciseSwapsForDay(dayIdx);
 
-      const exerciseSlots: ExerciseSlot[] = workout.exercises.map(
-        (programExercise, index) => {
-          // Check if there's a swap for this slot
-          const swappedExerciseId = swaps[index];
-          return {
-            exerciseId: swappedExerciseId || programExercise.id,
-            programExercise: programExercise,
-          };
-        }
-      );
+        const exerciseSlots: ExerciseSlot[] = workout.exercises.map(
+          (programExercise, index) => {
+            // Check if there's a swap for this slot
+            const swappedExerciseId = swaps[index];
+            return {
+              exerciseId: swappedExerciseId || programExercise.id,
+              programExercise: programExercise,
+            };
+          }
+        );
 
-      setSlots(exerciseSlots);
-    } catch (error) {
-      console.error("Error loading exercise slots:", error);
-      setSlots([]);
-    }
-  }, []);
+        setSlots(exerciseSlots);
+      } catch (error) {
+        console.error("Error loading exercise slots:", error);
+        setSlots([]);
+      }
+    },
+    []
+  );
 
   const loadWorkoutForDay = useCallback(
     async (dayIdx: number, programData?: ReturnType<typeof getProgramById>) => {
@@ -327,56 +330,61 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled"
         >
-        <View style={styles.header}>
-          <View style={styles.headerTop}>
-            <View style={styles.headerTextContainer}>
-              <Text style={styles.title}>{currentWorkout.label}</Text>
-              {currentWorkout.description && (
-                <Text style={styles.description}>
-                  {currentWorkout.description}
-                </Text>
-              )}
-              <View style={styles.intensityContainer}>
-                <Text style={styles.intensityLabel}>Intensity:</Text>
-                <View style={styles.intensityBar}>
-                  {Array.from({ length: 10 }).map((_, i) => (
-                    <View
-                      key={i}
-                      style={[
-                        styles.intensityDot,
-                        i < currentWorkout.intensity && styles.intensityDotFilled,
-                      ]}
-                    />
-                  ))}
+          <View style={styles.header}>
+            <View style={styles.headerTop}>
+              <View style={styles.headerTextContainer}>
+                <Text style={styles.title}>{currentWorkout.label}</Text>
+                {currentWorkout.description && (
+                  <Text style={styles.description}>
+                    {currentWorkout.description}
+                  </Text>
+                )}
+                <View style={styles.intensityContainer}>
+                  <Text style={styles.intensityLabel}>Intensity:</Text>
+                  <View style={styles.intensityBar}>
+                    {Array.from({ length: 10 }).map((_, i) => (
+                      <View
+                        key={i}
+                        style={[
+                          styles.intensityDot,
+                          i < currentWorkout.intensity &&
+                            styles.intensityDotFilled,
+                        ]}
+                      />
+                    ))}
+                  </View>
+                  <Text style={styles.intensityValue}>
+                    {currentWorkout.intensity}/10
+                  </Text>
                 </View>
-                <Text style={styles.intensityValue}>{currentWorkout.intensity}/10</Text>
               </View>
             </View>
+            {dayIndex !== null &&
+              selectedDayIndex !== null &&
+              selectedDayIndex !== dayIndex && (
+                <TouchableOpacity
+                  style={styles.setCurrentDayButton}
+                  onPress={handleSetAsCurrentDay}
+                >
+                  <Text style={styles.setCurrentDayButtonText}>
+                    Set as Today
+                  </Text>
+                </TouchableOpacity>
+              )}
           </View>
-          {dayIndex !== null &&
-            selectedDayIndex !== null &&
-            selectedDayIndex !== dayIndex && (
-              <TouchableOpacity
-                style={styles.setCurrentDayButton}
-                onPress={handleSetAsCurrentDay}
-              >
-                <Text style={styles.setCurrentDayButtonText}>Set as Today</Text>
-              </TouchableOpacity>
-            )}
-        </View>
 
-        {slots.map((slot, index) => (
-          <ExerciseCard
-            key={`${selectedDayIndex}-${index}-${slot.exerciseId}`}
-            exerciseId={slot.exerciseId}
-            programExercise={slot.programExercise}
-            slotNumber={index + 1}
-            dayIndex={selectedDayIndex}
-            slotIndex={index}
-            onSwap={() => handleSwapClick(index + 1)}
-          />
-        ))}
-      </ScrollView>
+          {slots.map((slot, index) => (
+            <ExerciseCard
+              key={`${selectedDayIndex}-${index}-${slot.exerciseId}`}
+              exerciseId={slot.exerciseId}
+              programExercise={slot.programExercise}
+              slotNumber={index + 1}
+              dayIndex={selectedDayIndex}
+              slotIndex={index}
+              onSwap={() => handleSwapClick(index + 1)}
+            />
+          ))}
+        </ScrollView>
       </KeyboardAvoidingView>
 
       <SwapModal
