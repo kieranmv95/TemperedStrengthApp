@@ -10,62 +10,83 @@ import {
 } from "react-native";
 import { getAllExercises, getExerciseById } from "../data/exercises";
 import { findAlternatives } from "../utils/pivotEngine";
-import { hasLoggedSets, clearLoggedSetsForSlot } from "../utils/storage";
+import {
+  clearExerciseSwap,
+  clearLoggedSetsForSlot,
+  hasLoggedSets,
+  saveExerciseSwap,
+} from "../utils/storage";
 
 interface SwapModalProps {
   visible: boolean;
-  currentExerciseId: string | null;
+  currentExerciseId: number | null;
+  originalExerciseId: number | null; // Original program exercise ID
   dayIndex: number | null;
   slotIndex: number;
   onClose: () => void;
-  onSelectExercise: (exerciseId: string) => void;
   onClearData?: () => void;
 }
 
 export const SwapModal: React.FC<SwapModalProps> = ({
   visible,
   currentExerciseId,
+  originalExerciseId,
   dayIndex,
   slotIndex,
   onClose,
-  onSelectExercise,
   onClearData,
 }) => {
   const currentExercise = currentExerciseId
     ? getExerciseById(currentExerciseId)
     : null;
+  const originalExercise = originalExerciseId
+    ? getExerciseById(originalExerciseId)
+    : null;
   const alternatives = currentExerciseId
     ? findAlternatives(currentExerciseId, 3)
     : getAllExercises().slice(0, 15); // Show all exercises for empty slots
 
-  const handleSelect = async (exerciseId: string) => {
+  // Check if the current exercise is swapped (different from original)
+  const isSwapped =
+    currentExerciseId !== null &&
+    originalExerciseId !== null &&
+    currentExerciseId !== originalExerciseId;
+
+  const handleSelect = async (exerciseId: number) => {
     // Check if there's logged data before swapping
     if (dayIndex !== null) {
       const hasLogged = await hasLoggedSets(dayIndex, slotIndex);
-      
+
       if (hasLogged) {
         Alert.alert(
-          'Clear Workout Data?',
-          'Swapping the exercise will clear all logged sets for this exercise. This cannot be undone.',
+          "Clear Workout Data?",
+          "Swapping the exercise will clear all logged sets for this exercise. This cannot be undone.",
           [
             {
-              text: 'Cancel',
-              style: 'cancel',
+              text: "Cancel",
+              style: "cancel",
             },
             {
-              text: 'Clear and Swap',
-              style: 'destructive',
+              text: "Clear and Swap",
+              style: "destructive",
               onPress: async () => {
                 try {
                   await clearLoggedSetsForSlot(dayIndex, slotIndex);
-                  if (onClearData) {
-                    onClearData();
+                  // Save the swap directly to storage
+                  if (dayIndex !== null) {
+                    await saveExerciseSwap(dayIndex, slotIndex, exerciseId);
                   }
-                  onSelectExercise(exerciseId);
+                  // Reload after swap is saved to ensure UI updates
+                  if (onClearData) {
+                    await onClearData();
+                  }
                   onClose();
                 } catch (error) {
-                  console.error('Error clearing logged sets:', error);
-                  Alert.alert('Error', 'Failed to clear workout data. Please try again.');
+                  console.error("Error clearing logged sets:", error);
+                  Alert.alert(
+                    "Error",
+                    "Failed to clear workout data. Please try again."
+                  );
                 }
               },
             },
@@ -74,9 +95,16 @@ export const SwapModal: React.FC<SwapModalProps> = ({
         return;
       }
     }
-    
+
     // No logged data, swap immediately
-    onSelectExercise(exerciseId);
+    // Save the swap directly to storage
+    if (dayIndex !== null) {
+      await saveExerciseSwap(dayIndex, slotIndex, exerciseId);
+    }
+    // Reload to ensure UI updates
+    if (onClearData) {
+      await onClearData();
+    }
     onClose();
   };
 
@@ -105,6 +133,86 @@ export const SwapModal: React.FC<SwapModalProps> = ({
               ? `Alternatives for ${currentExercise.pattern}`
               : "Choose an exercise"}
           </Text>
+
+          <Text style={styles.disclaimer}>
+            ⚠️ Deviating from too many exercises could reduce the effectiveness
+            of the overall program.
+          </Text>
+
+          {isSwapped && originalExercise && (
+            <TouchableOpacity
+              style={styles.resetButton}
+              onPress={async () => {
+                // Check if there's logged data before resetting
+                if (dayIndex !== null) {
+                  const hasLogged = await hasLoggedSets(dayIndex, slotIndex);
+
+                  if (hasLogged) {
+                    Alert.alert(
+                      "Clear Workout Data?",
+                      "Resetting to the original exercise will clear all logged sets for this exercise. This cannot be undone.",
+                      [
+                        {
+                          text: "Cancel",
+                          style: "cancel",
+                        },
+                        {
+                          text: "Clear and Reset",
+                          style: "destructive",
+                          onPress: async () => {
+                            try {
+                              // Clear logged sets/reps data for this slot
+                              await clearLoggedSetsForSlot(dayIndex, slotIndex);
+                              // Clear the swap to reset to original exercise
+                              await clearExerciseSwap(dayIndex, slotIndex);
+                              // Reload data to refresh the UI
+                              if (onClearData) {
+                                onClearData();
+                              }
+                              onClose();
+                            } catch (error) {
+                              console.error(
+                                "Error clearing logged sets and swap:",
+                                error
+                              );
+                              Alert.alert(
+                                "Error",
+                                "Failed to clear workout data. Please try again."
+                              );
+                            }
+                          },
+                        },
+                      ]
+                    );
+                    return;
+                  }
+                }
+
+                // No logged data, reset immediately
+                if (dayIndex !== null) {
+                  try {
+                    // Clear the swap to reset to original exercise
+                    await clearExerciseSwap(dayIndex, slotIndex);
+                    // Reload data to refresh the UI
+                    if (onClearData) {
+                      await onClearData();
+                    }
+                    onClose();
+                  } catch (error) {
+                    console.error("Error clearing swap:", error);
+                    Alert.alert(
+                      "Error",
+                      "Failed to reset exercise. Please try again."
+                    );
+                  }
+                }
+              }}
+            >
+              <Text style={styles.resetButtonText}>
+                Reset to {originalExercise.name}
+              </Text>
+            </TouchableOpacity>
+          )}
 
           <ScrollView style={styles.alternativesList}>
             {alternatives.length === 0 && currentExerciseId && (
@@ -183,8 +291,30 @@ const styles = StyleSheet.create({
   modalSubtitle: {
     color: "#888",
     fontSize: 14,
+    marginBottom: 12,
+    fontWeight: "500",
+  },
+  disclaimer: {
+    color: "#FFA726",
+    fontSize: 12,
     marginBottom: 20,
     fontWeight: "500",
+    fontStyle: "italic",
+    lineHeight: 18,
+  },
+  resetButton: {
+    backgroundColor: "#2A2A2A",
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#00E676",
+    alignItems: "center",
+  },
+  resetButtonText: {
+    color: "#00E676",
+    fontSize: 16,
+    fontWeight: "600",
   },
   alternativesList: {
     flexShrink: 1,

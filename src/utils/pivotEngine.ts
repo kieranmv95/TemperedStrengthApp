@@ -1,5 +1,5 @@
 // Pivot Engine - Logic for finding exercise alternatives
-import { exercises, type Exercise } from "../data/exercises";
+import { getAllExercises, type Exercise } from "../data/exercises";
 
 /**
  * Finds alternative exercises that share the same movement pattern
@@ -9,9 +9,10 @@ import { exercises, type Exercise } from "../data/exercises";
  * @returns Array of alternative exercises
  */
 export const findAlternatives = (
-  currentExerciseId: string,
+  currentExerciseId: number,
   count: number = 3
 ): Exercise[] => {
+  const exercises = getAllExercises();
   const currentExercise = exercises.find((ex) => ex.id === currentExerciseId);
 
   if (!currentExercise) {

@@ -10,13 +10,13 @@ const CUSTOM_SET_COUNTS_KEY = "custom_set_counts";
 export interface ExerciseSwap {
   dayIndex: number;
   slotIndex: number;
-  originalExerciseId: string;
-  swappedExerciseId: string;
+  originalExerciseId: number;
+  swappedExerciseId: number;
 }
 
 export interface ExerciseSwaps {
   [dayIndex: number]: {
-    [slotIndex: number]: string; // swapped exercise ID
+    [slotIndex: number]: number; // swapped exercise ID
   };
 }
 
@@ -101,7 +101,7 @@ export const setProgramStartDate = async (startDate: string): Promise<void> => {
 export const saveExerciseSwap = async (
   dayIndex: number,
   slotIndex: number,
-  exerciseId: string
+  exerciseId: number
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(EXERCISE_SWAPS_KEY);
@@ -126,7 +126,7 @@ export const saveExerciseSwap = async (
  */
 export const getExerciseSwapsForDay = async (
   dayIndex: number
-): Promise<{ [slotIndex: number]: string }> => {
+): Promise<{ [slotIndex: number]: number }> => {
   try {
     const data = await AsyncStorage.getItem(EXERCISE_SWAPS_KEY);
     const swaps: ExerciseSwaps = data ? JSON.parse(data) : {};
@@ -134,6 +134,36 @@ export const getExerciseSwapsForDay = async (
   } catch (error) {
     console.error("Error getting exercise swaps:", error);
     return {};
+  }
+};
+
+/**
+ * Clear/remove an exercise swap for a specific day and slot (resets to original exercise)
+ * @param dayIndex - Day index in the program
+ * @param slotIndex - Slot index (0-based)
+ */
+export const clearExerciseSwap = async (
+  dayIndex: number,
+  slotIndex: number
+): Promise<void> => {
+  try {
+    const data = await AsyncStorage.getItem(EXERCISE_SWAPS_KEY);
+    if (!data) return;
+
+    const swaps: ExerciseSwaps = JSON.parse(data);
+    if (swaps[dayIndex]?.[slotIndex] !== undefined) {
+      delete swaps[dayIndex][slotIndex];
+
+      // Clean up empty day objects
+      if (Object.keys(swaps[dayIndex]).length === 0) {
+        delete swaps[dayIndex];
+      }
+
+      await AsyncStorage.setItem(EXERCISE_SWAPS_KEY, JSON.stringify(swaps));
+    }
+  } catch (error) {
+    console.error("Error clearing exercise swap:", error);
+    throw error;
   }
 };
 

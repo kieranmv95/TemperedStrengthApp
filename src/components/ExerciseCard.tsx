@@ -18,7 +18,7 @@ import {
 } from "../utils/storage";
 
 interface ExerciseCardProps {
-  exerciseId: string | null;
+  exerciseId: number | null;
   programExercise: ProgramExercise | null;
   slotNumber: number;
   dayIndex: number | null;
@@ -47,6 +47,12 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   const exercise = exerciseId ? getExerciseById(exerciseId) : null;
   const defaultNumberOfSets = programExercise?.sets || 1;
   const [numberOfSets, setNumberOfSets] = useState(defaultNumberOfSets);
+
+  // Check if exercise has been swapped (deviation from program)
+  const isSwapped =
+    exerciseId !== null &&
+    programExercise !== null &&
+    exerciseId !== programExercise.id;
 
   // Load custom set count and logged sets from storage
   useEffect(() => {
@@ -103,7 +109,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     };
 
     loadData();
-  }, [programExercise, defaultNumberOfSets, dayIndex, slotIndex]);
+  }, [programExercise, defaultNumberOfSets, dayIndex, slotIndex, exerciseId]);
 
   // Cleanup timers on unmount
   useEffect(() => {
@@ -258,13 +264,24 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     );
   }
 
-  const repRangeText = programExercise?.hideReps
-    ? null
-    : programExercise?.isAmrap
-    ? "MAX REPS (AMRAP)"
-    : programExercise?.repRange
-    ? `${programExercise.repRange[0]}-${programExercise.repRange[1]} reps`
-    : null;
+  // Build rep range text based on exercise logging type
+  let repRangeText: string | null = null;
+
+  if (!programExercise?.hideReps) {
+    if (programExercise?.isAmrap) {
+      repRangeText = "MAX REPS (AMRAP)";
+    } else if (programExercise?.repRange) {
+      const [min, max] = programExercise.repRange;
+      const unit = exercise?.logging_type === "time" ? "seconds" : "reps";
+
+      // If min and max are the same, just show the single value
+      if (min === max) {
+        repRangeText = `${min} ${unit}`;
+      } else {
+        repRangeText = `${min}-${max} ${unit}`;
+      }
+    }
+  }
 
   return (
     <View style={styles.card}>
@@ -272,9 +289,9 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         <View style={styles.headerLeft}>
           <Text style={styles.exerciseName}>
             {exercise.name}
-            {programExercise?.additionalHeader && (
+            {!isSwapped && programExercise?.additionalHeader && (
               <Text style={styles.additionalHeader}>
-                {programExercise.additionalHeader}
+                {" - " + programExercise.additionalHeader}
               </Text>
             )}
           </Text>
@@ -286,6 +303,11 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
               ]}
             >
               {repRangeText}
+            </Text>
+          )}
+          {!isSwapped && programExercise?.additionalDescription && (
+            <Text style={styles.additionalDescription}>
+              {programExercise.additionalDescription}
             </Text>
           )}
         </View>
@@ -384,7 +406,11 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
               <View style={styles.inputGroupWithCheckmark}>
                 <View style={styles.inputGroup}>
-                  {isFirstSet && <Text style={styles.inputLabel}>Reps</Text>}
+                  {isFirstSet && (
+                    <Text style={styles.inputLabel}>
+                      {exercise.logging_type === "time" ? "Time" : "Reps"}
+                    </Text>
+                  )}
                   <TextInput
                     style={[
                       styles.input,
@@ -459,6 +485,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "600",
     marginBottom: 4,
+  },
+  additionalDescription: {
+    color: "#CCC",
+    fontSize: 12,
+    fontWeight: "600",
+    marginBottom: 4,
+    marginTop: 12,
   },
   repRangeLabel: {
     color: "#CCC",

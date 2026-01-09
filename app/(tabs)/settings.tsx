@@ -1,0 +1,207 @@
+import React, { useState } from 'react';
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { clearProgramData, getActiveProgramId } from '@/src/utils/storage';
+
+export default function SettingsScreen() {
+  const [hasProgram, setHasProgram] = useState<boolean>(false);
+
+  const checkProgramStatus = async () => {
+    try {
+      const programId = await getActiveProgramId();
+      setHasProgram(!!programId);
+    } catch (error) {
+      console.error('Error checking program status:', error);
+      setHasProgram(false);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      checkProgramStatus();
+    }, [])
+  );
+
+  const handleChangeProgram = () => {
+    Alert.alert(
+      'Change Program',
+      'Changing your program will lose all progress on your current program, including your workout logs and exercise swaps.\n\nFinishing a program to completion is the best approach for achieving your fitness goals.\n\nAre you sure you want to change programs?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Change Program',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await clearProgramData();
+              setHasProgram(false);
+              // Navigate back to Program tab (index)
+              router.replace('/');
+            } catch (error) {
+              console.error('Error changing program:', error);
+              Alert.alert('Error', 'Failed to change program. Please try again.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleClearAllData = () => {
+    Alert.alert(
+      'Clear All Data',
+      'This will permanently delete ALL stored data including:\n\n• Program progress\n• Workout logs\n• Exercise swaps\n• Custom set counts\n• Exercise cache\n\nThis action cannot be undone.\n\nAre you sure you want to clear all data?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Clear All Data',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await AsyncStorage.clear();
+              setHasProgram(false);
+              // Navigate back to Program tab (index)
+              router.replace('/');
+              Alert.alert('Success', 'All data has been cleared.');
+            } catch (error) {
+              console.error('Error clearing all data:', error);
+              Alert.alert('Error', 'Failed to clear all data. Please try again.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Settings</Text>
+      </View>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
+        <View style={styles.settingsList}>
+          <TouchableOpacity
+            style={[styles.settingItem, !hasProgram && styles.settingItemDisabled]}
+            onPress={handleChangeProgram}
+            disabled={!hasProgram}
+          >
+            <View style={styles.settingContent}>
+              <Text style={[styles.settingTitle, !hasProgram && styles.settingTitleDisabled]}>
+                Change Program
+              </Text>
+              <Text style={styles.settingDescription}>
+                Select a different program
+              </Text>
+            </View>
+            <Text style={[styles.settingArrow, !hasProgram && styles.settingArrowDisabled]}>
+              →
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.settingItem, styles.dangerItem]}
+            onPress={handleClearAllData}
+          >
+            <View style={styles.settingContent}>
+              <Text style={[styles.settingTitle, styles.dangerText]}>Clear All Data</Text>
+              <Text style={styles.settingDescription}>
+                Permanently delete all stored data
+              </Text>
+            </View>
+            <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#121212',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+  },
+  header: {
+    padding: 24,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#2A2A2A',
+  },
+  title: {
+    color: '#FFFFFF',
+    fontSize: 32,
+    fontWeight: '800',
+    letterSpacing: -0.5,
+  },
+  settingsList: {
+    gap: 12,
+  },
+  settingItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#2A2A2A',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#333',
+  },
+  settingItemDisabled: {
+    opacity: 0.5,
+  },
+  settingContent: {
+    flex: 1,
+  },
+  settingTitle: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  settingTitleDisabled: {
+    color: '#888',
+  },
+  settingDescription: {
+    color: '#888',
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  settingArrow: {
+    color: '#00E676',
+    fontSize: 24,
+    fontWeight: '600',
+    marginLeft: 12,
+  },
+  settingArrowDisabled: {
+    color: '#666',
+  },
+  dangerItem: {
+    borderColor: '#FF4444',
+  },
+  dangerText: {
+    color: '#FF4444',
+  },
+});
+

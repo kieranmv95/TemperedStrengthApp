@@ -162,7 +162,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                           <Text style={styles.statValue}>
                             {sessionsPerWeek}
                           </Text>
-                          <Text style={styles.statLabel}>Sessions/Week</Text>
+                          <Text style={styles.statLabel}>SPW</Text>
                         </View>
                       </>
                     );

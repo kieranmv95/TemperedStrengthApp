@@ -7,7 +7,6 @@ import {
   View,
 } from "react-native";
 import { DaySelector } from "../components/DaySelector";
-import { SettingsModal } from "../components/SettingsModal";
 import { Workout } from "../utils/program";
 
 interface RestDayScreenProps {
@@ -31,7 +30,6 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
   onDaySelect,
   onProgramReset,
 }) => {
-  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,12 +41,6 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
       />
       <View style={styles.header}>
         <View style={styles.headerSpacer} />
-        <TouchableOpacity
-          style={styles.settingsButton}
-          onPress={() => setSettingsModalVisible(true)}
-        >
-          <Text style={styles.settingsButtonText}>⚙️</Text>
-        </TouchableOpacity>
       </View>
       <View style={styles.content}>
         <View style={styles.iconContainer}>
@@ -62,16 +54,6 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
           Take this time to rest, hydrate, and prepare for your next workout.
         </Text>
       </View>
-
-      <SettingsModal
-        visible={settingsModalVisible}
-        onClose={() => setSettingsModalVisible(false)}
-        onProgramReset={() => {
-          if (onProgramReset) {
-            onProgramReset();
-          }
-        }}
-      />
     </SafeAreaView>
   );
 };
@@ -90,17 +72,6 @@ const styles = StyleSheet.create({
   },
   headerSpacer: {
     flex: 1,
-  },
-  settingsButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#1E1E1E",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  settingsButtonText: {
-    fontSize: 20,
   },
   content: {
     flex: 1,

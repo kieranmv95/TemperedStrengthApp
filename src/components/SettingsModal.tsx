@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { clearProgramData } from '../utils/storage';
 
 interface SettingsModalProps {
@@ -47,6 +48,34 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     );
   };
 
+  const handleClearAllData = () => {
+    Alert.alert(
+      'Clear All Data',
+      'This will permanently delete ALL stored data including:\n\n• Program progress\n• Workout logs\n• Exercise swaps\n• Custom set counts\n• Exercise cache\n\nThis action cannot be undone.\n\nAre you sure you want to clear all data?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Clear All Data',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await AsyncStorage.clear();
+              onProgramReset();
+              onClose();
+              Alert.alert('Success', 'All data has been cleared.');
+            } catch (error) {
+              console.error('Error clearing all data:', error);
+              Alert.alert('Error', 'Failed to clear all data. Please try again.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <Modal
       visible={visible}
@@ -75,6 +104,19 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </Text>
               </View>
               <Text style={styles.settingArrow}>→</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.settingItem, styles.dangerItem]}
+              onPress={handleClearAllData}
+            >
+              <View style={styles.settingContent}>
+                <Text style={[styles.settingTitle, styles.dangerText]}>Clear All Data</Text>
+                <Text style={styles.settingDescription}>
+                  Permanently delete all stored data
+                </Text>
+              </View>
+              <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -155,6 +197,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
     marginLeft: 12,
+  },
+  dangerItem: {
+    borderColor: '#FF4444',
+  },
+  dangerText: {
+    color: '#FF4444',
   },
 });
 

@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { DaySelector } from "../components/DaySelector";
 import { ExerciseCard } from "../components/ExerciseCard";
-import { SettingsModal } from "../components/SettingsModal";
 import { SwapModal } from "../components/SwapModal";
 import {
   getProgramById,
@@ -28,7 +27,7 @@ import {
 import { RestDayScreen } from "./RestDayScreen";
 
 interface ExerciseSlot {
-  exerciseId: string | null;
+  exerciseId: number | null;
   programExercise: ProgramExercise | null;
 }
 
@@ -52,7 +51,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [loading, setLoading] = useState(true);
   const [swapModalVisible, setSwapModalVisible] = useState(false);
   const [currentSwapSlot, setCurrentSwapSlot] = useState<number | null>(null);
-  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
 
   const calculateDaysSinceStart = (startDate: string): number => {
     const start = new Date(startDate);
@@ -221,7 +219,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     setSwapModalVisible(true);
   };
 
-  const handleSelectExercise = async (exerciseId: string) => {
+  const handleSelectExercise = async (exerciseId: number) => {
     if (currentSwapSlot !== null && selectedDayIndex !== null) {
       const newSlots = [...slots];
       newSlots[currentSwapSlot - 1] = {
@@ -335,12 +333,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                 <Text style={styles.intensityValue}>{currentWorkout.intensity}/10</Text>
               </View>
             </View>
-            <TouchableOpacity
-              style={styles.settingsButton}
-              onPress={() => setSettingsModalVisible(true)}
-            >
-              <Text style={styles.settingsButtonText}>⚙️</Text>
-            </TouchableOpacity>
           </View>
           {dayIndex !== null &&
             selectedDayIndex !== null &&
@@ -356,7 +348,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
         {slots.map((slot, index) => (
           <ExerciseCard
-            key={index}
+            key={`${selectedDayIndex}-${index}-${slot.exerciseId}`}
             exerciseId={slot.exerciseId}
             programExercise={slot.programExercise}
             slotNumber={index + 1}
@@ -374,27 +366,21 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             ? slots[currentSwapSlot - 1]?.exerciseId || null
             : null
         }
+        originalExerciseId={
+          currentSwapSlot !== null
+            ? slots[currentSwapSlot - 1]?.programExercise?.id || null
+            : null
+        }
         dayIndex={selectedDayIndex}
         slotIndex={currentSwapSlot !== null ? currentSwapSlot - 1 : 0}
         onClose={() => {
           setSwapModalVisible(false);
           setCurrentSwapSlot(null);
         }}
-        onSelectExercise={handleSelectExercise}
         onClearData={async () => {
           // Reload workout data to refresh the exercise card
           if (selectedDayIndex !== null) {
             await loadWorkoutForDay(selectedDayIndex);
-          }
-        }}
-      />
-
-      <SettingsModal
-        visible={settingsModalVisible}
-        onClose={() => setSettingsModalVisible(false)}
-        onProgramReset={() => {
-          if (onProgramReset) {
-            onProgramReset();
           }
         }}
       />
@@ -474,18 +460,6 @@ const styles = StyleSheet.create({
     color: "#888",
     fontSize: 12,
     fontWeight: "600",
-  },
-  settingsButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#1E1E1E",
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: 16,
-  },
-  settingsButtonText: {
-    fontSize: 20,
   },
   setCurrentDayButton: {
     marginTop: 16,
