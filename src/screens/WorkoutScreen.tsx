@@ -67,7 +67,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     return diffDays;
   };
 
-  const loadExerciseSlots = async (workout: Workout, dayIdx: number) => {
+  const loadExerciseSlots = useCallback(async (workout: Workout, dayIdx: number) => {
     try {
       const swaps = await getExerciseSwapsForDay(dayIdx);
 
@@ -85,8 +85,9 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       setSlots(exerciseSlots);
     } catch (error) {
       console.error("Error loading exercise slots:", error);
+      setSlots([]);
     }
-  };
+  }, []);
 
   const loadWorkoutForDay = useCallback(
     async (dayIdx: number, programData?: ReturnType<typeof getProgramById>) => {
@@ -109,7 +110,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         setSlots([]);
       }
     },
-    [program]
+    [program, loadExerciseSlots]
   );
 
   const loadWorkoutData = useCallback(async () => {
@@ -138,7 +139,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       setDayIndex(daysSinceStart);
       setSelectedDayIndex(daysSinceStart);
 
-      // Load workout for today
+      // Load workout for today - pass programData directly to avoid dependency on program state
       await loadWorkoutForDay(daysSinceStart, loadedProgram);
 
       setLoading(false);
@@ -286,7 +287,17 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     );
   }
 
-  if (!currentWorkout || slots.length === 0) {
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (!currentWorkout || (slots.length === 0 && !isRestDay)) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
