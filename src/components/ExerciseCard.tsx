@@ -399,6 +399,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                   value={weights[setIndex] || ""}
                   onChangeText={(value) => handleWeightChange(setIndex, value)}
                   keyboardType="numeric"
+                  returnKeyType="done"
+                  blurOnSubmit={true}
                   placeholder="0"
                   placeholderTextColor="#666"
                 />
@@ -420,6 +422,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                     value={reps[setIndex] || ""}
                     onChangeText={(value) => handleRepsChange(setIndex, value)}
                     keyboardType="numeric"
+                    returnKeyType="done"
+                    blurOnSubmit={true}
                     placeholder="0"
                     placeholderTextColor="#666"
                   />
