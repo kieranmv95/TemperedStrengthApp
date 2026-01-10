@@ -244,7 +244,6 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   mode="date"
                   display="spinner"
                   onChange={handleDateChange}
-                  minimumDate={new Date()}
                   style={styles.datePicker}
                 />
               </View>
@@ -256,7 +255,6 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
               mode="date"
               display="default"
               onChange={handleDateChange}
-              minimumDate={new Date()}
             />
           )}
         </>
