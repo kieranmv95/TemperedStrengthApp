@@ -1,3 +1,4 @@
+import { useSubscription } from "@/hooks/use-subscription";
 import { getProgramById, Program } from "@/src/utils/program";
 import { clearProgramData, getActiveProgramId } from "@/src/utils/storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -17,6 +18,7 @@ import {
 export default function SettingsScreen() {
   const [hasProgram, setHasProgram] = useState<boolean>(false);
   const [activeProgram, setActiveProgram] = useState<Program | null>(null);
+  const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
 
   const checkProgramStatus = async () => {
     try {
@@ -40,8 +42,19 @@ export default function SettingsScreen() {
   useFocusEffect(
     React.useCallback(() => {
       checkProgramStatus();
-    }, [])
+      refresh(); // Refresh subscription status when screen is focused
+    }, [refresh])
   );
+
+  const handleSubscriptionPress = () => {
+    if (isPro) {
+      // Open Customer Center for Pro users
+      router.push("/customer-center");
+    } else {
+      // Open Paywall for non-Pro users
+      router.push("/paywall");
+    }
+  };
 
   const handleChangeProgram = () => {
     Alert.alert(
@@ -118,6 +131,33 @@ export default function SettingsScreen() {
         contentContainerStyle={styles.content}
       >
         <View style={styles.settingsList}>
+          <TouchableOpacity
+            style={[styles.settingItem, isPro && styles.proItem]}
+            onPress={handleSubscriptionPress}
+            disabled={subscriptionLoading}
+          >
+            <View style={styles.settingContent}>
+              <View style={styles.settingTitleRow}>
+                <Text style={styles.settingTitle}>
+                  {isPro ? "Tempered Strength Pro" : "Upgrade to Pro"}
+                </Text>
+                {isPro && (
+                  <View style={styles.proBadge}>
+                    <Text style={styles.proBadgeText}>ACTIVE</Text>
+                  </View>
+                )}
+              </View>
+              <Text style={styles.settingDescription}>
+                {isPro
+                  ? "Manage your subscription and access Pro features"
+                  : "Unlock all premium features with a subscription"}
+              </Text>
+            </View>
+            <Text style={[styles.settingArrow, isPro && styles.proArrow]}>
+              →
+            </Text>
+          </TouchableOpacity>
+
           <TouchableOpacity
             style={[
               styles.settingItem,
@@ -243,5 +283,30 @@ const styles = StyleSheet.create({
   },
   dangerText: {
     color: "#FF4444",
+  },
+  proItem: {
+    borderColor: "#00E676",
+    backgroundColor: "#1A3A2A",
+  },
+  proArrow: {
+    color: "#00E676",
+  },
+  settingTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 4,
+  },
+  proBadge: {
+    backgroundColor: "#00E676",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  proBadgeText: {
+    color: "#000000",
+    fontSize: 10,
+    fontWeight: "700",
+    letterSpacing: 0.5,
   },
 });
