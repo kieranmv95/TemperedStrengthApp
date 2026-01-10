@@ -1,3 +1,5 @@
+import { useSubscription } from "@/hooks/use-subscription";
+import { router } from "expo-router";
 import React from "react";
 import {
   Alert,
@@ -13,7 +15,9 @@ import { findAlternatives } from "../utils/pivotEngine";
 import {
   clearExerciseSwap,
   clearLoggedSetsForSlot,
+  getRemainingSwapCount,
   hasLoggedSets,
+  incrementSwapCount,
   saveExerciseSwap,
 } from "../utils/storage";
 
@@ -36,6 +40,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
   onClose,
   onClearData,
 }) => {
+  const { isPro } = useSubscription();
   const currentExercise = currentExerciseId
     ? getExerciseById(currentExerciseId)
     : null;
@@ -43,7 +48,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
     ? getExerciseById(originalExerciseId)
     : null;
   const alternatives = currentExerciseId
-    ? findAlternatives(currentExerciseId, 3)
+    ? findAlternatives(currentExerciseId, 10)
     : getAllExercises().slice(0, 15); // Show all exercises for empty slots
 
   // Check if the current exercise is swapped (different from original)
@@ -53,6 +58,35 @@ export const SwapModal: React.FC<SwapModalProps> = ({
     currentExerciseId !== originalExerciseId;
 
   const handleSelect = async (exerciseId: number) => {
+    // Check swap limit for non-Pro users (only if actually swapping to a different exercise)
+    if (!isPro && dayIndex !== null && originalExerciseId !== null) {
+      // Only check limit if swapping to a different exercise (not resetting)
+      if (exerciseId !== originalExerciseId) {
+        const remainingSwaps = await getRemainingSwapCount();
+        if (remainingSwaps <= 0) {
+          Alert.alert(
+            "Upgrade to Pro",
+            "Unlimited swaps is part of a Pro membership. Free users get 10 swaps per month, resetting on the 1st of each month. You can reset a exercise back to the original exercise at any time for free.",
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "Upgrade to Pro",
+                style: "default",
+                onPress: () => {
+                  onClose();
+                  router.push("/paywall");
+                },
+              },
+            ]
+          );
+          return;
+        }
+      }
+    }
+
     // Check if there's logged data before swapping
     if (dayIndex !== null) {
       const hasLogged = await hasLoggedSets(dayIndex, slotIndex);
@@ -75,6 +109,14 @@ export const SwapModal: React.FC<SwapModalProps> = ({
                   // Save the swap directly to storage
                   if (dayIndex !== null) {
                     await saveExerciseSwap(dayIndex, slotIndex, exerciseId);
+                    // Increment swap count only if actually swapping (not resetting)
+                    if (
+                      !isPro &&
+                      originalExerciseId !== null &&
+                      exerciseId !== originalExerciseId
+                    ) {
+                      await incrementSwapCount();
+                    }
                   }
                   // Reload after swap is saved to ensure UI updates
                   if (onClearData) {
@@ -100,6 +142,14 @@ export const SwapModal: React.FC<SwapModalProps> = ({
     // Save the swap directly to storage
     if (dayIndex !== null) {
       await saveExerciseSwap(dayIndex, slotIndex, exerciseId);
+      // Increment swap count only if actually swapping (not resetting)
+      if (
+        !isPro &&
+        originalExerciseId !== null &&
+        exerciseId !== originalExerciseId
+      ) {
+        await incrementSwapCount();
+      }
     }
     // Reload to ensure UI updates
     if (onClearData) {
@@ -134,10 +184,18 @@ export const SwapModal: React.FC<SwapModalProps> = ({
               : "Choose an exercise"}
           </Text>
 
-          <Text style={styles.disclaimer}>
-            ⚠️ Deviating from too many exercises could reduce the effectiveness
-            of the overall program.
+          <Text style={styles.deviationTitle}>
+            Deviating from too many exercises could reduce the effectiveness of
+            the overall program.
           </Text>
+
+          {!isPro && (
+            <Text style={styles.disclaimer}>
+              Swapping an exercise will use one of your free swaps, you get 10
+              per month, resetting on the 1st of each month. Upgrade to PRO in
+              the settings to get unlimited swaps.
+            </Text>
+          )}
 
           {isSwapped && originalExercise && (
             <TouchableOpacity
@@ -295,12 +353,20 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   disclaimer: {
-    color: "#FFA726",
+    backgroundColor: "#FFA726",
+    padding: 12,
+    borderRadius: 8,
     fontSize: 12,
     marginBottom: 20,
     fontWeight: "500",
     fontStyle: "italic",
     lineHeight: 18,
+  },
+  deviationTitle: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    marginBottom: 12,
+    fontWeight: "500",
   },
   resetButton: {
     backgroundColor: "#2A2A2A",

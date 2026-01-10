@@ -53,6 +53,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [loading, setLoading] = useState(true);
   const [swapModalVisible, setSwapModalVisible] = useState(false);
   const [currentSwapSlot, setCurrentSwapSlot] = useState<number | null>(null);
+  const [swapRefreshCounter, setSwapRefreshCounter] = useState(0);
 
   const calculateDaysSinceStart = (startDate: string): number => {
     const start = new Date(startDate);
@@ -375,7 +376,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
           {slots.map((slot, index) => (
             <ExerciseCard
-              key={`${selectedDayIndex}-${index}-${slot.exerciseId}`}
+              key={`${selectedDayIndex}-${index}-${slot.exerciseId}-${swapRefreshCounter}`}
               exerciseId={slot.exerciseId}
               programExercise={slot.programExercise}
               slotNumber={index + 1}
@@ -409,6 +410,8 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           // Reload workout data to refresh the exercise card
           if (selectedDayIndex !== null) {
             await loadWorkoutForDay(selectedDayIndex);
+            // Increment refresh counter to force all ExerciseCard components to remount and refresh swap count
+            setSwapRefreshCounter((prev) => prev + 1);
           }
         }}
       />

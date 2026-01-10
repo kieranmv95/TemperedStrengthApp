@@ -6,6 +6,8 @@ const PROGRAM_START_DATE_KEY = "program_start_date";
 const EXERCISE_SWAPS_KEY = "exercise_swaps";
 const WORKOUT_LOGS_KEY = "workout_logs";
 const CUSTOM_SET_COUNTS_KEY = "custom_set_counts";
+const SWAP_COUNT_KEY = "swap_count";
+const SWAP_COUNT_MONTH_KEY = "swap_count_month";
 
 export interface ExerciseSwap {
   dayIndex: number;
@@ -160,9 +162,75 @@ export const clearExerciseSwap = async (
       }
 
       await AsyncStorage.setItem(EXERCISE_SWAPS_KEY, JSON.stringify(swaps));
+      // Note: Resetting to original exercise does NOT count against swap limit
     }
   } catch (error) {
     console.error("Error clearing exercise swap:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get current swap count (resets on 1st of each month)
+ * @returns Object with count and month
+ */
+const getSwapCountData = async (): Promise<{
+  count: number;
+  month: number;
+}> => {
+  try {
+    const countData = await AsyncStorage.getItem(SWAP_COUNT_KEY);
+    const monthData = await AsyncStorage.getItem(SWAP_COUNT_MONTH_KEY);
+
+    const currentMonth = new Date().getMonth(); // 0-11
+    const storedMonth = monthData ? parseInt(monthData, 10) : null;
+
+    // Reset if month changed (new month, reset on 1st)
+    if (storedMonth === null || storedMonth !== currentMonth) {
+      return { count: 0, month: currentMonth };
+    }
+
+    return {
+      count: countData ? parseInt(countData, 10) : 0,
+      month: currentMonth,
+    };
+  } catch (error) {
+    console.error("Error getting swap count data:", error);
+    return { count: 0, month: new Date().getMonth() };
+  }
+};
+
+/**
+ * Get remaining swap count for free users
+ * @returns Number of swaps remaining (0-10)
+ */
+export const getRemainingSwapCount = async (): Promise<number> => {
+  try {
+    const { count } = await getSwapCountData();
+    return Math.max(0, 10 - count);
+  } catch (error) {
+    console.error("Error getting remaining swap count:", error);
+    return 10;
+  }
+};
+
+/**
+ * Increment swap count (only call when user actually swaps, not on reset)
+ */
+export const incrementSwapCount = async (): Promise<number> => {
+  try {
+    const { count, month } = await getSwapCountData();
+    const currentMonth = new Date().getMonth();
+
+    // If month changed, reset to 1, otherwise increment
+    const newCount = month !== currentMonth ? 1 : count + 1;
+
+    await AsyncStorage.setItem(SWAP_COUNT_KEY, newCount.toString());
+    await AsyncStorage.setItem(SWAP_COUNT_MONTH_KEY, currentMonth.toString());
+
+    return newCount;
+  } catch (error) {
+    console.error("Error incrementing swap count:", error);
     throw error;
   }
 };

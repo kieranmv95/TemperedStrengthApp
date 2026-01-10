@@ -1,3 +1,4 @@
+import { useSubscription } from "@/hooks/use-subscription";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -13,6 +14,7 @@ import {
   clearLoggedSet,
   getCustomSetCount,
   getLoggedSets,
+  getRemainingSwapCount,
   saveCustomSetCount,
   saveLoggedSet,
 } from "../utils/storage";
@@ -34,12 +36,14 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   slotIndex,
   onSwap,
 }) => {
+  const { isPro } = useSubscription();
   const [weights, setWeights] = useState<string[]>([]);
   const [reps, setReps] = useState<string[]>([]);
   const [setStates, setSetStates] = useState<
     Map<number, "completed" | "failed">
   >(new Map());
   const [loading, setLoading] = useState(false);
+  const [remainingSwaps, setRemainingSwaps] = useState<number | null>(null);
   const saveTimersRef = useRef<{
     [key: number]: ReturnType<typeof setTimeout>;
   }>({});
@@ -53,6 +57,24 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     exerciseId !== null &&
     programExercise !== null &&
     exerciseId !== programExercise.id;
+
+  // Load swap count for non-Pro users
+  useEffect(() => {
+    const loadSwapCount = async () => {
+      if (!isPro) {
+        try {
+          const count = await getRemainingSwapCount();
+          setRemainingSwaps(count);
+        } catch (error) {
+          console.error("Error loading swap count:", error);
+          setRemainingSwaps(10); // Default to 10 on error
+        }
+      } else {
+        setRemainingSwaps(null); // Pro users have unlimited
+      }
+    };
+    loadSwapCount();
+  }, [isPro]);
 
   // Load custom set count and logged sets from storage
   useEffect(() => {
@@ -455,7 +477,13 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
       {programExercise?.canSwap !== false && (
         <View style={styles.swapButtonContainer}>
           <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
-            <Text style={styles.swapButtonText}>Swap Exercise</Text>
+            <Text style={styles.swapButtonText}>
+              {isPro
+                ? "Swap Exercise"
+                : `Swap Exercise${
+                    remainingSwaps !== null ? ` (${remainingSwaps})` : ""
+                  }`}
+            </Text>
           </TouchableOpacity>
         </View>
       )}

@@ -266,7 +266,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   <Text style={styles.programDescription}>
                     If started on a different day, the program will adjust to
                     the first day of the program being the first workout. You
-                    can change the session days in the program settings.
+                    can change the session days in the program once started.
                   </Text>
                   <View style={styles.daysSplitContainer}>
                     <View
@@ -502,6 +502,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   title: {
+    textAlign: "center",
     color: "#FFFFFF",
     fontSize: 32,
     fontWeight: "800",
@@ -509,6 +510,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   subtitle: {
+    textAlign: "center",
     color: "#888",
     fontSize: 16,
     fontWeight: "500",
@@ -524,6 +526,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   sectionHeaderText: {
+    textAlign: "center",
     color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "700",
@@ -543,7 +546,7 @@ const styles = StyleSheet.create({
   },
   programCardLocked: {
     opacity: 0.7,
-    borderColor: "#2A4A2A",
+    borderColor: "#c9b072",
   },
   programContent: {
     flex: 1,
