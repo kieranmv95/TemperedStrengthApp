@@ -353,7 +353,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             <Ionicons
               name="remove-circle-outline"
               size={24}
-              color={numberOfSets <= 1 ? "#444" : "#00E676"}
+              color={numberOfSets <= 1 ? "#444" : "#c9b072"}
             />
           </TouchableOpacity>
           <Text style={styles.setCountText}>{numberOfSets}</Text>
@@ -371,7 +371,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
               }
             }}
           >
-            <Ionicons name="add-circle-outline" size={24} color="#00E676" />
+            <Ionicons name="add-circle-outline" size={24} color="#c9b072" />
           </TouchableOpacity>
         </View>
       </View>
@@ -442,7 +442,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                     }
                     size={32}
                     color={
-                      isCompleted ? "#00E676" : isFailed ? "#FF6B6B" : "#666"
+                      isCompleted ? "#c9b072" : isFailed ? "#FF6B6B" : "#666"
                     }
                   />
                 </TouchableOpacity>
@@ -479,7 +479,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   exerciseName: {
-    color: "#00E676",
+    color: "#c9b072",
     fontSize: 20,
     fontWeight: "700",
     marginBottom: 4,
@@ -504,8 +504,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   amrapLabel: {
-    color: "#FF4444",
+    color: "#c9b072",
     fontWeight: "800",
+    opacity: 0.75,
   },
   setsHeader: {
     marginBottom: 12,
@@ -574,7 +575,7 @@ const styles = StyleSheet.create({
     borderColor: "#333",
   },
   inputCompleted: {
-    borderColor: "#00E676",
+    borderColor: "#c9b072",
     borderWidth: 2,
   },
   inputFailed: {
@@ -596,12 +597,12 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#00E676",
+    borderColor: "#c9b072",
     alignItems: "center",
     justifyContent: "center",
   },
   swapButtonText: {
-    color: "#00E676",
+    color: "#c9b072",
     fontSize: 14,
     fontWeight: "700",
     textTransform: "uppercase",
@@ -613,7 +614,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   slotLabel: {
-    color: "#00E676",
+    color: "#c9b072",
     fontSize: 12,
     fontWeight: "600",
     textTransform: "uppercase",

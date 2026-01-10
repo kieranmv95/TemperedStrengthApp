@@ -1,8 +1,8 @@
-import RevenueCatUI from 'react-native-purchases-ui';
-import { Alert, ActivityIndicator, StyleSheet, View } from 'react-native';
-import { useSubscription } from '@/hooks/use-subscription';
-import { useEffect, useState } from 'react';
-import { router } from 'expo-router';
+import { useSubscription } from "@/hooks/use-subscription";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, StyleSheet, View } from "react-native";
+import RevenueCatUI from "react-native-purchases-ui";
 
 export default function PaywallScreen() {
   const { isPro, refresh } = useSubscription();
@@ -19,7 +19,7 @@ export default function PaywallScreen() {
     const presentPaywall = async () => {
       try {
         setIsPresenting(true);
-        
+
         // Present the paywall created in RevenueCat dashboard
         const result = await RevenueCatUI.presentPaywall({
           displayCloseButton: true,
@@ -31,26 +31,26 @@ export default function PaywallScreen() {
         // Handle the result
         if (result === RevenueCatUI.PAYWALL_RESULT.PURCHASED) {
           Alert.alert(
-            'Welcome to Pro!',
-            'You now have access to all Pro features.',
-            [{ text: 'OK' }]
+            "Welcome to Pro!",
+            "You now have access to all Pro features.",
+            [{ text: "OK" }]
           );
         } else if (result === RevenueCatUI.PAYWALL_RESULT.CANCELLED) {
           // User cancelled, no action needed
         } else if (result === RevenueCatUI.PAYWALL_RESULT.NOT_PRESENTED) {
           // Paywall wasn't presented (e.g., no internet, no offerings)
           Alert.alert(
-            'Unable to Load Paywall',
-            'Please check your internet connection and try again.',
-            [{ text: 'OK' }]
+            "Unable to Load Paywall",
+            "Please check your internet connection and try again.",
+            [{ text: "OK" }]
           );
         }
       } catch (error) {
-        console.error('Error presenting paywall:', error);
+        console.error("Error presenting paywall:", error);
         Alert.alert(
-          'Paywall Unavailable',
-          'Paywalls require a development or production build. They are not available in Expo Go. Please build the app to test paywall functionality.',
-          [{ text: 'OK' }]
+          "Paywall Unavailable",
+          "Paywalls require a development or production build. They are not available in Expo Go. Please build the app to test paywall functionality.",
+          [{ text: "OK" }]
         );
       } finally {
         setIsPresenting(false);
@@ -66,7 +66,7 @@ export default function PaywallScreen() {
   // Show loading indicator while presenting paywall
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="#00E676" />
+      <ActivityIndicator size="large" color="#c9b072" />
     </View>
   );
 }
@@ -74,9 +74,8 @@ export default function PaywallScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#121212",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
-

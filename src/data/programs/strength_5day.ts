@@ -2,10 +2,12 @@ import { Program } from "@/src/utils/program";
 
 // 2. 5-DAY POWER & STRENGTH (6 Weeks)
 export const strength_5day: Program = {
+  isPro: true,
   id: "strength_5day",
   name: "5-Day Power & Strength",
   description:
     "6-Week Strength Peak. Intensifies every 2 weeks through progressive overload and rep-range tapering.",
+  daysSplit: ["mon", "tue", "wed", "thu", "fri"],
   workouts: Array.from({ length: 6 }).flatMap((_, week) => {
     const intensity = week < 2 ? 7 : week < 4 ? 8 : 9;
     const phase = week < 2 ? "Volume" : week < 4 ? "Strength" : "Peak";

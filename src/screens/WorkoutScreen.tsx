@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#333",
   },
   intensityDotFilled: {
-    backgroundColor: "#00E676",
+    backgroundColor: "#c9b072",
   },
   intensityValue: {
     color: "#888",
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
   },
   setCurrentDayButton: {
     marginTop: 16,
-    backgroundColor: "#00E676",
+    backgroundColor: "#c9b072",
     borderRadius: 8,
     padding: 12,
     alignItems: "center",

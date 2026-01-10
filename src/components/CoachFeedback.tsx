@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import React, { useState } from "react";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface CoachFeedbackProps {
   visible: boolean;
@@ -7,7 +7,7 @@ interface CoachFeedbackProps {
   onClose: () => void;
 }
 
-type FeelOption = 'easy' | 'perfect' | 'hard' | null;
+type FeelOption = "easy" | "perfect" | "hard" | null;
 
 export const CoachFeedback: React.FC<CoachFeedbackProps> = ({
   visible,
@@ -29,32 +29,32 @@ export const CoachFeedback: React.FC<CoachFeedbackProps> = ({
   };
 
   const getFeedback = (): string => {
-    if (!selectedFeel) return '';
-    
+    if (!selectedFeel) return "";
+
     switch (selectedFeel) {
-      case 'easy':
-        return 'Strong! Add 2.5kg next set.';
-      case 'hard':
+      case "easy":
+        return "Strong! Add 2.5kg next set.";
+      case "hard":
         const dropWeight = (currentWeight * 0.9).toFixed(1);
         return `Form first. Drop 10% weight (${dropWeight}kg).`;
-      case 'perfect':
-        return 'Perfect! Maintain this weight for next set.';
+      case "perfect":
+        return "Perfect! Maintain this weight for next set.";
       default:
-        return '';
+        return "";
     }
   };
 
   const getFeedbackColor = (): string => {
-    if (!selectedFeel) return '#00E676';
+    if (!selectedFeel) return "#c9b072";
     switch (selectedFeel) {
-      case 'easy':
-        return '#00E676';
-      case 'hard':
-        return '#FF6B6B';
-      case 'perfect':
-        return '#4ECDC4';
+      case "easy":
+        return "#c9b072";
+      case "hard":
+        return "#FF6B6B";
+      case "perfect":
+        return "#4ECDC4";
       default:
-        return '#00E676';
+        return "#c9b072";
     }
   };
 
@@ -70,30 +70,27 @@ export const CoachFeedback: React.FC<CoachFeedbackProps> = ({
           {!showFeedback ? (
             <>
               <Text style={styles.title}>How did that feel?</Text>
-              <TouchableOpacity
-                style={styles.skipButton}
-                onPress={handleClose}
-              >
+              <TouchableOpacity style={styles.skipButton} onPress={handleClose}>
                 <Text style={styles.skipButtonText}>Skip</Text>
               </TouchableOpacity>
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={[styles.feelButton, styles.easyButton]}
-                  onPress={() => handleFeelSelect('easy')}
+                  onPress={() => handleFeelSelect("easy")}
                 >
                   <Text style={styles.feelButtonText}>Too Easy</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={[styles.feelButton, styles.perfectButton]}
-                  onPress={() => handleFeelSelect('perfect')}
+                  onPress={() => handleFeelSelect("perfect")}
                 >
                   <Text style={styles.feelButtonText}>Perfect</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={[styles.feelButton, styles.hardButton]}
-                  onPress={() => handleFeelSelect('hard')}
+                  onPress={() => handleFeelSelect("hard")}
                 >
                   <Text style={styles.feelButtonText}>Too Hard</Text>
                 </TouchableOpacity>
@@ -102,14 +99,18 @@ export const CoachFeedback: React.FC<CoachFeedbackProps> = ({
           ) : (
             <>
               <Text style={styles.coachLabel}>Coach:</Text>
-              <Text style={[styles.feedbackText, { color: getFeedbackColor() }]}>
+              <Text
+                style={[styles.feedbackText, { color: getFeedbackColor() }]}
+              >
                 {getFeedback()}
               </Text>
               <TouchableOpacity
                 style={[styles.doneButton, { borderColor: getFeedbackColor() }]}
                 onPress={handleClose}
               >
-                <Text style={[styles.doneButtonText, { color: getFeedbackColor() }]}>
+                <Text
+                  style={[styles.doneButtonText, { color: getFeedbackColor() }]}
+                >
                   Got it
                 </Text>
               </TouchableOpacity>
@@ -124,37 +125,37 @@ export const CoachFeedback: React.FC<CoachFeedbackProps> = ({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    alignItems: "center",
+    justifyContent: "center",
   },
   modalContent: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: "#1E1E1E",
     borderRadius: 16,
     padding: 20,
-    width: '80%',
+    width: "80%",
     maxWidth: 320,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: "#2A2A2A",
   },
   title: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: '700',
-    textAlign: 'center',
+    fontWeight: "700",
+    textAlign: "center",
     marginBottom: 12,
   },
   skipButton: {
-    alignSelf: 'center',
+    alignSelf: "center",
     marginBottom: 16,
     paddingVertical: 6,
     paddingHorizontal: 16,
   },
   skipButtonText: {
-    color: '#888',
+    color: "#888",
     fontSize: 13,
-    fontWeight: '500',
-    textTransform: 'uppercase',
+    fontWeight: "500",
+    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   buttonContainer: {
@@ -163,55 +164,54 @@ const styles = StyleSheet.create({
   feelButton: {
     borderRadius: 10,
     padding: 14,
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1.5,
   },
   easyButton: {
-    backgroundColor: 'rgba(0, 230, 118, 0.1)',
-    borderColor: '#00E676',
+    backgroundColor: "rgba(0, 230, 118, 0.1)",
+    borderColor: "#c9b072",
   },
   perfectButton: {
-    backgroundColor: 'rgba(78, 205, 196, 0.1)',
-    borderColor: '#4ECDC4',
+    backgroundColor: "rgba(78, 205, 196, 0.1)",
+    borderColor: "#4ECDC4",
   },
   hardButton: {
-    backgroundColor: 'rgba(255, 107, 107, 0.1)',
-    borderColor: '#FF6B6B',
+    backgroundColor: "rgba(255, 107, 107, 0.1)",
+    borderColor: "#FF6B6B",
   },
   feelButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 15,
-    fontWeight: '600',
-    textTransform: 'uppercase',
+    fontWeight: "600",
+    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   coachLabel: {
-    color: '#888',
+    color: "#888",
     fontSize: 11,
-    fontWeight: '600',
-    textTransform: 'uppercase',
+    fontWeight: "600",
+    textTransform: "uppercase",
     letterSpacing: 0.5,
     marginBottom: 12,
-    textAlign: 'center',
+    textAlign: "center",
   },
   feedbackText: {
     fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
     marginBottom: 20,
     lineHeight: 22,
   },
   doneButton: {
     borderRadius: 10,
     padding: 12,
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1.5,
   },
   doneButtonText: {
     fontSize: 14,
-    fontWeight: '600',
-    textTransform: 'uppercase',
+    fontWeight: "600",
+    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
 });
-

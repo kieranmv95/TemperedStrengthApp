@@ -1,10 +1,12 @@
 import { Program } from "@/src/utils/program";
 
 export const olympic_foundations: Program = {
+  isPro: false,
   id: "oly_01",
   name: "Olympic Foundations",
   description:
     "4-Week technical build-up for Snatch and Clean & Jerk. Focuses on bar path, speed, and overhead stability.",
+  daysSplit: ["mon", "wed", "fri"],
   workouts: Array.from({ length: 4 }).flatMap((_, week) => {
     const baseIntensity = 7 + Math.floor(week / 2);
 

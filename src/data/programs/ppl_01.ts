@@ -3,9 +3,11 @@ import { Program } from "@/src/utils/program";
 // 1. PUSH PULL LEGS (4 Weeks)
 export const ppl_01: Program = {
   id: "ppl_01",
+  isPro: false,
   name: "Push/Pull/Legs (PPL)",
   description:
     "4-Week Hypertrophy block. Rotates intensity and exercise variations to maximize muscle fiber recruitment.",
+  daysSplit: ["mon", "wed", "fri"],
   workouts: Array.from({ length: 4 }).flatMap((_, week) => [
     {
       dayIndex: week * 7 + 0,

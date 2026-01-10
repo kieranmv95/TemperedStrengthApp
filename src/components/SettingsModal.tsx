@@ -1,14 +1,14 @@
-import React from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React from "react";
 import {
+  Alert,
   Modal,
-  View,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { clearProgramData } from '../utils/storage';
+  View,
+} from "react-native";
+import { clearProgramData } from "../utils/storage";
 
 interface SettingsModalProps {
   visible: boolean;
@@ -23,24 +23,27 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 }) => {
   const handleChangeProgram = () => {
     Alert.alert(
-      'Change Program',
-      'Changing your program will lose all progress on your current program, including your workout logs and exercise swaps.\n\nFinishing a program to completion is the best approach for achieving your fitness goals.\n\nAre you sure you want to change programs?',
+      "Change Program",
+      "Changing your program will lose all progress on your current program, including your workout logs and exercise swaps.\n\nFinishing a program to completion is the best approach for achieving your fitness goals.\n\nAre you sure you want to change programs?",
       [
         {
-          text: 'Cancel',
-          style: 'cancel',
+          text: "Cancel",
+          style: "cancel",
         },
         {
-          text: 'Change Program',
-          style: 'destructive',
+          text: "Change Program",
+          style: "destructive",
           onPress: async () => {
             try {
               await clearProgramData();
               onProgramReset();
               onClose();
             } catch (error) {
-              console.error('Error changing program:', error);
-              Alert.alert('Error', 'Failed to change program. Please try again.');
+              console.error("Error changing program:", error);
+              Alert.alert(
+                "Error",
+                "Failed to change program. Please try again."
+              );
             }
           },
         },
@@ -50,25 +53,28 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   const handleClearAllData = () => {
     Alert.alert(
-      'Clear All Data',
-      'This will permanently delete ALL stored data including:\n\n• Program progress\n• Workout logs\n• Exercise swaps\n• Custom set counts\n• Exercise cache\n\nThis action cannot be undone.\n\nAre you sure you want to clear all data?',
+      "Clear All Data",
+      "This will permanently delete ALL stored data including:\n\n• Program progress\n• Workout logs\n• Exercise swaps\n• Custom set counts\n• Exercise cache\n\nThis action cannot be undone.\n\nAre you sure you want to clear all data?",
       [
         {
-          text: 'Cancel',
-          style: 'cancel',
+          text: "Cancel",
+          style: "cancel",
         },
         {
-          text: 'Clear All Data',
-          style: 'destructive',
+          text: "Clear All Data",
+          style: "destructive",
           onPress: async () => {
             try {
               await AsyncStorage.clear();
               onProgramReset();
               onClose();
-              Alert.alert('Success', 'All data has been cleared.');
+              Alert.alert("Success", "All data has been cleared.");
             } catch (error) {
-              console.error('Error clearing all data:', error);
-              Alert.alert('Error', 'Failed to clear all data. Please try again.');
+              console.error("Error clearing all data:", error);
+              Alert.alert(
+                "Error",
+                "Failed to clear all data. Please try again."
+              );
             }
           },
         },
@@ -111,7 +117,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               onPress={handleClearAllData}
             >
               <View style={styles.settingContent}>
-                <Text style={[styles.settingTitle, styles.dangerText]}>Clear All Data</Text>
+                <Text style={[styles.settingTitle, styles.dangerText]}>
+                  Clear All Data
+                </Text>
                 <Text style={styles.settingDescription}>
                   Permanently delete all stored data
                 </Text>
@@ -128,81 +136,80 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    justifyContent: 'flex-end',
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    justifyContent: "flex-end",
   },
   modalContent: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: "#1E1E1E",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 24,
-    maxHeight: '80%',
+    maxHeight: "80%",
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: "#2A2A2A",
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 24,
   },
   modalTitle: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 24,
-    fontWeight: '700',
+    fontWeight: "700",
     flex: 1,
   },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#2A2A2A',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#2A2A2A",
+    alignItems: "center",
+    justifyContent: "center",
   },
   closeButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   settingsList: {
     gap: 12,
   },
   settingItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#2A2A2A',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#2A2A2A",
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#333',
+    borderColor: "#333",
   },
   settingContent: {
     flex: 1,
   },
   settingTitle: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 4,
   },
   settingDescription: {
-    color: '#888',
+    color: "#888",
     fontSize: 14,
     lineHeight: 20,
   },
   settingArrow: {
-    color: '#00E676',
+    color: "#c9b072",
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: "600",
     marginLeft: 12,
   },
   dangerItem: {
-    borderColor: '#FF4444',
+    borderColor: "#FF4444",
   },
   dangerText: {
-    color: '#FF4444',
+    color: "#FF4444",
   },
 });
-

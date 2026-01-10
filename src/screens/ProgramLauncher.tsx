@@ -1,6 +1,9 @@
+import { useSubscription } from "@/hooks/use-subscription";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
+  Alert,
   Modal,
   Platform,
   SafeAreaView,
@@ -20,17 +23,64 @@ interface ProgramLauncherProps {
 export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   onProgramSelected,
 }) => {
+  const { isPro } = useSubscription();
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [showProgramDetails, setShowProgramDetails] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
 
   const handleSelectProgram = (program: Program) => {
+    // Check if program requires Pro and user doesn't have it
+    if (program.isPro && !isPro) {
+      Alert.alert(
+        "Pro Program",
+        "This program is available for Tempered Strength Pro subscribers only. Upgrade to Pro to unlock this program.",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Upgrade to Pro",
+            style: "default",
+            onPress: () => {
+              router.push("/paywall");
+            },
+          },
+        ]
+      );
+      return;
+    }
+
     setSelectedProgram(program);
     setShowProgramDetails(true);
   };
 
   const handleStartProgram = () => {
+    // Double check Pro status before starting (in case entitlement changed)
+    if (selectedProgram?.isPro && !isPro) {
+      Alert.alert(
+        "Pro Required",
+        "This program requires Tempered Strength Pro. Please upgrade to continue.",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+            onPress: () => setShowProgramDetails(false),
+          },
+          {
+            text: "Upgrade to Pro",
+            style: "default",
+            onPress: () => {
+              setShowProgramDetails(false);
+              router.push("/paywall");
+            },
+          },
+        ]
+      );
+      return;
+    }
+
     setShowProgramDetails(false);
     setShowDatePicker(true);
   };
@@ -60,6 +110,60 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     }
   };
 
+  const renderProgramCard = (program: Program, isLocked: boolean) => {
+    // Calculate number of weeks from the maximum dayIndex
+    const maxDayIndex = Math.max(...program.workouts.map((w) => w.dayIndex));
+    const weekCount = Math.ceil((maxDayIndex + 1) / 7);
+    const sessionsPerWeek = (program.workouts.length / weekCount)
+      .toFixed(1)
+      .replace(/\.0$/, "");
+
+    return (
+      <TouchableOpacity
+        key={program.id}
+        style={[styles.programCard, isLocked && styles.programCardLocked]}
+        onPress={() => handleSelectProgram(program)}
+        disabled={false} // Always allow press to show upgrade prompt
+      >
+        <View style={styles.programContent}>
+          <View style={styles.programNameRow}>
+            <Text
+              style={[styles.programName, isLocked && styles.programNameLocked]}
+            >
+              {program.name}
+            </Text>
+            {program.isPro && (
+              <View style={styles.proBadge}>
+                <Text style={styles.proBadgeText}>PRO</Text>
+              </View>
+            )}
+          </View>
+          <Text
+            style={[
+              styles.programDescription,
+              isLocked && styles.programDescriptionLocked,
+            ]}
+          >
+            {program.description}
+          </Text>
+          <Text style={styles.programStats}>
+            {program.workouts.length} workouts • {weekCount}{" "}
+            {weekCount === 1 ? "week" : "weeks"} • {sessionsPerWeek}{" "}
+            sessions/week
+          </Text>
+          {isLocked && (
+            <Text style={styles.lockedText}>Upgrade to Pro to unlock</Text>
+          )}
+        </View>
+        <Text
+          style={[styles.selectArrow, isLocked && styles.selectArrowLocked]}
+        >
+          →
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -73,37 +177,29 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           </Text>
         </View>
 
-        {programs.map((program) => {
-          // Calculate number of weeks from the maximum dayIndex
-          const maxDayIndex = Math.max(
-            ...program.workouts.map((w) => w.dayIndex)
-          );
-          const weekCount = Math.ceil((maxDayIndex + 1) / 7);
-          const sessionsPerWeek = (program.workouts.length / weekCount)
-            .toFixed(1)
-            .replace(/\.0$/, "");
+        {isPro ? (
+          // Pro users see all programs in a single list
+          programs.map((program) => renderProgramCard(program, false))
+        ) : (
+          // Non-Pro users see Free and Pro sections
+          <>
+            {/* Free Programs Section */}
+            <View style={[styles.sectionHeader, styles.sectionHeaderFirst]}>
+              <Text style={styles.sectionHeaderText}>Free Programs</Text>
+            </View>
+            {programs
+              .filter((program) => !program.isPro)
+              .map((program) => renderProgramCard(program, false))}
 
-          return (
-            <TouchableOpacity
-              key={program.id}
-              style={styles.programCard}
-              onPress={() => handleSelectProgram(program)}
-            >
-              <View style={styles.programContent}>
-                <Text style={styles.programName}>{program.name}</Text>
-                <Text style={styles.programDescription}>
-                  {program.description}
-                </Text>
-                <Text style={styles.programStats}>
-                  {program.workouts.length} workouts • {weekCount}{" "}
-                  {weekCount === 1 ? "week" : "weeks"} • {sessionsPerWeek}{" "}
-                  sessions/week
-                </Text>
-              </View>
-              <Text style={styles.selectArrow}>→</Text>
-            </TouchableOpacity>
-          );
-        })}
+            {/* Pro Programs Section */}
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>Pro Programs</Text>
+            </View>
+            {programs
+              .filter((program) => program.isPro)
+              .map((program) => renderProgramCard(program, true))}
+          </>
+        )}
       </ScrollView>
 
       <Modal
@@ -115,9 +211,16 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
         <View style={styles.modalOverlay}>
           <View style={styles.programDetailsModal}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>
-                {selectedProgram?.name || "Program Details"}
-              </Text>
+              <View style={styles.modalTitleRow}>
+                <Text style={styles.modalTitle}>
+                  {selectedProgram?.name || "Program Details"}
+                </Text>
+                {selectedProgram?.isPro && (
+                  <View style={styles.proBadge}>
+                    <Text style={styles.proBadgeText}>PRO</Text>
+                  </View>
+                )}
+              </View>
               <TouchableOpacity
                 onPress={() => setShowProgramDetails(false)}
                 style={styles.closeButton}
@@ -132,6 +235,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
               </Text>
 
               <Text style={styles.sectionTitle}>Program Overview</Text>
+
               <View style={styles.statsContainer}>
                 <View style={styles.statItem}>
                   <Text style={styles.statValue}>
@@ -145,29 +249,148 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       ...selectedProgram.workouts.map((w) => w.dayIndex)
                     );
                     const weekCount = Math.ceil((maxDayIndex + 1) / 7);
-                    const sessionsPerWeek = (
-                      selectedProgram.workouts.length / weekCount
-                    )
-                      .toFixed(1)
-                      .replace(/\.0$/, "");
                     return (
-                      <>
-                        <View style={styles.statItem}>
-                          <Text style={styles.statValue}>{weekCount}</Text>
-                          <Text style={styles.statLabel}>
-                            {weekCount === 1 ? "Week" : "Weeks"}
-                          </Text>
-                        </View>
-                        <View style={styles.statItem}>
-                          <Text style={styles.statValue}>
-                            {sessionsPerWeek}
-                          </Text>
-                          <Text style={styles.statLabel}>SPW</Text>
-                        </View>
-                      </>
+                      <View style={styles.statItem}>
+                        <Text style={styles.statValue}>{weekCount}</Text>
+                        <Text style={styles.statLabel}>
+                          {weekCount === 1 ? "Week" : "Weeks"}
+                        </Text>
+                      </View>
                     );
                   })()}
               </View>
+
+              {selectedProgram?.daysSplit && (
+                <View>
+                  <Text style={styles.workoutTitle}>Workout Days</Text>
+                  <Text style={styles.programDescription}>
+                    If started on a different day, the program will adjust to
+                    the first day of the program being the first workout. You
+                    can change the session days in the program settings.
+                  </Text>
+                  <View style={styles.daysSplitContainer}>
+                    <View
+                      style={[
+                        styles.dayItem,
+                        selectedProgram.daysSplit.includes("mon") &&
+                          styles.dayItemSelected,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.dayLabel,
+                          selectedProgram.daysSplit.includes("mon") &&
+                            styles.dayLabelSelected,
+                        ]}
+                      >
+                        M
+                      </Text>
+                    </View>
+                    <View
+                      style={[
+                        styles.dayItem,
+                        selectedProgram.daysSplit.includes("tue") &&
+                          styles.dayItemSelected,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.dayLabel,
+                          selectedProgram.daysSplit.includes("tue") &&
+                            styles.dayLabelSelected,
+                        ]}
+                      >
+                        T
+                      </Text>
+                    </View>
+                    <View
+                      style={[
+                        styles.dayItem,
+                        selectedProgram.daysSplit.includes("wed") &&
+                          styles.dayItemSelected,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.dayLabel,
+                          selectedProgram.daysSplit.includes("wed") &&
+                            styles.dayLabelSelected,
+                        ]}
+                      >
+                        W
+                      </Text>
+                    </View>
+                    <View
+                      style={[
+                        styles.dayItem,
+                        selectedProgram.daysSplit.includes("thu") &&
+                          styles.dayItemSelected,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.dayLabel,
+                          selectedProgram.daysSplit.includes("thu") &&
+                            styles.dayLabelSelected,
+                        ]}
+                      >
+                        T
+                      </Text>
+                    </View>
+                    <View
+                      style={[
+                        styles.dayItem,
+                        selectedProgram.daysSplit.includes("fri") &&
+                          styles.dayItemSelected,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.dayLabel,
+                          selectedProgram.daysSplit.includes("fri") &&
+                            styles.dayLabelSelected,
+                        ]}
+                      >
+                        F
+                      </Text>
+                    </View>
+                    <View
+                      style={[
+                        styles.dayItem,
+                        selectedProgram.daysSplit.includes("sat") &&
+                          styles.dayItemSelected,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.dayLabel,
+                          selectedProgram.daysSplit.includes("sat") &&
+                            styles.dayLabelSelected,
+                        ]}
+                      >
+                        S
+                      </Text>
+                    </View>
+                    <View
+                      style={[
+                        styles.dayItem,
+                        selectedProgram.daysSplit.includes("sun") &&
+                          styles.dayItemSelected,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.dayLabel,
+                          selectedProgram.daysSplit.includes("sun") &&
+                            styles.dayLabelSelected,
+                        ]}
+                      >
+                        S
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              )}
 
               <Text style={styles.sectionTitle}>Workouts</Text>
               {selectedProgram?.workouts.map((workout, index) => (
@@ -290,6 +513,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
   },
+  sectionHeader: {
+    marginTop: 24,
+    marginBottom: 16,
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#2A2A2A",
+  },
+  sectionHeaderFirst: {
+    marginTop: 0,
+  },
+  sectionHeaderText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
   programCard: {
     backgroundColor: "#1E1E1E",
     borderRadius: 12,
@@ -301,14 +541,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  programCardLocked: {
+    opacity: 0.7,
+    borderColor: "#2A4A2A",
+  },
   programContent: {
     flex: 1,
+  },
+  programNameRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 8,
+    flexWrap: "wrap",
   },
   programName: {
     color: "#FFFFFF",
     fontSize: 22,
     fontWeight: "700",
-    marginBottom: 8,
+  },
+  programNameLocked: {
+    color: "#888",
   },
   programDescription: {
     color: "#CCC",
@@ -316,18 +569,44 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     lineHeight: 20,
   },
+  programDescriptionLocked: {
+    color: "#666",
+  },
   programStats: {
-    color: "#00E676",
+    color: "#c9b072",
     fontSize: 12,
     fontWeight: "600",
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   selectArrow: {
-    color: "#00E676",
+    color: "#c9b072",
     fontSize: 24,
     fontWeight: "600",
     marginLeft: 16,
+  },
+  selectArrowLocked: {
+    color: "#666",
+  },
+  proBadge: {
+    backgroundColor: "#c9b072",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  proBadgeText: {
+    color: "#000000",
+    fontSize: 10,
+    fontWeight: "700",
+    letterSpacing: 0.5,
+  },
+  lockedText: {
+    color: "#c9b072",
+    fontSize: 12,
+    fontWeight: "600",
+    marginTop: 4,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   datePickerContainer: {
     position: "absolute",
@@ -369,7 +648,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   confirmButtonText: {
-    color: "#00E676",
+    color: "#c9b072",
     fontSize: 16,
     fontWeight: "700",
   },
@@ -401,11 +680,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
   },
+  modalTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    flex: 1,
+    flexWrap: "wrap",
+  },
   modalTitle: {
     color: "#FFFFFF",
     fontSize: 24,
     fontWeight: "700",
-    flex: 1,
   },
   closeButton: {
     width: 32,
@@ -414,6 +699,31 @@ const styles = StyleSheet.create({
     backgroundColor: "#2A2A2A",
     alignItems: "center",
     justifyContent: "center",
+  },
+  daysSplitContainer: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 24,
+  },
+  dayItem: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#2A2A2A",
+    borderRadius: 8,
+    padding: 8,
+  },
+  dayLabel: {
+    color: "#888",
+    fontSize: 14,
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  dayItemSelected: {
+    backgroundColor: "#c9b072",
+  },
+  dayLabelSelected: {
+    color: "#000000",
   },
   closeButtonText: {
     color: "#FFFFFF",
@@ -430,12 +740,20 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginTop: 8,
   },
+  workoutTitle: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 6,
+    marginTop: 8,
+  },
   statsContainer: {
     flexDirection: "row",
     gap: 16,
     marginBottom: 24,
   },
   statItem: {
+    flex: 1,
     backgroundColor: "#2A2A2A",
     borderRadius: 12,
     padding: 16,
@@ -443,7 +761,7 @@ const styles = StyleSheet.create({
     minWidth: 100,
   },
   statValue: {
-    color: "#00E676",
+    color: "#c9b072",
     fontSize: 24,
     fontWeight: "700",
     marginBottom: 4,
@@ -510,7 +828,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#333",
   },
   workoutIntensityDotFilled: {
-    backgroundColor: "#00E676",
+    backgroundColor: "#c9b072",
   },
   workoutIntensityValue: {
     color: "#888",
@@ -524,7 +842,7 @@ const styles = StyleSheet.create({
     borderTopColor: "#2A2A2A",
   },
   startProgramButton: {
-    backgroundColor: "#00E676",
+    backgroundColor: "#c9b072",
     borderRadius: 12,
     padding: 16,
     alignItems: "center",

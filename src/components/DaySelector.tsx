@@ -172,6 +172,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#888",
   },
   dotToday: {
-    backgroundColor: "#00E676",
+    backgroundColor: "#c9b072",
   },
 });

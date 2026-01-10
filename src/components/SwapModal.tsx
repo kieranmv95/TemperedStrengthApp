@@ -308,11 +308,11 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#00E676",
+    borderColor: "#c9b072",
     alignItems: "center",
   },
   resetButtonText: {
-    color: "#00E676",
+    color: "#c9b072",
     fontSize: 16,
     fontWeight: "600",
   },
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   alternativeEquipment: {
-    color: "#00E676",
+    color: "#c9b072",
     fontSize: 12,
     fontWeight: "600",
     textTransform: "uppercase",
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   selectArrow: {
-    color: "#00E676",
+    color: "#c9b072",
     fontSize: 24,
     fontWeight: "600",
     marginLeft: 12,

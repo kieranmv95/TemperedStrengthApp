@@ -1,11 +1,5 @@
-import React, { useState } from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React from "react";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { DaySelector } from "../components/DaySelector";
 import { Workout } from "../utils/program";
 
@@ -30,7 +24,6 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
   onDaySelect,
   onProgramReset,
 }) => {
-
   return (
     <SafeAreaView style={styles.container}>
       <DaySelector
@@ -43,15 +36,13 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
         <View style={styles.headerSpacer} />
       </View>
       <View style={styles.content}>
-        <View style={styles.iconContainer}>
-          <Text style={styles.icon}>💤</Text>
-        </View>
         <Text style={styles.title}>Rest Day</Text>
         <Text style={styles.subtitle}>
           Your body needs recovery to grow stronger.
         </Text>
         <Text style={styles.description}>
-          Take this time to rest, hydrate, and prepare for your next workout.
+          Take this time to perform active recovery activities such as
+          stretching, foam rolling, or yoga, or simply take a day off.
         </Text>
       </View>
     </SafeAreaView>
@@ -79,14 +70,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 24,
   },
-  iconContainer: {
-    marginBottom: 24,
-  },
-  icon: {
-    fontSize: 80,
-  },
   title: {
-    color: "#FFFFFF",
+    color: "#c9b072",
     fontSize: 36,
     fontWeight: "800",
     marginBottom: 12,

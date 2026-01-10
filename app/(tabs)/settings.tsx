@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   settingArrow: {
-    color: "#00E676",
+    color: "#c9b072",
     fontSize: 24,
     fontWeight: "600",
     marginLeft: 12,
@@ -285,11 +285,11 @@ const styles = StyleSheet.create({
     color: "#FF4444",
   },
   proItem: {
-    borderColor: "#00E676",
+    borderColor: "#c9b072",
     backgroundColor: "#1A3A2A",
   },
   proArrow: {
-    color: "#00E676",
+    color: "#c9b072",
   },
   settingTitleRow: {
     flexDirection: "row",
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   proBadge: {
-    backgroundColor: "#00E676",
+    backgroundColor: "#c9b072",
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,

@@ -1,10 +1,12 @@
 import { Program } from "@/src/utils/program";
 
 export const olympic_advanced_8wk: Program = {
+  isPro: true,
   id: "oly_adv_01",
   name: "Advanced Olympic Performance",
   description:
     "8-Week peak. Phase 1: Volume & Positional Strength. Phase 2: Speed & Maximal Singles.",
+  daysSplit: ["mon", "wed", "fri"],
   workouts: Array.from({ length: 8 }).flatMap((_, week) => {
     const isPhase2 = week >= 4;
     const intensity = isPhase2

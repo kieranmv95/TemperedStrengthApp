@@ -2,10 +2,12 @@ import { Program } from "@/src/utils/program";
 
 // 3. WEEKEND WARRIOR (12 Weeks)
 export const full_body_2day: Program = {
+  isPro: false,
   id: "full_body_2day",
   name: "Weekend Warrior",
   description:
     "12-Week Full Body Maintenance. Alternates movement variants monthly to prevent plateaus.",
+  daysSplit: ["sat", "sun"],
   workouts: Array.from({ length: 12 }).flatMap((_, week) => {
     const cycle = Math.floor(week / 4);
     const cycleNames = ["Foundation", "Stability", "Hypertrophy"];

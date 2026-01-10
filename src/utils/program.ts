@@ -24,6 +24,8 @@ export interface Program {
   name: string;
   description: string;
   workouts: Workout[];
+  isPro: boolean;
+  daysSplit?: ("mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun")[];
 }
 
 export const programs: Program[] = programList;

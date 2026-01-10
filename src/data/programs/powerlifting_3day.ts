@@ -3,9 +3,11 @@ import { Program } from "@/src/utils/program";
 // 4. POWERLIFTING (8 Weeks)
 export const powerlifting_3day: Program = {
   id: "power_01",
+  isPro: false,
   name: "Traditional Powerlifting (SBD)",
   description:
     "8-Week Peaking Program. Volume drops as intensity climbs to a Week 8 testing session.",
+  daysSplit: ["mon", "wed", "fri"],
   workouts: Array.from({ length: 8 }).flatMap((_, week) => {
     const isTestingWeek = week === 7;
     const mainReps: [number, number] =
