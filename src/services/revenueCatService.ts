@@ -10,7 +10,8 @@ import Purchases, {
 // RevenueCat API Keys
 // Get your production keys from: https://app.revenuecat.com/project/{your_project_id}/settings/api-keys
 // Test keys start with "test_", Production keys start with "appl_" (iOS) or "goog_" (Android)
-// For production, set EXPO_PUBLIC_REVENUECAT_API_KEY_IOS and EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID in EAS secrets or .env
+// For production/TestFlight builds, set EXPO_PUBLIC_REVENUECAT_API_KEY_IOS and EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID in EAS secrets
+// WARNING: TestFlight builds are considered release builds and REQUIRE production keys, not test keys
 const REVENUECAT_API_KEY = Platform.select({
   ios:
     process.env.EXPO_PUBLIC_REVENUECAT_API_KEY_IOS ||
@@ -22,6 +23,20 @@ const REVENUECAT_API_KEY = Platform.select({
     "test_SnvzLVCMTIHpdvZxNJETTYDrEhL",
   default: "test_SnvzLVCMTIHpdvZxNJETTYDrEhL",
 })!;
+
+// Validate API key format in development to catch misconfigurations early
+if (__DEV__) {
+  const isTestKey = REVENUECAT_API_KEY.startsWith("test_");
+  const isProductionKey =
+    REVENUECAT_API_KEY.startsWith("appl_") ||
+    REVENUECAT_API_KEY.startsWith("goog_");
+  
+  if (!isTestKey && !isProductionKey) {
+    console.warn(
+      "⚠️ RevenueCat API key format may be invalid. Expected 'test_', 'appl_', or 'goog_' prefix."
+    );
+  }
+}
 
 // Entitlement identifier
 export const PRO_ENTITLEMENT_ID = "Tempered Strength Pro";

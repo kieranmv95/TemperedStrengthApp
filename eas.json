@@ -6,13 +6,25 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_REVENUECAT_API_KEY_IOS": "test_SnvzLVCMTIHpdvZxNJETTYDrEhL",
+        "EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID": "test_SnvzLVCMTIHpdvZxNJETTYDrEhL"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_REVENUECAT_API_KEY_IOS": "${EXPO_PUBLIC_REVENUECAT_API_KEY_IOS}",
+        "EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID": "${EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID}"
+      }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_REVENUECAT_API_KEY_IOS": "${EXPO_PUBLIC_REVENUECAT_API_KEY_IOS}",
+        "EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID": "${EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID}"
+      }
     }
   },
   "submit": {
