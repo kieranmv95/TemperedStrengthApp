@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import { Alert } from 'react-native';
 import Purchases, { CustomerInfo, PurchasesOffering as Offerings, PurchasesPackage } from 'react-native-purchases';
+import { router } from 'expo-router';
 import {
   getCustomerInfo,
   getOfferings,
@@ -7,6 +9,8 @@ import {
   restorePurchases,
   PRO_ENTITLEMENT_ID,
 } from '@/src/services/revenueCatService';
+import { getActiveProgramId, clearProgramData } from '@/src/utils/storage';
+import { getProgramById } from '@/src/utils/program';
 
 export interface SubscriptionState {
   isPro: boolean;
@@ -36,12 +40,65 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
 
   // Track if we've initialized to prevent duplicate listeners
   const listenerRef = useRef<(() => void) | null>(null);
+  // Track previous Pro status to detect subscription expiry
+  const previousIsProRef = useRef<boolean | null>(null);
+  // Track if initial load is complete to avoid false expiry detection
+  const initialLoadCompleteRef = useRef<boolean>(false);
+
+  /**
+   * Handle subscription expiry - check if user was on a Pro program and reset it
+   */
+  const handleSubscriptionExpiry = useCallback(async () => {
+    try {
+      const programId = await getActiveProgramId();
+      if (!programId) return;
+
+      const program = getProgramById(programId);
+      if (!program?.isPro) return;
+
+      // User was on a Pro program but subscription expired
+      console.log('Subscription expired while on Pro program, resetting...');
+      await clearProgramData();
+
+      // Show alert and navigate to program selection
+      Alert.alert(
+        'Subscription Expired',
+        'Your Pro subscription has expired. Your Pro program has been reset. Please select a new program or renew your subscription to continue.',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              // Navigate to the home/program selection screen
+              router.replace('/');
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      console.error('Error handling subscription expiry:', error);
+    }
+  }, []);
 
   /**
    * Update state based on customer info
    */
   const updateStateFromCustomerInfo = useCallback((customerInfo: CustomerInfo) => {
     const isPro = customerInfo.entitlements.active[PRO_ENTITLEMENT_ID] !== undefined;
+    
+    // Check for subscription expiry (was Pro, now not Pro)
+    // Only check after initial load is complete to avoid false positives
+    if (initialLoadCompleteRef.current && previousIsProRef.current === true && !isPro) {
+      handleSubscriptionExpiry();
+    }
+    
+    // Update previous Pro status
+    previousIsProRef.current = isPro;
+    
+    // Mark initial load as complete after first update
+    if (!initialLoadCompleteRef.current) {
+      initialLoadCompleteRef.current = true;
+    }
+
     setState((prev) => ({
       ...prev,
       customerInfo,
@@ -49,7 +106,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       isLoading: false,
       error: null,
     }));
-  }, []);
+  }, [handleSubscriptionExpiry]);
 
   /**
    * Load customer info and check entitlement status
