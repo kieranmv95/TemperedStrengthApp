@@ -3,11 +3,8 @@ import { getOfferings } from "@/src/services/revenueCatService";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, StyleSheet, View } from "react-native";
+import { PURCHASES_ERROR_CODE, PurchasesError } from "react-native-purchases";
 import RevenueCatUI from "react-native-purchases-ui";
-import Purchases, {
-  PURCHASES_ERROR_CODE,
-  PurchasesError,
-} from "react-native-purchases";
 
 export default function PaywallScreen() {
   const { isPro, refresh } = useSubscription();
@@ -27,16 +24,22 @@ export default function PaywallScreen() {
 
         // Check if offerings are available before presenting paywall
         const offerings = await getOfferings();
-        if (!offerings || !offerings.availablePackages || offerings.availablePackages.length === 0) {
-          console.error("No offerings available. Check RevenueCat dashboard configuration.");
+        if (
+          !offerings ||
+          !offerings.availablePackages ||
+          offerings.availablePackages.length === 0
+        ) {
+          console.error(
+            "No offerings available. Check RevenueCat dashboard configuration."
+          );
           Alert.alert(
             "Paywall Configuration Error",
             "No subscription packages are available. Please ensure:\n\n" +
-            "1. Products are configured in RevenueCat dashboard\n" +
-            "2. An offering is created and set as current\n" +
-            "3. Products match your App Store Connect product IDs\n" +
-            "4. Products are in 'Ready to Submit' or 'Approved' state\n\n" +
-            "Error Code: Configuration Error (No Offerings)",
+              "1. Products are configured in RevenueCat dashboard\n" +
+              "2. An offering is created and set as current\n" +
+              "3. Products match your App Store Connect product IDs\n" +
+              "4. Products are in 'Ready to Submit' or 'Approved' state\n\n" +
+              "Error Code: Configuration Error (No Offerings)",
             [
               {
                 text: "OK",
@@ -87,9 +90,10 @@ export default function PaywallScreen() {
         }
       } catch (error) {
         console.error("Error presenting paywall:", error);
-        
+
         // Extract detailed error information
-        let errorMessage = "An unknown error occurred while loading the paywall.";
+        let errorMessage =
+          "An unknown error occurred while loading the paywall.";
         let errorCode = "Unknown";
         let errorDetails = "";
 
@@ -102,7 +106,7 @@ export default function PaywallScreen() {
         const purchasesError = error as PurchasesError;
         if (purchasesError?.code !== undefined) {
           errorCode = `Error ${purchasesError.code}`;
-          
+
           // Map common error codes to helpful messages
           switch (purchasesError.code) {
             case PURCHASES_ERROR_CODE.CONFIGURATION_ERROR:
@@ -116,10 +120,12 @@ export default function PaywallScreen() {
                 `Underlying error: ${purchasesError.message || errorMessage}`;
               break;
             case PURCHASES_ERROR_CODE.NETWORK_ERROR:
-              errorMessage = "Network error. Please check your internet connection and try again.";
+              errorMessage =
+                "Network error. Please check your internet connection and try again.";
               break;
             case PURCHASES_ERROR_CODE.PURCHASE_NOT_ALLOWED_ERROR:
-              errorMessage = "Purchases are not allowed on this device. Please check your device settings.";
+              errorMessage =
+                "Purchases are not allowed on this device. Please check your device settings.";
               break;
             default:
               errorMessage = purchasesError.message || errorMessage;
