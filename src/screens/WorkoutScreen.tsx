@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
+  InputAccessoryView,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -68,6 +70,9 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [notes, setNotes] = useState<string>("");
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
   const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrollViewRef = useRef<ScrollView>(null);
+  const notesInputRef = useRef<TextInput>(null);
+  const notesInputAccessoryViewID = "notesInputAccessory";
 
   const calculateDaysSinceStart = (startDate: string): number => {
     const start = new Date(startDate);
@@ -296,6 +301,19 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     };
   }, []);
 
+  // Handle notes input focus - scroll to bottom to keep notes visible
+  const handleNotesFocus = useCallback(() => {
+    // Small delay to let keyboard animation start
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+  }, []);
+
+  // Handle done button press - dismiss keyboard
+  const handleNotesDone = useCallback(() => {
+    Keyboard.dismiss();
+  }, []);
+
   const handleSkipToNextWorkout = async () => {
     if (!nextWorkout) return;
 
@@ -383,6 +401,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
       >
         <ScrollView
+          ref={scrollViewRef}
           style={styles.scrollView}
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled"
@@ -491,13 +510,20 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             </TouchableOpacity>
             {isNotesExpanded && (
               <TextInput
+                ref={notesInputRef}
                 style={styles.notesInput}
                 value={notes}
                 onChangeText={handleNotesChange}
+                onFocus={handleNotesFocus}
                 placeholder="Add notes for this workout..."
                 placeholderTextColor="#666"
                 multiline
                 textAlignVertical="top"
+                inputAccessoryViewID={
+                  Platform.OS === "ios" ? notesInputAccessoryViewID : undefined
+                }
+                blurOnSubmit={Platform.OS === "android"}
+                returnKeyType={Platform.OS === "android" ? "done" : "default"}
               />
             )}
           </View>
@@ -531,6 +557,21 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           }
         }}
       />
+
+      {/* Keyboard accessory view for notes input (iOS only) */}
+      {Platform.OS === "ios" && (
+        <InputAccessoryView nativeID={notesInputAccessoryViewID}>
+          <View style={styles.keyboardAccessory}>
+            <View style={styles.keyboardAccessorySpacer} />
+            <TouchableOpacity
+              style={styles.keyboardDoneButton}
+              onPress={handleNotesDone}
+            >
+              <Text style={styles.keyboardDoneButtonText}>Done</Text>
+            </TouchableOpacity>
+          </View>
+        </InputAccessoryView>
+      )}
     </SafeAreaView>
   );
 };
@@ -724,5 +765,27 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingTop: 0,
     minHeight: 100,
+  },
+  keyboardAccessory: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    backgroundColor: "#2C2C2E",
+    borderTopWidth: 0.5,
+    borderTopColor: "#3D3D3F",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  keyboardAccessorySpacer: {
+    flex: 1,
+  },
+  keyboardDoneButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  keyboardDoneButtonText: {
+    color: "#0A84FF",
+    fontSize: 17,
+    fontWeight: "600",
   },
 });
