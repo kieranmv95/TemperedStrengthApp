@@ -196,6 +196,8 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     // Always allow viewing any day
     setSelectedDayIndex(dayIdx);
     await loadWorkoutForDay(dayIdx);
+    // Reset scroll position to top when switching days
+    scrollViewRef.current?.scrollTo({ y: 0, animated: false });
   };
 
   const handleSetAsCurrentDay = async () => {
