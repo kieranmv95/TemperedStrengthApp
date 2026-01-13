@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -24,6 +25,8 @@ import {
   getActiveProgramId,
   getExerciseSwapsForDay,
   getProgramStartDate,
+  getWorkoutNotes,
+  saveWorkoutNotes,
   setProgramStartDate,
 } from "../utils/storage";
 import { RestDayScreen } from "./RestDayScreen";
@@ -62,6 +65,9 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [swapModalVisible, setSwapModalVisible] = useState(false);
   const [currentSwapSlot, setCurrentSwapSlot] = useState<number | null>(null);
   const [swapRefreshCounter, setSwapRefreshCounter] = useState(0);
+  const [notes, setNotes] = useState<string>("");
+  const [isNotesExpanded, setIsNotesExpanded] = useState(false);
+  const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const calculateDaysSinceStart = (startDate: string): number => {
     const start = new Date(startDate);
@@ -116,6 +122,11 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     async (dayIdx: number, programData?: ReturnType<typeof getProgramById>) => {
       const programToUse = programData || program;
       if (!programToUse) return;
+
+      // Load notes for this day
+      const savedNotes = await getWorkoutNotes(dayIdx);
+      setNotes(savedNotes);
+      setIsNotesExpanded(savedNotes.length > 0);
 
       // Find workout for the selected day
       const workout = programToUse.workouts.find((w) => w.dayIndex === dayIdx);
@@ -251,6 +262,39 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       (slot): slot is ExerciseSlot => slot.type === "exercise"
     );
   }, [slots]);
+
+  // Handle notes change with debounced save
+  const handleNotesChange = useCallback(
+    (text: string) => {
+      setNotes(text);
+
+      // Clear existing debounce timer
+      if (notesDebounceRef.current) {
+        clearTimeout(notesDebounceRef.current);
+      }
+
+      // Debounce save to avoid too many writes
+      notesDebounceRef.current = setTimeout(async () => {
+        if (selectedDayIndex !== null) {
+          try {
+            await saveWorkoutNotes(selectedDayIndex, text);
+          } catch (error) {
+            console.error("Error saving notes:", error);
+          }
+        }
+      }, 500);
+    },
+    [selectedDayIndex]
+  );
+
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (notesDebounceRef.current) {
+        clearTimeout(notesDebounceRef.current);
+      }
+    };
+  }, []);
 
   const handleSkipToNextWorkout = async () => {
     if (!nextWorkout) return;
@@ -425,6 +469,38 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
               }
             });
           })()}
+
+          {/* Notes Section */}
+          <View style={styles.notesContainer}>
+            <TouchableOpacity
+              style={styles.notesHeader}
+              onPress={() => setIsNotesExpanded(!isNotesExpanded)}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.notesTitle}>Notes</Text>
+              <View style={styles.notesHeaderRight}>
+                {notes.length > 0 && !isNotesExpanded && (
+                  <View style={styles.notesBadge}>
+                    <Text style={styles.notesBadgeText}>Has notes</Text>
+                  </View>
+                )}
+                <Text style={styles.notesExpandIcon}>
+                  {isNotesExpanded ? "▼" : "▶"}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            {isNotesExpanded && (
+              <TextInput
+                style={styles.notesInput}
+                value={notes}
+                onChangeText={handleNotesChange}
+                placeholder="Add notes for this workout..."
+                placeholderTextColor="#666"
+                multiline
+                textAlignVertical="top"
+              />
+            )}
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
 
@@ -600,5 +676,53 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     flex: 1,
+  },
+  notesContainer: {
+    backgroundColor: "#1E1E1E",
+    borderRadius: 12,
+    marginTop: 8,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: "#2A2A2A",
+    overflow: "hidden",
+  },
+  notesHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 16,
+  },
+  notesTitle: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  notesHeaderRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  notesBadge: {
+    backgroundColor: "#333",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  notesBadgeText: {
+    color: "#888",
+    fontSize: 12,
+    fontWeight: "500",
+  },
+  notesExpandIcon: {
+    color: "#888",
+    fontSize: 12,
+  },
+  notesInput: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    lineHeight: 22,
+    padding: 16,
+    paddingTop: 0,
+    minHeight: 100,
   },
 });

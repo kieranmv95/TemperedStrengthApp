@@ -8,6 +8,7 @@ const WORKOUT_LOGS_KEY = "workout_logs";
 const CUSTOM_SET_COUNTS_KEY = "custom_set_counts";
 const SWAP_COUNT_KEY = "swap_count";
 const SWAP_COUNT_MONTH_KEY = "swap_count_month";
+const WORKOUT_NOTES_KEY = "workout_notes";
 
 export interface ExerciseSwap {
   dayIndex: number;
@@ -40,6 +41,10 @@ export interface CustomSetCounts {
   [dayIndex: number]: {
     [slotIndex: number]: number; // custom set count
   };
+}
+
+export interface WorkoutNotes {
+  [dayIndex: number]: string; // notes for each workout day
 }
 
 /**
@@ -484,7 +489,50 @@ export const clearFutureWorkoutData = async (
 };
 
 /**
- * Clear all program data (program ID, start date, swaps, workout logs)
+ * Save workout notes for a specific day
+ * @param dayIndex - Day index in the program
+ * @param notes - Notes text
+ */
+export const saveWorkoutNotes = async (
+  dayIndex: number,
+  notes: string
+): Promise<void> => {
+  try {
+    const data = await AsyncStorage.getItem(WORKOUT_NOTES_KEY);
+    const allNotes: WorkoutNotes = data ? JSON.parse(data) : {};
+
+    if (notes.trim() === "") {
+      // Remove empty notes
+      delete allNotes[dayIndex];
+    } else {
+      allNotes[dayIndex] = notes;
+    }
+
+    await AsyncStorage.setItem(WORKOUT_NOTES_KEY, JSON.stringify(allNotes));
+  } catch (error) {
+    console.error("Error saving workout notes:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get workout notes for a specific day
+ * @param dayIndex - Day index in the program
+ * @returns Notes text or empty string
+ */
+export const getWorkoutNotes = async (dayIndex: number): Promise<string> => {
+  try {
+    const data = await AsyncStorage.getItem(WORKOUT_NOTES_KEY);
+    const allNotes: WorkoutNotes = data ? JSON.parse(data) : {};
+    return allNotes[dayIndex] || "";
+  } catch (error) {
+    console.error("Error getting workout notes:", error);
+    return "";
+  }
+};
+
+/**
+ * Clear all program data (program ID, start date, swaps, workout logs, notes)
  */
 export const clearProgramData = async (): Promise<void> => {
   try {
@@ -493,6 +541,7 @@ export const clearProgramData = async (): Promise<void> => {
     await AsyncStorage.removeItem(EXERCISE_SWAPS_KEY);
     await AsyncStorage.removeItem(WORKOUT_LOGS_KEY);
     await AsyncStorage.removeItem(CUSTOM_SET_COUNTS_KEY);
+    await AsyncStorage.removeItem(WORKOUT_NOTES_KEY);
   } catch (error) {
     console.error("Error clearing program data:", error);
     throw error;
