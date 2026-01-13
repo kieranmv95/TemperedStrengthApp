@@ -22,11 +22,12 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import { router } from "expo-router";
 
-type FilterOption = "All" | WorkoutCategory | "Favorites";
+type FilterOption = "All" | WorkoutCategory | "Favorites" | "Pro";
 
 const FILTER_OPTIONS: FilterOption[] = [
   "All",
   "Favorites",
+  "Pro",
   "Strength",
   "WOD",
   "Hyrox",
@@ -193,6 +194,7 @@ export default function WorkoutsScreen() {
   const filteredWorkouts = allStandaloneWorkouts.filter((workout) => {
     if (activeFilter === "All") return true;
     if (activeFilter === "Favorites") return favorites.includes(workout.id);
+    if (activeFilter === "Pro") return workout.isPremium;
     return workout.category === activeFilter;
   });
 
@@ -327,8 +329,10 @@ export default function WorkoutsScreen() {
                 ? allStandaloneWorkouts.length
                 : filter === "Favorites"
                   ? favorites.length
-                  : allStandaloneWorkouts.filter((w) => w.category === filter)
-                      .length;
+                  : filter === "Pro"
+                    ? allStandaloneWorkouts.filter((w) => w.isPremium).length
+                    : allStandaloneWorkouts.filter((w) => w.category === filter)
+                        .length;
 
             return (
               <TouchableOpacity
@@ -339,6 +343,14 @@ export default function WorkoutsScreen() {
                 {filter === "Favorites" && (
                   <Ionicons
                     name="heart"
+                    size={14}
+                    color={isActive ? "#121212" : "#888"}
+                    style={styles.filterIcon}
+                  />
+                )}
+                {filter === "Pro" && (
+                  <Ionicons
+                    name="star"
                     size={14}
                     color={isActive ? "#121212" : "#888"}
                     style={styles.filterIcon}

@@ -30,28 +30,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const [startDate, setStartDate] = useState(new Date());
 
   const handleSelectProgram = (program: Program) => {
-    // Check if program requires Pro and user doesn't have it
-    if (program.isPro && !isPro) {
-      Alert.alert(
-        "Pro Program",
-        "This program is available for Tempered Strength Pro subscribers only. Upgrade to Pro to unlock this program.",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Upgrade to Pro",
-            style: "default",
-            onPress: () => {
-              router.push("/paywall");
-            },
-          },
-        ]
-      );
-      return;
-    }
-
+    // Allow viewing program details regardless of Pro status
     setSelectedProgram(program);
     setShowProgramDetails(true);
   };
@@ -404,12 +383,28 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
             </ScrollView>
 
             <View style={styles.modalFooter}>
-              <TouchableOpacity
-                style={styles.startProgramButton}
-                onPress={handleStartProgram}
-              >
-                <Text style={styles.startProgramButtonText}>Start Program</Text>
-              </TouchableOpacity>
+              {selectedProgram?.isPro && !isPro ? (
+                <TouchableOpacity
+                  style={styles.upgradeProgramButton}
+                  onPress={() => {
+                    setShowProgramDetails(false);
+                    router.push("/paywall");
+                  }}
+                >
+                  <Text style={styles.upgradeProgramButtonText}>
+                    Upgrade to Pro to Start
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.startProgramButton}
+                  onPress={handleStartProgram}
+                >
+                  <Text style={styles.startProgramButtonText}>
+                    Start Program
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>
@@ -796,6 +791,21 @@ const styles = StyleSheet.create({
   },
   startProgramButtonText: {
     color: "#121212",
+    fontSize: 16,
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  upgradeProgramButton: {
+    backgroundColor: "transparent",
+    borderRadius: 12,
+    padding: 16,
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#c9b072",
+  },
+  upgradeProgramButtonText: {
+    color: "#c9b072",
     fontSize: 16,
     fontWeight: "700",
     textTransform: "uppercase",

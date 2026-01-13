@@ -22,7 +22,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Program',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="doc.on.clipboard.fill" color={color} />,
         }}
       />
       <Tabs.Screen
