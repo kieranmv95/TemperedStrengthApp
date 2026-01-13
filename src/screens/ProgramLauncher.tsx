@@ -114,9 +114,6 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     // Calculate number of weeks from the maximum dayIndex
     const maxDayIndex = Math.max(...program.workouts.map((w) => w.dayIndex));
     const weekCount = Math.ceil((maxDayIndex + 1) / 7);
-    const sessionsPerWeek = (program.workouts.length / weekCount)
-      .toFixed(1)
-      .replace(/\.0$/, "");
 
     return (
       <TouchableOpacity
@@ -148,12 +145,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           </Text>
           <Text style={styles.programStats}>
             {program.workouts.length} workouts • {weekCount}{" "}
-            {weekCount === 1 ? "week" : "weeks"} • {sessionsPerWeek}{" "}
-            sessions/week
+            {weekCount === 1 ? "week" : "weeks"}
           </Text>
-          {isLocked && (
-            <Text style={styles.lockedText}>Upgrade to Pro to unlock</Text>
-          )}
         </View>
         <Text
           style={[styles.selectArrow, isLocked && styles.selectArrowLocked]}
@@ -177,28 +170,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           </Text>
         </View>
 
-        {isPro ? (
-          // Pro users see all programs in a single list
-          programs.map((program) => renderProgramCard(program, false))
-        ) : (
-          // Non-Pro users see Free and Pro sections
-          <>
-            {/* Free Programs Section */}
-            <View style={[styles.sectionHeader, styles.sectionHeaderFirst]}>
-              <Text style={styles.sectionHeaderText}>Free Programs</Text>
-            </View>
-            {programs
-              .filter((program) => !program.isPro)
-              .map((program) => renderProgramCard(program, false))}
-
-            {/* Pro Programs Section */}
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>Pro Programs</Text>
-            </View>
-            {programs
-              .filter((program) => program.isPro)
-              .map((program) => renderProgramCard(program, true))}
-          </>
+        {programs.map((program) =>
+          renderProgramCard(program, program.isPro && !isPro)
         )}
       </ScrollView>
 
@@ -499,10 +472,8 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: 24,
-    paddingTop: 16,
   },
   title: {
-    textAlign: "center",
     color: "#FFFFFF",
     fontSize: 32,
     fontWeight: "800",
@@ -510,28 +481,9 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   subtitle: {
-    textAlign: "center",
     color: "#888",
     fontSize: 16,
     fontWeight: "500",
-  },
-  sectionHeader: {
-    marginTop: 24,
-    marginBottom: 16,
-    paddingBottom: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: "#2A2A2A",
-  },
-  sectionHeaderFirst: {
-    marginTop: 0,
-  },
-  sectionHeaderText: {
-    textAlign: "center",
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "700",
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
   },
   programCard: {
     backgroundColor: "#1E1E1E",
@@ -601,14 +553,6 @@ const styles = StyleSheet.create({
     color: "#000000",
     fontSize: 10,
     fontWeight: "700",
-    letterSpacing: 0.5,
-  },
-  lockedText: {
-    color: "#c9b072",
-    fontSize: 12,
-    fontWeight: "600",
-    marginTop: 4,
-    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   datePickerContainer: {

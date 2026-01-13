@@ -9,6 +9,7 @@ const CUSTOM_SET_COUNTS_KEY = "custom_set_counts";
 const SWAP_COUNT_KEY = "swap_count";
 const SWAP_COUNT_MONTH_KEY = "swap_count_month";
 const WORKOUT_NOTES_KEY = "workout_notes";
+const FAVORITE_WORKOUTS_KEY = "favorite_workouts";
 
 export interface ExerciseSwap {
   dayIndex: number;
@@ -544,6 +545,82 @@ export const clearProgramData = async (): Promise<void> => {
     await AsyncStorage.removeItem(WORKOUT_NOTES_KEY);
   } catch (error) {
     console.error("Error clearing program data:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get favorite workout IDs
+ * @returns Array of workout IDs
+ */
+export const getFavoriteWorkouts = async (): Promise<string[]> => {
+  try {
+    const data = await AsyncStorage.getItem(FAVORITE_WORKOUTS_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error("Error getting favorite workouts:", error);
+    return [];
+  }
+};
+
+/**
+ * Add a workout to favorites
+ * @param workoutId - Workout ID to add
+ */
+export const addFavoriteWorkout = async (workoutId: string): Promise<void> => {
+  try {
+    const favorites = await getFavoriteWorkouts();
+    if (!favorites.includes(workoutId)) {
+      favorites.push(workoutId);
+      await AsyncStorage.setItem(
+        FAVORITE_WORKOUTS_KEY,
+        JSON.stringify(favorites)
+      );
+    }
+  } catch (error) {
+    console.error("Error adding favorite workout:", error);
+    throw error;
+  }
+};
+
+/**
+ * Remove a workout from favorites
+ * @param workoutId - Workout ID to remove
+ */
+export const removeFavoriteWorkout = async (
+  workoutId: string
+): Promise<void> => {
+  try {
+    const favorites = await getFavoriteWorkouts();
+    const filtered = favorites.filter((id) => id !== workoutId);
+    await AsyncStorage.setItem(FAVORITE_WORKOUTS_KEY, JSON.stringify(filtered));
+  } catch (error) {
+    console.error("Error removing favorite workout:", error);
+    throw error;
+  }
+};
+
+/**
+ * Toggle a workout's favorite status
+ * @param workoutId - Workout ID to toggle
+ * @returns New favorite status (true if now favorited)
+ */
+export const toggleFavoriteWorkout = async (
+  workoutId: string
+): Promise<boolean> => {
+  try {
+    const favorites = await getFavoriteWorkouts();
+    const isFavorite = favorites.includes(workoutId);
+
+    if (isFavorite) {
+      await removeFavoriteWorkout(workoutId);
+      return false;
+    } else {
+      await addFavoriteWorkout(workoutId);
+      return true;
+    }
+  } catch (error) {
+    console.error("Error toggling favorite workout:", error);
     throw error;
   }
 };
