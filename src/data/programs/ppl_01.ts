@@ -1,4 +1,17 @@
-import { Program } from "@/src/utils/program";
+import { Program, Warmup } from "@/src/utils/program";
+
+export const standard_warmup: Warmup = {
+  type: "warmup",
+  description: [
+    "3–5 minutes light cardio (rower, bike, or brisk walk) to raise body temperature.",
+    "30s hip flexor stretch each side / 30s hamstring stretch",
+    "10 arm circles forward / 10 arm circles backward",
+    "10 band pull-aparts or scapular wall slides",
+    "10 leg swings (front-to-back) each side / 10 leg swings (side-to-side) each side",
+    "10 glute bridges with 2s pause at the top",
+    "10 bodyweight squats focusing on depth and control",
+  ],
+};
 
 // 1. PUSH PULL LEGS (4 Weeks)
 export const ppl_01: Program = {
@@ -16,7 +29,9 @@ export const ppl_01: Program = {
         week % 2 === 0 ? "Heavy Barbell Focus" : "Dumbbell & Volume Focus",
       intensity: 7 + (week % 2),
       exercises: [
+        standard_warmup,
         {
+          type: "exercise",
           id: week % 2 === 0 ? 1 : 2,
           sets: 3,
           repRange: [8, 10],
@@ -27,8 +42,8 @@ export const ppl_01: Program = {
               ? "Barbell Bench: Focus on a controlled 2-second eccentric (lowering phase). Touch the chest lightly and drive up without bouncing."
               : "DB Bench: Allow the dumbbells to come slightly deeper than a barbell would. Focus on the stretch at the bottom and a hard squeeze at the top.",
         },
-
         {
+          type: "exercise",
           id: 27,
           sets: 3,
           repRange: [10, 12],
@@ -36,6 +51,7 @@ export const ppl_01: Program = {
             "Keep your core tight and avoid using momentum. Press the weights up in a slight arc so they meet at the top without touching.",
         },
         {
+          type: "exercise",
           id: 36,
           sets: 3,
           repRange: [12, 15],
@@ -44,6 +60,7 @@ export const ppl_01: Program = {
             "Do not fully lock out at the end of the movement. Keep the tension on the pectorals throughout the entire set. Think about hugging a large tree.",
         },
         {
+          type: "exercise",
           id: 33,
           sets: 3,
           repRange: [12, 15],
@@ -59,7 +76,9 @@ export const ppl_01: Program = {
       description: "Mid-back and Lat development with bicep finishers.",
       intensity: 7,
       exercises: [
+        standard_warmup,
         {
+          type: "exercise",
           id: week % 2 === 0 ? 7 : 8,
           sets: 3,
           repRange: [8, 10],
@@ -67,8 +86,8 @@ export const ppl_01: Program = {
           additionalDescription:
             "Think of your hands as hooks. Pull with your elbows and imagine trying to put them in your back pockets to fully engage the lats.",
         },
-
         {
+          type: "exercise",
           id: 10,
           sets: 3,
           repRange: [6, 10],
@@ -76,6 +95,7 @@ export const ppl_01: Program = {
             "Pull your chest to the bar, not just your chin. Squeeze your shoulder blades together at the top of every rep.",
         },
         {
+          type: "exercise",
           id: 35,
           sets: 3,
           repRange: [15, 20],
@@ -83,6 +103,7 @@ export const ppl_01: Program = {
             "A high-rep 'pump' movement. Pull the rope toward your eyes and pull the ends apart to target the rear deltoids and traps.",
         },
         {
+          type: "exercise",
           id: 32,
           sets: 3,
           repRange: [10, 12],
@@ -99,7 +120,9 @@ export const ppl_01: Program = {
       description: "Compound leg movements followed by high-rep isolation.",
       intensity: 8 + (week === 3 ? 1 : 0),
       exercises: [
+        standard_warmup,
         {
+          type: "exercise",
           id: week % 2 === 0 ? 4 : 19,
           sets: 3,
           repRange: [8, 10],
@@ -109,8 +132,8 @@ export const ppl_01: Program = {
               ? "Barbell Squats: Maintain a vertical chest. Break at the hips and knees simultaneously. Drive through the mid-foot."
               : "Leg Press: Place feet shoulder-width apart. Don't let your lower back lift off the seat at the bottom of the movement.",
         },
-
         {
+          type: "exercise",
           id: 23,
           sets: 3,
           repRange: [10, 12],
@@ -118,6 +141,7 @@ export const ppl_01: Program = {
             "Focus on the 'hinge.' Push your hips as far back as possible until you feel a deep stretch in your hamstrings, then snap forward.",
         },
         {
+          type: "exercise",
           id: 39,
           sets: 3,
           repRange: [12, 15],
@@ -126,6 +150,7 @@ export const ppl_01: Program = {
             "Pause for 1 second at the top of each rep with legs fully extended to maximize the contraction of the rectus femoris.",
         },
         {
+          type: "exercise",
           id: 31,
           sets: 3,
           repRange: [10, 15],

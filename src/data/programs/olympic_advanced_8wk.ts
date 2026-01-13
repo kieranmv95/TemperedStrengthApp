@@ -1,4 +1,13 @@
-import { Program } from "@/src/utils/program";
+import { Program, Warmup } from "@/src/utils/program";
+
+export const standard_warmup: Warmup = {
+  type: "warmup",
+  description: [
+    "3-minute cardio of choice, run/row/bike to raise your heart rate.",
+    "2 minutes of wrist stretches, ankle circles, and shoulder mobility exercises.",
+    "3 sets of 5 Empty bar cleans / 5 front rack squat / 5 overhead squats",
+  ],
+};
 
 export const olympic_advanced_8wk: Program = {
   isPro: true,
@@ -22,7 +31,9 @@ export const olympic_advanced_8wk: Program = {
           : "Snatch Complexes & Technical Volume",
         intensity: intensity,
         exercises: [
+          standard_warmup,
           {
+            type: "exercise",
             id: isPhase2 ? 57 : 59,
             sets: isPhase2 ? 5 : 4,
             repRange: isPhase2 ? [1, 2] : [3, 3],
@@ -34,6 +45,7 @@ export const olympic_advanced_8wk: Program = {
               : "Use the hang rep to find your 'power position.' Keep the bar tight to the pockets. The second rep from the floor must mimic the bar path of the hang rep.",
           },
           {
+            type: "exercise",
             id: 62,
             sets: 4,
             repRange: [3, 3],
@@ -42,6 +54,7 @@ export const olympic_advanced_8wk: Program = {
           },
 
           {
+            type: "exercise",
             id: 61,
             sets: 3,
             repRange: [5, 5],
@@ -50,6 +63,7 @@ export const olympic_advanced_8wk: Program = {
           },
 
           {
+            type: "exercise",
             id: 35,
             sets: 3,
             repRange: [12, 15],
@@ -64,7 +78,9 @@ export const olympic_advanced_8wk: Program = {
         description: "Focus on leg drive and maximal front rack recovery.",
         intensity: intensity + 1,
         exercises: [
+          standard_warmup,
           {
+            type: "exercise",
             id: 63,
             sets: 4,
             repRange: isPhase2 ? [1, 1] : [2, 2],
@@ -72,8 +88,8 @@ export const olympic_advanced_8wk: Program = {
               ? "Clean & Jerk singles. Focus on a sharp, aggressive 'drive' in the jerk. Ensure the back knee is bent and weight is balanced between feet."
               : "Focus on the 're-rack.' Keep the elbows up high in the catch of the clean so the bar doesn't slide forward during the transition to the jerk.",
           },
-
           {
+            type: "exercise",
             id: 68,
             sets: 5,
             repRange: isPhase2 ? [2, 3] : [5, 5],
@@ -81,6 +97,7 @@ export const olympic_advanced_8wk: Program = {
               "This is your primary strength builder. No 'soft' catches—treat every rep like you are recovering from a heavy clean.",
           },
           {
+            type: "exercise",
             id: 69,
             sets: 3,
             repRange: [3, 5],
@@ -88,11 +105,12 @@ export const olympic_advanced_8wk: Program = {
               "Builds the explosive 'finish' of the clean. Ensure the hips reach full extension before the arms start pulling.",
           },
           {
-            id: 84,
+            type: "exercise",
+            id: 11,
             sets: 3,
             repRange: [8, 12],
             additionalDescription:
-              "Lats are the 'brakes' of the snatch and clean. Use a slow eccentric (lowering phase) to build pulling control.",
+              "Lats are the 'brakes' of the snatch and clean. Use a slow pace to build pulling control.",
           },
         ],
       },
@@ -103,7 +121,9 @@ export const olympic_advanced_8wk: Program = {
           "Maximal effort competition lifts followed by unilateral accessories.",
         intensity: intensity + 1,
         exercises: [
+          standard_warmup,
           {
+            type: "exercise",
             id: 57,
             sets: 5,
             repRange: isPhase2 ? [1, 1] : [2, 2],
@@ -111,6 +131,7 @@ export const olympic_advanced_8wk: Program = {
               "Competition mindset. Clear the mind, find your start position, and execute. Look for consistency in foot landing.",
           },
           {
+            type: "exercise",
             id: 63,
             sets: 5,
             repRange: isPhase2 ? [1, 1] : [1, 1],
@@ -118,6 +139,7 @@ export const olympic_advanced_8wk: Program = {
               "Drive through the heels on the clean. In the jerk, focus on a vertical drive—do not let the chest dip forward.",
           },
           {
+            type: "exercise",
             id: 6,
             sets: 3,
             repRange: [8, 10],
@@ -126,6 +148,7 @@ export const olympic_advanced_8wk: Program = {
           },
 
           {
+            type: "exercise",
             id: 41,
             sets: 3,
             repRange: [10, 12],
@@ -133,6 +156,7 @@ export const olympic_advanced_8wk: Program = {
               "Develops the glute drive needed for the 'second pull.' Squeeze hard at the top and hold for 1 second.",
           },
           {
+            type: "exercise",
             id: 15,
             sets: 3,
             repRange: [10, 15],

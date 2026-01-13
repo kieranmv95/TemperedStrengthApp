@@ -16,6 +16,7 @@ import { SwapModal } from "../components/SwapModal";
 import {
   getProgramById,
   Exercise as ProgramExercise,
+  Warmup,
   Workout,
 } from "../utils/program";
 import {
@@ -23,15 +24,22 @@ import {
   getActiveProgramId,
   getExerciseSwapsForDay,
   getProgramStartDate,
-  saveExerciseSwap,
   setProgramStartDate,
 } from "../utils/storage";
 import { RestDayScreen } from "./RestDayScreen";
 
 interface ExerciseSlot {
+  type: "exercise";
   exerciseId: number | null;
   programExercise: ProgramExercise | null;
 }
+
+interface WarmupSlot {
+  type: "warmup";
+  warmup: Warmup;
+}
+
+type WorkoutSlot = ExerciseSlot | WarmupSlot;
 
 interface WorkoutScreenProps {
   onProgramReset?: () => void;
@@ -40,7 +48,7 @@ interface WorkoutScreenProps {
 export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   onProgramReset,
 }) => {
-  const [slots, setSlots] = useState<ExerciseSlot[]>([]);
+  const [slots, setSlots] = useState<WorkoutSlot[]>([]);
   const [currentWorkout, setCurrentWorkout] = useState<Workout | null>(null);
   const [nextWorkout, setNextWorkout] = useState<Workout | null>(null);
   const [dayIndex, setDayIndex] = useState<number | null>(null);
@@ -73,18 +81,29 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       try {
         const swaps = await getExerciseSwapsForDay(dayIdx);
 
-        const exerciseSlots: ExerciseSlot[] = workout.exercises.map(
-          (programExercise, index) => {
-            // Check if there's a swap for this slot
-            const swappedExerciseId = swaps[index];
+        // Track exercise slot index separately (warmups don't count for swap indices)
+        let exerciseSlotIndex = 0;
+
+        const workoutSlots: WorkoutSlot[] = workout.exercises.map((item) => {
+          if (item.type === "warmup") {
             return {
-              exerciseId: swappedExerciseId || programExercise.id,
-              programExercise: programExercise,
+              type: "warmup" as const,
+              warmup: item,
+            };
+          } else {
+            // It's an exercise
+            const currentIndex = exerciseSlotIndex;
+            exerciseSlotIndex++;
+            const swappedExerciseId = swaps[currentIndex];
+            return {
+              type: "exercise" as const,
+              exerciseId: swappedExerciseId || item.id,
+              programExercise: item,
             };
           }
-        );
+        });
 
-        setSlots(exerciseSlots);
+        setSlots(workoutSlots);
       } catch (error) {
         console.error("Error loading exercise slots:", error);
         setSlots([]);
@@ -221,24 +240,17 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     );
   };
 
-  const handleSwapClick = (slotNumber: number) => {
-    setCurrentSwapSlot(slotNumber);
+  const handleSwapClick = (exerciseSlotIndex: number) => {
+    setCurrentSwapSlot(exerciseSlotIndex);
     setSwapModalVisible(true);
   };
 
-  const handleSelectExercise = async (exerciseId: number) => {
-    if (currentSwapSlot !== null && selectedDayIndex !== null) {
-      const newSlots = [...slots];
-      newSlots[currentSwapSlot - 1] = {
-        ...newSlots[currentSwapSlot - 1],
-        exerciseId: exerciseId,
-      };
-      setSlots(newSlots);
-
-      // Save the swap
-      await saveExerciseSwap(selectedDayIndex, currentSwapSlot - 1, exerciseId);
-    }
-  };
+  // Get only exercise slots for swap modal calculations
+  const getExerciseSlots = useCallback(() => {
+    return slots.filter(
+      (slot): slot is ExerciseSlot => slot.type === "exercise"
+    );
+  }, [slots]);
 
   const handleSkipToNextWorkout = async () => {
     if (!nextWorkout) return;
@@ -374,17 +386,45 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
               )}
           </View>
 
-          {slots.map((slot, index) => (
-            <ExerciseCard
-              key={`${selectedDayIndex}-${index}-${slot.exerciseId}-${swapRefreshCounter}`}
-              exerciseId={slot.exerciseId}
-              programExercise={slot.programExercise}
-              slotNumber={index + 1}
-              dayIndex={selectedDayIndex}
-              slotIndex={index}
-              onSwap={() => handleSwapClick(index + 1)}
-            />
-          ))}
+          {(() => {
+            let exerciseSlotIndex = 0;
+            return slots.map((slot, index) => {
+              if (slot.type === "warmup") {
+                return (
+                  <View key={`warmup-${index}`} style={styles.warmupCard}>
+                    <Text style={styles.warmupTitle}>Warm-Up</Text>
+                    {slot.warmup.additionalDescription && (
+                      <Text style={styles.warmupDescription}>
+                        {slot.warmup.additionalDescription}
+                      </Text>
+                    )}
+                    <View style={styles.warmupList}>
+                      {slot.warmup.description.map((item, itemIndex) => (
+                        <View key={itemIndex} style={styles.warmupItem}>
+                          <Text style={styles.warmupBullet}>•</Text>
+                          <Text style={styles.warmupText}>{item}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                );
+              } else {
+                const currentExerciseIndex = exerciseSlotIndex;
+                exerciseSlotIndex++;
+                return (
+                  <ExerciseCard
+                    key={`${selectedDayIndex}-${index}-${slot.exerciseId}-${swapRefreshCounter}`}
+                    exerciseId={slot.exerciseId}
+                    programExercise={slot.programExercise}
+                    slotNumber={currentExerciseIndex + 1}
+                    dayIndex={selectedDayIndex}
+                    slotIndex={currentExerciseIndex}
+                    onSwap={() => handleSwapClick(currentExerciseIndex)}
+                  />
+                );
+              }
+            });
+          })()}
         </ScrollView>
       </KeyboardAvoidingView>
 
@@ -392,16 +432,16 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         visible={swapModalVisible}
         currentExerciseId={
           currentSwapSlot !== null
-            ? slots[currentSwapSlot - 1]?.exerciseId || null
+            ? getExerciseSlots()[currentSwapSlot]?.exerciseId || null
             : null
         }
         originalExerciseId={
           currentSwapSlot !== null
-            ? slots[currentSwapSlot - 1]?.programExercise?.id || null
+            ? getExerciseSlots()[currentSwapSlot]?.programExercise?.id || null
             : null
         }
         dayIndex={selectedDayIndex}
-        slotIndex={currentSwapSlot !== null ? currentSwapSlot - 1 : 0}
+        slotIndex={currentSwapSlot !== null ? currentSwapSlot : 0}
         onClose={() => {
           setSwapModalVisible(false);
           setCurrentSwapSlot(null);
@@ -447,7 +487,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#FFFFFF",
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: "800",
     marginBottom: 8,
     letterSpacing: -0.5,
@@ -517,5 +557,48 @@ const styles = StyleSheet.create({
   loadingText: {
     color: "#FFFFFF",
     fontSize: 16,
+  },
+  warmupCard: {
+    backgroundColor: "#1E1E1E",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#2A2A2A",
+  },
+  warmupTitle: {
+    color: "#c9b072",
+    fontSize: 16,
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    marginBottom: 8,
+  },
+  warmupDescription: {
+    color: "#888",
+    fontSize: 14,
+    fontStyle: "italic",
+    marginBottom: 12,
+    lineHeight: 20,
+  },
+  warmupList: {
+    gap: 8,
+  },
+  warmupItem: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 8,
+  },
+  warmupBullet: {
+    color: "#c9b072",
+    fontSize: 14,
+    fontWeight: "600",
+    marginTop: 1,
+  },
+  warmupText: {
+    color: "#CCCCCC",
+    fontSize: 14,
+    lineHeight: 20,
+    flex: 1,
   },
 });

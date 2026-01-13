@@ -1,6 +1,43 @@
-import { Program } from "@/src/utils/program";
+import { Program, Warmup } from "@/src/utils/program";
 
-// 4. POWERLIFTING (8 Weeks)
+export const squat_warmup: Warmup = {
+  type: "warmup",
+  description: [
+    "3-minute cardio of choice (bike or rower preferred) to raise heart rate and body temperature.",
+    "30s pigeon pose each side / 30s deep squat hold with prying / 30s cat-cow",
+    "10 leg swings (front-to-back) each side / 10 leg swings (side-to-side) each side",
+    "10 hip circles each direction",
+    "10 bodyweight squats with controlled tempo",
+    "10 glute bridges with 2s pause at the top",
+  ],
+};
+
+export const bench_warmup: Warmup = {
+  type: "warmup",
+  description: [
+    "3-minute cardio of choice (rower or ski erg preferred) to raise your heart rate.",
+    "30s banded or doorway pec stretch / 30s lat stretch each side",
+    "10 arm circles forward / 10 arm circles backward",
+    "10 band pull-aparts",
+    "10 banded face pulls",
+    "10 scapular push-ups",
+    "10 empty-bar bench presses focusing on bar path and shoulder stability",
+  ],
+};
+
+export const deadlift_warmup: Warmup = {
+  type: "warmup",
+  description: [
+    "3-minute cardio of choice (rower or bike preferred) to raise your heart rate.",
+    "30s hamstring stretch / 30s hip flexor stretch each side",
+    "10 hip circles each direction",
+    "10 glute bridges with 2s squeeze at the top",
+    "10 bodyweight good mornings",
+    "10 bird dogs (controlled, alternating sides)",
+    "5–10 empty-bar Romanian deadlifts focusing on hinge mechanics",
+  ],
+};
+
 export const powerlifting_3day: Program = {
   id: "power_01",
   isPro: false,
@@ -23,7 +60,9 @@ export const powerlifting_3day: Program = {
           : "High intensity squatting and quad accessories.",
         intensity: isTestingWeek ? 10 : baseIntensity + 1,
         exercises: [
+          squat_warmup,
           {
+            type: "exercise",
             id: 4,
             sets: week < 4 ? 4 : 5,
             repRange: mainReps,
@@ -35,6 +74,7 @@ export const powerlifting_3day: Program = {
           },
 
           {
+            type: "exercise",
             id: 22,
             sets: 3,
             repRange: [8, 10],
@@ -42,6 +82,7 @@ export const powerlifting_3day: Program = {
               "RDLs are here to protect your back. Keep the bar glued to your thighs and stop at mid-shin. You should feel a massive stretch in the hamstrings.",
           },
           {
+            type: "exercise",
             id: 19,
             sets: 3,
             repRange: [10, 12],
@@ -49,6 +90,7 @@ export const powerlifting_3day: Program = {
               "Pure quad hypertrophy to support your squat out of the hole. Keep your feet low on the platform to emphasize the knees.",
           },
           {
+            type: "exercise",
             id: 13,
             sets: 3,
             repRange: [45, 60],
@@ -65,7 +107,9 @@ export const powerlifting_3day: Program = {
           : "Competition bench form and shoulder stability.",
         intensity: isTestingWeek ? 10 : baseIntensity,
         exercises: [
+          bench_warmup,
           {
+            type: "exercise",
             id: 1,
             sets: week < 4 ? 4 : 5,
             repRange: mainReps,
@@ -77,6 +121,7 @@ export const powerlifting_3day: Program = {
           },
 
           {
+            type: "exercise",
             id: 26,
             sets: 3,
             repRange: [6, 8],
@@ -84,6 +129,7 @@ export const powerlifting_3day: Program = {
               "Overhead strength directly correlates to a stable bench press. Keep your ribs tucked; do not let your back arch excessively.",
           },
           {
+            type: "exercise",
             id: 30,
             sets: 3,
             repRange: [10, 12],
@@ -91,6 +137,7 @@ export const powerlifting_3day: Program = {
               "A bigger back provides a bigger 'shelf' to bench press from. Squeeze the handle to your sternum.",
           },
           {
+            type: "exercise",
             id: 54,
             sets: 3,
             repRange: [10, 12],
@@ -107,7 +154,9 @@ export const powerlifting_3day: Program = {
           : "Max effort pulling and posterior chain work.",
         intensity: isTestingWeek ? 10 : baseIntensity + 1,
         exercises: [
+          deadlift_warmup,
           {
+            type: "exercise",
             id: 14,
             sets: 3,
             repRange: mainReps,
@@ -119,6 +168,7 @@ export const powerlifting_3day: Program = {
           },
 
           {
+            type: "exercise",
             id: 6,
             sets: 3,
             repRange: [8, 10],
@@ -126,6 +176,7 @@ export const powerlifting_3day: Program = {
               "Unilateral leg strength to prevent 'shooting' one hip up during a heavy deadlift. Stay upright.",
           },
           {
+            type: "exercise",
             id: 10,
             sets: 3,
             repRange: [8, 12],
@@ -133,6 +184,7 @@ export const powerlifting_3day: Program = {
               "Lat strength is vital to keeping the bar close to your body during a heavy pull. Do not swing.",
           },
           {
+            type: "exercise",
             id: 48,
             sets: 3,
             repRange: [12, 15],

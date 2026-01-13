@@ -1,6 +1,18 @@
-import { Program } from "@/src/utils/program";
+import { Program, Warmup } from "@/src/utils/program";
 
-// 2. 5-DAY POWER & STRENGTH (6 Weeks)
+export const standard_warmup: Warmup = {
+  type: "warmup",
+  description: [
+    "3–5 minutes light cardio (rower, bike, or brisk walk) to raise body temperature.",
+    "30s hip flexor stretch each side / 30s hamstring stretch",
+    "10 arm circles forward / 10 arm circles backward",
+    "10 band pull-aparts or scapular wall slides",
+    "10 leg swings (front-to-back) each side / 10 leg swings (side-to-side) each side",
+    "10 glute bridges with 2s pause at the top",
+    "10 bodyweight squats focusing on depth and control",
+  ],
+};
+
 export const strength_5day: Program = {
   isPro: true,
   id: "strength_5day",
@@ -24,7 +36,9 @@ export const strength_5day: Program = {
         description: `Phase: ${phase}. Primary upper body compound focus.`,
         intensity: intensity,
         exercises: [
+          standard_warmup,
           {
+            type: "exercise",
             id: 1,
             sets: 4,
             repRange: reps,
@@ -34,6 +48,7 @@ export const strength_5day: Program = {
           },
 
           {
+            type: "exercise",
             id: 7,
             sets: 4,
             repRange: reps,
@@ -41,6 +56,7 @@ export const strength_5day: Program = {
               "Brace your core and keep your back flat. Avoid 'shrugging' the weight; pull with your elbows to target the mid-back and lats.",
           },
           {
+            type: "exercise",
             id: 18,
             sets: 3,
             repRange: [10, 12],
@@ -48,6 +64,7 @@ export const strength_5day: Program = {
               "Higher incline targets the upper clavicular head of the chest. Control the weight on the way down for a deep stretch.",
           },
           {
+            type: "exercise",
             id: 30,
             sets: 3,
             repRange: [10, 12],
@@ -63,7 +80,9 @@ export const strength_5day: Program = {
           "Developing maximal leg power and anterior chain strength.",
         intensity: intensity + 1,
         exercises: [
+          standard_warmup,
           {
+            type: "exercise",
             id: 4,
             sets: 5,
             repRange: reps,
@@ -73,6 +92,7 @@ export const strength_5day: Program = {
           },
 
           {
+            type: "exercise",
             id: 19,
             sets: 3,
             repRange: [8, 10],
@@ -80,6 +100,7 @@ export const strength_5day: Program = {
               "Keep your feet high on the platform to involve more glutes and hamstrings, or lower to focus on the quads.",
           },
           {
+            type: "exercise",
             id: 40,
             sets: 3,
             repRange: [12, 15],
@@ -88,6 +109,7 @@ export const strength_5day: Program = {
               "Slow and controlled. Do not let the weight stack 'slam' at the bottom; maintain tension on the hamstrings throughout.",
           },
           {
+            type: "exercise",
             id: 13,
             sets: 3,
             repRange: [45, 60],
@@ -102,7 +124,9 @@ export const strength_5day: Program = {
         description: "Structural balance and upper body hypertrophy.",
         intensity: intensity - 1,
         exercises: [
+          standard_warmup,
           {
+            type: "exercise",
             id: 26,
             sets: 4,
             repRange: [6, 8],
@@ -112,6 +136,7 @@ export const strength_5day: Program = {
           },
 
           {
+            type: "exercise",
             id: 34,
             sets: 4,
             repRange: [12, 15],
@@ -119,6 +144,7 @@ export const strength_5day: Program = {
               "Lead with the elbows. Imagine trying to touch the side walls with your dumbbells rather than lifting them 'up'.",
           },
           {
+            type: "exercise",
             id: 51,
             sets: 3,
             repRange: [10, 12],
@@ -126,6 +152,7 @@ export const strength_5day: Program = {
               "Neutral grip targets the brachialis and forearms. Keep your wrists straight and avoid swinging.",
           },
           {
+            type: "exercise",
             id: 54,
             sets: 3,
             repRange: [10, 12],
@@ -140,7 +167,9 @@ export const strength_5day: Program = {
         description: "Posterior chain development and pulling power.",
         intensity: intensity + 1,
         exercises: [
+          standard_warmup,
           {
+            type: "exercise",
             id: 14,
             sets: 3,
             repRange: [3, 5],
@@ -150,6 +179,7 @@ export const strength_5day: Program = {
           },
 
           {
+            type: "exercise",
             id: 6,
             sets: 3,
             repRange: [8, 10],
@@ -157,6 +187,7 @@ export const strength_5day: Program = {
               "Elevate your rear foot. Focus on keeping your front knee aligned with your toes. This is brutal but essential for hip stability.",
           },
           {
+            type: "exercise",
             id: 41,
             sets: 3,
             repRange: [8, 12],
@@ -164,6 +195,7 @@ export const strength_5day: Program = {
               "The best glute builder. Use a pad for the bar. Squeeze your glutes for a full second at the top of the movement.",
           },
           {
+            type: "exercise",
             id: 48,
             sets: 3,
             repRange: [12, 15],
@@ -179,7 +211,9 @@ export const strength_5day: Program = {
           "Focus on mind-muscle connection, isolation, and the 'pump'.",
         intensity: intensity,
         exercises: [
+          standard_warmup,
           {
+            type: "exercise",
             id: 2,
             sets: 3,
             repRange: [10, 12],
@@ -187,6 +221,7 @@ export const strength_5day: Program = {
               "Focus on the inner chest squeeze. Do not touch the dumbbells together at the top—keep the tension on the muscle.",
           },
           {
+            type: "exercise",
             id: 11,
             sets: 3,
             repRange: [10, 12],
@@ -194,6 +229,7 @@ export const strength_5day: Program = {
               "Lean back slightly and pull the bar to your upper chest. Focus on driving your shoulder blades down and back.",
           },
           {
+            type: "exercise",
             id: 17,
             sets: 3,
             repRange: [8, 12],
@@ -202,6 +238,7 @@ export const strength_5day: Program = {
               "Lean forward for more chest, stay upright for more triceps. On Week 6, go until you cannot push back up.",
           },
           {
+            type: "exercise",
             id: 56,
             sets: 3,
             repRange: [12, 15],

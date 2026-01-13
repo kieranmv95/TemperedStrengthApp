@@ -1,6 +1,19 @@
-import { Program } from "@/src/utils/program";
+import { Program, Warmup } from "@/src/utils/program";
 
-// 3. WEEKEND WARRIOR (12 Weeks)
+export const full_body_warmup: Warmup = {
+  type: "warmup",
+  description: [
+    "3-minute cardio of choice (rower, bike, or light jog) to raise heart rate and body temperature.",
+    "30s deep squat hold",
+    "10 arm circles forward / 10 arm circles backward",
+    "10 leg swings (front-to-back) each side / 10 leg swings (side-to-side) each side",
+    "10 band pull-aparts or scapular wall slides",
+    "10 glute bridges with 2s pause at the top",
+    "10 dead bugs or bird dogs (controlled)",
+    "10 bodyweight squats or inchworms",
+  ],
+};
+
 export const full_body_2day: Program = {
   isPro: false,
   id: "full_body_2day",
@@ -21,7 +34,9 @@ export const full_body_2day: Program = {
         } stability.`,
         intensity: 7,
         exercises: [
+          full_body_warmup,
           {
+            type: "exercise",
             id: cycle === 1 ? 19 : 4,
             sets: 3,
             repRange: [8, 10],
@@ -33,6 +48,7 @@ export const full_body_2day: Program = {
           },
 
           {
+            type: "exercise",
             id: 1,
             sets: 3,
             repRange: [8, 10],
@@ -40,6 +56,7 @@ export const full_body_2day: Program = {
               "Maintain a slight arch in your back and keep your shoulder blades 'tucked' into the bench. Think about bending the bar to engage your chest.",
           },
           {
+            type: "exercise",
             id: cycle === 2 ? 45 : 7,
             sets: 3,
             repRange: [8, 10],
@@ -50,6 +67,7 @@ export const full_body_2day: Program = {
           },
 
           {
+            type: "exercise",
             id: 24,
             sets: 3,
             repRange: [15, 20],
@@ -66,7 +84,9 @@ export const full_body_2day: Program = {
         description: "Pulling and overhead pressing focus.",
         intensity: 7,
         exercises: [
+          full_body_warmup,
           {
+            type: "exercise",
             id: 14,
             sets: 3,
             repRange: [5, 8],
@@ -76,6 +96,7 @@ export const full_body_2day: Program = {
           },
 
           {
+            type: "exercise",
             id: cycle === 1 ? 27 : 26,
             sets: 3,
             repRange: [8, 10],
@@ -86,6 +107,7 @@ export const full_body_2day: Program = {
                 : "Overhead Press: Squeeze your glutes and quads hard to create a stable base. Press the bar in a straight line, finishing with your head through the 'window'.",
           },
           {
+            type: "exercise",
             id: 10,
             sets: 3,
             repRange: [8, 12],
@@ -95,6 +117,7 @@ export const full_body_2day: Program = {
           },
 
           {
+            type: "exercise",
             id: 5,
             sets: 3,
             repRange: [12, 15],

@@ -1,6 +1,13 @@
 import { programList } from "@/src/data/programs";
 
+export interface Warmup {
+  type: "warmup";
+  additionalDescription?: string | null;
+  description: string[];
+}
+
 export interface Exercise {
+  type: "exercise";
   id: number;
   additionalHeader?: string | null;
   additionalDescription?: string | null;
@@ -16,7 +23,7 @@ export interface Workout {
   label: string;
   description: string;
   intensity: number; // 1 to 10 scale
-  exercises: Exercise[];
+  exercises: (Exercise | Warmup)[];
 }
 
 export interface Program {

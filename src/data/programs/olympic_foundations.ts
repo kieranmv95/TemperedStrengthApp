@@ -1,4 +1,13 @@
-import { Program } from "@/src/utils/program";
+import { Program, Warmup } from "@/src/utils/program";
+
+export const standard_warmup: Warmup = {
+  type: "warmup",
+  description: [
+    "3-minute cardio of choice, run/row/bike to raise your heart rate.",
+    "2 minutes of wrist stretches, ankle circles, and shoulder mobility exercises.",
+    "3 sets of 5 Empty bar cleans / 5 front rack squat / 5 overhead squats",
+  ],
+};
 
 export const olympic_foundations: Program = {
   isPro: false,
@@ -18,7 +27,9 @@ export const olympic_foundations: Program = {
           "Technical Snatch day focusing on the overhead catch and vertical pull.",
         intensity: baseIntensity,
         exercises: [
+          standard_warmup,
           {
+            type: "exercise",
             id: 59,
             sets: 3,
             repRange: [3, 3],
@@ -28,6 +39,7 @@ export const olympic_foundations: Program = {
           },
 
           {
+            type: "exercise",
             id: 61,
             sets: 5,
             repRange: [5, 5],
@@ -36,6 +48,7 @@ export const olympic_foundations: Program = {
           },
 
           {
+            type: "exercise",
             id: 62,
             sets: 3,
             repRange: [3, 5],
@@ -45,6 +58,7 @@ export const olympic_foundations: Program = {
           },
 
           {
+            type: "exercise",
             id: 13,
             sets: 3,
             repRange: [45, 60],
@@ -60,7 +74,9 @@ export const olympic_foundations: Program = {
           "Focusing on the front rack position and leg drive for the Jerk.",
         intensity: baseIntensity,
         exercises: [
+          standard_warmup,
           {
+            type: "exercise",
             id: 65,
             sets: 3,
             repRange: [3, 3],
@@ -69,6 +85,7 @@ export const olympic_foundations: Program = {
           },
 
           {
+            type: "exercise",
             id: 66,
             sets: 3,
             repRange: [2, 3],
@@ -78,6 +95,7 @@ export const olympic_foundations: Program = {
           },
 
           {
+            type: "exercise",
             id: 68,
             sets: 4,
             repRange: [5, 5],
@@ -85,6 +103,7 @@ export const olympic_foundations: Program = {
               "The engine of Olympic lifting. Keep your chest up and elbows high. If your elbows drop, the weight will pull you forward.",
           },
           {
+            type: "exercise",
             id: 31,
             sets: 3,
             repRange: [10, 15],
@@ -102,7 +121,9 @@ export const olympic_foundations: Program = {
             : "Integrating the full movements at moderate intensity.",
         intensity: week === 3 ? 9 : baseIntensity + 1,
         exercises: [
+          standard_warmup,
           {
+            type: "exercise",
             id: 57,
             sets: 5,
             repRange: week === 3 ? [1, 2] : [2, 3],
@@ -112,6 +133,7 @@ export const olympic_foundations: Program = {
           },
 
           {
+            type: "exercise",
             id: 63,
             sets: 5,
             repRange: week === 3 ? [1, 1] : [1, 2],
@@ -119,6 +141,7 @@ export const olympic_foundations: Program = {
               "The ultimate test of power. Ensure the clean is stable before beginning your dip for the jerk. Don't rush the transition.",
           },
           {
+            type: "exercise",
             id: 14,
             sets: 3,
             repRange: [3, 5],
@@ -128,6 +151,7 @@ export const olympic_foundations: Program = {
           },
 
           {
+            type: "exercise",
             id: 17,
             sets: 3,
             repRange: [8, 12],
