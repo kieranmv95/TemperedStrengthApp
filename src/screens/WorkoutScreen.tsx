@@ -349,54 +349,21 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
   const workoutDayIndices = program?.workouts.map((w) => w.dayIndex) || [];
 
-  if (isRestDay) {
-    return (
-      <RestDayScreen
-        nextWorkout={nextWorkout}
-        startDate={startDate || ""}
-        workoutDayIndices={workoutDayIndices}
-        currentDayIndex={selectedDayIndex || dayIndex || 0}
-        onViewNextWorkout={() => {
-          // For now, just show the next workout info
-          // Could implement a preview modal
-        }}
-        onSkipToNextWorkout={handleSkipToNextWorkout}
-        onDaySelect={handleDaySelect}
-        onProgramReset={onProgramReset}
-      />
-    );
-  }
+  // Render content below the DaySelector based on state
+  const renderContent = () => {
+    if (isRestDay) {
+      return <RestDayScreen onProgramReset={onProgramReset} />;
+    }
 
-  if (loading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading...</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  if (!currentWorkout || (slots.length === 0 && !isRestDay)) {
-    return (
-      <SafeAreaView style={styles.container}>
+    if (!currentWorkout || slots.length === 0) {
+      return (
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingText}>No workout found</Text>
         </View>
-      </SafeAreaView>
-    );
-  }
+      );
+    }
 
-  return (
-    <SafeAreaView style={styles.container}>
-      {startDate && dayIndex !== null && (
-        <DaySelector
-          startDate={startDate}
-          workoutDayIndices={workoutDayIndices}
-          currentDayIndex={selectedDayIndex ?? dayIndex}
-          onDaySelect={handleDaySelect}
-        />
-      )}
+    return (
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.keyboardAvoidingView}
@@ -445,7 +412,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                   onPress={handleSetAsCurrentDay}
                 >
                   <Text style={styles.setCurrentDayButtonText}>
-                    Set as Today
+                    Set as Today&apos;s Session
                   </Text>
                 </TouchableOpacity>
               )}
@@ -531,6 +498,21 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {startDate && dayIndex !== null && (
+        <DaySelector
+          startDate={startDate}
+          workoutDayIndices={workoutDayIndices}
+          currentDayIndex={selectedDayIndex ?? dayIndex}
+          onDaySelect={handleDaySelect}
+        />
+      )}
+
+      {renderContent()}
 
       <SwapModal
         visible={swapModalVisible}

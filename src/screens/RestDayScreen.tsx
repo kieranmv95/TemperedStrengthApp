@@ -1,40 +1,15 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { DaySelector } from "../components/DaySelector";
-import { Workout } from "../utils/program";
+import { StyleSheet, Text, View } from "react-native";
 
 interface RestDayScreenProps {
-  nextWorkout: Workout | null;
-  startDate: string;
-  workoutDayIndices: number[];
-  currentDayIndex: number;
-  onViewNextWorkout: () => void;
-  onSkipToNextWorkout: () => void;
-  onDaySelect: (dayIndex: number) => void;
   onProgramReset?: () => void;
 }
 
 export const RestDayScreen: React.FC<RestDayScreenProps> = ({
-  nextWorkout,
-  startDate,
-  workoutDayIndices,
-  currentDayIndex,
-  onViewNextWorkout,
-  onSkipToNextWorkout,
-  onDaySelect,
   onProgramReset,
 }) => {
   return (
-    <SafeAreaView style={styles.container}>
-      <DaySelector
-        startDate={startDate}
-        workoutDayIndices={workoutDayIndices}
-        currentDayIndex={currentDayIndex}
-        onDaySelect={onDaySelect}
-      />
-      <View style={styles.header}>
-        <View style={styles.headerSpacer} />
-      </View>
+    <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Rest Day</Text>
         <Text style={styles.subtitle}>
@@ -45,23 +20,12 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
           stretching, foam rolling, or yoga, or simply take a day off.
         </Text>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#121212",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingTop: 16,
-  },
-  headerSpacer: {
     flex: 1,
   },
   content: {
