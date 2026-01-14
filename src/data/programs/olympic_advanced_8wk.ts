@@ -149,17 +149,17 @@ export const olympic_advanced_8wk: Program = {
 
           {
             type: "exercise",
-            id: 41,
+            id: 22,
             sets: 3,
             repRange: [10, 12],
             additionalDescription:
-              "Develops the glute drive needed for the 'second pull.' Squeeze hard at the top and hold for 1 second.",
+              "Develops the glute drive needed for the 'second pull.'",
           },
           {
             type: "exercise",
-            id: 15,
+            id: 13,
             sets: 3,
-            repRange: [10, 15],
+            repRange: [45, 60],
             additionalDescription:
               "Anti-extension core strength. This protects the lower back when catching heavy weights overhead.",
           },
