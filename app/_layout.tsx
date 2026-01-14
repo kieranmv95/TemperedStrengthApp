@@ -37,6 +37,8 @@ export default function RootLayout() {
       <SubscriptionProvider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="glossary" options={{ headerShown: false }} />
+          <Stack.Screen name="article/[id]" options={{ headerShown: false }} />
           <Stack.Screen
             name="modal"
             options={{ presentation: "modal", title: "Modal" }}
