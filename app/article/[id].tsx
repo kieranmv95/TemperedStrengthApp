@@ -54,7 +54,10 @@ export default function ArticleScreen() {
   // Simple markdown-like rendering for content
   const renderContent = (content: string) => {
     const lines = content.split("\n");
-    return lines.map((line, index) => {
+    return lines.map((rawLine, index) => {
+      // Trim leading/trailing whitespace from each line
+      const line = rawLine.trim();
+      
       // H2 Headers
       if (line.startsWith("## ")) {
         return (
@@ -97,7 +100,7 @@ export default function ArticleScreen() {
         );
       }
       // Empty lines
-      if (line.trim() === "") {
+      if (line === "") {
         return <View key={index} style={styles.spacer} />;
       }
       // Regular paragraphs (with inline bold support)

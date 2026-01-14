@@ -22,7 +22,7 @@ import {
 
 export default function BriefScreen() {
   const featuredArticle = getFeaturedArticle();
-  const otherArticles = articles.filter((a) => !a.isFeatured).slice(0, 3);
+  const otherArticles = articles.filter((a) => !a.isFeatured);
   const previewGlossary = glossary.slice(0, 3);
 
   const handleArticlePress = (article: Article) => {
@@ -66,14 +66,22 @@ export default function BriefScreen() {
             />
           )}
 
-          {otherArticles.map((article) => (
-            <ArticleCard
-              key={article.id}
-              article={article}
-              onPress={handleArticlePress}
-              variant="compact"
-            />
-          ))}
+          {/* More Articles - Horizontal Scroll */}
+          <Text style={styles.moreArticlesLabel}>More Articles</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.articlesScrollContainer}
+          >
+            {otherArticles.map((article) => (
+              <ArticleCard
+                key={article.id}
+                article={article}
+                onPress={handleArticlePress}
+                variant="horizontal"
+              />
+            ))}
+          </ScrollView>
         </View>
 
         {/* THE SOUNDBOARD - Playlists Section */}
@@ -183,6 +191,17 @@ const styles = StyleSheet.create({
   },
   playlistsContainer: {
     paddingRight: 16,
+  },
+  moreArticlesLabel: {
+    color: "#666",
+    fontSize: 13,
+    fontWeight: "600",
+    marginTop: 16,
+    marginBottom: 12,
+  },
+  articlesScrollContainer: {
+    paddingRight: 16,
+    gap: 12,
   },
   bottomSpacer: {
     height: 32,

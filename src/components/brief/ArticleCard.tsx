@@ -13,7 +13,7 @@ import { Article } from "@/src/data/brief";
 interface ArticleCardProps {
   article: Article;
   onPress: (article: Article) => void;
-  variant?: "hero" | "compact";
+  variant?: "hero" | "compact" | "horizontal";
 }
 
 export function ArticleCard({
@@ -21,6 +21,39 @@ export function ArticleCard({
   onPress,
   variant = "compact",
 }: ArticleCardProps) {
+  if (variant === "horizontal") {
+    return (
+      <TouchableOpacity
+        style={styles.horizontalCard}
+        onPress={() => onPress(article)}
+        activeOpacity={0.8}
+      >
+        <ImageBackground
+          source={{ uri: article.image }}
+          style={styles.horizontalImage}
+          imageStyle={styles.horizontalImageStyle}
+        >
+          <View style={styles.horizontalOverlay}>
+            <View style={styles.horizontalCategoryBadge}>
+              <Text style={styles.horizontalCategoryText}>{article.category}</Text>
+            </View>
+            <View style={styles.horizontalContent}>
+              <Text style={styles.horizontalTitle} numberOfLines={2}>
+                {article.title}
+              </Text>
+              <View style={styles.horizontalMeta}>
+                <Ionicons name="time-outline" size={12} color="#999" />
+                <Text style={styles.horizontalMetaText}>
+                  {article.readTime} min
+                </Text>
+              </View>
+            </View>
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
+    );
+  }
+
   if (variant === "hero") {
     return (
       <TouchableOpacity
@@ -209,6 +242,59 @@ const styles = StyleSheet.create({
   compactMetaText: {
     color: "#666",
     fontSize: 12,
+  },
+
+  // Horizontal Card Styles (for scrollable list)
+  horizontalCard: {
+    width: 200,
+    borderRadius: 12,
+    overflow: "hidden",
+  },
+  horizontalImage: {
+    height: 150,
+    justifyContent: "flex-end",
+  },
+  horizontalImageStyle: {
+    borderRadius: 12,
+  },
+  horizontalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.45)",
+    padding: 12,
+    justifyContent: "space-between",
+  },
+  horizontalCategoryBadge: {
+    alignSelf: "flex-start",
+    backgroundColor: "rgba(201, 176, 114, 0.9)",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 4,
+  },
+  horizontalCategoryText: {
+    color: "#121212",
+    fontSize: 10,
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  horizontalContent: {
+    gap: 4,
+  },
+  horizontalTitle: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: "700",
+    lineHeight: 18,
+  },
+  horizontalMeta: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  horizontalMetaText: {
+    color: "#999",
+    fontSize: 11,
+    fontWeight: "500",
   },
 });
 
