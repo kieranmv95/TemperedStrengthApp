@@ -148,14 +148,16 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     weightStr: string,
     repsStr: string
   ) => {
-    if (!exerciseId || dayIndex === null || !weightStr || !repsStr) {
+    if (!exerciseId || dayIndex === null || !repsStr) {
       return;
     }
 
-    const weightNum = parseFloat(weightStr);
+    // Allow empty weight string to be treated as 0 (bodyweight)
+    const weightNum = weightStr ? parseFloat(weightStr) : 0;
     const repsNum = parseInt(repsStr, 10);
 
-    if (isNaN(weightNum) || isNaN(repsNum) || weightNum <= 0 || repsNum <= 0) {
+    // Allow weight >= 0 (0 = bodyweight), but reps must be > 0
+    if (isNaN(weightNum) || isNaN(repsNum) || weightNum < 0 || repsNum <= 0) {
       return;
     }
 
@@ -208,19 +210,16 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   };
 
   const handleToggleSetState = async (setIndex: number) => {
-    if (
-      !exerciseId ||
-      !weights[setIndex] ||
-      !reps[setIndex] ||
-      dayIndex === null
-    ) {
+    if (!exerciseId || !reps[setIndex] || dayIndex === null) {
       return;
     }
 
-    const weightNum = parseFloat(weights[setIndex]);
+    // Allow empty/0 weight for bodyweight exercises
+    const weightNum = weights[setIndex] ? parseFloat(weights[setIndex]) : 0;
     const repsNum = parseInt(reps[setIndex], 10);
 
-    if (isNaN(weightNum) || isNaN(repsNum) || weightNum <= 0 || repsNum <= 0) {
+    // Allow weight >= 0 (0 = bodyweight), but reps must be > 0
+    if (isNaN(weightNum) || isNaN(repsNum) || weightNum < 0 || repsNum <= 0) {
       return;
     }
 
@@ -402,7 +401,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         const setState = setStates.get(setIndex);
         const isCompleted = setState === "completed";
         const isFailed = setState === "failed";
-        const canLog = weights[setIndex] && reps[setIndex] && !loading;
+        // Allow logging with 0 or empty weight (bodyweight), but require reps
+        const canLog = reps[setIndex] && !loading;
         const isFirstSet = setIndex === 0;
 
         return (
