@@ -140,4 +140,88 @@ export const glossary: GlossaryTerm[] = [
       "A Box is often the name given to a gym space, CrossFit intorduced this as many crossfit gyms are simply a box room with kit. For example: 'I will be at the box in 10 minutes'",
     category: "General",
   },
+  {
+    id: "term_020",
+    term: "Reps",
+    definition:
+      "Repetitions. The number of times you perform an exercise. For example: 'I did 10 reps of squats'.",
+    category: "Training",
+  },
+  {
+    id: "term_021",
+    term: "Sets",
+    definition:
+      "Sets. The number of times you perform an exercise. For example: 'I did 10 sets of squats'.",
+    category: "Training",
+  },
+  {
+    id: "term_022",
+    term: "Pre",
+    definition:
+      "Pre-workout is a term used to describe pre-workout supplements. For example: 'I took a pre-workout before my workout'. Usually taken 15-30 minutes before a workout containing caffeine and other ingredients to enhance performance and energy.",
+    category: "Nutrition",
+  },
+  {
+    id: "term_023",
+    term: "Post-workout",
+    definition:
+      "Post-workout is a term used to describe post-workout supplements. For example: 'I took a post-workout after my workout'. Usually taken 15-30 minutes after a workout containing protein and other ingredients to help with recovery and muscle growth.",
+    category: "Nutrition",
+  },
+  {
+    id: "term_024",
+    term: "WOD",
+    definition:
+      "WOD is a term used to describe a workout of the day. For example: 'I did a WOD today'. Usually a workout that is designed to be done in a certain time frame.",
+    category: "Training",
+  },
+  {
+    id: "term_025",
+    term: "EMOM",
+    definition:
+      "EMOM is a term used to describe a workout where you perform the same exercise for a certain number of minutes. For example: 'I did 10 minutes of burpees EMOM'. Usually done for a certain number of minutes.",
+    category: "Training",
+  },
+  {
+    id: "term_026",
+    term: "For Time",
+    definition:
+      "For Time is a term used to describe a workout where you perform the same exercise for a certain number of minutes. For example: 'I did 10 minutes of burpees For Time'. Usually done for a certain number of minutes.",
+    category: "Training",
+  },
+  {
+    id: "term_027",
+    term: "Pump",
+    definition:
+      "Pump is a term used to describe the feeling of fullness in the muscles. Usually felt after a workout. It is a good sign of muscle growth and development.",
+    category: "Training",
+  },
+  {
+    id: "term_028",
+    term: "Tabata",
+    definition:
+      "A Tabata workout is a highly efficient, 4-minute form of High-Intensity Interval Training (HIIT) featuring eight rounds of 20 seconds of all-out effort exercise, followed by just 10 seconds of rest, developed by Japanese scientist Izumi Tabata for athletes.",
+    category: "Training",
+  },
+  {
+    id: "term_029",
+    term: "HIIT / Hit Training",
+    definition:
+      "HiiT is a term used to describe High-Intensity Interval Training. It is a form of interval training, typically combining short bursts of high-intensity exercise with longer periods of lower-intensity exercise.",
+    category: "Training",
+  },
+  {
+    id: "term_030",
+    term: "Clips",
+    definition:
+      "Clips are a type of equipment used to hold weights in place. They are often used in gyms to hold weights in place while you are working out. For example: 'I used clips to hold my weights in place'. Usually used for heavy weights on a standard barbell.",
+    category: "Equipment",
+  },
+  {
+    id: "term_031",
+    term: "Biscuit Plates",
+    definition:
+      "A biscuit plate is usually a Tiny incremental weight plate used on a barbell (0.5kg, 1kg, 2kg). For example: 'I used a 0.5kg biscuit plate to add 0.5kg to my squat'. Usually used on a standard barbell.",
+    category: "Equipment",
+  },
 ];
