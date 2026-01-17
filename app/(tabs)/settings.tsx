@@ -177,7 +177,7 @@ export default function SettingsScreen() {
               </Text>
               <Text style={styles.settingDescription}>
                 {hasProgram && activeProgram
-                  ? `${activeProgram.name} • ${activeProgram.description}`
+                  ? activeProgram.name
                   : "Select a different program"}
               </Text>
             </View>
