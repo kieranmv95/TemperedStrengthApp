@@ -1,12 +1,12 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { supabase } from "../lib/supabase";
+import { exerciseService } from "../services/exerciseService";
+
 jest.mock("../lib/supabase", () => ({
   supabase: {
     from: jest.fn(),
   },
 }));
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { supabase } from "../lib/supabase";
-import { exerciseService } from "../services/exerciseService";
 
 const mockOrder = jest.fn();
 const mockSelect = jest.fn(() => ({ order: mockOrder }));

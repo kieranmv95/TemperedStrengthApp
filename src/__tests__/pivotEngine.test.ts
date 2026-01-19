@@ -1,5 +1,5 @@
-import { findAlternatives } from "../utils/pivotEngine";
 import { getAllExercises } from "../data/exercises";
+import { findAlternatives } from "../utils/pivotEngine";
 
 jest.mock("../data/exercises", () => ({
   getAllExercises: jest.fn(),
