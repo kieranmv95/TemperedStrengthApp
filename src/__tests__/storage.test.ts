@@ -2,9 +2,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   getActiveProgramId,
   getFavoriteWorkouts,
+  getRestTimer,
   getWorkoutNotes,
   incrementSwapCount,
+  saveRestTimer,
   saveWorkoutNotes,
+  clearRestTimer,
   setActiveProgramId,
   toggleFavoriteWorkout,
 } from "../utils/storage";
@@ -41,6 +44,36 @@ describe("storage utilities", () => {
 
     await expect(toggleFavoriteWorkout("workout-1")).resolves.toBe(false);
     await expect(getFavoriteWorkouts()).resolves.toEqual([]);
+  });
+
+  it("saves and restores rest timer state", async () => {
+    const timerState = {
+      dayIndex: 3,
+      slotIndex: 1,
+      exerciseId: 7,
+      restTimeSeconds: 90,
+      startedAt: Date.now(),
+      status: "running" as const,
+    };
+
+    await saveRestTimer(timerState);
+
+    await expect(getRestTimer()).resolves.toEqual(timerState);
+  });
+
+  it("clears rest timer state", async () => {
+    await saveRestTimer({
+      dayIndex: 1,
+      slotIndex: 0,
+      exerciseId: 2,
+      restTimeSeconds: 60,
+      startedAt: Date.now(),
+      status: "running",
+    });
+
+    await clearRestTimer();
+
+    await expect(getRestTimer()).resolves.toBeNull();
   });
 
   it("increments swap count within the same month", async () => {
