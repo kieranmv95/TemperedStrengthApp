@@ -1,5 +1,16 @@
 import { useSubscription } from "@/hooks/use-subscription";
+import {
+  allStandaloneWorkouts,
+  SingleWorkout,
+  WorkoutCategory,
+} from "@/src/data/workouts";
+import {
+  getFavoriteWorkouts,
+  toggleFavoriteWorkout,
+} from "@/src/utils/storage";
 import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
+import { router } from "expo-router";
 import React, { useCallback, useState } from "react";
 import {
   FlatList,
@@ -10,21 +21,18 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  allStandaloneWorkouts,
-  SingleWorkout,
-  WorkoutCategory,
-} from "@/src/data/workouts";
-import {
-  getFavoriteWorkouts,
-  toggleFavoriteWorkout,
-} from "@/src/utils/storage";
-import { useFocusEffect } from "@react-navigation/native";
-import { router } from "expo-router";
 
-type FilterOption = "All" | WorkoutCategory | "Favorites" | "Pro";
+type TimeFilter = "≤15 min" | "16-30 min" | "31-45 min" | "46+ min" | null;
+type CategoryFilter = "All" | WorkoutCategory | "Favorites" | "Pro";
 
-const FILTER_OPTIONS: FilterOption[] = [
+const TIME_FILTERS: ("≤15 min" | "16-30 min" | "31-45 min" | "46+ min")[] = [
+  "≤15 min",
+  "16-30 min",
+  "31-45 min",
+  "46+ min",
+];
+
+const CATEGORY_FILTERS: CategoryFilter[] = [
   "All",
   "Favorites",
   "Pro",
@@ -151,7 +159,9 @@ function WorkoutCard({
 
 export default function WorkoutsScreen() {
   const { isPro } = useSubscription();
-  const [activeFilter, setActiveFilter] = useState<FilterOption>("All");
+  const [activeTimeFilter, setActiveTimeFilter] = useState<TimeFilter>(null);
+  const [activeCategoryFilter, setActiveCategoryFilter] =
+    useState<CategoryFilter>("All");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [selectedWorkout, setSelectedWorkout] = useState<SingleWorkout | null>(
     null
@@ -190,12 +200,30 @@ export default function WorkoutsScreen() {
     router.push("/paywall");
   };
 
-  // Filter workouts based on active filter
+  // Filter workouts based on active filters (time and category work together)
   const filteredWorkouts = allStandaloneWorkouts.filter((workout) => {
-    if (activeFilter === "All") return true;
-    if (activeFilter === "Favorites") return favorites.includes(workout.id);
-    if (activeFilter === "Pro") return workout.isPremium;
-    return workout.category === activeFilter;
+    // Apply time filter
+    if (activeTimeFilter === "≤15 min" && workout.estimatedTime > 15)
+      return false;
+    if (
+      activeTimeFilter === "16-30 min" &&
+      (workout.estimatedTime < 16 || workout.estimatedTime > 30)
+    )
+      return false;
+    if (
+      activeTimeFilter === "31-45 min" &&
+      (workout.estimatedTime < 31 || workout.estimatedTime > 45)
+    )
+      return false;
+    if (activeTimeFilter === "46+ min" && workout.estimatedTime < 46)
+      return false;
+
+    // Apply category filter
+    if (activeCategoryFilter === "All") return true;
+    if (activeCategoryFilter === "Favorites")
+      return favorites.includes(workout.id);
+    if (activeCategoryFilter === "Pro") return workout.isPremium;
+    return workout.category === activeCategoryFilter;
   });
 
   // Render workout detail modal
@@ -293,7 +321,9 @@ export default function WorkoutsScreen() {
                   const movementText =
                     typeof movement === "string"
                       ? movement
-                      : `${movement.name}: ${movement.value}${movement.note ? ` (${movement.note})` : ""}`;
+                      : `${movement.name}: ${movement.value}${
+                          movement.note ? ` (${movement.note})` : ""
+                        }`;
                   return (
                     <View key={movementIndex} style={styles.movementItem}>
                       <Text style={styles.movementBullet}>•</Text>
@@ -315,30 +345,30 @@ export default function WorkoutsScreen() {
         <Text style={styles.title}>Workouts</Text>
       </View>
 
-      {/* Filter tabs */}
-      <View style={styles.filterContainer}>
+      {/* Category filter tabs */}
+      <View style={styles.categoryFilterContainer}>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.filterScrollContent}
         >
-          {FILTER_OPTIONS.map((filter) => {
-            const isActive = activeFilter === filter;
+          {CATEGORY_FILTERS.map((filter) => {
+            const isActive = activeCategoryFilter === filter;
             const count =
               filter === "All"
                 ? allStandaloneWorkouts.length
                 : filter === "Favorites"
-                  ? favorites.length
-                  : filter === "Pro"
-                    ? allStandaloneWorkouts.filter((w) => w.isPremium).length
-                    : allStandaloneWorkouts.filter((w) => w.category === filter)
-                        .length;
+                ? favorites.length
+                : filter === "Pro"
+                ? allStandaloneWorkouts.filter((w) => w.isPremium).length
+                : allStandaloneWorkouts.filter((w) => w.category === filter)
+                    .length;
 
             return (
               <TouchableOpacity
                 key={filter}
                 style={[styles.filterTab, isActive && styles.filterTabActive]}
-                onPress={() => setActiveFilter(filter)}
+                onPress={() => setActiveCategoryFilter(filter)}
               >
                 {filter === "Favorites" && (
                   <Ionicons
@@ -378,23 +408,78 @@ export default function WorkoutsScreen() {
         </ScrollView>
       </View>
 
+      {/* Time filter tabs */}
+      <View style={styles.filterContainer}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.filterScrollContent}
+        >
+          {TIME_FILTERS.map((filter) => {
+            const isActive = activeTimeFilter === filter;
+            const count = allStandaloneWorkouts.filter((w) => {
+              if (filter === "≤15 min") return w.estimatedTime <= 15;
+              if (filter === "16-30 min")
+                return w.estimatedTime >= 16 && w.estimatedTime <= 30;
+              if (filter === "31-45 min")
+                return w.estimatedTime >= 31 && w.estimatedTime <= 45;
+              if (filter === "46+ min") return w.estimatedTime >= 46;
+              return false;
+            }).length;
+
+            return (
+              <TouchableOpacity
+                key={filter}
+                style={[styles.filterTab, isActive && styles.filterTabActive]}
+                onPress={() => setActiveTimeFilter(isActive ? null : filter)}
+              >
+                <Ionicons
+                  name="time-outline"
+                  size={14}
+                  color={isActive ? "#121212" : "#888"}
+                  style={styles.filterIcon}
+                />
+                <Text
+                  style={[
+                    styles.filterTabText,
+                    isActive && styles.filterTabTextActive,
+                  ]}
+                >
+                  {filter}
+                </Text>
+                <Text
+                  style={[
+                    styles.filterCount,
+                    isActive && styles.filterCountActive,
+                  ]}
+                >
+                  {count}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      </View>
+
       {/* Workout list */}
       {filteredWorkouts.length === 0 ? (
         <View style={styles.emptyState}>
           <Ionicons
-            name={activeFilter === "Favorites" ? "heart-outline" : "barbell"}
+            name={
+              activeCategoryFilter === "Favorites" ? "heart-outline" : "barbell"
+            }
             size={64}
             color="#333"
           />
           <Text style={styles.emptyTitle}>
-            {activeFilter === "Favorites"
+            {activeCategoryFilter === "Favorites"
               ? "No Favorites Yet"
               : "No Workouts Found"}
           </Text>
           <Text style={styles.emptyDescription}>
-            {activeFilter === "Favorites"
+            {activeCategoryFilter === "Favorites"
               ? "Tap the heart icon on any workout to save it here."
-              : "Try selecting a different category."}
+              : "Try selecting a different filter."}
           </Text>
         </View>
       ) : (
@@ -433,6 +518,9 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "800",
     letterSpacing: -0.5,
+  },
+  categoryFilterContainer: {
+    // No border for category filters - they're on the first row
   },
   filterContainer: {
     borderBottomWidth: 1,
