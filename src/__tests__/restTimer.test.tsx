@@ -6,6 +6,9 @@ jest.mock("react-native", () => {
   const RN = jest.requireActual("react-native/jest/mock");
   return {
     ...RN,
+    StyleSheet: {
+      create: (styles: Record<string, unknown>) => styles,
+    },
     AppState: {
       addEventListener: jest.fn(() => ({ remove: jest.fn() })),
       currentState: "active",
