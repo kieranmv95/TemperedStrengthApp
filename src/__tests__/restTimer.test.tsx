@@ -9,6 +9,7 @@ jest.mock("react-native", () => ({
   },
   StyleSheet: {
     create: (styles: Record<string, unknown>) => styles,
+    flatten: (style: Record<string, unknown> | null | undefined) => style || {},
   },
   Text: "Text",
   TouchableOpacity: "TouchableOpacity",
