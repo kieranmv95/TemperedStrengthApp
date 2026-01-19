@@ -2,19 +2,18 @@ import React from "react";
 import { render, act } from "@testing-library/react-native";
 import { RestTimer } from "../components/RestTimer";
 
-jest.mock("react-native", () => {
-  const RN = jest.requireActual("react-native/jest/mock");
-  return {
-    ...RN,
-    StyleSheet: {
-      create: (styles: Record<string, unknown>) => styles,
-    },
-    AppState: {
-      addEventListener: jest.fn(() => ({ remove: jest.fn() })),
-      currentState: "active",
-    },
-  };
-});
+jest.mock("react-native", () => ({
+  AppState: {
+    addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+    currentState: "active",
+  },
+  StyleSheet: {
+    create: (styles: Record<string, unknown>) => styles,
+  },
+  Text: "Text",
+  TouchableOpacity: "TouchableOpacity",
+  View: "View",
+}));
 
 describe("RestTimer", () => {
   beforeEach(() => {
