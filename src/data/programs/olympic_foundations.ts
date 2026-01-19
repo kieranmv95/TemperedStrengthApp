@@ -33,6 +33,7 @@ export const olympic_foundations: Program = {
             id: 59,
             sets: 3,
             repRange: [3, 3],
+            restTimeSeconds: 120,
             additionalHeader: "Technical Primer",
             additionalDescription:
               "Starting from the 'hang' position (bar at mid-thigh). Focus on the 'brush' against the hips and staying vertical. Do not let the bar swing out away from your body.",
@@ -43,6 +44,7 @@ export const olympic_foundations: Program = {
             id: 61,
             sets: 5,
             repRange: [5, 5],
+            restTimeSeconds: 120,
             additionalDescription:
               "The goal is total overhead rigidity. Keep your elbows locked and 'push' the ceiling away. Lower slowly to build stability in the bottom of the squat.",
           },
@@ -52,6 +54,7 @@ export const olympic_foundations: Program = {
             id: 62,
             sets: 3,
             repRange: [3, 5],
+            restTimeSeconds: 120,
             additionalHeader: "Pulling Mechanics",
             additionalDescription:
               "Focus on the 'triple extension' (ankles, knees, and hips). Pull the bar as high as possible while keeping it close to your chest. High elbows are key.",
@@ -62,6 +65,7 @@ export const olympic_foundations: Program = {
             id: 13,
             sets: 3,
             repRange: [45, 60],
+            restTimeSeconds: 60,
             additionalDescription:
               "Anti-extension core strength. A rock-solid core prevents the 'back-arching' that leads to missed lifts and injury.",
           },
@@ -80,6 +84,7 @@ export const olympic_foundations: Program = {
             id: 65,
             sets: 3,
             repRange: [3, 3],
+            restTimeSeconds: 120,
             additionalDescription:
               "Clean from the hang. Focus on a fast 'elbow turnover.' Your elbows should snap around the bar to land in a high front rack position.",
           },
@@ -89,6 +94,7 @@ export const olympic_foundations: Program = {
             id: 66,
             sets: 3,
             repRange: [2, 3],
+            restTimeSeconds: 120,
             additionalHeader: "Footwork Focus",
             additionalDescription:
               "Focus on the 'split.' The front shin should be vertical, and the back knee should be slightly bent. Stability is more important than depth here.",
@@ -99,6 +105,7 @@ export const olympic_foundations: Program = {
             id: 68,
             sets: 4,
             repRange: [5, 5],
+            restTimeSeconds: 150,
             additionalDescription:
               "The engine of Olympic lifting. Keep your chest up and elbows high. If your elbows drop, the weight will pull you forward.",
           },
@@ -107,6 +114,7 @@ export const olympic_foundations: Program = {
             id: 31,
             sets: 3,
             repRange: [10, 15],
+            restTimeSeconds: 60,
             additionalDescription:
               "Strengthens the hip flexors and lower abs, which are vital for 'pulling yourself under the bar' quickly.",
           },
@@ -127,6 +135,7 @@ export const olympic_foundations: Program = {
             id: 57,
             sets: 5,
             repRange: week === 3 ? [1, 2] : [2, 3],
+            restTimeSeconds: week === 3 ? 180 : 150,
             additionalHeader: week === 3 ? "Heavy Single" : "Full Movement",
             additionalDescription:
               "Merging the pull and the catch. Keep the bar path vertical. In Week 4, focus on a heavy but 'perfect' technical rep.",
@@ -137,6 +146,7 @@ export const olympic_foundations: Program = {
             id: 63,
             sets: 5,
             repRange: week === 3 ? [1, 1] : [1, 2],
+            restTimeSeconds: week === 3 ? 180 : 150,
             additionalDescription:
               "The ultimate test of power. Ensure the clean is stable before beginning your dip for the jerk. Don't rush the transition.",
           },
@@ -145,6 +155,7 @@ export const olympic_foundations: Program = {
             id: 14,
             sets: 3,
             repRange: [3, 5],
+            restTimeSeconds: 120,
             additionalHeader: "Clean Pull Variation",
             additionalDescription:
               "Use a 'Clean Grip.' This isn't a standard deadlift—keep your hips slightly lower and shoulders over the bar to mimic the first pull of a clean.",
@@ -155,6 +166,7 @@ export const olympic_foundations: Program = {
             id: 17,
             sets: 3,
             repRange: [8, 12],
+            restTimeSeconds: 60,
             isAmrap: true,
             additionalDescription:
               "Builds tricep and shoulder 'lockout' strength. Essential for supporting heavy weights overhead without collapsing.",

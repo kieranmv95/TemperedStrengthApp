@@ -35,6 +35,7 @@ export const ppl_01: Program = {
           id: week % 2 === 0 ? 1 : 2,
           sets: 3,
           repRange: [8, 10],
+          restTimeSeconds: 150,
           additionalHeader:
             week % 2 === 0 ? "Foundation Strength" : "Stability & Range",
           additionalDescription:
@@ -47,6 +48,7 @@ export const ppl_01: Program = {
           id: 27,
           sets: 3,
           repRange: [10, 12],
+          restTimeSeconds: 60,
           additionalDescription:
             "Keep your core tight and avoid using momentum. Press the weights up in a slight arc so they meet at the top without touching.",
         },
@@ -55,6 +57,7 @@ export const ppl_01: Program = {
           id: 36,
           sets: 3,
           repRange: [12, 15],
+          restTimeSeconds: 60,
           additionalHeader: "Constant Tension",
           additionalDescription:
             "Do not fully lock out at the end of the movement. Keep the tension on the pectorals throughout the entire set. Think about hugging a large tree.",
@@ -64,6 +67,7 @@ export const ppl_01: Program = {
           id: 33,
           sets: 3,
           repRange: [12, 15],
+          restTimeSeconds: 60,
           isAmrap: week === 3,
           additionalDescription:
             "Keep your elbows tucked and stationary. Only your forearms should move. On the final week, push until your form starts to break.",
@@ -82,6 +86,7 @@ export const ppl_01: Program = {
           id: week % 2 === 0 ? 7 : 8,
           sets: 3,
           repRange: [8, 10],
+          restTimeSeconds: 120,
           additionalHeader: "Back Thickness",
           additionalDescription:
             "Think of your hands as hooks. Pull with your elbows and imagine trying to put them in your back pockets to fully engage the lats.",
@@ -91,6 +96,7 @@ export const ppl_01: Program = {
           id: 10,
           sets: 3,
           repRange: [6, 10],
+          restTimeSeconds: 120,
           additionalDescription:
             "Pull your chest to the bar, not just your chin. Squeeze your shoulder blades together at the top of every rep.",
         },
@@ -99,6 +105,7 @@ export const ppl_01: Program = {
           id: 35,
           sets: 3,
           repRange: [15, 20],
+          restTimeSeconds: 60,
           additionalDescription:
             "A high-rep 'pump' movement. Pull the rope toward your eyes and pull the ends apart to target the rear deltoids and traps.",
         },
@@ -107,6 +114,7 @@ export const ppl_01: Program = {
           id: 32,
           sets: 3,
           repRange: [10, 12],
+          restTimeSeconds: 60,
           isAmrap: true,
           additionalHeader: "Bicep Peak",
           additionalDescription:
@@ -126,6 +134,7 @@ export const ppl_01: Program = {
           id: week % 2 === 0 ? 4 : 19,
           sets: 3,
           repRange: [8, 10],
+          restTimeSeconds: 150,
           additionalHeader: "Posterior & Anterior Load",
           additionalDescription:
             week % 2 === 0
@@ -137,6 +146,7 @@ export const ppl_01: Program = {
           id: 23,
           sets: 3,
           repRange: [10, 12],
+          restTimeSeconds: 120,
           additionalDescription:
             "Focus on the 'hinge.' Push your hips as far back as possible until you feel a deep stretch in your hamstrings, then snap forward.",
         },
@@ -145,6 +155,7 @@ export const ppl_01: Program = {
           id: 39,
           sets: 3,
           repRange: [12, 15],
+          restTimeSeconds: 60,
           additionalHeader: "Quad Isolation",
           additionalDescription:
             "Pause for 1 second at the top of each rep with legs fully extended to maximize the contraction of the rectus femoris.",
@@ -154,6 +165,7 @@ export const ppl_01: Program = {
           id: 31,
           sets: 3,
           repRange: [10, 15],
+          restTimeSeconds: 60,
           isAmrap: true,
           additionalDescription:
             "Keep your legs as straight as possible. Curl your pelvis toward your belly button at the top to engage the lower abdominals.",

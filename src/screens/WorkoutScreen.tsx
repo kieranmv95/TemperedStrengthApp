@@ -24,13 +24,21 @@ import {
 } from "../utils/program";
 import {
   clearFutureWorkoutData,
+  clearRestTimer,
   getActiveProgramId,
   getExerciseSwapsForDay,
   getProgramStartDate,
+  getRestTimer,
   getWorkoutNotes,
+  saveRestTimer,
   saveWorkoutNotes,
   setProgramStartDate,
+  RestTimerState,
 } from "../utils/storage";
+import {
+  cancelRestTimerNotification,
+  scheduleRestTimerNotification,
+} from "../utils/restTimerNotifications";
 import { RestDayScreen } from "./RestDayScreen";
 
 interface ExerciseSlot {
@@ -69,6 +77,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [swapRefreshCounter, setSwapRefreshCounter] = useState(0);
   const [notes, setNotes] = useState<string>("");
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
+  const [restTimer, setRestTimer] = useState<RestTimerState | null>(null);
   const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
   const notesInputRef = useRef<TextInput>(null);
@@ -192,6 +201,37 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     loadWorkoutData();
   }, [loadWorkoutData]);
 
+  const loadRestTimerState = useCallback(async () => {
+    try {
+      const timer = await getRestTimer();
+      if (!timer) {
+        setRestTimer(null);
+        return;
+      }
+
+      const endTime = timer.startedAt + timer.restTimeSeconds * 1000;
+      if (timer.status === "running" && Date.now() >= endTime) {
+        const completedTimer: RestTimerState = {
+          ...timer,
+          status: "completed",
+          completedAt: Date.now(),
+        };
+        setRestTimer(completedTimer);
+        await saveRestTimer(completedTimer);
+        return;
+      }
+
+      setRestTimer(timer);
+    } catch (error) {
+      console.error("Error loading rest timer:", error);
+      setRestTimer(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadRestTimerState();
+  }, [loadRestTimerState]);
+
   const handleDaySelect = async (dayIdx: number) => {
     // Always allow viewing any day
     setSelectedDayIndex(dayIdx);
@@ -262,6 +302,70 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     setCurrentSwapSlot(exerciseSlotIndex);
     setSwapModalVisible(true);
   };
+
+  const handleRestStart = useCallback(
+    async (payload: {
+      dayIndex: number;
+      slotIndex: number;
+      exerciseId: number | null;
+      restTimeSeconds: number;
+      exerciseName?: string;
+    }) => {
+      if (!payload.restTimeSeconds) return;
+      try {
+        if (restTimer?.notificationId) {
+          await cancelRestTimerNotification(restTimer.notificationId);
+        }
+
+        const notificationId = await scheduleRestTimerNotification(
+          payload.restTimeSeconds,
+          payload.exerciseName
+        );
+
+        const newTimer: RestTimerState = {
+          dayIndex: payload.dayIndex,
+          slotIndex: payload.slotIndex,
+          exerciseId: payload.exerciseId,
+          restTimeSeconds: payload.restTimeSeconds,
+          startedAt: Date.now(),
+          status: "running",
+          notificationId,
+        };
+        setRestTimer(newTimer);
+        await saveRestTimer(newTimer);
+      } catch (error) {
+        console.error("Error starting rest timer:", error);
+      }
+    },
+    [restTimer]
+  );
+
+  const handleRestDismiss = useCallback(async () => {
+    try {
+      if (restTimer?.notificationId) {
+        await cancelRestTimerNotification(restTimer.notificationId);
+      }
+      setRestTimer(null);
+      await clearRestTimer();
+    } catch (error) {
+      console.error("Error clearing rest timer:", error);
+    }
+  }, [restTimer]);
+
+  const handleRestComplete = useCallback(async () => {
+    if (!restTimer || restTimer.status === "completed") return;
+    try {
+      const completedTimer: RestTimerState = {
+        ...restTimer,
+        status: "completed",
+        completedAt: Date.now(),
+      };
+      setRestTimer(completedTimer);
+      await saveRestTimer(completedTimer);
+    } catch (error) {
+      console.error("Error completing rest timer:", error);
+    }
+  }, [restTimer]);
 
   // Get only exercise slots for swap modal calculations
   const getExerciseSlots = useCallback(() => {
@@ -443,6 +547,12 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
               } else {
                 const currentExerciseIndex = exerciseSlotIndex;
                 exerciseSlotIndex++;
+                const restTimerForSlot =
+                  restTimer &&
+                  restTimer.dayIndex === selectedDayIndex &&
+                  restTimer.slotIndex === currentExerciseIndex
+                    ? restTimer
+                    : null;
                 return (
                   <ExerciseCard
                     key={`${selectedDayIndex}-${index}-${slot.exerciseId}-${swapRefreshCounter}`}
@@ -452,6 +562,10 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                     dayIndex={selectedDayIndex}
                     slotIndex={currentExerciseIndex}
                     onSwap={() => handleSwapClick(currentExerciseIndex)}
+                    restTimer={restTimerForSlot}
+                    onRestStart={handleRestStart}
+                    onRestDismiss={handleRestDismiss}
+                    onRestComplete={handleRestComplete}
                   />
                 );
               }

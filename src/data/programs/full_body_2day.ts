@@ -40,6 +40,7 @@ export const full_body_2day: Program = {
             id: cycle === 1 ? 19 : 4,
             sets: 3,
             repRange: [8, 10],
+            restTimeSeconds: cycle === 1 ? 120 : 150,
             additionalHeader: cycle === 1 ? "Controlled Load" : "Core Demand",
             additionalDescription:
               cycle === 1
@@ -52,6 +53,7 @@ export const full_body_2day: Program = {
             id: 1,
             sets: 3,
             repRange: [8, 10],
+            restTimeSeconds: 150,
             additionalDescription:
               "Maintain a slight arch in your back and keep your shoulder blades 'tucked' into the bench. Think about bending the bar to engage your chest.",
           },
@@ -60,6 +62,7 @@ export const full_body_2day: Program = {
             id: cycle === 2 ? 45 : 7,
             sets: 3,
             repRange: [8, 10],
+            restTimeSeconds: 120,
             additionalDescription:
               cycle === 2
                 ? "T-Bar Row: Focus on pulling with your elbows rather than your hands. Squeeze your mid-back at the peak of the contraction."
@@ -71,6 +74,7 @@ export const full_body_2day: Program = {
             id: 24,
             sets: 3,
             repRange: [15, 20],
+            restTimeSeconds: 60,
             isAmrap: true,
             additionalHeader: "Glute Finisher",
             additionalDescription:
@@ -90,6 +94,7 @@ export const full_body_2day: Program = {
             id: 14,
             sets: 3,
             repRange: [5, 8],
+            restTimeSeconds: 180,
             additionalHeader: "Primary Pull",
             additionalDescription:
               "The king of posterior chain movements. Pull the slack out of the bar before lifting. Keep the bar in contact with your shins throughout.",
@@ -100,6 +105,7 @@ export const full_body_2day: Program = {
             id: cycle === 1 ? 27 : 26,
             sets: 3,
             repRange: [8, 10],
+            restTimeSeconds: 120,
             additionalHeader: "Vertical Drive",
             additionalDescription:
               cycle === 1
@@ -111,6 +117,7 @@ export const full_body_2day: Program = {
             id: 10,
             sets: 3,
             repRange: [8, 12],
+            restTimeSeconds: 120,
             isAmrap: true,
             additionalDescription:
               "The ultimate test of upper body relative strength. Aim for full extension at the bottom and chin over the bar at the top.",
@@ -121,6 +128,7 @@ export const full_body_2day: Program = {
             id: 5,
             sets: 3,
             repRange: [12, 15],
+            restTimeSeconds: 60,
             additionalDescription:
               "A goblet squat helps correct squat mechanics. Keep your elbows inside your knees at the bottom to open up the hips.",
           },

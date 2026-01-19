@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 import { getExerciseById } from "../data/exercises";
+import { RestTimer } from "./RestTimer";
 import { Exercise as ProgramExercise } from "../utils/program";
 import {
   clearLoggedSet,
@@ -18,6 +19,7 @@ import {
   saveCustomSetCount,
   saveLoggedSet,
 } from "../utils/storage";
+import type { RestTimerState } from "../utils/storage";
 
 interface ExerciseCardProps {
   exerciseId: number | null;
@@ -26,6 +28,18 @@ interface ExerciseCardProps {
   dayIndex: number | null;
   slotIndex: number;
   onSwap: () => void;
+  restTimer: RestTimerState | null;
+  onRestStart: (payload: RestTimerStartPayload) => void;
+  onRestDismiss: () => void;
+  onRestComplete: () => void;
+}
+
+interface RestTimerStartPayload {
+  dayIndex: number;
+  slotIndex: number;
+  exerciseId: number | null;
+  restTimeSeconds: number;
+  exerciseName?: string;
 }
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
@@ -35,6 +49,10 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   dayIndex,
   slotIndex,
   onSwap,
+  restTimer,
+  onRestStart,
+  onRestDismiss,
+  onRestComplete,
 }) => {
   const { isPro } = useSubscription();
   const [weights, setWeights] = useState<string[]>([]);
@@ -240,6 +258,15 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           repsNum,
           "completed"
         );
+        if (programExercise?.restTimeSeconds) {
+          onRestStart({
+            dayIndex,
+            slotIndex,
+            exerciseId,
+            restTimeSeconds: programExercise.restTimeSeconds,
+            exerciseName: exercise?.name,
+          });
+        }
       } else if (currentState === "completed") {
         // Completed -> Failed (red)
         newSetStates.set(setIndex, "failed");
@@ -474,6 +501,13 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         );
       })}
 
+      {restTimer && (
+        <RestTimer
+          timer={restTimer}
+          onDismiss={onRestDismiss}
+          onComplete={onRestComplete}
+        />
+      )}
       {programExercise?.canSwap !== false && (
         <View style={styles.swapButtonContainer}>
           <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
