@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { supabase } from "../lib/supabase";
-import { exerciseService } from "../services/exerciseService";
+import { exerciseService } from "./exerciseService";
 
 jest.mock("../lib/supabase", () => ({
   supabase: {

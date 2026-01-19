@@ -1,4 +1,4 @@
-import { getProgramById, programs } from "../utils/program";
+import { getProgramById, programs } from "./program";
 
 describe("program utilities", () => {
   it("returns the matching program by id", () => {
