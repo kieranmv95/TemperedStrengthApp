@@ -39,7 +39,6 @@ interface RestTimerStartPayload {
   slotIndex: number;
   exerciseId: number | null;
   restTimeSeconds: number;
-  exerciseName?: string;
 }
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
@@ -69,6 +68,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   const exercise = exerciseId ? getExerciseById(exerciseId) : null;
   const defaultNumberOfSets = programExercise?.sets || 1;
   const [numberOfSets, setNumberOfSets] = useState(defaultNumberOfSets);
+  const restTimeSeconds = programExercise?.restTimeSeconds;
 
   // Check if exercise has been swapped (deviation from program)
   const isSwapped =
@@ -258,15 +258,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           repsNum,
           "completed"
         );
-        if (programExercise?.restTimeSeconds) {
-          onRestStart({
-            dayIndex,
-            slotIndex,
-            exerciseId,
-            restTimeSeconds: programExercise.restTimeSeconds,
-            exerciseName: exercise?.name,
-          });
-        }
       } else if (currentState === "completed") {
         // Completed -> Failed (red)
         newSetStates.set(setIndex, "failed");
@@ -421,6 +412,21 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           >
             <Ionicons name="add-circle-outline" size={24} color="#c9b072" />
           </TouchableOpacity>
+          {restTimeSeconds && dayIndex !== null && (
+            <TouchableOpacity
+              style={styles.restTimerButton}
+              onPress={() =>
+                onRestStart({
+                  dayIndex,
+                  slotIndex,
+                  exerciseId,
+                  restTimeSeconds,
+                })
+              }
+            >
+              <Ionicons name="time-outline" size={20} color="#c9b072" />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
@@ -587,6 +593,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+  },
+  restTimerButton: {
+    padding: 4,
+    borderWidth: 1,
+    borderColor: "#2A2A2A",
+    borderRadius: 6,
   },
   setControlButton: {
     padding: 4,

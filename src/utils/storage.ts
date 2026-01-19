@@ -57,7 +57,6 @@ export interface RestTimerState {
   startedAt: number;
   status: "running" | "completed";
   completedAt?: number;
-  notificationId?: string | null;
 }
 
 /**

@@ -35,10 +35,6 @@ import {
   setProgramStartDate,
   RestTimerState,
 } from "../utils/storage";
-import {
-  cancelRestTimerNotification,
-  scheduleRestTimerNotification,
-} from "../utils/restTimerNotifications";
 import { RestDayScreen } from "./RestDayScreen";
 
 interface ExerciseSlot {
@@ -309,19 +305,9 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       slotIndex: number;
       exerciseId: number | null;
       restTimeSeconds: number;
-      exerciseName?: string;
     }) => {
       if (!payload.restTimeSeconds) return;
       try {
-        if (restTimer?.notificationId) {
-          await cancelRestTimerNotification(restTimer.notificationId);
-        }
-
-        const notificationId = await scheduleRestTimerNotification(
-          payload.restTimeSeconds,
-          payload.exerciseName
-        );
-
         const newTimer: RestTimerState = {
           dayIndex: payload.dayIndex,
           slotIndex: payload.slotIndex,
@@ -329,7 +315,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           restTimeSeconds: payload.restTimeSeconds,
           startedAt: Date.now(),
           status: "running",
-          notificationId,
         };
         setRestTimer(newTimer);
         await saveRestTimer(newTimer);
@@ -342,9 +327,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
   const handleRestDismiss = useCallback(async () => {
     try {
-      if (restTimer?.notificationId) {
-        await cancelRestTimerNotification(restTimer.notificationId);
-      }
       setRestTimer(null);
       await clearRestTimer();
     } catch (error) {
