@@ -2,15 +2,10 @@ import React from "react";
 import { render, act } from "@testing-library/react-native";
 import { RestTimer } from "../components/RestTimer";
 
-jest.mock("react-native", () => {
-  const actual = jest.requireActual("react-native");
-  return {
-    ...actual,
-    AppState: {
-      addEventListener: jest.fn(() => ({ remove: jest.fn() })),
-    },
-  };
-});
+jest.mock("react-native/Libraries/AppState/AppState", () => ({
+  addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+  currentState: "active",
+}));
 
 describe("RestTimer", () => {
   beforeEach(() => {
