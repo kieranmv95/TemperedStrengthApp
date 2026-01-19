@@ -42,6 +42,7 @@ export const strength_5day: Program = {
             id: 1,
             sets: 4,
             repRange: reps,
+            restTimeSeconds: intensity >= 9 ? 180 : 150,
             additionalHeader: "Main Power Lift",
             additionalDescription:
               "Maintain a tight arch and drive your feet into the floor. As reps drop, increase the rest time between sets to ensure maximum power output.",
@@ -52,6 +53,7 @@ export const strength_5day: Program = {
             id: 7,
             sets: 4,
             repRange: reps,
+            restTimeSeconds: 120,
             additionalDescription:
               "Brace your core and keep your back flat. Avoid 'shrugging' the weight; pull with your elbows to target the mid-back and lats.",
           },
@@ -60,6 +62,7 @@ export const strength_5day: Program = {
             id: 18,
             sets: 3,
             repRange: [10, 12],
+            restTimeSeconds: 90,
             additionalDescription:
               "Higher incline targets the upper clavicular head of the chest. Control the weight on the way down for a deep stretch.",
           },
@@ -68,6 +71,7 @@ export const strength_5day: Program = {
             id: 30,
             sets: 3,
             repRange: [10, 12],
+            restTimeSeconds: 90,
             additionalDescription:
               "Maintain a slight bend in the knees. Focus on pulling the handle to your belly button while keeping your shoulders down.",
           },
@@ -86,6 +90,7 @@ export const strength_5day: Program = {
             id: 4,
             sets: 5,
             repRange: reps,
+            restTimeSeconds: intensity >= 9 ? 180 : 150,
             additionalHeader: "Primary Mover",
             additionalDescription:
               "Sit back into the movement and keep your chest proud. In the 'Peak' phase (Weeks 5-6), focus on a fast, aggressive ascent.",
@@ -96,6 +101,7 @@ export const strength_5day: Program = {
             id: 19,
             sets: 3,
             repRange: [8, 10],
+            restTimeSeconds: 90,
             additionalDescription:
               "Keep your feet high on the platform to involve more glutes and hamstrings, or lower to focus on the quads.",
           },
@@ -104,6 +110,7 @@ export const strength_5day: Program = {
             id: 40,
             sets: 3,
             repRange: [12, 15],
+            restTimeSeconds: 60,
             additionalHeader: "Hamstring Isolation",
             additionalDescription:
               "Slow and controlled. Do not let the weight stack 'slam' at the bottom; maintain tension on the hamstrings throughout.",
@@ -113,6 +120,7 @@ export const strength_5day: Program = {
             id: 13,
             sets: 3,
             repRange: [45, 60],
+            restTimeSeconds: 60,
             additionalDescription:
               "Total body tension. Squeeze your glutes and quads to create a rigid bridge, protecting the lower back after heavy squatting.",
           },
@@ -130,6 +138,7 @@ export const strength_5day: Program = {
             id: 26,
             sets: 4,
             repRange: [6, 8],
+            restTimeSeconds: 120,
             additionalHeader: "Strict Press",
             additionalDescription:
               "No leg drive. Keep your core locked. Press the bar in a straight line, pulling your head back slightly as the bar passes your face.",
@@ -140,6 +149,7 @@ export const strength_5day: Program = {
             id: 34,
             sets: 4,
             repRange: [12, 15],
+            restTimeSeconds: 60,
             additionalDescription:
               "Lead with the elbows. Imagine trying to touch the side walls with your dumbbells rather than lifting them 'up'.",
           },
@@ -148,6 +158,7 @@ export const strength_5day: Program = {
             id: 51,
             sets: 3,
             repRange: [10, 12],
+            restTimeSeconds: 60,
             additionalDescription:
               "Neutral grip targets the brachialis and forearms. Keep your wrists straight and avoid swinging.",
           },
@@ -156,6 +167,7 @@ export const strength_5day: Program = {
             id: 54,
             sets: 3,
             repRange: [10, 12],
+            restTimeSeconds: 60,
             additionalDescription:
               "Keep your elbows 'tucked in' toward your ears. Focus on the stretch at the bottom of the movement.",
           },
@@ -173,6 +185,7 @@ export const strength_5day: Program = {
             id: 14,
             sets: 3,
             repRange: [3, 5],
+            restTimeSeconds: 180,
             additionalHeader: "Max Pull",
             additionalDescription:
               "Wedge your hips close to the bar. Pull the slack out before the lift. This is a technical lift—reset your position for every single rep.",
@@ -183,6 +196,7 @@ export const strength_5day: Program = {
             id: 6,
             sets: 3,
             repRange: [8, 10],
+            restTimeSeconds: 90,
             additionalDescription:
               "Elevate your rear foot. Focus on keeping your front knee aligned with your toes. This is brutal but essential for hip stability.",
           },
@@ -191,6 +205,7 @@ export const strength_5day: Program = {
             id: 41,
             sets: 3,
             repRange: [8, 12],
+            restTimeSeconds: 90,
             additionalDescription:
               "The best glute builder. Use a pad for the bar. Squeeze your glutes for a full second at the top of the movement.",
           },
@@ -199,6 +214,7 @@ export const strength_5day: Program = {
             id: 48,
             sets: 3,
             repRange: [12, 15],
+            restTimeSeconds: 60,
             additionalDescription:
               "Exhale sharply as you crunch down. This helps engage the deep abdominal muscles.",
           },
@@ -217,6 +233,7 @@ export const strength_5day: Program = {
             id: 2,
             sets: 3,
             repRange: [10, 12],
+            restTimeSeconds: 90,
             additionalDescription:
               "Focus on the inner chest squeeze. Do not touch the dumbbells together at the top—keep the tension on the muscle.",
           },
@@ -225,6 +242,7 @@ export const strength_5day: Program = {
             id: 11,
             sets: 3,
             repRange: [10, 12],
+            restTimeSeconds: 90,
             additionalDescription:
               "Lean back slightly and pull the bar to your upper chest. Focus on driving your shoulder blades down and back.",
           },
@@ -233,6 +251,7 @@ export const strength_5day: Program = {
             id: 17,
             sets: 3,
             repRange: [8, 12],
+            restTimeSeconds: 90,
             isAmrap: week === 5,
             additionalDescription:
               "Lean forward for more chest, stay upright for more triceps. On Week 6, go until you cannot push back up.",
@@ -242,6 +261,7 @@ export const strength_5day: Program = {
             id: 56,
             sets: 3,
             repRange: [12, 15],
+            restTimeSeconds: 60,
             additionalDescription:
               "Target the rear delts. Squeeze your shoulder blades together at the top. Use light weights and perfect form.",
           },

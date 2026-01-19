@@ -37,6 +37,7 @@ export const olympic_advanced_8wk: Program = {
             id: isPhase2 ? 57 : 59,
             sets: isPhase2 ? 5 : 4,
             repRange: isPhase2 ? [1, 2] : [3, 3],
+            restTimeSeconds: isPhase2 ? 180 : 150,
             additionalHeader: !isPhase2
               ? "Complex: Hang + Full"
               : "Full Snatch",
@@ -49,6 +50,7 @@ export const olympic_advanced_8wk: Program = {
             id: 62,
             sets: 4,
             repRange: [3, 3],
+            restTimeSeconds: 120,
             additionalDescription:
               "Overload the pull. We want to build the 'traps-to-ears' finish. Keep your elbows high and outside; do not let the bar swing out.",
           },
@@ -58,6 +60,7 @@ export const olympic_advanced_8wk: Program = {
             id: 61,
             sets: 3,
             repRange: [5, 5],
+            restTimeSeconds: 120,
             additionalDescription:
               "Builds absolute confidence in the catch. Focus on 'stretching' the bar apart to engage the lats and keep the torso vertical.",
           },
@@ -67,6 +70,7 @@ export const olympic_advanced_8wk: Program = {
             id: 35,
             sets: 3,
             repRange: [12, 15],
+            restTimeSeconds: 60,
             additionalDescription:
               "Prehab for the rotator cuff. Pull the rope toward your forehead and emphasize the external rotation at the end of the movement.",
           },
@@ -84,6 +88,7 @@ export const olympic_advanced_8wk: Program = {
             id: 63,
             sets: 4,
             repRange: isPhase2 ? [1, 1] : [2, 2],
+            restTimeSeconds: isPhase2 ? 180 : 150,
             additionalDescription: isPhase2
               ? "Clean & Jerk singles. Focus on a sharp, aggressive 'drive' in the jerk. Ensure the back knee is bent and weight is balanced between feet."
               : "Focus on the 're-rack.' Keep the elbows up high in the catch of the clean so the bar doesn't slide forward during the transition to the jerk.",
@@ -93,6 +98,7 @@ export const olympic_advanced_8wk: Program = {
             id: 68,
             sets: 5,
             repRange: isPhase2 ? [2, 3] : [5, 5],
+            restTimeSeconds: 150,
             additionalDescription:
               "This is your primary strength builder. No 'soft' catches—treat every rep like you are recovering from a heavy clean.",
           },
@@ -101,6 +107,7 @@ export const olympic_advanced_8wk: Program = {
             id: 69,
             sets: 3,
             repRange: [3, 5],
+            restTimeSeconds: 120,
             additionalDescription:
               "Builds the explosive 'finish' of the clean. Ensure the hips reach full extension before the arms start pulling.",
           },
@@ -109,6 +116,7 @@ export const olympic_advanced_8wk: Program = {
             id: 11,
             sets: 3,
             repRange: [8, 12],
+            restTimeSeconds: 90,
             additionalDescription:
               "Lats are the 'brakes' of the snatch and clean. Use a slow pace to build pulling control.",
           },
@@ -127,6 +135,7 @@ export const olympic_advanced_8wk: Program = {
             id: 57,
             sets: 5,
             repRange: isPhase2 ? [1, 1] : [2, 2],
+            restTimeSeconds: isPhase2 ? 180 : 150,
             additionalDescription:
               "Competition mindset. Clear the mind, find your start position, and execute. Look for consistency in foot landing.",
           },
@@ -135,6 +144,7 @@ export const olympic_advanced_8wk: Program = {
             id: 63,
             sets: 5,
             repRange: isPhase2 ? [1, 1] : [1, 1],
+            restTimeSeconds: isPhase2 ? 180 : 150,
             additionalDescription:
               "Drive through the heels on the clean. In the jerk, focus on a vertical drive—do not let the chest dip forward.",
           },
@@ -143,6 +153,7 @@ export const olympic_advanced_8wk: Program = {
             id: 6,
             sets: 3,
             repRange: [8, 10],
+            restTimeSeconds: 90,
             additionalDescription:
               "Fixes side-to-side imbalances. This prevents 'helicoptering' (rotating) during heavy cleans or snatches.",
           },
@@ -152,6 +163,7 @@ export const olympic_advanced_8wk: Program = {
             id: 22,
             sets: 3,
             repRange: [10, 12],
+            restTimeSeconds: 90,
             additionalDescription:
               "Develops the glute drive needed for the 'second pull.'",
           },
@@ -160,6 +172,7 @@ export const olympic_advanced_8wk: Program = {
             id: 13,
             sets: 3,
             repRange: [45, 60],
+            restTimeSeconds: 60,
             additionalDescription:
               "Anti-extension core strength. This protects the lower back when catching heavy weights overhead.",
           },

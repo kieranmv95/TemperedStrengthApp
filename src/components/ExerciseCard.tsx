@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 import { getExerciseById } from "../data/exercises";
+import { RestTimer } from "./RestTimer";
 import { Exercise as ProgramExercise } from "../utils/program";
 import {
   clearLoggedSet,
@@ -18,6 +19,7 @@ import {
   saveCustomSetCount,
   saveLoggedSet,
 } from "../utils/storage";
+import type { RestTimerState } from "../utils/storage";
 
 interface ExerciseCardProps {
   exerciseId: number | null;
@@ -26,6 +28,17 @@ interface ExerciseCardProps {
   dayIndex: number | null;
   slotIndex: number;
   onSwap: () => void;
+  restTimer: RestTimerState | null;
+  onRestStart: (payload: RestTimerStartPayload) => void;
+  onRestDismiss: () => void;
+  onRestComplete: () => void;
+}
+
+interface RestTimerStartPayload {
+  dayIndex: number;
+  slotIndex: number;
+  exerciseId: number | null;
+  restTimeSeconds: number;
 }
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
@@ -35,6 +48,10 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   dayIndex,
   slotIndex,
   onSwap,
+  restTimer,
+  onRestStart,
+  onRestDismiss,
+  onRestComplete,
 }) => {
   const { isPro } = useSubscription();
   const [weights, setWeights] = useState<string[]>([]);
@@ -51,6 +68,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   const exercise = exerciseId ? getExerciseById(exerciseId) : null;
   const defaultNumberOfSets = programExercise?.sets || 1;
   const [numberOfSets, setNumberOfSets] = useState(defaultNumberOfSets);
+  const restTimeSeconds = programExercise?.restTimeSeconds;
 
   // Check if exercise has been swapped (deviation from program)
   const isSwapped =
@@ -394,6 +412,21 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           >
             <Ionicons name="add-circle-outline" size={24} color="#c9b072" />
           </TouchableOpacity>
+          {restTimeSeconds && dayIndex !== null && (
+            <TouchableOpacity
+              style={styles.restTimerButton}
+              onPress={() =>
+                onRestStart({
+                  dayIndex,
+                  slotIndex,
+                  exerciseId,
+                  restTimeSeconds,
+                })
+              }
+            >
+              <Ionicons name="time-outline" size={20} color="#c9b072" />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
@@ -474,6 +507,13 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         );
       })}
 
+      {restTimer && (
+        <RestTimer
+          timer={restTimer}
+          onDismiss={onRestDismiss}
+          onComplete={onRestComplete}
+        />
+      )}
       {programExercise?.canSwap !== false && (
         <View style={styles.swapButtonContainer}>
           <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
@@ -553,6 +593,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+  },
+  restTimerButton: {
+    padding: 4,
+    borderWidth: 1,
+    borderColor: "#2A2A2A",
+    borderRadius: 6,
   },
   setControlButton: {
     padding: 4,

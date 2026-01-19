@@ -10,6 +10,7 @@ const SWAP_COUNT_KEY = "swap_count";
 const SWAP_COUNT_MONTH_KEY = "swap_count_month";
 const WORKOUT_NOTES_KEY = "workout_notes";
 const FAVORITE_WORKOUTS_KEY = "favorite_workouts";
+const REST_TIMER_KEY = "rest_timer";
 
 export interface ExerciseSwap {
   dayIndex: number;
@@ -46,6 +47,16 @@ export interface CustomSetCounts {
 
 export interface WorkoutNotes {
   [dayIndex: number]: string; // notes for each workout day
+}
+
+export interface RestTimerState {
+  dayIndex: number;
+  slotIndex: number;
+  exerciseId: number | null;
+  restTimeSeconds: number;
+  startedAt: number;
+  status: "running" | "completed";
+  completedAt?: number;
 }
 
 /**
@@ -533,6 +544,52 @@ export const getWorkoutNotes = async (dayIndex: number): Promise<string> => {
 };
 
 /**
+ * Save the active rest timer state (or clear if null)
+ * @param timer - Rest timer state or null to clear
+ */
+export const saveRestTimer = async (
+  timer: RestTimerState | null
+): Promise<void> => {
+  try {
+    if (!timer) {
+      await AsyncStorage.removeItem(REST_TIMER_KEY);
+      return;
+    }
+
+    await AsyncStorage.setItem(REST_TIMER_KEY, JSON.stringify(timer));
+  } catch (error) {
+    console.error("Error saving rest timer:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get the active rest timer state
+ * @returns Rest timer state or null
+ */
+export const getRestTimer = async (): Promise<RestTimerState | null> => {
+  try {
+    const data = await AsyncStorage.getItem(REST_TIMER_KEY);
+    return data ? (JSON.parse(data) as RestTimerState) : null;
+  } catch (error) {
+    console.error("Error getting rest timer:", error);
+    return null;
+  }
+};
+
+/**
+ * Clear the active rest timer
+ */
+export const clearRestTimer = async (): Promise<void> => {
+  try {
+    await AsyncStorage.removeItem(REST_TIMER_KEY);
+  } catch (error) {
+    console.error("Error clearing rest timer:", error);
+    throw error;
+  }
+};
+
+/**
  * Clear all program data (program ID, start date, swaps, workout logs, notes)
  */
 export const clearProgramData = async (): Promise<void> => {
@@ -543,6 +600,7 @@ export const clearProgramData = async (): Promise<void> => {
     await AsyncStorage.removeItem(WORKOUT_LOGS_KEY);
     await AsyncStorage.removeItem(CUSTOM_SET_COUNTS_KEY);
     await AsyncStorage.removeItem(WORKOUT_NOTES_KEY);
+    await AsyncStorage.removeItem(REST_TIMER_KEY);
   } catch (error) {
     console.error("Error clearing program data:", error);
     throw error;

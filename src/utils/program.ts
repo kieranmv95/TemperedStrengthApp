@@ -14,6 +14,7 @@ export interface Exercise {
   hideReps?: boolean;
   sets: number;
   repRange: [number, number];
+  restTimeSeconds?: number;
   isAmrap?: boolean;
   canSwap?: boolean;
 }

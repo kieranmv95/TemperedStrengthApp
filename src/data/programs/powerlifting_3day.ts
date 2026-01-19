@@ -66,6 +66,7 @@ export const powerlifting_3day: Program = {
             id: 4,
             sets: week < 4 ? 4 : 5,
             repRange: mainReps,
+            restTimeSeconds: isTestingWeek ? 180 : 150,
             hideReps: isTestingWeek ? true : false,
             additionalHeader: isTestingWeek ? "1RM Test" : "Competition Squat",
             additionalDescription: isTestingWeek
@@ -78,6 +79,7 @@ export const powerlifting_3day: Program = {
             id: 22,
             sets: 3,
             repRange: [8, 10],
+            restTimeSeconds: 90,
             additionalDescription:
               "RDLs are here to protect your back. Keep the bar glued to your thighs and stop at mid-shin. You should feel a massive stretch in the hamstrings.",
           },
@@ -86,6 +88,7 @@ export const powerlifting_3day: Program = {
             id: 19,
             sets: 3,
             repRange: [10, 12],
+            restTimeSeconds: 90,
             additionalDescription:
               "Pure quad hypertrophy to support your squat out of the hole. Keep your feet low on the platform to emphasize the knees.",
           },
@@ -94,6 +97,7 @@ export const powerlifting_3day: Program = {
             id: 13,
             sets: 3,
             repRange: [45, 60],
+            restTimeSeconds: 60,
             additionalDescription:
               "Bracing practice. Do not just 'hold' the plank; actively pull your elbows toward your toes to engage the deep core.",
           },
@@ -113,6 +117,7 @@ export const powerlifting_3day: Program = {
             id: 1,
             sets: week < 4 ? 4 : 5,
             repRange: mainReps,
+            restTimeSeconds: isTestingWeek ? 180 : 150,
             hideReps: isTestingWeek ? true : false,
             additionalHeader: isTestingWeek ? "1RM Test" : "Comp Bench",
             additionalDescription: isTestingWeek
@@ -125,6 +130,7 @@ export const powerlifting_3day: Program = {
             id: 26,
             sets: 3,
             repRange: [6, 8],
+            restTimeSeconds: 120,
             additionalDescription:
               "Overhead strength directly correlates to a stable bench press. Keep your ribs tucked; do not let your back arch excessively.",
           },
@@ -133,6 +139,7 @@ export const powerlifting_3day: Program = {
             id: 30,
             sets: 3,
             repRange: [10, 12],
+            restTimeSeconds: 90,
             additionalDescription:
               "A bigger back provides a bigger 'shelf' to bench press from. Squeeze the handle to your sternum.",
           },
@@ -141,6 +148,7 @@ export const powerlifting_3day: Program = {
             id: 54,
             sets: 3,
             repRange: [10, 12],
+            restTimeSeconds: 60,
             additionalDescription:
               "Strong triceps are required for the 'lockout' phase of the bench press. Keep elbows tucked in.",
           },
@@ -160,6 +168,7 @@ export const powerlifting_3day: Program = {
             id: 14,
             sets: 3,
             repRange: mainReps,
+            restTimeSeconds: isTestingWeek ? 180 : 150,
             hideReps: isTestingWeek ? true : false,
             additionalHeader: isTestingWeek ? "1RM Test" : "Comp Deadlift",
             additionalDescription: isTestingWeek
@@ -172,6 +181,7 @@ export const powerlifting_3day: Program = {
             id: 6,
             sets: 3,
             repRange: [8, 10],
+            restTimeSeconds: 90,
             additionalDescription:
               "Unilateral leg strength to prevent 'shooting' one hip up during a heavy deadlift. Stay upright.",
           },
@@ -180,6 +190,7 @@ export const powerlifting_3day: Program = {
             id: 10,
             sets: 3,
             repRange: [8, 12],
+            restTimeSeconds: 120,
             additionalDescription:
               "Lat strength is vital to keeping the bar close to your body during a heavy pull. Do not swing.",
           },
@@ -188,6 +199,7 @@ export const powerlifting_3day: Program = {
             id: 48,
             sets: 3,
             repRange: [12, 15],
+            restTimeSeconds: 60,
             additionalDescription:
               "Abdominal flexion under load. This builds the 'front' side of your brace to protect your lower back.",
           },
