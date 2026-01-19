@@ -176,33 +176,40 @@ export const clearExerciseSwap = async (
   }
 };
 
+const getCurrentYearMonth = (): string => {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  return `${now.getFullYear()}-${month}`;
+};
+
 /**
  * Get current swap count (resets on 1st of each month)
- * @returns Object with count and month
+ * @returns Object with count and year-month
  */
 const getSwapCountData = async (): Promise<{
   count: number;
-  month: number;
+  yearMonth: string;
 }> => {
   try {
     const countData = await AsyncStorage.getItem(SWAP_COUNT_KEY);
     const monthData = await AsyncStorage.getItem(SWAP_COUNT_MONTH_KEY);
 
-    const currentMonth = new Date().getMonth(); // 0-11
-    const storedMonth = monthData ? parseInt(monthData, 10) : null;
+    const currentYearMonth = getCurrentYearMonth();
+    const storedYearMonth =
+      monthData && /^\d{4}-\d{2}$/.test(monthData) ? monthData : null;
 
     // Reset if month changed (new month, reset on 1st)
-    if (storedMonth === null || storedMonth !== currentMonth) {
-      return { count: 0, month: currentMonth };
+    if (storedYearMonth === null || storedYearMonth !== currentYearMonth) {
+      return { count: 0, yearMonth: currentYearMonth };
     }
 
     return {
       count: countData ? parseInt(countData, 10) : 0,
-      month: currentMonth,
+      yearMonth: currentYearMonth,
     };
   } catch (error) {
     console.error("Error getting swap count data:", error);
-    return { count: 0, month: new Date().getMonth() };
+    return { count: 0, yearMonth: getCurrentYearMonth() };
   }
 };
 
@@ -225,14 +232,14 @@ export const getRemainingSwapCount = async (): Promise<number> => {
  */
 export const incrementSwapCount = async (): Promise<number> => {
   try {
-    const { count, month } = await getSwapCountData();
-    const currentMonth = new Date().getMonth();
+    const { count, yearMonth } = await getSwapCountData();
+    const currentYearMonth = getCurrentYearMonth();
 
     // If month changed, reset to 1, otherwise increment
-    const newCount = month !== currentMonth ? 1 : count + 1;
+    const newCount = yearMonth !== currentYearMonth ? 1 : count + 1;
 
     await AsyncStorage.setItem(SWAP_COUNT_KEY, newCount.toString());
-    await AsyncStorage.setItem(SWAP_COUNT_MONTH_KEY, currentMonth.toString());
+    await AsyncStorage.setItem(SWAP_COUNT_MONTH_KEY, currentYearMonth);
 
     return newCount;
   } catch (error) {
