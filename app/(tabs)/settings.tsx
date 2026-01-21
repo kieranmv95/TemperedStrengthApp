@@ -18,7 +18,8 @@ import {
 export default function SettingsScreen() {
   const [hasProgram, setHasProgram] = useState<boolean>(false);
   const [activeProgram, setActiveProgram] = useState<Program | null>(null);
-  const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
+  const {  isLoading: subscriptionLoading, refresh } = useSubscription();
+  const isPro = true;
 
   const checkProgramStatus = async () => {
     try {
@@ -152,6 +153,15 @@ export default function SettingsScreen() {
                   ? "Manage your subscription and access Pro features"
                   : "Unlock all premium features with a subscription"}
               </Text>
+              {isPro && (
+                <View style={styles.proFeaturesList}>
+                  <Text style={styles.proTitle}>Your Pro features include:</Text>
+                  <Text style={styles.proFeatureItem}>- All programs access</Text>
+                  <Text style={styles.proFeatureItem}>- All workout access</Text>
+                  <Text style={styles.proFeatureItem}>- Unlimited exercise swaps</Text>
+                  <Text style={styles.proFeatureItem}>- Early access to new features</Text>
+                </View>
+              )}
             </View>
             <Text style={[styles.settingArrow, isPro && styles.proArrow]}>
               →
@@ -286,7 +296,6 @@ const styles = StyleSheet.create({
   },
   proItem: {
     borderColor: "#c9b072",
-    backgroundColor: "#1A3A2A",
   },
   proArrow: {
     color: "#c9b072",
@@ -308,5 +317,21 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: "700",
     letterSpacing: 0.5,
+  },
+  proTitle: {
+    color: "#c9b072",
+    fontSize: 14,
+    fontWeight: "700",
+    marginBottom: 4,
+  },
+  proFeaturesList: {
+    marginTop: 8,
+    gap: 4,
+  },
+  proFeatureItem: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: "500",
+    lineHeight: 20,
   },
 });

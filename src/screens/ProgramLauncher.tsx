@@ -28,6 +28,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const [showProgramDetails, setShowProgramDetails] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
+  const [showWorkoutDaysMoreInfo, setShowWorkoutDaysMoreInfo] = useState(false);
 
   const handleSelectProgram = (program: Program) => {
     // Allow viewing program details regardless of Pro status
@@ -214,12 +215,21 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 
               {selectedProgram?.daysSplit && (
                 <View>
-                  <Text style={styles.workoutTitle}>Workout Days</Text>
-                  <Text style={styles.programDescription}>
-                    If started on a different day, the program will adjust to
-                    the first day of the program being the first workout. You
-                    can change the session days in the program once started.
+                  <View style={styles.workoutDaysTitleRow}>
+                    <View>
+                      <Text style={styles.workoutTitle}>Workout Days</Text>
+                    </View>
+                    <View>
+                      <TouchableOpacity style={styles.changeDaysButton} onPress={() => setShowWorkoutDaysMoreInfo(!showWorkoutDaysMoreInfo)}>
+                        <Text style={styles.moreInfoButtonText}>Change Days?</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  {showWorkoutDaysMoreInfo && (
+                    <Text style={styles.programDescription}>
+                    The first session working day will be the first day of the program you select. You can change the session days at any time in the program once started.
                   </Text>
+                  )}
                   <View style={styles.daysSplitContainer}>
                     <View
                       style={[
@@ -480,6 +490,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
   },
+  workoutDaysTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+    marginBottom: 8,
+    marginTop: 8,
+  },
+  changeDaysButton: {
+    padding: 3,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#c9b072",
+  },
+  moreInfoButtonText: {
+    color: "#c9b072",
+    fontSize: 9,
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
   programCard: {
     backgroundColor: "#1E1E1E",
     borderRadius: 12,
@@ -686,8 +717,6 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "700",
-    marginBottom: 6,
-    marginTop: 8,
   },
   statsContainer: {
     flexDirection: "row",
