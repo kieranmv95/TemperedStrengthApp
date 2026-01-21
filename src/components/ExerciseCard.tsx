@@ -9,8 +9,8 @@ import {
   View,
 } from "react-native";
 import { getExerciseById } from "../data/exercises";
-import { RestTimer } from "./RestTimer";
 import { Exercise as ProgramExercise } from "../utils/program";
+import type { RestTimerState } from "../utils/storage";
 import {
   clearLoggedSet,
   getCustomSetCount,
@@ -19,7 +19,7 @@ import {
   saveCustomSetCount,
   saveLoggedSet,
 } from "../utils/storage";
-import type { RestTimerState } from "../utils/storage";
+import { RestTimer } from "./RestTimer";
 
 interface ExerciseCardProps {
   exerciseId: number | null;
@@ -430,6 +430,16 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         </View>
       </View>
 
+      {restTimer && (
+        <View style={styles.restTimerContainer}>
+        <RestTimer
+          timer={restTimer}
+            onDismiss={onRestDismiss}
+            onComplete={onRestComplete}
+          />
+        </View>
+      )}
+
       {Array.from({ length: numberOfSets }).map((_, setIndex) => {
         const setState = setStates.get(setIndex);
         const isCompleted = setState === "completed";
@@ -507,13 +517,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         );
       })}
 
-      {restTimer && (
-        <RestTimer
-          timer={restTimer}
-          onDismiss={onRestDismiss}
-          onComplete={onRestComplete}
-        />
-      )}
       {programExercise?.canSwap !== false && (
         <View style={styles.swapButtonContainer}>
           <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
@@ -623,6 +626,9 @@ const styles = StyleSheet.create({
   },
   inputGroup: {
     flex: 1,
+  },
+  restTimerContainer: {
+    marginBottom: 12,
   },
   inputGroupWithCheckmark: {
     flex: 1,
