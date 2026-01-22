@@ -1,6 +1,6 @@
 import { useSubscription } from "@/hooks/use-subscription";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,8 +9,8 @@ import {
   View,
 } from "react-native";
 import { getExerciseById } from "../data/exercises";
-import { RestTimer } from "./RestTimer";
 import { Exercise as ProgramExercise } from "../utils/program";
+import type { RestTimerState } from "../utils/storage";
 import {
   clearLoggedSet,
   getCustomSetCount,
@@ -19,7 +19,7 @@ import {
   saveCustomSetCount,
   saveLoggedSet,
 } from "../utils/storage";
-import type { RestTimerState } from "../utils/storage";
+import { RestTimer } from "./RestTimer";
 
 interface ExerciseCardProps {
   exerciseId: number | null;
@@ -70,6 +70,16 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   const [numberOfSets, setNumberOfSets] = useState(defaultNumberOfSets);
   const restTimeSeconds = programExercise?.restTimeSeconds;
 
+  // Helper function to get default rep value from programExercise repRange
+  const getDefaultRepValue = useCallback((): string => {
+    if (programExercise?.repRange && !programExercise.hideReps && !programExercise.isAmrap) {
+      const [min, max] = programExercise.repRange;
+      // If min and max are the same, use that value; otherwise use the max
+      return (min === max ? min : max).toString();
+    }
+    return "";
+  }, [programExercise]);
+
   // Check if exercise has been swapped (deviation from program)
   const isSwapped =
     exerciseId !== null &&
@@ -112,20 +122,24 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           const initialSetStates: Map<number, "completed" | "failed"> =
             new Map();
 
+          const defaultRepValue = getDefaultRepValue();
+
           for (let i = 0; i < actualSetCount; i++) {
-            if (savedSets[i]) {
-              initialWeights[i] = savedSets[i].weight.toString();
-              initialReps[i] = savedSets[i].reps.toString();
+            const savedSet = savedSets[i];
+            if (savedSet) {
+              // Handle nullable weight: convert null to empty string, otherwise convert to string
+              initialWeights[i] = savedSet.weight === null ? "" : savedSet.weight.toString();
+              initialReps[i] = savedSet.reps.toString();
               // Restore state from storage if available (excluding null which means unchecked)
-              if (savedSets[i].state && savedSets[i].state !== null) {
-                const state = savedSets[i].state;
+              if (savedSet.state && savedSet.state !== null) {
+                const state = savedSet.state;
                 if (state === "completed" || state === "failed") {
                   initialSetStates.set(i, state);
                 }
               }
             } else {
               initialWeights[i] = "";
-              initialReps[i] = "";
+              initialReps[i] = defaultRepValue;
             }
           }
 
@@ -135,21 +149,23 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         } catch (error) {
           console.error("Error loading data:", error);
           // Initialize with empty arrays if error
+          const defaultRepValue = getDefaultRepValue();
           setWeights(Array(defaultNumberOfSets).fill(""));
-          setReps(Array(defaultNumberOfSets).fill(""));
+          setReps(Array(defaultNumberOfSets).fill(defaultRepValue));
           setNumberOfSets(defaultNumberOfSets);
         }
       } else {
         // Initialize arrays for sets
+        const defaultRepValue = getDefaultRepValue();
         setWeights(Array(defaultNumberOfSets).fill(""));
-        setReps(Array(defaultNumberOfSets).fill(""));
+        setReps(Array(defaultNumberOfSets).fill(defaultRepValue));
         setSetStates(new Map());
         setNumberOfSets(defaultNumberOfSets);
       }
     };
 
     loadData();
-  }, [programExercise, defaultNumberOfSets, dayIndex, slotIndex, exerciseId]);
+  }, [programExercise, defaultNumberOfSets, dayIndex, slotIndex, exerciseId, getDefaultRepValue]);
 
   // Cleanup timers on unmount
   useEffect(() => {
@@ -170,12 +186,15 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
       return;
     }
 
-    // Allow empty weight string to be treated as 0 (bodyweight)
-    const weightNum = weightStr ? parseFloat(weightStr) : 0;
+    // Allow empty weight string to be null (nullable)
+    const weightNum = weightStr ? parseFloat(weightStr) : null;
     const repsNum = parseInt(repsStr, 10);
 
-    // Allow weight >= 0 (0 = bodyweight), but reps must be > 0
-    if (isNaN(weightNum) || isNaN(repsNum) || weightNum < 0 || repsNum <= 0) {
+    // Validate: weight can be null or >= 0, reps must be > 0
+    if (weightNum !== null && (isNaN(weightNum) || weightNum < 0)) {
+      return;
+    }
+    if (isNaN(repsNum) || repsNum <= 0) {
       return;
     }
 
@@ -232,12 +251,15 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
       return;
     }
 
-    // Allow empty/0 weight for bodyweight exercises
-    const weightNum = weights[setIndex] ? parseFloat(weights[setIndex]) : 0;
+    // Allow empty weight to be null (nullable)
+    const weightNum = weights[setIndex] ? parseFloat(weights[setIndex]) : null;
     const repsNum = parseInt(reps[setIndex], 10);
 
-    // Allow weight >= 0 (0 = bodyweight), but reps must be > 0
-    if (isNaN(weightNum) || isNaN(repsNum) || weightNum < 0 || repsNum <= 0) {
+    // Validate: weight can be null or >= 0, reps must be > 0
+    if (weightNum !== null && (isNaN(weightNum) || weightNum < 0)) {
+      return;
+    }
+    if (isNaN(repsNum) || repsNum <= 0) {
       return;
     }
 
@@ -400,10 +422,11 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             style={styles.setControlButton}
             onPress={async () => {
               if (dayIndex !== null) {
+                const defaultRepValue = getDefaultRepValue();
                 const newCount = numberOfSets + 1;
                 setNumberOfSets(newCount);
                 setWeights((prev) => [...prev, ""]);
-                setReps((prev) => [...prev, ""]);
+                setReps((prev) => [...prev, defaultRepValue]);
 
                 // Save custom set count
                 await saveCustomSetCount(dayIndex, slotIndex, newCount);
@@ -429,6 +452,16 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           )}
         </View>
       </View>
+
+      {restTimer && (
+        <View style={styles.restTimerContainer}>
+        <RestTimer
+          timer={restTimer}
+            onDismiss={onRestDismiss}
+            onComplete={onRestComplete}
+          />
+        </View>
+      )}
 
       {Array.from({ length: numberOfSets }).map((_, setIndex) => {
         const setState = setStates.get(setIndex);
@@ -507,13 +540,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         );
       })}
 
-      {restTimer && (
-        <RestTimer
-          timer={restTimer}
-          onDismiss={onRestDismiss}
-          onComplete={onRestComplete}
-        />
-      )}
       {programExercise?.canSwap !== false && (
         <View style={styles.swapButtonContainer}>
           <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
@@ -623,6 +649,9 @@ const styles = StyleSheet.create({
   },
   inputGroup: {
     flex: 1,
+  },
+  restTimerContainer: {
+    marginBottom: 12,
   },
   inputGroupWithCheckmark: {
     flex: 1,

@@ -26,7 +26,7 @@ export interface ExerciseSwaps {
 }
 
 export interface LoggedSet {
-  weight: number;
+  weight: number | null;
   reps: number;
   state?: "completed" | "failed" | null;
 }
@@ -265,7 +265,7 @@ export const saveLoggedSet = async (
   dayIndex: number,
   slotIndex: number,
   setIndex: number,
-  weight: number,
+  weight: number | null,
   reps: number,
   state?: "completed" | "failed" | null
 ): Promise<void> => {

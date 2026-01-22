@@ -17,7 +17,7 @@ export const standard_warmup: Warmup = {
 export const ppl_01: Program = {
   id: "ppl_01",
   isPro: false,
-  name: "Push/Pull/Legs (PPL)",
+  name: "Push / Pull / Legs",
   description:
     "4-Week Hypertrophy block. Rotates intensity and exercise variations to maximize muscle fiber recruitment.",
   daysSplit: ["mon", "wed", "fri"],

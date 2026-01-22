@@ -76,7 +76,6 @@ export const RestTimer: React.FC<RestTimerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 12,
     padding: 12,
     borderRadius: 10,
     backgroundColor: "#151515",
