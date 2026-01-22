@@ -18,8 +18,7 @@ import {
 export default function SettingsScreen() {
   const [hasProgram, setHasProgram] = useState<boolean>(false);
   const [activeProgram, setActiveProgram] = useState<Program | null>(null);
-  const {  isLoading: subscriptionLoading, refresh } = useSubscription();
-  const isPro = true;
+  const {  isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
 
   const checkProgramStatus = async () => {
     try {
