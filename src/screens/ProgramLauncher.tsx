@@ -94,6 +94,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     // Calculate number of weeks from the maximum dayIndex
     const maxDayIndex = Math.max(...program.workouts.map((w) => w.dayIndex));
     const weekCount = Math.ceil((maxDayIndex + 1) / 7);
+    // Calculate sessions per week from daysSplit if available
+    const sessionsPerWeek = program.daysSplit?.length || 0;
 
     return (
       <TouchableOpacity
@@ -126,6 +128,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           <Text style={styles.programStats}>
             {program.workouts.length} workouts • {weekCount}{" "}
             {weekCount === 1 ? "week" : "weeks"}
+            {sessionsPerWeek > 0 && ` • ${sessionsPerWeek} sessions/week`}
           </Text>
         </View>
         <Text
