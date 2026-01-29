@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { getExerciseById } from "../data/exercises";
 import { Program, programs } from "../utils/program";
 import { setActiveProgramId, setProgramStartDate } from "../utils/storage";
 
@@ -366,6 +367,19 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       {workout.description}
                     </Text>
                   )}
+                  {(() => {
+                    const exerciseIds = workout.exercises
+                      .filter((ex) => ex.type === "exercise")
+                      .map((ex) => (ex as { id: number }).id);
+                    const exerciseNames = exerciseIds
+                      .map((id) => getExerciseById(id)?.name)
+                      .filter((name): name is string => name !== undefined);
+                    return exerciseNames.length > 0 ? (
+                      <Text style={styles.workoutExercisesList}>
+                        {exerciseNames.join(", ")}
+                      </Text>
+                    ) : null;
+                  })()}
                   <View style={styles.workoutMeta}>
                     <Text style={styles.workoutExercises}>
                       {workout.exercises.length} exercises
@@ -766,6 +780,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     marginBottom: 12,
+  },
+  workoutExercisesList: {
+    color: "#c9b072",
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 12,
+    fontStyle: "italic",
   },
   workoutMeta: {
     flexDirection: "row",
