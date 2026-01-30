@@ -13,11 +13,11 @@ export const standard_warmup: Warmup = {
   ],
 };
 
-// 1. PUSH PULL LEGS (4 Weeks)
+// 1. 3 DAY SPLIT (4 Weeks)
 export const ppl_01: Program = {
   id: "ppl_01",
   isPro: false,
-  name: "Push / Pull / Legs",
+  name: "3 Day Split",
   description:
     "4-Week Hypertrophy block. Rotates intensity and exercise variations to maximize muscle fiber recruitment.",
   daysSplit: ["mon", "wed", "fri"],

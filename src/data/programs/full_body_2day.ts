@@ -17,7 +17,7 @@ export const full_body_warmup: Warmup = {
 export const full_body_2day: Program = {
   isPro: false,
   id: "full_body_2day",
-  name: "Weekend Warrior",
+  name: "2 Day Full Body",
   description:
     "12-Week Full Body Maintenance. Alternates movement variants monthly to prevent plateaus.",
   daysSplit: ["sat", "sun"],

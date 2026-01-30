@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { getExerciseById } from "../data/exercises";
 import { Program, programs } from "../utils/program";
 import { setActiveProgramId, setProgramStartDate } from "../utils/storage";
 
@@ -94,6 +95,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     // Calculate number of weeks from the maximum dayIndex
     const maxDayIndex = Math.max(...program.workouts.map((w) => w.dayIndex));
     const weekCount = Math.ceil((maxDayIndex + 1) / 7);
+    // Calculate sessions per week from daysSplit if available
+    const sessionsPerWeek = program.daysSplit?.length || 0;
 
     return (
       <TouchableOpacity
@@ -126,6 +129,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           <Text style={styles.programStats}>
             {program.workouts.length} workouts • {weekCount}{" "}
             {weekCount === 1 ? "week" : "weeks"}
+            {sessionsPerWeek > 0 && ` • ${sessionsPerWeek} sessions/week`}
           </Text>
         </View>
         <Text
@@ -363,6 +367,19 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       {workout.description}
                     </Text>
                   )}
+                  {(() => {
+                    const exerciseIds = workout.exercises
+                      .filter((ex) => ex.type === "exercise")
+                      .map((ex) => (ex as { id: number }).id);
+                    const exerciseNames = exerciseIds
+                      .map((id) => getExerciseById(id)?.name)
+                      .filter((name): name is string => name !== undefined);
+                    return exerciseNames.length > 0 ? (
+                      <Text style={styles.workoutExercisesList}>
+                        {exerciseNames.join(", ")}
+                      </Text>
+                    ) : null;
+                  })()}
                   <View style={styles.workoutMeta}>
                     <Text style={styles.workoutExercises}>
                       {workout.exercises.length} exercises
@@ -763,6 +780,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     marginBottom: 12,
+  },
+  workoutExercisesList: {
+    color: "#c9b072",
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 12,
+    fontStyle: "italic",
   },
   workoutMeta: {
     flexDirection: "row",
