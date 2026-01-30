@@ -15,7 +15,7 @@ export const articles: Article[] = [
     title: "The Science of Progressive Overload",
     subtitle: "Why adding weight isn't the only way to grow stronger",
     category: "Methodology",
-    readTime: 8,
+    readTime: 4,
     image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800",
     isFeatured: true,
     content: `Progressive overload is the gradual increase of stress placed upon the body during training. While most people think this means simply adding more weight to the bar, there are actually multiple ways to achieve progressive overload.
@@ -46,7 +46,7 @@ export const articles: Article[] = [
     title: "Nutrition Timing: Does It Really Matter?",
     subtitle: "Separating fact from fitness industry fiction",
     category: "Nutrition",
-    readTime: 6,
+    readTime: 4,
     image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800",
     content: `The fitness industry has long perpetuated the myth of the "anabolic window" – the idea that you must consume protein within 30 minutes of your workout or lose your gains.
     
@@ -72,7 +72,7 @@ export const articles: Article[] = [
     title: "Sleep: The Ultimate Performance Enhancer",
     subtitle: "How 8 hours beats any supplement on the market",
     category: "Recovery",
-    readTime: 5,
+    readTime: 4,
     image: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=800",
     content: `You can have the perfect training program and dial in your nutrition, but without adequate sleep, you're leaving gains on the table.
     
@@ -98,7 +98,7 @@ export const articles: Article[] = [
     title: "Mental Toughness in Training",
     subtitle: "Building an unbreakable mindset under the bar",
     category: "Mindset",
-    readTime: 7,
+    readTime: 4,
     image: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800",
     content: `The difference between a good lifter and a great one often comes down to what happens between the ears. Mental toughness isn't something you're born with – it's trained.
     
@@ -125,7 +125,7 @@ export const articles: Article[] = [
     title: "Mastering the Squat Depth",
     subtitle: "How to improve mobility for a deeper, safer squat",
     category: "Technique",
-    readTime: 9,
+    readTime: 4,
     image: "https://images.unsplash.com/photo-1574673003875-4a2ad2bcd5b5?w=800",
     content: `Squatting deep isn't just for show—it engages more muscle fibers and ensures better joint health.
     
@@ -151,7 +151,7 @@ export const articles: Article[] = [
     title: "Active Recovery vs. Passive Rest",
     subtitle: "When to move and when to sit still",
     category: "Recovery",
-    readTime: 5,
+    readTime: 4,
     image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800",
     content: `Should you spend your day off on the couch or on a light walk? The answer depends on your training intensity.
     
@@ -178,7 +178,7 @@ export const articles: Article[] = [
     title: "The Hierarchy of Hydration",
     subtitle: "Why water is the most underrated ergogenic aid",
     category: "Nutrition",
-    readTime: 6,
+    readTime: 4,
     image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=800",
     content: `A mere 2% drop in body water levels can lead to a significant decrease in physical performance.
     
@@ -203,7 +203,7 @@ export const articles: Article[] = [
     title: "Mastering the Conventional Deadlift",
     subtitle: "Technical pillars for a powerful, pain-free pull",
     category: "Technique",
-    readTime: 10,
+    readTime: 4,
     image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800",
     content: `The deadlift is the ultimate test of strength. Success lies in the setup.
     
@@ -230,7 +230,7 @@ export const articles: Article[] = [
     title: "Consistency vs. Intensity",
     subtitle: "The math of long-term body transformation",
     category: "Mindset",
-    readTime: 5,
+    readTime: 4,
     image: "https://images.unsplash.com/photo-1550345332-09e3ac987658?w=800",
     content: `A world-class program followed for two weeks is useless compared to a basic program followed for two years.
     
@@ -251,7 +251,7 @@ export const articles: Article[] = [
     title: "Injury Prevention 101",
     subtitle: "Understanding the difference between pain and strain",
     category: "Recovery",
-    readTime: 7,
+    readTime: 4,
     image: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=800",
     content: `Injury is the fastest way to halt progress. Understanding biofeedback is essential for longevity.
     
