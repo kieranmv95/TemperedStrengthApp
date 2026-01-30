@@ -21,6 +21,7 @@ export const full_body_2day: Program = {
   description:
     "12-Week Full Body Maintenance. Alternates movement variants monthly to prevent plateaus.",
   daysSplit: ["sat", "sun"],
+  averageSessionDuration: "60 min",
   workouts: Array.from({ length: 12 }).flatMap((_, week) => {
     const cycle = Math.floor(week / 4);
     const cycleNames = ["Foundation", "Stability", "Hypertrophy"];

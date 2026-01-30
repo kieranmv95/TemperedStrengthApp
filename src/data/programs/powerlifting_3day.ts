@@ -45,6 +45,7 @@ export const powerlifting_3day: Program = {
   description:
     "8-Week Peaking Program. Volume drops as intensity climbs to a Week 8 testing session.",
   daysSplit: ["mon", "wed", "fri"],
+  averageSessionDuration: "60 min",
   workouts: Array.from({ length: 8 }).flatMap((_, week) => {
     const isTestingWeek = week === 7;
     const mainReps: [number, number] =

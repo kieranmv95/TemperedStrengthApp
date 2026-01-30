@@ -130,6 +130,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
             {program.workouts.length} workouts • {weekCount}{" "}
             {weekCount === 1 ? "week" : "weeks"}
             {sessionsPerWeek > 0 && ` • ${sessionsPerWeek} sessions/week`}
+            {program.averageSessionDuration && ` • ${program.averageSessionDuration}`}
           </Text>
         </View>
         <Text
@@ -193,6 +194,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 
               <Text style={styles.sectionTitle}>Program Overview</Text>
 
+            <View style={styles.programOverviewContainer}>
               <View style={styles.statsContainer}>
                 <View style={styles.statItem}>
                   <Text style={styles.statValue}>
@@ -216,6 +218,16 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                     );
                   })()}
               </View>
+
+              {selectedProgram?.averageSessionDuration && (
+                <View style={styles.statItem}>
+                  <Text style={styles.statValue}>
+                    {selectedProgram.averageSessionDuration}
+                  </Text>
+                  <Text style={styles.statLabel}>Avg Session</Text>
+                </View>
+              )}
+</View>
 
               {selectedProgram?.daysSplit && (
                 <View>
@@ -507,6 +519,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
   },
+  programOverviewContainer: {
+    marginBottom: 24,
+  },
   workoutDaysTitleRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -738,7 +753,7 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: "row",
     gap: 16,
-    marginBottom: 24,
+    marginBottom: 16,
   },
   statItem: {
     flex: 1,

@@ -21,6 +21,7 @@ export const ppl_01: Program = {
   description:
     "4-Week Hypertrophy block. Rotates intensity and exercise variations to maximize muscle fiber recruitment.",
   daysSplit: ["mon", "wed", "fri"],
+  averageSessionDuration: "60 min",
   workouts: Array.from({ length: 4 }).flatMap((_, week) => [
     {
       dayIndex: week * 7 + 0,

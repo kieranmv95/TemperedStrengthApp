@@ -34,6 +34,7 @@ export interface Program {
   workouts: Workout[];
   isPro: boolean;
   daysSplit?: ("mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun")[];
+  averageSessionDuration?: string;
 }
 
 export const programs: Program[] = programList;

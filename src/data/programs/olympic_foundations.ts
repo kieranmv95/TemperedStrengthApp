@@ -16,6 +16,7 @@ export const olympic_foundations: Program = {
   description:
     "4-Week technical build-up for Snatch and Clean & Jerk. Focuses on bar path, speed, and overhead stability.",
   daysSplit: ["mon", "wed", "fri"],
+  averageSessionDuration: "60 min",
   workouts: Array.from({ length: 4 }).flatMap((_, week) => {
     const baseIntensity = 7 + Math.floor(week / 2);
 

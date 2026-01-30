@@ -16,6 +16,7 @@ export const olympic_advanced_8wk: Program = {
   description:
     "8-Week peak. Phase 1: Volume & Positional Strength. Phase 2: Speed & Maximal Singles.",
   daysSplit: ["mon", "wed", "fri"],
+  averageSessionDuration: "60 min",
   workouts: Array.from({ length: 8 }).flatMap((_, week) => {
     const isPhase2 = week >= 4;
     const intensity = isPhase2
