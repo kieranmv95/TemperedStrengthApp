@@ -675,7 +675,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 24,
-    maxHeight: "90%",
+    maxHeight: "95%",
     borderWidth: 1,
     borderColor: "#2A2A2A",
   },
@@ -736,7 +736,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   modalContent: {
-    maxHeight: 400,
+    maxHeight: 500,
   },
   sectionTitle: {
     color: "#FFFFFF",
