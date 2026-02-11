@@ -1,18 +1,14 @@
-import { initializeExercises } from "@/src/data/exercises";
 import { ProgramLauncher } from "@/src/screens/ProgramLauncher";
 import { WorkoutScreen } from "@/src/screens/WorkoutScreen";
 import { getActiveProgramId } from "@/src/utils/storage";
-import { useEffect, useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
 
 export default function HomeScreen() {
   const [hasProgram, setHasProgram] = useState<boolean | null>(null);
 
   const initializeApp = async () => {
     try {
-      // Initialize exercises from Supabase/cache on app load
-      await initializeExercises();
-
       // Check program status
       const programId = await getActiveProgramId();
       setHasProgram(!!programId);
