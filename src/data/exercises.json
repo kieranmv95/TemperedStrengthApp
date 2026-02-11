@@ -1,0 +1,852 @@
+[
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Bodyweight",
+       "id":15,
+       "logging_type":"reps",
+       "muscle":"Abs",
+       "name":"Ab Wheel Rollout",
+       "pattern":"Core",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":83,
+       "logging_type":"reps",
+       "muscle":"Glute Medius",
+       "name":"Abductor Machine",
+       "pattern":"Isolation",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":82,
+       "logging_type":"reps",
+       "muscle":"Adductors",
+       "name":"Adductor Machine",
+       "pattern":"Knee Dominant",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":43,
+       "logging_type":"reps",
+       "muscle":"Shoulders",
+       "name":"Arnold Press",
+       "pattern":"Vertical Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":84,
+       "logging_type":"reps",
+       "muscle":"Back",
+       "name":"Assisted Pull-up Machine",
+       "pattern":"Vertical Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":4,
+       "logging_type":"reps",
+       "muscle":"Quadriceps",
+       "name":"Barbell Back Squat",
+       "pattern":"Knee Dominant",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":1,
+       "logging_type":"reps",
+       "muscle":"Chest",
+       "name":"Barbell Bench Press",
+       "pattern":"Horizontal Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":14,
+       "logging_type":"reps",
+       "muscle":"Posterior Chain",
+       "name":"Barbell Deadlift",
+       "pattern":"Hip Hinge",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":26,
+       "logging_type":"reps",
+       "muscle":"Shoulders",
+       "name":"Barbell Overhead Press",
+       "pattern":"Vertical Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":7,
+       "logging_type":"reps",
+       "muscle":"Back",
+       "name":"Barbell Row",
+       "pattern":"Horizontal Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Bodyweight",
+       "id":21,
+       "logging_type":"reps",
+       "muscle":"Quadriceps",
+       "name":"Bodyweight Squats",
+       "pattern":"Knee Dominant",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":6,
+       "logging_type":"reps",
+       "muscle":"Quadriceps",
+       "name":"Bulgarian Split Squat",
+       "pattern":"Knee Dominant",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Cable",
+       "id":79,
+       "logging_type":"reps",
+       "muscle":"Lower Chest",
+       "name":"Cable Crossover (High to Low)",
+       "pattern":"Horizontal Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Cable",
+       "id":48,
+       "logging_type":"reps",
+       "muscle":"Abs",
+       "name":"Cable Crunch",
+       "pattern":"Core",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Cable",
+       "id":36,
+       "logging_type":"reps",
+       "muscle":"Chest",
+       "name":"Cable Flyes",
+       "pattern":"Horizontal Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":55,
+       "logging_type":"reps",
+       "muscle":"Calves",
+       "name":"Calf Raises",
+       "pattern":"Isolation",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":16,
+       "logging_type":"reps",
+       "muscle":"Chest",
+       "name":"Chest Press Machine",
+       "pattern":"Horizontal Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Bodyweight",
+       "id":12,
+       "logging_type":"reps",
+       "muscle":"Back",
+       "name":"Chin-ups",
+       "pattern":"Vertical Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":63,
+       "logging_type":"reps",
+       "muscle":"Full Body",
+       "name":"Clean & Jerk",
+       "pattern":"Olympic (Clean & Jerk)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":69,
+       "logging_type":"reps",
+       "muscle":"Back/Traps",
+       "name":"Clean High Pull",
+       "pattern":"Olympic (Clean & Jerk)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":74,
+       "logging_type":"reps",
+       "muscle":"Quadriceps/Core",
+       "name":"DB Goblet Front Squat",
+       "pattern":"Olympic (Clean & Jerk)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":5,
+       "logging_type":"reps",
+       "muscle":"Quadriceps",
+       "name":"DB Goblet Squat",
+       "pattern":"Knee Dominant",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":77,
+       "logging_type":"reps",
+       "muscle":"Shoulders/Traps",
+       "name":"DB Muscle Snatch",
+       "pattern":"Olympic (Snatch)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":72,
+       "logging_type":"reps",
+       "muscle":"Full Body/Back",
+       "name":"DB Power Clean",
+       "pattern":"Olympic (Clean & Jerk)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":73,
+       "logging_type":"reps",
+       "muscle":"Shoulders/Legs",
+       "name":"DB Push Press",
+       "pattern":"Olympic (Clean & Jerk)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":23,
+       "logging_type":"reps",
+       "muscle":"Hamstrings",
+       "name":"DB Romanian Deadlift",
+       "pattern":"Hip Hinge",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":71,
+       "logging_type":"reps",
+       "muscle":"Full Body/Shoulders",
+       "name":"DB Snatch",
+       "pattern":"Olympic (Snatch)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":76,
+       "logging_type":"reps",
+       "muscle":"Legs/Balance",
+       "name":"DB Split Squat (Jerk Stance)",
+       "pattern":"Olympic (Clean & Jerk)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Bodyweight",
+       "id":17,
+       "logging_type":"reps",
+       "muscle":"Triceps/Chest",
+       "name":"Dips",
+       "pattern":"Horizontal Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":2,
+       "logging_type":"reps",
+       "muscle":"Chest",
+       "name":"Dumbbell Bench Press",
+       "pattern":"Horizontal Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":32,
+       "logging_type":"reps",
+       "muscle":"Biceps",
+       "name":"Dumbbell Bicep Curls",
+       "pattern":"Isolation",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":8,
+       "logging_type":"reps",
+       "muscle":"Back",
+       "name":"Dumbbell Row",
+       "pattern":"Horizontal Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":27,
+       "logging_type":"reps",
+       "muscle":"Shoulders",
+       "name":"Dumbbell Shoulder Press",
+       "pattern":"Vertical Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Cable",
+       "id":35,
+       "logging_type":"reps",
+       "muscle":"Rear Delts",
+       "name":"Face Pulls",
+       "pattern":"Isolation",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":37,
+       "logging_type":"reps",
+       "muscle":"Triceps/Chest",
+       "name":"Floor Press",
+       "pattern":"Horizontal Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":68,
+       "logging_type":"reps",
+       "muscle":"Quadriceps/Core",
+       "name":"Front Squat",
+       "pattern":"Olympic (Clean & Jerk)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":57,
+       "logging_type":"reps",
+       "muscle":"Full Body",
+       "name":"Full Snatch",
+       "pattern":"Olympic (Snatch)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Bodyweight",
+       "id":25,
+       "logging_type":"reps",
+       "muscle":"Glutes",
+       "name":"Glute Bridge",
+       "pattern":"Hip Hinge",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":42,
+       "logging_type":"reps",
+       "muscle":"Hamstrings/Lower Back",
+       "name":"Good Mornings",
+       "pattern":"Hip Hinge",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":20,
+       "logging_type":"reps",
+       "muscle":"Quadriceps",
+       "name":"Hack Squat",
+       "pattern":"Knee Dominant",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":51,
+       "logging_type":"reps",
+       "muscle":"Biceps/Forearms",
+       "name":"Hammer Curls",
+       "pattern":"Isolation",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":65,
+       "logging_type":"reps",
+       "muscle":"Full Body",
+       "name":"Hang Clean",
+       "pattern":"Olympic (Clean & Jerk)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":59,
+       "logging_type":"reps",
+       "muscle":"Full Body/Traps",
+       "name":"Hang Snatch",
+       "pattern":"Olympic (Snatch)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Bodyweight",
+       "id":31,
+       "logging_type":"reps",
+       "muscle":"Abs",
+       "name":"Hanging Leg Raise",
+       "pattern":"Core",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":41,
+       "logging_type":"reps",
+       "muscle":"Glutes",
+       "name":"Hip Thrust",
+       "pattern":"Hip Hinge",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":18,
+       "logging_type":"reps",
+       "muscle":"Upper Chest",
+       "name":"Incline DB Press",
+       "pattern":"Horizontal Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Bodyweight",
+       "id":9,
+       "logging_type":"reps",
+       "muscle":"Back",
+       "name":"Inverted Row",
+       "pattern":"Horizontal Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Kettlebell",
+       "id":24,
+       "logging_type":"reps",
+       "muscle":"Glutes",
+       "name":"Kettlebell Swing",
+       "pattern":"Hip Hinge",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":11,
+       "logging_type":"reps",
+       "muscle":"Back",
+       "name":"Lat Pulldown",
+       "pattern":"Vertical Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":34,
+       "logging_type":"reps",
+       "muscle":"Shoulders",
+       "name":"Lateral Raises",
+       "pattern":"Isolation",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":40,
+       "logging_type":"reps",
+       "muscle":"Hamstrings",
+       "name":"Leg Curl",
+       "pattern":"Hip Hinge",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":39,
+       "logging_type":"reps",
+       "muscle":"Quadriceps",
+       "name":"Leg Extensions",
+       "pattern":"Knee Dominant",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":19,
+       "logging_type":"reps",
+       "muscle":"Quadriceps",
+       "name":"Leg Press",
+       "pattern":"Knee Dominant",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Cable",
+       "id":85,
+       "logging_type":"reps",
+       "muscle":"Lats/Mid-Back",
+       "name":"Low Row Cable (Single Arm)",
+       "pattern":"Horizontal Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":81,
+       "logging_type":"reps",
+       "muscle":"Hamstrings",
+       "name":"Lying Leg Curl Machine",
+       "pattern":"Hip Hinge",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":28,
+       "logging_type":"reps",
+       "muscle":"Shoulders",
+       "name":"Machine Shoulder Press",
+       "pattern":"Vertical Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":70,
+       "logging_type":"reps",
+       "muscle":"Upper Body/Back",
+       "name":"Muscle Clean",
+       "pattern":"Olympic (Clean & Jerk)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":61,
+       "logging_type":"reps",
+       "muscle":"Quadriceps/Core",
+       "name":"Overhead Squat",
+       "pattern":"Olympic (Snatch)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":53,
+       "logging_type":"reps",
+       "muscle":"Triceps",
+       "name":"Overhead Tricep Extension",
+       "pattern":"Isolation",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":78,
+       "logging_type":"reps",
+       "muscle":"Chest",
+       "name":"Pec Deck Machine",
+       "pattern":"Horizontal Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Bodyweight",
+       "id":29,
+       "logging_type":"reps",
+       "muscle":"Shoulders",
+       "name":"Pike Push-ups",
+       "pattern":"Vertical Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Bodyweight",
+       "id":13,
+       "logging_type":"time",
+       "muscle":"Abs",
+       "name":"Plank",
+       "pattern":"Core",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":64,
+       "logging_type":"reps",
+       "muscle":"Full Body/Back",
+       "name":"Power Clean",
+       "pattern":"Olympic (Clean & Jerk)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":58,
+       "logging_type":"reps",
+       "muscle":"Full Body/Shoulders",
+       "name":"Power Snatch",
+       "pattern":"Olympic (Snatch)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":52,
+       "logging_type":"reps",
+       "muscle":"Biceps",
+       "name":"Preacher Curls",
+       "pattern":"Isolation",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Bodyweight",
+       "id":10,
+       "logging_type":"reps",
+       "muscle":"Back",
+       "name":"Pull-ups",
+       "pattern":"Vertical Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":67,
+       "logging_type":"reps",
+       "muscle":"Shoulders/Legs",
+       "name":"Push Jerk",
+       "pattern":"Olympic (Clean & Jerk)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Bodyweight",
+       "id":3,
+       "logging_type":"reps",
+       "muscle":"Chest",
+       "name":"Push-ups",
+       "pattern":"Horizontal Push",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":56,
+       "logging_type":"reps",
+       "muscle":"Rear Delts",
+       "name":"Reverse Flyes",
+       "pattern":"Isolation",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":22,
+       "logging_type":"reps",
+       "muscle":"Hamstrings",
+       "name":"Romanian Deadlift",
+       "pattern":"Hip Hinge",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":49,
+       "logging_type":"reps",
+       "muscle":"Obliques",
+       "name":"Russian Twists",
+       "pattern":"Core",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":30,
+       "logging_type":"reps",
+       "muscle":"Back",
+       "name":"Seated Cable Row",
+       "pattern":"Horizontal Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Machine",
+       "id":80,
+       "logging_type":"reps",
+       "muscle":"Hamstrings",
+       "name":"Seated Leg Curl Machine",
+       "pattern":"Hip Hinge",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Bodyweight",
+       "id":50,
+       "logging_type":"reps",
+       "muscle":"Obliques",
+       "name":"Side Plank",
+       "pattern":"Core",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Cable",
+       "id":44,
+       "logging_type":"reps",
+       "muscle":"Back",
+       "name":"Single Arm Cable Row",
+       "pattern":"Horizontal Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":75,
+       "logging_type":"reps",
+       "muscle":"Core/Shoulder Stability",
+       "name":"Single Arm DB Overhead Squat",
+       "pattern":"Olympic (Snatch)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Cable",
+       "id":47,
+       "logging_type":"reps",
+       "muscle":"Lats",
+       "name":"Single Arm Lat Pulldown",
+       "pattern":"Vertical Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":54,
+       "logging_type":"reps",
+       "muscle":"Triceps",
+       "name":"Skull Crushers",
+       "pattern":"Isolation",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":60,
+       "logging_type":"reps",
+       "muscle":"Legs/Shoulders",
+       "name":"Snatch Balance",
+       "pattern":"Olympic (Snatch)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":62,
+       "logging_type":"reps",
+       "muscle":"Back/Traps",
+       "name":"Snatch High Pull",
+       "pattern":"Olympic (Snatch)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":66,
+       "logging_type":"reps",
+       "muscle":"Shoulders/Legs",
+       "name":"Split Jerk",
+       "pattern":"Olympic (Clean & Jerk)",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Cable",
+       "id":46,
+       "logging_type":"reps",
+       "muscle":"Lats",
+       "name":"Straight Arm Pulldown",
+       "pattern":"Vertical Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Barbell",
+       "id":45,
+       "logging_type":"reps",
+       "muscle":"Back",
+       "name":"T-Bar Row",
+       "pattern":"Horizontal Pull",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Cable",
+       "id":33,
+       "logging_type":"reps",
+       "muscle":"Triceps",
+       "name":"Tricep Pushdowns",
+       "pattern":"Isolation",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    },
+    {
+       "created_at":"2026-01-09T11:01:39.971167+00:00",
+       "equipment":"Dumbbell",
+       "id":38,
+       "logging_type":"reps",
+       "muscle":"Quadriceps/Glutes",
+       "name":"Walking Lunges",
+       "pattern":"Knee Dominant",
+       "updated_at":"2026-01-09T11:01:39.971167+00:00"
+    }
+ ]
