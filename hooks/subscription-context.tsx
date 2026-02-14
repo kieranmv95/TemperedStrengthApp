@@ -38,8 +38,8 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     error: null,
   });
 
-  // Track if we've initialized to prevent duplicate listeners
-  const listenerRef = useRef<(() => void) | null>(null);
+  // Track listener reference for cleanup (RevenueCat requires passing the same function to remove)
+  const listenerRef = useRef<((customerInfo: CustomerInfo) => void) | null>(null);
   // Track previous Pro status to detect subscription expiry
   const previousIsProRef = useRef<boolean | null>(null);
   // Track if initial load is complete to avoid false expiry detection
@@ -202,17 +202,17 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     loadOfferings();
 
     // Set up listener for customer info changes (fires on purchases, restores, etc.)
-    const removeListener = Purchases.addCustomerInfoUpdateListener((customerInfo) => {
+    const listener = (customerInfo: CustomerInfo) => {
       console.log('RevenueCat: Customer info updated via listener');
       updateStateFromCustomerInfo(customerInfo);
-    });
-
-    listenerRef.current = removeListener;
+    };
+    Purchases.addCustomerInfoUpdateListener(listener);
+    listenerRef.current = listener;
 
     // Cleanup listener on unmount
     return () => {
       if (listenerRef.current) {
-        listenerRef.current();
+        Purchases.removeCustomerInfoUpdateListener(listenerRef.current);
         listenerRef.current = null;
       }
     };
