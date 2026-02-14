@@ -1,9 +1,9 @@
 // Exercise data - loaded directly from bundled JSON
-import type { Exercise } from "../types/exercise";
-import exercisesData from "./exercises.json";
+import type { Exercise } from '../types/exercise';
+import exercisesData from './exercises.json';
 
 // Re-export Exercise type
-export type { Exercise } from "../types/exercise";
+export type { Exercise } from '../types/exercise';
 
 // Sort exercises by name once at module load
 const exercises: Exercise[] = (exercisesData as Exercise[])

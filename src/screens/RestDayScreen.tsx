@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 interface RestDayScreenProps {
   onProgramReset?: () => void;
@@ -30,29 +30,29 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
   title: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 36,
-    fontWeight: "800",
+    fontWeight: '800',
     marginBottom: 12,
-    textAlign: "center",
+    textAlign: 'center',
   },
   subtitle: {
-    color: "#888",
+    color: '#888',
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 16,
-    textAlign: "center",
+    textAlign: 'center',
   },
   description: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 16,
     lineHeight: 24,
-    textAlign: "center",
+    textAlign: 'center',
     paddingHorizontal: 16,
   },
 });

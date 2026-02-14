@@ -2,7 +2,7 @@ export interface Article {
   id: string;
   title: string;
   subtitle: string;
-  category: "Methodology" | "Nutrition" | "Recovery" | "Mindset" | "Technique";
+  category: 'Methodology' | 'Nutrition' | 'Recovery' | 'Mindset' | 'Technique';
   readTime: number; // in minutes
   image: string;
   content: string;
@@ -13,7 +13,7 @@ export interface GlossaryTerm {
   id: string;
   term: string;
   definition: string;
-  category?: "Movements" | "Equipment" | "Training" | "Nutrition" | "General";
+  category?: 'Movements' | 'Equipment' | 'Training' | 'Nutrition' | 'General';
 }
 
 export interface Playlist {

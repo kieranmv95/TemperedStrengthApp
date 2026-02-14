@@ -1,13 +1,13 @@
 module.exports = {
-  preset: "jest-expo",
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  preset: 'jest-expo',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/$1",
+    '^@/(.*)$': '<rootDir>/$1',
   },
-  testPathIgnorePatterns: ["/node_modules/", "/dist/"],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   collectCoverageFrom: [
-    "src/**/*.{ts,tsx}",
-    "!src/**/index.ts",
-    "!src/**/*.d.ts",
+    'src/**/*.{ts,tsx}',
+    '!src/**/index.ts',
+    '!src/**/*.d.ts',
   ],
 };

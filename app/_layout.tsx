@@ -1,13 +1,13 @@
-import { SubscriptionProvider } from "@/src/hooks/subscription-context";
-import { initializeRevenueCat } from "@/src/services/revenueCatService";
-import { DarkTheme, ThemeProvider } from "@react-navigation/native";
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
-import "react-native-reanimated";
+import { SubscriptionProvider } from '@/src/hooks/subscription-context';
+import { initializeRevenueCat } from '@/src/services/revenueCatService';
+import { DarkTheme, ThemeProvider } from '@react-navigation/native';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState } from 'react';
+import 'react-native-reanimated';
 
 export const unstable_settings = {
-  anchor: "(tabs)",
+  anchor: '(tabs)',
 };
 
 export default function RootLayout() {
@@ -20,7 +20,7 @@ export default function RootLayout() {
         setIsRevenueCatReady(true);
       })
       .catch((error) => {
-        console.error("Failed to initialize RevenueCat:", error);
+        console.error('Failed to initialize RevenueCat:', error);
         // Still allow app to load even if RevenueCat fails
         setIsRevenueCatReady(true);
       });
@@ -41,11 +41,11 @@ export default function RootLayout() {
           <Stack.Screen name="article/[id]" options={{ headerShown: false }} />
           <Stack.Screen
             name="paywall"
-            options={{ presentation: "modal", title: "Upgrade to Pro" }}
+            options={{ presentation: 'modal', title: 'Upgrade to Pro' }}
           />
           <Stack.Screen
             name="customer-center"
-            options={{ presentation: "modal", title: "Subscription" }}
+            options={{ presentation: 'modal', title: 'Subscription' }}
           />
         </Stack>
         <StatusBar style="light" />

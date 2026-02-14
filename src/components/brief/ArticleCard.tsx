@@ -1,6 +1,6 @@
-import type { Article } from "@/src/types/brief";
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
+import type { Article } from '@/src/types/brief';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
 import {
   Image,
   ImageBackground,
@@ -8,20 +8,20 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 
 interface ArticleCardProps {
   article: Article;
   onPress: (article: Article) => void;
-  variant?: "hero" | "compact" | "horizontal";
+  variant?: 'hero' | 'compact' | 'horizontal';
 }
 
 export function ArticleCard({
   article,
   onPress,
-  variant = "compact",
+  variant = 'compact',
 }: ArticleCardProps) {
-  if (variant === "horizontal") {
+  if (variant === 'horizontal') {
     return (
       <TouchableOpacity
         style={styles.horizontalCard}
@@ -35,7 +35,9 @@ export function ArticleCard({
         >
           <View style={styles.horizontalOverlay}>
             <View style={styles.horizontalCategoryBadge}>
-              <Text style={styles.horizontalCategoryText}>{article.category}</Text>
+              <Text style={styles.horizontalCategoryText}>
+                {article.category}
+              </Text>
             </View>
             <View style={styles.horizontalContent}>
               <Text style={styles.horizontalTitle} numberOfLines={2}>
@@ -54,7 +56,7 @@ export function ArticleCard({
     );
   }
 
-  if (variant === "hero") {
+  if (variant === 'hero') {
     return (
       <TouchableOpacity
         style={styles.heroCard}
@@ -120,97 +122,97 @@ const styles = StyleSheet.create({
   // Hero Card Styles
   heroCard: {
     borderRadius: 16,
-    overflow: "hidden",
+    overflow: 'hidden',
     marginBottom: 16,
   },
   heroImage: {
     height: 240,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
   heroImageStyle: {
     borderRadius: 16,
   },
   heroOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: 'rgba(0,0,0,0.5)',
     padding: 16,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   heroBadgeRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 8,
   },
   categoryBadge: {
-    backgroundColor: "rgba(201, 176, 114, 0.9)",
+    backgroundColor: 'rgba(201, 176, 114, 0.9)',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 4,
   },
   categoryBadgeText: {
-    color: "#121212",
+    color: '#121212',
     fontSize: 11,
-    fontWeight: "700",
-    textTransform: "uppercase",
+    fontWeight: '700',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   featuredBadge: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
-    backgroundColor: "#c9b072",
+    backgroundColor: '#c9b072',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 4,
   },
   featuredBadgeText: {
-    color: "#121212",
+    color: '#121212',
     fontSize: 11,
-    fontWeight: "700",
-    textTransform: "uppercase",
+    fontWeight: '700',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   heroContent: {
     gap: 8,
   },
   heroTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 22,
-    fontWeight: "800",
+    fontWeight: '800',
     lineHeight: 28,
   },
   heroSubtitle: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 14,
     lineHeight: 20,
   },
   heroMeta: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
     marginTop: 4,
   },
   heroMetaText: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
 
   // Compact Card Styles
   compactCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#1E1E1E",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1E1E1E',
     borderRadius: 12,
     padding: 12,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
   },
   compactImage: {
     width: 72,
     height: 72,
     borderRadius: 8,
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
   },
   compactContent: {
     flex: 1,
@@ -218,29 +220,29 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   compactCategoryRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   compactCategory: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 11,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   compactTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: '600',
     lineHeight: 20,
   },
   compactMeta: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   compactMetaText: {
-    color: "#666",
+    color: '#666',
     fontSize: 12,
   },
 
@@ -248,53 +250,52 @@ const styles = StyleSheet.create({
   horizontalCard: {
     width: 200,
     borderRadius: 12,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   horizontalImage: {
     height: 150,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
   horizontalImageStyle: {
     borderRadius: 12,
   },
   horizontalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.45)",
+    backgroundColor: 'rgba(0,0,0,0.45)',
     padding: 12,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   horizontalCategoryBadge: {
-    alignSelf: "flex-start",
-    backgroundColor: "rgba(201, 176, 114, 0.9)",
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(201, 176, 114, 0.9)',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 4,
   },
   horizontalCategoryText: {
-    color: "#121212",
+    color: '#121212',
     fontSize: 10,
-    fontWeight: "700",
-    textTransform: "uppercase",
+    fontWeight: '700',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   horizontalContent: {
     gap: 4,
   },
   horizontalTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: "700",
+    fontWeight: '700',
     lineHeight: 18,
   },
   horizontalMeta: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   horizontalMetaText: {
-    color: "#999",
+    color: '#999',
     fontSize: 11,
-    fontWeight: "500",
+    fontWeight: '500',
   },
 });
-

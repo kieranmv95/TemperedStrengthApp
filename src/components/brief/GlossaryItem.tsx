@@ -1,6 +1,6 @@
-import type { GlossaryTerm } from "@/src/types/brief";
-import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import type { GlossaryTerm } from '@/src/types/brief';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
 import {
   LayoutAnimation,
   Platform,
@@ -9,10 +9,10 @@ import {
   TouchableOpacity,
   UIManager,
   View,
-} from "react-native";
+} from 'react-native';
 
 // Enable LayoutAnimation on Android
-if (Platform.OS === "android") {
+if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
   }
@@ -20,11 +20,11 @@ if (Platform.OS === "android") {
 
 interface GlossaryItemProps {
   term: GlossaryTerm;
-  variant?: "compact" | "expanded";
+  variant?: 'compact' | 'expanded';
 }
 
-export function GlossaryItem({ term, variant = "compact" }: GlossaryItemProps) {
-  const [isExpanded, setIsExpanded] = useState(variant === "expanded");
+export function GlossaryItem({ term, variant = 'compact' }: GlossaryItemProps) {
+  const [isExpanded, setIsExpanded] = useState(variant === 'expanded');
 
   const handleToggle = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -47,7 +47,7 @@ export function GlossaryItem({ term, variant = "compact" }: GlossaryItemProps) {
           )}
         </View>
         <Ionicons
-          name={isExpanded ? "chevron-up" : "chevron-down"}
+          name={isExpanded ? 'chevron-up' : 'chevron-down'}
           size={20}
           color="#666"
         />
@@ -63,55 +63,54 @@ export function GlossaryItem({ term, variant = "compact" }: GlossaryItemProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderRadius: 12,
     padding: 16,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
   },
   cardExpanded: {
-    borderColor: "#3A3A3A",
+    borderColor: '#3A3A3A',
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   termContainer: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
   },
   term: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   categoryBadge: {
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
   },
   categoryText: {
-    color: "#666",
+    color: '#666',
     fontSize: 10,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   definitionContainer: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: "#2A2A2A",
+    borderTopColor: '#2A2A2A',
   },
   definition: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 14,
     lineHeight: 22,
   },
 });
-

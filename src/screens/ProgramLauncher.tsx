@@ -1,7 +1,7 @@
-import { useSubscription } from "@/src/hooks/use-subscription";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import { useSubscription } from '@/src/hooks/use-subscription';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { router } from 'expo-router';
+import React, { useState } from 'react';
 import {
   Alert,
   Modal,
@@ -12,11 +12,11 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { getExerciseById } from "../data/exercises";
-import type { Program } from "../types/program";
-import { programs } from "../utils/program";
-import { setActiveProgramId, setProgramStartDate } from "../utils/storage";
+} from 'react-native';
+import { getExerciseById } from '../data/exercises';
+import type { Program } from '../types/program';
+import { programs } from '../utils/program';
+import { setActiveProgramId, setProgramStartDate } from '../utils/storage';
 
 interface ProgramLauncherProps {
   onProgramSelected: () => void;
@@ -42,20 +42,20 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     // Double check Pro status before starting (in case entitlement changed)
     if (selectedProgram?.isPro && !isPro) {
       Alert.alert(
-        "Pro Required",
-        "This program requires Tempered Strength Pro. Please upgrade to continue.",
+        'Pro Required',
+        'This program requires Tempered Strength Pro. Please upgrade to continue.',
         [
           {
-            text: "Cancel",
-            style: "cancel",
+            text: 'Cancel',
+            style: 'cancel',
             onPress: () => setShowProgramDetails(false),
           },
           {
-            text: "Upgrade to Pro",
-            style: "default",
+            text: 'Upgrade to Pro',
+            style: 'default',
             onPress: () => {
               setShowProgramDetails(false);
-              router.push("/paywall");
+              router.push('/paywall');
             },
           },
         ]
@@ -68,12 +68,12 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   };
 
   const handleDateChange = (event: any, date?: Date) => {
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       setShowDatePicker(false);
     }
     if (date) {
       setStartDate(date);
-      if (Platform.OS === "android") {
+      if (Platform.OS === 'android') {
         handleConfirmDate(date);
       }
     }
@@ -88,7 +88,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
       setShowDatePicker(false);
       onProgramSelected();
     } catch (error) {
-      console.error("Error saving program selection:", error);
+      console.error('Error saving program selection:', error);
     }
   };
 
@@ -128,10 +128,11 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
             {program.description}
           </Text>
           <Text style={styles.programStats}>
-            {program.workouts.length} workouts • {weekCount}{" "}
-            {weekCount === 1 ? "week" : "weeks"}
+            {program.workouts.length} workouts • {weekCount}{' '}
+            {weekCount === 1 ? 'week' : 'weeks'}
             {sessionsPerWeek > 0 && ` • ${sessionsPerWeek} sessions/week`}
-            {program.averageSessionDuration && ` • ${program.averageSessionDuration}`}
+            {program.averageSessionDuration &&
+              ` • ${program.averageSessionDuration}`}
           </Text>
         </View>
         <Text
@@ -172,7 +173,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
             <View style={styles.modalHeader}>
               <View style={styles.modalTitleRow}>
                 <Text style={styles.modalTitle}>
-                  {selectedProgram?.name || "Program Details"}
+                  {selectedProgram?.name || 'Program Details'}
                 </Text>
                 {selectedProgram?.isPro && (
                   <View style={styles.proBadge}>
@@ -213,7 +214,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                         <View style={styles.statItem}>
                           <Text style={styles.statValue}>{weekCount}</Text>
                           <Text style={styles.statLabel}>
-                            {weekCount === 1 ? "Week" : "Weeks"}
+                            {weekCount === 1 ? 'Week' : 'Weeks'}
                           </Text>
                         </View>
                       );
@@ -237,29 +238,38 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       <Text style={styles.workoutTitle}>Workout Days</Text>
                     </View>
                     <View>
-                      <TouchableOpacity style={styles.changeDaysButton} onPress={() => setShowWorkoutDaysMoreInfo(!showWorkoutDaysMoreInfo)}>
-                        <Text style={styles.moreInfoButtonText}>Change Days?</Text>
+                      <TouchableOpacity
+                        style={styles.changeDaysButton}
+                        onPress={() =>
+                          setShowWorkoutDaysMoreInfo(!showWorkoutDaysMoreInfo)
+                        }
+                      >
+                        <Text style={styles.moreInfoButtonText}>
+                          Change Days?
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   </View>
                   {showWorkoutDaysMoreInfo && (
                     <Text style={styles.programDescription}>
-                      The first session working day will be the first day of the program you select. You can change the session days at any time in the program once started.
+                      The first session working day will be the first day of the
+                      program you select. You can change the session days at any
+                      time in the program once started.
                     </Text>
                   )}
                   <View style={styles.daysSplitContainer}>
                     <View
                       style={[
                         styles.dayItem,
-                        selectedProgram.daysSplit.includes("mon") &&
-                        styles.dayItemSelected,
+                        selectedProgram.daysSplit.includes('mon') &&
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
-                          selectedProgram.daysSplit.includes("mon") &&
-                          styles.dayLabelSelected,
+                          selectedProgram.daysSplit.includes('mon') &&
+                            styles.dayLabelSelected,
                         ]}
                       >
                         M
@@ -268,15 +278,15 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                     <View
                       style={[
                         styles.dayItem,
-                        selectedProgram.daysSplit.includes("tue") &&
-                        styles.dayItemSelected,
+                        selectedProgram.daysSplit.includes('tue') &&
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
-                          selectedProgram.daysSplit.includes("tue") &&
-                          styles.dayLabelSelected,
+                          selectedProgram.daysSplit.includes('tue') &&
+                            styles.dayLabelSelected,
                         ]}
                       >
                         T
@@ -285,15 +295,15 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                     <View
                       style={[
                         styles.dayItem,
-                        selectedProgram.daysSplit.includes("wed") &&
-                        styles.dayItemSelected,
+                        selectedProgram.daysSplit.includes('wed') &&
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
-                          selectedProgram.daysSplit.includes("wed") &&
-                          styles.dayLabelSelected,
+                          selectedProgram.daysSplit.includes('wed') &&
+                            styles.dayLabelSelected,
                         ]}
                       >
                         W
@@ -302,15 +312,15 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                     <View
                       style={[
                         styles.dayItem,
-                        selectedProgram.daysSplit.includes("thu") &&
-                        styles.dayItemSelected,
+                        selectedProgram.daysSplit.includes('thu') &&
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
-                          selectedProgram.daysSplit.includes("thu") &&
-                          styles.dayLabelSelected,
+                          selectedProgram.daysSplit.includes('thu') &&
+                            styles.dayLabelSelected,
                         ]}
                       >
                         T
@@ -319,15 +329,15 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                     <View
                       style={[
                         styles.dayItem,
-                        selectedProgram.daysSplit.includes("fri") &&
-                        styles.dayItemSelected,
+                        selectedProgram.daysSplit.includes('fri') &&
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
-                          selectedProgram.daysSplit.includes("fri") &&
-                          styles.dayLabelSelected,
+                          selectedProgram.daysSplit.includes('fri') &&
+                            styles.dayLabelSelected,
                         ]}
                       >
                         F
@@ -336,15 +346,15 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                     <View
                       style={[
                         styles.dayItem,
-                        selectedProgram.daysSplit.includes("sat") &&
-                        styles.dayItemSelected,
+                        selectedProgram.daysSplit.includes('sat') &&
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
-                          selectedProgram.daysSplit.includes("sat") &&
-                          styles.dayLabelSelected,
+                          selectedProgram.daysSplit.includes('sat') &&
+                            styles.dayLabelSelected,
                         ]}
                       >
                         S
@@ -353,15 +363,15 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                     <View
                       style={[
                         styles.dayItem,
-                        selectedProgram.daysSplit.includes("sun") &&
-                        styles.dayItemSelected,
+                        selectedProgram.daysSplit.includes('sun') &&
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
-                          selectedProgram.daysSplit.includes("sun") &&
-                          styles.dayLabelSelected,
+                          selectedProgram.daysSplit.includes('sun') &&
+                            styles.dayLabelSelected,
                         ]}
                       >
                         S
@@ -382,14 +392,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   )}
                   {(() => {
                     const exerciseIds = workout.exercises
-                      .filter((ex) => ex.type === "exercise")
+                      .filter((ex) => ex.type === 'exercise')
                       .map((ex) => (ex as { id: number }).id);
                     const exerciseNames = exerciseIds
                       .map((id) => getExerciseById(id)?.name)
                       .filter((name): name is string => name !== undefined);
                     return exerciseNames.length > 0 ? (
                       <Text style={styles.workoutExercisesList}>
-                        {exerciseNames.join(", ")}
+                        {exerciseNames.join(', ')}
                       </Text>
                     ) : null;
                   })()}
@@ -408,7 +418,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                             style={[
                               styles.workoutIntensityDot,
                               i < workout.intensity &&
-                              styles.workoutIntensityDotFilled,
+                                styles.workoutIntensityDotFilled,
                             ]}
                           />
                         ))}
@@ -428,7 +438,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   style={styles.upgradeProgramButton}
                   onPress={() => {
                     setShowProgramDetails(false);
-                    router.push("/paywall");
+                    router.push('/paywall');
                   }}
                 >
                   <Text style={styles.upgradeProgramButtonText}>
@@ -452,7 +462,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 
       {showDatePicker && (
         <>
-          {Platform.OS === "ios" && (
+          {Platform.OS === 'ios' && (
             <View style={styles.datePickerContainer}>
               <View style={styles.datePickerHeader}>
                 <TouchableOpacity
@@ -480,7 +490,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
               </View>
             </View>
           )}
-          {Platform.OS === "android" && (
+          {Platform.OS === 'android' && (
             <DateTimePicker
               value={startDate}
               mode="date"
@@ -497,7 +507,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121212",
+    backgroundColor: '#121212',
   },
   scrollView: {
     flex: 1,
@@ -509,24 +519,24 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   title: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 32,
-    fontWeight: "800",
+    fontWeight: '800',
     marginBottom: 8,
     letterSpacing: -0.5,
   },
   subtitle: {
-    color: "#888",
+    color: '#888',
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   programOverviewContainer: {
     marginBottom: 24,
   },
   workoutDaysTitleRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     gap: 12,
     marginBottom: 8,
     marginTop: 8,
@@ -535,349 +545,349 @@ const styles = StyleSheet.create({
     padding: 3,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#c9b072",
+    borderColor: '#c9b072',
   },
   moreInfoButtonText: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 9,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   programCard: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderRadius: 12,
     padding: 20,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#2A2A2A",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    borderColor: '#2A2A2A',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   programCardLocked: {
     opacity: 0.7,
-    borderColor: "#c9b072",
+    borderColor: '#c9b072',
   },
   programContent: {
     flex: 1,
   },
   programNameRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
     marginBottom: 8,
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
   },
   programName: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 22,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   programNameLocked: {
-    color: "#888",
+    color: '#888',
   },
   programDescription: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 14,
     marginBottom: 8,
     lineHeight: 20,
   },
   programDescriptionLocked: {
-    color: "#666",
+    color: '#666',
   },
   programStats: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 12,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   selectArrow: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 24,
-    fontWeight: "600",
+    fontWeight: '600',
     marginLeft: 16,
   },
   selectArrowLocked: {
-    color: "#666",
+    color: '#666',
   },
   proBadge: {
-    backgroundColor: "#c9b072",
+    backgroundColor: '#c9b072',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
   },
   proBadgeText: {
-    color: "#000000",
+    color: '#000000',
     fontSize: 10,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 0.5,
   },
   datePickerContainer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
     paddingBottom: 40,
-    alignItems: "center",
+    alignItems: 'center',
   },
   datePickerHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#2A2A2A",
+    borderBottomColor: '#2A2A2A',
   },
   datePickerTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     flex: 1,
-    textAlign: "center",
+    textAlign: 'center',
   },
   cancelButton: {
     padding: 8,
   },
   cancelButtonText: {
-    color: "#888",
+    color: '#888',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   confirmButton: {
     padding: 8,
   },
   confirmButtonText: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   datePickerWrapper: {
-    alignItems: "center",
-    width: "100%",
+    alignItems: 'center',
+    width: '100%',
   },
   datePicker: {
-    backgroundColor: "#1E1E1E",
-    alignSelf: "center",
+    backgroundColor: '#1E1E1E',
+    alignSelf: 'center',
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    justifyContent: "flex-end",
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'flex-end',
   },
   programDetailsModal: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 24,
-    maxHeight: "95%",
+    maxHeight: '95%',
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
   },
   modalHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 20,
   },
   modalTitleRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
     flex: 1,
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
   },
   modalTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "#2A2A2A",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#2A2A2A',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   daysSplitContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 8,
     marginBottom: 24,
   },
   dayItem: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#2A2A2A",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#2A2A2A',
     borderRadius: 8,
     padding: 8,
   },
   dayLabel: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 4,
   },
   dayItemSelected: {
-    backgroundColor: "#c9b072",
+    backgroundColor: '#c9b072',
   },
   dayLabelSelected: {
-    color: "#000000",
+    color: '#000000',
   },
   closeButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   modalContent: {
     maxHeight: 500,
   },
   sectionTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 16,
     marginTop: 8,
   },
   workoutTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   statsContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 16,
     marginBottom: 16,
   },
   statItem: {
     flex: 1,
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     borderRadius: 12,
     padding: 16,
-    alignItems: "center",
+    alignItems: 'center',
     minWidth: 100,
   },
   statValue: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 4,
   },
   statLabel: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   workoutItem: {
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#333",
+    borderColor: '#333',
   },
   workoutLabel: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 4,
   },
   workoutDescription: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 14,
     lineHeight: 20,
     marginBottom: 12,
   },
   workoutExercisesList: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 14,
     lineHeight: 20,
     marginBottom: 12,
-    fontStyle: "italic",
+    fontStyle: 'italic',
   },
   workoutMeta: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
     gap: 8,
   },
   workoutExercises: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
   },
   workoutIntensity: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 6,
   },
   workoutIntensityLabel: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   workoutIntensityBar: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 3,
-    alignItems: "center",
+    alignItems: 'center',
   },
   workoutIntensityDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: "#333",
+    backgroundColor: '#333',
   },
   workoutIntensityDotFilled: {
-    backgroundColor: "#c9b072",
+    backgroundColor: '#c9b072',
   },
   workoutIntensityValue: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   modalFooter: {
     marginTop: 24,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: "#2A2A2A",
+    borderTopColor: '#2A2A2A',
   },
   startProgramButton: {
-    backgroundColor: "#c9b072",
+    backgroundColor: '#c9b072',
     borderRadius: 12,
     padding: 16,
-    alignItems: "center",
+    alignItems: 'center',
   },
   startProgramButtonText: {
-    color: "#121212",
+    color: '#121212',
     fontSize: 16,
-    fontWeight: "700",
-    textTransform: "uppercase",
+    fontWeight: '700',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   upgradeProgramButton: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderRadius: 12,
     padding: 16,
-    alignItems: "center",
+    alignItems: 'center',
     borderWidth: 2,
-    borderColor: "#c9b072",
+    borderColor: '#c9b072',
   },
   upgradeProgramButtonText: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 16,
-    fontWeight: "700",
-    textTransform: "uppercase",
+    fontWeight: '700',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
 });

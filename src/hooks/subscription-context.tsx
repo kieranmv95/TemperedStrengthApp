@@ -1,6 +1,17 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+} from 'react';
 import { Alert } from 'react-native';
-import Purchases, { CustomerInfo, PurchasesOffering as Offerings, PurchasesPackage } from 'react-native-purchases';
+import Purchases, {
+  CustomerInfo,
+  PurchasesOffering as Offerings,
+  PurchasesPackage,
+} from 'react-native-purchases';
 import { router } from 'expo-router';
 import {
   getCustomerInfo,
@@ -21,15 +32,28 @@ export interface SubscriptionState {
 }
 
 interface SubscriptionContextType extends SubscriptionState {
-  purchase: (packageToPurchase: PurchasesPackage) => Promise<{ success: boolean; customerInfo?: CustomerInfo; error?: Error }>;
-  restore: () => Promise<{ success: boolean; customerInfo?: CustomerInfo; isPro?: boolean; error?: Error }>;
+  purchase: (packageToPurchase: PurchasesPackage) => Promise<{
+    success: boolean;
+    customerInfo?: CustomerInfo;
+    error?: Error;
+  }>;
+  restore: () => Promise<{
+    success: boolean;
+    customerInfo?: CustomerInfo;
+    isPro?: boolean;
+    error?: Error;
+  }>;
   refresh: () => Promise<void>;
   loadOfferings: () => Promise<void>;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | null>(null);
 
-export function SubscriptionProvider({ children }: { children: React.ReactNode }) {
+export function SubscriptionProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [state, setState] = useState<SubscriptionState>({
     isPro: false,
     isLoading: true,
@@ -39,7 +63,9 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   });
 
   // Track listener reference for cleanup (RevenueCat requires passing the same function to remove)
-  const listenerRef = useRef<((customerInfo: CustomerInfo) => void) | null>(null);
+  const listenerRef = useRef<((customerInfo: CustomerInfo) => void) | null>(
+    null
+  );
   // Track previous Pro status to detect subscription expiry
   const previousIsProRef = useRef<boolean | null>(null);
   // Track if initial load is complete to avoid false expiry detection
@@ -82,31 +108,39 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   /**
    * Update state based on customer info
    */
-  const updateStateFromCustomerInfo = useCallback((customerInfo: CustomerInfo) => {
-    const isPro = customerInfo.entitlements.active[PRO_ENTITLEMENT_ID] !== undefined;
+  const updateStateFromCustomerInfo = useCallback(
+    (customerInfo: CustomerInfo) => {
+      const isPro =
+        customerInfo.entitlements.active[PRO_ENTITLEMENT_ID] !== undefined;
 
-    // Check for subscription expiry (was Pro, now not Pro)
-    // Only check after initial load is complete to avoid false positives
-    if (initialLoadCompleteRef.current && previousIsProRef.current === true && !isPro) {
-      handleSubscriptionExpiry();
-    }
+      // Check for subscription expiry (was Pro, now not Pro)
+      // Only check after initial load is complete to avoid false positives
+      if (
+        initialLoadCompleteRef.current &&
+        previousIsProRef.current === true &&
+        !isPro
+      ) {
+        handleSubscriptionExpiry();
+      }
 
-    // Update previous Pro status
-    previousIsProRef.current = isPro;
+      // Update previous Pro status
+      previousIsProRef.current = isPro;
 
-    // Mark initial load as complete after first update
-    if (!initialLoadCompleteRef.current) {
-      initialLoadCompleteRef.current = true;
-    }
+      // Mark initial load as complete after first update
+      if (!initialLoadCompleteRef.current) {
+        initialLoadCompleteRef.current = true;
+      }
 
-    setState((prev) => ({
-      ...prev,
-      customerInfo,
-      isPro,
-      isLoading: false,
-      error: null,
-    }));
-  }, [handleSubscriptionExpiry]);
+      setState((prev) => ({
+        ...prev,
+        customerInfo,
+        isPro,
+        isLoading: false,
+        error: null,
+      }));
+    },
+    [handleSubscriptionExpiry]
+  );
 
   /**
    * Load customer info and check entitlement status
@@ -149,23 +183,26 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   /**
    * Purchase a package
    */
-  const purchase = useCallback(async (packageToPurchase: PurchasesPackage) => {
-    try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
-      const customerInfo = await purchasePackage(packageToPurchase);
-      // The listener will also fire, but we update immediately for responsiveness
-      updateStateFromCustomerInfo(customerInfo);
-      return { success: true, customerInfo };
-    } catch (error) {
-      const err = error as Error;
-      setState((prev) => ({
-        ...prev,
-        error: err,
-        isLoading: false,
-      }));
-      return { success: false, error: err };
-    }
-  }, [updateStateFromCustomerInfo]);
+  const purchase = useCallback(
+    async (packageToPurchase: PurchasesPackage) => {
+      try {
+        setState((prev) => ({ ...prev, isLoading: true, error: null }));
+        const customerInfo = await purchasePackage(packageToPurchase);
+        // The listener will also fire, but we update immediately for responsiveness
+        updateStateFromCustomerInfo(customerInfo);
+        return { success: true, customerInfo };
+      } catch (error) {
+        const err = error as Error;
+        setState((prev) => ({
+          ...prev,
+          error: err,
+          isLoading: false,
+        }));
+        return { success: false, error: err };
+      }
+    },
+    [updateStateFromCustomerInfo]
+  );
 
   /**
    * Restore purchases
@@ -174,7 +211,8 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     try {
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
       const customerInfo = await restorePurchases();
-      const isPro = customerInfo.entitlements.active[PRO_ENTITLEMENT_ID] !== undefined;
+      const isPro =
+        customerInfo.entitlements.active[PRO_ENTITLEMENT_ID] !== undefined;
       updateStateFromCustomerInfo(customerInfo);
       return { success: true, customerInfo, isPro };
     } catch (error) {
@@ -240,7 +278,9 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
 export function useSubscriptionContext(): SubscriptionContextType {
   const context = useContext(SubscriptionContext);
   if (!context) {
-    throw new Error('useSubscriptionContext must be used within a SubscriptionProvider');
+    throw new Error(
+      'useSubscriptionContext must be used within a SubscriptionProvider'
+    );
   }
   return context;
 }

@@ -1,11 +1,11 @@
-export type { Article, GlossaryTerm, Playlist } from "./brief";
-export type { Exercise } from "./exercise";
+export type { Article, GlossaryTerm, Playlist } from './brief';
+export type { Exercise } from './exercise';
 export type {
   Program,
   Exercise as ProgramExercise,
   Warmup,
   Workout,
-} from "./program";
+} from './program';
 export type {
   CustomSetCounts,
   ExerciseSwap,
@@ -14,9 +14,9 @@ export type {
   RestTimerState,
   WorkoutLogs,
   WorkoutNotes,
-} from "./storage";
+} from './storage';
 export type {
   DetailedMovement,
   SingleWorkout,
   WorkoutCategory,
-} from "./workouts";
+} from './workouts';

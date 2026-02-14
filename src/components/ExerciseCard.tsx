@@ -1,16 +1,16 @@
-import { useSubscription } from "@/src/hooks/use-subscription";
-import { Ionicons } from "@expo/vector-icons";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useSubscription } from '@/src/hooks/use-subscription';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { getExerciseById } from "../data/exercises";
-import type { Exercise as ProgramExercise } from "../types/program";
-import type { RestTimerState } from "../types/storage";
+} from 'react-native';
+import { getExerciseById } from '../data/exercises';
+import type { Exercise as ProgramExercise } from '../types/program';
+import type { RestTimerState } from '../types/storage';
 import {
   clearLoggedSet,
   getCustomSetCount,
@@ -18,8 +18,8 @@ import {
   getRemainingSwapCount,
   saveCustomSetCount,
   saveLoggedSet,
-} from "../utils/storage";
-import { RestTimer } from "./RestTimer";
+} from '../utils/storage';
+import { RestTimer } from './RestTimer';
 
 interface ExerciseCardProps {
   exerciseId: number | null;
@@ -57,7 +57,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   const [weights, setWeights] = useState<string[]>([]);
   const [reps, setReps] = useState<string[]>([]);
   const [setStates, setSetStates] = useState<
-    Map<number, "completed" | "failed">
+    Map<number, 'completed' | 'failed'>
   >(new Map());
   const [loading, setLoading] = useState(false);
   const [remainingSwaps, setRemainingSwaps] = useState<number | null>(null);
@@ -72,12 +72,16 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
   // Helper function to get default rep value from programExercise repRange
   const getDefaultRepValue = useCallback((): string => {
-    if (programExercise?.repRange && !programExercise.hideReps && !programExercise.isAmrap) {
+    if (
+      programExercise?.repRange &&
+      !programExercise.hideReps &&
+      !programExercise.isAmrap
+    ) {
       const [min, max] = programExercise.repRange;
       // If min and max are the same, use that value; otherwise use the max
       return (min === max ? min : max).toString();
     }
-    return "";
+    return '';
   }, [programExercise]);
 
   // Check if exercise has been swapped (deviation from program)
@@ -94,7 +98,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           const count = await getRemainingSwapCount();
           setRemainingSwaps(count);
         } catch (error) {
-          console.error("Error loading swap count:", error);
+          console.error('Error loading swap count:', error);
           setRemainingSwaps(10); // Default to 10 on error
         }
       } else {
@@ -119,7 +123,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           // Initialize arrays with saved data or empty strings
           const initialWeights: string[] = [];
           const initialReps: string[] = [];
-          const initialSetStates: Map<number, "completed" | "failed"> =
+          const initialSetStates: Map<number, 'completed' | 'failed'> =
             new Map();
 
           const defaultRepValue = getDefaultRepValue();
@@ -128,17 +132,18 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             const savedSet = savedSets[i];
             if (savedSet) {
               // Handle nullable weight: convert null to empty string, otherwise convert to string
-              initialWeights[i] = savedSet.weight === null ? "" : savedSet.weight.toString();
+              initialWeights[i] =
+                savedSet.weight === null ? '' : savedSet.weight.toString();
               initialReps[i] = savedSet.reps.toString();
               // Restore state from storage if available (excluding null which means unchecked)
               if (savedSet.state && savedSet.state !== null) {
                 const state = savedSet.state;
-                if (state === "completed" || state === "failed") {
+                if (state === 'completed' || state === 'failed') {
                   initialSetStates.set(i, state);
                 }
               }
             } else {
-              initialWeights[i] = "";
+              initialWeights[i] = '';
               initialReps[i] = defaultRepValue;
             }
           }
@@ -147,17 +152,17 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           setReps(initialReps);
           setSetStates(initialSetStates);
         } catch (error) {
-          console.error("Error loading data:", error);
+          console.error('Error loading data:', error);
           // Initialize with empty arrays if error
           const defaultRepValue = getDefaultRepValue();
-          setWeights(Array(defaultNumberOfSets).fill(""));
+          setWeights(Array(defaultNumberOfSets).fill(''));
           setReps(Array(defaultNumberOfSets).fill(defaultRepValue));
           setNumberOfSets(defaultNumberOfSets);
         }
       } else {
         // Initialize arrays for sets
         const defaultRepValue = getDefaultRepValue();
-        setWeights(Array(defaultNumberOfSets).fill(""));
+        setWeights(Array(defaultNumberOfSets).fill(''));
         setReps(Array(defaultNumberOfSets).fill(defaultRepValue));
         setSetStates(new Map());
         setNumberOfSets(defaultNumberOfSets);
@@ -165,7 +170,14 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     };
 
     loadData();
-  }, [programExercise, defaultNumberOfSets, dayIndex, slotIndex, exerciseId, getDefaultRepValue]);
+  }, [
+    programExercise,
+    defaultNumberOfSets,
+    dayIndex,
+    slotIndex,
+    exerciseId,
+    getDefaultRepValue,
+  ]);
 
   // Cleanup timers on unmount
   useEffect(() => {
@@ -210,7 +222,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         currentState
       );
     } catch (error) {
-      console.error("Error auto-saving set:", error);
+      console.error('Error auto-saving set:', error);
     }
   };
 
@@ -226,7 +238,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
     // Auto-save after 500ms of no typing
     saveTimersRef.current[setIndex] = setTimeout(() => {
-      autoSaveSet(setIndex, value, reps[setIndex] || "");
+      autoSaveSet(setIndex, value, reps[setIndex] || '');
     }, 500);
   };
 
@@ -242,7 +254,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
     // Auto-save after 500ms of no typing
     saveTimersRef.current[setIndex] = setTimeout(() => {
-      autoSaveSet(setIndex, weights[setIndex] || "", value);
+      autoSaveSet(setIndex, weights[setIndex] || '', value);
     }, 500);
   };
 
@@ -271,27 +283,27 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
       // Cycle through states: none -> completed -> failed -> none
       if (currentState === undefined) {
         // Default -> Completed (green)
-        newSetStates.set(setIndex, "completed");
+        newSetStates.set(setIndex, 'completed');
         await saveLoggedSet(
           dayIndex,
           slotIndex,
           setIndex,
           weightNum,
           repsNum,
-          "completed"
+          'completed'
         );
-      } else if (currentState === "completed") {
+      } else if (currentState === 'completed') {
         // Completed -> Failed (red)
-        newSetStates.set(setIndex, "failed");
+        newSetStates.set(setIndex, 'failed');
         await saveLoggedSet(
           dayIndex,
           slotIndex,
           setIndex,
           weightNum,
           repsNum,
-          "failed"
+          'failed'
         );
-      } else if (currentState === "failed") {
+      } else if (currentState === 'failed') {
         // Failed -> Default (explicitly unchecked)
         newSetStates.delete(setIndex);
         await saveLoggedSet(
@@ -306,7 +318,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
       setSetStates(newSetStates);
     } catch (error) {
-      console.error("Error toggling set state:", error);
+      console.error('Error toggling set state:', error);
     } finally {
       setLoading(false);
     }
@@ -330,10 +342,10 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
   if (!programExercise?.hideReps) {
     if (programExercise?.isAmrap) {
-      repRangeText = "MAX REPS (AMRAP)";
+      repRangeText = 'MAX REPS (AMRAP)';
     } else if (programExercise?.repRange) {
       const [min, max] = programExercise.repRange;
-      const unit = exercise?.logging_type === "time" ? "seconds" : "reps";
+      const unit = exercise?.logging_type === 'time' ? 'seconds' : 'reps';
 
       // If min and max are the same, just show the single value
       if (min === max) {
@@ -352,7 +364,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             {exercise.name}
             {!isSwapped && programExercise?.additionalHeader && (
               <Text style={styles.additionalHeader}>
-                {" - " + programExercise.additionalHeader}
+                {' - ' + programExercise.additionalHeader}
               </Text>
             )}
           </Text>
@@ -405,7 +417,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                     await clearLoggedSet(dayIndex, slotIndex, i);
                   }
                 } catch (error) {
-                  console.error("Error clearing removed sets:", error);
+                  console.error('Error clearing removed sets:', error);
                 }
               }
             }}
@@ -414,7 +426,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             <Ionicons
               name="remove-circle-outline"
               size={24}
-              color={numberOfSets <= 1 ? "#444" : "#c9b072"}
+              color={numberOfSets <= 1 ? '#444' : '#c9b072'}
             />
           </TouchableOpacity>
           <Text style={styles.setCountText}>{numberOfSets}</Text>
@@ -425,7 +437,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                 const defaultRepValue = getDefaultRepValue();
                 const newCount = numberOfSets + 1;
                 setNumberOfSets(newCount);
-                setWeights((prev) => [...prev, ""]);
+                setWeights((prev) => [...prev, '']);
                 setReps((prev) => [...prev, defaultRepValue]);
 
                 // Save custom set count
@@ -465,8 +477,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
       {Array.from({ length: numberOfSets }).map((_, setIndex) => {
         const setState = setStates.get(setIndex);
-        const isCompleted = setState === "completed";
-        const isFailed = setState === "failed";
+        const isCompleted = setState === 'completed';
+        const isFailed = setState === 'failed';
         // Allow logging with 0 or empty weight (bodyweight), but require reps
         const canLog = reps[setIndex] && !loading;
         const isFirstSet = setIndex === 0;
@@ -484,7 +496,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                     isCompleted && styles.inputCompleted,
                     isFailed && styles.inputFailed,
                   ]}
-                  value={weights[setIndex] || ""}
+                  value={weights[setIndex] || ''}
                   onChangeText={(value) => handleWeightChange(setIndex, value)}
                   keyboardType="numeric"
                   returnKeyType="done"
@@ -498,7 +510,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                 <View style={styles.inputGroup}>
                   {isFirstSet && (
                     <Text style={styles.inputLabel}>
-                      {exercise.logging_type === "time" ? "Time" : "Reps"}
+                      {exercise.logging_type === 'time' ? 'Time' : 'Reps'}
                     </Text>
                   )}
                   <TextInput
@@ -507,7 +519,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                       isCompleted && styles.inputCompleted,
                       isFailed && styles.inputFailed,
                     ]}
-                    value={reps[setIndex] || ""}
+                    value={reps[setIndex] || ''}
                     onChangeText={(value) => handleRepsChange(setIndex, value)}
                     keyboardType="numeric"
                     returnKeyType="done"
@@ -526,11 +538,11 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                 >
                   <Ionicons
                     name={
-                      setState ? "checkmark-circle" : "checkmark-circle-outline"
+                      setState ? 'checkmark-circle' : 'checkmark-circle-outline'
                     }
                     size={32}
                     color={
-                      isCompleted ? "#c9b072" : isFailed ? "#FF6B6B" : "#666"
+                      isCompleted ? '#c9b072' : isFailed ? '#FF6B6B' : '#666'
                     }
                   />
                 </TouchableOpacity>
@@ -545,9 +557,10 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
             <Text style={styles.swapButtonText}>
               {isPro
-                ? "Swap Exercise"
-                : `Swap Exercise${remainingSwaps !== null ? ` (${remainingSwaps})` : ""
-                }`}
+                ? 'Swap Exercise'
+                : `Swap Exercise${
+                    remainingSwaps !== null ? ` (${remainingSwaps})` : ''
+                  }`}
             </Text>
           </TouchableOpacity>
         </View>
@@ -558,12 +571,12 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
   },
   header: {
     marginBottom: 16,
@@ -572,57 +585,57 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   exerciseName: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 4,
   },
   additionalHeader: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 4,
   },
   additionalDescription: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 4,
     marginTop: 12,
   },
   repRangeLabel: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 4,
   },
   amrapLabel: {
-    color: "#c9b072",
-    fontWeight: "800",
+    color: '#c9b072',
+    fontWeight: '800',
     opacity: 0.75,
   },
   setsHeader: {
     marginBottom: 12,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   setsLabel: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   setControls: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   restTimerButton: {
     padding: 4,
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
     borderRadius: 6,
   },
   setControlButton: {
@@ -632,17 +645,17 @@ const styles = StyleSheet.create({
     opacity: 0.3,
   },
   setCountText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
     minWidth: 24,
-    textAlign: "center",
+    textAlign: 'center',
   },
   setContainer: {
     marginBottom: 12,
   },
   inputContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 12,
     marginBottom: 0,
   },
@@ -654,40 +667,40 @@ const styles = StyleSheet.create({
   },
   inputGroupWithCheckmark: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "flex-end",
+    flexDirection: 'row',
+    alignItems: 'flex-end',
     gap: 8,
   },
   inputLabel: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 8,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   input: {
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     borderRadius: 8,
     padding: 12,
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     borderWidth: 1,
-    borderColor: "#333",
+    borderColor: '#333',
   },
   inputCompleted: {
-    borderColor: "#c9b072",
+    borderColor: '#c9b072',
     borderWidth: 2,
   },
   inputFailed: {
-    borderColor: "#FF6B6B",
+    borderColor: '#FF6B6B',
     borderWidth: 2,
   },
   checkmarkButton: {
     paddingBottom: 8,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   checkmarkButtonDisabled: {
     opacity: 0.3,
@@ -699,27 +712,27 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#c9b072",
-    alignItems: "center",
-    justifyContent: "center",
+    borderColor: '#c9b072',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   swapButtonText: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 14,
-    fontWeight: "700",
-    textTransform: "uppercase",
+    fontWeight: '700',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   slotHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   slotLabel: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 12,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 4,
   },

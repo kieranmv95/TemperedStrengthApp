@@ -1,7 +1,7 @@
-import { getArticleById } from "@/src/data/brief";
-import { Ionicons } from "@expo/vector-icons";
-import { router, useLocalSearchParams } from "expo-router";
-import React from "react";
+import { getArticleById } from '@/src/data/brief';
+import { Ionicons } from '@expo/vector-icons';
+import { router, useLocalSearchParams } from 'expo-router';
+import React from 'react';
 import {
   Image,
   SafeAreaView,
@@ -10,7 +10,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 
 export default function ArticleScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -36,7 +36,7 @@ export default function ArticleScreen() {
   const renderInlineFormatting = (text: string, baseStyle: object) => {
     const parts = text.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, i) => {
-      if (part.startsWith("**") && part.endsWith("**")) {
+      if (part.startsWith('**') && part.endsWith('**')) {
         return (
           <Text key={i} style={[baseStyle, styles.inlineBold]}>
             {part.slice(2, -2)}
@@ -53,30 +53,30 @@ export default function ArticleScreen() {
 
   // Simple markdown-like rendering for content
   const renderContent = (content: string) => {
-    const lines = content.split("\n");
+    const lines = content.split('\n');
     return lines.map((rawLine, index) => {
       // Trim leading/trailing whitespace from each line
       const line = rawLine.trim();
-      
+
       // H2 Headers
-      if (line.startsWith("## ")) {
+      if (line.startsWith('## ')) {
         return (
           <Text key={index} style={styles.heading2}>
-            {line.replace("## ", "")}
+            {line.replace('## ', '')}
           </Text>
         );
       }
       // H3 Headers
-      if (line.startsWith("### ")) {
+      if (line.startsWith('### ')) {
         return (
           <Text key={index} style={styles.heading3}>
-            {line.replace("### ", "")}
+            {line.replace('### ', '')}
           </Text>
         );
       }
       // List items
-      if (line.startsWith("- ")) {
-        const listContent = line.replace("- ", "");
+      if (line.startsWith('- ')) {
+        const listContent = line.replace('- ', '');
         return (
           <View key={index} style={styles.listItem}>
             <Text style={styles.bullet}>•</Text>
@@ -88,8 +88,8 @@ export default function ArticleScreen() {
       }
       // Numbered list
       if (/^\d+\.\s/.test(line)) {
-        const [num, ...rest] = line.split(". ");
-        const listContent = rest.join(". ");
+        const [num, ...rest] = line.split('. ');
+        const listContent = rest.join('. ');
         return (
           <View key={index} style={styles.listItem}>
             <Text style={styles.numberBullet}>{num}.</Text>
@@ -100,7 +100,7 @@ export default function ArticleScreen() {
         );
       }
       // Empty lines
-      if (line === "") {
+      if (line === '') {
         return <View key={index} style={styles.spacer} />;
       }
       // Regular paragraphs (with inline bold support)
@@ -169,25 +169,25 @@ export default function ArticleScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121212",
+    backgroundColor: '#121212',
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#2A2A2A",
+    borderBottomColor: '#2A2A2A',
   },
   headerBackButton: {
     padding: 4,
   },
   headerTitle: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   headerSpacer: {
@@ -200,49 +200,49 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   heroImage: {
-    width: "100%",
+    width: '100%',
     height: 220,
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
   },
   metaContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
     paddingHorizontal: 20,
     paddingTop: 20,
   },
   categoryBadge: {
-    backgroundColor: "#c9b072",
+    backgroundColor: '#c9b072',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 4,
   },
   categoryText: {
-    color: "#121212",
+    color: '#121212',
     fontSize: 11,
-    fontWeight: "700",
-    textTransform: "uppercase",
+    fontWeight: '700',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   readTime: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   readTimeText: {
-    color: "#888",
+    color: '#888',
     fontSize: 13,
   },
   title: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 28,
-    fontWeight: "800",
+    fontWeight: '800',
     lineHeight: 34,
     paddingHorizontal: 20,
     marginTop: 16,
   },
   subtitle: {
-    color: "#888",
+    color: '#888',
     fontSize: 16,
     lineHeight: 24,
     paddingHorizontal: 20,
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     marginHorizontal: 20,
     marginVertical: 24,
   },
@@ -258,51 +258,51 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   heading2: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     marginTop: 24,
     marginBottom: 12,
   },
   heading3: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 17,
-    fontWeight: "700",
+    fontWeight: '700',
     marginTop: 16,
     marginBottom: 8,
   },
   paragraph: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 16,
     lineHeight: 26,
     marginBottom: 4,
   },
   inlineBold: {
-    color: "#FFFFFF",
-    fontWeight: "700",
+    color: '#FFFFFF',
+    fontWeight: '700',
   },
   listItem: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 8,
     paddingLeft: 8,
   },
   bullet: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 16,
     lineHeight: 26,
     marginRight: 12,
   },
   numberBullet: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     lineHeight: 26,
     marginRight: 8,
     width: 24,
   },
   listText: {
     flex: 1,
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 16,
     lineHeight: 26,
   },
@@ -314,23 +314,23 @@ const styles = StyleSheet.create({
   },
   errorContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   errorText: {
-    color: "#888",
+    color: '#888',
     fontSize: 18,
     marginBottom: 16,
   },
   backButton: {
-    backgroundColor: "#c9b072",
+    backgroundColor: '#c9b072',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
   },
   backButtonText: {
-    color: "#121212",
+    color: '#121212',
     fontSize: 14,
-    fontWeight: "700",
+    fontWeight: '700',
   },
 });

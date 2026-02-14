@@ -1,8 +1,8 @@
-import { ProgramLauncher } from "@/src/screens/ProgramLauncher";
-import { WorkoutScreen } from "@/src/screens/WorkoutScreen";
-import { getActiveProgramId } from "@/src/utils/storage";
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
+import { ProgramLauncher } from '@/src/screens/ProgramLauncher';
+import { WorkoutScreen } from '@/src/screens/WorkoutScreen';
+import { getActiveProgramId } from '@/src/utils/storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function HomeScreen() {
   const [hasProgram, setHasProgram] = useState<boolean | null>(null);
@@ -13,7 +13,7 @@ export default function HomeScreen() {
       const programId = await getActiveProgramId();
       setHasProgram(!!programId);
     } catch (error) {
-      console.error("Error initializing app:", error);
+      console.error('Error initializing app:', error);
       setHasProgram(false);
     }
   };
@@ -30,7 +30,7 @@ export default function HomeScreen() {
           const programId = await getActiveProgramId();
           setHasProgram(!!programId);
         } catch (error) {
-          console.error("Error checking program status:", error);
+          console.error('Error checking program status:', error);
           setHasProgram(false);
         }
       };

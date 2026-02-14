@@ -6,6 +6,5 @@ export type Exercise = {
   equipment: string;
   created_at: string;
   updated_at: string;
-  logging_type: "reps" | "time";
+  logging_type: 'reps' | 'time';
 };
-

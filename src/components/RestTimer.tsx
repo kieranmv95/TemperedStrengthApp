@@ -1,6 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { AppState, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import type { RestTimerState } from "../types/storage";
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  AppState,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import type { RestTimerState } from '../types/storage';
 
 interface RestTimerProps {
   timer: RestTimerState;
@@ -11,7 +17,7 @@ interface RestTimerProps {
 const formatDuration = (totalSeconds: number): string => {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 };
 
 export const RestTimer: React.FC<RestTimerProps> = ({
@@ -21,7 +27,7 @@ export const RestTimer: React.FC<RestTimerProps> = ({
 }) => {
   const [now, setNow] = useState(Date.now());
   const completedRef = useRef(false);
-  const isRunning = timer.status === "running";
+  const isRunning = timer.status === 'running';
 
   const remainingSeconds = useMemo(() => {
     const endTime = timer.startedAt + timer.restTimeSeconds * 1000;
@@ -49,8 +55,8 @@ export const RestTimer: React.FC<RestTimerProps> = ({
   }, [isRunning, remainingSeconds, onComplete]);
 
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", (state) => {
-      if (state === "active") {
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
         setNow(Date.now());
       }
     });
@@ -62,7 +68,9 @@ export const RestTimer: React.FC<RestTimerProps> = ({
       <View style={styles.header}>
         <Text style={styles.label}>Rest Timer</Text>
         <TouchableOpacity onPress={onDismiss} style={styles.dismissButton}>
-          <Text style={styles.dismissText}>{isRunning ? "Skip" : "Dismiss"}</Text>
+          <Text style={styles.dismissText}>
+            {isRunning ? 'Skip' : 'Dismiss'}
+          </Text>
         </TouchableOpacity>
       </View>
       {isRunning ? (
@@ -78,21 +86,21 @@ const styles = StyleSheet.create({
   container: {
     padding: 12,
     borderRadius: 10,
-    backgroundColor: "#151515",
+    backgroundColor: '#151515',
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 8,
   },
   label: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   dismissButton: {
@@ -100,23 +108,23 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: "#333",
+    borderColor: '#333',
   },
   dismissText: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   timerText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 24,
-    fontWeight: "800",
-    textAlign: "center",
+    fontWeight: '800',
+    textAlign: 'center',
   },
   completeText: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 16,
-    fontWeight: "700",
-    textAlign: "center",
+    fontWeight: '700',
+    textAlign: 'center',
   },
 });

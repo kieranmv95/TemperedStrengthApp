@@ -5,4 +5,4 @@
 export {
   useSubscriptionContext as useSubscription,
   type SubscriptionState,
-} from "./subscription-context";
+} from './subscription-context';

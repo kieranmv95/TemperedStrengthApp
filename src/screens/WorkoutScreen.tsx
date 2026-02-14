@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Alert,
   InputAccessoryView,
@@ -12,17 +12,17 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { DaySelector } from "../components/DaySelector";
-import { ExerciseCard } from "../components/ExerciseCard";
-import { SwapModal } from "../components/SwapModal";
+} from 'react-native';
+import { DaySelector } from '../components/DaySelector';
+import { ExerciseCard } from '../components/ExerciseCard';
+import { SwapModal } from '../components/SwapModal';
 import type {
   Exercise as ProgramExercise,
   Warmup,
   Workout,
-} from "../types/program";
-import type { RestTimerState } from "../types/storage";
-import { getProgramById } from "../utils/program";
+} from '../types/program';
+import type { RestTimerState } from '../types/storage';
+import { getProgramById } from '../utils/program';
 import {
   clearFutureWorkoutData,
   clearRestTimer,
@@ -34,17 +34,17 @@ import {
   saveRestTimer,
   saveWorkoutNotes,
   setProgramStartDate,
-} from "../utils/storage";
-import { RestDayScreen } from "./RestDayScreen";
+} from '../utils/storage';
+import { RestDayScreen } from './RestDayScreen';
 
 interface ExerciseSlot {
-  type: "exercise";
+  type: 'exercise';
   exerciseId: number | null;
   programExercise: ProgramExercise | null;
 }
 
 interface WarmupSlot {
-  type: "warmup";
+  type: 'warmup';
   warmup: Warmup;
 }
 
@@ -71,13 +71,13 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [swapModalVisible, setSwapModalVisible] = useState(false);
   const [currentSwapSlot, setCurrentSwapSlot] = useState<number | null>(null);
   const [swapRefreshCounter, setSwapRefreshCounter] = useState(0);
-  const [notes, setNotes] = useState<string>("");
+  const [notes, setNotes] = useState<string>('');
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
   const [restTimer, setRestTimer] = useState<RestTimerState | null>(null);
   const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
   const notesInputRef = useRef<TextInput>(null);
-  const notesInputAccessoryViewID = "notesInputAccessory";
+  const notesInputAccessoryViewID = 'notesInputAccessory';
 
   const calculateDaysSinceStart = (startDate: string): number => {
     const start = new Date(startDate);
@@ -101,9 +101,9 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         let exerciseSlotIndex = 0;
 
         const workoutSlots: WorkoutSlot[] = workout.exercises.map((item) => {
-          if (item.type === "warmup") {
+          if (item.type === 'warmup') {
             return {
-              type: "warmup" as const,
+              type: 'warmup' as const,
               warmup: item,
             };
           } else {
@@ -112,7 +112,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             exerciseSlotIndex++;
             const swappedExerciseId = swaps[currentIndex];
             return {
-              type: "exercise" as const,
+              type: 'exercise' as const,
               exerciseId: swappedExerciseId || item.id,
               programExercise: item,
             };
@@ -121,7 +121,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
         setSlots(workoutSlots);
       } catch (error) {
-        console.error("Error loading exercise slots:", error);
+        console.error('Error loading exercise slots:', error);
         setSlots([]);
       }
     },
@@ -171,7 +171,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
       const loadedProgram = getProgramById(programId);
       if (!loadedProgram) {
-        console.error("Program not found:", programId);
+        console.error('Program not found:', programId);
         setLoading(false);
         return;
       }
@@ -188,7 +188,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
       setLoading(false);
     } catch (error) {
-      console.error("Error loading workout data:", error);
+      console.error('Error loading workout data:', error);
       setLoading(false);
     }
   }, [loadWorkoutForDay]);
@@ -206,10 +206,10 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       }
 
       const endTime = timer.startedAt + timer.restTimeSeconds * 1000;
-      if (timer.status === "running" && Date.now() >= endTime) {
+      if (timer.status === 'running' && Date.now() >= endTime) {
         const completedTimer: RestTimerState = {
           ...timer,
-          status: "completed",
+          status: 'completed',
           completedAt: Date.now(),
         };
         setRestTimer(completedTimer);
@@ -219,7 +219,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
       setRestTimer(timer);
     } catch (error) {
-      console.error("Error loading rest timer:", error);
+      console.error('Error loading rest timer:', error);
       setRestTimer(null);
     }
   }, []);
@@ -247,16 +247,16 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
     // Show confirmation dialog
     Alert.alert(
-      "Set as Current Session?",
-      "Setting this workout as the current session will adjust the program start date so this session becomes day 0, and clear any completed days ahead of this date. Are you sure?",
+      'Set as Current Session?',
+      'Setting this workout as the current session will adjust the program start date so this session becomes day 0, and clear any completed days ahead of this date. Are you sure?',
       [
         {
-          text: "Cancel",
-          style: "cancel",
+          text: 'Cancel',
+          style: 'cancel',
         },
         {
-          text: "Yes",
-          style: "destructive",
+          text: 'Yes',
+          style: 'destructive',
           onPress: async () => {
             try {
               // Calculate the date that corresponds to the selected day index
@@ -282,10 +282,10 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                 await loadWorkoutData();
               }
             } catch (error) {
-              console.error("Error setting current session:", error);
+              console.error('Error setting current session:', error);
               Alert.alert(
-                "Error",
-                "Failed to set current session. Please try again."
+                'Error',
+                'Failed to set current session. Please try again.'
               );
             }
           },
@@ -314,12 +314,12 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           exerciseId: payload.exerciseId,
           restTimeSeconds: payload.restTimeSeconds,
           startedAt: Date.now(),
-          status: "running",
+          status: 'running',
         };
         setRestTimer(newTimer);
         await saveRestTimer(newTimer);
       } catch (error) {
-        console.error("Error starting rest timer:", error);
+        console.error('Error starting rest timer:', error);
       }
     },
     [restTimer]
@@ -330,29 +330,29 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       setRestTimer(null);
       await clearRestTimer();
     } catch (error) {
-      console.error("Error clearing rest timer:", error);
+      console.error('Error clearing rest timer:', error);
     }
   }, [restTimer]);
 
   const handleRestComplete = useCallback(async () => {
-    if (!restTimer || restTimer.status === "completed") return;
+    if (!restTimer || restTimer.status === 'completed') return;
     try {
       const completedTimer: RestTimerState = {
         ...restTimer,
-        status: "completed",
+        status: 'completed',
         completedAt: Date.now(),
       };
       setRestTimer(completedTimer);
       await saveRestTimer(completedTimer);
     } catch (error) {
-      console.error("Error completing rest timer:", error);
+      console.error('Error completing rest timer:', error);
     }
   }, [restTimer]);
 
   // Get only exercise slots for swap modal calculations
   const getExerciseSlots = useCallback(() => {
     return slots.filter(
-      (slot): slot is ExerciseSlot => slot.type === "exercise"
+      (slot): slot is ExerciseSlot => slot.type === 'exercise'
     );
   }, [slots]);
 
@@ -372,7 +372,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           try {
             await saveWorkoutNotes(selectedDayIndex, text);
           } catch (error) {
-            console.error("Error saving notes:", error);
+            console.error('Error saving notes:', error);
           }
         }
       }, 500);
@@ -451,9 +451,9 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
     return (
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoidingView}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
       >
         <ScrollView
           ref={scrollViewRef}
@@ -479,7 +479,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                         style={[
                           styles.intensityDot,
                           i < currentWorkout.intensity &&
-                          styles.intensityDotFilled,
+                            styles.intensityDotFilled,
                         ]}
                       />
                     ))}
@@ -507,7 +507,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           {(() => {
             let exerciseSlotIndex = 0;
             return slots.map((slot, index) => {
-              if (slot.type === "warmup") {
+              if (slot.type === 'warmup') {
                 return (
                   <View key={`warmup-${index}`} style={styles.warmupCard}>
                     <Text style={styles.warmupTitle}>Warm-Up</Text>
@@ -531,8 +531,8 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                 exerciseSlotIndex++;
                 const restTimerForSlot =
                   restTimer &&
-                    restTimer.dayIndex === selectedDayIndex &&
-                    restTimer.slotIndex === currentExerciseIndex
+                  restTimer.dayIndex === selectedDayIndex &&
+                  restTimer.slotIndex === currentExerciseIndex
                     ? restTimer
                     : null;
                 return (
@@ -569,7 +569,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                   </View>
                 )}
                 <Text style={styles.notesExpandIcon}>
-                  {isNotesExpanded ? "▼" : "▶"}
+                  {isNotesExpanded ? '▼' : '▶'}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -585,10 +585,10 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                 multiline
                 textAlignVertical="top"
                 inputAccessoryViewID={
-                  Platform.OS === "ios" ? notesInputAccessoryViewID : undefined
+                  Platform.OS === 'ios' ? notesInputAccessoryViewID : undefined
                 }
-                blurOnSubmit={Platform.OS === "android"}
-                returnKeyType={Platform.OS === "android" ? "done" : "default"}
+                blurOnSubmit={Platform.OS === 'android'}
+                returnKeyType={Platform.OS === 'android' ? 'done' : 'default'}
               />
             )}
           </View>
@@ -639,7 +639,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       />
 
       {/* Keyboard accessory view for notes input (iOS only) */}
-      {Platform.OS === "ios" && (
+      {Platform.OS === 'ios' && (
         <InputAccessoryView nativeID={notesInputAccessoryViewID}>
           <View style={styles.keyboardAccessory}>
             <View style={styles.keyboardAccessorySpacer} />
@@ -659,7 +659,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121212",
+    backgroundColor: '#121212',
   },
   keyboardAvoidingView: {
     flex: 1,
@@ -675,106 +675,106 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   headerTop: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
   headerTextContainer: {
     flex: 1,
   },
   title: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 28,
-    fontWeight: "800",
+    fontWeight: '800',
     marginBottom: 8,
     letterSpacing: -0.5,
   },
   subtitle: {
-    color: "#888",
+    color: '#888',
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   description: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
     marginBottom: 12,
     lineHeight: 20,
   },
   intensityContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   intensityLabel: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   intensityBar: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 4,
-    alignItems: "center",
+    alignItems: 'center',
   },
   intensityDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: "#333",
+    backgroundColor: '#333',
   },
   intensityDotFilled: {
-    backgroundColor: "#c9b072",
+    backgroundColor: '#c9b072',
   },
   intensityValue: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   setCurrentDayButton: {
     marginTop: 16,
-    backgroundColor: "#c9b072",
+    backgroundColor: '#c9b072',
     borderRadius: 8,
     padding: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   setCurrentDayButtonText: {
-    color: "#121212",
+    color: '#121212',
     fontSize: 14,
-    fontWeight: "700",
-    textTransform: "uppercase",
+    fontWeight: '700',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
   },
   warmupCard: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
   },
   warmupTitle: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 16,
-    fontWeight: "700",
-    textTransform: "uppercase",
+    fontWeight: '700',
+    textTransform: 'uppercase',
     letterSpacing: 1,
     marginBottom: 8,
   },
   warmupDescription: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
-    fontStyle: "italic",
+    fontStyle: 'italic',
     marginBottom: 12,
     lineHeight: 20,
   },
@@ -782,64 +782,64 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   warmupItem: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     gap: 8,
   },
   warmupBullet: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     marginTop: 1,
   },
   warmupText: {
-    color: "#CCCCCC",
+    color: '#CCCCCC',
     fontSize: 14,
     lineHeight: 20,
     flex: 1,
   },
   notesContainer: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderRadius: 12,
     marginTop: 8,
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: "#2A2A2A",
-    overflow: "hidden",
+    borderColor: '#2A2A2A',
+    overflow: 'hidden',
   },
   notesHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 16,
   },
   notesTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   notesHeaderRight: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   notesBadge: {
-    backgroundColor: "#333",
+    backgroundColor: '#333',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
   },
   notesBadgeText: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   notesExpandIcon: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
   },
   notesInput: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
     lineHeight: 22,
     padding: 16,
@@ -847,12 +847,12 @@ const styles = StyleSheet.create({
     minHeight: 100,
   },
   keyboardAccessory: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    backgroundColor: "#2C2C2E",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    backgroundColor: '#2C2C2E',
     borderTopWidth: 0.5,
-    borderTopColor: "#3D3D3F",
+    borderTopColor: '#3D3D3F',
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
@@ -864,8 +864,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   keyboardDoneButtonText: {
-    color: "#0A84FF",
+    color: '#0A84FF',
     fontSize: 17,
-    fontWeight: "600",
+    fontWeight: '600',
   },
 });

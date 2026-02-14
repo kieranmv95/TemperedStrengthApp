@@ -1,16 +1,16 @@
-import { ArticleCard } from "@/src/components/brief/ArticleCard";
-import { GlossaryItem } from "@/src/components/brief/GlossaryItem";
-import { PlaylistCard } from "@/src/components/brief/PlaylistCard";
+import { ArticleCard } from '@/src/components/brief/ArticleCard';
+import { GlossaryItem } from '@/src/components/brief/GlossaryItem';
+import { PlaylistCard } from '@/src/components/brief/PlaylistCard';
 import {
   articles,
   getFeaturedArticle,
   glossary,
   playlists,
-} from "@/src/data/brief";
-import type { Article } from "@/src/types/brief";
-import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import React from "react";
+} from '@/src/data/brief';
+import type { Article } from '@/src/types/brief';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import React from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -18,7 +18,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 
 export default function BriefScreen() {
   const featuredArticle = getFeaturedArticle();
@@ -27,13 +27,13 @@ export default function BriefScreen() {
 
   const handleArticlePress = (article: Article) => {
     router.push({
-      pathname: "/article/[id]",
+      pathname: '/article/[id]',
       params: { id: article.id },
     });
   };
 
   const handleSeeAllGlossary = () => {
-    router.push("/glossary");
+    router.push('/glossary');
   };
 
   return (
@@ -46,7 +46,9 @@ export default function BriefScreen() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>Brief</Text>
-          <Text style={styles.subtitle}>Your daily intel for the iron game</Text>
+          <Text style={styles.subtitle}>
+            Your daily intel for the iron game
+          </Text>
         </View>
 
         {/* FIELD INTEL - Articles Section */}
@@ -135,7 +137,7 @@ export default function BriefScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121212",
+    backgroundColor: '#121212',
   },
   scrollView: {
     flex: 1,
@@ -148,54 +150,54 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   title: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 32,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: -0.5,
     marginBottom: 4,
   },
   subtitle: {
-    color: "#666",
+    color: '#666',
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   section: {
     marginBottom: 32,
   },
   sectionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 16,
   },
   sectionTitleRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   sectionTitle: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1.5,
   },
   seeAllButton: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   seeAllText: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   playlistsContainer: {
     paddingRight: 16,
   },
   moreArticlesLabel: {
-    color: "#666",
+    color: '#666',
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: '600',
     marginTop: 16,
     marginBottom: 12,
   },
@@ -207,4 +209,3 @@ const styles = StyleSheet.create({
     height: 32,
   },
 });
-

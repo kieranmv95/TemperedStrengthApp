@@ -1,11 +1,11 @@
 export interface Warmup {
-  type: "warmup";
+  type: 'warmup';
   additionalDescription?: string | null;
   description: string[];
 }
 
 export interface Exercise {
-  type: "exercise";
+  type: 'exercise';
   id: number;
   additionalHeader?: string | null;
   additionalDescription?: string | null;
@@ -31,6 +31,6 @@ export interface Program {
   description: string;
   workouts: Workout[];
   isPro: boolean;
-  daysSplit?: ("mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun")[];
+  daysSplit?: ('mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')[];
   averageSessionDuration?: string;
 }

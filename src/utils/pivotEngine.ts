@@ -1,5 +1,5 @@
 // Pivot Engine - Logic for finding exercise alternatives
-import { getAllExercises, type Exercise } from "../data/exercises";
+import { getAllExercises, type Exercise } from '../data/exercises';
 
 /**
  * Finds alternative exercises that share the same movement pattern

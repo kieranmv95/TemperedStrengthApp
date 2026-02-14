@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Dimensions,
   NativeScrollEvent,
@@ -8,7 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 
 interface DaySelectorProps {
   startDate: string; // ISO string
@@ -33,7 +33,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   const scrollViewRef = useRef<ScrollView>(null);
   const lastStartDateRef = useRef<string>(startDate);
   const [isTodayVisible, setIsTodayVisible] = useState(true);
-  
+
   const start = new Date(startDate);
   start.setHours(0, 0, 0, 0);
 
@@ -58,8 +58,9 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   );
 
   // Check if today is within the visible range of days
-  const isTodayInRange = todayDayIndex >= minDayIndex && todayDayIndex <= maxDayIndex;
-  
+  const isTodayInRange =
+    todayDayIndex >= minDayIndex && todayDayIndex <= maxDayIndex;
+
   // Check if today is currently selected
   const isTodaySelected = currentDayIndex === todayDayIndex;
 
@@ -70,23 +71,23 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
 
     // Get short month name (Jan, Feb, Mar, etc.)
     const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     const month = monthNames[date.getMonth()];
 
     // Get ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
-    const suffix = ["th", "st", "nd", "rd"][
+    const suffix = ['th', 'st', 'nd', 'rd'][
       day % 10 > 3 || Math.floor((day % 100) / 10) === 1 ? 0 : day % 10
     ];
 
@@ -110,22 +111,22 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   );
 
   const hasScrolledInitially = useRef(false);
-  const screenWidth = Dimensions.get("window").width;
+  const screenWidth = Dimensions.get('window').width;
 
   // Track scroll position to determine if today is visible
   const handleScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       if (!isTodayInRange) return;
-      
+
       const scrollX = event.nativeEvent.contentOffset.x;
       const todayArrayIndex = todayDayIndex - minDayIndex;
       const todayPosition = todayArrayIndex * ITEM_WIDTH + SCROLL_PADDING_H;
-      
+
       // Check if today's position is within the visible area
       const isVisible =
         todayPosition >= scrollX - ITEM_WIDTH &&
         todayPosition <= scrollX + screenWidth + ITEM_WIDTH;
-      
+
       setIsTodayVisible(isVisible);
     },
     [todayDayIndex, minDayIndex, isTodayInRange, screenWidth]
@@ -134,10 +135,10 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   // Jump to today handler
   const handleJumpToToday = useCallback(() => {
     if (!isTodayInRange) return;
-    
+
     // Select today
     onDaySelect(todayDayIndex);
-    
+
     // Scroll to center today
     const todayArrayIndex = todayDayIndex - minDayIndex;
     const scrollX =
@@ -145,12 +146,12 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
       screenWidth / 2 +
       ITEM_WIDTH / 2 +
       SCROLL_PADDING_H;
-    
+
     scrollViewRef.current?.scrollTo({
       x: Math.max(0, scrollX),
       animated: true,
     });
-    
+
     setIsTodayVisible(true);
   }, [todayDayIndex, minDayIndex, screenWidth, onDaySelect, isTodayInRange]);
 
@@ -159,7 +160,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   // since day 0 will be at the beginning - no jarring animation needed
   useEffect(() => {
     const startDateChanged = lastStartDateRef.current !== startDate;
-    
+
     if (startDateChanged) {
       // Start date changed - reset scroll to beginning instantly (day 0 is there)
       lastStartDateRef.current = startDate;
@@ -169,10 +170,10 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
     } else if (!hasScrolledInitially.current) {
       // Initial mount - scroll to center the current day
       hasScrolledInitially.current = true;
-      
+
       // Calculate the index of current day in the days array
       const currentDayArrayIndex = currentDayIndex - minDayIndex;
-      
+
       if (currentDayArrayIndex >= 0 && currentDayArrayIndex < days.length) {
         // Calculate scroll position to center the current day
         const scrollX =
@@ -193,7 +194,8 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   }, [startDate, currentDayIndex, minDayIndex, days.length, screenWidth]);
 
   // Show "Jump to Today" button if today is in range AND (not visible OR not selected)
-  const showJumpToToday = isTodayInRange && (!isTodayVisible || !isTodaySelected);
+  const showJumpToToday =
+    isTodayInRange && (!isTodayVisible || !isTodaySelected);
 
   return (
     <View style={styles.container}>
@@ -228,8 +230,8 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
                   dayIsToday
                     ? styles.dotToday
                     : dayHasWorkout
-                    ? styles.dotWorkout
-                    : null,
+                      ? styles.dotWorkout
+                      : null,
                 ]}
               />
             </TouchableOpacity>
@@ -251,9 +253,9 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderBottomWidth: 1,
-    borderBottomColor: "#2A2A2A",
+    borderBottomColor: '#2A2A2A',
     paddingTop: 12,
     paddingBottom: 8,
   },
@@ -262,27 +264,27 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: SCROLL_PADDING_H,
-    alignItems: "center",
+    alignItems: 'center',
     gap: GAP,
   },
   dayItem: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingHorizontal: ITEM_PADDING_H,
     paddingVertical: 8,
     minWidth: ITEM_MIN_WIDTH,
   },
   dayItemSelected: {
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     borderRadius: 8,
   },
   dayLabel: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 4,
   },
   dayLabelSelected: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
   },
   dot: {
     width: 6,
@@ -291,24 +293,24 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   dotWorkout: {
-    backgroundColor: "#888",
+    backgroundColor: '#888',
   },
   dotToday: {
-    backgroundColor: "#c9b072",
+    backgroundColor: '#c9b072',
   },
   jumpToTodayButton: {
-    alignSelf: "center",
+    alignSelf: 'center',
     marginTop: 8,
     paddingHorizontal: 16,
     paddingVertical: 6,
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#c9b072",
+    borderColor: '#c9b072',
   },
   jumpToTodayText: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
   },
 });

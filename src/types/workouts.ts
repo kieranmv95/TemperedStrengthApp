@@ -1,16 +1,16 @@
 export type WorkoutCategory =
-  | "Strength"
-  | "WOD"
-  | "Hyrox"
-  | "Conditioning"
-  | "Mobility";
+  | 'Strength'
+  | 'WOD'
+  | 'Hyrox'
+  | 'Conditioning'
+  | 'Mobility';
 
 export interface SingleWorkout {
   id: string;
   title: string;
   description: string;
   category: WorkoutCategory;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   estimatedTime: number;
   tags: string[];
   isPremium: boolean;

@@ -14,7 +14,7 @@ export interface ExerciseSwaps {
 export interface LoggedSet {
   weight: number | null;
   reps: number;
-  state?: "completed" | "failed" | null;
+  state?: 'completed' | 'failed' | null;
 }
 
 export interface WorkoutLogs {
@@ -41,6 +41,6 @@ export interface RestTimerState {
   exerciseId: number | null;
   restTimeSeconds: number;
   startedAt: number;
-  status: "running" | "completed";
+  status: 'running' | 'completed';
   completedAt?: number;
 }

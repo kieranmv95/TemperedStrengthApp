@@ -1,14 +1,14 @@
-import { useSubscription } from "@/src/hooks/use-subscription";
-import { allStandaloneWorkouts } from "@/src/data/workouts";
-import type { SingleWorkout, WorkoutCategory } from "@/src/types/workouts";
+import { useSubscription } from '@/src/hooks/use-subscription';
+import { allStandaloneWorkouts } from '@/src/data/workouts';
+import type { SingleWorkout, WorkoutCategory } from '@/src/types/workouts';
 import {
   getFavoriteWorkouts,
   toggleFavoriteWorkout,
-} from "@/src/utils/storage";
-import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
-import { router } from "expo-router";
-import React, { useCallback, useState } from "react";
+} from '@/src/utils/storage';
+import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
+import { router } from 'expo-router';
+import React, { useCallback, useState } from 'react';
 import {
   FlatList,
   SafeAreaView,
@@ -17,41 +17,41 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 
-type TimeFilter = "≤15 min" | "16-30 min" | "31-45 min" | "46+ min" | null;
-type CategoryFilter = "All" | WorkoutCategory | "Favorites" | "Pro";
+type TimeFilter = '≤15 min' | '16-30 min' | '31-45 min' | '46+ min' | null;
+type CategoryFilter = 'All' | WorkoutCategory | 'Favorites' | 'Pro';
 
-const TIME_FILTERS: ("≤15 min" | "16-30 min" | "31-45 min" | "46+ min")[] = [
-  "≤15 min",
-  "16-30 min",
-  "31-45 min",
-  "46+ min",
+const TIME_FILTERS: ('≤15 min' | '16-30 min' | '31-45 min' | '46+ min')[] = [
+  '≤15 min',
+  '16-30 min',
+  '31-45 min',
+  '46+ min',
 ];
 
 const CATEGORY_FILTERS: CategoryFilter[] = [
-  "All",
-  "Favorites",
-  "Pro",
-  "Strength",
-  "WOD",
-  "Hyrox",
-  "Conditioning",
-  "Mobility",
+  'All',
+  'Favorites',
+  'Pro',
+  'Strength',
+  'WOD',
+  'Hyrox',
+  'Conditioning',
+  'Mobility',
 ];
 
 const CATEGORY_ICONS: Record<WorkoutCategory, string> = {
-  Strength: "barbell",
-  WOD: "timer",
-  Hyrox: "fitness",
-  Conditioning: "heart",
-  Mobility: "body",
+  Strength: 'barbell',
+  WOD: 'timer',
+  Hyrox: 'fitness',
+  Conditioning: 'heart',
+  Mobility: 'body',
 };
 
 const DIFFICULTY_COLORS: Record<string, string> = {
-  Beginner: "#c9b072",
-  Intermediate: "#c9b072",
-  Advanced: "#c9b072",
+  Beginner: '#c9b072',
+  Intermediate: '#c9b072',
+  Advanced: '#c9b072',
 };
 
 interface WorkoutCardProps {
@@ -109,9 +109,9 @@ function WorkoutCard({
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Ionicons
-            name={isFavorite ? "heart" : "heart-outline"}
+            name={isFavorite ? 'heart' : 'heart-outline'}
             size={24}
-            color={isFavorite ? "#FF6B6B" : "#666"}
+            color={isFavorite ? '#FF6B6B' : '#666'}
           />
         </TouchableOpacity>
       </View>
@@ -158,7 +158,7 @@ export default function WorkoutsScreen() {
   const { isPro } = useSubscription();
   const [activeTimeFilter, setActiveTimeFilter] = useState<TimeFilter>(null);
   const [activeCategoryFilter, setActiveCategoryFilter] =
-    useState<CategoryFilter>("All");
+    useState<CategoryFilter>('All');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [selectedWorkout, setSelectedWorkout] = useState<SingleWorkout | null>(
     null
@@ -194,32 +194,32 @@ export default function WorkoutsScreen() {
   };
 
   const handleLockedPress = () => {
-    router.push("/paywall");
+    router.push('/paywall');
   };
 
   // Filter workouts based on active filters (time and category work together)
   const filteredWorkouts = allStandaloneWorkouts.filter((workout) => {
     // Apply time filter
-    if (activeTimeFilter === "≤15 min" && workout.estimatedTime > 15)
+    if (activeTimeFilter === '≤15 min' && workout.estimatedTime > 15)
       return false;
     if (
-      activeTimeFilter === "16-30 min" &&
+      activeTimeFilter === '16-30 min' &&
       (workout.estimatedTime < 16 || workout.estimatedTime > 30)
     )
       return false;
     if (
-      activeTimeFilter === "31-45 min" &&
+      activeTimeFilter === '31-45 min' &&
       (workout.estimatedTime < 31 || workout.estimatedTime > 45)
     )
       return false;
-    if (activeTimeFilter === "46+ min" && workout.estimatedTime < 46)
+    if (activeTimeFilter === '46+ min' && workout.estimatedTime < 46)
       return false;
 
     // Apply category filter
-    if (activeCategoryFilter === "All") return true;
-    if (activeCategoryFilter === "Favorites")
+    if (activeCategoryFilter === 'All') return true;
+    if (activeCategoryFilter === 'Favorites')
       return favorites.includes(workout.id);
-    if (activeCategoryFilter === "Pro") return workout.isPremium;
+    if (activeCategoryFilter === 'Pro') return workout.isPremium;
     return workout.category === activeCategoryFilter;
   });
 
@@ -244,12 +244,12 @@ export default function WorkoutsScreen() {
             <Ionicons
               name={
                 favorites.includes(selectedWorkout.id)
-                  ? "heart"
-                  : "heart-outline"
+                  ? 'heart'
+                  : 'heart-outline'
               }
               size={24}
               color={
-                favorites.includes(selectedWorkout.id) ? "#FF6B6B" : "#FFFFFF"
+                favorites.includes(selectedWorkout.id) ? '#FF6B6B' : '#FFFFFF'
               }
             />
           </TouchableOpacity>
@@ -316,10 +316,11 @@ export default function WorkoutsScreen() {
               <View style={styles.movementsList}>
                 {block.movements.map((movement, movementIndex) => {
                   const movementText =
-                    typeof movement === "string"
+                    typeof movement === 'string'
                       ? movement
-                      : `${movement.name}: ${movement.value}${movement.note ? ` (${movement.note})` : ""
-                      }`;
+                      : `${movement.name}: ${movement.value}${
+                          movement.note ? ` (${movement.note})` : ''
+                        }`;
                   return (
                     <View key={movementIndex} style={styles.movementItem}>
                       <Text style={styles.movementBullet}>•</Text>
@@ -351,14 +352,14 @@ export default function WorkoutsScreen() {
           {CATEGORY_FILTERS.map((filter) => {
             const isActive = activeCategoryFilter === filter;
             const count =
-              filter === "All"
+              filter === 'All'
                 ? allStandaloneWorkouts.length
-                : filter === "Favorites"
+                : filter === 'Favorites'
                   ? favorites.length
-                  : filter === "Pro"
+                  : filter === 'Pro'
                     ? allStandaloneWorkouts.filter((w) => w.isPremium).length
                     : allStandaloneWorkouts.filter((w) => w.category === filter)
-                      .length;
+                        .length;
 
             return (
               <TouchableOpacity
@@ -366,19 +367,19 @@ export default function WorkoutsScreen() {
                 style={[styles.filterTab, isActive && styles.filterTabActive]}
                 onPress={() => setActiveCategoryFilter(filter)}
               >
-                {filter === "Favorites" && (
+                {filter === 'Favorites' && (
                   <Ionicons
                     name="heart"
                     size={14}
-                    color={isActive ? "#121212" : "#888"}
+                    color={isActive ? '#121212' : '#888'}
                     style={styles.filterIcon}
                   />
                 )}
-                {filter === "Pro" && (
+                {filter === 'Pro' && (
                   <Ionicons
                     name="star"
                     size={14}
-                    color={isActive ? "#121212" : "#888"}
+                    color={isActive ? '#121212' : '#888'}
                     style={styles.filterIcon}
                   />
                 )}
@@ -414,12 +415,12 @@ export default function WorkoutsScreen() {
           {TIME_FILTERS.map((filter) => {
             const isActive = activeTimeFilter === filter;
             const count = allStandaloneWorkouts.filter((w) => {
-              if (filter === "≤15 min") return w.estimatedTime <= 15;
-              if (filter === "16-30 min")
+              if (filter === '≤15 min') return w.estimatedTime <= 15;
+              if (filter === '16-30 min')
                 return w.estimatedTime >= 16 && w.estimatedTime <= 30;
-              if (filter === "31-45 min")
+              if (filter === '31-45 min')
                 return w.estimatedTime >= 31 && w.estimatedTime <= 45;
-              if (filter === "46+ min") return w.estimatedTime >= 46;
+              if (filter === '46+ min') return w.estimatedTime >= 46;
               return false;
             }).length;
 
@@ -432,7 +433,7 @@ export default function WorkoutsScreen() {
                 <Ionicons
                   name="time-outline"
                   size={14}
-                  color={isActive ? "#121212" : "#888"}
+                  color={isActive ? '#121212' : '#888'}
                   style={styles.filterIcon}
                 />
                 <Text
@@ -462,20 +463,20 @@ export default function WorkoutsScreen() {
         <View style={styles.emptyState}>
           <Ionicons
             name={
-              activeCategoryFilter === "Favorites" ? "heart-outline" : "barbell"
+              activeCategoryFilter === 'Favorites' ? 'heart-outline' : 'barbell'
             }
             size={64}
             color="#333"
           />
           <Text style={styles.emptyTitle}>
-            {activeCategoryFilter === "Favorites"
-              ? "No Favorites Yet"
-              : "No Workouts Found"}
+            {activeCategoryFilter === 'Favorites'
+              ? 'No Favorites Yet'
+              : 'No Workouts Found'}
           </Text>
           <Text style={styles.emptyDescription}>
-            {activeCategoryFilter === "Favorites"
-              ? "Tap the heart icon on any workout to save it here."
-              : "Try selecting a different filter."}
+            {activeCategoryFilter === 'Favorites'
+              ? 'Tap the heart icon on any workout to save it here.'
+              : 'Try selecting a different filter.'}
           </Text>
         </View>
       ) : (
@@ -503,16 +504,16 @@ export default function WorkoutsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121212",
+    backgroundColor: '#121212',
   },
   header: {
     padding: 24,
     paddingBottom: 16,
   },
   title: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 32,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: -0.5,
   },
   categoryFilterContainer: {
@@ -520,7 +521,7 @@ const styles = StyleSheet.create({
   },
   filterContainer: {
     borderBottomWidth: 1,
-    borderBottomColor: "#2A2A2A",
+    borderBottomColor: '#2A2A2A',
   },
   filterScrollContent: {
     paddingHorizontal: 16,
@@ -528,38 +529,38 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   filterTab: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
   },
   filterTabActive: {
-    backgroundColor: "#c9b072",
-    borderColor: "#c9b072",
+    backgroundColor: '#c9b072',
+    borderColor: '#c9b072',
   },
   filterIcon: {
     marginRight: 4,
   },
   filterTabText: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   filterTabTextActive: {
-    color: "#121212",
+    color: '#121212',
   },
   filterCount: {
-    color: "#666",
+    color: '#666',
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     marginLeft: 6,
   },
   filterCountActive: {
-    color: "#121212",
+    color: '#121212',
     opacity: 0.7,
   },
   listContent: {
@@ -567,85 +568,85 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   workoutCard: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
   },
   workoutCardLocked: {
-    borderColor: "#c9b072",
+    borderColor: '#c9b072',
     borderWidth: 2,
     opacity: 0.6,
   },
   cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 8,
   },
   cardTitleRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   categoryIcon: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: "#2A2A2A",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#2A2A2A',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cardCategory: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   premiumBadge: {
-    backgroundColor: "#c9b072",
+    backgroundColor: '#c9b072',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
   },
   premiumBadgeText: {
-    color: "#121212",
+    color: '#121212',
     fontSize: 10,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   favoriteButton: {
     padding: 4,
   },
   cardTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 4,
   },
   cardDescription: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
     lineHeight: 20,
     marginBottom: 12,
   },
   cardMeta: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
     marginBottom: 12,
   },
   metaItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   metaText: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   difficultyBadge: {
     paddingHorizontal: 8,
@@ -655,51 +656,51 @@ const styles = StyleSheet.create({
   },
   difficultyText: {
     fontSize: 11,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   tagsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 6,
   },
   tag: {
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
   },
   tagText: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   emptyState: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 48,
   },
   emptyTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     marginTop: 16,
     marginBottom: 8,
-    textAlign: "center",
+    textAlign: 'center',
   },
   emptyDescription: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
     lineHeight: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   // Detail view styles
   detailHeader: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#2A2A2A",
+    borderBottomColor: '#2A2A2A',
   },
   backButton: {
     padding: 8,
@@ -707,9 +708,9 @@ const styles = StyleSheet.create({
   },
   detailTitle: {
     flex: 1,
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   detailFavoriteButton: {
     padding: 8,
@@ -721,65 +722,65 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   detailMetaRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
     marginBottom: 16,
   },
   detailCategoryBadge: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 6,
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 16,
   },
   detailCategoryText: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   detailMetaItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   detailMetaText: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   detailDescription: {
-    color: "#CCC",
+    color: '#CCC',
     fontSize: 16,
     lineHeight: 24,
     marginBottom: 16,
   },
   detailTagsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 8,
     marginBottom: 24,
   },
   blockContainer: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
   },
   blockName: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 8,
   },
   blockInstructions: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
-    fontStyle: "italic",
+    fontStyle: 'italic',
     marginBottom: 12,
     lineHeight: 20,
   },
@@ -787,18 +788,18 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   movementItem: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     gap: 8,
   },
   movementBullet: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     marginTop: 2,
   },
   movementText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 15,
     lineHeight: 22,
     flex: 1,

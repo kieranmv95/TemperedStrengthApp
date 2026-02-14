@@ -6,8 +6,8 @@ import type {
   RestTimerState,
   WorkoutLogs,
   WorkoutNotes,
-} from "@/src/types/storage";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+} from '@/src/types/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type {
   CustomSetCounts,
@@ -17,18 +17,18 @@ export type {
   RestTimerState,
   WorkoutLogs,
   WorkoutNotes,
-} from "@/src/types/storage";
+} from '@/src/types/storage';
 
-const PROGRAM_STORAGE_KEY = "active_program";
-const PROGRAM_START_DATE_KEY = "program_start_date";
-const EXERCISE_SWAPS_KEY = "exercise_swaps";
-const WORKOUT_LOGS_KEY = "workout_logs";
-const CUSTOM_SET_COUNTS_KEY = "custom_set_counts";
-const SWAP_COUNT_KEY = "swap_count";
-const SWAP_COUNT_MONTH_KEY = "swap_count_month";
-const WORKOUT_NOTES_KEY = "workout_notes";
-const FAVORITE_WORKOUTS_KEY = "favorite_workouts";
-const REST_TIMER_KEY = "rest_timer";
+const PROGRAM_STORAGE_KEY = 'active_program';
+const PROGRAM_START_DATE_KEY = 'program_start_date';
+const EXERCISE_SWAPS_KEY = 'exercise_swaps';
+const WORKOUT_LOGS_KEY = 'workout_logs';
+const CUSTOM_SET_COUNTS_KEY = 'custom_set_counts';
+const SWAP_COUNT_KEY = 'swap_count';
+const SWAP_COUNT_MONTH_KEY = 'swap_count_month';
+const WORKOUT_NOTES_KEY = 'workout_notes';
+const FAVORITE_WORKOUTS_KEY = 'favorite_workouts';
+const REST_TIMER_KEY = 'rest_timer';
 
 /**
  * Get the active program ID
@@ -38,7 +38,7 @@ export const getActiveProgramId = async (): Promise<string | null> => {
   try {
     return await AsyncStorage.getItem(PROGRAM_STORAGE_KEY);
   } catch (error) {
-    console.error("Error getting active program:", error);
+    console.error('Error getting active program:', error);
     return null;
   }
 };
@@ -51,7 +51,7 @@ export const setActiveProgramId = async (programId: string): Promise<void> => {
   try {
     await AsyncStorage.setItem(PROGRAM_STORAGE_KEY, programId);
   } catch (error) {
-    console.error("Error setting active program:", error);
+    console.error('Error setting active program:', error);
     throw error;
   }
 };
@@ -64,7 +64,7 @@ export const getProgramStartDate = async (): Promise<string | null> => {
   try {
     return await AsyncStorage.getItem(PROGRAM_START_DATE_KEY);
   } catch (error) {
-    console.error("Error getting program start date:", error);
+    console.error('Error getting program start date:', error);
     return null;
   }
 };
@@ -77,7 +77,7 @@ export const setProgramStartDate = async (startDate: string): Promise<void> => {
   try {
     await AsyncStorage.setItem(PROGRAM_START_DATE_KEY, startDate);
   } catch (error) {
-    console.error("Error setting program start date:", error);
+    console.error('Error setting program start date:', error);
     throw error;
   }
 };
@@ -91,7 +91,7 @@ export const setProgramStartDate = async (startDate: string): Promise<void> => {
 export const saveExerciseSwap = async (
   dayIndex: number,
   slotIndex: number,
-  exerciseId: number,
+  exerciseId: number
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(EXERCISE_SWAPS_KEY);
@@ -104,7 +104,7 @@ export const saveExerciseSwap = async (
 
     await AsyncStorage.setItem(EXERCISE_SWAPS_KEY, JSON.stringify(swaps));
   } catch (error) {
-    console.error("Error saving exercise swap:", error);
+    console.error('Error saving exercise swap:', error);
     throw error;
   }
 };
@@ -115,14 +115,14 @@ export const saveExerciseSwap = async (
  * @returns Object mapping slot indices to exercise IDs
  */
 export const getExerciseSwapsForDay = async (
-  dayIndex: number,
+  dayIndex: number
 ): Promise<{ [slotIndex: number]: number }> => {
   try {
     const data = await AsyncStorage.getItem(EXERCISE_SWAPS_KEY);
     const swaps: ExerciseSwaps = data ? JSON.parse(data) : {};
     return swaps[dayIndex] || {};
   } catch (error) {
-    console.error("Error getting exercise swaps:", error);
+    console.error('Error getting exercise swaps:', error);
     return {};
   }
 };
@@ -134,7 +134,7 @@ export const getExerciseSwapsForDay = async (
  */
 export const clearExerciseSwap = async (
   dayIndex: number,
-  slotIndex: number,
+  slotIndex: number
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(EXERCISE_SWAPS_KEY);
@@ -153,7 +153,7 @@ export const clearExerciseSwap = async (
       // Note: Resetting to original exercise does NOT count against swap limit
     }
   } catch (error) {
-    console.error("Error clearing exercise swap:", error);
+    console.error('Error clearing exercise swap:', error);
     throw error;
   }
 };
@@ -183,7 +183,7 @@ const getSwapCountData = async (): Promise<{
       month: currentMonth,
     };
   } catch (error) {
-    console.error("Error getting swap count data:", error);
+    console.error('Error getting swap count data:', error);
     return { count: 0, month: new Date().getMonth() };
   }
 };
@@ -197,7 +197,7 @@ export const getRemainingSwapCount = async (): Promise<number> => {
     const { count } = await getSwapCountData();
     return Math.max(0, 10 - count);
   } catch (error) {
-    console.error("Error getting remaining swap count:", error);
+    console.error('Error getting remaining swap count:', error);
     return 10;
   }
 };
@@ -218,7 +218,7 @@ export const incrementSwapCount = async (): Promise<number> => {
 
     return newCount;
   } catch (error) {
-    console.error("Error incrementing swap count:", error);
+    console.error('Error incrementing swap count:', error);
     throw error;
   }
 };
@@ -238,7 +238,7 @@ export const saveLoggedSet = async (
   setIndex: number,
   weight: number | null,
   reps: number,
-  state?: "completed" | "failed" | null,
+  state?: 'completed' | 'failed' | null
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
@@ -267,7 +267,7 @@ export const saveLoggedSet = async (
 
     await AsyncStorage.setItem(WORKOUT_LOGS_KEY, JSON.stringify(logs));
   } catch (error) {
-    console.error("Error saving logged set:", error);
+    console.error('Error saving logged set:', error);
     throw error;
   }
 };
@@ -280,14 +280,14 @@ export const saveLoggedSet = async (
  */
 export const getLoggedSets = async (
   dayIndex: number,
-  slotIndex: number,
+  slotIndex: number
 ): Promise<{ [setIndex: number]: LoggedSet }> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
     const logs: WorkoutLogs = data ? JSON.parse(data) : {};
     return logs[dayIndex]?.[slotIndex] || {};
   } catch (error) {
-    console.error("Error getting logged sets:", error);
+    console.error('Error getting logged sets:', error);
     return {};
   }
 };
@@ -300,13 +300,13 @@ export const getLoggedSets = async (
  */
 export const hasLoggedSets = async (
   dayIndex: number,
-  slotIndex: number,
+  slotIndex: number
 ): Promise<boolean> => {
   try {
     const loggedSets = await getLoggedSets(dayIndex, slotIndex);
     return Object.keys(loggedSets).length > 0;
   } catch (error) {
-    console.error("Error checking logged sets:", error);
+    console.error('Error checking logged sets:', error);
     return false;
   }
 };
@@ -318,7 +318,7 @@ export const hasLoggedSets = async (
  */
 export const clearLoggedSetsForSlot = async (
   dayIndex: number,
-  slotIndex: number,
+  slotIndex: number
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
@@ -336,7 +336,7 @@ export const clearLoggedSetsForSlot = async (
       await AsyncStorage.setItem(WORKOUT_LOGS_KEY, JSON.stringify(logs));
     }
   } catch (error) {
-    console.error("Error clearing logged sets for slot:", error);
+    console.error('Error clearing logged sets for slot:', error);
     throw error;
   }
 };
@@ -350,7 +350,7 @@ export const clearLoggedSetsForSlot = async (
 export const saveCustomSetCount = async (
   dayIndex: number,
   slotIndex: number,
-  setCount: number,
+  setCount: number
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(CUSTOM_SET_COUNTS_KEY);
@@ -363,7 +363,7 @@ export const saveCustomSetCount = async (
 
     await AsyncStorage.setItem(CUSTOM_SET_COUNTS_KEY, JSON.stringify(counts));
   } catch (error) {
-    console.error("Error saving custom set count:", error);
+    console.error('Error saving custom set count:', error);
     throw error;
   }
 };
@@ -376,14 +376,14 @@ export const saveCustomSetCount = async (
  */
 export const getCustomSetCount = async (
   dayIndex: number,
-  slotIndex: number,
+  slotIndex: number
 ): Promise<number | null> => {
   try {
     const data = await AsyncStorage.getItem(CUSTOM_SET_COUNTS_KEY);
     const counts: CustomSetCounts = data ? JSON.parse(data) : {};
     return counts[dayIndex]?.[slotIndex] ?? null;
   } catch (error) {
-    console.error("Error getting custom set count:", error);
+    console.error('Error getting custom set count:', error);
     return null;
   }
 };
@@ -397,7 +397,7 @@ export const getCustomSetCount = async (
 export const clearLoggedSet = async (
   dayIndex: number,
   slotIndex: number,
-  setIndex: number,
+  setIndex: number
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
@@ -419,7 +419,7 @@ export const clearLoggedSet = async (
       await AsyncStorage.setItem(WORKOUT_LOGS_KEY, JSON.stringify(logs));
     }
   } catch (error) {
-    console.error("Error clearing logged set:", error);
+    console.error('Error clearing logged set:', error);
     throw error;
   }
 };
@@ -429,7 +429,7 @@ export const clearLoggedSet = async (
  * @param fromDayIndex - Day index to start clearing from (inclusive)
  */
 export const clearFutureWorkoutData = async (
-  fromDayIndex: number,
+  fromDayIndex: number
 ): Promise<void> => {
   try {
     // Clear workout logs
@@ -445,7 +445,7 @@ export const clearFutureWorkoutData = async (
       });
       await AsyncStorage.setItem(
         WORKOUT_LOGS_KEY,
-        JSON.stringify(filteredLogs),
+        JSON.stringify(filteredLogs)
       );
     }
 
@@ -462,11 +462,11 @@ export const clearFutureWorkoutData = async (
       });
       await AsyncStorage.setItem(
         EXERCISE_SWAPS_KEY,
-        JSON.stringify(filteredSwaps),
+        JSON.stringify(filteredSwaps)
       );
     }
   } catch (error) {
-    console.error("Error clearing future workout data:", error);
+    console.error('Error clearing future workout data:', error);
     throw error;
   }
 };
@@ -478,13 +478,13 @@ export const clearFutureWorkoutData = async (
  */
 export const saveWorkoutNotes = async (
   dayIndex: number,
-  notes: string,
+  notes: string
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_NOTES_KEY);
     const allNotes: WorkoutNotes = data ? JSON.parse(data) : {};
 
-    if (notes.trim() === "") {
+    if (notes.trim() === '') {
       // Remove empty notes
       delete allNotes[dayIndex];
     } else {
@@ -493,7 +493,7 @@ export const saveWorkoutNotes = async (
 
     await AsyncStorage.setItem(WORKOUT_NOTES_KEY, JSON.stringify(allNotes));
   } catch (error) {
-    console.error("Error saving workout notes:", error);
+    console.error('Error saving workout notes:', error);
     throw error;
   }
 };
@@ -507,10 +507,10 @@ export const getWorkoutNotes = async (dayIndex: number): Promise<string> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_NOTES_KEY);
     const allNotes: WorkoutNotes = data ? JSON.parse(data) : {};
-    return allNotes[dayIndex] || "";
+    return allNotes[dayIndex] || '';
   } catch (error) {
-    console.error("Error getting workout notes:", error);
-    return "";
+    console.error('Error getting workout notes:', error);
+    return '';
   }
 };
 
@@ -519,7 +519,7 @@ export const getWorkoutNotes = async (dayIndex: number): Promise<string> => {
  * @param timer - Rest timer state or null to clear
  */
 export const saveRestTimer = async (
-  timer: RestTimerState | null,
+  timer: RestTimerState | null
 ): Promise<void> => {
   try {
     if (!timer) {
@@ -529,7 +529,7 @@ export const saveRestTimer = async (
 
     await AsyncStorage.setItem(REST_TIMER_KEY, JSON.stringify(timer));
   } catch (error) {
-    console.error("Error saving rest timer:", error);
+    console.error('Error saving rest timer:', error);
     throw error;
   }
 };
@@ -543,7 +543,7 @@ export const getRestTimer = async (): Promise<RestTimerState | null> => {
     const data = await AsyncStorage.getItem(REST_TIMER_KEY);
     return data ? (JSON.parse(data) as RestTimerState) : null;
   } catch (error) {
-    console.error("Error getting rest timer:", error);
+    console.error('Error getting rest timer:', error);
     return null;
   }
 };
@@ -555,7 +555,7 @@ export const clearRestTimer = async (): Promise<void> => {
   try {
     await AsyncStorage.removeItem(REST_TIMER_KEY);
   } catch (error) {
-    console.error("Error clearing rest timer:", error);
+    console.error('Error clearing rest timer:', error);
     throw error;
   }
 };
@@ -573,7 +573,7 @@ export const clearProgramData = async (): Promise<void> => {
     await AsyncStorage.removeItem(WORKOUT_NOTES_KEY);
     await AsyncStorage.removeItem(REST_TIMER_KEY);
   } catch (error) {
-    console.error("Error clearing program data:", error);
+    console.error('Error clearing program data:', error);
     throw error;
   }
 };
@@ -587,7 +587,7 @@ export const getFavoriteWorkouts = async (): Promise<string[]> => {
     const data = await AsyncStorage.getItem(FAVORITE_WORKOUTS_KEY);
     return data ? JSON.parse(data) : [];
   } catch (error) {
-    console.error("Error getting favorite workouts:", error);
+    console.error('Error getting favorite workouts:', error);
     return [];
   }
 };
@@ -603,11 +603,11 @@ export const addFavoriteWorkout = async (workoutId: string): Promise<void> => {
       favorites.push(workoutId);
       await AsyncStorage.setItem(
         FAVORITE_WORKOUTS_KEY,
-        JSON.stringify(favorites),
+        JSON.stringify(favorites)
       );
     }
   } catch (error) {
-    console.error("Error adding favorite workout:", error);
+    console.error('Error adding favorite workout:', error);
     throw error;
   }
 };
@@ -617,14 +617,14 @@ export const addFavoriteWorkout = async (workoutId: string): Promise<void> => {
  * @param workoutId - Workout ID to remove
  */
 export const removeFavoriteWorkout = async (
-  workoutId: string,
+  workoutId: string
 ): Promise<void> => {
   try {
     const favorites = await getFavoriteWorkouts();
     const filtered = favorites.filter((id) => id !== workoutId);
     await AsyncStorage.setItem(FAVORITE_WORKOUTS_KEY, JSON.stringify(filtered));
   } catch (error) {
-    console.error("Error removing favorite workout:", error);
+    console.error('Error removing favorite workout:', error);
     throw error;
   }
 };
@@ -635,7 +635,7 @@ export const removeFavoriteWorkout = async (
  * @returns New favorite status (true if now favorited)
  */
 export const toggleFavoriteWorkout = async (
-  workoutId: string,
+  workoutId: string
 ): Promise<boolean> => {
   try {
     const favorites = await getFavoriteWorkouts();
@@ -649,7 +649,7 @@ export const toggleFavoriteWorkout = async (
       return true;
     }
   } catch (error) {
-    console.error("Error toggling favorite workout:", error);
+    console.error('Error toggling favorite workout:', error);
     throw error;
   }
 };

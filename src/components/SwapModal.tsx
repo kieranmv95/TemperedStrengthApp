@@ -1,6 +1,6 @@
-import { useSubscription } from "@/src/hooks/use-subscription";
-import { router } from "expo-router";
-import React from "react";
+import { useSubscription } from '@/src/hooks/use-subscription';
+import { router } from 'expo-router';
+import React from 'react';
 import {
   Alert,
   Modal,
@@ -9,9 +9,9 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { getAllExercises, getExerciseById } from "../data/exercises";
-import { findAlternatives } from "../utils/pivotEngine";
+} from 'react-native';
+import { getAllExercises, getExerciseById } from '../data/exercises';
+import { findAlternatives } from '../utils/pivotEngine';
 import {
   clearExerciseSwap,
   clearLoggedSetsForSlot,
@@ -19,7 +19,7 @@ import {
   hasLoggedSets,
   incrementSwapCount,
   saveExerciseSwap,
-} from "../utils/storage";
+} from '../utils/storage';
 
 interface SwapModalProps {
   visible: boolean;
@@ -65,19 +65,19 @@ export const SwapModal: React.FC<SwapModalProps> = ({
         const remainingSwaps = await getRemainingSwapCount();
         if (remainingSwaps <= 0) {
           Alert.alert(
-            "Upgrade to Pro",
-            "Unlimited swaps is part of a Pro membership. Free users get 10 swaps per month, resetting on the 1st of each month. You can reset a exercise back to the original exercise at any time for free.",
+            'Upgrade to Pro',
+            'Unlimited swaps is part of a Pro membership. Free users get 10 swaps per month, resetting on the 1st of each month. You can reset a exercise back to the original exercise at any time for free.',
             [
               {
-                text: "Cancel",
-                style: "cancel",
+                text: 'Cancel',
+                style: 'cancel',
               },
               {
-                text: "Upgrade to Pro",
-                style: "default",
+                text: 'Upgrade to Pro',
+                style: 'default',
                 onPress: () => {
                   onClose();
-                  router.push("/paywall");
+                  router.push('/paywall');
                 },
               },
             ]
@@ -93,16 +93,16 @@ export const SwapModal: React.FC<SwapModalProps> = ({
 
       if (hasLogged) {
         Alert.alert(
-          "Clear Workout Data?",
-          "Swapping the exercise will clear all logged sets for this exercise. This cannot be undone.",
+          'Clear Workout Data?',
+          'Swapping the exercise will clear all logged sets for this exercise. This cannot be undone.',
           [
             {
-              text: "Cancel",
-              style: "cancel",
+              text: 'Cancel',
+              style: 'cancel',
             },
             {
-              text: "Clear and Swap",
-              style: "destructive",
+              text: 'Clear and Swap',
+              style: 'destructive',
               onPress: async () => {
                 try {
                   await clearLoggedSetsForSlot(dayIndex, slotIndex);
@@ -124,10 +124,10 @@ export const SwapModal: React.FC<SwapModalProps> = ({
                   }
                   onClose();
                 } catch (error) {
-                  console.error("Error clearing logged sets:", error);
+                  console.error('Error clearing logged sets:', error);
                   Alert.alert(
-                    "Error",
-                    "Failed to clear workout data. Please try again."
+                    'Error',
+                    'Failed to clear workout data. Please try again.'
                   );
                 }
               },
@@ -171,7 +171,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
             <Text style={styles.modalTitle}>
               {currentExercise
                 ? `Swap ${currentExercise.name}`
-                : "Select Exercise"}
+                : 'Select Exercise'}
             </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>✕</Text>
@@ -181,7 +181,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
           <Text style={styles.modalSubtitle}>
             {currentExercise
               ? `Alternatives for ${currentExercise.pattern}`
-              : "Choose an exercise"}
+              : 'Choose an exercise'}
           </Text>
 
           <Text style={styles.deviationTitle}>
@@ -207,16 +207,16 @@ export const SwapModal: React.FC<SwapModalProps> = ({
 
                   if (hasLogged) {
                     Alert.alert(
-                      "Clear Workout Data?",
-                      "Resetting to the original exercise will clear all logged sets for this exercise. This cannot be undone.",
+                      'Clear Workout Data?',
+                      'Resetting to the original exercise will clear all logged sets for this exercise. This cannot be undone.',
                       [
                         {
-                          text: "Cancel",
-                          style: "cancel",
+                          text: 'Cancel',
+                          style: 'cancel',
                         },
                         {
-                          text: "Clear and Reset",
-                          style: "destructive",
+                          text: 'Clear and Reset',
+                          style: 'destructive',
                           onPress: async () => {
                             try {
                               // Clear logged sets/reps data for this slot
@@ -230,12 +230,12 @@ export const SwapModal: React.FC<SwapModalProps> = ({
                               onClose();
                             } catch (error) {
                               console.error(
-                                "Error clearing logged sets and swap:",
+                                'Error clearing logged sets and swap:',
                                 error
                               );
                               Alert.alert(
-                                "Error",
-                                "Failed to clear workout data. Please try again."
+                                'Error',
+                                'Failed to clear workout data. Please try again.'
                               );
                             }
                           },
@@ -257,10 +257,10 @@ export const SwapModal: React.FC<SwapModalProps> = ({
                     }
                     onClose();
                   } catch (error) {
-                    console.error("Error clearing swap:", error);
+                    console.error('Error clearing swap:', error);
                     Alert.alert(
-                      "Error",
-                      "Failed to reset exercise. Please try again."
+                      'Error',
+                      'Failed to reset exercise. Please try again.'
                     );
                   }
                 }
@@ -308,130 +308,130 @@ export const SwapModal: React.FC<SwapModalProps> = ({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    justifyContent: "flex-end",
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 24,
-    maxHeight: "80%",
+    maxHeight: '80%',
     borderWidth: 1,
-    borderColor: "#2A2A2A",
-    flexDirection: "column",
+    borderColor: '#2A2A2A',
+    flexDirection: 'column',
   },
   modalHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 16,
   },
   modalTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: '700',
     flex: 1,
   },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "#2A2A2A",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#2A2A2A',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   closeButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   modalSubtitle: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
     marginBottom: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   disclaimer: {
-    backgroundColor: "#FFA726",
+    backgroundColor: '#FFA726',
     padding: 12,
     borderRadius: 8,
     fontSize: 12,
     marginBottom: 20,
-    fontWeight: "500",
-    fontStyle: "italic",
+    fontWeight: '500',
+    fontStyle: 'italic',
     lineHeight: 18,
   },
   deviationTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
     marginBottom: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   resetButton: {
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#c9b072",
-    alignItems: "center",
+    borderColor: '#c9b072',
+    alignItems: 'center',
   },
   resetButtonText: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   alternativesList: {
     flexShrink: 1,
     minHeight: 200,
   },
   noAlternatives: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
-    textAlign: "center",
+    textAlign: 'center',
     padding: 20,
   },
   alternativeItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#2A2A2A",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#2A2A2A',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#333",
+    borderColor: '#333',
   },
   alternativeContent: {
     flex: 1,
   },
   alternativeName: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 8,
   },
   alternativeMeta: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 12,
   },
   alternativeEquipment: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 12,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   alternativeMuscle: {
-    color: "#888",
+    color: '#888',
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   selectArrow: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 24,
-    fontWeight: "600",
+    fontWeight: '600',
     marginLeft: 12,
   },
 });

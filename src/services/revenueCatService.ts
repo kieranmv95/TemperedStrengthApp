@@ -1,11 +1,11 @@
-import { Platform } from "react-native";
+import { Platform } from 'react-native';
 import Purchases, {
   CustomerInfo,
   PurchasesOffering as Offerings,
   PURCHASES_ERROR_CODE,
   PurchasesError,
   PurchasesPackage,
-} from "react-native-purchases";
+} from 'react-native-purchases';
 
 // RevenueCat API Keys
 // Get your production keys from: https://app.revenuecat.com/project/{your_project_id}/settings/api-keys
@@ -16,21 +16,21 @@ const REVENUECAT_API_KEY = Platform.select({
   ios:
     process.env.EXPO_PUBLIC_REVENUECAT_API_KEY_IOS ||
     process.env.EXPO_PUBLIC_REVENUECAT_API_KEY ||
-    "test_SnvzLVCMTIHpdvZxNJETTYDrEhL",
+    'test_SnvzLVCMTIHpdvZxNJETTYDrEhL',
   android:
     process.env.EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID ||
     process.env.EXPO_PUBLIC_REVENUECAT_API_KEY ||
-    "test_SnvzLVCMTIHpdvZxNJETTYDrEhL",
-  default: "test_SnvzLVCMTIHpdvZxNJETTYDrEhL",
+    'test_SnvzLVCMTIHpdvZxNJETTYDrEhL',
+  default: 'test_SnvzLVCMTIHpdvZxNJETTYDrEhL',
 })!;
 
 // Validate API key format in development to catch misconfigurations early
 if (__DEV__) {
-  const isTestKey = REVENUECAT_API_KEY.startsWith("test_");
+  const isTestKey = REVENUECAT_API_KEY.startsWith('test_');
   const isProductionKey =
-    REVENUECAT_API_KEY.startsWith("appl_") ||
-    REVENUECAT_API_KEY.startsWith("goog_");
-  
+    REVENUECAT_API_KEY.startsWith('appl_') ||
+    REVENUECAT_API_KEY.startsWith('goog_');
+
   if (!isTestKey && !isProductionKey) {
     console.warn(
       "⚠️ RevenueCat API key format may be invalid. Expected 'test_', 'appl_', or 'goog_' prefix."
@@ -39,13 +39,13 @@ if (__DEV__) {
 }
 
 // Entitlement identifier
-export const PRO_ENTITLEMENT_ID = "Tempered Strength Pro";
+export const PRO_ENTITLEMENT_ID = 'Tempered Strength Pro';
 
 // Product identifiers
 export const PRODUCT_IDENTIFIERS = {
-  MONTHLY: "monthly",
-  YEARLY: "yearly",
-  LIFETIME: "lifetime",
+  MONTHLY: 'monthly',
+  YEARLY: 'yearly',
+  LIFETIME: 'lifetime',
 } as const;
 
 /**
@@ -66,9 +66,9 @@ export async function initializeRevenueCat(userId?: string): Promise<void> {
       Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
     }
 
-    console.log("RevenueCat initialized successfully");
+    console.log('RevenueCat initialized successfully');
   } catch (error) {
-    console.error("Error initializing RevenueCat:", error);
+    console.error('Error initializing RevenueCat:', error);
     throw error;
   }
 }
@@ -92,7 +92,7 @@ export async function getCustomerInfo(): Promise<CustomerInfo> {
       const customerInfo = await Purchases.getCustomerInfo();
       return customerInfo;
     } catch (error) {
-      console.error("Error fetching customer info:", error);
+      console.error('Error fetching customer info:', error);
       throw error;
     } finally {
       // Clear the pending request when done (success or error)
@@ -111,7 +111,7 @@ export async function hasProEntitlement(): Promise<boolean> {
     const customerInfo = await Purchases.getCustomerInfo();
     return customerInfo.entitlements.active[PRO_ENTITLEMENT_ID] !== undefined;
   } catch (error) {
-    console.error("Error checking entitlement:", error);
+    console.error('Error checking entitlement:', error);
     return false;
   }
 }
@@ -124,7 +124,7 @@ export async function getOfferings(): Promise<Offerings | null> {
     const offerings = await Purchases.getOfferings();
     return offerings.current;
   } catch (error) {
-    console.error("Error fetching offerings:", error);
+    console.error('Error fetching offerings:', error);
     return null;
   }
 }
@@ -143,11 +143,11 @@ export async function purchasePackage(
 
     // Handle user cancellation gracefully
     if (purchasesError.code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
-      throw new Error("Purchase was cancelled");
+      throw new Error('Purchase was cancelled');
     }
 
     // Handle other errors
-    console.error("Error purchasing package:", purchasesError);
+    console.error('Error purchasing package:', purchasesError);
     throw purchasesError;
   }
 }
@@ -160,7 +160,7 @@ export async function restorePurchases(): Promise<CustomerInfo> {
     const customerInfo = await Purchases.restorePurchases();
     return customerInfo;
   } catch (error) {
-    console.error("Error restoring purchases:", error);
+    console.error('Error restoring purchases:', error);
     throw error;
   }
 }
@@ -184,7 +184,7 @@ export async function isSubscribed(): Promise<boolean> {
       productId === PRODUCT_IDENTIFIERS.YEARLY
     );
   } catch (error) {
-    console.error("Error checking subscription status:", error);
+    console.error('Error checking subscription status:', error);
     return false;
   }
 }
@@ -198,7 +198,7 @@ export async function getActiveProductIdentifier(): Promise<string | null> {
     const entitlement = customerInfo.entitlements.active[PRO_ENTITLEMENT_ID];
     return entitlement?.productIdentifier || null;
   } catch (error) {
-    console.error("Error getting active product identifier:", error);
+    console.error('Error getting active product identifier:', error);
     return null;
   }
 }
@@ -211,7 +211,7 @@ export async function syncPurchases(): Promise<CustomerInfo> {
     const customerInfo = await Purchases.getCustomerInfo();
     return customerInfo;
   } catch (error) {
-    console.error("Error syncing purchases:", error);
+    console.error('Error syncing purchases:', error);
     throw error;
   }
 }
@@ -223,7 +223,7 @@ export async function setUserId(userId: string): Promise<void> {
   try {
     await Purchases.logIn(userId);
   } catch (error) {
-    console.error("Error setting user ID:", error);
+    console.error('Error setting user ID:', error);
     throw error;
   }
 }
@@ -236,7 +236,7 @@ export async function logOutUser(): Promise<CustomerInfo> {
     const customerInfo = await Purchases.logOut();
     return customerInfo;
   } catch (error) {
-    console.error("Error logging out user:", error);
+    console.error('Error logging out user:', error);
     throw error;
   }
 }

@@ -1,9 +1,9 @@
-import { GlossaryItem } from "@/src/components/brief/GlossaryItem";
-import { glossary, searchGlossary } from "@/src/data/brief";
-import type { GlossaryTerm } from "@/src/types/brief";
-import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import React, { useMemo, useState } from "react";
+import { GlossaryItem } from '@/src/components/brief/GlossaryItem';
+import { glossary, searchGlossary } from '@/src/data/brief';
+import type { GlossaryTerm } from '@/src/types/brief';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import React, { useMemo, useState } from 'react';
 import {
   FlatList,
   SafeAreaView,
@@ -12,27 +12,27 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 
-type CategoryFilter = "All" | GlossaryTerm["category"];
+type CategoryFilter = 'All' | GlossaryTerm['category'];
 
 const CATEGORY_FILTERS: CategoryFilter[] = [
-  "All",
-  "Training",
-  "Movements",
-  "Nutrition",
-  "Equipment",
-  "General",
+  'All',
+  'Training',
+  'Movements',
+  'Nutrition',
+  'Equipment',
+  'General',
 ];
 
 export default function GlossaryScreen() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState<CategoryFilter>("All");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
 
   const filteredTerms = useMemo(() => {
     let results = searchQuery ? searchGlossary(searchQuery) : glossary;
 
-    if (activeCategory !== "All") {
+    if (activeCategory !== 'All') {
       results = results.filter((term) => term.category === activeCategory);
     }
 
@@ -68,7 +68,7 @@ export default function GlossaryScreen() {
             autoCorrect={false}
           />
           {searchQuery.length > 0 && (
-            <TouchableOpacity onPress={() => setSearchQuery("")}>
+            <TouchableOpacity onPress={() => setSearchQuery('')}>
               <Ionicons name="close-circle" size={20} color="#666" />
             </TouchableOpacity>
           )}
@@ -80,13 +80,13 @@ export default function GlossaryScreen() {
         <FlatList
           horizontal
           data={CATEGORY_FILTERS}
-          keyExtractor={(item) => item || "All"}
+          keyExtractor={(item) => item || 'All'}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.filterList}
           renderItem={({ item }) => {
             const isActive = activeCategory === item;
             const count =
-              item === "All"
+              item === 'All'
                 ? glossary.length
                 : glossary.filter((t) => t.category === item).length;
 
@@ -101,7 +101,7 @@ export default function GlossaryScreen() {
                     isActive && styles.filterTabTextActive,
                   ]}
                 >
-                  {item || "All"}
+                  {item || 'All'}
                 </Text>
                 <Text
                   style={[
@@ -135,7 +135,8 @@ export default function GlossaryScreen() {
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <Text style={styles.resultsCount}>
-              {filteredTerms.length} {filteredTerms.length === 1 ? "term" : "terms"}
+              {filteredTerms.length}{' '}
+              {filteredTerms.length === 1 ? 'term' : 'terms'}
             </Text>
           }
         />
@@ -147,24 +148,24 @@ export default function GlossaryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121212",
+    backgroundColor: '#121212',
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#2A2A2A",
+    borderBottomColor: '#2A2A2A',
   },
   headerBackButton: {
     padding: 4,
   },
   headerTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   headerSpacer: {
     width: 32,
@@ -174,24 +175,24 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   searchInputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#1E1E1E",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1E1E1E',
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
     gap: 10,
   },
   searchInput: {
     flex: 1,
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
   },
   filterContainer: {
     borderBottomWidth: 1,
-    borderBottomColor: "#2A2A2A",
+    borderBottomColor: '#2A2A2A',
   },
   filterList: {
     paddingHorizontal: 16,
@@ -199,63 +200,62 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   filterTab: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: "#1E1E1E",
+    backgroundColor: '#1E1E1E',
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
     gap: 6,
   },
   filterTabActive: {
-    backgroundColor: "#c9b072",
-    borderColor: "#c9b072",
+    backgroundColor: '#c9b072',
+    borderColor: '#c9b072',
   },
   filterTabText: {
-    color: "#888",
+    color: '#888',
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   filterTabTextActive: {
-    color: "#121212",
+    color: '#121212',
   },
   filterCount: {
-    color: "#666",
+    color: '#666',
     fontSize: 11,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   filterCountActive: {
-    color: "#121212",
+    color: '#121212',
     opacity: 0.7,
   },
   listContent: {
     padding: 16,
   },
   resultsCount: {
-    color: "#666",
+    color: '#666',
     fontSize: 13,
-    fontWeight: "500",
+    fontWeight: '500',
     marginBottom: 12,
   },
   emptyState: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 48,
   },
   emptyTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     marginTop: 16,
     marginBottom: 8,
   },
   emptyDescription: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
-

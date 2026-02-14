@@ -1,11 +1,11 @@
-import { useSubscription } from "@/src/hooks/use-subscription";
-import type { Program } from "@/src/types/program";
-import { getProgramById } from "@/src/utils/program";
-import { clearProgramData, getActiveProgramId } from "@/src/utils/storage";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import { useSubscription } from '@/src/hooks/use-subscription';
+import type { Program } from '@/src/types/program';
+import { getProgramById } from '@/src/utils/program';
+import { clearProgramData, getActiveProgramId } from '@/src/utils/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { router } from 'expo-router';
+import React, { useState } from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -14,7 +14,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 
 export default function SettingsScreen() {
   const [hasProgram, setHasProgram] = useState<boolean>(false);
@@ -34,7 +34,7 @@ export default function SettingsScreen() {
         setActiveProgram(null);
       }
     } catch (error) {
-      console.error("Error checking program status:", error);
+      console.error('Error checking program status:', error);
       setHasProgram(false);
       setActiveProgram(null);
     }
@@ -50,37 +50,37 @@ export default function SettingsScreen() {
   const handleSubscriptionPress = () => {
     if (isPro) {
       // Open Customer Center for Pro users
-      router.push("/customer-center");
+      router.push('/customer-center');
     } else {
       // Open Paywall for non-Pro users
-      router.push("/paywall");
+      router.push('/paywall');
     }
   };
 
   const handleChangeProgram = () => {
     Alert.alert(
-      "Change Program",
-      "Changing your program will lose all progress on your current program, including your workout logs and exercise swaps.\n\nFinishing a program to completion is the best approach for achieving your fitness goals.\n\nAre you sure you want to change programs?",
+      'Change Program',
+      'Changing your program will lose all progress on your current program, including your workout logs and exercise swaps.\n\nFinishing a program to completion is the best approach for achieving your fitness goals.\n\nAre you sure you want to change programs?',
       [
         {
-          text: "Cancel",
-          style: "cancel",
+          text: 'Cancel',
+          style: 'cancel',
         },
         {
-          text: "Change Program",
-          style: "destructive",
+          text: 'Change Program',
+          style: 'destructive',
           onPress: async () => {
             try {
               await clearProgramData();
               setHasProgram(false);
               setActiveProgram(null);
               // Navigate back to Program tab (index)
-              router.replace("/");
+              router.replace('/');
             } catch (error) {
-              console.error("Error changing program:", error);
+              console.error('Error changing program:', error);
               Alert.alert(
-                "Error",
-                "Failed to change program. Please try again."
+                'Error',
+                'Failed to change program. Please try again.'
               );
             }
           },
@@ -91,29 +91,29 @@ export default function SettingsScreen() {
 
   const handleClearAllData = () => {
     Alert.alert(
-      "Clear All Data",
-      "This will permanently delete ALL stored data including:\n\n• Program progress\n• Workout logs\n• Exercise swaps\n• Custom set counts\n• Exercise cache\n\nThis action cannot be undone.\n\nAre you sure you want to clear all data?",
+      'Clear All Data',
+      'This will permanently delete ALL stored data including:\n\n• Program progress\n• Workout logs\n• Exercise swaps\n• Custom set counts\n• Exercise cache\n\nThis action cannot be undone.\n\nAre you sure you want to clear all data?',
       [
         {
-          text: "Cancel",
-          style: "cancel",
+          text: 'Cancel',
+          style: 'cancel',
         },
         {
-          text: "Clear All Data",
-          style: "destructive",
+          text: 'Clear All Data',
+          style: 'destructive',
           onPress: async () => {
             try {
               await AsyncStorage.clear();
               setHasProgram(false);
               setActiveProgram(null);
               // Navigate back to Program tab (index)
-              router.replace("/");
-              Alert.alert("Success", "All data has been cleared.");
+              router.replace('/');
+              Alert.alert('Success', 'All data has been cleared.');
             } catch (error) {
-              console.error("Error clearing all data:", error);
+              console.error('Error clearing all data:', error);
               Alert.alert(
-                "Error",
-                "Failed to clear all data. Please try again."
+                'Error',
+                'Failed to clear all data. Please try again.'
               );
             }
           },
@@ -140,7 +140,7 @@ export default function SettingsScreen() {
             <View style={styles.settingContent}>
               <View style={styles.settingTitleRow}>
                 <Text style={styles.settingTitle}>
-                  {isPro ? "Tempered Strength Pro" : "Upgrade to Pro"}
+                  {isPro ? 'Tempered Strength Pro' : 'Upgrade to Pro'}
                 </Text>
                 {isPro && (
                   <View style={styles.proBadge}>
@@ -150,16 +150,26 @@ export default function SettingsScreen() {
               </View>
               <Text style={styles.settingDescription}>
                 {isPro
-                  ? "Manage your subscription and access Pro features"
-                  : "Unlock all premium features with a subscription"}
+                  ? 'Manage your subscription and access Pro features'
+                  : 'Unlock all premium features with a subscription'}
               </Text>
               {isPro && (
                 <View style={styles.proFeaturesList}>
-                  <Text style={styles.proTitle}>Your Pro features include:</Text>
-                  <Text style={styles.proFeatureItem}>- All programs access</Text>
-                  <Text style={styles.proFeatureItem}>- All workout access</Text>
-                  <Text style={styles.proFeatureItem}>- Unlimited exercise swaps</Text>
-                  <Text style={styles.proFeatureItem}>- Early access to new features</Text>
+                  <Text style={styles.proTitle}>
+                    Your Pro features include:
+                  </Text>
+                  <Text style={styles.proFeatureItem}>
+                    - All programs access
+                  </Text>
+                  <Text style={styles.proFeatureItem}>
+                    - All workout access
+                  </Text>
+                  <Text style={styles.proFeatureItem}>
+                    - Unlimited exercise swaps
+                  </Text>
+                  <Text style={styles.proFeatureItem}>
+                    - Early access to new features
+                  </Text>
                 </View>
               )}
             </View>
@@ -188,7 +198,7 @@ export default function SettingsScreen() {
               <Text style={styles.settingDescription}>
                 {hasProgram && activeProgram
                   ? activeProgram.name
-                  : "Select a different program"}
+                  : 'Select a different program'}
               </Text>
             </View>
             <Text
@@ -226,7 +236,7 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121212",
+    backgroundColor: '#121212',
   },
   scrollView: {
     flex: 1,
@@ -238,26 +248,26 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#2A2A2A",
+    borderBottomColor: '#2A2A2A',
   },
   title: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 32,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: -0.5,
   },
   settingsList: {
     gap: 12,
   },
   settingItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#2A2A2A",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#2A2A2A',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#333",
+    borderColor: '#333',
   },
   settingItemDisabled: {
     opacity: 0.5,
@@ -266,62 +276,62 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   settingTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 4,
   },
   settingTitleDisabled: {
-    color: "#888",
+    color: '#888',
   },
   settingDescription: {
-    color: "#888",
+    color: '#888',
     fontSize: 14,
     lineHeight: 20,
   },
   settingArrow: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 24,
-    fontWeight: "600",
+    fontWeight: '600',
     marginLeft: 12,
   },
   settingArrowDisabled: {
-    color: "#666",
+    color: '#666',
   },
   dangerItem: {
-    borderColor: "#FF4444",
+    borderColor: '#FF4444',
   },
   dangerText: {
-    color: "#FF4444",
+    color: '#FF4444',
   },
   proItem: {
-    borderColor: "#c9b072",
+    borderColor: '#c9b072',
   },
   proArrow: {
-    color: "#c9b072",
+    color: '#c9b072',
   },
   settingTitleRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
     marginBottom: 4,
   },
   proBadge: {
-    backgroundColor: "#c9b072",
+    backgroundColor: '#c9b072',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
   },
   proBadgeText: {
-    color: "#000000",
+    color: '#000000',
     fontSize: 10,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 0.5,
   },
   proTitle: {
-    color: "#c9b072",
+    color: '#c9b072',
     fontSize: 14,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 4,
   },
   proFeaturesList: {
@@ -329,9 +339,9 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   proFeatureItem: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
     lineHeight: 20,
   },
 });

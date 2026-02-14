@@ -1,15 +1,15 @@
-import type { Article } from "@/src/types/brief";
+import type { Article } from '@/src/types/brief';
 
-export type { Article } from "@/src/types/brief";
+export type { Article } from '@/src/types/brief';
 
 export const articles: Article[] = [
   {
-    id: "article_001",
-    title: "The Science of Progressive Overload",
+    id: 'article_001',
+    title: 'The Science of Progressive Overload',
     subtitle: "Why adding weight isn't the only way to grow stronger",
-    category: "Methodology",
+    category: 'Methodology',
     readTime: 4,
-    image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800",
+    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800',
     isFeatured: true,
     content: `Progressive overload is the gradual increase of stress placed upon the body during training. While most people think this means simply adding more weight to the bar, there are actually multiple ways to achieve progressive overload.
     
@@ -49,12 +49,12 @@ export const articles: Article[] = [
     Your body adapts to stress. To continue making progress, you must consistently challenge it beyond its current capacity. Track your workouts, make small incremental changes, and trust the process. Remember: progress isn't always linear. Some weeks you'll add weight, others you'll add reps or improve form. All of these are valid forms of progression.`,
   },
   {
-    id: "article_002",
-    title: "Nutrition Timing: Does It Really Matter?",
-    subtitle: "Separating fact from fitness industry fiction",
-    category: "Nutrition",
+    id: 'article_002',
+    title: 'Nutrition Timing: Does It Really Matter?',
+    subtitle: 'Separating fact from fitness industry fiction',
+    category: 'Nutrition',
     readTime: 4,
-    image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800",
+    image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800',
     content: `The fitness industry has long perpetuated the myth of the "anabolic window" – the idea that you must consume protein within 30 minutes of your workout or lose your gains.
     
     ## The Truth
@@ -86,12 +86,12 @@ export const articles: Article[] = [
     6. Consistency beats perfection – missing one post-workout meal won't derail your progress`,
   },
   {
-    id: "article_003",
-    title: "Sleep: The Ultimate Performance Enhancer",
-    subtitle: "How 8 hours beats any supplement on the market",
-    category: "Recovery",
+    id: 'article_003',
+    title: 'Sleep: The Ultimate Performance Enhancer',
+    subtitle: 'How 8 hours beats any supplement on the market',
+    category: 'Recovery',
     readTime: 4,
-    image: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=800",
+    image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=800',
     content: `You can have the perfect training program and dial in your nutrition, but without adequate sleep, you're leaving gains on the table.
     
     ## What Happens During Sleep
@@ -129,12 +129,12 @@ export const articles: Article[] = [
     8 hours of quality sleep will do more for your performance than any legal supplement. Prioritize it. Treat sleep as seriously as you treat your training and nutrition.`,
   },
   {
-    id: "article_004",
-    title: "Mental Toughness in Training",
-    subtitle: "Building an unbreakable mindset under the bar",
-    category: "Mindset",
+    id: 'article_004',
+    title: 'Mental Toughness in Training',
+    subtitle: 'Building an unbreakable mindset under the bar',
+    category: 'Mindset',
     readTime: 4,
-    image: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800",
+    image: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800',
     content: `The difference between a good lifter and a great one often comes down to what happens between the ears. Mental toughness isn't something you're born with – it's trained.
     
     ## Developing Mental Fortitude
@@ -183,13 +183,13 @@ export const articles: Article[] = [
     Remember: mental toughness is a skill. Practice it deliberately, just like you practice your squat form.`,
   },
   {
-    id: "article_005",
-    title: "Mastering the Squat Depth",
-    subtitle: "How to improve mobility for a deeper, safer squat",
-    category: "Technique",
+    id: 'article_005',
+    title: 'Mastering the Squat Depth',
+    subtitle: 'How to improve mobility for a deeper, safer squat',
+    category: 'Technique',
     readTime: 4,
     image:
-      "https://plus.unsplash.com/premium_photo-1661374894884-52d7f260cd97?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      'https://plus.unsplash.com/premium_photo-1661374894884-52d7f260cd97?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     content: `Squatting deep isn't just for show—it engages more muscle fibers and ensures better joint health. Research shows that deeper squats (below parallel) activate significantly more muscle mass in the quadriceps, glutes, and adductors compared to partial squats.
     
     ## Common Mobility Issues
@@ -236,12 +236,12 @@ export const articles: Article[] = [
     Some individuals have structural limitations (bone-on-bone contact, previous injuries) that prevent deep squatting. In these cases, work to your available range of motion and focus on other exercises to target the muscles that deep squats would normally hit.`,
   },
   {
-    id: "article_006",
-    title: "Active Recovery vs. Passive Rest",
-    subtitle: "When to move and when to sit still",
-    category: "Recovery",
+    id: 'article_006',
+    title: 'Active Recovery vs. Passive Rest',
+    subtitle: 'When to move and when to sit still',
+    category: 'Recovery',
     readTime: 4,
-    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800",
+    image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800',
     content: `Should you spend your day off on the couch or on a light walk? The answer depends on your training intensity and recovery status.
     
     ## What is Active Recovery?
@@ -305,12 +305,12 @@ export const articles: Article[] = [
     The best recovery method is the one that makes you feel better, not worse. If active recovery leaves you feeling more fatigued, choose passive rest. Recovery is individual – experiment to find what works for you.`,
   },
   {
-    id: "article_007",
-    title: "The Hierarchy of Hydration",
-    subtitle: "Why water is the most underrated ergogenic aid",
-    category: "Nutrition",
+    id: 'article_007',
+    title: 'The Hierarchy of Hydration',
+    subtitle: 'Why water is the most underrated ergogenic aid',
+    category: 'Nutrition',
     readTime: 4,
-    image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=800",
+    image: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=800',
     content: `A mere 2% drop in body water levels can lead to a significant decrease in physical performance. At 3% dehydration, strength can decrease by 10-15%, and endurance performance drops even more dramatically. Hydration isn't just about water – it's about maintaining optimal cellular function.
     
     ## Why Hydration Matters
@@ -369,12 +369,12 @@ export const articles: Article[] = [
     Hydration is a daily practice, not just something to think about during training. Start your day hydrated, maintain it throughout, and replace what you lose. Your performance and recovery depend on it.`,
   },
   {
-    id: "article_008",
-    title: "Mastering the Conventional Deadlift",
-    subtitle: "Technical pillars for a powerful, pain-free pull",
-    category: "Technique",
+    id: 'article_008',
+    title: 'Mastering the Conventional Deadlift',
+    subtitle: 'Technical pillars for a powerful, pain-free pull',
+    category: 'Technique',
     readTime: 4,
-    image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800",
+    image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800',
     content: `The deadlift is the ultimate test of strength. Success lies in the setup. A proper setup positions your body to move maximum weight efficiently and safely. The deadlift is unique because you start from a dead stop – there's no eccentric loading phase to help you.
     
     ## The Setup Checklist
@@ -431,12 +431,12 @@ export const articles: Article[] = [
     Straps are a tool, not a crutch. Use them when grip strength limits your deadlift training, not to avoid developing grip strength. For most lifters, use straps for volume work and go strapless for heavy singles to maintain grip strength.`,
   },
   {
-    id: "article_009",
-    title: "Consistency vs. Intensity",
-    subtitle: "The math of long-term body transformation",
-    category: "Mindset",
+    id: 'article_009',
+    title: 'Consistency vs. Intensity',
+    subtitle: 'The math of long-term body transformation',
+    category: 'Mindset',
     readTime: 4,
-    image: "https://images.unsplash.com/photo-1550345332-09e3ac987658?w=800",
+    image: 'https://images.unsplash.com/photo-1550345332-09e3ac987658?w=800',
     content: `A world-class program followed for two weeks is useless compared to a basic program followed for two years. The best program is the one you'll actually do consistently. Consistency beats intensity every single time.
     
     ## The Math of Consistency
@@ -492,12 +492,12 @@ export const articles: Article[] = [
     Success is simply the result of average work repeated daily without quitting. Show up, do the work, trust the process. The results will come.`,
   },
   {
-    id: "article_010",
-    title: "Injury Prevention 101",
-    subtitle: "Understanding the difference between pain and strain",
-    category: "Recovery",
+    id: 'article_010',
+    title: 'Injury Prevention 101',
+    subtitle: 'Understanding the difference between pain and strain',
+    category: 'Recovery',
     readTime: 4,
-    image: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=800",
+    image: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=800',
     content: `Injury is the fastest way to halt progress. Understanding biofeedback is essential for longevity. The strongest lifters aren't necessarily those who lift the most weight – they're those who lift consistently for the longest time. Injury prevention is an investment in your training future.
     
     ## Good Pain vs. Bad Pain
