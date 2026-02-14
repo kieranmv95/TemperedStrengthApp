@@ -1,6 +1,7 @@
-import { Article, articles } from "./brief/articles";
-import { GlossaryTerm, glossary } from "./brief/glossary";
-import { Playlist, playlists } from "./brief/playlists";
+import type { Article, GlossaryTerm } from "@/src/types/brief";
+import { articles } from "./brief/articles";
+import { glossary } from "./brief/glossary";
+import { playlists } from "./brief/playlists";
 
 // Helper functions
 export const getFeaturedArticle = (): Article | undefined => {
@@ -16,15 +17,16 @@ export const searchGlossary = (query: string): GlossaryTerm[] => {
   return glossary.filter(
     (term) =>
       term.term.toLowerCase().includes(lowercaseQuery) ||
-      term.definition.toLowerCase().includes(lowercaseQuery)
+      term.definition.toLowerCase().includes(lowercaseQuery),
   );
 };
 
 export const getGlossaryByCategory = (
-  category: GlossaryTerm["category"]
+  category: GlossaryTerm["category"],
 ): GlossaryTerm[] => {
   return glossary.filter((term) => term.category === category);
 };
 
 // Re-export types and data for consumers
-export { Article, GlossaryTerm, Playlist, articles, glossary, playlists };
+export type { Article, GlossaryTerm, Playlist } from "@/src/types/brief";
+export { articles, glossary, playlists };

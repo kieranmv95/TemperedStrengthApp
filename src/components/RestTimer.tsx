@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { AppState, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import type { RestTimerState } from "../utils/storage";
+import type { RestTimerState } from "../types/storage";
 
 interface RestTimerProps {
   timer: RestTimerState;

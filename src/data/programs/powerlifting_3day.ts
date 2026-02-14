@@ -1,4 +1,4 @@
-import { Program, Warmup } from "@/src/utils/program";
+import type { Program, Warmup } from "@/src/types/program";
 
 export const squat_warmup: Warmup = {
   type: "warmup",

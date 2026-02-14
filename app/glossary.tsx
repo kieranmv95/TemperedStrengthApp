@@ -1,3 +1,6 @@
+import { GlossaryItem } from "@/src/components/brief/GlossaryItem";
+import { glossary, searchGlossary } from "@/src/data/brief";
+import type { GlossaryTerm } from "@/src/types/brief";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useMemo, useState } from "react";
@@ -10,8 +13,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { GlossaryItem } from "@/src/components/brief/GlossaryItem";
-import { glossary, GlossaryTerm, searchGlossary } from "@/src/data/brief";
 
 type CategoryFilter = "All" | GlossaryTerm["category"];
 

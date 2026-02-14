@@ -16,12 +16,13 @@ import {
 import { DaySelector } from "../components/DaySelector";
 import { ExerciseCard } from "../components/ExerciseCard";
 import { SwapModal } from "../components/SwapModal";
-import {
-  getProgramById,
+import type {
   Exercise as ProgramExercise,
   Warmup,
   Workout,
-} from "../utils/program";
+} from "../types/program";
+import type { RestTimerState } from "../types/storage";
+import { getProgramById } from "../utils/program";
 import {
   clearFutureWorkoutData,
   clearRestTimer,
@@ -33,7 +34,6 @@ import {
   saveRestTimer,
   saveWorkoutNotes,
   setProgramStartDate,
-  RestTimerState,
 } from "../utils/storage";
 import { RestDayScreen } from "./RestDayScreen";
 
@@ -479,7 +479,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                         style={[
                           styles.intensityDot,
                           i < currentWorkout.intensity &&
-                            styles.intensityDotFilled,
+                          styles.intensityDotFilled,
                         ]}
                       />
                     ))}
@@ -531,8 +531,8 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                 exerciseSlotIndex++;
                 const restTimerForSlot =
                   restTimer &&
-                  restTimer.dayIndex === selectedDayIndex &&
-                  restTimer.slotIndex === currentExerciseIndex
+                    restTimer.dayIndex === selectedDayIndex &&
+                    restTimer.slotIndex === currentExerciseIndex
                     ? restTimer
                     : null;
                 return (

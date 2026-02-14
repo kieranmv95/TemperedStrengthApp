@@ -1,3 +1,13 @@
+import { ArticleCard } from "@/src/components/brief/ArticleCard";
+import { GlossaryItem } from "@/src/components/brief/GlossaryItem";
+import { PlaylistCard } from "@/src/components/brief/PlaylistCard";
+import {
+  articles,
+  getFeaturedArticle,
+  glossary,
+  playlists,
+} from "@/src/data/brief";
+import type { Article } from "@/src/types/brief";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
@@ -9,16 +19,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { ArticleCard } from "@/src/components/brief/ArticleCard";
-import { PlaylistCard } from "@/src/components/brief/PlaylistCard";
-import { GlossaryItem } from "@/src/components/brief/GlossaryItem";
-import {
-  articles,
-  playlists,
-  glossary,
-  getFeaturedArticle,
-  Article,
-} from "@/src/data/brief";
 
 export default function BriefScreen() {
   const featuredArticle = getFeaturedArticle();

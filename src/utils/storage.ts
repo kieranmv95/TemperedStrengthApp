@@ -1,5 +1,23 @@
 // Storage utilities for AsyncStorage
+import type {
+  CustomSetCounts,
+  ExerciseSwaps,
+  LoggedSet,
+  RestTimerState,
+  WorkoutLogs,
+  WorkoutNotes,
+} from "@/src/types/storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+export type {
+  CustomSetCounts,
+  ExerciseSwap,
+  ExerciseSwaps,
+  LoggedSet,
+  RestTimerState,
+  WorkoutLogs,
+  WorkoutNotes,
+} from "@/src/types/storage";
 
 const PROGRAM_STORAGE_KEY = "active_program";
 const PROGRAM_START_DATE_KEY = "program_start_date";
@@ -11,53 +29,6 @@ const SWAP_COUNT_MONTH_KEY = "swap_count_month";
 const WORKOUT_NOTES_KEY = "workout_notes";
 const FAVORITE_WORKOUTS_KEY = "favorite_workouts";
 const REST_TIMER_KEY = "rest_timer";
-
-export interface ExerciseSwap {
-  dayIndex: number;
-  slotIndex: number;
-  originalExerciseId: number;
-  swappedExerciseId: number;
-}
-
-export interface ExerciseSwaps {
-  [dayIndex: number]: {
-    [slotIndex: number]: number; // swapped exercise ID
-  };
-}
-
-export interface LoggedSet {
-  weight: number | null;
-  reps: number;
-  state?: "completed" | "failed" | null;
-}
-
-export interface WorkoutLogs {
-  [dayIndex: number]: {
-    [slotIndex: number]: {
-      [setIndex: number]: LoggedSet;
-    };
-  };
-}
-
-export interface CustomSetCounts {
-  [dayIndex: number]: {
-    [slotIndex: number]: number; // custom set count
-  };
-}
-
-export interface WorkoutNotes {
-  [dayIndex: number]: string; // notes for each workout day
-}
-
-export interface RestTimerState {
-  dayIndex: number;
-  slotIndex: number;
-  exerciseId: number | null;
-  restTimeSeconds: number;
-  startedAt: number;
-  status: "running" | "completed";
-  completedAt?: number;
-}
 
 /**
  * Get the active program ID
@@ -120,7 +91,7 @@ export const setProgramStartDate = async (startDate: string): Promise<void> => {
 export const saveExerciseSwap = async (
   dayIndex: number,
   slotIndex: number,
-  exerciseId: number
+  exerciseId: number,
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(EXERCISE_SWAPS_KEY);
@@ -144,7 +115,7 @@ export const saveExerciseSwap = async (
  * @returns Object mapping slot indices to exercise IDs
  */
 export const getExerciseSwapsForDay = async (
-  dayIndex: number
+  dayIndex: number,
 ): Promise<{ [slotIndex: number]: number }> => {
   try {
     const data = await AsyncStorage.getItem(EXERCISE_SWAPS_KEY);
@@ -163,7 +134,7 @@ export const getExerciseSwapsForDay = async (
  */
 export const clearExerciseSwap = async (
   dayIndex: number,
-  slotIndex: number
+  slotIndex: number,
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(EXERCISE_SWAPS_KEY);
@@ -267,7 +238,7 @@ export const saveLoggedSet = async (
   setIndex: number,
   weight: number | null,
   reps: number,
-  state?: "completed" | "failed" | null
+  state?: "completed" | "failed" | null,
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
@@ -309,7 +280,7 @@ export const saveLoggedSet = async (
  */
 export const getLoggedSets = async (
   dayIndex: number,
-  slotIndex: number
+  slotIndex: number,
 ): Promise<{ [setIndex: number]: LoggedSet }> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
@@ -329,7 +300,7 @@ export const getLoggedSets = async (
  */
 export const hasLoggedSets = async (
   dayIndex: number,
-  slotIndex: number
+  slotIndex: number,
 ): Promise<boolean> => {
   try {
     const loggedSets = await getLoggedSets(dayIndex, slotIndex);
@@ -347,7 +318,7 @@ export const hasLoggedSets = async (
  */
 export const clearLoggedSetsForSlot = async (
   dayIndex: number,
-  slotIndex: number
+  slotIndex: number,
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
@@ -379,7 +350,7 @@ export const clearLoggedSetsForSlot = async (
 export const saveCustomSetCount = async (
   dayIndex: number,
   slotIndex: number,
-  setCount: number
+  setCount: number,
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(CUSTOM_SET_COUNTS_KEY);
@@ -405,7 +376,7 @@ export const saveCustomSetCount = async (
  */
 export const getCustomSetCount = async (
   dayIndex: number,
-  slotIndex: number
+  slotIndex: number,
 ): Promise<number | null> => {
   try {
     const data = await AsyncStorage.getItem(CUSTOM_SET_COUNTS_KEY);
@@ -426,7 +397,7 @@ export const getCustomSetCount = async (
 export const clearLoggedSet = async (
   dayIndex: number,
   slotIndex: number,
-  setIndex: number
+  setIndex: number,
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
@@ -458,7 +429,7 @@ export const clearLoggedSet = async (
  * @param fromDayIndex - Day index to start clearing from (inclusive)
  */
 export const clearFutureWorkoutData = async (
-  fromDayIndex: number
+  fromDayIndex: number,
 ): Promise<void> => {
   try {
     // Clear workout logs
@@ -474,7 +445,7 @@ export const clearFutureWorkoutData = async (
       });
       await AsyncStorage.setItem(
         WORKOUT_LOGS_KEY,
-        JSON.stringify(filteredLogs)
+        JSON.stringify(filteredLogs),
       );
     }
 
@@ -491,7 +462,7 @@ export const clearFutureWorkoutData = async (
       });
       await AsyncStorage.setItem(
         EXERCISE_SWAPS_KEY,
-        JSON.stringify(filteredSwaps)
+        JSON.stringify(filteredSwaps),
       );
     }
   } catch (error) {
@@ -507,7 +478,7 @@ export const clearFutureWorkoutData = async (
  */
 export const saveWorkoutNotes = async (
   dayIndex: number,
-  notes: string
+  notes: string,
 ): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_NOTES_KEY);
@@ -548,7 +519,7 @@ export const getWorkoutNotes = async (dayIndex: number): Promise<string> => {
  * @param timer - Rest timer state or null to clear
  */
 export const saveRestTimer = async (
-  timer: RestTimerState | null
+  timer: RestTimerState | null,
 ): Promise<void> => {
   try {
     if (!timer) {
@@ -632,7 +603,7 @@ export const addFavoriteWorkout = async (workoutId: string): Promise<void> => {
       favorites.push(workoutId);
       await AsyncStorage.setItem(
         FAVORITE_WORKOUTS_KEY,
-        JSON.stringify(favorites)
+        JSON.stringify(favorites),
       );
     }
   } catch (error) {
@@ -646,7 +617,7 @@ export const addFavoriteWorkout = async (workoutId: string): Promise<void> => {
  * @param workoutId - Workout ID to remove
  */
 export const removeFavoriteWorkout = async (
-  workoutId: string
+  workoutId: string,
 ): Promise<void> => {
   try {
     const favorites = await getFavoriteWorkouts();
@@ -664,7 +635,7 @@ export const removeFavoriteWorkout = async (
  * @returns New favorite status (true if now favorited)
  */
 export const toggleFavoriteWorkout = async (
-  workoutId: string
+  workoutId: string,
 ): Promise<boolean> => {
   try {
     const favorites = await getFavoriteWorkouts();

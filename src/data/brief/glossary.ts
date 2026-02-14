@@ -1,9 +1,6 @@
-export interface GlossaryTerm {
-  id: string;
-  term: string;
-  definition: string;
-  category?: "Movements" | "Equipment" | "Training" | "Nutrition" | "General";
-}
+import type { GlossaryTerm } from "@/src/types/brief";
+
+export type { GlossaryTerm } from "@/src/types/brief";
 
 // Mock Glossary Data (ELI5 Style)
 export const glossary: GlossaryTerm[] = [

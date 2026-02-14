@@ -1,3 +1,4 @@
+import type { GlossaryTerm } from "@/src/types/brief";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
@@ -9,7 +10,6 @@ import {
   UIManager,
   View,
 } from "react-native";
-import { GlossaryTerm } from "@/src/data/brief";
 
 // Enable LayoutAnimation on Android
 if (Platform.OS === "android") {

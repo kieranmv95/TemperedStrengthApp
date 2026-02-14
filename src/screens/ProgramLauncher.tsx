@@ -14,7 +14,8 @@ import {
   View,
 } from "react-native";
 import { getExerciseById } from "../data/exercises";
-import { Program, programs } from "../utils/program";
+import type { Program } from "../types/program";
+import { programs } from "../utils/program";
 import { setActiveProgramId, setProgramStartDate } from "../utils/storage";
 
 interface ProgramLauncherProps {
@@ -194,40 +195,40 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 
               <Text style={styles.sectionTitle}>Program Overview</Text>
 
-            <View style={styles.programOverviewContainer}>
-              <View style={styles.statsContainer}>
-                <View style={styles.statItem}>
-                  <Text style={styles.statValue}>
-                    {selectedProgram?.workouts.length}
-                  </Text>
-                  <Text style={styles.statLabel}>Workouts</Text>
+              <View style={styles.programOverviewContainer}>
+                <View style={styles.statsContainer}>
+                  <View style={styles.statItem}>
+                    <Text style={styles.statValue}>
+                      {selectedProgram?.workouts.length}
+                    </Text>
+                    <Text style={styles.statLabel}>Workouts</Text>
+                  </View>
+                  {selectedProgram &&
+                    (() => {
+                      const maxDayIndex = Math.max(
+                        ...selectedProgram.workouts.map((w) => w.dayIndex)
+                      );
+                      const weekCount = Math.ceil((maxDayIndex + 1) / 7);
+                      return (
+                        <View style={styles.statItem}>
+                          <Text style={styles.statValue}>{weekCount}</Text>
+                          <Text style={styles.statLabel}>
+                            {weekCount === 1 ? "Week" : "Weeks"}
+                          </Text>
+                        </View>
+                      );
+                    })()}
                 </View>
-                {selectedProgram &&
-                  (() => {
-                    const maxDayIndex = Math.max(
-                      ...selectedProgram.workouts.map((w) => w.dayIndex)
-                    );
-                    const weekCount = Math.ceil((maxDayIndex + 1) / 7);
-                    return (
-                      <View style={styles.statItem}>
-                        <Text style={styles.statValue}>{weekCount}</Text>
-                        <Text style={styles.statLabel}>
-                          {weekCount === 1 ? "Week" : "Weeks"}
-                        </Text>
-                      </View>
-                    );
-                  })()}
-              </View>
 
-              {selectedProgram?.averageSessionDuration && (
-                <View style={styles.statItem}>
-                  <Text style={styles.statValue}>
-                    {selectedProgram.averageSessionDuration}
-                  </Text>
-                  <Text style={styles.statLabel}>Avg Session</Text>
-                </View>
-              )}
-</View>
+                {selectedProgram?.averageSessionDuration && (
+                  <View style={styles.statItem}>
+                    <Text style={styles.statValue}>
+                      {selectedProgram.averageSessionDuration}
+                    </Text>
+                    <Text style={styles.statLabel}>Avg Session</Text>
+                  </View>
+                )}
+              </View>
 
               {selectedProgram?.daysSplit && (
                 <View>
@@ -243,22 +244,22 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   </View>
                   {showWorkoutDaysMoreInfo && (
                     <Text style={styles.programDescription}>
-                    The first session working day will be the first day of the program you select. You can change the session days at any time in the program once started.
-                  </Text>
+                      The first session working day will be the first day of the program you select. You can change the session days at any time in the program once started.
+                    </Text>
                   )}
                   <View style={styles.daysSplitContainer}>
                     <View
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes("mon") &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes("mon") &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         M
@@ -268,14 +269,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes("tue") &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes("tue") &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         T
@@ -285,14 +286,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes("wed") &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes("wed") &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         W
@@ -302,14 +303,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes("thu") &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes("thu") &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         T
@@ -319,14 +320,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes("fri") &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes("fri") &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         F
@@ -336,14 +337,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes("sat") &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes("sat") &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         S
@@ -353,14 +354,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes("sun") &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes("sun") &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         S
@@ -407,7 +408,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                             style={[
                               styles.workoutIntensityDot,
                               i < workout.intensity &&
-                                styles.workoutIntensityDotFilled,
+                              styles.workoutIntensityDotFilled,
                             ]}
                           />
                         ))}

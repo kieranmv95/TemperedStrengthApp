@@ -1,14 +1,14 @@
+import type { Article } from "@/src/types/brief";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
   Image,
+  ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  ImageBackground,
 } from "react-native";
-import { Article } from "@/src/data/brief";
 
 interface ArticleCardProps {
   article: Article;

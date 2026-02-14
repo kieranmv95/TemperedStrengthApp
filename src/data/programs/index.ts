@@ -1,4 +1,4 @@
-import { Program } from "@/src/utils/program";
+import type { Program } from "@/src/types/program";
 import { full_body_2day } from "./full_body_2day";
 import { olympic_advanced_8wk } from "./olympic_advanced_8wk";
 import { olympic_foundations } from "./olympic_foundations";

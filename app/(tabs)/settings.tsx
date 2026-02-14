@@ -1,5 +1,6 @@
 import { useSubscription } from "@/hooks/use-subscription";
-import { getProgramById, Program } from "@/src/utils/program";
+import type { Program } from "@/src/types/program";
+import { getProgramById } from "@/src/utils/program";
 import { clearProgramData, getActiveProgramId } from "@/src/utils/storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -18,7 +19,7 @@ import {
 export default function SettingsScreen() {
   const [hasProgram, setHasProgram] = useState<boolean>(false);
   const [activeProgram, setActiveProgram] = useState<Program | null>(null);
-  const {  isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
+  const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
 
   const checkProgramStatus = async () => {
     try {

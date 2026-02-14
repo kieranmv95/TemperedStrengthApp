@@ -1,9 +1,6 @@
 import { useSubscription } from "@/hooks/use-subscription";
-import {
-  allStandaloneWorkouts,
-  SingleWorkout,
-  WorkoutCategory,
-} from "@/src/data/workouts";
+import { allStandaloneWorkouts } from "@/src/data/workouts";
+import type { SingleWorkout, WorkoutCategory } from "@/src/types/workouts";
 import {
   getFavoriteWorkouts,
   toggleFavoriteWorkout,
@@ -321,9 +318,8 @@ export default function WorkoutsScreen() {
                   const movementText =
                     typeof movement === "string"
                       ? movement
-                      : `${movement.name}: ${movement.value}${
-                          movement.note ? ` (${movement.note})` : ""
-                        }`;
+                      : `${movement.name}: ${movement.value}${movement.note ? ` (${movement.note})` : ""
+                      }`;
                   return (
                     <View key={movementIndex} style={styles.movementItem}>
                       <Text style={styles.movementBullet}>•</Text>
@@ -358,11 +354,11 @@ export default function WorkoutsScreen() {
               filter === "All"
                 ? allStandaloneWorkouts.length
                 : filter === "Favorites"
-                ? favorites.length
-                : filter === "Pro"
-                ? allStandaloneWorkouts.filter((w) => w.isPremium).length
-                : allStandaloneWorkouts.filter((w) => w.category === filter)
-                    .length;
+                  ? favorites.length
+                  : filter === "Pro"
+                    ? allStandaloneWorkouts.filter((w) => w.isPremium).length
+                    : allStandaloneWorkouts.filter((w) => w.category === filter)
+                      .length;
 
             return (
               <TouchableOpacity

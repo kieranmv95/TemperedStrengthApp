@@ -9,8 +9,8 @@ import {
   View,
 } from "react-native";
 import { getExerciseById } from "../data/exercises";
-import { Exercise as ProgramExercise } from "../utils/program";
-import type { RestTimerState } from "../utils/storage";
+import type { Exercise as ProgramExercise } from "../types/program";
+import type { RestTimerState } from "../types/storage";
 import {
   clearLoggedSet,
   getCustomSetCount,
@@ -455,8 +455,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
       {restTimer && (
         <View style={styles.restTimerContainer}>
-        <RestTimer
-          timer={restTimer}
+          <RestTimer
+            timer={restTimer}
             onDismiss={onRestDismiss}
             onComplete={onRestComplete}
           />
@@ -546,9 +546,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             <Text style={styles.swapButtonText}>
               {isPro
                 ? "Swap Exercise"
-                : `Swap Exercise${
-                    remainingSwaps !== null ? ` (${remainingSwaps})` : ""
-                  }`}
+                : `Swap Exercise${remainingSwaps !== null ? ` (${remainingSwaps})` : ""
+                }`}
             </Text>
           </TouchableOpacity>
         </View>

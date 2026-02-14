@@ -1,11 +1,6 @@
-// Brief Tab Data Types and Mock Data
-export interface Playlist {
-  id: string;
-  title: string;
-  subtitle: string;
-  artworkUrl: string;
-  itunesUrl: string;
-}
+import type { Playlist } from "@/src/types/brief";
+
+export type { Playlist } from "@/src/types/brief";
 
 // Mock Playlists Data
 export const playlists: Playlist[] = [

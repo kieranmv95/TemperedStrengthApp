@@ -1,3 +1,4 @@
+import type { Playlist } from "@/src/types/brief";
 import { Ionicons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
 import React from "react";
@@ -9,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Playlist } from "@/src/data/brief";
 
 interface PlaylistCardProps {
   playlist: Playlist;

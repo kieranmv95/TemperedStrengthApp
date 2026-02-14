@@ -1,32 +1,10 @@
-export type WorkoutCategory =
-  | "Strength"
-  | "WOD"
-  | "Hyrox"
-  | "Conditioning"
-  | "Mobility";
+import type { SingleWorkout } from "@/src/types/workouts";
 
-export interface SingleWorkout {
-  id: string;
-  title: string;
-  description: string;
-  category: WorkoutCategory;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
-  estimatedTime: number;
-  tags: string[];
-  isPremium: boolean;
-
-  blocks: {
-    name: string;
-    instructions?: string;
-    movements: string[] | DetailedMovement[];
-  }[];
-}
-
-export interface DetailedMovement {
-  name: string;
-  value: string;
-  note?: string;
-}
+export type {
+  DetailedMovement,
+  SingleWorkout,
+  WorkoutCategory,
+} from "@/src/types/workouts";
 
 const freeWorkouts: SingleWorkout[] = [
   {

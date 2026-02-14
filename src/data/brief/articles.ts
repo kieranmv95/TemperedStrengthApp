@@ -1,13 +1,6 @@
-export interface Article {
-  id: string;
-  title: string;
-  subtitle: string;
-  category: "Methodology" | "Nutrition" | "Recovery" | "Mindset" | "Technique";
-  readTime: number; // in minutes
-  image: string;
-  content: string;
-  isFeatured?: boolean;
-}
+import type { Article } from "@/src/types/brief";
+
+export type { Article } from "@/src/types/brief";
 
 export const articles: Article[] = [
   {
@@ -195,7 +188,8 @@ export const articles: Article[] = [
     subtitle: "How to improve mobility for a deeper, safer squat",
     category: "Technique",
     readTime: 4,
-    image: "https://plus.unsplash.com/premium_photo-1661374894884-52d7f260cd97?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image:
+      "https://plus.unsplash.com/premium_photo-1661374894884-52d7f260cd97?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     content: `Squatting deep isn't just for show—it engages more muscle fibers and ensures better joint health. Research shows that deeper squats (below parallel) activate significantly more muscle mass in the quadriceps, glutes, and adductors compared to partial squats.
     
     ## Common Mobility Issues
