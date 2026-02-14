@@ -40,10 +40,6 @@ export default function RootLayout() {
           <Stack.Screen name="glossary" options={{ headerShown: false }} />
           <Stack.Screen name="article/[id]" options={{ headerShown: false }} />
           <Stack.Screen
-            name="modal"
-            options={{ presentation: "modal", title: "Modal" }}
-          />
-          <Stack.Screen
             name="paywall"
             options={{ presentation: "modal", title: "Upgrade to Pro" }}
           />
