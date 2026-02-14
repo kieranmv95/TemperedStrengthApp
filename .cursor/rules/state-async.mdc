@@ -1,0 +1,10 @@
+---
+description: State and async handling
+alwaysApply: true
+---
+
+# State & Async
+
+- Prefer local state.
+- Handle loading and error states.
+- No hidden side effects.

@@ -1,0 +1,11 @@
+---
+description: Expo Router file-based routing and route structure
+globs: "app/**/*.ts, app/**/*.tsx"
+alwaysApply: false
+---
+
+# Expo Router
+
+- Follow file-based routing.
+- Keep route files thin.
+- Move logic to components/hooks.

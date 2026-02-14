@@ -1,0 +1,27 @@
+---
+description: Core intent, before-changing-code discipline, and style principles
+alwaysApply: true
+---
+
+# Core
+
+## Intent
+
+Produce readable, predictable, maintainable code.
+Do not introduce clever abstractions.
+Match existing patterns.
+
+Senior-owned codebase. Assume high standards.
+
+## Before Changing Code
+
+- Read relevant files fully.
+- Follow existing patterns.
+- Do not refactor unless explicitly asked.
+- Do not introduce new dependencies.
+
+## Style
+
+Readability > compression.
+Explicit > clever.
+Simple > abstract.

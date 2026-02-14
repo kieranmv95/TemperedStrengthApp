@@ -1,0 +1,25 @@
+---
+description: Conventional Commits and commit discipline
+alwaysApply: true
+---
+
+# Commits
+
+Follow Conventional Commits (https://www.conventionalcommits.org/en/v1.0.0/).
+
+Use simple types:
+- feat: new feature
+- fix: bug fix
+- refactor: internal change, no behaviour change
+- chore: tooling / config / maintenance
+- docs: documentation only
+
+Rules:
+- Keep commits small and focused.
+- Clear, concise messages.
+- No mixed concerns in a single commit.
+- Do not commit unrelated formatting changes.
+
+Example:
+feat: add onboarding step validation
+fix: prevent crash when user has no profile image

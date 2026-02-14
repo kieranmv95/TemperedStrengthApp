@@ -1,0 +1,14 @@
+---
+description: React Native component patterns
+globs: "**/*.tsx"
+alwaysApply: false
+---
+
+# React Native
+
+- Functional components only.
+- Keep components small and focused.
+- Extract complexity instead of nesting it.
+- No inline component definitions.
+
+Avoid unnecessary `useMemo` / `useCallback`.
