@@ -1,4 +1,4 @@
-import { SubscriptionProvider } from "@/hooks/subscription-context";
+import { SubscriptionProvider } from "@/src/hooks/subscription-context";
 import { initializeRevenueCat } from "@/src/services/revenueCatService";
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";

@@ -1,4 +1,4 @@
-import { useSubscription } from "@/hooks/use-subscription";
+import { useSubscription } from "@/src/hooks/use-subscription";
 import type { Program } from "@/src/types/program";
 import { getProgramById } from "@/src/utils/program";
 import { clearProgramData, getActiveProgramId } from "@/src/utils/storage";

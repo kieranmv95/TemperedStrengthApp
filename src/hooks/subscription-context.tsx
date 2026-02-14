@@ -84,16 +84,16 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
    */
   const updateStateFromCustomerInfo = useCallback((customerInfo: CustomerInfo) => {
     const isPro = customerInfo.entitlements.active[PRO_ENTITLEMENT_ID] !== undefined;
-    
+
     // Check for subscription expiry (was Pro, now not Pro)
     // Only check after initial load is complete to avoid false positives
     if (initialLoadCompleteRef.current && previousIsProRef.current === true && !isPro) {
       handleSubscriptionExpiry();
     }
-    
+
     // Update previous Pro status
     previousIsProRef.current = isPro;
-    
+
     // Mark initial load as complete after first update
     if (!initialLoadCompleteRef.current) {
       initialLoadCompleteRef.current = true;
@@ -244,4 +244,3 @@ export function useSubscriptionContext(): SubscriptionContextType {
   }
   return context;
 }
-

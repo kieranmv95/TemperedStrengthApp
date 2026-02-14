@@ -1,4 +1,4 @@
-import { useSubscription } from "@/hooks/use-subscription";
+import { useSubscription } from "@/src/hooks/use-subscription";
 import { allStandaloneWorkouts } from "@/src/data/workouts";
 import type { SingleWorkout, WorkoutCategory } from "@/src/types/workouts";
 import {

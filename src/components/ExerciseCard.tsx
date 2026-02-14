@@ -1,4 +1,4 @@
-import { useSubscription } from "@/hooks/use-subscription";
+import { useSubscription } from "@/src/hooks/use-subscription";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {

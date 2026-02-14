@@ -1,4 +1,4 @@
-import { useSubscription } from "@/hooks/use-subscription";
+import { useSubscription } from "@/src/hooks/use-subscription";
 import { router } from "expo-router";
 import React from "react";
 import {

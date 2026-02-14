@@ -1,4 +1,4 @@
-import { useSubscription } from "@/hooks/use-subscription";
+import { useSubscription } from "@/src/hooks/use-subscription";
 import { router } from "expo-router";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import RevenueCatUI from "react-native-purchases-ui";
