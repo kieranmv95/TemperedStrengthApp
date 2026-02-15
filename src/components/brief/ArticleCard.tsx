@@ -10,11 +10,11 @@ import {
   View,
 } from 'react-native';
 
-interface ArticleCardProps {
+type ArticleCardProps = {
   article: Article;
   onPress: (article: Article) => void;
   variant?: 'hero' | 'compact' | 'horizontal';
-}
+};
 
 export function ArticleCard({
   article,

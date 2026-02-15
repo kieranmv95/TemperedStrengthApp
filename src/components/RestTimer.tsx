@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 import type { RestTimerState } from '../types/storage';
 
-interface RestTimerProps {
+type RestTimerProps = {
   timer: RestTimerState;
   onDismiss: () => void;
   onComplete: () => void;
-}
+};
 
 const formatDuration = (totalSeconds: number): string => {
   const minutes = Math.floor(totalSeconds / 60);

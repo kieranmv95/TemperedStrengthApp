@@ -18,9 +18,9 @@ import type { Program } from '../types/program';
 import { programs } from '../utils/program';
 import { setActiveProgramId, setProgramStartDate } from '../utils/storage';
 
-interface ProgramLauncherProps {
+type ProgramLauncherProps = {
   onProgramSelected: () => void;
-}
+};
 
 export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   onProgramSelected,
@@ -262,14 +262,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('mon') &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('mon') &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         M
@@ -279,14 +279,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('tue') &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('tue') &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         T
@@ -296,14 +296,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('wed') &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('wed') &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         W
@@ -313,14 +313,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('thu') &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('thu') &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         T
@@ -330,14 +330,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('fri') &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('fri') &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         F
@@ -347,14 +347,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('sat') &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('sat') &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         S
@@ -364,14 +364,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('sun') &&
-                          styles.dayItemSelected,
+                        styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('sun') &&
-                            styles.dayLabelSelected,
+                          styles.dayLabelSelected,
                         ]}
                       >
                         S
@@ -418,7 +418,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                             style={[
                               styles.workoutIntensityDot,
                               i < workout.intensity &&
-                                styles.workoutIntensityDotFilled,
+                              styles.workoutIntensityDotFilled,
                             ]}
                           />
                         ))}

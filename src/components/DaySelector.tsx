@@ -10,12 +10,12 @@ import {
   View,
 } from 'react-native';
 
-interface DaySelectorProps {
+type DaySelectorProps = {
   startDate: string; // ISO string
   workoutDayIndices: number[]; // Array of day indices that have workouts
   currentDayIndex: number;
   onDaySelect: (dayIndex: number) => void;
-}
+};
 
 // Constants for layout calculations
 const ITEM_MIN_WIDTH = 50;

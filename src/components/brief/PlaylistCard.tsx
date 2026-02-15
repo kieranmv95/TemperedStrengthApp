@@ -11,9 +11,9 @@ import {
   View,
 } from 'react-native';
 
-interface PlaylistCardProps {
+type PlaylistCardProps = {
   playlist: Playlist;
-}
+};
 
 export function PlaylistCard({ playlist }: PlaylistCardProps) {
   const handlePress = async () => {

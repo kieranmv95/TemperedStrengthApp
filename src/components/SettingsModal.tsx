@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 import { clearProgramData } from '../utils/storage';
 
-interface SettingsModalProps {
+type SettingsModalProps = {
   visible: boolean;
   onClose: () => void;
   onProgramReset: () => void;
-}
+};
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
   visible,

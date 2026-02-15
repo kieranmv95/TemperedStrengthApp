@@ -21,7 +21,7 @@ import {
   saveExerciseSwap,
 } from '../utils/storage';
 
-interface SwapModalProps {
+type SwapModalProps = {
   visible: boolean;
   currentExerciseId: number | null;
   originalExerciseId: number | null; // Original program exercise ID
@@ -29,7 +29,7 @@ interface SwapModalProps {
   slotIndex: number;
   onClose: () => void;
   onClearData?: () => void;
-}
+};
 
 export const SwapModal: React.FC<SwapModalProps> = ({
   visible,

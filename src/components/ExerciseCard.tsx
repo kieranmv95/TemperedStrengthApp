@@ -21,7 +21,7 @@ import {
 } from '../utils/storage';
 import { RestTimer } from './RestTimer';
 
-interface ExerciseCardProps {
+type ExerciseCardProps = {
   exerciseId: number | null;
   programExercise: ProgramExercise | null;
   slotNumber: number;
@@ -32,14 +32,14 @@ interface ExerciseCardProps {
   onRestStart: (payload: RestTimerStartPayload) => void;
   onRestDismiss: () => void;
   onRestComplete: () => void;
-}
+};
 
-interface RestTimerStartPayload {
+type RestTimerStartPayload = {
   dayIndex: number;
   slotIndex: number;
   exerciseId: number | null;
   restTimeSeconds: number;
-}
+};
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   exerciseId,
@@ -558,9 +558,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             <Text style={styles.swapButtonText}>
               {isPro
                 ? 'Swap Exercise'
-                : `Swap Exercise${
-                    remainingSwaps !== null ? ` (${remainingSwaps})` : ''
-                  }`}
+                : `Swap Exercise${remainingSwaps !== null ? ` (${remainingSwaps})` : ''
+                }`}
             </Text>
           </TouchableOpacity>
         </View>

@@ -37,22 +37,22 @@ import {
 } from '../utils/storage';
 import { RestDayScreen } from './RestDayScreen';
 
-interface ExerciseSlot {
+type ExerciseSlot = {
   type: 'exercise';
   exerciseId: number | null;
   programExercise: ProgramExercise | null;
-}
+};
 
-interface WarmupSlot {
+type WarmupSlot = {
   type: 'warmup';
   warmup: Warmup;
-}
+};
 
 type WorkoutSlot = ExerciseSlot | WarmupSlot;
 
-interface WorkoutScreenProps {
+type WorkoutScreenProps = {
   onProgramReset?: () => void;
-}
+};
 
 export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   onProgramReset,
@@ -479,7 +479,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                         style={[
                           styles.intensityDot,
                           i < currentWorkout.intensity &&
-                            styles.intensityDotFilled,
+                          styles.intensityDotFilled,
                         ]}
                       />
                     ))}
@@ -531,8 +531,8 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                 exerciseSlotIndex++;
                 const restTimerForSlot =
                   restTimer &&
-                  restTimer.dayIndex === selectedDayIndex &&
-                  restTimer.slotIndex === currentExerciseIndex
+                    restTimer.dayIndex === selectedDayIndex &&
+                    restTimer.slotIndex === currentExerciseIndex
                     ? restTimer
                     : null;
                 return (

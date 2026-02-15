@@ -18,10 +18,10 @@ if (Platform.OS === 'android') {
   }
 }
 
-interface GlossaryItemProps {
+type GlossaryItemProps = {
   term: GlossaryTerm;
   variant?: 'compact' | 'expanded';
-}
+};
 
 export function GlossaryItem({ term, variant = 'compact' }: GlossaryItemProps) {
   const [isExpanded, setIsExpanded] = useState(variant === 'expanded');

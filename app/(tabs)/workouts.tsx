@@ -1,5 +1,5 @@
-import { useSubscription } from '@/src/hooks/use-subscription';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
+import { useSubscription } from '@/src/hooks/use-subscription';
 import type { SingleWorkout, WorkoutCategory } from '@/src/types/workouts';
 import {
   getFavoriteWorkouts,
@@ -54,14 +54,14 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   Advanced: '#c9b072',
 };
 
-interface WorkoutCardProps {
+type WorkoutCardProps = {
   workout: SingleWorkout;
   isFavorite: boolean;
   isPro: boolean;
   onToggleFavorite: (workoutId: string) => void;
   onPress: (workout: SingleWorkout) => void;
   onLockedPress: () => void;
-}
+};
 
 function WorkoutCard({
   workout,
@@ -318,9 +318,8 @@ export default function WorkoutsScreen() {
                   const movementText =
                     typeof movement === 'string'
                       ? movement
-                      : `${movement.name}: ${movement.value}${
-                          movement.note ? ` (${movement.note})` : ''
-                        }`;
+                      : `${movement.name}: ${movement.value}${movement.note ? ` (${movement.note})` : ''
+                      }`;
                   return (
                     <View key={movementIndex} style={styles.movementItem}>
                       <Text style={styles.movementBullet}>•</Text>
@@ -359,7 +358,7 @@ export default function WorkoutsScreen() {
                   : filter === 'Pro'
                     ? allStandaloneWorkouts.filter((w) => w.isPremium).length
                     : allStandaloneWorkouts.filter((w) => w.category === filter)
-                        .length;
+                      .length;
 
             return (
               <TouchableOpacity
