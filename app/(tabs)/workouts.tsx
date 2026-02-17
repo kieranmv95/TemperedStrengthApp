@@ -1,3 +1,9 @@
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '@/src/constants/theme';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import type { SingleWorkout, WorkoutCategory } from '@/src/types/workouts';
@@ -49,9 +55,9 @@ const CATEGORY_ICONS: Record<WorkoutCategory, string> = {
 };
 
 const DIFFICULTY_COLORS: Record<string, string> = {
-  Beginner: '#c9b072',
-  Intermediate: '#c9b072',
-  Advanced: '#c9b072',
+  Beginner: Colors.accent,
+  Intermediate: Colors.accent,
+  Advanced: Colors.accent,
 };
 
 type WorkoutCardProps = {
@@ -93,7 +99,7 @@ function WorkoutCard({
             <Ionicons
               name={CATEGORY_ICONS[workout.category] as any}
               size={16}
-              color="#c9b072"
+              color={Colors.accent}
             />
           </View>
           <Text style={styles.cardCategory}>{workout.category}</Text>
@@ -111,7 +117,7 @@ function WorkoutCard({
           <Ionicons
             name={isFavorite ? 'heart' : 'heart-outline'}
             size={24}
-            color={isFavorite ? '#FF6B6B' : '#666'}
+            color={isFavorite ? Colors.destructive : Colors.textPlaceholder}
           />
         </TouchableOpacity>
       </View>
@@ -123,7 +129,7 @@ function WorkoutCard({
 
       <View style={styles.cardMeta}>
         <View style={styles.metaItem}>
-          <Ionicons name="time-outline" size={14} color="#888" />
+          <Ionicons name="time-outline" size={14} color={Colors.textMuted} />
           <Text style={styles.metaText}>{workout.estimatedTime} min</Text>
         </View>
         <View
@@ -232,7 +238,7 @@ export default function WorkoutsScreen() {
             style={styles.backButton}
             onPress={handleCloseDetail}
           >
-            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.detailTitle} numberOfLines={1}>
             {selectedWorkout.title}
@@ -249,7 +255,9 @@ export default function WorkoutsScreen() {
               }
               size={24}
               color={
-                favorites.includes(selectedWorkout.id) ? '#FF6B6B' : '#FFFFFF'
+                favorites.includes(selectedWorkout.id)
+                  ? Colors.destructive
+                  : Colors.textPrimary
               }
             />
           </TouchableOpacity>
@@ -264,14 +272,14 @@ export default function WorkoutsScreen() {
               <Ionicons
                 name={CATEGORY_ICONS[selectedWorkout.category] as any}
                 size={14}
-                color="#c9b072"
+                color={Colors.accent}
               />
               <Text style={styles.detailCategoryText}>
                 {selectedWorkout.category}
               </Text>
             </View>
             <View style={styles.detailMetaItem}>
-              <Ionicons name="time-outline" size={16} color="#888" />
+              <Ionicons name="time-outline" size={16} color={Colors.textMuted} />
               <Text style={styles.detailMetaText}>
                 {selectedWorkout.estimatedTime} min
               </Text>
@@ -370,7 +378,7 @@ export default function WorkoutsScreen() {
                   <Ionicons
                     name="heart"
                     size={14}
-                    color={isActive ? '#121212' : '#888'}
+                    color={isActive ? Colors.textOnAccent : Colors.textMuted}
                     style={styles.filterIcon}
                   />
                 )}
@@ -378,7 +386,7 @@ export default function WorkoutsScreen() {
                   <Ionicons
                     name="star"
                     size={14}
-                    color={isActive ? '#121212' : '#888'}
+                    color={isActive ? Colors.textOnAccent : Colors.textMuted}
                     style={styles.filterIcon}
                   />
                 )}
@@ -432,7 +440,7 @@ export default function WorkoutsScreen() {
                 <Ionicons
                   name="time-outline"
                   size={14}
-                  color={isActive ? '#121212' : '#888'}
+                  color={isActive ? Colors.textOnAccent : Colors.textMuted}
                   style={styles.filterIcon}
                 />
                 <Text
@@ -465,7 +473,7 @@ export default function WorkoutsScreen() {
               activeCategoryFilter === 'Favorites' ? 'heart-outline' : 'barbell'
             }
             size={64}
-            color="#333"
+            color={Colors.backgroundSubtle}
           />
           <Text style={styles.emptyTitle}>
             {activeCategoryFilter === 'Favorites'
@@ -503,15 +511,15 @@ export default function WorkoutsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: Colors.backgroundScreen,
   },
   header: {
-    padding: 24,
-    paddingBottom: 16,
+    padding: Spacing.section,
+    paddingBottom: Spacing.xxl,
   },
   title: {
-    color: '#FFFFFF',
-    fontSize: 32,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayXXXl,
     fontWeight: '800',
     letterSpacing: -0.5,
   },
@@ -520,62 +528,62 @@ const styles = StyleSheet.create({
   },
   filterContainer: {
     borderBottomWidth: 1,
-    borderBottomColor: '#2A2A2A',
+    borderBottomColor: Colors.borderDefault,
   },
   filterScrollContent: {
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-    gap: 8,
+    paddingHorizontal: Spacing.xxl,
+    paddingBottom: Spacing.xl,
+    gap: Spacing.md,
   },
   filterTab: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: '#1E1E1E',
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.pill,
+    backgroundColor: Colors.backgroundCard,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: Colors.borderDefault,
   },
   filterTabActive: {
-    backgroundColor: '#c9b072',
-    borderColor: '#c9b072',
+    backgroundColor: Colors.accent,
+    borderColor: Colors.accent,
   },
   filterIcon: {
-    marginRight: 4,
+    marginRight: Spacing.xs,
   },
   filterTabText: {
-    color: '#888',
-    fontSize: 14,
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
     fontWeight: '600',
   },
   filterTabTextActive: {
-    color: '#121212',
+    color: Colors.textOnAccent,
   },
   filterCount: {
-    color: '#666',
-    fontSize: 12,
+    color: Colors.textPlaceholder,
+    fontSize: FontSize.md,
     fontWeight: '600',
-    marginLeft: 6,
+    marginLeft: Spacing.sm,
   },
   filterCountActive: {
-    color: '#121212',
+    color: Colors.textOnAccent,
     opacity: 0.7,
   },
   listContent: {
-    padding: 16,
+    padding: Spacing.xxl,
     paddingBottom: 32,
   },
   workoutCard: {
-    backgroundColor: '#1E1E1E',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxl,
+    marginBottom: Spacing.xl,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: Colors.borderDefault,
   },
   workoutCardLocked: {
-    borderColor: '#c9b072',
+    borderColor: Colors.accent,
     borderWidth: 2,
     opacity: 0.6,
   },
@@ -583,94 +591,94 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.md,
   },
   cardTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: Spacing.md,
   },
   categoryIcon: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#2A2A2A',
+    backgroundColor: Colors.backgroundElevated,
     alignItems: 'center',
     justifyContent: 'center',
   },
   cardCategory: {
-    color: '#888',
-    fontSize: 12,
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   premiumBadge: {
-    backgroundColor: '#c9b072',
-    paddingHorizontal: 6,
+    backgroundColor: Colors.accent,
+    paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: BorderRadius.sm,
   },
   premiumBadgeText: {
-    color: '#121212',
-    fontSize: 10,
+    color: Colors.textOnAccent,
+    fontSize: FontSize.xxs,
     fontWeight: '700',
   },
   favoriteButton: {
-    padding: 4,
+    padding: Spacing.xs,
   },
   cardTitle: {
-    color: '#FFFFFF',
-    fontSize: 20,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayMd,
     fontWeight: '700',
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   cardDescription: {
-    color: '#888',
-    fontSize: 14,
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
     lineHeight: 20,
-    marginBottom: 12,
+    marginBottom: Spacing.xl,
   },
   cardMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    marginBottom: 12,
+    gap: Spacing.xl,
+    marginBottom: Spacing.xl,
   },
   metaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: Spacing.xs,
   },
   metaText: {
-    color: '#888',
-    fontSize: 12,
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
     fontWeight: '500',
   },
   difficultyBadge: {
-    paddingHorizontal: 8,
+    paddingHorizontal: Spacing.md,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: BorderRadius.sm,
     borderWidth: 1,
   },
   difficultyText: {
-    fontSize: 11,
+    fontSize: FontSize.sm,
     fontWeight: '600',
   },
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 6,
+    gap: Spacing.sm,
   },
   tag: {
-    backgroundColor: '#2A2A2A',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
+    backgroundColor: Colors.backgroundElevated,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.xxl,
   },
   tagText: {
-    color: '#888',
-    fontSize: 12,
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
     fontWeight: '500',
   },
   emptyState: {
@@ -680,16 +688,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 48,
   },
   emptyTitle: {
-    color: '#FFFFFF',
-    fontSize: 20,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayMd,
     fontWeight: '700',
-    marginTop: 16,
-    marginBottom: 8,
+    marginTop: Spacing.xxl,
+    marginBottom: Spacing.md,
     textAlign: 'center',
   },
   emptyDescription: {
-    color: '#888',
-    fontSize: 14,
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
     lineHeight: 20,
     textAlign: 'center',
   },
@@ -697,109 +705,109 @@ const styles = StyleSheet.create({
   detailHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    padding: Spacing.xxl,
     borderBottomWidth: 1,
-    borderBottomColor: '#2A2A2A',
+    borderBottomColor: Colors.borderDefault,
   },
   backButton: {
-    padding: 8,
-    marginRight: 8,
+    padding: Spacing.md,
+    marginRight: Spacing.md,
   },
   detailTitle: {
     flex: 1,
-    color: '#FFFFFF',
-    fontSize: 20,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayMd,
     fontWeight: '700',
   },
   detailFavoriteButton: {
-    padding: 8,
+    padding: Spacing.md,
   },
   detailContent: {
     flex: 1,
   },
   detailContentContainer: {
-    padding: 20,
+    padding: Spacing.xxxl,
   },
   detailMetaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    marginBottom: 16,
+    gap: Spacing.xl,
+    marginBottom: Spacing.xxl,
   },
   detailCategoryBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    backgroundColor: '#2A2A2A',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 16,
+    gap: Spacing.sm,
+    backgroundColor: Colors.backgroundElevated,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.full,
   },
   detailCategoryText: {
-    color: '#c9b072',
-    fontSize: 12,
+    color: Colors.accent,
+    fontSize: FontSize.md,
     fontWeight: '600',
   },
   detailMetaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: Spacing.xs,
   },
   detailMetaText: {
-    color: '#888',
-    fontSize: 14,
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
     fontWeight: '500',
   },
   detailDescription: {
-    color: '#CCC',
-    fontSize: 16,
+    color: Colors.textSecondary,
+    fontSize: FontSize.xxl,
     lineHeight: 24,
-    marginBottom: 16,
+    marginBottom: Spacing.xxl,
   },
   detailTagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
-    marginBottom: 24,
+    gap: Spacing.md,
+    marginBottom: Spacing.section,
   },
   blockContainer: {
-    backgroundColor: '#1E1E1E',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxl,
+    marginBottom: Spacing.xxl,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: Colors.borderDefault,
   },
   blockName: {
-    color: '#c9b072',
-    fontSize: 18,
+    color: Colors.accent,
+    fontSize: FontSize.displaySm,
     fontWeight: '700',
-    marginBottom: 8,
+    marginBottom: Spacing.md,
   },
   blockInstructions: {
-    color: '#888',
-    fontSize: 14,
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
     fontStyle: 'italic',
-    marginBottom: 12,
+    marginBottom: Spacing.xl,
     lineHeight: 20,
   },
   movementsList: {
-    gap: 8,
+    gap: Spacing.md,
   },
   movementItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 8,
+    gap: Spacing.md,
   },
   movementBullet: {
-    color: '#c9b072',
-    fontSize: 14,
+    color: Colors.accent,
+    fontSize: FontSize.lg,
     fontWeight: '600',
     marginTop: 2,
   },
   movementText: {
-    color: '#FFFFFF',
-    fontSize: 15,
+    color: Colors.textPrimary,
+    fontSize: FontSize.xl,
     lineHeight: 22,
     flex: 1,
   },

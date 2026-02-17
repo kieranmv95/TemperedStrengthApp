@@ -1,3 +1,9 @@
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '../constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -426,7 +432,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             <Ionicons
               name="remove-circle-outline"
               size={24}
-              color={numberOfSets <= 1 ? '#444' : '#c9b072'}
+              color={numberOfSets <= 1 ? Colors.textOnDark : Colors.accent}
             />
           </TouchableOpacity>
           <Text style={styles.setCountText}>{numberOfSets}</Text>
@@ -445,7 +451,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
               }
             }}
           >
-            <Ionicons name="add-circle-outline" size={24} color="#c9b072" />
+            <Ionicons name="add-circle-outline" size={24} color={Colors.accent} />
           </TouchableOpacity>
           {restTimeSeconds && dayIndex !== null && (
             <TouchableOpacity
@@ -459,7 +465,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                 })
               }
             >
-              <Ionicons name="time-outline" size={20} color="#c9b072" />
+              <Ionicons name="time-outline" size={20} color={Colors.accent} />
             </TouchableOpacity>
           )}
         </View>
@@ -502,7 +508,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                   returnKeyType="done"
                   blurOnSubmit={true}
                   placeholder="0"
-                  placeholderTextColor="#666"
+                  placeholderTextColor={Colors.textPlaceholder}
                 />
               </View>
 
@@ -525,7 +531,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                     returnKeyType="done"
                     blurOnSubmit={true}
                     placeholder="0"
-                    placeholderTextColor="#666"
+                    placeholderTextColor={Colors.textPlaceholder}
                   />
                 </View>
                 <TouchableOpacity
@@ -542,7 +548,11 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                     }
                     size={32}
                     color={
-                      isCompleted ? '#c9b072' : isFailed ? '#FF6B6B' : '#666'
+                      isCompleted
+                        ? Colors.accent
+                        : isFailed
+                          ? Colors.destructive
+                          : Colors.textPlaceholder
                     }
                   />
                 </TouchableOpacity>
@@ -570,58 +580,58 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#1E1E1E',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxl,
+    marginBottom: Spacing.xxl,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: Colors.borderDefault,
   },
   header: {
-    marginBottom: 16,
+    marginBottom: Spacing.xxl,
   },
   headerLeft: {
     flex: 1,
   },
   exerciseName: {
-    color: '#c9b072',
-    fontSize: 20,
+    color: Colors.accent,
+    fontSize: FontSize.displayMd,
     fontWeight: '700',
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   additionalHeader: {
-    color: '#CCC',
-    fontSize: 12,
+    color: Colors.textSecondary,
+    fontSize: FontSize.md,
     fontWeight: '600',
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   additionalDescription: {
-    color: '#CCC',
-    fontSize: 12,
+    color: Colors.textSecondary,
+    fontSize: FontSize.md,
     fontWeight: '600',
-    marginBottom: 4,
-    marginTop: 12,
+    marginBottom: Spacing.xs,
+    marginTop: Spacing.xl,
   },
   repRangeLabel: {
-    color: '#CCC',
-    fontSize: 14,
+    color: Colors.textSecondary,
+    fontSize: FontSize.lg,
     fontWeight: '600',
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   amrapLabel: {
-    color: '#c9b072',
+    color: Colors.accent,
     fontWeight: '800',
     opacity: 0.75,
   },
   setsHeader: {
-    marginBottom: 12,
+    marginBottom: Spacing.xl,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   setsLabel: {
-    color: '#888',
-    fontSize: 12,
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -629,75 +639,75 @@ const styles = StyleSheet.create({
   setControls: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: Spacing.md,
   },
   restTimerButton: {
-    padding: 4,
+    padding: Spacing.xs,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
-    borderRadius: 6,
+    borderColor: Colors.borderDefault,
+    borderRadius: BorderRadius.md,
   },
   setControlButton: {
-    padding: 4,
+    padding: Spacing.xs,
   },
   setControlButtonDisabled: {
     opacity: 0.3,
   },
   setCountText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxl,
     fontWeight: '700',
     minWidth: 24,
     textAlign: 'center',
   },
   setContainer: {
-    marginBottom: 12,
+    marginBottom: Spacing.xl,
   },
   inputContainer: {
     flexDirection: 'row',
-    gap: 12,
+    gap: Spacing.xl,
     marginBottom: 0,
   },
   inputGroup: {
     flex: 1,
   },
   restTimerContainer: {
-    marginBottom: 12,
+    marginBottom: Spacing.xl,
   },
   inputGroupWithCheckmark: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    gap: 8,
+    gap: Spacing.md,
   },
   inputLabel: {
-    color: '#CCC',
-    fontSize: 12,
+    color: Colors.textSecondary,
+    fontSize: FontSize.md,
     fontWeight: '600',
-    marginBottom: 8,
+    marginBottom: Spacing.md,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   input: {
-    backgroundColor: '#2A2A2A',
-    borderRadius: 8,
-    padding: 12,
-    color: '#FFFFFF',
-    fontSize: 16,
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.xl,
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxl,
     fontWeight: '600',
     borderWidth: 1,
-    borderColor: '#333',
+    borderColor: Colors.borderSubtle,
   },
   inputCompleted: {
-    borderColor: '#c9b072',
+    borderColor: Colors.accent,
     borderWidth: 2,
   },
   inputFailed: {
-    borderColor: '#FF6B6B',
+    borderColor: Colors.destructive,
     borderWidth: 2,
   },
   checkmarkButton: {
-    paddingBottom: 8,
+    paddingBottom: Spacing.md,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -705,19 +715,19 @@ const styles = StyleSheet.create({
     opacity: 0.3,
   },
   swapButtonContainer: {
-    marginTop: 8,
+    marginTop: Spacing.md,
   },
   swapButton: {
-    paddingVertical: 12,
-    borderRadius: 8,
+    paddingVertical: Spacing.xl,
+    borderRadius: BorderRadius.lg,
     borderWidth: 1,
-    borderColor: '#c9b072',
+    borderColor: Colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
   },
   swapButtonText: {
-    color: '#c9b072',
-    fontSize: 14,
+    color: Colors.accent,
+    fontSize: FontSize.lg,
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -728,11 +738,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   slotLabel: {
-    color: '#c9b072',
-    fontSize: 12,
+    color: Colors.accent,
+    fontSize: FontSize.md,
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
 });

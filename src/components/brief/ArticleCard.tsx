@@ -1,5 +1,11 @@
 import type { Article } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '../../constants/theme';
 import React from 'react';
 import {
   Image,
@@ -44,7 +50,7 @@ export function ArticleCard({
                 {article.title}
               </Text>
               <View style={styles.horizontalMeta}>
-                <Ionicons name="time-outline" size={12} color="#999" />
+                <Ionicons name="time-outline" size={12} color={Colors.textTertiary} />
                 <Text style={styles.horizontalMetaText}>
                   {article.readTime} min
                 </Text>
@@ -74,7 +80,7 @@ export function ArticleCard({
                 <Text style={styles.categoryBadgeText}>{article.category}</Text>
               </View>
               <View style={styles.featuredBadge}>
-                <Ionicons name="star" size={12} color="#121212" />
+                <Ionicons name="star" size={12} color={Colors.textOnAccent} />
                 <Text style={styles.featuredBadgeText}>Featured</Text>
               </View>
             </View>
@@ -82,7 +88,7 @@ export function ArticleCard({
               <Text style={styles.heroTitle}>{article.title}</Text>
               <Text style={styles.heroSubtitle}>{article.subtitle}</Text>
               <View style={styles.heroMeta}>
-                <Ionicons name="time-outline" size={14} color="#888" />
+                <Ionicons name="time-outline" size={14} color={Colors.textMuted} />
                 <Text style={styles.heroMetaText}>
                   {article.readTime} min read
                 </Text>
@@ -109,11 +115,11 @@ export function ArticleCard({
           {article.title}
         </Text>
         <View style={styles.compactMeta}>
-          <Ionicons name="time-outline" size={12} color="#666" />
+          <Ionicons name="time-outline" size={12} color={Colors.textPlaceholder} />
           <Text style={styles.compactMetaText}>{article.readTime} min</Text>
         </View>
       </View>
-      <Ionicons name="chevron-forward" size={20} color="#444" />
+      <Ionicons name="chevron-forward" size={20} color={Colors.textOnDark} />
     </TouchableOpacity>
   );
 }
@@ -121,36 +127,36 @@ export function ArticleCard({
 const styles = StyleSheet.create({
   // Hero Card Styles
   heroCard: {
-    borderRadius: 16,
+    borderRadius: BorderRadius.full,
     overflow: 'hidden',
-    marginBottom: 16,
+    marginBottom: Spacing.xxl,
   },
   heroImage: {
     height: 240,
     justifyContent: 'flex-end',
   },
   heroImageStyle: {
-    borderRadius: 16,
+    borderRadius: BorderRadius.full,
   },
   heroOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    padding: 16,
+    backgroundColor: Colors.overlayLight,
+    padding: Spacing.xxl,
     justifyContent: 'space-between',
   },
   heroBadgeRow: {
     flexDirection: 'row',
-    gap: 8,
+    gap: Spacing.md,
   },
   categoryBadge: {
-    backgroundColor: 'rgba(201, 176, 114, 0.9)',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 4,
+    backgroundColor: Colors.accentOverlay,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
   },
   categoryBadgeText: {
-    color: '#121212',
-    fontSize: 11,
+    color: Colors.textOnAccent,
+    fontSize: FontSize.sm,
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -158,42 +164,42 @@ const styles = StyleSheet.create({
   featuredBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    backgroundColor: '#c9b072',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 4,
+    gap: Spacing.xs,
+    backgroundColor: Colors.accent,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
   },
   featuredBadgeText: {
-    color: '#121212',
-    fontSize: 11,
+    color: Colors.textOnAccent,
+    fontSize: FontSize.sm,
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   heroContent: {
-    gap: 8,
+    gap: Spacing.md,
   },
   heroTitle: {
-    color: '#FFFFFF',
-    fontSize: 22,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayLg,
     fontWeight: '800',
     lineHeight: 28,
   },
   heroSubtitle: {
-    color: '#CCC',
-    fontSize: 14,
+    color: Colors.textSecondary,
+    fontSize: FontSize.lg,
     lineHeight: 20,
   },
   heroMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    marginTop: 4,
+    gap: Spacing.xs,
+    marginTop: Spacing.xs,
   },
   heroMetaText: {
-    color: '#888',
-    fontSize: 12,
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
     fontWeight: '500',
   },
 
@@ -201,55 +207,55 @@ const styles = StyleSheet.create({
   compactCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1E1E1E',
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 10,
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xl,
+    marginBottom: Spacing.lg,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: Colors.borderDefault,
   },
   compactImage: {
     width: 72,
     height: 72,
-    borderRadius: 8,
-    backgroundColor: '#2A2A2A',
+    borderRadius: BorderRadius.lg,
+    backgroundColor: Colors.backgroundElevated,
   },
   compactContent: {
     flex: 1,
-    marginLeft: 12,
-    gap: 4,
+    marginLeft: Spacing.xl,
+    gap: Spacing.xs,
   },
   compactCategoryRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   compactCategory: {
-    color: '#c9b072',
-    fontSize: 11,
+    color: Colors.accent,
+    fontSize: FontSize.sm,
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   compactTitle: {
-    color: '#FFFFFF',
-    fontSize: 15,
+    color: Colors.textPrimary,
+    fontSize: FontSize.xl,
     fontWeight: '600',
     lineHeight: 20,
   },
   compactMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: Spacing.xs,
   },
   compactMetaText: {
-    color: '#666',
-    fontSize: 12,
+    color: Colors.textPlaceholder,
+    fontSize: FontSize.md,
   },
 
   // Horizontal Card Styles (for scrollable list)
   horizontalCard: {
     width: 200,
-    borderRadius: 12,
+    borderRadius: BorderRadius.xxl,
     overflow: 'hidden',
   },
   horizontalImage: {
@@ -257,45 +263,45 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   horizontalImageStyle: {
-    borderRadius: 12,
+    borderRadius: BorderRadius.xxl,
   },
   horizontalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.45)',
-    padding: 12,
+    backgroundColor: Colors.overlayLighter,
+    padding: Spacing.xl,
     justifyContent: 'space-between',
   },
   horizontalCategoryBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(201, 176, 114, 0.9)',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 4,
+    backgroundColor: Colors.accentOverlay,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xxs,
+    borderRadius: BorderRadius.sm,
   },
   horizontalCategoryText: {
-    color: '#121212',
-    fontSize: 10,
+    color: Colors.textOnAccent,
+    fontSize: FontSize.xxs,
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   horizontalContent: {
-    gap: 4,
+    gap: Spacing.xs,
   },
   horizontalTitle: {
-    color: '#FFFFFF',
-    fontSize: 14,
+    color: Colors.textPrimary,
+    fontSize: FontSize.lg,
     fontWeight: '700',
     lineHeight: 18,
   },
   horizontalMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: Spacing.xs,
   },
   horizontalMetaText: {
-    color: '#999',
-    fontSize: 11,
+    color: Colors.textTertiary,
+    fontSize: FontSize.sm,
     fontWeight: '500',
   },
 });

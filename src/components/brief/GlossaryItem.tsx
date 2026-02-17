@@ -1,5 +1,11 @@
 import type { GlossaryTerm } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '../../constants/theme';
 import React, { useState } from 'react';
 import {
   LayoutAnimation,
@@ -49,7 +55,7 @@ export function GlossaryItem({ term, variant = 'compact' }: GlossaryItemProps) {
         <Ionicons
           name={isExpanded ? 'chevron-up' : 'chevron-down'}
           size={20}
-          color="#666"
+          color={Colors.textPlaceholder}
         />
       </View>
       {isExpanded && (
@@ -63,15 +69,15 @@ export function GlossaryItem({ term, variant = 'compact' }: GlossaryItemProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#1E1E1E',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 10,
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxl,
+    marginBottom: Spacing.lg,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: Colors.borderDefault,
   },
   cardExpanded: {
-    borderColor: '#3A3A3A',
+    borderColor: Colors.backgroundBorder,
   },
   header: {
     flexDirection: 'row',
@@ -82,35 +88,35 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: Spacing.lg,
   },
   term: {
-    color: '#c9b072',
-    fontSize: 16,
+    color: Colors.accent,
+    fontSize: FontSize.xxl,
     fontWeight: '700',
   },
   categoryBadge: {
-    backgroundColor: '#2A2A2A',
-    paddingHorizontal: 8,
+    backgroundColor: Colors.backgroundElevated,
+    paddingHorizontal: Spacing.md,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: BorderRadius.sm,
   },
   categoryText: {
-    color: '#666',
-    fontSize: 10,
+    color: Colors.textPlaceholder,
+    fontSize: FontSize.xxs,
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   definitionContainer: {
-    marginTop: 12,
-    paddingTop: 12,
+    marginTop: Spacing.xl,
+    paddingTop: Spacing.xl,
     borderTopWidth: 1,
-    borderTopColor: '#2A2A2A',
+    borderTopColor: Colors.borderDefault,
   },
   definition: {
-    color: '#CCC',
-    fontSize: 14,
+    color: Colors.textSecondary,
+    fontSize: FontSize.lg,
     lineHeight: 22,
   },
 });

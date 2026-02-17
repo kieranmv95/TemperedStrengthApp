@@ -9,6 +9,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '../constants/theme';
 
 type DaySelectorProps = {
   startDate: string; // ISO string
@@ -253,11 +259,11 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: Colors.backgroundCard,
     borderBottomWidth: 1,
-    borderBottomColor: '#2A2A2A',
-    paddingTop: 12,
-    paddingBottom: 8,
+    borderBottomColor: Colors.borderDefault,
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.md,
   },
   scrollView: {
     flexGrow: 0,
@@ -270,47 +276,47 @@ const styles = StyleSheet.create({
   dayItem: {
     alignItems: 'center',
     paddingHorizontal: ITEM_PADDING_H,
-    paddingVertical: 8,
+    paddingVertical: Spacing.md,
     minWidth: ITEM_MIN_WIDTH,
   },
   dayItemSelected: {
-    backgroundColor: '#2A2A2A',
-    borderRadius: 8,
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.lg,
   },
   dayLabel: {
-    color: '#888',
-    fontSize: 14,
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
     fontWeight: '600',
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   dayLabelSelected: {
-    color: '#FFFFFF',
+    color: Colors.textPrimary,
   },
   dot: {
     width: 6,
     height: 6,
-    borderRadius: 3,
+    borderRadius: BorderRadius.xs,
     marginTop: 2,
   },
   dotWorkout: {
-    backgroundColor: '#888',
+    backgroundColor: Colors.textMuted,
   },
   dotToday: {
-    backgroundColor: '#c9b072',
+    backgroundColor: Colors.accent,
   },
   jumpToTodayButton: {
     alignSelf: 'center',
-    marginTop: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    backgroundColor: '#2A2A2A',
-    borderRadius: 16,
+    marginTop: Spacing.md,
+    paddingHorizontal: Spacing.xxl,
+    paddingVertical: Spacing.sm,
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.full,
     borderWidth: 1,
-    borderColor: '#c9b072',
+    borderColor: Colors.accent,
   },
   jumpToTodayText: {
-    color: '#c9b072',
-    fontSize: 12,
+    color: Colors.accent,
+    fontSize: FontSize.md,
     fontWeight: '600',
   },
 });

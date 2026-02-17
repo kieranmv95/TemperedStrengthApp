@@ -1,4 +1,10 @@
 import { GlossaryItem } from '@/src/components/brief/GlossaryItem';
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '@/src/constants/theme';
 import { glossary, searchGlossary } from '@/src/data/brief';
 import type { GlossaryTerm } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
@@ -48,7 +54,7 @@ export default function GlossaryScreen() {
           style={styles.headerBackButton}
           onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Terminology</Text>
         <View style={styles.headerSpacer} />
@@ -57,19 +63,19 @@ export default function GlossaryScreen() {
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <View style={styles.searchInputContainer}>
-          <Ionicons name="search" size={20} color="#666" />
+          <Ionicons name="search" size={20} color={Colors.textPlaceholder} />
           <TextInput
             style={styles.searchInput}
             value={searchQuery}
             onChangeText={setSearchQuery}
             placeholder="Search terms..."
-            placeholderTextColor="#666"
+            placeholderTextColor={Colors.textPlaceholder}
             autoCapitalize="none"
             autoCorrect={false}
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={20} color="#666" />
+              <Ionicons name="close-circle" size={20} color={Colors.textPlaceholder} />
             </TouchableOpacity>
           )}
         </View>
@@ -120,7 +126,7 @@ export default function GlossaryScreen() {
       {/* Results */}
       {filteredTerms.length === 0 ? (
         <View style={styles.emptyState}>
-          <Ionicons name="search-outline" size={64} color="#333" />
+          <Ionicons name="search-outline" size={64} color={Colors.backgroundSubtle} />
           <Text style={styles.emptyTitle}>No Terms Found</Text>
           <Text style={styles.emptyDescription}>
             Try adjusting your search or filter.
@@ -148,97 +154,97 @@ export default function GlossaryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: Colors.backgroundScreen,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: Spacing.xxl,
+    paddingVertical: Spacing.xl,
     borderBottomWidth: 1,
-    borderBottomColor: '#2A2A2A',
+    borderBottomColor: Colors.borderDefault,
   },
   headerBackButton: {
-    padding: 4,
+    padding: Spacing.xs,
   },
   headerTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displaySm,
     fontWeight: '700',
   },
   headerSpacer: {
     width: 32,
   },
   searchContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: Spacing.xxl,
+    paddingVertical: Spacing.xl,
   },
   searchInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1E1E1E',
-    borderRadius: 12,
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
     paddingHorizontal: 14,
-    paddingVertical: 12,
+    paddingVertical: Spacing.xl,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
-    gap: 10,
+    borderColor: Colors.borderDefault,
+    gap: Spacing.lg,
   },
   searchInput: {
     flex: 1,
-    color: '#FFFFFF',
-    fontSize: 16,
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxl,
   },
   filterContainer: {
     borderBottomWidth: 1,
-    borderBottomColor: '#2A2A2A',
+    borderBottomColor: Colors.borderDefault,
   },
   filterList: {
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-    gap: 8,
+    paddingHorizontal: Spacing.xxl,
+    paddingBottom: Spacing.xl,
+    gap: Spacing.md,
   },
   filterTab: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: '#1E1E1E',
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.pill,
+    backgroundColor: Colors.backgroundCard,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
-    gap: 6,
+    borderColor: Colors.borderDefault,
+    gap: Spacing.sm,
   },
   filterTabActive: {
-    backgroundColor: '#c9b072',
-    borderColor: '#c9b072',
+    backgroundColor: Colors.accent,
+    borderColor: Colors.accent,
   },
   filterTabText: {
-    color: '#888',
-    fontSize: 13,
+    color: Colors.textMuted,
+    fontSize: FontSize.base,
     fontWeight: '600',
   },
   filterTabTextActive: {
-    color: '#121212',
+    color: Colors.textOnAccent,
   },
   filterCount: {
-    color: '#666',
-    fontSize: 11,
+    color: Colors.textPlaceholder,
+    fontSize: FontSize.sm,
     fontWeight: '600',
   },
   filterCountActive: {
-    color: '#121212',
+    color: Colors.textOnAccent,
     opacity: 0.7,
   },
   listContent: {
-    padding: 16,
+    padding: Spacing.xxl,
   },
   resultsCount: {
-    color: '#666',
-    fontSize: 13,
+    color: Colors.textPlaceholder,
+    fontSize: FontSize.base,
     fontWeight: '500',
-    marginBottom: 12,
+    marginBottom: Spacing.xl,
   },
   emptyState: {
     flex: 1,
@@ -247,15 +253,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 48,
   },
   emptyTitle: {
-    color: '#FFFFFF',
-    fontSize: 20,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayMd,
     fontWeight: '700',
-    marginTop: 16,
-    marginBottom: 8,
+    marginTop: Spacing.xxl,
+    marginBottom: Spacing.md,
   },
   emptyDescription: {
-    color: '#888',
-    fontSize: 14,
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
     textAlign: 'center',
   },
 });

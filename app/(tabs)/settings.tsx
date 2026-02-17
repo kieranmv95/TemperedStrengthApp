@@ -1,3 +1,9 @@
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
@@ -236,38 +242,38 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: Colors.backgroundScreen,
   },
   scrollView: {
     flex: 1,
   },
   content: {
-    padding: 24,
+    padding: Spacing.section,
   },
   header: {
-    padding: 24,
-    paddingBottom: 16,
+    padding: Spacing.section,
+    paddingBottom: Spacing.xxl,
     borderBottomWidth: 1,
-    borderBottomColor: '#2A2A2A',
+    borderBottomColor: Colors.borderDefault,
   },
   title: {
-    color: '#FFFFFF',
-    fontSize: 32,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayXXXl,
     fontWeight: '800',
     letterSpacing: -0.5,
   },
   settingsList: {
-    gap: 12,
+    gap: Spacing.xl,
   },
   settingItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#2A2A2A',
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxl,
     borderWidth: 1,
-    borderColor: '#333',
+    borderColor: Colors.borderSubtle,
   },
   settingItemDisabled: {
     opacity: 0.5,
@@ -276,71 +282,71 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   settingTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displaySm,
     fontWeight: '700',
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   settingTitleDisabled: {
-    color: '#888',
+    color: Colors.textMuted,
   },
   settingDescription: {
-    color: '#888',
-    fontSize: 14,
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
     lineHeight: 20,
   },
   settingArrow: {
-    color: '#c9b072',
-    fontSize: 24,
+    color: Colors.accent,
+    fontSize: FontSize.displayXl,
     fontWeight: '600',
-    marginLeft: 12,
+    marginLeft: Spacing.xl,
   },
   settingArrowDisabled: {
-    color: '#666',
+    color: Colors.textPlaceholder,
   },
   dangerItem: {
-    borderColor: '#FF4444',
+    borderColor: Colors.destructiveAlt,
   },
   dangerText: {
-    color: '#FF4444',
+    color: Colors.destructiveAlt,
   },
   proItem: {
-    borderColor: '#c9b072',
+    borderColor: Colors.accent,
   },
   proArrow: {
-    color: '#c9b072',
+    color: Colors.accent,
   },
   settingTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginBottom: 4,
+    gap: Spacing.md,
+    marginBottom: Spacing.xs,
   },
   proBadge: {
-    backgroundColor: '#c9b072',
-    paddingHorizontal: 8,
+    backgroundColor: Colors.accent,
+    paddingHorizontal: Spacing.md,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: BorderRadius.sm,
   },
   proBadgeText: {
-    color: '#000000',
-    fontSize: 10,
+    color: Colors.textBlack,
+    fontSize: FontSize.xxs,
     fontWeight: '700',
     letterSpacing: 0.5,
   },
   proTitle: {
-    color: '#c9b072',
-    fontSize: 14,
+    color: Colors.accent,
+    fontSize: FontSize.lg,
     fontWeight: '700',
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   proFeaturesList: {
-    marginTop: 8,
-    gap: 4,
+    marginTop: Spacing.md,
+    gap: Spacing.xs,
   },
   proFeatureItem: {
-    color: '#FFFFFF',
-    fontSize: 14,
+    color: Colors.textPrimary,
+    fontSize: FontSize.lg,
     fontWeight: '500',
     lineHeight: 20,
   },
