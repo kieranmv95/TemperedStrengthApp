@@ -1,4 +1,4 @@
-export interface Article {
+export type Article = {
   id: string;
   title: string;
   subtitle: string;
@@ -7,19 +7,19 @@ export interface Article {
   image: string;
   content: string;
   isFeatured?: boolean;
-}
+};
 
-export interface GlossaryTerm {
+export type GlossaryTerm = {
   id: string;
   term: string;
   definition: string;
   category?: 'Movements' | 'Equipment' | 'Training' | 'Nutrition' | 'General';
-}
+};
 
-export interface Playlist {
+export type Playlist = {
   id: string;
   title: string;
   subtitle: string;
   artworkUrl: string;
   itunesUrl: string;
-}
+};

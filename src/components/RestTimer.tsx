@@ -6,13 +6,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '../constants/theme';
 import type { RestTimerState } from '../types/storage';
 
-interface RestTimerProps {
+type RestTimerProps = {
   timer: RestTimerState;
   onDismiss: () => void;
   onComplete: () => void;
-}
+};
 
 const formatDuration = (totalSeconds: number): string => {
   const minutes = Math.floor(totalSeconds / 60);
@@ -84,46 +90,46 @@ export const RestTimer: React.FC<RestTimerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 12,
-    borderRadius: 10,
-    backgroundColor: '#151515',
+    padding: Spacing.xl,
+    borderRadius: BorderRadius.xl,
+    backgroundColor: Colors.backgroundDark,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: Colors.borderDefault,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.md,
   },
   label: {
-    color: '#888',
-    fontSize: 12,
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   dismissButton: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: '#333',
+    borderColor: Colors.borderSubtle,
   },
   dismissText: {
-    color: '#CCC',
-    fontSize: 12,
+    color: Colors.textSecondary,
+    fontSize: FontSize.md,
     fontWeight: '600',
   },
   timerText: {
-    color: '#FFFFFF',
-    fontSize: 24,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayXl,
     fontWeight: '800',
     textAlign: 'center',
   },
   completeText: {
-    color: '#c9b072',
-    fontSize: 16,
+    color: Colors.accent,
+    fontSize: FontSize.xxl,
     fontWeight: '700',
     textAlign: 'center',
   },

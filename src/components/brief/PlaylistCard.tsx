@@ -1,5 +1,11 @@
 import type { Playlist } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '../../constants/theme';
 import * as Linking from 'expo-linking';
 import React from 'react';
 import {
@@ -11,9 +17,9 @@ import {
   View,
 } from 'react-native';
 
-interface PlaylistCardProps {
+type PlaylistCardProps = {
   playlist: Playlist;
-}
+};
 
 export function PlaylistCard({ playlist }: PlaylistCardProps) {
   const handlePress = async () => {
@@ -42,7 +48,7 @@ export function PlaylistCard({ playlist }: PlaylistCardProps) {
       <View style={styles.imageContainer}>
         <Image source={{ uri: playlist.artworkUrl }} style={styles.artwork} />
         <View style={styles.playOverlay}>
-          <Ionicons name="play" size={24} color="#FFFFFF" />
+          <Ionicons name="play" size={24} color={Colors.textPrimary} />
         </View>
       </View>
       <Text style={styles.title} numberOfLines={1}>
@@ -58,37 +64,37 @@ export function PlaylistCard({ playlist }: PlaylistCardProps) {
 const styles = StyleSheet.create({
   card: {
     width: 140,
-    marginRight: 12,
+    marginRight: Spacing.xl,
   },
   imageContainer: {
     position: 'relative',
-    marginBottom: 10,
+    marginBottom: Spacing.lg,
   },
   artwork: {
     width: 140,
     height: 140,
-    borderRadius: 12,
-    backgroundColor: '#2A2A2A',
+    borderRadius: BorderRadius.xxl,
+    backgroundColor: Colors.backgroundElevated,
   },
   playOverlay: {
     position: 'absolute',
-    bottom: 8,
-    right: 8,
+    bottom: Spacing.md,
+    right: Spacing.md,
     width: 40,
     height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(201, 176, 114, 0.9)',
+    borderRadius: BorderRadius.pill,
+    backgroundColor: Colors.accentOverlay,
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
-    color: '#FFFFFF',
-    fontSize: 14,
+    color: Colors.textPrimary,
+    fontSize: FontSize.lg,
     fontWeight: '600',
   },
   subtitle: {
-    color: '#666',
-    fontSize: 12,
+    color: Colors.textPlaceholder,
+    fontSize: FontSize.md,
     marginTop: 2,
   },
 });

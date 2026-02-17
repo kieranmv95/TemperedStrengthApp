@@ -1,3 +1,4 @@
+import { Colors } from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { getOfferings } from '@/src/services/revenueCatService';
 import { router } from 'expo-router';
@@ -162,7 +163,7 @@ export default function PaywallScreen() {
   // Show loading indicator while presenting paywall
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="#c9b072" />
+      <ActivityIndicator size="large" color={Colors.accent} />
     </View>
   );
 }
@@ -170,7 +171,7 @@ export default function PaywallScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: Colors.backgroundScreen,
     alignItems: 'center',
     justifyContent: 'center',
   },

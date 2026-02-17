@@ -1,3 +1,9 @@
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '@/src/constants/theme';
 import { getArticleById } from '@/src/data/brief';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -120,7 +126,7 @@ export default function ArticleScreen() {
           style={styles.headerBackButton}
           onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle} numberOfLines={1}>
           {article.category}
@@ -142,7 +148,7 @@ export default function ArticleScreen() {
             <Text style={styles.categoryText}>{article.category}</Text>
           </View>
           <View style={styles.readTime}>
-            <Ionicons name="time-outline" size={14} color="#888" />
+            <Ionicons name="time-outline" size={14} color={Colors.textMuted} />
             <Text style={styles.readTimeText}>{article.readTime} min read</Text>
           </View>
         </View>
@@ -169,23 +175,23 @@ export default function ArticleScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: Colors.backgroundScreen,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: Spacing.xxl,
+    paddingVertical: Spacing.xl,
     borderBottomWidth: 1,
-    borderBottomColor: '#2A2A2A',
+    borderBottomColor: Colors.borderDefault,
   },
   headerBackButton: {
-    padding: 4,
+    padding: Spacing.xs,
   },
   headerTitle: {
-    color: '#888',
-    fontSize: 14,
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -202,24 +208,24 @@ const styles = StyleSheet.create({
   heroImage: {
     width: '100%',
     height: 220,
-    backgroundColor: '#2A2A2A',
+    backgroundColor: Colors.backgroundElevated,
   },
   metaContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    gap: Spacing.xl,
+    paddingHorizontal: Spacing.xxxl,
+    paddingTop: Spacing.xxxl,
   },
   categoryBadge: {
-    backgroundColor: '#c9b072',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 4,
+    backgroundColor: Colors.accent,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
   },
   categoryText: {
-    color: '#121212',
-    fontSize: 11,
+    color: Colors.textOnAccent,
+    fontSize: FontSize.sm,
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -227,87 +233,87 @@ const styles = StyleSheet.create({
   readTime: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: Spacing.xs,
   },
   readTimeText: {
-    color: '#888',
-    fontSize: 13,
+    color: Colors.textMuted,
+    fontSize: FontSize.base,
   },
   title: {
-    color: '#FFFFFF',
-    fontSize: 28,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayXXl,
     fontWeight: '800',
     lineHeight: 34,
-    paddingHorizontal: 20,
-    marginTop: 16,
+    paddingHorizontal: Spacing.xxxl,
+    marginTop: Spacing.xxl,
   },
   subtitle: {
-    color: '#888',
-    fontSize: 16,
+    color: Colors.textMuted,
+    fontSize: FontSize.xxl,
     lineHeight: 24,
-    paddingHorizontal: 20,
-    marginTop: 8,
+    paddingHorizontal: Spacing.xxxl,
+    marginTop: Spacing.md,
   },
   divider: {
     height: 1,
-    backgroundColor: '#2A2A2A',
-    marginHorizontal: 20,
-    marginVertical: 24,
+    backgroundColor: Colors.borderDefault,
+    marginHorizontal: Spacing.xxxl,
+    marginVertical: Spacing.section,
   },
   articleContent: {
-    paddingHorizontal: 20,
+    paddingHorizontal: Spacing.xxxl,
   },
   heading2: {
-    color: '#c9b072',
-    fontSize: 20,
+    color: Colors.accent,
+    fontSize: FontSize.displayMd,
     fontWeight: '700',
-    marginTop: 24,
-    marginBottom: 12,
+    marginTop: Spacing.section,
+    marginBottom: Spacing.xl,
   },
   heading3: {
-    color: '#FFFFFF',
-    fontSize: 17,
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxxl,
     fontWeight: '700',
-    marginTop: 16,
-    marginBottom: 8,
+    marginTop: Spacing.xxl,
+    marginBottom: Spacing.md,
   },
   paragraph: {
-    color: '#CCC',
-    fontSize: 16,
+    color: Colors.textSecondary,
+    fontSize: FontSize.xxl,
     lineHeight: 26,
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   inlineBold: {
-    color: '#FFFFFF',
+    color: Colors.textPrimary,
     fontWeight: '700',
   },
   listItem: {
     flexDirection: 'row',
-    marginBottom: 8,
-    paddingLeft: 8,
+    marginBottom: Spacing.md,
+    paddingLeft: Spacing.md,
   },
   bullet: {
-    color: '#c9b072',
-    fontSize: 16,
+    color: Colors.accent,
+    fontSize: FontSize.xxl,
     lineHeight: 26,
-    marginRight: 12,
+    marginRight: Spacing.xl,
   },
   numberBullet: {
-    color: '#c9b072',
-    fontSize: 16,
+    color: Colors.accent,
+    fontSize: FontSize.xxl,
     fontWeight: '600',
     lineHeight: 26,
-    marginRight: 8,
+    marginRight: Spacing.md,
     width: 24,
   },
   listText: {
     flex: 1,
-    color: '#CCC',
-    fontSize: 16,
+    color: Colors.textSecondary,
+    fontSize: FontSize.xxl,
     lineHeight: 26,
   },
   spacer: {
-    height: 12,
+    height: Spacing.xl,
   },
   bottomSpacer: {
     height: 40,
@@ -318,19 +324,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   errorText: {
-    color: '#888',
-    fontSize: 18,
-    marginBottom: 16,
+    color: Colors.textMuted,
+    fontSize: FontSize.displaySm,
+    marginBottom: Spacing.xxl,
   },
   backButton: {
-    backgroundColor: '#c9b072',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
+    backgroundColor: Colors.accent,
+    paddingHorizontal: Spacing.xxxl,
+    paddingVertical: Spacing.lg,
+    borderRadius: BorderRadius.lg,
   },
   backButtonText: {
-    color: '#121212',
-    fontSize: 14,
+    color: Colors.textOnAccent,
+    fontSize: FontSize.lg,
     fontWeight: '700',
   },
 });

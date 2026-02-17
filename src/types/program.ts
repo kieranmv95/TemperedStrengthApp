@@ -1,10 +1,10 @@
-export interface Warmup {
+export type Warmup = {
   type: 'warmup';
   additionalDescription?: string | null;
   description: string[];
-}
+};
 
-export interface Exercise {
+export type Exercise = {
   type: 'exercise';
   id: number;
   additionalHeader?: string | null;
@@ -15,17 +15,17 @@ export interface Exercise {
   restTimeSeconds?: number;
   isAmrap?: boolean;
   canSwap?: boolean;
-}
+};
 
-export interface Workout {
+export type Workout = {
   dayIndex: number;
   label: string;
   description: string;
   intensity: number; // 1 to 10 scale
   exercises: (Exercise | Warmup)[];
-}
+};
 
-export interface Program {
+export type Program = {
   id: string;
   name: string;
   description: string;
@@ -33,4 +33,4 @@ export interface Program {
   isPro: boolean;
   daysSplit?: ('mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')[];
   averageSessionDuration?: string;
-}
+};
