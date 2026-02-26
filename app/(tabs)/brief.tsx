@@ -1,6 +1,7 @@
 import { ArticleCard } from '@/src/components/brief/ArticleCard';
 import { GlossaryItem } from '@/src/components/brief/GlossaryItem';
 import { PlaylistCard } from '@/src/components/brief/PlaylistCard';
+import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import {
   articles,
   getFeaturedArticle,
@@ -55,7 +56,7 @@ export default function BriefScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="document-text" size={18} color="#c9b072" />
+              <Ionicons name="document-text" size={18} color={Colors.accent} />
               <Text style={styles.sectionTitle}>FIELD INTEL</Text>
             </View>
           </View>
@@ -90,7 +91,7 @@ export default function BriefScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="musical-notes" size={18} color="#c9b072" />
+              <Ionicons name="musical-notes" size={18} color={Colors.accent} />
               <Text style={styles.sectionTitle}>THE SOUNDBOARD</Text>
             </View>
           </View>
@@ -110,7 +111,7 @@ export default function BriefScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="book" size={18} color="#c9b072" />
+              <Ionicons name="book" size={18} color={Colors.accent} />
               <Text style={styles.sectionTitle}>TERMINOLOGY</Text>
             </View>
             <TouchableOpacity
@@ -118,7 +119,7 @@ export default function BriefScreen() {
               onPress={handleSeeAllGlossary}
             >
               <Text style={styles.seeAllText}>See All</Text>
-              <Ionicons name="chevron-forward" size={16} color="#c9b072" />
+              <Ionicons name="chevron-forward" size={16} color={Colors.accent} />
             </TouchableOpacity>
           </View>
 
@@ -137,28 +138,28 @@ export default function BriefScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: Colors.backgroundScreen,
   },
   scrollView: {
     flex: 1,
   },
   content: {
-    paddingHorizontal: 16,
+    paddingHorizontal: Spacing.xxl,
   },
   header: {
-    paddingTop: 24,
-    paddingBottom: 24,
+    paddingTop: Spacing.section,
+    paddingBottom: Spacing.section,
   },
   title: {
-    color: '#FFFFFF',
-    fontSize: 32,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayXXXl,
     fontWeight: '800',
     letterSpacing: -0.5,
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   subtitle: {
-    color: '#666',
-    fontSize: 14,
+    color: Colors.textPlaceholder,
+    fontSize: FontSize.lg,
     fontWeight: '500',
   },
   section: {
@@ -168,42 +169,42 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: Spacing.xxl,
   },
   sectionTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: Spacing.md,
   },
   sectionTitle: {
-    color: '#888',
-    fontSize: 12,
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
     fontWeight: '700',
     letterSpacing: 1.5,
   },
   seeAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: Spacing.xs,
   },
   seeAllText: {
-    color: '#c9b072',
-    fontSize: 13,
+    color: Colors.accent,
+    fontSize: FontSize.base,
     fontWeight: '600',
   },
   playlistsContainer: {
-    paddingRight: 16,
+    paddingRight: Spacing.xxl,
   },
   moreArticlesLabel: {
-    color: '#666',
-    fontSize: 13,
+    color: Colors.textPlaceholder,
+    fontSize: FontSize.base,
     fontWeight: '600',
-    marginTop: 16,
-    marginBottom: 12,
+    marginTop: Spacing.xxl,
+    marginBottom: Spacing.xl,
   },
   articlesScrollContainer: {
-    paddingRight: 16,
-    gap: 12,
+    paddingRight: Spacing.xxl,
+    gap: Spacing.xl,
   },
   bottomSpacer: {
     height: 32,

@@ -1,10 +1,20 @@
+import {
+  getCustomerInfo,
+  getOfferings,
+  PRO_ENTITLEMENT_ID,
+  purchasePackage,
+  restorePurchases,
+} from '@/src/services/revenueCatService';
+import { getProgramById } from '@/src/utils/program';
+import { clearProgramData, getActiveProgramId } from '@/src/utils/storage';
+import { router } from 'expo-router';
 import React, {
   createContext,
-  useContext,
-  useState,
-  useEffect,
   useCallback,
+  useContext,
+  useEffect,
   useRef,
+  useState,
 } from 'react';
 import { Alert } from 'react-native';
 import Purchases, {
@@ -12,26 +22,16 @@ import Purchases, {
   PurchasesOffering as Offerings,
   PurchasesPackage,
 } from 'react-native-purchases';
-import { router } from 'expo-router';
-import {
-  getCustomerInfo,
-  getOfferings,
-  purchasePackage,
-  restorePurchases,
-  PRO_ENTITLEMENT_ID,
-} from '@/src/services/revenueCatService';
-import { getActiveProgramId, clearProgramData } from '@/src/utils/storage';
-import { getProgramById } from '@/src/utils/program';
 
-export interface SubscriptionState {
+export type SubscriptionState = {
   isPro: boolean;
   isLoading: boolean;
   customerInfo: CustomerInfo | null;
   offerings: Offerings | null;
   error: Error | null;
-}
+};
 
-interface SubscriptionContextType extends SubscriptionState {
+type SubscriptionContextType = SubscriptionState & {
   purchase: (packageToPurchase: PurchasesPackage) => Promise<{
     success: boolean;
     customerInfo?: CustomerInfo;
@@ -45,7 +45,7 @@ interface SubscriptionContextType extends SubscriptionState {
   }>;
   refresh: () => Promise<void>;
   loadOfferings: () => Promise<void>;
-}
+};
 
 const SubscriptionContext = createContext<SubscriptionContextType | null>(null);
 

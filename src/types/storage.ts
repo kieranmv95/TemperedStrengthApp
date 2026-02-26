@@ -1,41 +1,41 @@
-export interface ExerciseSwap {
+export type ExerciseSwap = {
   dayIndex: number;
   slotIndex: number;
   originalExerciseId: number;
   swappedExerciseId: number;
-}
+};
 
-export interface ExerciseSwaps {
+export type ExerciseSwaps = {
   [dayIndex: number]: {
     [slotIndex: number]: number; // swapped exercise ID
   };
-}
+};
 
-export interface LoggedSet {
+export type LoggedSet = {
   weight: number | null;
   reps: number;
   state?: 'completed' | 'failed' | null;
-}
+};
 
-export interface WorkoutLogs {
+export type WorkoutLogs = {
   [dayIndex: number]: {
     [slotIndex: number]: {
       [setIndex: number]: LoggedSet;
     };
   };
-}
+};
 
-export interface CustomSetCounts {
+export type CustomSetCounts = {
   [dayIndex: number]: {
     [slotIndex: number]: number; // custom set count
   };
-}
+};
 
-export interface WorkoutNotes {
+export type WorkoutNotes = {
   [dayIndex: number]: string; // notes for each workout day
-}
+};
 
-export interface RestTimerState {
+export type RestTimerState = {
   dayIndex: number;
   slotIndex: number;
   exerciseId: number | null;
@@ -43,4 +43,4 @@ export interface RestTimerState {
   startedAt: number;
   status: 'running' | 'completed';
   completedAt?: number;
-}
+};

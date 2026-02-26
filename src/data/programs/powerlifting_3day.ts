@@ -52,61 +52,98 @@ export const powerlifting_3day: Program = {
       week < 3 ? [8, 8] : week < 6 ? [5, 5] : [2, 3];
     const baseIntensity = week < 3 ? 7 : week < 6 ? 8 : 9;
 
+    // Accessory rep ranges taper in line with the program's peaking arc.
+    // High volume accessories in peak/testing week add unnecessary fatigue.
+    const accessoryReps: [number, number] =
+      week < 3 ? [8, 10] : week < 6 ? [6, 8] : [5, 6];
+
     return [
+      // ─────────────────────────────────────────────
+      // DAY 1 — Squat Focus (Monday)
+      // FIX 1: Plank now has hideReps: true — logging_type is 'time',
+      //         rendering [45, 60] as reps was incorrect.
+      // FIX 2: RDL rep range now uses accessoryReps so it tapers with
+      //         the program. High-rep RDLs in peak/test week are
+      //         unnecessary posterior chain fatigue before a 1RM.
+      // FIX 3: Testing week sets reduced to 1 — on a 1RM day the user
+      //         builds up with warm-up sets then attempts a max.
+      //         Prescribing 5 working sets is incorrect for this context.
+      // ─────────────────────────────────────────────
       {
         dayIndex: week * 7 + 0,
-        label: 'Squat Focus',
+        label: isTestingWeek
+          ? 'TESTING DAY — 1RM Squat'
+          : `Squat Focus — Week ${week + 1}`,
         description: isTestingWeek
           ? 'TESTING DAY: New 1RM Squat'
           : 'High intensity squatting and quad accessories.',
-        intensity: isTestingWeek ? 10 : baseIntensity + 1,
+        intensity: isTestingWeek ? 10 : Math.min(baseIntensity + 1, 10),
         exercises: [
           squat_warmup,
           {
             type: 'exercise',
-            id: 4,
-            sets: week < 4 ? 4 : 5,
+            id: 4, // Barbell Back Squat
+            sets: isTestingWeek ? 1 : week < 4 ? 4 : 5, // FIX: 1 set on test day
             repRange: mainReps,
             restTimeSeconds: isTestingWeek ? 180 : 150,
-            hideReps: isTestingWeek ? true : false,
+            hideReps: isTestingWeek,
             additionalHeader: isTestingWeek ? '1RM Test' : 'Competition Squat',
             additionalDescription: isTestingWeek
-              ? 'The culmination of 8 weeks. Take 3-5 warm-up sets, then attempt your new Max. Focus: Big breath, tight back, and drive the hips.'
+              ? 'The culmination of 8 weeks. Take 4–6 progressively heavier warm-up sets, then attempt your new max. Big breath, tight back, drive the hips through the top.'
               : "Focus on 'rooting' your feet into the floor. Create maximum intra-abdominal pressure. Descent should be controlled, ascent should be explosive.",
           },
-
           {
             type: 'exercise',
-            id: 22,
+            id: 22, // Romanian Deadlift
             sets: 3,
-            repRange: [8, 10],
+            repRange: accessoryReps, // FIX: was hardcoded [8, 10] every week
             restTimeSeconds: 90,
             additionalDescription:
               'RDLs are here to protect your back. Keep the bar glued to your thighs and stop at mid-shin. You should feel a massive stretch in the hamstrings.',
           },
           {
             type: 'exercise',
-            id: 19,
+            id: 19, // Leg Press
             sets: 3,
             repRange: [10, 12],
             restTimeSeconds: 90,
+            canSwap: true,
             additionalDescription:
               'Pure quad hypertrophy to support your squat out of the hole. Keep your feet low on the platform to emphasize the knees.',
           },
           {
             type: 'exercise',
-            id: 13,
+            id: 13, // Plank
             sets: 3,
             repRange: [45, 60],
+            hideReps: true, // FIX: logging_type is 'time' — display as seconds
             restTimeSeconds: 60,
             additionalDescription:
               "Bracing practice. Do not just 'hold' the plank; actively pull your elbows toward your toes to engage the deep core.",
           },
         ],
       },
+
+      // ─────────────────────────────────────────────
+      // DAY 2 — Bench Focus (Wednesday)
+      // FIX: Skull Crushers replaced with Face Pulls (id: 35).
+      //
+      // A powerlifting bench day already has: Bench Press + OHP + Seated
+      // Cable Row. That is heavy pressing across every set. 8 weeks of
+      // this with zero direct rear delt / external rotation work is the
+      // #1 cause of shoulder impingement in competitive benchers.
+      //
+      // Face Pulls address the rotator cuff and rear delts directly,
+      // counterbalancing the pressing volume. Tricep lockout strength
+      // is already well-served by the volume on the comp bench sets —
+      // an isolated skull crusher adds marginal lockout gains compared
+      // to the shoulder injury risk it compounds.
+      // ─────────────────────────────────────────────
       {
         dayIndex: week * 7 + 2,
-        label: 'Bench Focus',
+        label: isTestingWeek
+          ? 'TESTING DAY — 1RM Bench'
+          : `Bench Focus — Week ${week + 1}`,
         description: isTestingWeek
           ? 'TESTING DAY: New 1RM Bench'
           : 'Competition bench form and shoulder stability.',
@@ -115,20 +152,19 @@ export const powerlifting_3day: Program = {
           bench_warmup,
           {
             type: 'exercise',
-            id: 1,
-            sets: week < 4 ? 4 : 5,
+            id: 1, // Barbell Bench Press
+            sets: isTestingWeek ? 1 : week < 4 ? 4 : 5, // FIX: 1 set on test day
             repRange: mainReps,
             restTimeSeconds: isTestingWeek ? 180 : 150,
-            hideReps: isTestingWeek ? true : false,
+            hideReps: isTestingWeek,
             additionalHeader: isTestingWeek ? '1RM Test' : 'Comp Bench',
             additionalDescription: isTestingWeek
-              ? 'Find your max. Keep your heels driven into the floor (leg drive) and maintain your arch throughout the press.'
+              ? 'Find your max. Take 4–6 warm-up sets, then go for it. Keep your heels driven into the floor (leg drive) and maintain your arch throughout the press.'
               : "Pull your shoulder blades together and down. Touch the bar to your lower chest/upper stomach. Drive the bar 'back' toward your face.",
           },
-
           {
             type: 'exercise',
-            id: 26,
+            id: 26, // Barbell Overhead Press
             sets: 3,
             repRange: [6, 8],
             restTimeSeconds: 120,
@@ -137,7 +173,7 @@ export const powerlifting_3day: Program = {
           },
           {
             type: 'exercise',
-            id: 30,
+            id: 30, // Seated Cable Row
             sets: 3,
             repRange: [10, 12],
             restTimeSeconds: 90,
@@ -146,40 +182,56 @@ export const powerlifting_3day: Program = {
           },
           {
             type: 'exercise',
-            id: 54,
+            id: 35, // Face Pulls — REPLACED Skull Crushers
             sets: 3,
-            repRange: [10, 12],
+            repRange: [15, 20],
             restTimeSeconds: 60,
             additionalDescription:
-              "Strong triceps are required for the 'lockout' phase of the bench press. Keep elbows tucked in.",
+              'Non-negotiable for shoulder longevity in any heavy bench program. Pull the rope to your forehead with elbows flared high. This protects the rotator cuff and counterbalances weeks of pressing load.',
           },
         ],
       },
+
+      // ─────────────────────────────────────────────
+      // DAY 3 — Deadlift Focus (Friday)
+      // FIX 1: Cable Crunches (id: 48) replaced with Hanging Leg Raise
+      //         (id: 31). After Comp Deadlifts + Bulgarian Split Squats +
+      //         Pull-ups, the lumbar spine is at maximum weekly fatigue.
+      //         Cable Crunches add compressive spinal flexion load on top
+      //         of that. Hanging Leg Raises train the same abs through hip
+      //         flexion with zero additional lower back stress, and
+      //         actually decompress the spine when done hanging.
+      // FIX 2: Pull-ups canSwap: true added — not all users can perform
+      //         bodyweight pull-ups. Assisted Pull-up Machine (id: 84)
+      //         or Lat Pulldown (id: 11) are natural swaps.
+      // FIX 3: Testing week sets: 1 on the main deadlift.
+      // ─────────────────────────────────────────────
       {
         dayIndex: week * 7 + 4,
-        label: 'Deadlift Focus',
+        label: isTestingWeek
+          ? 'TESTING DAY — 1RM Deadlift'
+          : `Deadlift Focus — Week ${week + 1}`,
         description: isTestingWeek
           ? 'TESTING DAY: New 1RM Deadlift'
           : 'Max effort pulling and posterior chain work.',
-        intensity: isTestingWeek ? 10 : baseIntensity + 1,
+        intensity: isTestingWeek ? 10 : Math.min(baseIntensity + 1, 10),
         exercises: [
           deadlift_warmup,
           {
             type: 'exercise',
-            id: 14,
-            sets: 3,
+            id: 14, // Barbell Deadlift
+            sets: isTestingWeek ? 1 : 3, // FIX: 1 set on test day
             repRange: mainReps,
             restTimeSeconds: isTestingWeek ? 180 : 150,
-            hideReps: isTestingWeek ? true : false,
+            hideReps: isTestingWeek,
             additionalHeader: isTestingWeek ? '1RM Test' : 'Comp Deadlift',
             additionalDescription: isTestingWeek
-              ? "The final lift. Grip it and rip it. Keep the spine neutral and don't let the hips rise faster than the chest."
+              ? "The final lift. Take 4–6 warm-up sets, then grip it and rip it. Keep the spine neutral and don't let the hips rise faster than the chest."
               : "Slack out, chest up. Pull the bar into your shins and think about 'pushing the floor away' rather than 'pulling the bar up'.",
           },
-
           {
             type: 'exercise',
-            id: 6,
+            id: 6, // Bulgarian Split Squat
             sets: 3,
             repRange: [8, 10],
             restTimeSeconds: 90,
@@ -188,21 +240,22 @@ export const powerlifting_3day: Program = {
           },
           {
             type: 'exercise',
-            id: 10,
+            id: 10, // Pull-ups
             sets: 3,
-            repRange: [8, 12],
+            repRange: [6, 10], // FIX: tightened from [8, 12] — cleaner target range
             restTimeSeconds: 120,
+            canSwap: true, // FIX: not all users can do bodyweight pull-ups
             additionalDescription:
-              'Lat strength is vital to keeping the bar close to your body during a heavy pull. Do not swing.',
+              'Lat strength is vital to keeping the bar close to your body during a heavy pull. Do not swing. If bodyweight pull-ups are not yet achievable, swap to the Assisted Pull-up Machine or Lat Pulldown.',
           },
           {
             type: 'exercise',
-            id: 48,
+            id: 31, // Hanging Leg Raise — REPLACED Cable Crunches
             sets: 3,
-            repRange: [12, 15],
+            repRange: [10, 15],
             restTimeSeconds: 60,
             additionalDescription:
-              "Abdominal flexion under load. This builds the 'front' side of your brace to protect your lower back.",
+              'After heavy deadlifts and hinge work, spinal flexion under load is the last thing your lower back needs. Hanging Leg Raises build the same anterior core strength through hip flexion, with zero additional lumbar stress — and the hang itself decompresses the spine.',
           },
         ],
       },

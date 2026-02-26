@@ -1,3 +1,4 @@
+import { Colors } from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { router } from 'expo-router';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
@@ -22,7 +23,7 @@ export default function CustomerCenterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: Colors.backgroundScreen,
   },
   content: {
     flex: 1,

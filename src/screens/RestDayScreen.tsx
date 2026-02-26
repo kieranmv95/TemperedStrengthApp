@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Colors, FontSize, Spacing } from '../constants/theme';
 
-interface RestDayScreenProps {
+type RestDayScreenProps = {
   onProgramReset?: () => void;
-}
+};
 
 export const RestDayScreen: React.FC<RestDayScreenProps> = ({
   onProgramReset,
@@ -32,27 +33,27 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
+    padding: Spacing.section,
   },
   title: {
-    color: '#c9b072',
-    fontSize: 36,
+    color: Colors.accent,
+    fontSize: FontSize.hero,
     fontWeight: '800',
-    marginBottom: 12,
+    marginBottom: Spacing.xl,
     textAlign: 'center',
   },
   subtitle: {
-    color: '#888',
-    fontSize: 18,
+    color: Colors.textMuted,
+    fontSize: FontSize.displaySm,
     fontWeight: '600',
-    marginBottom: 16,
+    marginBottom: Spacing.xxl,
     textAlign: 'center',
   },
   description: {
-    color: '#CCC',
-    fontSize: 16,
+    color: Colors.textSecondary,
+    fontSize: FontSize.xxl,
     lineHeight: 24,
     textAlign: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: Spacing.xxl,
   },
 });

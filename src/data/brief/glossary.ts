@@ -2,7 +2,6 @@ import type { GlossaryTerm } from '@/src/types/brief';
 
 export type { GlossaryTerm } from '@/src/types/brief';
 
-// Mock Glossary Data (ELI5 Style)
 export const glossary: GlossaryTerm[] = [
   {
     id: 'term_001',
@@ -148,7 +147,7 @@ export const glossary: GlossaryTerm[] = [
     id: 'term_021',
     term: 'Sets',
     definition:
-      "Sets. The number of times you perform an exercise. For example: 'I did 10 sets of squats'.",
+      "A group of consecutive repetitions performed without rest. For example: '3 sets of 10 reps' means you do 10 reps, rest, do 10 more, rest, then do 10 more. Sets and reps together determine your total training volume.",
     category: 'Training',
   },
   {
@@ -176,14 +175,14 @@ export const glossary: GlossaryTerm[] = [
     id: 'term_025',
     term: 'EMOM',
     definition:
-      "EMOM is a term used to describe a workout where you perform the same exercise for a certain number of minutes. For example: 'I did 10 minutes of burpees EMOM'. Usually done for a certain number of minutes.",
+      "Every Minute On the Minute. You start a new set of reps at the top of every minute. Whatever time is left after finishing your reps is your rest. For example: '5 pull-ups EMOM for 10 minutes' means you do 5 pull-ups, rest for the remainder of the minute, then go again.",
     category: 'Training',
   },
   {
     id: 'term_026',
     term: 'For Time',
     definition:
-      "For Time is a term used to describe a workout where you perform the same exercise for a certain number of minutes. For example: 'I did 10 minutes of burpees For Time'. Usually done for a certain number of minutes.",
+      "A workout format where you complete a fixed amount of work as fast as possible. Your score is how long it took. For example: '5 rounds of 10 burpees and 10 squats for time' — the clock runs until you finish your last rep.",
     category: 'Training',
   },
   {
@@ -220,5 +219,89 @@ export const glossary: GlossaryTerm[] = [
     definition:
       "A biscuit plate is usually a Tiny incremental weight plate used on a barbell (0.5kg, 1kg, 2kg). For example: 'I used a 0.5kg biscuit plate to add 0.5kg to my squat'. Usually used on a standard barbell.",
     category: 'Equipment',
+  },
+  {
+    id: 'term_032',
+    term: '1RM',
+    definition:
+      "One Rep Max. The maximum weight you can lift for a single rep with good form. Used as a benchmark for measuring strength and calculating training loads. For example: 'Work up to 85% of your 1RM today' means use 85% of your best ever single rep weight.",
+    category: 'Training',
+  },
+  {
+    id: 'term_033',
+    term: 'Progressive Overload',
+    definition:
+      'Gradually increasing the demand placed on your body over time — by adding weight, reps, sets, or reducing rest. The fundamental principle behind every training program. Without it, your body adapts and stops changing.',
+    category: 'Training',
+  },
+  {
+    id: 'term_034',
+    term: 'Drop Set',
+    definition:
+      'A technique where you perform a set to failure, immediately reduce the weight, and keep going without rest. For example: bench press 10 reps at 80kg, immediately drop to 60kg and go again. Extends the set beyond normal failure to increase intensity and volume.',
+    category: 'Training',
+  },
+  {
+    id: 'term_035',
+    term: 'Tempo',
+    definition:
+      'The speed at which you perform each phase of a lift, written as four numbers. For example: 3-1-2-0 means 3 seconds lowering, 1 second pause at the bottom, 2 seconds lifting, 0 seconds pause at the top. Controlling tempo increases time under tension and reduces the risk of injury.',
+    category: 'Training',
+  },
+  {
+    id: 'term_036',
+    term: 'Rest Period',
+    definition:
+      'The time you take between sets to recover before your next effort. Shorter rests (30–60s) increase intensity and cardiovascular demand. Longer rests (2–3 minutes) allow more recovery for heavier compound lifts. Your program will usually specify a recommended rest time.',
+    category: 'Training',
+  },
+  {
+    id: 'term_037',
+    term: 'Warm-up Set',
+    definition:
+      'A lighter set performed before your working sets to prepare your muscles, joints, and nervous system for heavier loads. For example: before a 100kg squat, you might do sets at 40kg, 60kg, and 80kg first. Warm-up sets reduce injury risk and improve performance on your main sets.',
+    category: 'Training',
+  },
+  {
+    id: 'term_038',
+    term: 'Unilateral',
+    definition:
+      'Training one limb at a time. For example: single-leg Romanian deadlifts, Bulgarian split squats, single-arm dumbbell rows. Unilateral work exposes and corrects strength imbalances between sides that bilateral (both limbs) exercises can mask.',
+    category: 'Movements',
+  },
+  {
+    id: 'term_039',
+    term: 'Posterior Chain',
+    definition:
+      'The group of muscles running along the back of your body — primarily the glutes, hamstrings, and spinal erectors. These muscles are responsible for hip extension, posture, and generating force in pulling and hinging movements like deadlifts and Romanian deadlifts.',
+    category: 'Movements',
+  },
+  {
+    id: 'term_040',
+    term: 'Front Rack',
+    definition:
+      'The position where a barbell rests across the front of your shoulders, supported by your fingertips with elbows held high. Used in the Clean & Jerk and Front Squat. A correct front rack requires wrist and shoulder mobility — if your elbows drop, the bar rolls forward and the lift breaks down.',
+    category: 'Movements',
+  },
+  {
+    id: 'term_041',
+    term: 'Triple Extension',
+    definition:
+      'The simultaneous extension of the ankles, knees, and hips to generate maximum upward force. The explosive core of Olympic lifts like the Clean and Snatch. Think of it as a full-body jump that launches the bar upward before you pull yourself underneath it.',
+    category: 'Movements',
+  },
+  {
+    id: 'term_042',
+    term: 'Periodisation',
+    definition:
+      'The structured organisation of training across time into phases — each with a specific goal like building volume, increasing intensity, or peaking for a test. Prevents plateaus by systematically varying the stimulus. Most serious programs are periodised across weeks or months.',
+    category: 'Training',
+  },
+  {
+    id: 'term_043',
+    term: 'Plateau',
+    definition:
+      'A point where your progress stalls despite continued training. Usually caused by the body adapting to the same stimulus. Overcome by changing variables like exercise selection, rep ranges, volume, or rest periods — which is why programs are designed to rotate these over time.',
+    category: 'Training',
   },
 ];

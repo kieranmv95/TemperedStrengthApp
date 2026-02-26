@@ -5,7 +5,7 @@ export type WorkoutCategory =
   | 'Conditioning'
   | 'Mobility';
 
-export interface SingleWorkout {
+export type SingleWorkout = {
   id: string;
   title: string;
   description: string;
@@ -20,10 +20,10 @@ export interface SingleWorkout {
     instructions?: string;
     movements: string[] | DetailedMovement[];
   }[];
-}
+};
 
-export interface DetailedMovement {
+export type DetailedMovement = {
   name: string;
   value: string;
   note?: string;
-}
+};
