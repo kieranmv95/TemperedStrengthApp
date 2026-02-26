@@ -1,9 +1,3 @@
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '../constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { router } from 'expo-router';
 import React from 'react';
@@ -16,6 +10,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '../constants/theme';
 import { getAllExercises, getExerciseById } from '../data/exercises';
 import { findAlternatives } from '../utils/pivotEngine';
 import {
@@ -83,7 +83,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
                 style: 'default',
                 onPress: () => {
                   onClose();
-                  router.push('/paywall');
+                  router.push('/settings');
                 },
               },
             ]

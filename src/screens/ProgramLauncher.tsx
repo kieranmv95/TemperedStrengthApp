@@ -4,7 +4,6 @@ import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
   Alert,
-  InteractionManager,
   Modal,
   Platform,
   SafeAreaView,
@@ -12,7 +11,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import {
   BorderRadius,
@@ -62,9 +61,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
             style: 'default',
             onPress: () => {
               setShowProgramDetails(false);
-              InteractionManager.runAfterInteractions(() => {
-                router.push('/paywall');
-              });
+              router.push('/settings');
             },
           },
         ]
@@ -73,7 +70,6 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     }
 
     setShowProgramDetails(false);
-    setShowDatePicker(true);
   };
 
   const handleDateChange = (event: any, date?: Date) => {
@@ -447,9 +443,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   style={styles.upgradeProgramButton}
                   onPress={() => {
                     setShowProgramDetails(false);
-                    InteractionManager.runAfterInteractions(() => {
-                      router.push('/paywall');
-                    });
+                    router.push('/settings');
                   }}
                 >
                   <Text style={styles.upgradeProgramButtonText}>

@@ -200,7 +200,7 @@ export default function WorkoutsScreen() {
   };
 
   const handleLockedPress = () => {
-    router.push('/paywall');
+    router.push('/settings');
   };
 
   // Filter workouts based on active filters (time and category work together)
