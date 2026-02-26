@@ -281,14 +281,9 @@ export const articles: Article[] = [
     - You've had multiple consecutive high-intensity sessions
     - You're experiencing systemic fatigue that doesn't improve with sleep
     
-    ## The 50% Rule
+    ## The Recovery Session
     
-    On an active recovery day, keep your effort at roughly 50% of what you would do during a normal training session. This means:
-    - 50% of your normal intensity
-    - 50% of your normal duration
-    - 50% of your normal volume
-    
-    If you normally train for 90 minutes, an active recovery session should be 30-45 minutes of very light movement.
+    On an active recovery day, keep your effort genuinely light. This means a pace where conversation comes easily, a duration of 30-45 minutes rather than a full training session, and zero competition with yourself. If you finish feeling more tired than when you started, you went too hard.
     
     ## Active Recovery Protocol
     
@@ -373,7 +368,7 @@ export const articles: Article[] = [
     title: 'Mastering the Conventional Deadlift',
     subtitle: 'Technical pillars for a powerful, pain-free pull',
     category: 'Technique',
-    readTime: 4,
+    readTime: 5,
     image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800',
     content: `The deadlift is the ultimate test of strength. Success lies in the setup. A proper setup positions your body to move maximum weight efficiently and safely. The deadlift is unique because you start from a dead stop – there's no eccentric loading phase to help you.
     
@@ -435,7 +430,7 @@ export const articles: Article[] = [
     title: 'Consistency vs. Intensity',
     subtitle: 'The math of long-term body transformation',
     category: 'Mindset',
-    readTime: 4,
+    readTime: 5,
     image: 'https://images.unsplash.com/photo-1550345332-09e3ac987658?w=800',
     content: `A world-class program followed for two weeks is useless compared to a basic program followed for two years. The best program is the one you'll actually do consistently. Consistency beats intensity every single time.
     
@@ -496,7 +491,7 @@ export const articles: Article[] = [
     title: 'Injury Prevention 101',
     subtitle: 'Understanding the difference between pain and strain',
     category: 'Recovery',
-    readTime: 4,
+    readTime: 5,
     image: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=800',
     content: `Injury is the fastest way to halt progress. Understanding biofeedback is essential for longevity. The strongest lifters aren't necessarily those who lift the most weight – they're those who lift consistently for the longest time. Injury prevention is an investment in your training future.
     
@@ -582,5 +577,310 @@ export const articles: Article[] = [
     Spend 10-15 minutes daily on prehab work. This is an investment that pays dividends in training longevity.
     
     Longevity is the ultimate gain. You can't build muscle if you're stuck on the physio's table. Train smart, listen to your body, and prioritize movement quality. The strongest lifters are those who can still lift in their 40s, 50s, and beyond.`,
+  },
+
+  // ─────────────────────────────────────────────────────────
+  // NEW ARTICLES
+  // ─────────────────────────────────────────────────────────
+
+  {
+    id: 'article_011',
+    title: 'Mastering the Bench Press',
+    subtitle: 'The setup secrets behind a bigger, safer press',
+    category: 'Technique',
+    readTime: 5,
+    image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800',
+    content: `The bench press is the most performed exercise in any gym, yet it remains one of the most poorly executed. Most people lie down, grab the bar, and push. The lifters who build serious chest development and stay injury-free do something fundamentally different – they set up.
+    
+    ## Why Setup Matters
+    
+    The bench press is not just a chest exercise. It is a full-body movement. Your legs, back, and shoulders all contribute. A poor setup leaves half your strength on the table and loads your shoulder joint in ways it was not designed to handle.
+    
+    ## The Setup
+    
+    ### 1. Eye Position
+    Lie down so the bar is directly over your eyes. This is your starting position. Too far back and you clip the uprights on the way out. Too far forward and you are pressing on an awkward angle before you even begin.
+    
+    ### 2. Shoulder Blades
+    Before you touch the bar, pull your shoulder blades together and down – as if trying to put them in your back pockets. Hold this position throughout the entire set. This creates a stable platform to press from and protects the shoulder joint by keeping the rotator cuff in a strong position.
+    
+    ### 3. The Arch
+    A natural arch in the lower back is correct and safe. It is not a cheat – it is a structural position that shortens the range of motion slightly and allows the chest to be in a better pressing angle. Force your back flat and you lose this advantage. Exaggerate it excessively and you are compensating for poor mobility elsewhere.
+    
+    ### 4. Foot Position
+    Plant your feet flat on the floor. Drive them into the ground throughout the set. This leg drive transfers force through your whole body and creates full-body tension that allows you to press more weight. If your feet are dangling, you are pressing with one third of your potential.
+    
+    ### 5. Grip Width
+    Take a grip slightly wider than shoulder-width. Your forearms should be vertical when the bar touches your chest – not angled inward or flared out. Forearms vertical means the force is travelling directly through the bar with no wasted energy.
+    
+    ## The Press
+    
+    ### Unracking
+    Push the bar off the uprights with straight arms – do not press it out. Walk it out to directly over your lower chest before beginning your descent. Pressing out at an angle pre-fatigues your shoulders before the set even starts.
+    
+    ### The Descent
+    Lower the bar with control to your lower chest or upper stomach – not your clavicle. The exact touch point depends on your torso length and arch, but a good rule is to aim for the base of your sternum. Flaring the elbows to 90 degrees puts enormous stress on the shoulder joint. Keep them at roughly 45-75 degrees from your torso.
+    
+    ### The Drive
+    Drive the bar up and very slightly back toward your face. Think about pushing yourself into the bench rather than pushing the bar away. Squeeze your chest hard through the concentric phase and lock out fully at the top.
+    
+    ## Common Errors
+    
+    1. **Bouncing Off the Chest**: Controlled touch, not a bounce. Momentum does not build muscle.
+    2. **Elbows Flaring**: The most common cause of shoulder pain in bench pressers. Keep them tucked.
+    3. **Feet Off the Floor**: You are removing your base of power. Keep them planted.
+    4. **Losing the Shoulder Blade Position**: If your shoulder blades protract on the way up, you've lost your shelf. Set them and keep them.
+    5. **Pressing to the Neck**: Bar path too high stresses the shoulder capsule. Lower the touch point.
+    
+    ## Building the Bench
+    
+    Progress the bench press with the same principles as any compound movement – small, consistent load increases, full range of motion, and technical mastery before adding weight. Paused reps (holding the bar on the chest for 1-2 seconds) are one of the most effective tools for building raw pressing strength, as they eliminate the stretch reflex and force the muscles to work from a dead stop.`,
+  },
+  {
+    id: 'article_012',
+    title: 'How to Squat: The Complete Guide',
+    subtitle: 'Building the foundation of lower body strength',
+    category: 'Technique',
+    readTime: 5,
+    image: 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800',
+    content: `The squat is the most fundamental movement pattern in human history. Sit down, stand up. Every variation in the gym traces back to this basic motor pattern. Done well, it builds more muscle and strength than almost any other exercise. Done poorly, it is one of the fastest routes to a lower back or knee injury.
+    
+    ## The Squat Pattern
+    
+    Before loading any weight, you need to own the movement. A bodyweight squat should feel natural and comfortable. If it does not, no amount of added weight will fix the underlying issue – it will only make it worse.
+    
+    ## The Setup
+    
+    ### Bar Position
+    For a high bar squat, the bar sits on the upper traps, just below the base of your neck. For a low bar squat, it sits lower – on the rear deltoids and spine of the scapula. High bar keeps you more upright and stresses the quads. Low bar allows a more forward lean and involves more posterior chain. Both are correct. Pick one, learn it, and stick with it.
+    
+    ### Stance Width
+    Stand with your feet roughly shoulder-width apart, toes pointed out between 15 and 30 degrees. Your exact stance is determined by your hip anatomy – there is no universal correct answer. The right stance for you is the one that allows you to reach depth comfortably without your knees caving or your lower back rounding.
+    
+    ### Grip and Elbows
+    Your hands on the bar are there to stabilize it, not to carry it. Grip it firmly, pull your elbows down and slightly forward to create upper back tightness. This tension keeps the bar locked in place and prevents it rolling.
+    
+    ## The Descent
+    
+    Take a big breath into your belly, brace your core as hard as you can, and begin your descent by simultaneously pushing your knees out and sitting your hips back and down. These two cues work together – knees out creates space for your hips to drop, and hips back keeps your torso upright.
+    
+    Descend until your hip crease is at or below the top of your knee. This is parallel. Below parallel is better for muscle development if your mobility allows it. At no point should your lower back round – if it does, you have gone past your current available range of motion.
+    
+    ## The Ascent
+    
+    Drive the floor away. Think about pushing the ground down rather than standing up. Lead with your chest – if your hips rise faster than your shoulders, the bar will tip forward and you will be in a good morning, not a squat. Keep your knees tracking over your toes throughout.
+    
+    Breathe out forcefully as you pass the sticking point (typically just above parallel). Lock out fully at the top – hips through, knees straight, standing tall.
+    
+    ## Common Errors
+    
+    1. **Knees Caving Inward**: Drive your knees out actively throughout the movement. Think about spreading the floor apart with your feet.
+    2. **Heels Rising**: Usually an ankle mobility issue. Elevating your heels slightly (on plates or a wedge) is a short-term fix while you address the root cause.
+    3. **Good Morning Squat**: Hips rising faster than the bar. Focus on keeping your chest up and driving through a more upright position.
+    4. **Butt Wink**: Posterior pelvic tilt at the bottom of the squat. Often a mobility limitation – work on hip flexor and hamstring length.
+    5. **Half Reps**: Squatting to a comfortable depth rather than a challenging one. Film yourself from the side to verify your actual depth.
+    
+    ## Building the Squat
+    
+    Consistency is more important than load. Squatting twice per week with moderate weight and perfect form will build more strength over a year than once per week with heavy, sloppy reps. Use paused squats (2-3 second hold at the bottom) to build positional strength and confidence in the hole. Use tempo squats (4 second descent) to identify and fix weaknesses in your movement pattern.`,
+  },
+  {
+    id: 'article_013',
+    title: 'Protein: The Complete Guide',
+    subtitle: 'How much you need, when to eat it, and why it matters',
+    category: 'Nutrition',
+    readTime: 4,
+    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800',
+    content: `Protein is the most important macronutrient for anyone training seriously. It is the raw material your body uses to repair muscle damage caused by training and build new tissue. Without adequate protein, you can train perfectly and still fail to make the progress your effort deserves.
+    
+    ## How Much Do You Need?
+    
+    The research is clear: for people training to build muscle or maintain strength, the target is 1.6-2.2g of protein per kilogram of bodyweight per day. For a person weighing 80kg, that is 128-176g of protein daily.
+    
+    Higher intakes (up to 3g/kg) have been shown in some studies to be beneficial during aggressive fat loss phases, where the extra protein helps preserve muscle mass while eating in a calorie deficit. Beyond this, additional protein provides no further muscle-building benefit and is simply used for energy.
+    
+    ## What Counts as Protein?
+    
+    ### Complete Protein Sources
+    Complete proteins contain all nine essential amino acids your body cannot produce itself. These are the highest quality sources for muscle building:
+    - Chicken, turkey, lean beef, pork
+    - Fish and seafood
+    - Eggs and egg whites
+    - Dairy: Greek yogurt, cottage cheese, milk
+    - Whey, casein, and egg protein supplements
+    
+    ### Plant-Based Sources
+    Plant proteins are often incomplete, meaning they are missing one or more essential amino acids. Combining different sources throughout the day (rice and beans, for example) covers all amino acids. Soy and quinoa are exceptions – both are complete plant proteins.
+    
+    ## Leucine: The Trigger
+    
+    Of all the amino acids, leucine is the most important for triggering muscle protein synthesis. Each meal needs approximately 2-3g of leucine to maximally stimulate muscle building. This is roughly the amount found in 30-40g of protein from animal sources, or slightly more from plant sources. This is why meal protein targets of 30-40g per sitting are recommended rather than spreading the same total across ten small meals.
+    
+    ## Timing
+    
+    Total daily intake is the priority. However, research suggests some practical guidelines for optimising the muscle-building response:
+    
+    - **Pre-training**: A protein-containing meal 1-2 hours before training reduces muscle breakdown during the session.
+    - **Post-training**: Consuming protein within 2 hours of training maximises the recovery window. The exact timing matters less than most people think – the window is hours, not minutes.
+    - **Before sleep**: Casein protein (found in cottage cheese and milk) digests slowly and provides a sustained amino acid supply during overnight recovery.
+    - **Meal spacing**: Spreading intake across 3-5 meals every 3-4 hours appears to maximise muscle protein synthesis across the day.
+    
+    ## Protein Supplements
+    
+    Supplements are not necessary but are practical. Whey protein is the most researched and effective option – it is fast-digesting, high in leucine, and convenient. Casein is slower-digesting and useful before sleep. Plant-based blends (pea and rice combined) are a solid option for those avoiding animal products.
+    
+    Supplements are a tool to hit your daily target, not a replacement for whole food sources. Aim to get the majority of your protein from food and use supplements to fill gaps.
+    
+    ## Practical Targets
+    
+    Hitting 160g of protein daily as an 80kg person might look like:
+    - Breakfast: 4 eggs and Greek yogurt – approximately 40g
+    - Lunch: Chicken breast with rice – approximately 45g
+    - Pre-training snack: Protein shake – approximately 25g
+    - Dinner: Salmon with vegetables – approximately 40g
+    - Evening: Cottage cheese – approximately 15g
+    
+    Total: approximately 165g. Achievable through food alone with modest planning.`,
+  },
+  {
+    id: 'article_014',
+    title: 'How to Choose Your Training Split',
+    subtitle: 'Full body, PPL, upper/lower — which structure is right for you?',
+    category: 'Methodology',
+    readTime: 4,
+    image: 'https://images.unsplash.com/photo-1581009137042-c552e485697a?w=800',
+    content: `One of the most common questions in fitness is which training split to follow. Full body three days a week or push/pull/legs five days? Upper/lower four days or a classic bodybuilding bro split? The answer depends on your schedule, experience level, and goal – not on what works for someone else.
+    
+    ## The Core Principle: Frequency and Volume
+    
+    Every muscle group needs a minimum effective dose of training to grow and a maximum recoverable dose before it becomes counterproductive. Research consistently shows that training each muscle group at least twice per week produces better hypertrophy results than once per week. Your split exists to distribute volume across the week in a way that respects this principle while fitting your life.
+    
+    ## Full Body (2-3 Days Per Week)
+    
+    Every session trains every major muscle group. Works well for beginners building foundational movement quality and for anyone with limited training time. The lower frequency per session means lighter loads on individual muscle groups, but each muscle gets hit multiple times per week.
+    
+    - **Best for**: Beginners, people with 2-3 days available, those returning from a break
+    - **Limitation**: Session length grows quickly as you advance and need more volume per muscle group
+    
+    ## Upper/Lower (4 Days Per Week)
+    
+    Two upper body days and two lower body days per week. Each muscle group gets trained twice per week with enough volume per session to drive real growth. The most efficient split for intermediate lifters who can commit to four sessions.
+    
+    - **Best for**: Intermediate lifters, reliable 4-day schedules, balanced strength and hypertrophy goals
+    - **Limitation**: Requires consistent 4-day availability; lower body sessions can be demanding
+    
+    ## Push/Pull/Legs (3 or 6 Days Per Week)
+    
+    Push day: chest, shoulders, triceps. Pull day: back and biceps. Legs: quads, hamstrings, glutes, calves. Run it three days per week and each muscle group gets trained once. Run it six days and each gets trained twice. The three-day version is the most common.
+    
+    - **Best for**: Intermediate to advanced lifters, those who enjoy dedicated muscle group sessions, 3-6 day schedules
+    - **Limitation**: In the 3-day version each muscle is only trained once per week, which is suboptimal for hypertrophy
+    
+    ## 5-Day Bodybuilding Split
+    
+    One muscle group per day: chest, back, legs, shoulders, arms. Maximum volume per muscle group per session. Each muscle is trained once per week with full focus and recovery between sessions.
+    
+    - **Best for**: Advanced lifters, those who can train 5 days consistently, dedicated bodybuilding goals
+    - **Limitation**: Lower training frequency per muscle group; requires 5 reliable sessions per week
+    
+    ## How to Choose
+    
+    Ask yourself three questions:
+    
+    1. **How many days can I reliably train per week?** Be honest. The best split is one you can actually follow. Two reliable days beats five inconsistent ones.
+    2. **How long have I been training?** Beginners need movement quality and frequency more than volume. Advanced lifters need volume and specialisation.
+    3. **What is my primary goal?** Strength and athletic performance respond well to full body and upper/lower. Bodybuilding aesthetics respond well to splits that allow higher per-muscle volume.
+    
+    ## The Honest Answer
+    
+    For most people, a well-designed 3-4 day program that they follow consistently for a year will produce better results than the "optimal" 6-day program they follow for three months before burning out. Match the split to your life, not to an ideal that does not exist in it.`,
+  },
+  {
+    id: 'article_015',
+    title: 'The Deload: Why Doing Less Gets You More',
+    subtitle: 'How planned rest weeks unlock your next level of performance',
+    category: 'Methodology',
+    readTime: 3,
+    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800',
+    content: `Every serious training program has one thing in common: planned periods of reduced training. A deload is not a sign of weakness or laziness. It is the mechanism by which your body converts accumulated training stress into actual adaptation. Without it, you are building a debt you cannot pay back.
+    
+    ## What Is a Deload?
+    
+    A deload is a planned reduction in training volume, intensity, or both, typically lasting one week. You still train, but at a reduced load that allows your central nervous system, connective tissue, and muscles to fully recover from accumulated fatigue. Think of it as the period where the gains from the previous block are actually locked in.
+    
+    ## Why You Need One
+    
+    Training creates stress. Stress creates fatigue. Fatigue masks fitness. This is the fundamental paradox of training – the harder you work, the more fatigued you become, and the harder it is to see the progress you are actually making. A deload removes the fatigue, and suddenly your true fitness level is revealed. This is why many lifters hit personal bests in the week after a deload.
+    
+    Connective tissue – tendons and ligaments – adapts more slowly than muscle. You can build the strength to lift a weight before your joints are ready to handle it repeatedly. Deloads give connective tissue the time it needs to catch up, which is one of the most effective long-term injury prevention strategies available.
+    
+    ## When to Deload
+    
+    ### Scheduled Deloads
+    The most reliable approach. Plan a deload every 4-8 weeks regardless of how you feel. Most structured programs build this in automatically. This removes the psychological temptation to skip it when you feel good.
+    
+    ### Reactive Deloads
+    Take an unplanned deload when you notice multiple warning signs at once: persistent fatigue that does not improve with one rest day, decreasing performance across several sessions, unusual joint soreness, disrupted sleep, or a general loss of motivation to train.
+    
+    ## How to Deload
+    
+    There are two main approaches:
+    
+    - **Volume deload**: Keep the same weights but reduce sets by 40-50%. If you normally do 4 sets, do 2. This maintains neural drive while reducing total stress.
+    - **Intensity deload**: Keep the same sets but drop the weight by 40-50%. Useful when joints feel beaten up from heavy loading.
+    
+    Either approach works. The key principle is that the week should feel noticeably easier than your normal training. If it does not, you have not deloaded – you have just had a slightly easier week.
+    
+    ## What Not to Do
+    
+    Do not use a deload week as an excuse for zero activity. Complete rest can leave you feeling flat and stiff, and the return to training feels harder. Keep moving, keep the pattern, reduce the load. You are maintaining the habit while allowing the body to recover.
+    
+    ## The Return
+    
+    The week after a proper deload, most lifters feel noticeably stronger, move better, and have higher energy in sessions. This is not coincidence – it is the adaptation that the previous training block was building toward, finally visible once the fatigue is cleared. Trust the process.`,
+  },
+  {
+    id: 'article_016',
+    title: 'Introduction to Olympic Weightlifting',
+    subtitle: 'What the snatch and clean & jerk are, and why athletes use them',
+    category: 'Methodology',
+    readTime: 4,
+    image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800',
+    content: `Olympic weightlifting is one of the oldest and most demanding strength sports in existence. It comprises two lifts: the snatch, and the clean & jerk. Both are contested at the Olympic Games and are the basis of an entire training methodology used by athletes across dozens of sports. Understanding what these lifts are, and why they are so effective, is the first step to approaching them with confidence.
+    
+    ## The Two Lifts
+    
+    ### The Snatch
+    The snatch takes the barbell from the floor to overhead in a single, uninterrupted movement. The lifter pulls the bar upward, generating maximum velocity, then pulls themselves under it in a deep squat to catch it with arms locked out directly overhead. It is the faster, more technical of the two lifts and requires exceptional mobility, coordination, and confidence.
+    
+    ### The Clean & Jerk
+    The clean & jerk is two movements performed in sequence. First, the clean: the bar is pulled from the floor to the shoulders, caught in a front squat position, and recovered to standing. Then, the jerk: the bar is driven overhead using a dip and drive of the legs, and the lifter splits or squats under it to catch it with locked arms. The clean & jerk allows heavier weights than the snatch and tests raw power and composure under load.
+    
+    ## Why Athletes Use These Lifts
+    
+    Olympic lifts are not just for weightlifters. They are used by sprinters, rugby players, footballers, martial artists, and CrossFit athletes because they develop qualities that few other exercises can match.
+    
+    - **Power**: The snatch and clean require the highest rate of force development of any barbell exercise. Your body must generate enormous force in a fraction of a second.
+    - **Triple Extension**: Both lifts train the simultaneous explosion of ankles, knees, and hips – the same motor pattern used in jumping, sprinting, and throwing.
+    - **Coordination**: The lifts train the nervous system to coordinate the entire body as a single unit, not just isolated muscle groups.
+    - **Mobility**: Overhead squatting and front rack positions demand and develop exceptional shoulder, wrist, and hip mobility.
+    
+    ## The Learning Curve
+    
+    Olympic lifting has a steeper learning curve than most gym exercises. The movements are technical and require patient, systematic coaching. The standard teaching progression works from the top down:
+    
+    1. Start with the receiving position (overhead squat for snatch, front squat for clean)
+    2. Learn the pull from the hang position (bar at mid-thigh)
+    3. Integrate the full lift from the floor
+    
+    This approach builds positional confidence before adding speed and load. Rushing the progression is the most common mistake beginners make.
+    
+    ## Equipment
+    
+    Olympic lifting uses a specific barbell – the Olympic bar – which has rotating sleeves that allow the plates to spin independently. This rotation reduces the torque transferred to the wrists during the catch. Bumper plates (rubber-coated) allow the bar to be dropped safely from overhead. Lifting shoes with an elevated heel improve ankle dorsiflexion and allow a more upright torso in the squat positions.
+    
+    ## Is Olympic Lifting for You?
+    
+    If you want to develop explosive power, improve athletic performance across other sports, or simply want a technically challenging and deeply satisfying form of strength training, Olympic lifting is worth pursuing. It rewards patience, consistency, and attention to detail more than raw strength. The lifters who progress fastest are not always the strongest – they are the ones who are most committed to the technique.`,
   },
 ];
