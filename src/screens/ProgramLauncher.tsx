@@ -1,15 +1,10 @@
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '../constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
   Alert,
+  InteractionManager,
   Modal,
   Platform,
   SafeAreaView,
@@ -19,6 +14,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
 import type { Program } from '../types/program';
 import { programs } from '../utils/program';
@@ -61,7 +62,9 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
             style: 'default',
             onPress: () => {
               setShowProgramDetails(false);
-              router.push('/paywall');
+              InteractionManager.runAfterInteractions(() => {
+                router.push('/paywall');
+              });
             },
           },
         ]
@@ -444,7 +447,9 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   style={styles.upgradeProgramButton}
                   onPress={() => {
                     setShowProgramDetails(false);
-                    router.push('/paywall');
+                    InteractionManager.runAfterInteractions(() => {
+                      router.push('/paywall');
+                    });
                   }}
                 >
                   <Text style={styles.upgradeProgramButtonText}>
