@@ -70,6 +70,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     }
 
     setShowProgramDetails(false);
+    setShowDatePicker(true);
   };
 
   const handleDateChange = (event: any, date?: Date) => {
