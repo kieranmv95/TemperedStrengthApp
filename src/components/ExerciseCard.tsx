@@ -38,6 +38,7 @@ type ExerciseCardProps = {
   onRestStart: (payload: RestTimerStartPayload) => void;
   onRestDismiss: () => void;
   onRestComplete: () => void;
+  onRestRestart: () => void;
 };
 
 type RestTimerStartPayload = {
@@ -58,6 +59,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   onRestStart,
   onRestDismiss,
   onRestComplete,
+  onRestRestart,
 }) => {
   const { isPro } = useSubscription();
   const [weights, setWeights] = useState<string[]>([]);
@@ -477,6 +479,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             timer={restTimer}
             onDismiss={onRestDismiss}
             onComplete={onRestComplete}
+            onRestart={onRestRestart}
           />
         </View>
       )}

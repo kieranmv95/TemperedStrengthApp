@@ -18,6 +18,7 @@ type RestTimerProps = {
   timer: RestTimerState;
   onDismiss: () => void;
   onComplete: () => void;
+  onRestart: () => void;
 };
 
 const formatDuration = (totalSeconds: number): string => {
@@ -30,6 +31,7 @@ export const RestTimer: React.FC<RestTimerProps> = ({
   timer,
   onDismiss,
   onComplete,
+  onRestart,
 }) => {
   const [now, setNow] = useState(Date.now());
   const completedRef = useRef(false);
@@ -73,11 +75,16 @@ export const RestTimer: React.FC<RestTimerProps> = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.label}>Rest Timer</Text>
-        <TouchableOpacity onPress={onDismiss} style={styles.dismissButton}>
-          <Text style={styles.dismissText}>
-            {isRunning ? 'Skip' : 'Dismiss'}
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.headerButtons}>
+          <TouchableOpacity onPress={onRestart} style={styles.dismissButton}>
+            <Text style={styles.dismissText}>Restart</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onDismiss} style={styles.dismissButton}>
+            <Text style={styles.dismissText}>
+              {isRunning ? 'Skip' : 'Dismiss'}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       {isRunning ? (
         <Text style={styles.timerText}>{formatDuration(remainingSeconds)}</Text>
@@ -108,6 +115,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
   },
   dismissButton: {
     paddingHorizontal: Spacing.md,

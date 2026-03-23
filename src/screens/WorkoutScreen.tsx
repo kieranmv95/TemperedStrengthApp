@@ -355,6 +355,16 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     }
   }, [restTimer]);
 
+  const handleRestRestart = useCallback(async () => {
+    if (!restTimer) return;
+    await handleRestStart({
+      dayIndex: restTimer.dayIndex,
+      slotIndex: restTimer.slotIndex,
+      exerciseId: restTimer.exerciseId,
+      restTimeSeconds: restTimer.restTimeSeconds,
+    });
+  }, [restTimer, handleRestStart]);
+
   // Get only exercise slots for swap modal calculations
   const getExerciseSlots = useCallback(() => {
     return slots.filter(
@@ -554,6 +564,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                     onRestStart={handleRestStart}
                     onRestDismiss={handleRestDismiss}
                     onRestComplete={handleRestComplete}
+                    onRestRestart={handleRestRestart}
                   />
                 );
               }
