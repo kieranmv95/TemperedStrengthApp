@@ -42,6 +42,7 @@ describe('RestTimer', () => {
         }}
         onDismiss={jest.fn()}
         onComplete={onComplete}
+        onRestart={jest.fn()}
       />
     );
 
@@ -75,6 +76,7 @@ describe('RestTimer', () => {
         }}
         onDismiss={jest.fn()}
         onComplete={jest.fn()}
+        onRestart={jest.fn()}
       />
     );
 

@@ -28,6 +28,7 @@ import type {
   Workout,
 } from '../types/program';
 import type { RestTimerState } from '../types/storage';
+import { useTimerNotification } from '../hooks/useTimerNotification';
 import { getProgramById } from '../utils/program';
 import {
   clearFutureWorkoutData,
@@ -80,6 +81,8 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [notes, setNotes] = useState<string>('');
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
   const [restTimer, setRestTimer] = useState<RestTimerState | null>(null);
+  const { scheduleTimerNotification, cancelTimerNotification } =
+    useTimerNotification();
   const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
   const notesInputRef = useRef<TextInput>(null);
@@ -314,31 +317,34 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     }) => {
       if (!payload.restTimeSeconds) return;
       try {
+        const startedAt = Date.now();
         const newTimer: RestTimerState = {
           dayIndex: payload.dayIndex,
           slotIndex: payload.slotIndex,
           exerciseId: payload.exerciseId,
           restTimeSeconds: payload.restTimeSeconds,
-          startedAt: Date.now(),
+          startedAt,
           status: 'running',
         };
         setRestTimer(newTimer);
+        await scheduleTimerNotification(payload.restTimeSeconds);
         await saveRestTimer(newTimer);
       } catch (error) {
         console.error('Error starting rest timer:', error);
       }
     },
-    [restTimer]
+    [scheduleTimerNotification]
   );
 
   const handleRestDismiss = useCallback(async () => {
     try {
+      await cancelTimerNotification();
       setRestTimer(null);
       await clearRestTimer();
     } catch (error) {
       console.error('Error clearing rest timer:', error);
     }
-  }, [restTimer]);
+  }, [cancelTimerNotification]);
 
   const handleRestComplete = useCallback(async () => {
     if (!restTimer || restTimer.status === 'completed') return;
