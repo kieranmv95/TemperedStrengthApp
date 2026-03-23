@@ -4,6 +4,7 @@ import {
   InputAccessoryView,
   Keyboard,
   KeyboardAvoidingView,
+  Modal,
   Platform,
   SafeAreaView,
   ScrollView,
@@ -43,6 +44,7 @@ import {
   setProgramStartDate,
 } from '../utils/storage';
 import { RestDayScreen } from './RestDayScreen';
+import { ProgramLauncher } from './ProgramLauncher';
 
 type ExerciseSlot = {
   type: 'exercise';
@@ -66,7 +68,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 }) => {
   const [slots, setSlots] = useState<WorkoutSlot[]>([]);
   const [currentWorkout, setCurrentWorkout] = useState<Workout | null>(null);
-  const [nextWorkout, setNextWorkout] = useState<Workout | null>(null);
   const [dayIndex, setDayIndex] = useState<number | null>(null);
   const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null);
   const [startDate, setStartDate] = useState<string | null>(null);
@@ -81,6 +82,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [notes, setNotes] = useState<string>('');
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
   const [restTimer, setRestTimer] = useState<RestTimerState | null>(null);
+  const [programLauncherVisible, setProgramLauncherVisible] = useState(false);
   const { scheduleTimerNotification, cancelTimerNotification } =
     useTimerNotification();
   const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -156,9 +158,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         await loadExerciseSlots(workout, dayIdx);
       } else {
         setIsRestDay(true);
-        // Find next workout
-        const next = programToUse.workouts.find((w) => w.dayIndex > dayIdx);
-        setNextWorkout(next || null);
         setCurrentWorkout(null);
         setSlots([]);
       }
@@ -424,27 +423,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     Keyboard.dismiss();
   }, []);
 
-  const handleSkipToNextWorkout = async () => {
-    if (!nextWorkout) return;
-
-    const programId = await getActiveProgramId();
-    if (!programId) return;
-
-    const program = getProgramById(programId);
-    if (!program) return;
-
-    // Update start date to skip to next workout
-    const currentStartDate = await getProgramStartDate();
-    if (!currentStartDate) return;
-
-    const startDate = new Date(currentStartDate);
-    const daysToSkip = nextWorkout.dayIndex - (dayIndex || 0);
-    startDate.setDate(startDate.getDate() - daysToSkip);
-
-    await setProgramStartDate(startDate.toISOString());
-    await loadWorkoutData();
-  };
-
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -511,19 +489,27 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                   </Text>
                 </View>
               </View>
-            </View>
-            {dayIndex !== null &&
-              selectedDayIndex !== null &&
-              selectedDayIndex !== dayIndex && (
+              <View style={styles.headerActions}>
+                {dayIndex !== null &&
+                  selectedDayIndex !== null &&
+                  selectedDayIndex !== dayIndex && (
+                    <TouchableOpacity
+                      style={styles.setCurrentDayButton}
+                      onPress={handleSetAsCurrentDay}
+                    >
+                      <Text style={styles.setCurrentDayButtonText}>
+                        Set as Today&apos;s Session
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                 <TouchableOpacity
-                  style={styles.setCurrentDayButton}
-                  onPress={handleSetAsCurrentDay}
+                  style={styles.programsButton}
+                  onPress={() => setProgramLauncherVisible(true)}
                 >
-                  <Text style={styles.setCurrentDayButtonText}>
-                    Set as Today&apos;s Session
-                  </Text>
+                  <Text style={styles.programsButtonText}>Programs</Text>
                 </TouchableOpacity>
-              )}
+              </View>
+            </View>
           </View>
 
           {(() => {
@@ -633,6 +619,32 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
       {renderContent()}
 
+      {programLauncherVisible && (
+        <Modal
+          visible={programLauncherVisible}
+          animationType="slide"
+          onRequestClose={() => setProgramLauncherVisible(false)}
+        >
+          <ProgramLauncher
+            resetExistingProgramData
+            onClose={() => setProgramLauncherVisible(false)}
+            onProgramSelected={() => {
+              setProgramLauncherVisible(false);
+              setSwapModalVisible(false);
+              setCurrentSwapSlot(null);
+
+              // Switching programs can leave a scheduled rest notification queued,
+              // so cancel it and reload the workout state to match the new program.
+              void (async () => {
+                await cancelTimerNotification();
+                await loadWorkoutData();
+                await loadRestTimerState();
+              })();
+            }}
+          />
+        </Modal>
+      )}
+
       <SwapModal
         visible={swapModalVisible}
         currentExerciseId={
@@ -705,6 +717,10 @@ const styles = StyleSheet.create({
   headerTextContainer: {
     flex: 1,
   },
+  headerActions: {
+    alignItems: 'flex-end',
+    gap: Spacing.sm,
+  },
   title: {
     color: Colors.textPrimary,
     fontSize: FontSize.displayXXl,
@@ -766,6 +782,21 @@ const styles = StyleSheet.create({
     color: Colors.textOnAccent,
     fontSize: FontSize.lg,
     fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  programsButton: {
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.lg,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+  },
+  programsButtonText: {
+    color: Colors.accent,
+    fontSize: FontSize.md,
+    fontWeight: '800',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
