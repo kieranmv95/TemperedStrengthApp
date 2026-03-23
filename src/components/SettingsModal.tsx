@@ -1,12 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '../constants/theme';
-import {
   Alert,
   Modal,
   StyleSheet,
@@ -14,6 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '../constants/theme';
 import { clearProgramData } from '../utils/storage';
 
 type SettingsModalProps = {
@@ -29,15 +29,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 }) => {
   const handleChangeProgram = () => {
     Alert.alert(
-      'Change Program',
-      'Changing your program will lose all progress on your current program, including your workout logs and exercise swaps.\n\nFinishing a program to completion is the best approach for achieving your fitness goals.\n\nAre you sure you want to change programs?',
+      'Cancel Program',
+      'Cancelling your current program will lose all progress on it, including your workout logs and exercise swaps.\n\nYou can start a different program after cancelling.\n\nAre you sure you want to cancel this program?',
       [
         {
           text: 'Cancel',
           style: 'cancel',
         },
         {
-          text: 'Change Program',
+          text: 'Cancel Program',
           style: 'destructive',
           onPress: async () => {
             try {
@@ -110,9 +110,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               onPress={handleChangeProgram}
             >
               <View style={styles.settingContent}>
-                <Text style={styles.settingTitle}>Change Program</Text>
+                <Text style={styles.settingTitle}>Cancel Program</Text>
                 <Text style={styles.settingDescription}>
-                  Select a different program
+                  Clear your current program progress and select a new one
                 </Text>
               </View>
               <Text style={styles.settingArrow}>→</Text>

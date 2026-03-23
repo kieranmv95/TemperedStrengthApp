@@ -65,15 +65,15 @@ export default function SettingsScreen() {
 
   const handleChangeProgram = () => {
     Alert.alert(
-      'Change Program',
-      'Changing your program will lose all progress on your current program, including your workout logs and exercise swaps.\n\nFinishing a program to completion is the best approach for achieving your fitness goals.\n\nAre you sure you want to change programs?',
+      'Cancel Program',
+      'Cancelling your current program will lose all progress on it, including your workout logs and exercise swaps.\n\nYou can start a different program after cancelling.\n\nAre you sure you want to cancel this program?',
       [
         {
           text: 'Cancel',
           style: 'cancel',
         },
         {
-          text: 'Change Program',
+          text: 'Cancel Program',
           style: 'destructive',
           onPress: async () => {
             try {
@@ -199,7 +199,7 @@ export default function SettingsScreen() {
                   !hasProgram && styles.settingTitleDisabled,
                 ]}
               >
-                Change Program
+                Cancel Program
               </Text>
               <Text style={styles.settingDescription}>
                 {hasProgram && activeProgram

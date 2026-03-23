@@ -542,6 +542,10 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   mode="date"
                   display="spinner"
                   onChange={handleDateChange}
+                  // iOS native pickers sometimes render with the wrong variant.
+                  // Explicitly force dark styling so text stays readable.
+                  textColor={Colors.textPrimary}
+                  themeVariant="dark"
                   style={styles.datePicker}
                 />
               </View>

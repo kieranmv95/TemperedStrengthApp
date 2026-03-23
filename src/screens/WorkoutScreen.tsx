@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import {
   BorderRadius,
   Colors,
@@ -461,6 +462,26 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled"
         >
+          {!isRestDay && dayIndex !== null && (
+            <View style={styles.programSwitchRow}>
+              <TouchableOpacity
+                style={styles.programsButton}
+                onPress={() => setProgramLauncherVisible(true)}
+              >
+                <Ionicons
+                  name="swap-horizontal"
+                  size={18}
+                  color={Colors.accent}
+                />
+                <View style={styles.programsButtonTextContainer}>
+                  <Text style={styles.programsButtonTitle}>
+                    Change Program
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
+
           <View style={styles.header}>
             <View style={styles.headerTop}>
               <View style={styles.headerTextContainer}>
@@ -489,26 +510,24 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                   </Text>
                 </View>
               </View>
-              <View style={styles.headerActions}>
-                {dayIndex !== null &&
-                  selectedDayIndex !== null &&
-                  selectedDayIndex !== dayIndex && (
-                    <TouchableOpacity
-                      style={styles.setCurrentDayButton}
-                      onPress={handleSetAsCurrentDay}
-                    >
-                      <Text style={styles.setCurrentDayButtonText}>
-                        Set as Today&apos;s Session
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-                <TouchableOpacity
-                  style={styles.programsButton}
-                  onPress={() => setProgramLauncherVisible(true)}
-                >
-                  <Text style={styles.programsButtonText}>Programs</Text>
-                </TouchableOpacity>
-              </View>
+            </View>
+
+            <View style={styles.headerBottomActions}>
+              {dayIndex !== null &&
+                selectedDayIndex !== null &&
+                selectedDayIndex !== dayIndex && (
+                  <TouchableOpacity
+                    style={[
+                      styles.setCurrentDayButton,
+                      styles.setCurrentDayButtonInHeaderActions,
+                    ]}
+                    onPress={handleSetAsCurrentDay}
+                  >
+                    <Text style={styles.setCurrentDayButtonText}>
+                      Set as Today&apos;s Session
+                    </Text>
+                  </TouchableOpacity>
+                )}
             </View>
           </View>
 
@@ -721,6 +740,20 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     gap: Spacing.sm,
   },
+  headerBottomActions: {
+    marginTop: Spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: Spacing.sm,
+  },
+  programSwitchRow: {
+    paddingTop: 0,
+    paddingBottom: Spacing.md,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
   title: {
     color: Colors.textPrimary,
     fontSize: FontSize.displayXXl,
@@ -778,6 +811,11 @@ const styles = StyleSheet.create({
     padding: Spacing.xl,
     alignItems: 'center',
   },
+  setCurrentDayButtonInHeaderActions: {
+    // This button now lives in the header action row (below title),
+    // so don't keep the old top spacing used for the top-right layout.
+    marginTop: 0,
+  },
   setCurrentDayButtonText: {
     color: Colors.textOnAccent,
     fontSize: FontSize.lg,
@@ -787,18 +825,33 @@ const styles = StyleSheet.create({
   },
   programsButton: {
     backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.lg,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.pill,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
   },
-  programsButtonText: {
+  programsButtonTextContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  programsButtonTitle: {
     color: Colors.accent,
-    fontSize: FontSize.md,
+    fontSize: FontSize.sm,
     fontWeight: '800',
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 0.4,
+    lineHeight: 13,
+  },
+  programsButtonSubtitle: {
+    color: Colors.textMuted,
+    fontSize: FontSize.xs,
+    fontWeight: '600',
+    marginTop: Spacing.xxs,
+    lineHeight: 11,
   },
   loadingContainer: {
     flex: 1,
