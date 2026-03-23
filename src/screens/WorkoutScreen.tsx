@@ -512,23 +512,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
               </View>
             </View>
 
-            <View style={styles.headerBottomActions}>
-              {dayIndex !== null &&
-                selectedDayIndex !== null &&
-                selectedDayIndex !== dayIndex && (
-                  <TouchableOpacity
-                    style={[
-                      styles.setCurrentDayButton,
-                      styles.setCurrentDayButtonInHeaderActions,
-                    ]}
-                    onPress={handleSetAsCurrentDay}
-                  >
-                    <Text style={styles.setCurrentDayButtonText}>
-                      Set as Today&apos;s Session
-                    </Text>
-                  </TouchableOpacity>
-                )}
-            </View>
           </View>
 
           {(() => {
@@ -633,6 +616,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           workoutDayIndices={workoutDayIndices}
           currentDayIndex={selectedDayIndex ?? dayIndex}
           onDaySelect={handleDaySelect}
+          onSetAsToday={handleSetAsCurrentDay}
         />
       )}
 
