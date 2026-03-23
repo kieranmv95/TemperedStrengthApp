@@ -5,15 +5,18 @@ import {
   Spacing,
 } from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { ProgramLauncher } from '@/src/screens/ProgramLauncher';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
-import { clearProgramData, getActiveProgramId } from '@/src/utils/storage';
+import { getActiveProgramId } from '@/src/utils/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
   Alert,
+  Modal,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -25,6 +28,7 @@ import {
 export default function SettingsScreen() {
   const [hasProgram, setHasProgram] = useState<boolean>(false);
   const [activeProgram, setActiveProgram] = useState<Program | null>(null);
+  const [programLauncherVisible, setProgramLauncherVisible] = useState(false);
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
 
   const checkProgramStatus = async () => {
@@ -63,36 +67,21 @@ export default function SettingsScreen() {
     }
   };
 
-  const handleChangeProgram = () => {
-    Alert.alert(
-      'Cancel Program',
-      'Cancelling your current program will lose all progress on it, including your workout logs and exercise swaps.\n\nYou can start a different program after cancelling.\n\nAre you sure you want to cancel this program?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Cancel Program',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await clearProgramData();
-              setHasProgram(false);
-              setActiveProgram(null);
-              // Navigate back to Program tab (index)
-              router.replace('/');
-            } catch (error) {
-              console.error('Error changing program:', error);
-              Alert.alert(
-                'Error',
-                'Failed to change program. Please try again.'
-              );
-            }
-          },
-        },
-      ]
-    );
+  const handleProgramSelectedFromLauncher = () => {
+    setProgramLauncherVisible(false);
+
+    void (async () => {
+      try {
+        // Changing a program can leave a scheduled rest timer around.
+        // Cancel everything to prevent notifications for the old program.
+        await Notifications.cancelAllScheduledNotificationsAsync();
+      } catch (error) {
+        console.error('Error cancelling scheduled notifications:', error);
+      } finally {
+        checkProgramStatus();
+        router.replace('/');
+      }
+    })();
   };
 
   const handleClearAllData = () => {
@@ -189,7 +178,7 @@ export default function SettingsScreen() {
               styles.settingItem,
               !hasProgram && styles.settingItemDisabled,
             ]}
-            onPress={handleChangeProgram}
+            onPress={() => setProgramLauncherVisible(true)}
             disabled={!hasProgram}
           >
             <View style={styles.settingContent}>
@@ -199,7 +188,7 @@ export default function SettingsScreen() {
                   !hasProgram && styles.settingTitleDisabled,
                 ]}
               >
-                Cancel Program
+                Change Program
               </Text>
               <Text style={styles.settingDescription}>
                 {hasProgram && activeProgram
@@ -235,6 +224,21 @@ export default function SettingsScreen() {
           )}
         </View>
       </ScrollView>
+
+      {programLauncherVisible && (
+        <Modal
+          visible={programLauncherVisible}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setProgramLauncherVisible(false)}
+        >
+          <ProgramLauncher
+            resetExistingProgramData
+            onClose={() => setProgramLauncherVisible(false)}
+            onProgramSelected={handleProgramSelectedFromLauncher}
+          />
+        </Modal>
+      )}
     </SafeAreaView>
   );
 }

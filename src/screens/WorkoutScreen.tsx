@@ -4,7 +4,6 @@ import {
   InputAccessoryView,
   Keyboard,
   KeyboardAvoidingView,
-  Modal,
   Platform,
   SafeAreaView,
   ScrollView,
@@ -14,7 +13,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import {
   BorderRadius,
   Colors,
@@ -45,7 +43,6 @@ import {
   setProgramStartDate,
 } from '../utils/storage';
 import { RestDayScreen } from './RestDayScreen';
-import { ProgramLauncher } from './ProgramLauncher';
 
 type ExerciseSlot = {
   type: 'exercise';
@@ -83,7 +80,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [notes, setNotes] = useState<string>('');
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
   const [restTimer, setRestTimer] = useState<RestTimerState | null>(null);
-  const [programLauncherVisible, setProgramLauncherVisible] = useState(false);
   const { scheduleTimerNotification, cancelTimerNotification } =
     useTimerNotification();
   const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -462,26 +458,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled"
         >
-          {!isRestDay && dayIndex !== null && (
-            <View style={styles.programSwitchRow}>
-              <TouchableOpacity
-                style={styles.programsButton}
-                onPress={() => setProgramLauncherVisible(true)}
-              >
-                <Ionicons
-                  name="swap-horizontal"
-                  size={18}
-                  color={Colors.accent}
-                />
-                <View style={styles.programsButtonTextContainer}>
-                  <Text style={styles.programsButtonTitle}>
-                    Change Program
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          )}
-
           <View style={styles.header}>
             <View style={styles.headerTop}>
               <View style={styles.headerTextContainer}>
@@ -622,32 +598,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
       {renderContent()}
 
-      {programLauncherVisible && (
-        <Modal
-          visible={programLauncherVisible}
-          animationType="slide"
-          onRequestClose={() => setProgramLauncherVisible(false)}
-        >
-          <ProgramLauncher
-            resetExistingProgramData
-            onClose={() => setProgramLauncherVisible(false)}
-            onProgramSelected={() => {
-              setProgramLauncherVisible(false);
-              setSwapModalVisible(false);
-              setCurrentSwapSlot(null);
-
-              // Switching programs can leave a scheduled rest notification queued,
-              // so cancel it and reload the workout state to match the new program.
-              void (async () => {
-                await cancelTimerNotification();
-                await loadWorkoutData();
-                await loadRestTimerState();
-              })();
-            }}
-          />
-        </Modal>
-      )}
-
       <SwapModal
         visible={swapModalVisible}
         currentExerciseId={
@@ -731,13 +681,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     gap: Spacing.sm,
   },
-  programSwitchRow: {
-    paddingTop: 0,
-    paddingBottom: Spacing.md,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-  },
   title: {
     color: Colors.textPrimary,
     fontSize: FontSize.displayXXl,
@@ -806,36 +749,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
-  },
-  programsButton: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.pill,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs,
-    borderWidth: 1,
-    borderColor: Colors.borderDefault,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-  },
-  programsButtonTextContainer: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-  },
-  programsButtonTitle: {
-    color: Colors.accent,
-    fontSize: FontSize.sm,
-    fontWeight: '800',
-    textTransform: 'uppercase',
-    letterSpacing: 0.4,
-    lineHeight: 13,
-  },
-  programsButtonSubtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.xs,
-    fontWeight: '600',
-    marginTop: Spacing.xxs,
-    lineHeight: 11,
   },
   loadingContainer: {
     flex: 1,
