@@ -21,6 +21,7 @@ type DaySelectorProps = {
   workoutDayIndices: number[]; // Array of day indices that have workouts
   currentDayIndex: number;
   onDaySelect: (dayIndex: number) => void;
+  onSetAsToday?: () => void;
 };
 
 // Constants for layout calculations
@@ -35,6 +36,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   workoutDayIndices,
   currentDayIndex,
   onDaySelect,
+  onSetAsToday,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const lastStartDateRef = useRef<string>(startDate);
@@ -203,6 +205,9 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   const showJumpToToday =
     isTodayInRange && (!isTodayVisible || !isTodaySelected);
 
+  // Show "Set as Today's Session" alongside "Jump to Today"
+  const showSetAsToday = isTodayInRange && !isTodaySelected && !!onSetAsToday;
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -244,14 +249,29 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
           );
         })}
       </ScrollView>
-      {showJumpToToday && (
-        <TouchableOpacity
-          style={styles.jumpToTodayButton}
-          onPress={handleJumpToToday}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.jumpToTodayText}>Jump to Today</Text>
-        </TouchableOpacity>
+      {(showJumpToToday || showSetAsToday) && (
+        <View style={styles.timelineActionRow}>
+          {showJumpToToday && (
+            <TouchableOpacity
+              style={styles.jumpToTodayButton}
+              onPress={handleJumpToToday}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.jumpToTodayText}>Jump to Today</Text>
+            </TouchableOpacity>
+          )}
+          {showSetAsToday && (
+            <TouchableOpacity
+              style={styles.jumpToTodayButton}
+              onPress={onSetAsToday}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.jumpToTodayText} numberOfLines={2}>
+                Set as Today&apos;s Session
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
       )}
     </View>
   );
@@ -305,8 +325,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.accent,
   },
   jumpToTodayButton: {
-    alignSelf: 'center',
-    marginTop: Spacing.md,
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.sm,
     backgroundColor: Colors.backgroundElevated,
@@ -318,5 +336,11 @@ const styles = StyleSheet.create({
     color: Colors.accent,
     fontSize: FontSize.md,
     fontWeight: '600',
+  },
+  timelineActionRow: {
+    alignSelf: 'center',
+    marginTop: Spacing.md,
+    flexDirection: 'row',
+    gap: Spacing.md,
   },
 });

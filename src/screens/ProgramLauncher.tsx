@@ -22,14 +22,26 @@ import {
 import { getExerciseById } from '../data/exercises';
 import type { Program } from '../types/program';
 import { programs } from '../utils/program';
-import { setActiveProgramId, setProgramStartDate } from '../utils/storage';
+import {
+  clearProgramData,
+  setActiveProgramId,
+  setProgramStartDate,
+} from '../utils/storage';
 
 type ProgramLauncherProps = {
   onProgramSelected: () => void;
+  /**
+   * When true, selecting a program is treated as a "switch".
+   * The app should clear current progress before starting the new program.
+   */
+  resetExistingProgramData?: boolean;
+  onClose?: () => void;
 };
 
 export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   onProgramSelected,
+  resetExistingProgramData = false,
+  onClose,
 }) => {
   const { isPro } = useSubscription();
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
@@ -69,6 +81,28 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
       return;
     }
 
+    if (resetExistingProgramData) {
+      Alert.alert(
+        'Change Program',
+        'Changing your program will lose all progress on your current program, including your workout logs and exercise swaps.\n\nFinishing a program to completion is the best approach for achieving your fitness goals.\n\nAre you sure you want to change programs?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'Change Program',
+            style: 'destructive',
+            onPress: () => {
+              setShowProgramDetails(false);
+              setShowDatePicker(true);
+            },
+          },
+        ]
+      );
+      return;
+    }
+
     setShowProgramDetails(false);
     setShowDatePicker(true);
   };
@@ -89,6 +123,9 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     if (!selectedProgram) return;
 
     try {
+      if (resetExistingProgramData) {
+        await clearProgramData();
+      }
       await setActiveProgramId(selectedProgram.id);
       await setProgramStartDate(date.toISOString());
       setShowDatePicker(false);
@@ -157,10 +194,24 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
         contentContainerStyle={styles.content}
       >
         <View style={styles.header}>
-          <Text style={styles.title}>Select a Program</Text>
-          <Text style={styles.subtitle}>
-            Choose your training program to get started
-          </Text>
+          <View style={styles.headerTop}>
+            <View style={styles.headerTextContainer}>
+              <Text style={styles.title}>Select a Program</Text>
+              <Text style={styles.subtitle}>
+                Choose your training program to get started
+              </Text>
+            </View>
+
+            {onClose && (
+              <TouchableOpacity
+                onPress={onClose}
+                style={styles.headerCloseButton}
+                accessibilityRole="button"
+              >
+                <Text style={styles.headerCloseButtonText}>✕</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
 
         {programs.map((program) =>
@@ -491,6 +542,10 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   mode="date"
                   display="spinner"
                   onChange={handleDateChange}
+                  // iOS native pickers sometimes render with the wrong variant.
+                  // Explicitly force dark styling so text stays readable.
+                  textColor={Colors.textPrimary}
+                  themeVariant="dark"
                   style={styles.datePicker}
                 />
               </View>
@@ -523,6 +578,31 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: Spacing.section,
+  },
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  headerTextContainer: {
+    flex: 1,
+    paddingRight: Spacing.md,
+  },
+  headerCloseButton: {
+    width: 36,
+    height: 36,
+    borderRadius: BorderRadius.full,
+    backgroundColor: Colors.backgroundElevated,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+  },
+  headerCloseButtonText: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displaySm,
+    fontWeight: '600',
+    lineHeight: 18,
   },
   title: {
     color: Colors.textPrimary,

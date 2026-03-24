@@ -28,6 +28,7 @@ import type {
   Workout,
 } from '../types/program';
 import type { RestTimerState } from '../types/storage';
+import { useTimerNotification } from '../hooks/useTimerNotification';
 import { getProgramById } from '../utils/program';
 import {
   clearFutureWorkoutData,
@@ -65,7 +66,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 }) => {
   const [slots, setSlots] = useState<WorkoutSlot[]>([]);
   const [currentWorkout, setCurrentWorkout] = useState<Workout | null>(null);
-  const [nextWorkout, setNextWorkout] = useState<Workout | null>(null);
   const [dayIndex, setDayIndex] = useState<number | null>(null);
   const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null);
   const [startDate, setStartDate] = useState<string | null>(null);
@@ -80,6 +80,8 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [notes, setNotes] = useState<string>('');
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
   const [restTimer, setRestTimer] = useState<RestTimerState | null>(null);
+  const { scheduleTimerNotification, cancelTimerNotification } =
+    useTimerNotification();
   const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
   const notesInputRef = useRef<TextInput>(null);
@@ -153,9 +155,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         await loadExerciseSlots(workout, dayIdx);
       } else {
         setIsRestDay(true);
-        // Find next workout
-        const next = programToUse.workouts.find((w) => w.dayIndex > dayIdx);
-        setNextWorkout(next || null);
         setCurrentWorkout(null);
         setSlots([]);
       }
@@ -314,31 +313,34 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     }) => {
       if (!payload.restTimeSeconds) return;
       try {
+        const startedAt = Date.now();
         const newTimer: RestTimerState = {
           dayIndex: payload.dayIndex,
           slotIndex: payload.slotIndex,
           exerciseId: payload.exerciseId,
           restTimeSeconds: payload.restTimeSeconds,
-          startedAt: Date.now(),
+          startedAt,
           status: 'running',
         };
         setRestTimer(newTimer);
+        await scheduleTimerNotification(payload.restTimeSeconds);
         await saveRestTimer(newTimer);
       } catch (error) {
         console.error('Error starting rest timer:', error);
       }
     },
-    [restTimer]
+    [scheduleTimerNotification]
   );
 
   const handleRestDismiss = useCallback(async () => {
     try {
+      await cancelTimerNotification();
       setRestTimer(null);
       await clearRestTimer();
     } catch (error) {
       console.error('Error clearing rest timer:', error);
     }
-  }, [restTimer]);
+  }, [cancelTimerNotification]);
 
   const handleRestComplete = useCallback(async () => {
     if (!restTimer || restTimer.status === 'completed') return;
@@ -354,6 +356,16 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       console.error('Error completing rest timer:', error);
     }
   }, [restTimer]);
+
+  const handleRestRestart = useCallback(async () => {
+    if (!restTimer) return;
+    await handleRestStart({
+      dayIndex: restTimer.dayIndex,
+      slotIndex: restTimer.slotIndex,
+      exerciseId: restTimer.exerciseId,
+      restTimeSeconds: restTimer.restTimeSeconds,
+    });
+  }, [restTimer, handleRestStart]);
 
   // Get only exercise slots for swap modal calculations
   const getExerciseSlots = useCallback(() => {
@@ -407,27 +419,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const handleNotesDone = useCallback(() => {
     Keyboard.dismiss();
   }, []);
-
-  const handleSkipToNextWorkout = async () => {
-    if (!nextWorkout) return;
-
-    const programId = await getActiveProgramId();
-    if (!programId) return;
-
-    const program = getProgramById(programId);
-    if (!program) return;
-
-    // Update start date to skip to next workout
-    const currentStartDate = await getProgramStartDate();
-    if (!currentStartDate) return;
-
-    const startDate = new Date(currentStartDate);
-    const daysToSkip = nextWorkout.dayIndex - (dayIndex || 0);
-    startDate.setDate(startDate.getDate() - daysToSkip);
-
-    await setProgramStartDate(startDate.toISOString());
-    await loadWorkoutData();
-  };
 
   if (loading) {
     return (
@@ -496,18 +487,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                 </View>
               </View>
             </View>
-            {dayIndex !== null &&
-              selectedDayIndex !== null &&
-              selectedDayIndex !== dayIndex && (
-                <TouchableOpacity
-                  style={styles.setCurrentDayButton}
-                  onPress={handleSetAsCurrentDay}
-                >
-                  <Text style={styles.setCurrentDayButtonText}>
-                    Set as Today&apos;s Session
-                  </Text>
-                </TouchableOpacity>
-              )}
+
           </View>
 
           {(() => {
@@ -554,6 +534,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                     onRestStart={handleRestStart}
                     onRestDismiss={handleRestDismiss}
                     onRestComplete={handleRestComplete}
+                    onRestRestart={handleRestRestart}
                   />
                 );
               }
@@ -611,6 +592,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           workoutDayIndices={workoutDayIndices}
           currentDayIndex={selectedDayIndex ?? dayIndex}
           onDaySelect={handleDaySelect}
+          onSetAsToday={handleSetAsCurrentDay}
         />
       )}
 
@@ -688,6 +670,17 @@ const styles = StyleSheet.create({
   headerTextContainer: {
     flex: 1,
   },
+  headerActions: {
+    alignItems: 'flex-end',
+    gap: Spacing.sm,
+  },
+  headerBottomActions: {
+    marginTop: Spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: Spacing.sm,
+  },
   title: {
     color: Colors.textPrimary,
     fontSize: FontSize.displayXXl,
@@ -744,6 +737,11 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     padding: Spacing.xl,
     alignItems: 'center',
+  },
+  setCurrentDayButtonInHeaderActions: {
+    // This button now lives in the header action row (below title),
+    // so don't keep the old top spacing used for the top-right layout.
+    marginTop: 0,
   },
   setCurrentDayButtonText: {
     color: Colors.textOnAccent,
