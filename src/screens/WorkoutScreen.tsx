@@ -4,6 +4,7 @@ import {
   InputAccessoryView,
   Keyboard,
   KeyboardAvoidingView,
+  Modal,
   Platform,
   SafeAreaView,
   ScrollView,
@@ -13,22 +14,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { DaySelector } from '../components/DaySelector';
+import { ExerciseCard } from '../components/ExerciseCard';
+import { SwapModal } from '../components/SwapModal';
 import {
   BorderRadius,
   Colors,
   FontSize,
   Spacing,
 } from '../constants/theme';
-import { DaySelector } from '../components/DaySelector';
-import { ExerciseCard } from '../components/ExerciseCard';
-import { SwapModal } from '../components/SwapModal';
+import { useTimerNotification } from '../hooks/useTimerNotification';
 import type {
   Exercise as ProgramExercise,
   Warmup,
   Workout,
 } from '../types/program';
 import type { RestTimerState } from '../types/storage';
-import { useTimerNotification } from '../hooks/useTimerNotification';
 import { getProgramById } from '../utils/program';
 import {
   clearFutureWorkoutData,
@@ -43,6 +44,46 @@ import {
   setProgramStartDate,
 } from '../utils/storage';
 import { RestDayScreen } from './RestDayScreen';
+
+const INTENSITY_LEVELS: {
+  range: [number, number];
+  label: string;
+  feel: string;
+}[] = [
+    {
+      range: [1, 2],
+      label: 'Very Light',
+      feel: 'Minimal effort. Recovery-level work. You should feel refreshed, not fatigued.',
+    },
+    {
+      range: [3, 4],
+      label: 'Light',
+      feel: 'Easy effort. Good for technique practice and building volume without heavy strain.',
+    },
+    {
+      range: [5, 6],
+      label: 'Moderate',
+      feel: 'Noticeable effort. Challenging but sustainable. You could hold a short conversation.',
+    },
+    {
+      range: [7, 8],
+      label: 'Hard',
+      feel: 'Demanding effort. Requires real focus and grit. Expect to feel spent by the end.',
+    },
+    {
+      range: [9, 10],
+      label: 'Very Hard',
+      feel: 'Near-maximal effort. Highly taxing on the body and nervous system. Full recovery is essential.',
+    },
+  ];
+
+const getIntensityLevel = (intensity: number) => {
+  return (
+    INTENSITY_LEVELS.find(
+      (l) => intensity >= l.range[0] && intensity <= l.range[1]
+    ) ?? INTENSITY_LEVELS[2]
+  );
+};
 
 type ExerciseSlot = {
   type: 'exercise';
@@ -80,6 +121,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [notes, setNotes] = useState<string>('');
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
   const [restTimer, setRestTimer] = useState<RestTimerState | null>(null);
+  const [intensityModalVisible, setIntensityModalVisible] = useState(false);
   const { scheduleTimerNotification, cancelTimerNotification } =
     useTimerNotification();
   const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -467,27 +509,38 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                     {currentWorkout.description}
                   </Text>
                 )}
-                <View style={styles.intensityContainer}>
-                  <Text style={styles.intensityLabel}>Intensity:</Text>
-                  <View style={styles.intensityBar}>
-                    {Array.from({ length: 10 }).map((_, i) => (
-                      <View
-                        key={i}
-                        style={[
-                          styles.intensityDot,
-                          i < currentWorkout.intensity &&
-                          styles.intensityDotFilled,
-                        ]}
-                      />
-                    ))}
-                  </View>
-                  <Text style={styles.intensityValue}>
-                    {currentWorkout.intensity}/10
-                  </Text>
-                </View>
               </View>
             </View>
+          </View>
 
+          <View style={styles.intensityCard}>
+            <View style={styles.intensityCardHeader}>
+              <Text style={styles.intensityLabel}>Intensity</Text>
+              <Text style={styles.intensityValue}>
+                {currentWorkout.intensity}/10
+              </Text>
+            </View>
+            <View style={styles.intensityBarTrack}>
+              <View
+                style={[
+                  styles.intensityBarFill,
+                  { width: `${currentWorkout.intensity * 10}%` },
+                ]}
+              />
+            </View>
+            <Text style={styles.intensityFeel}>
+              {getIntensityLevel(currentWorkout.intensity).label}.{' '}
+              {getIntensityLevel(currentWorkout.intensity).feel}
+            </Text>
+            <TouchableOpacity
+              style={styles.intensityCta}
+              onPress={() => setIntensityModalVisible(true)}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.intensityCtaText}>
+                View all intensity levels
+              </Text>
+            </TouchableOpacity>
           </View>
 
           {(() => {
@@ -626,6 +679,59 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         }}
       />
 
+      <Modal
+        visible={intensityModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIntensityModalVisible(false)}
+      >
+        <View style={styles.intensityModalOverlay}>
+          <View style={styles.intensityModalContent}>
+            <Text style={styles.intensityModalTitle}>Intensity Levels</Text>
+            <Text style={styles.intensityModalSubtitle}>
+              How each level should feel during your session
+            </Text>
+            {INTENSITY_LEVELS.map((level) => {
+              const isActive =
+                currentWorkout &&
+                currentWorkout.intensity >= level.range[0] &&
+                currentWorkout.intensity <= level.range[1];
+              return (
+                <View
+                  key={level.label}
+                  style={[
+                    styles.intensityModalRow,
+                    isActive && styles.intensityModalRowActive,
+                  ]}
+                >
+                  <View style={styles.intensityModalRowHeader}>
+                    <Text style={styles.intensityModalRange}>
+                      {level.range[0]}–{level.range[1]}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.intensityModalLabel,
+                        isActive && styles.intensityModalLabelActive,
+                      ]}
+                    >
+                      {level.label}
+                    </Text>
+                  </View>
+                  <Text style={styles.intensityModalFeel}>{level.feel}</Text>
+                </View>
+              );
+            })}
+            <TouchableOpacity
+              style={styles.intensityModalClose}
+              onPress={() => setIntensityModalVisible(false)}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.intensityModalCloseText}>Got it</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       {/* Keyboard accessory view for notes input (iOS only) */}
       {Platform.OS === 'ios' && (
         <InputAccessoryView nativeID={notesInputAccessoryViewID}>
@@ -700,36 +806,127 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
     lineHeight: 20,
   },
-  intensityContainer: {
+  intensityCard: {
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxl,
+    marginBottom: Spacing.xxl,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+  },
+  intensityCardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.lg,
+  },
+  intensityLabel: {
+    color: Colors.accent,
+    fontSize: FontSize.xxl,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  intensityValue: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayMd,
+    fontWeight: '800',
+  },
+  intensityBarTrack: {
+    height: 6,
+    borderRadius: BorderRadius.xs,
+    backgroundColor: Colors.backgroundSubtle,
+    marginBottom: Spacing.xl,
+    overflow: 'hidden',
+  },
+  intensityBarFill: {
+    height: '100%',
+    borderRadius: BorderRadius.xs,
+    backgroundColor: Colors.accent,
+  },
+  intensityFeel: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+    marginBottom: Spacing.xl,
+  },
+  intensityCta: {
+    alignSelf: 'flex-start',
+  },
+  intensityCtaText: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '600',
+  },
+  intensityModalOverlay: {
+    flex: 1,
+    backgroundColor: Colors.overlay,
+    justifyContent: 'center',
+    padding: Spacing.xxl,
+  },
+  intensityModalContent: {
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxl,
+  },
+  intensityModalTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayLg,
+    fontWeight: '800',
+    marginBottom: Spacing.xs,
+  },
+  intensityModalSubtitle: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    marginBottom: Spacing.xxl,
+  },
+  intensityModalRow: {
+    padding: Spacing.xl,
+    borderRadius: BorderRadius.lg,
+    marginBottom: Spacing.md,
+  },
+  intensityModalRowActive: {
+    backgroundColor: Colors.backgroundElevated,
+    borderWidth: 1,
+    borderColor: Colors.accent,
+  },
+  intensityModalRowHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.md,
+    marginBottom: Spacing.xs,
   },
-  intensityLabel: {
+  intensityModalRange: {
     color: Colors.textMuted,
     fontSize: FontSize.md,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    fontWeight: '700',
+    minWidth: 30,
   },
-  intensityBar: {
-    flexDirection: 'row',
-    gap: Spacing.xs,
-    alignItems: 'center',
+  intensityModalLabel: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxl,
+    fontWeight: '700',
   },
-  intensityDot: {
-    width: 8,
-    height: 8,
-    borderRadius: BorderRadius.sm,
-    backgroundColor: Colors.backgroundSubtle,
+  intensityModalLabelActive: {
+    color: Colors.accent,
   },
-  intensityDotFilled: {
+  intensityModalFeel: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.base,
+    lineHeight: 18,
+    paddingLeft: 38,
+  },
+  intensityModalClose: {
     backgroundColor: Colors.accent,
+    borderRadius: BorderRadius.lg,
+    paddingVertical: Spacing.xl,
+    alignItems: 'center',
+    marginTop: Spacing.xl,
   },
-  intensityValue: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '600',
+  intensityModalCloseText: {
+    color: Colors.textOnAccent,
+    fontSize: FontSize.xxl,
+    fontWeight: '700',
   },
   setCurrentDayButton: {
     marginTop: Spacing.xxl,
