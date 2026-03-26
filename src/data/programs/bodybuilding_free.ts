@@ -126,8 +126,8 @@ export const bodybuilding_free: Program = {
       // Balance: Full vertical and horizontal pull coverage every week
       // Variation: Horizontal row alternates barbell (even) / dumbbell (odd)
       //            Vertical pull alternates pull-ups (even) / lat pulldown (odd)
-      // Core: Ab Wheel Rollout closes the session — anti-extension work
-      //       with no spinal load after a pulling-dominant session.
+      // Core: Sit-ups close the session — direct ab volume to finish
+      //       without adding loading after a pulling-dominant session.
       // ─────────────────────────────────────────────
       {
         dayIndex: week * 7 + 2,
@@ -188,13 +188,13 @@ export const bodybuilding_free: Program = {
           },
           {
             type: 'exercise',
-            id: 15, // Ab Wheel Rollout
+            id: 86, // Sit-ups
             sets: 3,
             repRange: [8, 12],
             restTimeSeconds: 60,
             additionalHeader: 'Core Finisher',
             additionalDescription:
-              'Brace hard before each rollout — do not let your lower back collapse. Roll out only as far as you can maintain a neutral spine. This is one of the most effective anti-extension core exercises available.',
+              'Controlled reps. Keep your chin tucked and avoid pulling on the neck. Exhale as you sit up and focus on initiating with the abs rather than swinging.',
           },
         ],
       },

@@ -89,11 +89,11 @@ export const olympic_advanced_8wk: Program = {
 
       // ─────────────────────────────────────────────
       // DAY 2 — Clean, Jerk & Front Squat (Wednesday)
-      // FIX: Ab Wheel Rollout added as core finisher. Day 2 previously had
+      // FIX: Sit-ups added as core finisher. Day 2 previously had
       //      no direct core work — the session ended on Lat Pulldown.
       //      The front rack and overhead demands of the C&J require strong
-      //      anti-flexion core stability. Ab Wheel Rollout is one of the
-      //      best anti-extension core exercises and fits an advanced program.
+      //      trunk control and bracing under load. Sit-ups are a simple,
+      //      repeatable way to build direct ab volume without extra equipment.
       // ─────────────────────────────────────────────
       {
         dayIndex: week * 7 + 2,
@@ -141,13 +141,13 @@ export const olympic_advanced_8wk: Program = {
           },
           {
             type: 'exercise',
-            id: 15, // Ab Wheel Rollout — ADDED for core work
+            id: 86, // Sit-ups — ADDED for core work
             sets: 3,
             repRange: [8, 12],
             restTimeSeconds: 60,
             additionalHeader: 'Core Finisher',
             additionalDescription:
-              'Anti-extension core strength is critical for maintaining position under a heavy front rack and overhead catch. Brace hard before each rollout and avoid letting your lower back collapse.',
+              'Controlled reps. Exhale as you sit up, keep the chin tucked (don’t pull on the neck), and aim to feel the abs initiate the movement rather than yanking with the hip flexors.',
           },
         ],
       },

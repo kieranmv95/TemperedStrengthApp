@@ -292,13 +292,13 @@ export const bodybuilding_pro: Program = {
           },
           {
             type: 'exercise',
-            id: 15, // Ab Wheel Rollout
+            id: 86, // Sit-ups
             sets: 3,
             repRange: [8, 12],
             restTimeSeconds: isolationRest,
             additionalHeader: 'Core Finisher',
             additionalDescription:
-              'Brace hard before each rollout — do not let your lower back collapse. Roll only as far as you can maintain a neutral spine. This is one of the most effective anti-extension core exercises available.',
+              'Controlled reps and smooth tempo. Avoid pulling on the neck—think ribs down, chin tucked, and exhale as you sit up. Stop each rep before your hip flexors take over.',
           },
         ],
       },

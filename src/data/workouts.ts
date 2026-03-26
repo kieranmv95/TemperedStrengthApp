@@ -1287,9 +1287,9 @@ const proWorkouts: SingleWorkout[] = [
         name: 'Core Finisher',
         movements: [
           {
-            name: 'Ab Wheel Rollout',
+            name: 'Sit-ups',
             value: '3 x 10',
-            note: 'Brace hard before each rep. Roll only as far as you can maintain a neutral spine.',
+            note: "Controlled reps. Exhale as you sit up, keep your chin tucked, and don't pull on the neck. Aim for consistent tempo rather than speed.",
           },
         ],
       },
