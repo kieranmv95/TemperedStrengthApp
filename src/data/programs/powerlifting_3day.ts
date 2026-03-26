@@ -59,21 +59,21 @@ export const powerlifting_3day: Program = {
 
     return [
       // ─────────────────────────────────────────────
-      // DAY 1 — Squat Focus (Monday)
-      // FIX 1: Plank now has hideReps: true — logging_type is 'time',
+      // DAY 1 - Squat Focus (Monday)
+      // FIX 1: Plank now has hideReps: true - logging_type is 'time',
       //         rendering [45, 60] as reps was incorrect.
       // FIX 2: RDL rep range now uses accessoryReps so it tapers with
       //         the program. High-rep RDLs in peak/test week are
       //         unnecessary posterior chain fatigue before a 1RM.
-      // FIX 3: Testing week sets reduced to 1 — on a 1RM day the user
+      // FIX 3: Testing week sets reduced to 1 - on a 1RM day the user
       //         builds up with warm-up sets then attempts a max.
       //         Prescribing 5 working sets is incorrect for this context.
       // ─────────────────────────────────────────────
       {
         dayIndex: week * 7 + 0,
         label: isTestingWeek
-          ? 'TESTING DAY — 1RM Squat'
-          : `Squat Focus — Week ${week + 1}`,
+          ? 'TESTING DAY - 1RM Squat'
+          : `Squat Focus - Week ${week + 1}`,
         description: isTestingWeek
           ? 'TESTING DAY: New 1RM Squat'
           : 'High intensity squatting and quad accessories.',
@@ -109,14 +109,14 @@ export const powerlifting_3day: Program = {
             restTimeSeconds: 90,
             canSwap: true,
             additionalDescription:
-              'Pure quad hypertrophy to support your squat out of the hole. Keep your feet low on the platform to emphasize the knees.',
+              'Pure quad hypertrophy to support your squat out of the hole. Keep your feet low on the platform to emphasise the knees.',
           },
           {
             type: 'exercise',
             id: 13, // Plank
             sets: 3,
             repRange: [45, 60],
-            hideReps: true, // FIX: logging_type is 'time' — display as seconds
+            hideReps: true, // FIX: logging_type is 'time' - display as seconds
             restTimeSeconds: 60,
             additionalDescription:
               "Bracing practice. Do not just 'hold' the plank; actively pull your elbows toward your toes to engage the deep core.",
@@ -125,7 +125,7 @@ export const powerlifting_3day: Program = {
       },
 
       // ─────────────────────────────────────────────
-      // DAY 2 — Bench Focus (Wednesday)
+      // DAY 2 - Bench Focus (Wednesday)
       // FIX: Skull Crushers replaced with Face Pulls (id: 35).
       //
       // A powerlifting bench day already has: Bench Press + OHP + Seated
@@ -135,15 +135,15 @@ export const powerlifting_3day: Program = {
       //
       // Face Pulls address the rotator cuff and rear delts directly,
       // counterbalancing the pressing volume. Tricep lockout strength
-      // is already well-served by the volume on the comp bench sets —
+      // is already well-served by the volume on the comp bench sets -
       // an isolated skull crusher adds marginal lockout gains compared
       // to the shoulder injury risk it compounds.
       // ─────────────────────────────────────────────
       {
         dayIndex: week * 7 + 2,
         label: isTestingWeek
-          ? 'TESTING DAY — 1RM Bench'
-          : `Bench Focus — Week ${week + 1}`,
+          ? 'TESTING DAY - 1RM Bench'
+          : `Bench Focus - Week ${week + 1}`,
         description: isTestingWeek
           ? 'TESTING DAY: New 1RM Bench'
           : 'Competition bench form and shoulder stability.',
@@ -182,7 +182,7 @@ export const powerlifting_3day: Program = {
           },
           {
             type: 'exercise',
-            id: 35, // Face Pulls — REPLACED Skull Crushers
+            id: 35, // Face Pulls - REPLACED Skull Crushers
             sets: 3,
             repRange: [15, 20],
             restTimeSeconds: 60,
@@ -193,7 +193,7 @@ export const powerlifting_3day: Program = {
       },
 
       // ─────────────────────────────────────────────
-      // DAY 3 — Deadlift Focus (Friday)
+      // DAY 3 - Deadlift Focus (Friday)
       // FIX 1: Cable Crunches (id: 48) replaced with Hanging Leg Raise
       //         (id: 31). After Comp Deadlifts + Bulgarian Split Squats +
       //         Pull-ups, the lumbar spine is at maximum weekly fatigue.
@@ -201,7 +201,7 @@ export const powerlifting_3day: Program = {
       //         of that. Hanging Leg Raises train the same abs through hip
       //         flexion with zero additional lower back stress, and
       //         actually decompress the spine when done hanging.
-      // FIX 2: Pull-ups canSwap: true added — not all users can perform
+      // FIX 2: Pull-ups canSwap: true added - not all users can perform
       //         bodyweight pull-ups. Assisted Pull-up Machine (id: 84)
       //         or Lat Pulldown (id: 11) are natural swaps.
       // FIX 3: Testing week sets: 1 on the main deadlift.
@@ -209,8 +209,8 @@ export const powerlifting_3day: Program = {
       {
         dayIndex: week * 7 + 4,
         label: isTestingWeek
-          ? 'TESTING DAY — 1RM Deadlift'
-          : `Deadlift Focus — Week ${week + 1}`,
+          ? 'TESTING DAY - 1RM Deadlift'
+          : `Deadlift Focus - Week ${week + 1}`,
         description: isTestingWeek
           ? 'TESTING DAY: New 1RM Deadlift'
           : 'Max effort pulling and posterior chain work.',
@@ -242,7 +242,7 @@ export const powerlifting_3day: Program = {
             type: 'exercise',
             id: 10, // Pull-ups
             sets: 3,
-            repRange: [6, 10], // FIX: tightened from [8, 12] — cleaner target range
+            repRange: [6, 10], // FIX: tightened from [8, 12] - cleaner target range
             restTimeSeconds: 120,
             canSwap: true, // FIX: not all users can do bodyweight pull-ups
             additionalDescription:
@@ -250,12 +250,12 @@ export const powerlifting_3day: Program = {
           },
           {
             type: 'exercise',
-            id: 31, // Hanging Leg Raise — REPLACED Cable Crunches
+            id: 31, // Hanging Leg Raise - REPLACED Cable Crunches
             sets: 3,
             repRange: [10, 15],
             restTimeSeconds: 60,
             additionalDescription:
-              'After heavy deadlifts and hinge work, spinal flexion under load is the last thing your lower back needs. Hanging Leg Raises build the same anterior core strength through hip flexion, with zero additional lumbar stress — and the hang itself decompresses the spine.',
+              'After heavy deadlifts and hinge work, spinal flexion under load is the last thing your lower back needs. Hanging Leg Raises build the same anterior core strength through hip flexion, with zero additional lumbar stress - and the hang itself decompresses the spine.',
           },
         ],
       },

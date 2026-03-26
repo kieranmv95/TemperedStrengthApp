@@ -65,20 +65,20 @@ export const arms_warmup: Warmup = {
 };
 
 // ─────────────────────────────────────────────────────────
-// PRO BODYBUILDING — 5 DAY SPLIT
+// PRO BODYBUILDING - 5 DAY SPLIT
 //
 // Structure:
-//   Mon — Chest
-//   Tue — Back
-//   Wed — Legs
-//   Thu — Shoulders
-//   Fri — Arms
+//   Mon - Chest
+//   Tue - Back
+//   Wed - Legs
+//   Thu - Shoulders
+//   Fri - Arms
 //
 // Phases:
-//   Phase 1 (Weeks  1–4):  Foundation      — higher reps, form mastery, moderate load
-//   Phase 2 (Weeks  5–8):  Hypertrophy     — volume peak, controlled load increase
-//   Phase 3 (Weeks  9–12): Intensification — drop sets, AMRAP, lower reps, peak load
-//   Phase 4 (Weeks 13–16): Peaking         — lower volume, maximum load, strength-hypertrophy
+//   Phase 1 (Weeks  1–4):  Foundation      - higher reps, form mastery, moderate load
+//   Phase 2 (Weeks  5–8):  Hypertrophy     - volume peak, controlled load increase
+//   Phase 3 (Weeks  9–12): Intensification - drop sets, AMRAP, lower reps, peak load
+//   Phase 4 (Weeks 13–16): Peaking         - lower volume, maximum load, strength-hypertrophy
 //
 // Progressive overload mechanics:
 //   - Compound rep ranges taper each phase
@@ -128,7 +128,7 @@ export const bodybuilding_pro: Program = {
         [12, 15], // Foundation
         [10, 12], // Hypertrophy
         [8, 10], // Intensification
-        [8, 10], // Peaking (same — isolation stays moderate)
+        [8, 10], // Peaking (same - isolation stays moderate)
       ] as [number, number][]
     )[phase];
 
@@ -155,7 +155,7 @@ export const bodybuilding_pro: Program = {
 
     return [
       // ───────────────────────────────────────────────────
-      // DAY 1 — CHEST (Monday)
+      // DAY 1 - CHEST (Monday)
       // Structure: 2 compound movements + 2 isolation + rear delt health
       // Variation: Primary compound alternates barbell/dumbbell
       //            Secondary compound alternates incline/flat
@@ -163,7 +163,7 @@ export const bodybuilding_pro: Program = {
       // ───────────────────────────────────────────────────
       {
         dayIndex: week * 7 + 0,
-        label: `Chest — Week ${week + 1} (${phaseName})`,
+        label: `Chest - Week ${week + 1} (${phaseName})`,
         description: variantA
           ? 'Barbell strength focus. Maximise load and upper chest development.'
           : 'Dumbbell range-of-motion focus. Prioritise stretch, squeeze, and mind-muscle connection.',
@@ -189,8 +189,8 @@ export const bodybuilding_pro: Program = {
             restTimeSeconds: compoundRest,
             additionalHeader: variantA ? 'Upper Chest' : 'Tricep & Inner Chest',
             additionalDescription: variantA
-              ? 'Use a 30–45° incline to maximise upper clavicular head activation. Control the descent — the stretch under load is where upper chest development happens.'
-              : 'The floor limits the range of motion and removes the stretch reflex — this isolates the triceps and inner chest under pure muscular tension. Do not bounce off the floor.',
+              ? 'Use a 30–45° incline to maximise upper clavicular head activation. Control the descent - the stretch under load is where upper chest development happens.'
+              : 'The floor limits the range of motion and removes the stretch reflex - this isolates the triceps and inner chest under pure muscular tension. Do not bounce off the floor.',
           },
           {
             type: 'exercise',
@@ -201,7 +201,7 @@ export const bodybuilding_pro: Program = {
             isAmrap: useAmrap,
             additionalHeader: 'Pec Isolation',
             additionalDescription: variantA
-              ? 'Do not lock out — keep constant tension on the pecs throughout. Think about wrapping your arms around a barrel. Squeeze for a full second at peak contraction.'
+              ? 'Do not lock out - keep constant tension on the pecs throughout. Think about wrapping your arms around a barrel. Squeeze for a full second at peak contraction.'
               : 'The pec deck locks your arms in the movement pattern so the chest must do all the work. Pause at the peak contraction and resist the urge to let the weight pull your arms back too far.',
           },
           {
@@ -212,8 +212,8 @@ export const bodybuilding_pro: Program = {
             restTimeSeconds: accessoryRest,
             additionalHeader: 'Tricep Accessory',
             additionalDescription: variantA
-              ? 'Keep your elbows pointing at the ceiling throughout. Focus on the long head stretch at the bottom — elbows should not flare out to the sides.'
-              : 'Keep your elbows pinned to your sides — only your forearms should move. Full extension at the bottom to maximise tricep contraction.',
+              ? 'Keep your elbows pointing at the ceiling throughout. Focus on the long head stretch at the bottom - elbows should not flare out to the sides.'
+              : 'Keep your elbows pinned to your sides - only your forearms should move. Full extension at the bottom to maximise tricep contraction.',
           },
           {
             type: 'exercise',
@@ -229,7 +229,7 @@ export const bodybuilding_pro: Program = {
       },
 
       // ───────────────────────────────────────────────────
-      // DAY 2 — BACK (Tuesday)
+      // DAY 2 - BACK (Tuesday)
       // Structure: 2 compound pulls (horizontal + vertical) + 2 accessories + core
       // Variation: Horizontal row alternates barbell/T-bar
       //            Vertical pull alternates pull-ups/lat pulldown
@@ -237,7 +237,7 @@ export const bodybuilding_pro: Program = {
       // ───────────────────────────────────────────────────
       {
         dayIndex: week * 7 + 1,
-        label: `Back — Week ${week + 1} (${phaseName})`,
+        label: `Back - Week ${week + 1} (${phaseName})`,
         description: variantA
           ? 'Barbell and pull-up focus for maximum back thickness and width.'
           : 'T-bar and pulldown focus for lat isolation and mid-back detail.',
@@ -252,7 +252,7 @@ export const bodybuilding_pro: Program = {
             restTimeSeconds: compoundRest,
             additionalHeader: 'Back Thickness',
             additionalDescription: variantA
-              ? 'Keep your torso rigid and parallel to the floor. Pull with your elbows, not your hands — drive them into your back pockets. This builds the mid-back thickness that defines a classic physique.'
+              ? 'Keep your torso rigid and parallel to the floor. Pull with your elbows, not your hands - drive them into your back pockets. This builds the mid-back thickness that defines a classic physique.'
               : 'Brace hard and keep your chest on the pad. Pull with your elbows and squeeze your shoulder blades together at the peak. T-bar rows allow a heavy neutral-grip load that the back responds extremely well to.',
           },
           {
@@ -264,8 +264,8 @@ export const bodybuilding_pro: Program = {
             canSwap: true,
             additionalHeader: 'Lat Width',
             additionalDescription: variantA
-              ? 'Pull your chest to the bar — not just your chin. Initiate the movement by depressing your shoulder blades before bending your elbows. Full dead hang at the bottom on every rep.'
-              : 'Lean back slightly and pull the bar to your upper chest. Initiate by pulling your shoulder blades down — drive your elbows toward your hips.',
+              ? 'Pull your chest to the bar - not just your chin. Initiate the movement by depressing your shoulder blades before bending your elbows. Full dead hang at the bottom on every rep.'
+              : 'Lean back slightly and pull the bar to your upper chest. Initiate by pulling your shoulder blades down - drive your elbows toward your hips.',
           },
           {
             type: 'exercise',
@@ -287,7 +287,7 @@ export const bodybuilding_pro: Program = {
             canSwap: true,
             additionalHeader: 'Lat Isolation',
             additionalDescription: variantA
-              ? 'Keep your arms straight throughout — this is a lat isolation movement, not a row. Focus on pulling your shoulder blades down and feeling the lats contract fully at the bottom.'
+              ? 'Keep your arms straight throughout - this is a lat isolation movement, not a row. Focus on pulling your shoulder blades down and feeling the lats contract fully at the bottom.'
               : 'Initiate by depressing the shoulder blade before bending the elbow. Focus on each side independently to address any lat development imbalances.',
           },
           {
@@ -298,13 +298,13 @@ export const bodybuilding_pro: Program = {
             restTimeSeconds: isolationRest,
             additionalHeader: 'Core Finisher',
             additionalDescription:
-              'Controlled reps and smooth tempo. Avoid pulling on the neck—think ribs down, chin tucked, and exhale as you sit up. Stop each rep before your hip flexors take over.',
+              'Controlled reps and smooth tempo. Avoid pulling on the neck - think ribs down, chin tucked, and exhale as you sit up. Stop each rep before your hip flexors take over.',
           },
         ],
       },
 
       // ───────────────────────────────────────────────────
-      // DAY 3 — LEGS (Wednesday)
+      // DAY 3 - LEGS (Wednesday)
       // Structure: Knee dominant compound + hip hinge + quad isolation
       //            + hamstring isolation + calf + core
       // Variation: Primary compound alternates barbell squat/hack squat
@@ -313,7 +313,7 @@ export const bodybuilding_pro: Program = {
       // ───────────────────────────────────────────────────
       {
         dayIndex: week * 7 + 2,
-        label: `Legs — Week ${week + 1} (${phaseName})`,
+        label: `Legs - Week ${week + 1} (${phaseName})`,
         description: variantA
           ? 'Squat and RDL focus. Anterior and posterior chain loaded through full range.'
           : 'Hack squat and hip thrust focus. Maximum quad and glute hypertrophy.',
@@ -328,8 +328,8 @@ export const bodybuilding_pro: Program = {
             restTimeSeconds: Math.min(compoundRest + 30, 180),
             additionalHeader: variantA ? 'King of Legs' : 'Quad Overload',
             additionalDescription: variantA
-              ? 'Sit back and down — keep your chest proud throughout. At the bottom your thighs should be at or below parallel. Drive the floor away on the ascent and squeeze your glutes at the top.'
-              : 'Hack squat allows a more upright torso and places extreme tension on the quads. Control the descent fully — do not bounce out of the bottom. Keep constant tension throughout.',
+              ? 'Sit back and down - keep your chest proud throughout. At the bottom your thighs should be at or below parallel. Drive the floor away on the ascent and squeeze your glutes at the top.'
+              : 'Hack squat allows a more upright torso and places extreme tension on the quads. Control the descent fully - do not bounce out of the bottom. Keep constant tension throughout.',
           },
           {
             type: 'exercise',
@@ -340,7 +340,7 @@ export const bodybuilding_pro: Program = {
             additionalHeader: variantA ? 'Posterior Chain' : 'Glute Peak',
             additionalDescription: variantA
               ? 'Push your hips back as far as possible until you feel a deep hamstring stretch. Keep the bar close to your legs throughout. Drive your hips through to standing and squeeze your glutes hard at the top.'
-              : 'Use a pad for the bar. Drive through your heels and squeeze your glutes for a full second at the top. Your shins should be vertical at peak contraction — if they are not, adjust your foot position.',
+              : 'Use a pad for the bar. Drive through your heels and squeeze your glutes for a full second at the top. Your shins should be vertical at peak contraction - if they are not, adjust your foot position.',
           },
           {
             type: 'exercise',
@@ -354,8 +354,8 @@ export const bodybuilding_pro: Program = {
               ? 'Quad Isolation'
               : 'Hamstring Isolation',
             additionalDescription: variantA
-              ? 'Pause for a full second at the top with legs fully extended. This peak contraction maximises rectus femoris activation. Control the eccentric — do not let the weight slam down.'
-              : 'Slow and controlled throughout. Do not let the weight stack slam at the bottom — maintain tension on the hamstrings through the full range. Flex the hamstrings hard at peak contraction.',
+              ? 'Pause for a full second at the top with legs fully extended. This peak contraction maximises rectus femoris activation. Control the eccentric - do not let the weight slam down.'
+              : 'Slow and controlled throughout. Do not let the weight stack slam at the bottom - maintain tension on the hamstrings through the full range. Flex the hamstrings hard at peak contraction.',
           },
           {
             type: 'exercise',
@@ -367,7 +367,7 @@ export const bodybuilding_pro: Program = {
             additionalHeader: 'Hamstring Detail',
             additionalDescription:
               phase >= 2
-                ? 'The lying position stretches the hamstring differently to the seated variant — both positions are worth training across a full program. Control every rep.'
+                ? 'The lying position stretches the hamstring differently to the seated variant - both positions are worth training across a full program. Control every rep.'
                 : 'Seated leg curl places the hamstring in a stretched position throughout. Focus on a slow eccentric and a hard peak contraction.',
           },
           {
@@ -378,7 +378,7 @@ export const bodybuilding_pro: Program = {
             restTimeSeconds: 45,
             canSwap: true,
             additionalDescription:
-              'Full range of motion — all the way up onto your toes and all the way down for a deep stretch. Calves respond well to slow eccentrics and high volume. Pause for a second at the top of each rep.',
+              'Full range of motion - all the way up onto your toes and all the way down for a deep stretch. Calves respond well to slow eccentrics and high volume. Pause for a second at the top of each rep.',
           },
           {
             type: 'exercise',
@@ -388,14 +388,14 @@ export const bodybuilding_pro: Program = {
             restTimeSeconds: isolationRest,
             additionalHeader: 'Core Finisher',
             additionalDescription: variantA
-              ? 'Keep your hips still — the movement comes entirely from your spine. Exhale sharply as you crunch down and hold the peak contraction for a beat.'
-              : 'Keep your legs as straight as possible. Curl your pelvis toward your belly button at the top to engage the lower abs. Avoid swinging — initiate every rep from a controlled dead hang.',
+              ? 'Keep your hips still - the movement comes entirely from your spine. Exhale sharply as you crunch down and hold the peak contraction for a beat.'
+              : 'Keep your legs as straight as possible. Curl your pelvis toward your belly button at the top to engage the lower abs. Avoid swinging - initiate every rep from a controlled dead hang.',
           },
         ],
       },
 
       // ───────────────────────────────────────────────────
-      // DAY 4 — SHOULDERS (Thursday)
+      // DAY 4 - SHOULDERS (Thursday)
       // Structure: 2 pressing movements + lateral raises + rear delt work
       //            + traps + core
       // Variation: Primary press alternates barbell OHP/machine press
@@ -404,7 +404,7 @@ export const bodybuilding_pro: Program = {
       // ───────────────────────────────────────────────────
       {
         dayIndex: week * 7 + 3,
-        label: `Shoulders — Week ${week + 1} (${phaseName})`,
+        label: `Shoulders - Week ${week + 1} (${phaseName})`,
         description: variantA
           ? 'Barbell overhead press focus. Strict strength through the full vertical pressing pattern.'
           : 'Machine and dumbbell focus. Shoulder detail and maximum isolation.',
@@ -419,8 +419,8 @@ export const bodybuilding_pro: Program = {
             restTimeSeconds: compoundRest,
             additionalHeader: variantA ? 'Strict Press' : 'Controlled Load',
             additionalDescription: variantA
-              ? 'No leg drive. Squeeze your glutes and brace your core to create a rigid base. Press the bar vertically — pull your head back slightly as the bar passes, then push your head through at the top.'
-              : 'The machine eliminates stability demands and allows you to focus purely on deltoid recruitment. Control the weight both ways — do not let the stack crash between reps.',
+              ? 'No leg drive. Squeeze your glutes and brace your core to create a rigid base. Press the bar vertically - pull your head back slightly as the bar passes, then push your head through at the top.'
+              : 'The machine eliminates stability demands and allows you to focus purely on deltoid recruitment. Control the weight both ways - do not let the stack crash between reps.',
           },
           {
             type: 'exercise',
@@ -433,7 +433,7 @@ export const bodybuilding_pro: Program = {
               : 'Full Rotation',
             additionalDescription: variantA
               ? 'Dumbbells allow each shoulder to work independently, exposing and correcting strength imbalances. Press in a slight arc and stop just short of the weights touching at the top.'
-              : 'The rotation from palms-in at the bottom to palms-forward at the top recruits all three heads of the deltoid across the movement. Slow and deliberate — do not rush the rotation.',
+              : 'The rotation from palms-in at the bottom to palms-forward at the top recruits all three heads of the deltoid across the movement. Slow and deliberate - do not rush the rotation.',
           },
           {
             type: 'exercise',
@@ -444,7 +444,7 @@ export const bodybuilding_pro: Program = {
             canSwap: true,
             isAmrap: useAmrap,
             additionalDescription:
-              'The most important exercise for shoulder width. Lead with the elbows — imagine trying to touch the side walls. Stop slightly above shoulder height. Use lighter weight than feels necessary and focus on the burn.',
+              'The most important exercise for shoulder width. Lead with the elbows - imagine trying to touch the side walls. Stop slightly above shoulder height. Use lighter weight than feels necessary and focus on the burn.',
           },
           {
             type: 'exercise',
@@ -454,7 +454,7 @@ export const bodybuilding_pro: Program = {
             restTimeSeconds: isolationRest,
             additionalHeader: 'Rear Delt',
             additionalDescription: variantA
-              ? 'Pull the rope to your forehead with elbows flared high. Emphasise the external rotation at the end — this directly protects the rotator cuff across a heavy 16-week pressing program.'
+              ? 'Pull the rope to your forehead with elbows flared high. Emphasise the external rotation at the end - this directly protects the rotator cuff across a heavy 16-week pressing program.'
               : 'Use light weight. Lead with the elbows and squeeze your shoulder blades together at the peak. Focus on feeling the rear deltoid contract, not the traps.',
           },
           {
@@ -471,22 +471,22 @@ export const bodybuilding_pro: Program = {
       },
 
       // ───────────────────────────────────────────────────
-      // DAY 5 — ARMS (Friday)
+      // DAY 5 - ARMS (Friday)
       // Structure: 2 bicep movements + 2 tricep movements + forearms + core
       // Variation: Bicep compound alternates barbell/dumbbell curls
       //            Bicep isolation alternates preacher/hammer curls
       //            Tricep compound alternates skull crushers/overhead extension
       //            Tricep isolation alternates pushdowns/dips
-      // Note: Arms day falls on Friday — any residual fatigue from the week
+      // Note: Arms day falls on Friday - any residual fatigue from the week
       //       is a non-issue since there is no pressing or pulling tomorrow.
       // ───────────────────────────────────────────────────
       {
         dayIndex: week * 7 + 4,
-        label: `Arms — Week ${week + 1} (${phaseName})`,
+        label: `Arms - Week ${week + 1} (${phaseName})`,
         description: variantA
           ? 'Barbell and skull crusher focus. Maximum mechanical load through the elbow flexors and extensors.'
           : 'Dumbbell and cable focus. Range of motion, isolation, and the pump.',
-        intensity: Math.max(intensity - 1, 6), // Arms day is slightly lower intensity — recovery day before the week resets
+        intensity: Math.max(intensity - 1, 6), // Arms day is slightly lower intensity - recovery day before the week resets
         exercises: [
           arms_warmup,
           // ── BICEPS ──
@@ -500,8 +500,8 @@ export const bodybuilding_pro: Program = {
               ? 'Bicep Peak'
               : 'Brachialis & Thickness',
             additionalDescription: variantA
-              ? 'Supinate (rotate) your wrist at the top of each rep to fully contract the bicep peak. Keep your elbows pinned to your sides — no swinging.'
-              : 'Neutral grip targets the brachialis underneath the bicep — developing this muscle pushes the bicep peak higher. Keep your wrists straight and avoid rocking.',
+              ? 'Supinate (rotate) your wrist at the top of each rep to fully contract the bicep peak. Keep your elbows pinned to your sides - no swinging.'
+              : 'Neutral grip targets the brachialis underneath the bicep - developing this muscle pushes the bicep peak higher. Keep your wrists straight and avoid rocking.',
           },
           {
             type: 'exercise',
@@ -512,8 +512,8 @@ export const bodybuilding_pro: Program = {
             isAmrap: useAmrap,
             additionalHeader: variantA ? 'Stretch & Peak' : 'Supination Focus',
             additionalDescription: variantA
-              ? 'The preacher bench eliminates all momentum. Focus on the full stretch at the bottom — resisting the urge to bounce out of the bottom is where the growth happens.'
-              : 'Alternate arms. As one curls, the other is descending — this keeps constant tension and maximises the pump. Supinate hard at the top of every rep.',
+              ? 'The preacher bench eliminates all momentum. Focus on the full stretch at the bottom - resisting the urge to bounce out of the bottom is where the growth happens.'
+              : 'Alternate arms. As one curls, the other is descending - this keeps constant tension and maximises the pump. Supinate hard at the top of every rep.',
           },
           // ── TRICEPS ──
           {
@@ -524,7 +524,7 @@ export const bodybuilding_pro: Program = {
             restTimeSeconds: accessoryRest,
             additionalHeader: variantA ? 'Long Head Mass' : 'Full Stretch',
             additionalDescription: variantA
-              ? "Elbows pointing at the ceiling, tucked close to your ears. Lower the bar to your forehead with control — the stretch at the bottom is critical. Don't let the elbows flare."
+              ? "Elbows pointing at the ceiling, tucked close to your ears. Lower the bar to your forehead with control - the stretch at the bottom is critical. Don't let the elbows flare."
               : 'Overhead position puts the long head of the tricep in its most fully stretched position. This is the largest head and the key to arm size. Keep elbows pointing up throughout.',
           },
           {
@@ -537,8 +537,8 @@ export const bodybuilding_pro: Program = {
             isAmrap: useAmrap && variantA,
             additionalHeader: variantA ? 'Lateral Head' : 'Compound Finisher',
             additionalDescription: variantA
-              ? 'Elbows pinned to your sides — only your forearms should move. Full extension at the bottom to maximise the peak contraction in the lateral head.'
-              : 'Stay upright to keep the load on the triceps. Full range of motion — lockout at the top, full stretch at the bottom. These are an excellent mass builder to close out the week.',
+              ? 'Elbows pinned to your sides - only your forearms should move. Full extension at the bottom to maximise the peak contraction in the lateral head.'
+              : 'Stay upright to keep the load on the triceps. Full range of motion - lockout at the top, full stretch at the bottom. These are an excellent mass builder to close out the week.',
           },
           // ── FOREARMS ──
           {
@@ -560,7 +560,7 @@ export const bodybuilding_pro: Program = {
             restTimeSeconds: isolationRest,
             additionalHeader: 'Core Finisher',
             additionalDescription:
-              "Actively pull your elbows toward your toes — don't just 'hold' the plank. Squeeze your glutes and quads to create total body tension. This closes out the training week with foundational bracing work.",
+              "Actively pull your elbows toward your toes - don't just 'hold' the plank. Squeeze your glutes and quads to create total body tension. This closes out the training week with foundational bracing work.",
           },
         ],
       },

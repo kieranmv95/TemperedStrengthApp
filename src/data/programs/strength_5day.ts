@@ -32,8 +32,8 @@ export const strength_5day: Program = {
 
     return [
       // ─────────────────────────────────────────────
-      // DAY 1 — Chest & Back (Heavy)
-      // Push/pull pairing. No changes needed — well balanced.
+      // DAY 1 - Chest & Back (Heavy)
+      // Push/pull pairing. No changes needed - well balanced.
       // ─────────────────────────────────────────────
       {
         dayIndex: week * 7 + 0,
@@ -83,7 +83,7 @@ export const strength_5day: Program = {
       },
 
       // ─────────────────────────────────────────────
-      // DAY 2 — Lower Body (Squat focus)
+      // DAY 2 - Lower Body (Squat focus)
       // ─────────────────────────────────────────────
       {
         dayIndex: week * 7 + 1,
@@ -137,7 +137,7 @@ export const strength_5day: Program = {
       },
 
       // ─────────────────────────────────────────────
-      // DAY 3 — Shoulders & Arms
+      // DAY 3 - Shoulders & Arms
       // FIX: Added Face Pulls before arm work to address the lack of any
       // rear delt / pulling movement. A purely push-dominant shoulder day
       // over 6 weeks creates imbalance and impingement risk.
@@ -172,7 +172,7 @@ export const strength_5day: Program = {
           },
           {
             type: 'exercise',
-            id: 35, // Face Pulls — ADDED for rear delt health and push/pull balance
+            id: 35, // Face Pulls - ADDED for rear delt health and push/pull balance
             sets: 3,
             repRange: [15, 20],
             restTimeSeconds: 60,
@@ -202,7 +202,7 @@ export const strength_5day: Program = {
       },
 
       // ─────────────────────────────────────────────
-      // DAY 4 — Lower Body (Deadlift focus)
+      // DAY 4 - Lower Body (Deadlift focus)
       // FIX 1: Deadlift repRange now uses the `reps` variable so it
       //         scales through Volume → Strength → Peak like every other
       //         compound. Previously hardcoded to [3, 5] all 6 weeks.
@@ -223,11 +223,11 @@ export const strength_5day: Program = {
             type: 'exercise',
             id: 14, // Barbell Deadlift
             sets: 3,
-            repRange: reps, // FIX: was hardcoded [3, 5] — now scales with phase
+            repRange: reps, // FIX: was hardcoded [3, 5] - now scales with phase
             restTimeSeconds: 180,
             additionalHeader: 'Max Pull',
             additionalDescription:
-              'Wedge your hips close to the bar. Pull the slack out before the lift. This is a technical lift—reset your position for every single rep.',
+              'Wedge your hips close to the bar. Pull the slack out before the lift. This is a technical lift - reset your position for every single rep.',
           },
           {
             type: 'exercise',
@@ -249,7 +249,7 @@ export const strength_5day: Program = {
           },
           {
             type: 'exercise',
-            id: 31, // Hanging Leg Raise — REPLACED Cable Crunches
+            id: 31, // Hanging Leg Raise - REPLACED Cable Crunches
             sets: 3,
             repRange: [10, 15],
             restTimeSeconds: 60,
@@ -260,14 +260,14 @@ export const strength_5day: Program = {
       },
 
       // ─────────────────────────────────────────────
-      // DAY 5 — Upper Body Hypertrophy
+      // DAY 5 - Upper Body Hypertrophy
       // FIX 1: Reverse Flyes replaced with Face Pulls (id: 35). Reverse Flyes
       //         now live on the Shoulder day (Day 3) where rear delt work
       //         belongs. Face Pulls are better suited here for joint health
       //         after a week of heavy pressing, and fit the pump/hypertrophy
       //         theme.
       // FIX 2: Dumbbell Bicep Curls (id: 32) added. An "Upper Hypertrophy"
-      //         day with no direct bicep work was a clear gap — the pull
+      //         day with no direct bicep work was a clear gap - the pull
       //         movements (Lat Pulldown, Dips) don't provide enough isolation
       //         volume for hypertrophy goals.
       // ─────────────────────────────────────────────
@@ -286,7 +286,7 @@ export const strength_5day: Program = {
             repRange: [10, 12],
             restTimeSeconds: 90,
             additionalDescription:
-              'Focus on the inner chest squeeze. Do not touch the dumbbells together at the top—keep the tension on the muscle.',
+              'Focus on the inner chest squeeze. Do not touch the dumbbells together at the top - keep the tension on the muscle.',
           },
           {
             type: 'exercise',
@@ -309,7 +309,7 @@ export const strength_5day: Program = {
           },
           {
             type: 'exercise',
-            id: 35, // Face Pulls — REPLACED Reverse Flyes
+            id: 35, // Face Pulls - REPLACED Reverse Flyes
             sets: 3,
             repRange: [15, 20],
             restTimeSeconds: 60,
@@ -318,12 +318,12 @@ export const strength_5day: Program = {
           },
           {
             type: 'exercise',
-            id: 32, // Dumbbell Bicep Curls — ADDED
+            id: 32, // Dumbbell Bicep Curls - ADDED
             sets: 3,
             repRange: [10, 15],
             restTimeSeconds: 60,
             additionalDescription:
-              'Supinate the wrist at the top of each rep to fully contract the bicep. Keep your elbows pinned to your sides — no swinging.',
+              'Supinate the wrist at the top of each rep to fully contract the bicep. Keep your elbows pinned to your sides - no swinging.',
           },
         ],
       },

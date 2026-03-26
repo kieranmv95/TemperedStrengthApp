@@ -84,7 +84,7 @@ export const glossary: GlossaryTerm[] = [
     id: 'term_012',
     term: 'Macros',
     definition:
-      'Short for macronutrients: protein, carbs, and fats. The three main types of nutrients your body needs in large amounts. Tracking them helps optimize your diet.',
+      'Short for macronutrients: protein, carbs, and fats. The three main types of nutrients your body needs in large amounts. Tracking them helps optimise your diet.',
     category: 'Nutrition',
   },
   {
@@ -182,7 +182,7 @@ export const glossary: GlossaryTerm[] = [
     id: 'term_026',
     term: 'For Time',
     definition:
-      "A workout format where you complete a fixed amount of work as fast as possible. Your score is how long it took. For example: '5 rounds of 10 burpees and 10 squats for time' — the clock runs until you finish your last rep.",
+      "A workout format where you complete a fixed amount of work as fast as possible. Your score is how long it took. For example: '5 rounds of 10 burpees and 10 squats for time' - the clock runs until you finish your last rep.",
     category: 'Training',
   },
   {
@@ -231,7 +231,7 @@ export const glossary: GlossaryTerm[] = [
     id: 'term_033',
     term: 'Progressive Overload',
     definition:
-      'Gradually increasing the demand placed on your body over time — by adding weight, reps, sets, or reducing rest. The fundamental principle behind every training program. Without it, your body adapts and stops changing.',
+      'Gradually increasing the demand placed on your body over time - by adding weight, reps, sets, or reducing rest. The fundamental principle behind every training program. Without it, your body adapts and stops changing.',
     category: 'Training',
   },
   {
@@ -273,14 +273,14 @@ export const glossary: GlossaryTerm[] = [
     id: 'term_039',
     term: 'Posterior Chain',
     definition:
-      'The group of muscles running along the back of your body — primarily the glutes, hamstrings, and spinal erectors. These muscles are responsible for hip extension, posture, and generating force in pulling and hinging movements like deadlifts and Romanian deadlifts.',
+      'The group of muscles running along the back of your body - primarily the glutes, hamstrings, and spinal erectors. These muscles are responsible for hip extension, posture, and generating force in pulling and hinging movements like deadlifts and Romanian deadlifts.',
     category: 'Movements',
   },
   {
     id: 'term_040',
     term: 'Front Rack',
     definition:
-      'The position where a barbell rests across the front of your shoulders, supported by your fingertips with elbows held high. Used in the Clean & Jerk and Front Squat. A correct front rack requires wrist and shoulder mobility — if your elbows drop, the bar rolls forward and the lift breaks down.',
+      'The position where a barbell rests across the front of your shoulders, supported by your fingertips with elbows held high. Used in the Clean & Jerk and Front Squat. A correct front rack requires wrist and shoulder mobility - if your elbows drop, the bar rolls forward and the lift breaks down.',
     category: 'Movements',
   },
   {
@@ -294,14 +294,14 @@ export const glossary: GlossaryTerm[] = [
     id: 'term_042',
     term: 'Periodisation',
     definition:
-      'The structured organisation of training across time into phases — each with a specific goal like building volume, increasing intensity, or peaking for a test. Prevents plateaus by systematically varying the stimulus. Most serious programs are periodised across weeks or months.',
+      'The structured organisation of training across time into phases - each with a specific goal like building volume, increasing intensity, or peaking for a test. Prevents plateaus by systematically varying the stimulus. Most serious programs are periodised across weeks or months.',
     category: 'Training',
   },
   {
     id: 'term_043',
     term: 'Plateau',
     definition:
-      'A point where your progress stalls despite continued training. Usually caused by the body adapting to the same stimulus. Overcome by changing variables like exercise selection, rep ranges, volume, or rest periods — which is why programs are designed to rotate these over time.',
+      'A point where your progress stalls despite continued training. Usually caused by the body adapting to the same stimulus. Overcome by changing variables like exercise selection, rep ranges, volume, or rest periods - which is why programs are designed to rotate these over time.',
     category: 'Training',
   },
 ];

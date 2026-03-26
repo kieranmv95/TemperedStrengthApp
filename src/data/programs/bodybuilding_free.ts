@@ -25,7 +25,7 @@ export const legs_warmup: Warmup = {
 };
 
 // ─────────────────────────────────────────────────────────
-// TRADITIONAL BODYBUILDING — 3 DAY SPLIT
+// TRADITIONAL BODYBUILDING - 3 DAY SPLIT
 // Structure: Chest & Triceps | Back & Biceps | Legs & Shoulders
 // 4 Weeks | Mon / Wed / Fri | 60 min sessions
 // ─────────────────────────────────────────────────────────
@@ -42,13 +42,13 @@ export const bodybuilding_free: Program = {
     // Intensity trends upward across the block
     const intensity = week < 2 ? 7 : 8;
 
-    // Rep ranges taper in weeks 3–4 — same weight target, fewer reps = heavier load
+    // Rep ranges taper in weeks 3–4 - same weight target, fewer reps = heavier load
     const compoundReps: [number, number] = week < 2 ? [10, 12] : [8, 10];
     const accessoryReps: [number, number] = week < 2 ? [12, 15] : [10, 12];
 
     return [
       // ─────────────────────────────────────────────
-      // DAY 1 — Chest & Triceps (Monday)
+      // DAY 1 - Chest & Triceps (Monday)
       // Primary: Horizontal push compounds, pec isolation, tricep isolation
       // Balance: Reverse Flyes close the session to protect the shoulder joint
       //          after a full day of pressing volume.
@@ -83,7 +83,7 @@ export const bodybuilding_free: Program = {
             repRange: compoundReps,
             restTimeSeconds: 120,
             additionalDescription:
-              'Use a 30–45° incline to target the upper chest. Control the weight on the descent — the stretch under load is where upper chest growth happens.',
+              'Use a 30–45° incline to target the upper chest. Control the weight on the descent - the stretch under load is where upper chest growth happens.',
           },
           {
             type: 'exercise',
@@ -93,7 +93,7 @@ export const bodybuilding_free: Program = {
             restTimeSeconds: 60,
             additionalHeader: 'Constant Tension',
             additionalDescription:
-              'Do not lock out at the top — keep the tension on the pecs throughout. Think about trying to wrap your arms around a barrel. Squeeze for a full second at peak contraction.',
+              'Do not lock out at the top - keep the tension on the pecs throughout. Think about trying to wrap your arms around a barrel. Squeeze for a full second at peak contraction.',
           },
           {
             type: 'exercise',
@@ -104,7 +104,7 @@ export const bodybuilding_free: Program = {
             additionalHeader: 'Tricep Isolation',
             additionalDescription:
               week % 2 === 0
-                ? "Keep your elbows pointing at the ceiling and tucked close to your ears. Focus on the stretch at the bottom of the movement — don't let them flare out."
+                ? "Keep your elbows pointing at the ceiling and tucked close to your ears. Focus on the stretch at the bottom of the movement - don't let them flare out."
                 : 'Overhead position puts the long head of the tricep in a fully stretched position. Keep your elbows pointing straight up and avoid letting them flare forward.',
           },
           {
@@ -115,18 +115,18 @@ export const bodybuilding_free: Program = {
             restTimeSeconds: 60,
             additionalHeader: 'Shoulder Health',
             additionalDescription:
-              'Use light weight — this is prehab, not a strength exercise. Lead with the elbows and stop at shoulder height. This directly counteracts the anterior shoulder load from all the pressing work today.',
+              'Use light weight - this is prehab, not a strength exercise. Lead with the elbows and stop at shoulder height. This directly counteracts the anterior shoulder load from all the pressing work today.',
           },
         ],
       },
 
       // ─────────────────────────────────────────────
-      // DAY 2 — Back & Biceps (Wednesday)
+      // DAY 2 - Back & Biceps (Wednesday)
       // Primary: Horizontal + vertical pull compounds, bicep isolation
       // Balance: Full vertical and horizontal pull coverage every week
       // Variation: Horizontal row alternates barbell (even) / dumbbell (odd)
       //            Vertical pull alternates pull-ups (even) / lat pulldown (odd)
-      // Core: Sit-ups close the session — direct ab volume to finish
+      // Core: Sit-ups close the session - direct ab volume to finish
       //       without adding loading after a pulling-dominant session.
       // ─────────────────────────────────────────────
       {
@@ -148,8 +148,8 @@ export const bodybuilding_free: Program = {
             additionalHeader: 'Back Thickness',
             additionalDescription:
               week % 2 === 0
-                ? "Keep your torso rigid and parallel to the floor. Pull with your elbows — imagine driving them into your back pockets. This builds the mid-back 'thickness' that defines a classic physique."
-                : 'Brace your core against the bench. Pull the dumbbell to your hip, not your armpit — this keeps the lat engaged rather than the rear delt doing the work.',
+                ? "Keep your torso rigid and parallel to the floor. Pull with your elbows - imagine driving them into your back pockets. This builds the mid-back 'thickness' that defines a classic physique."
+                : 'Brace your core against the bench. Pull the dumbbell to your hip, not your armpit - this keeps the lat engaged rather than the rear delt doing the work.',
           },
           {
             type: 'exercise',
@@ -161,8 +161,8 @@ export const bodybuilding_free: Program = {
             additionalHeader: 'Lat Width',
             additionalDescription:
               week % 2 === 0
-                ? "Pull your chest to the bar — not just your chin. Think about 'putting your shoulder blades in your back pockets' at the top of every rep."
-                : 'Lean back slightly and pull the bar to your upper chest. Drive your elbows down and back — focus on the lats doing the work, not the biceps.',
+                ? "Pull your chest to the bar - not just your chin. Think about 'putting your shoulder blades in your back pockets' at the top of every rep."
+                : 'Lean back slightly and pull the bar to your upper chest. Drive your elbows down and back - focus on the lats doing the work, not the biceps.',
           },
           {
             type: 'exercise',
@@ -183,8 +183,8 @@ export const bodybuilding_free: Program = {
             additionalHeader: 'Bicep Isolation',
             additionalDescription:
               week % 2 === 0
-                ? 'Supinate (rotate) your wrist at the top of each rep to fully contract the bicep peak. Keep your elbows pinned — no swinging.'
-                : 'The preacher bench eliminates all momentum. Focus on the full stretch at the bottom — resisting the urge to bounce out of the bottom position is where the growth happens.',
+                ? 'Supinate (rotate) your wrist at the top of each rep to fully contract the bicep peak. Keep your elbows pinned - no swinging.'
+                : 'The preacher bench eliminates all momentum. Focus on the full stretch at the bottom - resisting the urge to bounce out of the bottom position is where the growth happens.',
           },
           {
             type: 'exercise',
@@ -200,7 +200,7 @@ export const bodybuilding_free: Program = {
       },
 
       // ─────────────────────────────────────────────
-      // DAY 3 — Legs & Shoulders (Friday)
+      // DAY 3 - Legs & Shoulders (Friday)
       // Primary: Knee dominant compound, hip hinge, quad + hamstring isolation,
       //          vertical push, lateral isolation
       // Balance: Quad and hamstring isolation alternate weeks to ensure
@@ -229,8 +229,8 @@ export const bodybuilding_free: Program = {
             additionalHeader: week % 2 === 0 ? 'King of Legs' : 'Quad Drive',
             additionalDescription:
               week % 2 === 0
-                ? "Sit back and down — keep your chest proud throughout. In the bottom position, your thighs should be at least parallel. Drive the floor away on the ascent, not just 'stand up'."
-                : "Feet shoulder-width apart in the middle of the platform. Don't let your lower back peel off the seat at the bottom — control the depth.",
+                ? "Sit back and down - keep your chest proud throughout. In the bottom position, your thighs should be at least parallel. Drive the floor away on the ascent, not just 'stand up'."
+                : "Feet shoulder-width apart in the middle of the platform. Don't let your lower back peel off the seat at the bottom - control the depth.",
           },
           {
             type: 'exercise',
@@ -253,7 +253,7 @@ export const bodybuilding_free: Program = {
             additionalDescription:
               week % 2 === 0
                 ? 'Pause for a full second at the top with legs fully extended. This peak contraction maximises rectus femoris activation.'
-                : 'Control the descent — do not let the weight stack slam at the bottom. Maintain tension on the hamstrings through the full range of motion.',
+                : 'Control the descent - do not let the weight stack slam at the bottom. Maintain tension on the hamstrings through the full range of motion.',
           },
           {
             type: 'exercise',
@@ -265,8 +265,8 @@ export const bodybuilding_free: Program = {
               week % 2 === 0 ? 'Strict Press' : 'Shoulder Press',
             additionalDescription:
               week % 2 === 0
-                ? 'No leg drive. Squeeze your glutes and brace your core to create a rigid base. Press the bar vertically — pull your head back slightly as it passes your face, then push your head through at the top.'
-                : 'Press the dumbbells up in a slight arc so they nearly touch at the top. Avoid using momentum — full range of motion from just above shoulder height to full lockout.',
+                ? 'No leg drive. Squeeze your glutes and brace your core to create a rigid base. Press the bar vertically - pull your head back slightly as it passes your face, then push your head through at the top.'
+                : 'Press the dumbbells up in a slight arc so they nearly touch at the top. Avoid using momentum - full range of motion from just above shoulder height to full lockout.',
           },
           {
             type: 'exercise',
@@ -276,7 +276,7 @@ export const bodybuilding_free: Program = {
             restTimeSeconds: 60,
             canSwap: true,
             additionalDescription:
-              "Lead with the elbows — think about trying to touch the side walls rather than lifting the weight 'up.' Stop slightly above shoulder height. Use lighter weight than feels necessary.",
+              "Lead with the elbows - think about trying to touch the side walls rather than lifting the weight 'up.' Stop slightly above shoulder height. Use lighter weight than feels necessary.",
           },
           {
             type: 'exercise',

@@ -22,7 +22,7 @@ export const olympic_foundations: Program = {
 
     return [
       // ─────────────────────────────────────────────
-      // DAY 1 — Snatch Focus (Monday)
+      // DAY 1 - Snatch Focus (Monday)
       // FIX 1: Overhead Squat moved to first exercise (after warmup).
       //         Positional/stability drills must come before the partial
       //         movement (Hang Snatch), not after. The original order had
@@ -30,7 +30,7 @@ export const olympic_foundations: Program = {
       // FIX 2: Overhead Squat reduced from 5×5 to 3×3. 5×5 OHS before
       //         Hang Snatches and High Pulls over-fatigues shoulder
       //         stabilisers. In a technical foundations program, OHS
-      //         serves as a positional primer — 3×3 is the correct volume.
+      //         serves as a positional primer - 3×3 is the correct volume.
       // ─────────────────────────────────────────────
       {
         dayIndex: week * 7 + 0,
@@ -42,13 +42,13 @@ export const olympic_foundations: Program = {
           standard_warmup,
           {
             type: 'exercise',
-            id: 61, // Overhead Squat — MOVED to first, REDUCED to 3×3
+            id: 61, // Overhead Squat - MOVED to first, REDUCED to 3×3
             sets: 3,
             repRange: [3, 3],
             restTimeSeconds: 90,
             additionalHeader: 'Positional Primer',
             additionalDescription:
-              "Open every Snatch session here. The goal is total overhead rigidity — keep your elbows locked and 'push' the ceiling away. Lower slowly to groove the bottom position before you load it with speed.",
+              "Open every Snatch session here. The goal is total overhead rigidity - keep your elbows locked and 'push' the ceiling away. Lower slowly to groove the bottom position before you load it with speed.",
           },
           {
             type: 'exercise',
@@ -83,10 +83,10 @@ export const olympic_foundations: Program = {
       },
 
       // ─────────────────────────────────────────────
-      // DAY 2 — Clean & Jerk Focus (Wednesday)
+      // DAY 2 - Clean & Jerk Focus (Wednesday)
       // FIX 1: Intensity bumped to baseIntensity + 1. The Clean & Jerk
       //         is a two-movement lift requiring the highest technical and
-      //         physical demand of any session — it should reflect that.
+      //         physical demand of any session - it should reflect that.
       // FIX 2: Seated Cable Row added after Front Squat. Day 2 had no
       //         horizontal pull or back reinforcement at all. Upper back
       //         and lat strength are critical for maintaining the front rack
@@ -130,7 +130,7 @@ export const olympic_foundations: Program = {
           },
           {
             type: 'exercise',
-            id: 30, // Seated Cable Row — ADDED for back/front rack support
+            id: 30, // Seated Cable Row - ADDED for back/front rack support
             sets: 3,
             repRange: [10, 12],
             restTimeSeconds: 90,
@@ -151,23 +151,23 @@ export const olympic_foundations: Program = {
       },
 
       // ─────────────────────────────────────────────
-      // DAY 3 — Full Classic Lifts (Friday)
+      // DAY 3 - Full Classic Lifts (Friday)
       // FIX 1: Barbell Deadlift (id: 14) replaced with Clean High Pull (id: 69).
       //         The original labelled the deadlift as a "Clean Pull Variation"
       //         and described it as mimicking the first pull of a clean. That
-      //         is precisely what the Clean High Pull is — it exists in the DB
+      //         is precisely what the Clean High Pull is - it exists in the DB
       //         for this exact purpose and carries the correct pattern, muscle
       //         tagging, and bar path intent.
       // FIX 2: AMRAP Dips replaced with Good Mornings (id: 42). Day 3 is the
       //         most technically demanding session of the week. Finishing with
-      //         AMRAP chest/tricep work is a poor fit — it adds fatigue that
+      //         AMRAP chest/tricep work is a poor fit - it adds fatigue that
       //         carries into Monday's Snatch session. Good Mornings directly
       //         reinforce the hip hinge mechanics practised all session and
       //         strengthen the posterior chain that drives the first pull.
       // FIX 3: Testing week intensity fixed to 10. The original logic set
       //         week 4 (testing) to intensity 9, while week 3's Day 3 was
       //         also 9 (baseIntensity 8 + 1). Testing week should be the
-      //         peak — 10.
+      //         peak - 10.
       // ─────────────────────────────────────────────
       {
         dayIndex: week * 7 + 4,
@@ -200,23 +200,23 @@ export const olympic_foundations: Program = {
           },
           {
             type: 'exercise',
-            id: 69, // Clean High Pull — REPLACED Barbell Deadlift
+            id: 69, // Clean High Pull - REPLACED Barbell Deadlift
             sets: 3,
             repRange: [3, 5],
             restTimeSeconds: 120,
             additionalHeader: 'Clean Pull Accessory',
             additionalDescription:
-              'Use a clean grip and focus on triple extension — ankles, knees, and hips firing in sequence. This directly reinforces the first and second pull mechanics from your clean work earlier in the session. Keep the bar close and pull the elbows high.',
+              'Use a clean grip and focus on triple extension - ankles, knees, and hips firing in sequence. This directly reinforces the first and second pull mechanics from your clean work earlier in the session. Keep the bar close and pull the elbows high.',
           },
           {
             type: 'exercise',
-            id: 42, // Good Mornings — REPLACED AMRAP Dips
+            id: 42, // Good Mornings - REPLACED AMRAP Dips
             sets: 3,
             repRange: [8, 10],
             restTimeSeconds: 90,
             additionalHeader: 'Posterior Chain Finisher',
             additionalDescription:
-              'Keep a slight bend in the knees and hinge from the hips — not the lower back. This strengthens the hamstrings and spinal erectors that power your first pull off the floor. Use light-to-moderate weight and focus on feeling the hamstring stretch at the bottom.',
+              'Keep a slight bend in the knees and hinge from the hips - not the lower back. This strengthens the hamstrings and spinal erectors that power your first pull off the floor. Use light-to-moderate weight and focus on feeling the hamstring stretch at the bottom.',
           },
         ],
       },

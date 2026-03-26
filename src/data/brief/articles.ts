@@ -31,7 +31,7 @@ export const articles: Article[] = [
     Better technique means more muscle activation and safer progression. A deeper squat or longer range of motion increases the difficulty without adding weight.
     
     ### 6. Increase Range of Motion
-    Performing exercises through a greater range of motion increases time under tension and muscle fiber recruitment. For example, going deeper in squats or achieving full extension in presses.
+    Performing exercises through a greater range of motion increases time under tension and muscle fibre recruitment. For example, going deeper in squats or achieving full extension in presses.
     
     ### 7. Increase Training Frequency
     Adding an extra session per week increases weekly volume, which is a form of progressive overload for intermediate to advanced lifters.
@@ -70,7 +70,7 @@ export const articles: Article[] = [
     
     ## Meal Frequency
     
-    Spreading protein across 3-5 meals throughout the day (roughly every 3-4 hours) appears optimal for muscle protein synthesis. Each meal should contain 20-40g of protein to maximize the muscle-building response. This is more important than timing relative to workouts.
+    Spreading protein across 3-5 meals throughout the day (roughly every 3-4 hours) appears optimal for muscle protein synthesis. Each meal should contain 20-40g of protein to maximise the muscle-building response. This is more important than timing relative to workouts.
     
     ## Pre-Workout vs. Post-Workout
     
@@ -82,7 +82,7 @@ export const articles: Article[] = [
     2. Spread protein across 3-5 meals for optimal muscle protein synthesis
     3. Don't stress about the exact minute you eat – the window is wide
     4. Pre-workout nutrition > post-workout for most people
-    5. If training fasted, prioritize post-workout protein
+    5. If training fasted, prioritise post-workout protein
     6. Consistency beats perfection – missing one post-workout meal won't derail your progress`,
   },
   {
@@ -110,7 +110,7 @@ export const articles: Article[] = [
     
     Research shows that even one night of poor sleep (less than 6 hours) can reduce strength output by 5-10%. Chronic sleep deprivation (less than 7 hours regularly) increases injury risk, impairs recovery, and reduces training adaptations. Your body doesn't adapt to less sleep – it just performs worse.
     
-    ## Sleep Optimization Tips
+    ## Sleep Optimisation Tips
     
     1. **Consistent Schedule**: Same bed/wake times, even on weekends. Your circadian rhythm thrives on consistency.
     2. **Cool Room**: 18-20°C is optimal for sleep quality. Your body temperature naturally drops during sleep.
@@ -126,7 +126,7 @@ export const articles: Article[] = [
     
     ## The Bottom Line
     
-    8 hours of quality sleep will do more for your performance than any legal supplement. Prioritize it. Treat sleep as seriously as you treat your training and nutrition.`,
+    8 hours of quality sleep will do more for your performance than any legal supplement. Prioritise it. Treat sleep as seriously as you treat your training and nutrition.`,
   },
   {
     id: 'article_004',
@@ -160,7 +160,7 @@ export const articles: Article[] = [
     
     ## Visualization
     
-    Mental rehearsal is used by elite athletes. Before your set, close your eyes and visualize:
+    Mental rehearsal is used by elite athletes. Before your set, close your eyes and visualise:
     1. Your setup position
     2. The movement pattern
     3. A successful completion
@@ -176,7 +176,7 @@ export const articles: Article[] = [
     
     Before your next heavy set:
     1. Take 3 deep breaths using box breathing
-    2. Visualize a successful lift in detail
+    2. Visualise a successful lift in detail
     3. Use a cue word or phrase ("drive," "explosive," "smooth")
     4. Execute with full commitment – no hesitation
     
@@ -190,7 +190,7 @@ export const articles: Article[] = [
     readTime: 4,
     image:
       'https://plus.unsplash.com/premium_photo-1661374894884-52d7f260cd97?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    content: `Squatting deep isn't just for show—it engages more muscle fibers and ensures better joint health. Research shows that deeper squats (below parallel) activate significantly more muscle mass in the quadriceps, glutes, and adductors compared to partial squats.
+    content: `Squatting deep isn't just for show - it engages more muscle fibres and ensures better joint health. Research shows that deeper squats (below parallel) activate significantly more muscle mass in the quadriceps, glutes, and adductors compared to partial squats.
     
     ## Common Mobility Issues
     
@@ -276,7 +276,7 @@ export const articles: Article[] = [
     
     Passive rest is necessary when:
     - You show signs of overtraining (elevated resting heart rate, persistent fatigue, poor sleep)
-    - You have a localized injury or pain (not just soreness)
+    - You have a localised injury or pain (not just soreness)
     - You are mentally burnt out or experiencing training apathy
     - You've had multiple consecutive high-intensity sessions
     - You're experiencing systemic fatigue that doesn't improve with sleep
@@ -318,7 +318,7 @@ export const articles: Article[] = [
     
     ## Signs of Dehydration
     
-    Learn to recognize early warning signs:
+    Learn to recognise early warning signs:
     - Dark yellow urine (should be pale yellow)
     - Thirst (you're already 1-2% dehydrated when you feel thirsty)
     - Fatigue or decreased energy
@@ -329,7 +329,7 @@ export const articles: Article[] = [
     
     ## Daily Hydration Needs
     
-    The general recommendation is 30-35ml per kg of bodyweight per day. For a 70kg person, that's approximately 2.1-2.5 liters. However, this increases significantly with training.
+    The general recommendation is 30-35ml per kg of bodyweight per day. For a 70kg person, that's approximately 2.1-2.5 litres. However, this increases significantly with training.
     
     ## Your Daily Protocol
     
@@ -343,18 +343,18 @@ export const articles: Article[] = [
     Aim for 500-750ml of water for every hour of intense exercise. Sip regularly rather than chugging large amounts at once. For sessions longer than 60 minutes, consider a sports drink with electrolytes.
     
     ### 4. Post-Training Rehydration
-    After training, drink 1.5 times the fluid you lost. A simple way to estimate: weigh yourself before and after training. Each kilogram lost equals approximately 1 liter of fluid. Replace this plus 50% more.
+    After training, drink 1.5 times the fluid you lost. A simple way to estimate: weigh yourself before and after training. Each kilogram lost equals approximately 1 litre of fluid. Replace this plus 50% more.
     
     ### 5. Electrolyte Balance
-    If you sweat heavily, ensure you consume sodium and magnesium to maintain muscle contraction quality. Sodium is the primary electrolyte lost in sweat. For heavy sweaters or long sessions, add 500-700mg of sodium per liter of water. Magnesium and potassium are also important but typically less critical unless training in extreme heat.
+    If you sweat heavily, ensure you consume sodium and magnesium to maintain muscle contraction quality. Sodium is the primary electrolyte lost in sweat. For heavy sweaters or long sessions, add 500-700mg of sodium per litre of water. Magnesium and potassium are also important but typically less critical unless training in extreme heat.
     
     ## Monitoring Hydration
     
-    The simplest method: check your urine color. Pale yellow to clear indicates good hydration. Dark yellow or amber means you need more fluids. Weigh yourself daily at the same time (morning, after bathroom, before eating) to track baseline hydration.
+    The simplest method: check your urine colour. Pale yellow to clear indicates good hydration. Dark yellow or amber means you need more fluids. Weigh yourself daily at the same time (morning, after bathroom, before eating) to track baseline hydration.
     
     ## Special Considerations
     
-    - **Hot Environments**: Increase fluid intake by 50-100%. You may need 1-1.5 liters per hour in extreme heat.
+    - **Hot Environments**: Increase fluid intake by 50-100%. You may need 1-1.5 litres per hour in extreme heat.
     - **High Altitude**: You lose more water through respiration at altitude. Increase intake by 25-50%.
     - **Caffeine**: Moderate caffeine (1-2 cups) doesn't significantly dehydrate, but excessive amounts can have a diuretic effect.
     - **Alcohol**: Alcohol is a diuretic. If you drink, increase water intake accordingly.
@@ -375,7 +375,7 @@ export const articles: Article[] = [
     ## The Setup Checklist
     
     ### 1. The Stance
-    Feet hip-width apart (typically shoulder-width or slightly narrower). The bar should be over the mid-foot—about an inch from your shins. Your toes can point straight ahead or slightly outward (5-15 degrees). Find what feels natural and allows your knees to track properly.
+    Feet hip-width apart (typically shoulder-width or slightly narrower). The bar should be over the mid-foot - about an inch from your shins. Your toes can point straight ahead or slightly outward (5-15 degrees). Find what feels natural and allows your knees to track properly.
     
     ### 2. The Grip
     Hinge at the hips and grip the bar just outside your legs. Use a double overhand grip for lighter weights, mixed grip (one over, one under) for heavy singles. Do not move the bar once you've gripped it. The bar should be directly over the middle of your foot.
@@ -450,7 +450,7 @@ export const articles: Article[] = [
     
     ### Stack Your Habits
     
-    Link your training to an existing habit. For example: "After I have my morning coffee, I'll do my workout." This creates a trigger that makes the behavior automatic.
+    Link your training to an existing habit. For example: "After I have my morning coffee, I'll do my workout." This creates a trigger that makes the behaviour automatic.
     
     ### Make It Obvious
     
@@ -482,7 +482,7 @@ export const articles: Article[] = [
     
     ## The Identity Shift
     
-    Instead of "I'm trying to get stronger," adopt the identity "I'm someone who trains consistently." Your identity shapes your behavior. When training becomes part of who you are, not just something you do, consistency becomes natural.
+    Instead of "I'm trying to get stronger," adopt the identity "I'm someone who trains consistently." Your identity shapes your behaviour. When training becomes part of who you are, not just something you do, consistency becomes natural.
     
     Success is simply the result of average work repeated daily without quitting. Show up, do the work, trust the process. The results will come.`,
   },
@@ -533,7 +533,7 @@ export const articles: Article[] = [
     
     - **Raise**: Increase body temperature with 5-10 minutes of light cardio (bike, rower, light jog). You should break a light sweat.
     - **Activate**: Use low-intensity movements to "wake up" the muscles you'll be using. Examples: glute bridges, band pull-aparts, leg swings, arm circles.
-    - **Mobilize**: Move your joints through the required range of motion. Perform the movements you'll be training, but with lighter load or bodyweight.
+    - **Mobilise**: Move your joints through the required range of motion. Perform the movements you'll be training, but with lighter load or bodyweight.
     - **Potentiate**: Perform 1-2 light sets of your first exercise before working sets. This primes your nervous system.
     
     ## Recovery as Prevention
@@ -576,7 +576,7 @@ export const articles: Article[] = [
     
     Spend 10-15 minutes daily on prehab work. This is an investment that pays dividends in training longevity.
     
-    Longevity is the ultimate gain. You can't build muscle if you're stuck on the physio's table. Train smart, listen to your body, and prioritize movement quality. The strongest lifters are those who can still lift in their 40s, 50s, and beyond.`,
+    Longevity is the ultimate gain. You can't build muscle if you're stuck on the physio's table. Train smart, listen to your body, and prioritise movement quality. The strongest lifters are those who can still lift in their 40s, 50s, and beyond.`,
   },
 
   // ─────────────────────────────────────────────────────────
@@ -658,7 +658,7 @@ export const articles: Article[] = [
     Stand with your feet roughly shoulder-width apart, toes pointed out between 15 and 30 degrees. Your exact stance is determined by your hip anatomy – there is no universal correct answer. The right stance for you is the one that allows you to reach depth comfortably without your knees caving or your lower back rounding.
     
     ### Grip and Elbows
-    Your hands on the bar are there to stabilize it, not to carry it. Grip it firmly, pull your elbows down and slightly forward to create upper back tightness. This tension keeps the bar locked in place and prevents it rolling.
+    Your hands on the bar are there to stabilise it, not to carry it. Grip it firmly, pull your elbows down and slightly forward to create upper back tightness. This tension keeps the bar locked in place and prevents it rolling.
     
     ## The Descent
     
@@ -745,7 +745,7 @@ export const articles: Article[] = [
   {
     id: 'article_014',
     title: 'How to Choose Your Training Split',
-    subtitle: 'Full body, PPL, upper/lower — which structure is right for you?',
+    subtitle: 'Full body, PPL, upper/lower - which structure is right for you?',
     category: 'Methodology',
     readTime: 4,
     image: 'https://images.unsplash.com/photo-1581009137042-c552e485697a?w=800',

@@ -18,13 +18,13 @@ export const ppl_01: Program = {
   isPro: false,
   name: '3 Day Split',
   description:
-    '4-Week Hypertrophy block. Rotates intensity and exercise variations to maximize muscle fiber recruitment.',
+    '4-Week Hypertrophy block. Rotates intensity and exercise variations to maximise muscle fibre recruitment.',
   daysSplit: ['mon', 'wed', 'fri'],
   averageSessionDuration: '60 min',
   workouts: Array.from({ length: 4 }).flatMap((_, week) => {
     // FIX: Intensity now trends upward (7→7→8→8) rather than oscillating
     // (7→8→7→8). The barbell/dumbbell variation already provides the weekly
-    // contrast — intensity should reflect genuine progression, not yo-yo.
+    // contrast - intensity should reflect genuine progression, not yo-yo.
     const pushPullIntensity = week < 2 ? 7 : 8;
 
     return [
@@ -32,7 +32,7 @@ export const ppl_01: Program = {
       // PUSH DAY (Monday)
       // FIX 1: Shoulder press now alternates between Barbell OHP (even weeks,
       //         id: 26) and DB Shoulder Press (odd weeks, id: 27) at [8, 10]
-      //         with 120s rest — giving it proper compound weight rather than
+      //         with 120s rest - giving it proper compound weight rather than
       //         treating it as a light accessory at [10, 12] / 60s.
       // FIX 2: Tricep Pushdowns alternate with Reverse Flyes (id: 56) on odd
       //         weeks. 4 weeks of heavy pressing with no direct rear delt
@@ -64,11 +64,11 @@ export const ppl_01: Program = {
           {
             type: 'exercise',
             // FIX: Shoulder press now alternates and carries proper compound weight.
-            // Even weeks: Barbell OHP — strict, heavier vertical push.
-            // Odd weeks: DB Shoulder Press — natural arc, unilateral stability.
+            // Even weeks: Barbell OHP - strict, heavier vertical push.
+            // Odd weeks: DB Shoulder Press - natural arc, unilateral stability.
             id: week % 2 === 0 ? 26 : 27,
             sets: 3,
-            repRange: [8, 10], // FIX: was [10, 12] at 60s — treated as accessory, not compound
+            repRange: [8, 10], // FIX: was [10, 12] at 60s - treated as accessory, not compound
             restTimeSeconds: 120,
             additionalHeader:
               week % 2 === 0 ? 'Strict Press' : 'Dumbbell Press',
@@ -90,8 +90,8 @@ export const ppl_01: Program = {
           {
             type: 'exercise',
             // FIX: Tricep Pushdowns alternate with Reverse Flyes.
-            // Even weeks: Tricep Pushdowns (id: 33) — tricep isolation finisher.
-            // Odd weeks: Reverse Flyes (id: 56) — rear delt protection on the
+            // Even weeks: Tricep Pushdowns (id: 33) - tricep isolation finisher.
+            // Odd weeks: Reverse Flyes (id: 56) - rear delt protection on the
             // day it's needed most. Face Pulls on Pull day cover rear delts mid-week
             // but with 3 push sessions in 4 weeks, Push day needs its own
             // counterbalance too.
@@ -115,7 +115,7 @@ export const ppl_01: Program = {
       // FIX 1: Intensity now scales with pushPullIntensity (7→7→8→8) instead
       //         of being hardcoded at 7 all 4 weeks. Pull was the only day
       //         that never progressed.
-      // FIX 2: Pull-ups canSwap: true added — non-pro program, broad audience.
+      // FIX 2: Pull-ups canSwap: true added - non-pro program, broad audience.
       // FIX 3: Dumbbell Bicep Curl isAmrap gated to week >= 3. Unconditional
       //         AMRAP from week 1 encourages form breakdown from the first
       //         session. Final two weeks only.
@@ -162,7 +162,7 @@ export const ppl_01: Program = {
             sets: 3,
             repRange: [10, 12],
             restTimeSeconds: 60,
-            isAmrap: week >= 3, // FIX: was unconditional — now gated to final two weeks only
+            isAmrap: week >= 3, // FIX: was unconditional - now gated to final two weeks only
             additionalHeader: 'Bicep Peak',
             additionalDescription:
               'No swinging. Keep your back against a wall or post if you find yourself using your hips to move the weight.',
@@ -174,7 +174,7 @@ export const ppl_01: Program = {
       // LEGS DAY (Friday)
       // FIX 1: Leg Extension (id: 39) now alternates with Leg Curl (id: 40)
       //         on odd weeks. The original had 2 quad movements (squat + leg
-      //         extension) vs 1 hamstring hinge (RDL) — heavily quad-dominant.
+      //         extension) vs 1 hamstring hinge (RDL) - heavily quad-dominant.
       //         Alternating gives both muscle groups direct isolation work
       //         without adding overall volume.
       // FIX 2: RDL "snap forward" cue corrected. That phrase implies lumbar
@@ -208,7 +208,7 @@ export const ppl_01: Program = {
             repRange: [10, 12],
             restTimeSeconds: 120,
             additionalDescription:
-              'Focus on the hinge. Push your hips as far back as possible until you feel a deep stretch in your hamstrings, then drive your hips through to standing and squeeze your glutes at the top.', // FIX: removed "snap forward" — dangerous cue implying lumbar hyperextension
+              'Focus on the hinge. Push your hips as far back as possible until you feel a deep stretch in your hamstrings, then drive your hips through to standing and squeeze your glutes at the top.', // FIX: removed "snap forward" - dangerous cue implying lumbar hyperextension
           },
           {
             type: 'exercise',
@@ -224,8 +224,8 @@ export const ppl_01: Program = {
               week % 2 === 0 ? 'Quad Isolation' : 'Hamstring Isolation',
             additionalDescription:
               week % 2 === 0
-                ? 'Pause for 1 second at the top of each rep with legs fully extended to maximize the contraction of the rectus femoris.'
-                : "Slow and controlled. Do not let the weight stack 'slam' at the bottom — maintain tension on the hamstrings throughout the full range.",
+                ? 'Pause for 1 second at the top of each rep with legs fully extended to maximise the contraction of the rectus femoris.'
+                : "Slow and controlled. Do not let the weight stack 'slam' at the bottom - maintain tension on the hamstrings throughout the full range.",
           },
           {
             type: 'exercise',

@@ -32,7 +32,7 @@ const freeWorkouts: SingleWorkout[] = [
   },
   {
     id: 'f_02',
-    title: 'Death by 10 Meters',
+    title: 'Death by 10 Metres',
     description:
       'An EMOM (Every Minute on the Minute) shuttle test. This starts easy but becomes maximal effort quickly.',
     category: 'Conditioning',
@@ -102,7 +102,7 @@ const freeWorkouts: SingleWorkout[] = [
     id: 'f_05',
     title: 'Leg Day Primer',
     description:
-      'High volume bodyweight leg pump. Keep rest minimal to maximize metabolic stress.',
+      'High volume bodyweight leg pump. Keep rest minimal to maximise metabolic stress.',
     category: 'Strength',
     difficulty: 'Beginner',
     estimatedTime: 25,
@@ -469,7 +469,7 @@ const freeWorkouts: SingleWorkout[] = [
     id: 'f_21',
     title: 'Chest & Triceps',
     description:
-      'A classic push session built around the bench press. Control the descent on every rep — the lowering phase is where the chest work really happens.',
+      'A classic push session built around the bench press. Control the descent on every rep - the lowering phase is where the chest work really happens.',
     category: 'Strength',
     difficulty: 'Intermediate',
     estimatedTime: 50,
@@ -510,7 +510,7 @@ const freeWorkouts: SingleWorkout[] = [
       {
         name: 'Tricep Finisher',
         instructions:
-          'Rest 60s between sets. Keep elbows pinned — only forearms should move.',
+          'Rest 60s between sets. Keep elbows pinned - only forearms should move.',
         movements: [
           {
             name: 'Dips (Bench or Bar)',
@@ -520,7 +520,7 @@ const freeWorkouts: SingleWorkout[] = [
           {
             name: 'Overhead Tricep Extension (DB or Cable)',
             value: '3 x 12',
-            note: 'Full stretch at the bottom — do not rush.',
+            note: 'Full stretch at the bottom - do not rush.',
           },
         ],
       },
@@ -542,7 +542,7 @@ const freeWorkouts: SingleWorkout[] = [
     id: 'f_22',
     title: 'Back & Biceps',
     description:
-      'A pulling session focused on building lat width and mid-back thickness. Think of your hands as hooks — pull with your elbows, not your hands.',
+      'A pulling session focused on building lat width and mid-back thickness. Think of your hands as hooks - pull with your elbows, not your hands.',
     category: 'Strength',
     difficulty: 'Intermediate',
     estimatedTime: 50,
@@ -583,7 +583,7 @@ const freeWorkouts: SingleWorkout[] = [
       {
         name: 'Bicep Finisher',
         instructions:
-          'Rest 60s between sets. No swinging — keep elbows pinned.',
+          'Rest 60s between sets. No swinging - keep elbows pinned.',
         movements: [
           {
             name: 'Dumbbell Bicep Curls',
@@ -726,7 +726,7 @@ const proWorkouts: SingleWorkout[] = [
     id: 'p_03',
     title: 'Metabolic Stress: Row/Thruster',
     description:
-      "A 'couplet' designed to maximize lactate production. This will burn.",
+      "A 'couplet' designed to maximise lactate production. This will burn.",
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 20,
@@ -1127,7 +1127,7 @@ const proWorkouts: SingleWorkout[] = [
           '30s doorway pec stretch each side',
           '10 scapular push-ups',
           '10 band pull-aparts',
-          '1 x 15 empty-bar or very light bench press — focus on bar path',
+          '1 x 15 empty-bar or very light bench press - focus on bar path',
         ],
       },
       {
@@ -1155,14 +1155,14 @@ const proWorkouts: SingleWorkout[] = [
           {
             name: 'Dumbbell Floor Press',
             value: '3 x 10',
-            note: 'No stretch reflex — pure tricep and inner chest tension from a dead stop.',
+            note: 'No stretch reflex - pure tricep and inner chest tension from a dead stop.',
           },
         ],
       },
       {
         name: 'Isolation',
         instructions:
-          'Rest 60s between sets. No lockout — keep constant tension on the pecs.',
+          'Rest 60s between sets. No lockout - keep constant tension on the pecs.',
         movements: [
           {
             name: 'Pec Deck or Cable Flyes',
@@ -1210,7 +1210,7 @@ const proWorkouts: SingleWorkout[] = [
     id: 'p_22',
     title: 'Back Day',
     description:
-      'A complete back session targeting thickness, width, and rear delt health. Pull with your elbows — your hands are just hooks.',
+      'A complete back session targeting thickness, width, and rear delt health. Pull with your elbows - your hands are just hooks.',
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 60,
@@ -1224,7 +1224,7 @@ const proWorkouts: SingleWorkout[] = [
           '30s lat stretch each side',
           '10 band pull-aparts',
           '10 dead bugs (alternating, controlled)',
-          '1 x 10 light dumbbell rows each side — focus on scapular retraction',
+          '1 x 10 light dumbbell rows each side - focus on scapular retraction',
         ],
       },
       {
@@ -1242,7 +1242,7 @@ const proWorkouts: SingleWorkout[] = [
       {
         name: 'Vertical Pull',
         instructions:
-          'Rest 2 mins between sets. Full dead hang at the bottom — every rep.',
+          'Rest 2 mins between sets. Full dead hang at the bottom - every rep.',
         movements: [
           {
             name: 'Weighted Pull-ups or Lat Pulldown',
@@ -1268,13 +1268,13 @@ const proWorkouts: SingleWorkout[] = [
           {
             name: 'T-Bar Row',
             value: '3 x 10',
-            note: 'Chest on the pad. Neutral grip. Pull elbows past your torso — this is where the mid-back really fires.',
+            note: 'Chest on the pad. Neutral grip. Pull elbows past your torso - this is where the mid-back really fires.',
           },
         ],
       },
       {
         name: 'Lat Isolation',
-        instructions: 'Rest 60s. Arms stay straight — this is not a row.',
+        instructions: 'Rest 60s. Arms stay straight - this is not a row.',
         movements: [
           {
             name: 'Straight Arm Pulldown',
@@ -1309,7 +1309,7 @@ const proWorkouts: SingleWorkout[] = [
       {
         name: 'Warmup',
         movements: [
-          '5 mins bike — thorough warm-up for knees and hips',
+          '5 mins bike - thorough warm-up for knees and hips',
           '30s hip flexor stretch each side / 30s pigeon pose each side',
           '10 glute bridges with 2s pause at the top',
           '10 bodyweight squats with controlled tempo',
@@ -1319,12 +1319,12 @@ const proWorkouts: SingleWorkout[] = [
       {
         name: 'Primary Compound',
         instructions:
-          'Rest 2.5–3 mins between sets. This is the most important set of the week — earn it.',
+          'Rest 2.5–3 mins between sets. This is the most important set of the week - earn it.',
         movements: [
           {
             name: 'Barbell Back Squat',
             value: '5 x 5',
-            note: 'Sit back and down. Hip crease below knee. Drive the floor away — do not just stand up.',
+            note: 'Sit back and down. Hip crease below knee. Drive the floor away - do not just stand up.',
           },
         ],
       },
@@ -1361,14 +1361,14 @@ const proWorkouts: SingleWorkout[] = [
           {
             name: 'Lying or Seated Leg Curl',
             value: '3 x 12',
-            note: 'Slow eccentric. Do not let the stack slam at the bottom — maintain hamstring tension throughout.',
+            note: 'Slow eccentric. Do not let the stack slam at the bottom - maintain hamstring tension throughout.',
           },
         ],
       },
       {
         name: 'Calves',
         instructions:
-          'Rest 45s between sets. Full range of motion — all the way up, all the way down.',
+          'Rest 45s between sets. Full range of motion - all the way up, all the way down.',
         movements: [
           {
             name: 'Calf Raises (Machine or Standing)',
@@ -1408,13 +1408,13 @@ const proWorkouts: SingleWorkout[] = [
           '10 arm circles forward / 10 arm circles backward',
           '10 band pull-aparts',
           '10 banded face pulls',
-          '1 x 10 empty-bar overhead press — focus on lockout',
+          '1 x 10 empty-bar overhead press - focus on lockout',
         ],
       },
       {
         name: 'Primary Press',
         instructions:
-          'Rest 2–3 mins between sets. No leg drive — strict press only.',
+          'Rest 2–3 mins between sets. No leg drive - strict press only.',
         movements: [
           {
             name: 'Barbell Overhead Press',
@@ -1435,14 +1435,14 @@ const proWorkouts: SingleWorkout[] = [
           {
             name: 'Machine Shoulder Press',
             value: '3 x 12',
-            note: 'Eliminates stability demands — focus entirely on deltoid recruitment. Control the eccentric.',
+            note: 'Eliminates stability demands - focus entirely on deltoid recruitment. Control the eccentric.',
           },
         ],
       },
       {
         name: 'Lateral Development',
         instructions:
-          'Rest 60s. Lead with the elbows — think about touching the side walls.',
+          'Rest 60s. Lead with the elbows - think about touching the side walls.',
         movements: [
           {
             name: 'Lateral Raises (Dumbbell or Cable)',
@@ -1469,7 +1469,7 @@ const proWorkouts: SingleWorkout[] = [
           {
             name: 'Reverse Flyes (Dumbbell or Machine)',
             value: '3 x 15',
-            note: 'Focus on feeling the rear delt contract — not the traps.',
+            note: 'Focus on feeling the rear delt contract - not the traps.',
           },
         ],
       },
@@ -1489,7 +1489,7 @@ const proWorkouts: SingleWorkout[] = [
     id: 'p_25',
     title: 'Arms Day',
     description:
-      'Dedicated bicep and tricep session. The arms respond exceptionally well to focused isolation work — give them your full attention for once.',
+      'Dedicated bicep and tricep session. The arms respond exceptionally well to focused isolation work - give them your full attention for once.',
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 55,
@@ -1502,18 +1502,18 @@ const proWorkouts: SingleWorkout[] = [
           '3 mins light cardio',
           '30s wrist flexor stretch each side / 30s wrist extensor stretch each side',
           '10 arm circles forward / 10 arm circles backward',
-          '1 x 15 cable curls (light) / 1 x 15 tricep pushdowns (light) — pump blood into the elbow joints',
+          '1 x 15 cable curls (light) / 1 x 15 tricep pushdowns (light) - pump blood into the elbow joints',
         ],
       },
       {
-        name: 'Biceps — Compound',
+        name: 'Biceps - Compound',
         instructions:
-          'Rest 90s between sets. Elbows stay pinned — no swinging.',
+          'Rest 90s between sets. Elbows stay pinned - no swinging.',
         movements: [
           {
             name: 'Barbell or EZ Bar Curl',
             value: '4 x 10',
-            note: 'The heaviest bicep movement of the session. Full extension at the bottom — do not cheat the range.',
+            note: 'The heaviest bicep movement of the session. Full extension at the bottom - do not cheat the range.',
           },
           {
             name: 'Incline Dumbbell Curl',
@@ -1523,18 +1523,18 @@ const proWorkouts: SingleWorkout[] = [
         ],
       },
       {
-        name: 'Biceps — Isolation',
-        instructions: 'Rest 60s. No momentum — the bicep does all the work.',
+        name: 'Biceps - Isolation',
+        instructions: 'Rest 60s. No momentum - the bicep does all the work.',
         movements: [
           {
             name: 'Preacher Curl (Barbell or EZ Bar)',
             value: '3 x 12',
-            note: 'The bench eliminates all cheating. Resist the urge to bounce at the bottom — that stretch is where growth happens.',
+            note: 'The bench eliminates all cheating. Resist the urge to bounce at the bottom - that stretch is where growth happens.',
           },
           {
             name: 'Hammer Curls',
             value: '3 x 12',
-            note: 'Neutral grip targets the brachialis — developing this pushes the bicep peak higher.',
+            note: 'Neutral grip targets the brachialis - developing this pushes the bicep peak higher.',
           },
           {
             name: 'Cable Curl (Single Arm)',
@@ -1544,7 +1544,7 @@ const proWorkouts: SingleWorkout[] = [
         ],
       },
       {
-        name: 'Triceps — Compound',
+        name: 'Triceps - Compound',
         instructions: 'Rest 90s between sets. Elbows stay tucked throughout.',
         movements: [
           {
@@ -1555,16 +1555,16 @@ const proWorkouts: SingleWorkout[] = [
           {
             name: 'Overhead Tricep Extension (Cable or Dumbbell)',
             value: '3 x 12',
-            note: 'Overhead position places the long head in full stretch. Keep elbows pointing straight up — do not let them flare.',
+            note: 'Overhead position places the long head in full stretch. Keep elbows pointing straight up - do not let them flare.',
           },
         ],
       },
       {
-        name: 'Triceps — Isolation',
+        name: 'Triceps - Isolation',
         instructions: 'Rest 60s. Squeeze the lateral head hard on every rep.',
         movements: [
           {
-            name: 'Tricep Pushdowns (Cable — Straight Bar or Rope)',
+            name: 'Tricep Pushdowns (Cable - Straight Bar or Rope)',
             value: '3 x 15',
             note: 'Full extension at the bottom. Rope allows a twist at the bottom to maximise lateral head contraction.',
           },

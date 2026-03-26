@@ -41,18 +41,18 @@ export const full_body_2day: Program = {
 
     return [
       // ─────────────────────────────────────────────
-      // DAY A — Full Body (Saturday)
-      // FIX 1: Bench Press now cycles — barbell in Foundation/Stability,
+      // DAY A - Full Body (Saturday)
+      // FIX 1: Bench Press now cycles - barbell in Foundation/Stability,
       //         Incline DB Press in Hypertrophy for greater ROM and pec stretch.
       // FIX 2: Lat Pulldown added after the row to provide a vertical pull.
       //         Day A previously had no vertical pull at all.
       // FIX 3: isAmrap removed from KB Swing. Going to failure on a
-      //         hip-power movement risks form breakdown — keep it structured.
+      //         hip-power movement risks form breakdown - keep it structured.
       // ─────────────────────────────────────────────
       {
         dayIndex: week * 7 + 0,
         label: `Full Body A (Week ${week + 1})`,
-        description: `Phase ${cycle + 1} — ${cycleNames[cycle]}: ${cycleDescriptions[cycle]}`,
+        description: `Phase ${cycle + 1} - ${cycleNames[cycle]}: ${cycleDescriptions[cycle]}`,
         intensity,
         exercises: [
           full_body_warmup,
@@ -71,8 +71,8 @@ export const full_body_2day: Program = {
           {
             type: 'exercise',
             // FIX: Bench now varies by cycle.
-            // Foundation + Stability: Barbell Bench Press (id: 1) — builds base pressing strength.
-            // Hypertrophy: Incline DB Press (id: 18) — greater ROM, deeper pec stretch, fits hypertrophy goal.
+            // Foundation + Stability: Barbell Bench Press (id: 1) - builds base pressing strength.
+            // Hypertrophy: Incline DB Press (id: 18) - greater ROM, deeper pec stretch, fits hypertrophy goal.
             id: cycle === 2 ? 18 : 1,
             sets: 3,
             repRange: cycle === 2 ? [10, 12] : [8, 10],
@@ -96,7 +96,7 @@ export const full_body_2day: Program = {
           {
             type: 'exercise',
             // FIX: Lat Pulldown added to provide vertical pull on Day A.
-            // Day A previously had no vertical pull at all — squat, bench,
+            // Day A previously had no vertical pull at all - squat, bench,
             // row, and KB swing left the lats completely undertrained on this day.
             // Cycles between standard and single arm variant for variety.
             id: cycle === 2 ? 47 : 11, // Single Arm Lat Pulldown (Hypertrophy) / Lat Pulldown (Foundation + Stability)
@@ -107,7 +107,7 @@ export const full_body_2day: Program = {
             additionalDescription:
               cycle === 2
                 ? 'Single Arm Lat Pulldown: Allows you to focus on each side independently. Initiate the pull by depressing your shoulder blade, not by bending your elbow.'
-                : 'Lat Pulldown: Lean back slightly and pull the bar to your upper chest. Drive your elbows down and back — think of pulling your shoulder blades into your back pockets.',
+                : 'Lat Pulldown: Lean back slightly and pull the bar to your upper chest. Drive your elbows down and back - think of pulling your shoulder blades into your back pockets.',
           },
           {
             type: 'exercise',
@@ -115,22 +115,22 @@ export const full_body_2day: Program = {
             sets: 3,
             repRange: [15, 20],
             restTimeSeconds: 60,
-            // FIX: isAmrap removed. KB Swing is a hip-power movement — going to
+            // FIX: isAmrap removed. KB Swing is a hip-power movement - going to
             // failure risks form breakdown (hyperextension, loss of hinge pattern).
             additionalHeader: 'Glute Finisher',
             additionalDescription:
-              "A high-rep conditioning tool. Focus on the hip hinge — push your glutes back and 'snap' them forward to propel the weight. Stop before form deteriorates.",
+              "A high-rep conditioning tool. Focus on the hip hinge - push your glutes back and 'snap' them forward to propel the weight. Stop before form deteriorates.",
           },
         ],
       },
 
       // ─────────────────────────────────────────────
-      // DAY B — Full Body (Sunday)
-      // FIX 1: Pull-ups canSwap: true added — this is a non-pro program
+      // DAY B - Full Body (Sunday)
+      // FIX 1: Pull-ups canSwap: true added - this is a non-pro program
       //         serving a broad audience. Not all users can do bodyweight
       //         pull-ups.
       // FIX 2: DB Goblet Squat (id: 5) replaced with a cycling core finisher.
-      //         Day B opens with Deadlifts — adding more knee-dominant squatting
+      //         Day B opens with Deadlifts - adding more knee-dominant squatting
       //         at the end of the session compounds fatigue on already-loaded
       //         patterns. A core finisher is a better close to a pulling-focused
       //         day, and addresses the complete lack of direct core work on Day B.
@@ -138,7 +138,7 @@ export const full_body_2day: Program = {
       {
         dayIndex: week * 7 + 1,
         label: `Full Body B (Week ${week + 1})`,
-        description: `Phase ${cycle + 1} — ${cycleNames[cycle]}: Pulling and overhead pressing focus.`,
+        description: `Phase ${cycle + 1} - ${cycleNames[cycle]}: Pulling and overhead pressing focus.`,
         intensity,
         exercises: [
           full_body_warmup,
@@ -178,9 +178,9 @@ export const full_body_2day: Program = {
           {
             type: 'exercise',
             // FIX: Goblet Squat replaced with a cycling core finisher.
-            // Foundation: Plank (id: 13) — anti-extension bracing fundamentals.
-            // Stability: Hanging Leg Raise (id: 31) — hip flexion core, no spinal load.
-            // Hypertrophy: Cable Crunch (id: 48) — loaded core flexion for hypertrophy.
+            // Foundation: Plank (id: 13) - anti-extension bracing fundamentals.
+            // Stability: Hanging Leg Raise (id: 31) - hip flexion core, no spinal load.
+            // Hypertrophy: Cable Crunch (id: 48) - loaded core flexion for hypertrophy.
             id: cycle === 0 ? 13 : cycle === 1 ? 31 : 48,
             sets: 3,
             repRange:
@@ -189,10 +189,10 @@ export const full_body_2day: Program = {
             additionalHeader: 'Core Finisher',
             additionalDescription:
               cycle === 0
-                ? 'Plank: Actively pull your elbows toward your toes. This is bracing practice — the same tension pattern you need under a heavy deadlift.'
+                ? 'Plank: Actively pull your elbows toward your toes. This is bracing practice - the same tension pattern you need under a heavy deadlift.'
                 : cycle === 1
-                  ? 'Hanging Leg Raise: Keep your legs as straight as possible. Avoid swinging — initiate every rep from a dead hang.'
-                  : 'Cable Crunch: Exhale sharply as you crunch down. Keep your hips still — the movement should come entirely from your spine, not your hips.',
+                  ? 'Hanging Leg Raise: Keep your legs as straight as possible. Avoid swinging - initiate every rep from a dead hang.'
+                  : 'Cable Crunch: Exhale sharply as you crunch down. Keep your hips still - the movement should come entirely from your spine, not your hips.',
           },
         ],
       },
