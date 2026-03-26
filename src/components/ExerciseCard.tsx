@@ -386,11 +386,14 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
               {repRangeText}
             </Text>
           )}
-          {!isSwapped && programExercise?.additionalDescription && (
-            <Text style={styles.additionalDescription}>
-              {programExercise.additionalDescription}
-            </Text>
-          )}
+          {(() => {
+            const description = isSwapped
+              ? exercise.description
+              : programExercise?.additionalDescription ?? exercise.description;
+            return description ? (
+              <Text style={styles.additionalDescription}>{description}</Text>
+            ) : null;
+          })()}
         </View>
       </View>
 
