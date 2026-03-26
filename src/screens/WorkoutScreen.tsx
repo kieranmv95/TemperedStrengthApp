@@ -16,6 +16,8 @@ import {
 } from 'react-native';
 import { DaySelector } from '../components/DaySelector';
 import { ExerciseCard } from '../components/ExerciseCard';
+import { SessionSummaryModal } from '../components/SessionSummaryModal';
+import { SessionTimer } from '../components/SessionTimer';
 import { SwapModal } from '../components/SwapModal';
 import {
   BorderRadius,
@@ -29,16 +31,27 @@ import type {
   Warmup,
   Workout,
 } from '../types/program';
-import type { RestTimerState } from '../types/storage';
+import type {
+  ActiveSession,
+  CompletedSession,
+  RestTimerState,
+} from '../types/storage';
 import { getProgramById } from '../utils/program';
 import {
+  clearActiveSession,
+  clearCompletedSession,
   clearFutureWorkoutData,
   clearRestTimer,
+  getActiveSession,
   getActiveProgramId,
+  getCompletedSession,
   getExerciseSwapsForDay,
   getProgramStartDate,
   getRestTimer,
+  getWorkoutLogsForDay,
   getWorkoutNotes,
+  saveActiveSession,
+  saveCompletedSession,
   saveRestTimer,
   saveWorkoutNotes,
   setProgramStartDate,
@@ -85,6 +98,21 @@ const getIntensityLevel = (intensity: number) => {
   );
 };
 
+const formatSessionDuration = (ms: number): string => {
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  if (hours > 0) {
+    return `${hours}h ${minutes}m`;
+  }
+  if (minutes > 0) {
+    return `${minutes}m ${seconds}s`;
+  }
+  return `${seconds}s`;
+};
+
 type ExerciseSlot = {
   type: 'exercise';
   exerciseId: number | null;
@@ -122,6 +150,16 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
   const [restTimer, setRestTimer] = useState<RestTimerState | null>(null);
   const [intensityModalVisible, setIntensityModalVisible] = useState(false);
+  const [activeSession, setActiveSession] = useState<ActiveSession | null>(
+    null
+  );
+  const [completedSession, setCompletedSession] =
+    useState<CompletedSession | null>(null);
+  const [sessionSummary, setSessionSummary] = useState<{
+    duration: number;
+    totalVolume: number;
+    setsCompleted: number;
+  } | null>(null);
   const { scheduleTimerNotification, cancelTimerNotification } =
     useTimerNotification();
   const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -183,10 +221,14 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       const programToUse = programData || program;
       if (!programToUse) return;
 
-      // Load notes for this day
-      const savedNotes = await getWorkoutNotes(dayIdx);
+      // Load notes and completed session for this day
+      const [savedNotes, savedCompletedSession] = await Promise.all([
+        getWorkoutNotes(dayIdx),
+        getCompletedSession(dayIdx),
+      ]);
       setNotes(savedNotes);
       setIsNotesExpanded(savedNotes.length > 0);
+      setCompletedSession(savedCompletedSession);
 
       // Find workout for the selected day
       const workout = programToUse.workouts.find((w) => w.dayIndex === dayIdx);
@@ -274,6 +316,97 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   useEffect(() => {
     loadRestTimerState();
   }, [loadRestTimerState]);
+
+  const loadActiveSessionState = useCallback(async () => {
+    try {
+      const session = await getActiveSession();
+      setActiveSession(session);
+    } catch (error) {
+      console.error('Error loading active session:', error);
+      setActiveSession(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadActiveSessionState();
+  }, [loadActiveSessionState]);
+
+  const handleStartSession = useCallback(async () => {
+    if (selectedDayIndex === null) return;
+    try {
+      const session: ActiveSession = {
+        dayIndex: selectedDayIndex,
+        startedAt: Date.now(),
+      };
+      await saveActiveSession(session);
+      setActiveSession(session);
+    } catch (error) {
+      console.error('Error starting session:', error);
+    }
+  }, [selectedDayIndex]);
+
+  const handleFinishSession = useCallback(async () => {
+    if (!activeSession) return;
+    try {
+      const completedAt = Date.now();
+      const duration = completedAt - activeSession.startedAt;
+
+      const dayLogs = await getWorkoutLogsForDay(activeSession.dayIndex);
+      let totalVolume = 0;
+      let setsCompleted = 0;
+
+      for (const slotSets of Object.values(dayLogs)) {
+        for (const set of Object.values(slotSets)) {
+          if (set.state === 'completed' || set.state === 'failed') {
+            setsCompleted++;
+            if (set.weight !== null && set.weight > 0) {
+              totalVolume += set.weight * set.reps;
+            }
+          }
+        }
+      }
+
+      const completed: CompletedSession = {
+        dayIndex: activeSession.dayIndex,
+        startedAt: activeSession.startedAt,
+        completedAt,
+        totalVolume,
+        setsCompleted,
+      };
+
+      await saveCompletedSession(completed);
+      await clearActiveSession();
+      setActiveSession(null);
+      setCompletedSession(completed);
+      setSessionSummary({ duration, totalVolume, setsCompleted });
+    } catch (error) {
+      console.error('Error finishing session:', error);
+    }
+  }, [activeSession]);
+
+  const handleRedoWorkout = useCallback(async () => {
+    if (selectedDayIndex === null) return;
+
+    Alert.alert(
+      'Redo this workout?',
+      'This will clear your session record for this day. Your logged sets will remain.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Redo',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await clearCompletedSession(selectedDayIndex);
+              setCompletedSession(null);
+            } catch (error) {
+              console.error('Error clearing completed session:', error);
+            }
+          },
+        },
+      ]
+    );
+  }, [selectedDayIndex]);
 
   const handleDaySelect = async (dayIdx: number) => {
     // Always allow viewing any day
@@ -513,6 +646,48 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             </View>
           </View>
 
+          {completedSession && !activeSession && (
+            <View style={styles.completedSessionBanner}>
+              <Text style={styles.completedSessionTitle}>
+                Session Completed
+              </Text>
+              <View style={styles.completedSessionStats}>
+                <View style={styles.completedSessionStat}>
+                  <Text style={styles.completedSessionStatValue}>
+                    {formatSessionDuration(
+                      completedSession.completedAt -
+                        completedSession.startedAt
+                    )}
+                  </Text>
+                  <Text style={styles.completedSessionStatLabel}>
+                    Duration
+                  </Text>
+                </View>
+                <View style={styles.completedSessionStat}>
+                  <Text style={styles.completedSessionStatValue}>
+                    {completedSession.totalVolume.toLocaleString()}kg
+                  </Text>
+                  <Text style={styles.completedSessionStatLabel}>
+                    Volume
+                  </Text>
+                </View>
+                <View style={styles.completedSessionStat}>
+                  <Text style={styles.completedSessionStatValue}>
+                    {completedSession.setsCompleted}
+                  </Text>
+                  <Text style={styles.completedSessionStatLabel}>Sets</Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                style={styles.redoButton}
+                onPress={handleRedoWorkout}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.redoButtonText}>Redo Workout</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
           <View style={styles.intensityCard}>
             <View style={styles.intensityCardHeader}>
               <Text style={styles.intensityLabel}>Intensity</Text>
@@ -649,6 +824,27 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         />
       )}
 
+      {!isRestDay && !loading && activeSession && (
+        <SessionTimer
+          startedAt={activeSession.startedAt}
+          onFinish={handleFinishSession}
+        />
+      )}
+
+      {!isRestDay &&
+        !loading &&
+        !activeSession &&
+        !completedSession &&
+        currentWorkout && (
+          <TouchableOpacity
+            style={styles.startSessionButton}
+            onPress={handleStartSession}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.startSessionButtonText}>Start Session</Text>
+          </TouchableOpacity>
+        )}
+
       {renderContent()}
 
       <SwapModal
@@ -731,6 +927,14 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           </View>
         </View>
       </Modal>
+
+      <SessionSummaryModal
+        visible={sessionSummary !== null}
+        duration={sessionSummary?.duration ?? 0}
+        totalVolume={sessionSummary?.totalVolume ?? 0}
+        setsCompleted={sessionSummary?.setsCompleted ?? 0}
+        onDismiss={() => setSessionSummary(null)}
+      />
 
       {/* Keyboard accessory view for notes input (iOS only) */}
       {Platform.OS === 'ios' && (
@@ -1067,6 +1271,70 @@ const styles = StyleSheet.create({
   keyboardDoneButtonText: {
     color: Colors.link,
     fontSize: FontSize.xxxl,
+    fontWeight: '600',
+  },
+  startSessionButton: {
+    borderWidth: 1,
+    borderColor: Colors.accent,
+    borderRadius: BorderRadius.lg,
+    paddingVertical: Spacing.xl,
+    marginHorizontal: Spacing.xxl,
+    marginTop: Spacing.xl,
+    alignItems: 'center',
+  },
+  startSessionButtonText: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  completedSessionBanner: {
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxl,
+    marginBottom: Spacing.xxl,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+  },
+  completedSessionTitle: {
+    color: Colors.accent,
+    fontSize: FontSize.xxl,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: Spacing.xl,
+  },
+  completedSessionStats: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: Spacing.xl,
+  },
+  completedSessionStat: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  completedSessionStatValue: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displaySm,
+    fontWeight: '800',
+    marginBottom: Spacing.xxs,
+  },
+  completedSessionStatLabel: {
+    color: Colors.textMuted,
+    fontSize: FontSize.sm,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  redoButton: {
+    alignSelf: 'center',
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.xxl,
+  },
+  redoButtonText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.base,
     fontWeight: '600',
   },
 });

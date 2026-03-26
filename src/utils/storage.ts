@@ -1,5 +1,8 @@
 // Storage utilities for AsyncStorage
 import type {
+  ActiveSession,
+  CompletedSession,
+  CompletedSessions,
   CustomSetCounts,
   ExerciseSwaps,
   LoggedSet,
@@ -10,6 +13,9 @@ import type {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type {
+  ActiveSession,
+  CompletedSession,
+  CompletedSessions,
   CustomSetCounts,
   ExerciseSwap,
   ExerciseSwaps,
@@ -29,6 +35,8 @@ const SWAP_COUNT_MONTH_KEY = 'swap_count_month';
 const WORKOUT_NOTES_KEY = 'workout_notes';
 const FAVORITE_WORKOUTS_KEY = 'favorite_workouts';
 const REST_TIMER_KEY = 'rest_timer';
+const ACTIVE_SESSION_KEY = 'active_session';
+const COMPLETED_SESSIONS_KEY = 'completed_sessions';
 
 /**
  * Get the active program ID
@@ -572,6 +580,8 @@ export const clearProgramData = async (): Promise<void> => {
     await AsyncStorage.removeItem(CUSTOM_SET_COUNTS_KEY);
     await AsyncStorage.removeItem(WORKOUT_NOTES_KEY);
     await AsyncStorage.removeItem(REST_TIMER_KEY);
+    await AsyncStorage.removeItem(ACTIVE_SESSION_KEY);
+    await AsyncStorage.removeItem(COMPLETED_SESSIONS_KEY);
   } catch (error) {
     console.error('Error clearing program data:', error);
     throw error;
@@ -651,5 +661,124 @@ export const toggleFavoriteWorkout = async (
   } catch (error) {
     console.error('Error toggling favorite workout:', error);
     throw error;
+  }
+};
+
+/**
+ * Save the active session state (or clear if null)
+ */
+export const saveActiveSession = async (
+  session: ActiveSession | null
+): Promise<void> => {
+  try {
+    if (!session) {
+      await AsyncStorage.removeItem(ACTIVE_SESSION_KEY);
+      return;
+    }
+    await AsyncStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(session));
+  } catch (error) {
+    console.error('Error saving active session:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get the active session state
+ */
+export const getActiveSession = async (): Promise<ActiveSession | null> => {
+  try {
+    const data = await AsyncStorage.getItem(ACTIVE_SESSION_KEY);
+    return data ? (JSON.parse(data) as ActiveSession) : null;
+  } catch (error) {
+    console.error('Error getting active session:', error);
+    return null;
+  }
+};
+
+/**
+ * Clear the active session
+ */
+export const clearActiveSession = async (): Promise<void> => {
+  try {
+    await AsyncStorage.removeItem(ACTIVE_SESSION_KEY);
+  } catch (error) {
+    console.error('Error clearing active session:', error);
+    throw error;
+  }
+};
+
+/**
+ * Save a completed session keyed by dayIndex
+ */
+export const saveCompletedSession = async (
+  session: CompletedSession
+): Promise<void> => {
+  try {
+    const data = await AsyncStorage.getItem(COMPLETED_SESSIONS_KEY);
+    const sessions: CompletedSessions = data ? JSON.parse(data) : {};
+    sessions[session.dayIndex] = session;
+    await AsyncStorage.setItem(
+      COMPLETED_SESSIONS_KEY,
+      JSON.stringify(sessions)
+    );
+  } catch (error) {
+    console.error('Error saving completed session:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get a completed session for a specific day
+ */
+export const getCompletedSession = async (
+  dayIndex: number
+): Promise<CompletedSession | null> => {
+  try {
+    const data = await AsyncStorage.getItem(COMPLETED_SESSIONS_KEY);
+    const sessions: CompletedSessions = data ? JSON.parse(data) : {};
+    return sessions[dayIndex] ?? null;
+  } catch (error) {
+    console.error('Error getting completed session:', error);
+    return null;
+  }
+};
+
+/**
+ * Clear a completed session for a specific day (used by redo workout flow)
+ */
+export const clearCompletedSession = async (
+  dayIndex: number
+): Promise<void> => {
+  try {
+    const data = await AsyncStorage.getItem(COMPLETED_SESSIONS_KEY);
+    if (!data) return;
+
+    const sessions: CompletedSessions = JSON.parse(data);
+    if (sessions[dayIndex] !== undefined) {
+      delete sessions[dayIndex];
+      await AsyncStorage.setItem(
+        COMPLETED_SESSIONS_KEY,
+        JSON.stringify(sessions)
+      );
+    }
+  } catch (error) {
+    console.error('Error clearing completed session:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get all workout logs for a specific day (all slots and sets)
+ */
+export const getWorkoutLogsForDay = async (
+  dayIndex: number
+): Promise<{ [slotIndex: number]: { [setIndex: number]: LoggedSet } }> => {
+  try {
+    const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
+    const logs: WorkoutLogs = data ? JSON.parse(data) : {};
+    return logs[dayIndex] ?? {};
+  } catch (error) {
+    console.error('Error getting workout logs for day:', error);
+    return {};
   }
 };

@@ -44,3 +44,20 @@ export type RestTimerState = {
   status: 'running' | 'completed';
   completedAt?: number;
 };
+
+export type ActiveSession = {
+  dayIndex: number;
+  startedAt: number;
+};
+
+export type CompletedSession = {
+  dayIndex: number;
+  startedAt: number;
+  completedAt: number;
+  totalVolume: number;
+  setsCompleted: number;
+};
+
+export type CompletedSessions = {
+  [dayIndex: number]: CompletedSession;
+};
