@@ -79,7 +79,6 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const [showProgramDetails, setShowProgramDetails] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
-  const [showWorkoutDaysMoreInfo, setShowWorkoutDaysMoreInfo] = useState(false);
   const [selectedWeekdays, setSelectedWeekdays] = useState<ProgramDaySplitKey[]>(
     []
   );
@@ -399,42 +398,19 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 
               {selectedProgram?.daysSplit && (
                 <View>
-                  <View style={styles.workoutDaysTitleRow}>
-                    <View style={styles.workoutDaysTitleBlock}>
-                      <Text style={styles.workoutTitle}>Workout Days</Text>
-                      <Text style={styles.workoutDaysHint}>
-                        The template recommends{' '}
-                        {selectedProgram.daysSplit
-                          .map((k) => programAnchorFullWeekdayName(k))
-                          .join(', ')}
-                        . Tap days below to match your real week — you need
-                        exactly {sessionsRequired} training days before you can
-                        start. Your start date will be on the first of those
-                        weekdays in calendar order (Mon→Sun).
-                      </Text>
-                    </View>
-                    <View>
-                      <TouchableOpacity
-                        style={styles.changeDaysButton}
-                        onPress={() =>
-                          setShowWorkoutDaysMoreInfo(!showWorkoutDaysMoreInfo)
-                        }
-                      >
-                        <Text style={styles.moreInfoButtonText}>
-                          About these days
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  {showWorkoutDaysMoreInfo && (
-                    <Text style={styles.programDescription}>
-                      Your choices set which weekdays count as training days each
-                      rolling week from your start date. After you start, you can
-                      still realign where you are in the block using the start
-                      date and &quot;Set as Today&apos;s Session&quot; from the
-                      workout screen.
+                  <View style={styles.workoutDaysTitleBlock}>
+                    <Text style={styles.workoutTitle}>Workout Days</Text>
+                    <Text style={styles.workoutDaysHint}>
+                      The template recommends{' '}
+                      {selectedProgram.daysSplit
+                        .map((k) => programAnchorFullWeekdayName(k))
+                        .join(', ')}
+                      . Tap days below to match your real week. You need exactly{' '}
+                      {sessionsRequired} training days before you can start. Your
+                      start date will be on the first of those weekdays in
+                      calendar order (Mon→Sun).
                     </Text>
-                  )}
+                  </View>
                   {!weekdaySelectionReady && (
                     <Text style={styles.weekdaySelectionHint}>
                       Select exactly {sessionsRequired} days (
@@ -669,27 +645,6 @@ const styles = StyleSheet.create({
   programOverviewContainer: {
     marginBottom: Spacing.section,
   },
-  workoutDaysTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: Spacing.xl,
-    marginBottom: Spacing.md,
-    marginTop: Spacing.md,
-  },
-  changeDaysButton: {
-    padding: Spacing.xxs,
-    borderRadius: BorderRadius.sm,
-    borderWidth: 1,
-    borderColor: Colors.accent,
-  },
-  moreInfoButtonText: {
-    color: Colors.accent,
-    fontSize: FontSize.xs,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
   programCard: {
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
@@ -825,8 +780,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   workoutDaysTitleBlock: {
-    flex: 1,
-    paddingRight: Spacing.md,
+    marginBottom: Spacing.md,
+    marginTop: Spacing.md,
   },
   workoutDaysHint: {
     color: Colors.textMuted,
