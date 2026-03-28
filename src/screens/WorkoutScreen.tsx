@@ -19,12 +19,7 @@ import { ExerciseCard } from '../components/ExerciseCard';
 import { SessionSummaryModal } from '../components/SessionSummaryModal';
 import { SessionTimer } from '../components/SessionTimer';
 import { SwapModal } from '../components/SwapModal';
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '../constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
 import { useTimerNotification } from '../hooks/useTimerNotification';
 import type {
   Exercise as ProgramExercise,
@@ -56,6 +51,7 @@ import {
   saveWorkoutNotes,
   setProgramStartDate,
 } from '../utils/storage';
+import { ProgramStartingInXScreen } from './ProgramStartingInXScreen';
 import { RestDayScreen } from './RestDayScreen';
 
 const INTENSITY_LEVELS: {
@@ -63,32 +59,32 @@ const INTENSITY_LEVELS: {
   label: string;
   feel: string;
 }[] = [
-    {
-      range: [1, 2],
-      label: 'Very Light',
-      feel: 'Minimal effort. Recovery-level work. You should feel refreshed, not fatigued.',
-    },
-    {
-      range: [3, 4],
-      label: 'Light',
-      feel: 'Easy effort. Good for technique practice and building volume without heavy strain.',
-    },
-    {
-      range: [5, 6],
-      label: 'Moderate',
-      feel: 'Noticeable effort. Challenging but sustainable. You could hold a short conversation.',
-    },
-    {
-      range: [7, 8],
-      label: 'Hard',
-      feel: 'Demanding effort. Requires real focus and grit. Expect to feel spent by the end.',
-    },
-    {
-      range: [9, 10],
-      label: 'Very Hard',
-      feel: 'Near-maximal effort. Highly taxing on the body and nervous system. Full recovery is essential.',
-    },
-  ];
+  {
+    range: [1, 2],
+    label: 'Very Light',
+    feel: 'Minimal effort. Recovery-level work. You should feel refreshed, not fatigued.',
+  },
+  {
+    range: [3, 4],
+    label: 'Light',
+    feel: 'Easy effort. Good for technique practice and building volume without heavy strain.',
+  },
+  {
+    range: [5, 6],
+    label: 'Moderate',
+    feel: 'Noticeable effort. Challenging but sustainable. You could hold a short conversation.',
+  },
+  {
+    range: [7, 8],
+    label: 'Hard',
+    feel: 'Demanding effort. Requires real focus and grit. Expect to feel spent by the end.',
+  },
+  {
+    range: [9, 10],
+    label: 'Very Hard',
+    feel: 'Near-maximal effort. Highly taxing on the body and nervous system. Full recovery is essential.',
+  },
+];
 
 const getIntensityLevel = (intensity: number) => {
   return (
@@ -220,6 +216,16 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     async (dayIdx: number, programData?: ReturnType<typeof getProgramById>) => {
       const programToUse = programData || program;
       if (!programToUse) return;
+
+      if (dayIdx < 0) {
+        setNotes('');
+        setIsNotesExpanded(false);
+        setCompletedSession(null);
+        setCurrentWorkout(null);
+        setSlots([]);
+        setIsRestDay(false);
+        return;
+      }
 
       // Load notes and completed session for this day
       const [savedNotes, savedCompletedSession] = await Promise.all([
@@ -420,6 +426,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     if (
       selectedDayIndex === null ||
       dayIndex === null ||
+      dayIndex < 0 ||
       selectedDayIndex === dayIndex
     ) {
       return;
@@ -609,6 +616,10 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
   // Render content below the DaySelector based on state
   const renderContent = () => {
+    if (selectedDayIndex !== null && selectedDayIndex < 0) {
+      return <ProgramStartingInXScreen daysUntilStart={-selectedDayIndex} />;
+    }
+
     if (isRestDay) {
       return <RestDayScreen onProgramReset={onProgramReset} />;
     }
@@ -655,21 +666,16 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                 <View style={styles.completedSessionStat}>
                   <Text style={styles.completedSessionStatValue}>
                     {formatSessionDuration(
-                      completedSession.completedAt -
-                        completedSession.startedAt
+                      completedSession.completedAt - completedSession.startedAt
                     )}
                   </Text>
-                  <Text style={styles.completedSessionStatLabel}>
-                    Duration
-                  </Text>
+                  <Text style={styles.completedSessionStatLabel}>Duration</Text>
                 </View>
                 <View style={styles.completedSessionStat}>
                   <Text style={styles.completedSessionStatValue}>
                     {completedSession.totalVolume.toLocaleString()}kg
                   </Text>
-                  <Text style={styles.completedSessionStatLabel}>
-                    Volume
-                  </Text>
+                  <Text style={styles.completedSessionStatLabel}>Volume</Text>
                 </View>
                 <View style={styles.completedSessionStat}>
                   <Text style={styles.completedSessionStatValue}>
@@ -745,8 +751,8 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                 exerciseSlotIndex++;
                 const restTimerForSlot =
                   restTimer &&
-                    restTimer.dayIndex === selectedDayIndex &&
-                    restTimer.slotIndex === currentExerciseIndex
+                  restTimer.dayIndex === selectedDayIndex &&
+                  restTimer.slotIndex === currentExerciseIndex
                     ? restTimer
                     : null;
                 return (
@@ -820,7 +826,11 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           workoutDayIndices={workoutDayIndices}
           currentDayIndex={selectedDayIndex ?? dayIndex}
           onDaySelect={handleDaySelect}
-          onSetAsToday={handleSetAsCurrentDay}
+          onSetAsToday={
+            dayIndex !== null && dayIndex >= 0
+              ? handleSetAsCurrentDay
+              : undefined
+          }
         />
       )}
 

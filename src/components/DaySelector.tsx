@@ -9,12 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '../constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
 
 type DaySelectorProps = {
   startDate: string; // ISO string
@@ -53,17 +48,17 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
       ? Math.max(...workoutDayIndices)
       : currentDayIndex;
 
-  // Show all days from the first session to the last session
-  const minDayIndex = firstDayIndex;
-  const maxDayIndex = lastDayIndex;
-
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // Calculate which dayIndex corresponds to today
   const todayDayIndex = Math.floor(
     (today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
   );
+
+  // Include calendar days before program start (negative indices) so today is
+  // visible when the start date is in the future.
+  const minDayIndex = Math.min(firstDayIndex, todayDayIndex);
+  const maxDayIndex = lastDayIndex;
 
   // Check if today is within the visible range of days
   const isTodayInRange =
@@ -223,6 +218,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
           const dayHasWorkout = hasWorkout(dayIndex);
           const dayIsToday = isToday(dayIndex);
           const isSelected = dayIndex === currentDayIndex;
+          const beforeProgramStart = dayIndex < 0;
 
           return (
             <TouchableOpacity
@@ -240,9 +236,11 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
                   styles.dot,
                   dayIsToday
                     ? styles.dotToday
-                    : dayHasWorkout
-                      ? styles.dotWorkout
-                      : null,
+                    : beforeProgramStart
+                      ? null
+                      : dayHasWorkout
+                        ? styles.dotWorkout
+                        : null,
                 ]}
               />
             </TouchableOpacity>
