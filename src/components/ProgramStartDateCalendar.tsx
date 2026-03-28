@@ -43,6 +43,8 @@ export const ProgramStartDateCalendar: React.FC<
 
   const anchorJsDay = programSplitKeyToJsDay(anchor);
 
+  const todayStart = normalizeToLocalMidnight(new Date());
+
   const { year, month, cells } = useMemo(() => {
     const y = visibleMonth.getFullYear();
     const m = visibleMonth.getMonth();
@@ -71,7 +73,15 @@ export const ProgramStartDateCalendar: React.FC<
     });
   }, [visibleMonth]);
 
+  const lastDayOfPreviousMonth = useMemo(
+    () => normalizeToLocalMidnight(new Date(year, month, 0)),
+    [year, month]
+  );
+
+  const canGoPrev = lastDayOfPreviousMonth.getTime() >= todayStart.getTime();
+
   const goPrevMonth = () => {
+    if (!canGoPrev) return;
     setVisibleMonth(new Date(year, month - 1, 1));
   };
 
@@ -84,9 +94,11 @@ export const ProgramStartDateCalendar: React.FC<
       <View style={styles.monthRow}>
         <TouchableOpacity
           onPress={goPrevMonth}
-          style={styles.monthNavHit}
+          style={[styles.monthNavHit, !canGoPrev && styles.monthNavDisabled]}
           accessibilityRole="button"
           accessibilityLabel="Previous month"
+          accessibilityState={{ disabled: !canGoPrev }}
+          disabled={!canGoPrev}
         >
           <Text style={styles.monthNavText}>‹</Text>
         </TouchableOpacity>
@@ -118,9 +130,10 @@ export const ProgramStartDateCalendar: React.FC<
           const cellDate = new Date(year, month, cell.day);
           cellDate.setHours(0, 0, 0, 0);
           const isAnchor = cellDate.getDay() === anchorJsDay;
+          const isPast = cellDate.getTime() < todayStart.getTime();
           const selected = sameLocalCalendarDay(cellDate, normalizedValue);
 
-          if (!isAnchor) {
+          if (!isAnchor || isPast) {
             return (
               <View key={`d-${cell.day}`} style={styles.dayCell}>
                 <View style={[styles.dayInner, styles.dayInnerDisabled]}>
@@ -170,6 +183,9 @@ const styles = StyleSheet.create({
     minHeight: 44,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  monthNavDisabled: {
+    opacity: 0.35,
   },
   monthNavText: {
     color: Colors.accent,

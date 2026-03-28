@@ -119,9 +119,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 
     const anchor = getProgramAnchorWeekdayKey(selectedProgram);
     const normalized = normalizeToLocalMidnight(startDate);
-    const toSave = isProgramAnchorDate(normalized, anchor)
+    let toSave = isProgramAnchorDate(normalized, anchor)
       ? normalized
       : nearestProgramAnchorOnOrAfter(normalized, anchor);
+
+    const todayStart = normalizeToLocalMidnight(new Date());
+    if (toSave.getTime() < todayStart.getTime()) {
+      toSave = nearestProgramAnchorOnOrAfter(todayStart, anchor);
+    }
 
     try {
       if (resetExistingProgramData) {
@@ -555,7 +560,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                 )}s`}
               </Text>
               . Only those dates can be your program start; other days are
-              greyed out because they do not match day 1 of this template.
+              greyed out because they do not match day 1 of this template. Past
+              dates cannot be selected.
             </Text>
             <ProgramStartDateCalendar
               value={startDate}
