@@ -1,27 +1,28 @@
+import { ProgramStartDateCalendar } from '@/src/components/ProgramStartDateCalendar';
 import { useSubscription } from '@/src/hooks/use-subscription';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Modal,
-  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '../constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
 import type { Program } from '../types/program';
 import { programs } from '../utils/program';
+import {
+  getProgramAnchorWeekdayKey,
+  isProgramAnchorDate,
+  nearestProgramAnchorOnOrAfter,
+  normalizeToLocalMidnight,
+  programAnchorFullWeekdayName,
+} from '../utils/programStartWeekday';
 import {
   clearProgramData,
   setActiveProgramId,
@@ -49,6 +50,12 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [showWorkoutDaysMoreInfo, setShowWorkoutDaysMoreInfo] = useState(false);
+
+  useEffect(() => {
+    if (!showDatePicker || !selectedProgram) return;
+    const anchor = getProgramAnchorWeekdayKey(selectedProgram);
+    setStartDate(nearestProgramAnchorOnOrAfter(new Date(), anchor));
+  }, [showDatePicker, selectedProgram]);
 
   const handleSelectProgram = (program: Program) => {
     // Allow viewing program details regardless of Pro status
@@ -107,27 +114,21 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     setShowDatePicker(true);
   };
 
-  const handleDateChange = (event: any, date?: Date) => {
-    if (Platform.OS === 'android') {
-      setShowDatePicker(false);
-    }
-    if (date) {
-      setStartDate(date);
-      if (Platform.OS === 'android') {
-        handleConfirmDate(date);
-      }
-    }
-  };
-
-  const handleConfirmDate = async (date: Date) => {
+  const handleConfirmDate = async () => {
     if (!selectedProgram) return;
+
+    const anchor = getProgramAnchorWeekdayKey(selectedProgram);
+    const normalized = normalizeToLocalMidnight(startDate);
+    const toSave = isProgramAnchorDate(normalized, anchor)
+      ? normalized
+      : nearestProgramAnchorOnOrAfter(normalized, anchor);
 
     try {
       if (resetExistingProgramData) {
         await clearProgramData();
       }
       await setActiveProgramId(selectedProgram.id);
-      await setProgramStartDate(date.toISOString());
+      await setProgramStartDate(toSave.toISOString());
       setShowDatePicker(false);
       onProgramSelected();
     } catch (error) {
@@ -291,8 +292,15 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
               {selectedProgram?.daysSplit && (
                 <View>
                   <View style={styles.workoutDaysTitleRow}>
-                    <View>
+                    <View style={styles.workoutDaysTitleBlock}>
                       <Text style={styles.workoutTitle}>Workout Days</Text>
+                      <Text style={styles.workoutDaysHint}>
+                        When you start, you will pick a start date on{' '}
+                        {`${programAnchorFullWeekdayName(
+                          getProgramAnchorWeekdayKey(selectedProgram)
+                        )}s`}{' '}
+                        only — that lines up with day 1 of the program.
+                      </Text>
                     </View>
                     <View>
                       <TouchableOpacity
@@ -319,14 +327,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('mon') &&
-                        styles.dayItemSelected,
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('mon') &&
-                          styles.dayLabelSelected,
+                            styles.dayLabelSelected,
                         ]}
                       >
                         M
@@ -336,14 +344,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('tue') &&
-                        styles.dayItemSelected,
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('tue') &&
-                          styles.dayLabelSelected,
+                            styles.dayLabelSelected,
                         ]}
                       >
                         T
@@ -353,14 +361,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('wed') &&
-                        styles.dayItemSelected,
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('wed') &&
-                          styles.dayLabelSelected,
+                            styles.dayLabelSelected,
                         ]}
                       >
                         W
@@ -370,14 +378,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('thu') &&
-                        styles.dayItemSelected,
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('thu') &&
-                          styles.dayLabelSelected,
+                            styles.dayLabelSelected,
                         ]}
                       >
                         T
@@ -387,14 +395,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('fri') &&
-                        styles.dayItemSelected,
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('fri') &&
-                          styles.dayLabelSelected,
+                            styles.dayLabelSelected,
                         ]}
                       >
                         F
@@ -404,14 +412,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('sat') &&
-                        styles.dayItemSelected,
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('sat') &&
-                          styles.dayLabelSelected,
+                            styles.dayLabelSelected,
                         ]}
                       >
                         S
@@ -421,14 +429,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                       style={[
                         styles.dayItem,
                         selectedProgram.daysSplit.includes('sun') &&
-                        styles.dayItemSelected,
+                          styles.dayItemSelected,
                       ]}
                     >
                       <Text
                         style={[
                           styles.dayLabel,
                           selectedProgram.daysSplit.includes('sun') &&
-                          styles.dayLabelSelected,
+                            styles.dayLabelSelected,
                         ]}
                       >
                         S
@@ -475,7 +483,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                             style={[
                               styles.workoutIntensityDot,
                               i < workout.intensity &&
-                              styles.workoutIntensityDotFilled,
+                                styles.workoutIntensityDotFilled,
                             ]}
                           />
                         ))}
@@ -517,49 +525,45 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
         </View>
       </Modal>
 
-      {showDatePicker && (
-        <>
-          {Platform.OS === 'ios' && (
-            <View style={styles.datePickerContainer}>
-              <View style={styles.datePickerHeader}>
-                <TouchableOpacity
-                  onPress={() => setShowDatePicker(false)}
-                  style={styles.cancelButton}
-                >
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
-                <Text style={styles.datePickerTitle}>Select Start Date</Text>
-                <TouchableOpacity
-                  onPress={() => handleConfirmDate(startDate)}
-                  style={styles.confirmButton}
-                >
-                  <Text style={styles.confirmButtonText}>Confirm</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.datePickerWrapper}>
-                <DateTimePicker
-                  value={startDate}
-                  mode="date"
-                  display="spinner"
-                  onChange={handleDateChange}
-                  // iOS native pickers sometimes render with the wrong variant.
-                  // Explicitly force dark styling so text stays readable.
-                  textColor={Colors.textPrimary}
-                  themeVariant="dark"
-                  style={styles.datePicker}
-                />
-              </View>
-            </View>
-          )}
-          {Platform.OS === 'android' && (
-            <DateTimePicker
+      {showDatePicker && selectedProgram && (
+        <View style={styles.datePickerContainer}>
+          <View style={styles.datePickerHeader}>
+            <TouchableOpacity
+              onPress={() => setShowDatePicker(false)}
+              style={styles.cancelButton}
+            >
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+            <Text style={styles.datePickerTitle}>Select Start Date</Text>
+            <TouchableOpacity
+              onPress={handleConfirmDate}
+              style={styles.confirmButton}
+            >
+              <Text style={styles.confirmButtonText}>Confirm</Text>
+            </TouchableOpacity>
+          </View>
+          <ScrollView
+            style={styles.datePickerScroll}
+            contentContainerStyle={styles.datePickerScrollContent}
+            keyboardShouldPersistTaps="handled"
+          >
+            <Text style={styles.datePickerExplanation}>
+              Your first session is always on{' '}
+              <Text style={styles.datePickerExplanationEmphasis}>
+                {`${programAnchorFullWeekdayName(
+                  getProgramAnchorWeekdayKey(selectedProgram)
+                )}s`}
+              </Text>
+              . Only those dates can be your program start; other days are
+              greyed out because they do not match day 1 of this template.
+            </Text>
+            <ProgramStartDateCalendar
               value={startDate}
-              mode="date"
-              display="default"
-              onChange={handleDateChange}
+              onChange={setStartDate}
+              anchor={getProgramAnchorWeekdayKey(selectedProgram)}
             />
-          )}
-        </>
+          </ScrollView>
+        </View>
       )}
     </SafeAreaView>
   );
@@ -721,7 +725,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.borderDefault,
     paddingBottom: 40,
-    alignItems: 'center',
+    maxHeight: '75%',
   },
   datePickerHeader: {
     flexDirection: 'row',
@@ -754,13 +758,35 @@ const styles = StyleSheet.create({
     fontSize: FontSize.xxl,
     fontWeight: '700',
   },
-  datePickerWrapper: {
-    alignItems: 'center',
+  datePickerScroll: {
+    maxHeight: 420,
     width: '100%',
   },
-  datePicker: {
-    backgroundColor: Colors.backgroundCard,
-    alignSelf: 'center',
+  datePickerScrollContent: {
+    paddingBottom: Spacing.xxl,
+  },
+  datePickerExplanation: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+    paddingHorizontal: Spacing.xxl,
+    paddingTop: Spacing.md,
+    paddingBottom: Spacing.lg,
+    textAlign: 'center',
+  },
+  datePickerExplanationEmphasis: {
+    color: Colors.textPrimary,
+    fontWeight: '700',
+  },
+  workoutDaysTitleBlock: {
+    flex: 1,
+    paddingRight: Spacing.md,
+  },
+  workoutDaysHint: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    lineHeight: 18,
+    marginTop: Spacing.xs,
   },
   modalOverlay: {
     flex: 1,
