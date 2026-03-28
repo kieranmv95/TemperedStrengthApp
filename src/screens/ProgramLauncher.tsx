@@ -1,7 +1,7 @@
 import { ProgramStartDateCalendar } from '@/src/components/ProgramStartDateCalendar';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   Modal,
@@ -17,6 +17,7 @@ import { getExerciseById } from '../data/exercises';
 import type { Program } from '../types/program';
 import { programs } from '../utils/program';
 import {
+  type ProgramDaySplitKey,
   getProgramAnchorWeekdayKey,
   isProgramAnchorDate,
   nearestProgramAnchorOnOrAfter,
@@ -24,10 +25,39 @@ import {
   programAnchorFullWeekdayName,
 } from '../utils/programStartWeekday';
 import {
+  clampStartDateToPatternAndToday,
+  firstSessionWeekdayForPattern,
+  nearestDateOnOrAfterAllowingWeekdays,
+  sessionsPerWeekFromProgram,
+  sortPatternByCalendarOrder,
+} from '../utils/programWeekPattern';
+import {
   clearProgramData,
+  clearProgramWorkoutWeekdays,
   setActiveProgramId,
   setProgramStartDate,
+  setProgramWorkoutWeekdays,
 } from '../utils/storage';
+
+const CALENDAR_DAY_KEYS: ProgramDaySplitKey[] = [
+  'mon',
+  'tue',
+  'wed',
+  'thu',
+  'fri',
+  'sat',
+  'sun',
+];
+
+const CAL_DAY_LABELS: Record<ProgramDaySplitKey, string> = {
+  mon: 'M',
+  tue: 'T',
+  wed: 'W',
+  thu: 'T',
+  fri: 'F',
+  sat: 'S',
+  sun: 'S',
+};
 
 type ProgramLauncherProps = {
   onProgramSelected: () => void;
@@ -50,12 +80,64 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [showWorkoutDaysMoreInfo, setShowWorkoutDaysMoreInfo] = useState(false);
+  const [selectedWeekdays, setSelectedWeekdays] = useState<ProgramDaySplitKey[]>(
+    []
+  );
+
+  useEffect(() => {
+    if (!selectedProgram) return;
+    if (selectedProgram.daysSplit?.length) {
+      setSelectedWeekdays(
+        sortPatternByCalendarOrder([...selectedProgram.daysSplit])
+      );
+    } else {
+      setSelectedWeekdays([getProgramAnchorWeekdayKey(selectedProgram)]);
+    }
+  }, [selectedProgram]);
+
+  const startDatePickerAllowedWeekdays = useMemo((): ProgramDaySplitKey[] => {
+    if (!selectedProgram) {
+      return [];
+    }
+    if (!selectedProgram.daysSplit?.length) {
+      return [getProgramAnchorWeekdayKey(selectedProgram)];
+    }
+    if (selectedWeekdays.length === 0) {
+      return [getProgramAnchorWeekdayKey(selectedProgram)];
+    }
+    return [firstSessionWeekdayForPattern(selectedWeekdays)];
+  }, [selectedProgram, selectedWeekdays]);
 
   useEffect(() => {
     if (!showDatePicker || !selectedProgram) return;
-    const anchor = getProgramAnchorWeekdayKey(selectedProgram);
-    setStartDate(nearestProgramAnchorOnOrAfter(new Date(), anchor));
-  }, [showDatePicker, selectedProgram]);
+    setStartDate(
+      nearestDateOnOrAfterAllowingWeekdays(
+        new Date(),
+        startDatePickerAllowedWeekdays
+      )
+    );
+  }, [showDatePicker, selectedProgram, startDatePickerAllowedWeekdays]);
+
+  const sessionsRequired = selectedProgram
+    ? sessionsPerWeekFromProgram(selectedProgram)
+    : 0;
+
+  const weekdaySelectionReady =
+    !selectedProgram?.daysSplit?.length ||
+    (selectedWeekdays.length === sessionsRequired &&
+      new Set(selectedWeekdays).size === sessionsRequired);
+
+  const startBlockedByWeekdays =
+    !!selectedProgram?.daysSplit?.length && !weekdaySelectionReady;
+
+  const toggleWeekday = (key: ProgramDaySplitKey) => {
+    setSelectedWeekdays((prev) => {
+      if (prev.includes(key)) {
+        return prev.filter((k) => k !== key);
+      }
+      return [...prev, key];
+    });
+  };
 
   const handleSelectProgram = (program: Program) => {
     // Allow viewing program details regardless of Pro status
@@ -117,15 +199,30 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const handleConfirmDate = async () => {
     if (!selectedProgram) return;
 
-    const anchor = getProgramAnchorWeekdayKey(selectedProgram);
-    const normalized = normalizeToLocalMidnight(startDate);
-    let toSave = isProgramAnchorDate(normalized, anchor)
-      ? normalized
-      : nearestProgramAnchorOnOrAfter(normalized, anchor);
+    const today = new Date();
+    let toSave: Date;
 
-    const todayStart = normalizeToLocalMidnight(new Date());
-    if (toSave.getTime() < todayStart.getTime()) {
-      toSave = nearestProgramAnchorOnOrAfter(todayStart, anchor);
+    if (selectedProgram.daysSplit?.length) {
+      const sortedPattern = sortPatternByCalendarOrder(selectedWeekdays);
+      if (
+        sortedPattern.length !== sessionsRequired ||
+        new Set(sortedPattern).size !== sessionsRequired
+      ) {
+        return;
+      }
+      const startWeekday = firstSessionWeekdayForPattern(sortedPattern);
+      toSave = clampStartDateToPatternAndToday(startDate, today, [startWeekday]);
+    } else {
+      const anchor = getProgramAnchorWeekdayKey(selectedProgram);
+      const normalized = normalizeToLocalMidnight(startDate);
+      toSave = isProgramAnchorDate(normalized, anchor)
+        ? normalized
+        : nearestProgramAnchorOnOrAfter(normalized, anchor);
+
+      const todayStart = normalizeToLocalMidnight(today);
+      if (toSave.getTime() < todayStart.getTime()) {
+        toSave = nearestProgramAnchorOnOrAfter(todayStart, anchor);
+      }
     }
 
     try {
@@ -134,6 +231,13 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
       }
       await setActiveProgramId(selectedProgram.id);
       await setProgramStartDate(toSave.toISOString());
+      if (selectedProgram.daysSplit?.length) {
+        await setProgramWorkoutWeekdays(
+          sortPatternByCalendarOrder(selectedWeekdays)
+        );
+      } else {
+        await clearProgramWorkoutWeekdays();
+      }
       setShowDatePicker(false);
       onProgramSelected();
     } catch (error) {
@@ -145,8 +249,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     // Calculate number of weeks from the maximum dayIndex
     const maxDayIndex = Math.max(...program.workouts.map((w) => w.dayIndex));
     const weekCount = Math.ceil((maxDayIndex + 1) / 7);
-    // Calculate sessions per week from daysSplit if available
-    const sessionsPerWeek = program.daysSplit?.length || 0;
+    const sessionsPerWeek = sessionsPerWeekFromProgram(program);
 
     return (
       <TouchableOpacity
@@ -300,11 +403,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                     <View style={styles.workoutDaysTitleBlock}>
                       <Text style={styles.workoutTitle}>Workout Days</Text>
                       <Text style={styles.workoutDaysHint}>
-                        When you start, you will pick a start date on{' '}
-                        {`${programAnchorFullWeekdayName(
-                          getProgramAnchorWeekdayKey(selectedProgram)
-                        )}s`}{' '}
-                        only — that lines up with day 1 of the program.
+                        The template recommends{' '}
+                        {selectedProgram.daysSplit
+                          .map((k) => programAnchorFullWeekdayName(k))
+                          .join(', ')}
+                        . Tap days below to match your real week — you need
+                        exactly {sessionsRequired} training days before you can
+                        start. Your start date will be on the first of those
+                        weekdays in calendar order (Mon→Sun).
                       </Text>
                     </View>
                     <View>
@@ -315,138 +421,52 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                         }
                       >
                         <Text style={styles.moreInfoButtonText}>
-                          Change Days?
+                          About these days
                         </Text>
                       </TouchableOpacity>
                     </View>
                   </View>
                   {showWorkoutDaysMoreInfo && (
                     <Text style={styles.programDescription}>
-                      The first session working day will be the first day of the
-                      program you select. You can change the session days at any
-                      time in the program once started.
+                      Your choices set which weekdays count as training days each
+                      rolling week from your start date. After you start, you can
+                      still realign where you are in the block using the start
+                      date and &quot;Set as Today&apos;s Session&quot; from the
+                      workout screen.
+                    </Text>
+                  )}
+                  {!weekdaySelectionReady && (
+                    <Text style={styles.weekdaySelectionHint}>
+                      Select exactly {sessionsRequired} days (
+                      {selectedWeekdays.length} selected).
                     </Text>
                   )}
                   <View style={styles.daysSplitContainer}>
-                    <View
-                      style={[
-                        styles.dayItem,
-                        selectedProgram.daysSplit.includes('mon') &&
-                          styles.dayItemSelected,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.dayLabel,
-                          selectedProgram.daysSplit.includes('mon') &&
-                            styles.dayLabelSelected,
-                        ]}
-                      >
-                        M
-                      </Text>
-                    </View>
-                    <View
-                      style={[
-                        styles.dayItem,
-                        selectedProgram.daysSplit.includes('tue') &&
-                          styles.dayItemSelected,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.dayLabel,
-                          selectedProgram.daysSplit.includes('tue') &&
-                            styles.dayLabelSelected,
-                        ]}
-                      >
-                        T
-                      </Text>
-                    </View>
-                    <View
-                      style={[
-                        styles.dayItem,
-                        selectedProgram.daysSplit.includes('wed') &&
-                          styles.dayItemSelected,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.dayLabel,
-                          selectedProgram.daysSplit.includes('wed') &&
-                            styles.dayLabelSelected,
-                        ]}
-                      >
-                        W
-                      </Text>
-                    </View>
-                    <View
-                      style={[
-                        styles.dayItem,
-                        selectedProgram.daysSplit.includes('thu') &&
-                          styles.dayItemSelected,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.dayLabel,
-                          selectedProgram.daysSplit.includes('thu') &&
-                            styles.dayLabelSelected,
-                        ]}
-                      >
-                        T
-                      </Text>
-                    </View>
-                    <View
-                      style={[
-                        styles.dayItem,
-                        selectedProgram.daysSplit.includes('fri') &&
-                          styles.dayItemSelected,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.dayLabel,
-                          selectedProgram.daysSplit.includes('fri') &&
-                            styles.dayLabelSelected,
-                        ]}
-                      >
-                        F
-                      </Text>
-                    </View>
-                    <View
-                      style={[
-                        styles.dayItem,
-                        selectedProgram.daysSplit.includes('sat') &&
-                          styles.dayItemSelected,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.dayLabel,
-                          selectedProgram.daysSplit.includes('sat') &&
-                            styles.dayLabelSelected,
-                        ]}
-                      >
-                        S
-                      </Text>
-                    </View>
-                    <View
-                      style={[
-                        styles.dayItem,
-                        selectedProgram.daysSplit.includes('sun') &&
-                          styles.dayItemSelected,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.dayLabel,
-                          selectedProgram.daysSplit.includes('sun') &&
-                            styles.dayLabelSelected,
-                        ]}
-                      >
-                        S
-                      </Text>
-                    </View>
+                    {CALENDAR_DAY_KEYS.map((key) => {
+                      const selected = selectedWeekdays.includes(key);
+                      return (
+                        <TouchableOpacity
+                          key={key}
+                          style={[
+                            styles.dayItem,
+                            selected && styles.dayItemSelected,
+                          ]}
+                          onPress={() => toggleWeekday(key)}
+                          accessibilityRole="checkbox"
+                          accessibilityState={{ checked: selected }}
+                          accessibilityLabel={`${programAnchorFullWeekdayName(key)} training day`}
+                        >
+                          <Text
+                            style={[
+                              styles.dayLabel,
+                              selected && styles.dayLabelSelected,
+                            ]}
+                          >
+                            {CAL_DAY_LABELS[key]}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
                   </View>
                 </View>
               )}
@@ -517,8 +537,12 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  style={styles.startProgramButton}
+                  style={[
+                    styles.startProgramButton,
+                    startBlockedByWeekdays && styles.startProgramButtonDisabled,
+                  ]}
                   onPress={handleStartProgram}
+                  disabled={startBlockedByWeekdays}
                 >
                   <Text style={styles.startProgramButtonText}>
                     Start Program
@@ -553,20 +577,36 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
             keyboardShouldPersistTaps="handled"
           >
             <Text style={styles.datePickerExplanation}>
-              Your first session is always on{' '}
-              <Text style={styles.datePickerExplanationEmphasis}>
-                {`${programAnchorFullWeekdayName(
-                  getProgramAnchorWeekdayKey(selectedProgram)
-                )}s`}
-              </Text>
-              . Only those dates can be your program start; other days are
-              greyed out because they do not match day 1 of this template. Past
-              dates cannot be selected.
+              {selectedProgram.daysSplit?.length ? (
+                <>
+                  Your first session each week is the earliest day you picked
+                  (Mon→Sun order). Pick a start date on{' '}
+                  <Text style={styles.datePickerExplanationEmphasis}>
+                    {`${programAnchorFullWeekdayName(
+                      startDatePickerAllowedWeekdays[0] ?? 'mon'
+                    )}s`}
+                  </Text>
+                  . Other weekdays are greyed out. Past dates cannot be
+                  selected.
+                </>
+              ) : (
+                <>
+                  Your first session is always on{' '}
+                  <Text style={styles.datePickerExplanationEmphasis}>
+                    {`${programAnchorFullWeekdayName(
+                      getProgramAnchorWeekdayKey(selectedProgram)
+                    )}s`}
+                  </Text>
+                  . Only those dates can be your program start; other days are
+                  greyed out because they do not match day 1 of this template.
+                  Past dates cannot be selected.
+                </>
+              )}
             </Text>
             <ProgramStartDateCalendar
               value={startDate}
               onChange={setStartDate}
-              anchor={getProgramAnchorWeekdayKey(selectedProgram)}
+              allowedWeekdays={startDatePickerAllowedWeekdays}
             />
           </ScrollView>
         </View>
@@ -794,6 +834,12 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginTop: Spacing.xs,
   },
+  weekdaySelectionHint: {
+    color: Colors.accent,
+    fontSize: FontSize.md,
+    fontWeight: '600',
+    marginBottom: Spacing.md,
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: Colors.overlay,
@@ -985,6 +1031,9 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xxl,
     alignItems: 'center',
+  },
+  startProgramButtonDisabled: {
+    opacity: 0.4,
   },
   startProgramButtonText: {
     color: Colors.textOnAccent,

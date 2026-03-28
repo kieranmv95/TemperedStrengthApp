@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
   InputAccessoryView,
@@ -32,6 +32,11 @@ import type {
   RestTimerState,
 } from '../types/storage';
 import { getProgramById } from '../utils/program';
+import type { ProgramDaySplitKey } from '../utils/programStartWeekday';
+import {
+  getWorkoutForDaySinceStart,
+  listTrainingDayDeltasForProgram,
+} from '../utils/programWeekPattern';
 import {
   clearActiveSession,
   clearCompletedSession,
@@ -42,6 +47,7 @@ import {
   getCompletedSession,
   getExerciseSwapsForDay,
   getProgramStartDate,
+  getProgramWorkoutWeekdays,
   getRestTimer,
   getWorkoutLogsForDay,
   getWorkoutNotes,
@@ -134,6 +140,9 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const [dayIndex, setDayIndex] = useState<number | null>(null);
   const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null);
   const [startDate, setStartDate] = useState<string | null>(null);
+  const [workoutWeekPattern, setWorkoutWeekPattern] = useState<
+    ProgramDaySplitKey[] | null
+  >(null);
   const [program, setProgram] = useState<ReturnType<
     typeof getProgramById
   > | null>(null);
@@ -162,6 +171,16 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const scrollViewRef = useRef<ScrollView>(null);
   const notesInputRef = useRef<TextInput>(null);
   const notesInputAccessoryViewID = 'notesInputAccessory';
+
+  const programRef = useRef<ReturnType<typeof getProgramById> | null>(null);
+  const startDateRef = useRef<string | null>(null);
+  const workoutWeekPatternRef = useRef<ProgramDaySplitKey[] | null>(null);
+
+  useEffect(() => {
+    programRef.current = program;
+    startDateRef.current = startDate;
+    workoutWeekPatternRef.current = workoutWeekPattern;
+  }, [program, startDate, workoutWeekPattern]);
 
   const calculateDaysSinceStart = (startDate: string): number => {
     const start = new Date(startDate);
@@ -213,8 +232,13 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   );
 
   const loadWorkoutForDay = useCallback(
-    async (dayIdx: number, programData?: ReturnType<typeof getProgramById>) => {
-      const programToUse = programData || program;
+    async (
+      dayIdx: number,
+      programData?: ReturnType<typeof getProgramById>,
+      startISOOverride?: string | null,
+      patternOverride?: ProgramDaySplitKey[] | null
+    ) => {
+      const programToUse = programData ?? programRef.current;
       if (!programToUse) return;
 
       if (dayIdx < 0) {
@@ -236,8 +260,22 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       setIsNotesExpanded(savedNotes.length > 0);
       setCompletedSession(savedCompletedSession);
 
-      // Find workout for the selected day
-      const workout = programToUse.workouts.find((w) => w.dayIndex === dayIdx);
+      const startISO =
+        startISOOverride !== undefined ? startISOOverride : startDateRef.current;
+      const effectivePattern =
+        patternOverride !== undefined
+          ? patternOverride
+          : workoutWeekPatternRef.current;
+
+      const workout =
+        startISO !== null
+          ? getWorkoutForDaySinceStart(
+              programToUse,
+              startISO,
+              effectivePattern,
+              dayIdx
+            )
+          : (programToUse.workouts.find((w) => w.dayIndex === dayIdx) ?? null);
 
       if (workout) {
         setCurrentWorkout(workout);
@@ -249,7 +287,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         setSlots([]);
       }
     },
-    [program, loadExerciseSlots]
+    [loadExerciseSlots]
   );
 
   const loadWorkoutData = useCallback(async () => {
@@ -257,6 +295,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       setLoading(true);
       const programId = await getActiveProgramId();
       const savedStartDate = await getProgramStartDate();
+      const savedWeekPattern = await getProgramWorkoutWeekdays();
 
       if (!programId || !savedStartDate) {
         // No program selected, should show ProgramLauncher
@@ -273,13 +312,25 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
       setProgram(loadedProgram);
       setStartDate(savedStartDate);
+      setWorkoutWeekPattern(
+        savedWeekPattern && savedWeekPattern.length > 0
+          ? savedWeekPattern
+          : null
+      );
 
       const daysSinceStart = calculateDaysSinceStart(savedStartDate);
       setDayIndex(daysSinceStart);
       setSelectedDayIndex(daysSinceStart);
 
       // Load workout for today - pass programData directly to avoid dependency on program state
-      await loadWorkoutForDay(daysSinceStart, loadedProgram);
+      await loadWorkoutForDay(
+        daysSinceStart,
+        loadedProgram,
+        savedStartDate,
+        savedWeekPattern && savedWeekPattern.length > 0
+          ? savedWeekPattern
+          : null
+      );
 
       setLoading(false);
     } catch (error) {
@@ -602,6 +653,17 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     Keyboard.dismiss();
   }, []);
 
+  const workoutDayIndices = useMemo(() => {
+    if (!program || !startDate) {
+      return [];
+    }
+    return listTrainingDayDeltasForProgram(
+      program,
+      startDate,
+      workoutWeekPattern
+    );
+  }, [program, startDate, workoutWeekPattern]);
+
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -611,8 +673,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       </SafeAreaView>
     );
   }
-
-  const workoutDayIndices = program?.workouts.map((w) => w.dayIndex) || [];
 
   // Render content below the DaySelector based on state
   const renderContent = () => {

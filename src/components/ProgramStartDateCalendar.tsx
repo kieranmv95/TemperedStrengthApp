@@ -12,7 +12,8 @@ const WEEKDAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 type ProgramStartDateCalendarProps = {
   value: Date;
   onChange: (date: Date) => void;
-  anchor: ProgramDaySplitKey;
+  /** Start date may fall on any of these weekdays (local). */
+  allowedWeekdays: ProgramDaySplitKey[];
 };
 
 function sameLocalCalendarDay(a: Date, b: Date): boolean {
@@ -25,7 +26,7 @@ function sameLocalCalendarDay(a: Date, b: Date): boolean {
 
 export const ProgramStartDateCalendar: React.FC<
   ProgramStartDateCalendarProps
-> = ({ value, onChange, anchor }) => {
+> = ({ value, onChange, allowedWeekdays }) => {
   const normalizedValue = useMemo(
     () => normalizeToLocalMidnight(value),
     [value]
@@ -41,7 +42,10 @@ export const ProgramStartDateCalendar: React.FC<
     setVisibleMonth(new Date(v.getFullYear(), v.getMonth(), 1));
   }, [value]);
 
-  const anchorJsDay = programSplitKeyToJsDay(anchor);
+  const allowedJsDays = useMemo(
+    () => new Set(allowedWeekdays.map((k) => programSplitKeyToJsDay(k))),
+    [allowedWeekdays]
+  );
 
   const todayStart = normalizeToLocalMidnight(new Date());
 
@@ -129,11 +133,12 @@ export const ProgramStartDateCalendar: React.FC<
 
           const cellDate = new Date(year, month, cell.day);
           cellDate.setHours(0, 0, 0, 0);
-          const isAnchor = cellDate.getDay() === anchorJsDay;
+          const isAllowed =
+            allowedJsDays.size > 0 && allowedJsDays.has(cellDate.getDay());
           const isPast = cellDate.getTime() < todayStart.getTime();
           const selected = sameLocalCalendarDay(cellDate, normalizedValue);
 
-          if (!isAnchor || isPast) {
+          if (!isAllowed || isPast) {
             return (
               <View key={`d-${cell.day}`} style={styles.dayCell}>
                 <View style={[styles.dayInner, styles.dayInnerDisabled]}>
@@ -150,7 +155,7 @@ export const ProgramStartDateCalendar: React.FC<
                 style={[styles.dayInner, selected && styles.dayInnerSelected]}
                 accessibilityRole="button"
                 accessibilityState={{ selected }}
-                accessibilityLabel={`${cell.day}, select start date`}
+                accessibilityLabel={`${cell.day}, select program start date`}
               >
                 <Text
                   style={[styles.dayText, selected && styles.dayTextSelected]}

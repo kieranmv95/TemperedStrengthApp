@@ -1,4 +1,5 @@
 // Storage utilities for AsyncStorage
+import type { Program } from '@/src/types/program';
 import type {
   ActiveSession,
   CompletedSession,
@@ -11,6 +12,8 @@ import type {
   WorkoutNotes,
 } from '@/src/types/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export type ProgramWorkoutWeekdayKey = NonNullable<Program['daysSplit']>[number];
 
 export type {
   ActiveSession,
@@ -27,6 +30,7 @@ export type {
 
 const PROGRAM_STORAGE_KEY = 'active_program';
 const PROGRAM_START_DATE_KEY = 'program_start_date';
+const PROGRAM_WORKOUT_WEEKDAYS_KEY = 'program_workout_weekdays';
 const EXERCISE_SWAPS_KEY = 'exercise_swaps';
 const WORKOUT_LOGS_KEY = 'workout_logs';
 const CUSTOM_SET_COUNTS_KEY = 'custom_set_counts';
@@ -86,6 +90,49 @@ export const setProgramStartDate = async (startDate: string): Promise<void> => {
     await AsyncStorage.setItem(PROGRAM_START_DATE_KEY, startDate);
   } catch (error) {
     console.error('Error setting program start date:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get stored workout weekday pattern (rolling-week training days), or null if unset (legacy).
+ */
+export const getProgramWorkoutWeekdays =
+  async (): Promise<ProgramWorkoutWeekdayKey[] | null> => {
+    try {
+      const raw = await AsyncStorage.getItem(PROGRAM_WORKOUT_WEEKDAYS_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as unknown;
+      if (!Array.isArray(parsed) || parsed.length === 0) return null;
+      return parsed as ProgramWorkoutWeekdayKey[];
+    } catch (error) {
+      console.error('Error getting program workout weekdays:', error);
+      return null;
+    }
+  };
+
+/**
+ * Persist workout weekday pattern alongside program start.
+ */
+export const setProgramWorkoutWeekdays = async (
+  weekdays: ProgramWorkoutWeekdayKey[]
+): Promise<void> => {
+  try {
+    await AsyncStorage.setItem(
+      PROGRAM_WORKOUT_WEEKDAYS_KEY,
+      JSON.stringify(weekdays)
+    );
+  } catch (error) {
+    console.error('Error setting program workout weekdays:', error);
+    throw error;
+  }
+};
+
+export const clearProgramWorkoutWeekdays = async (): Promise<void> => {
+  try {
+    await AsyncStorage.removeItem(PROGRAM_WORKOUT_WEEKDAYS_KEY);
+  } catch (error) {
+    console.error('Error clearing program workout weekdays:', error);
     throw error;
   }
 };
@@ -575,6 +622,7 @@ export const clearProgramData = async (): Promise<void> => {
   try {
     await AsyncStorage.removeItem(PROGRAM_STORAGE_KEY);
     await AsyncStorage.removeItem(PROGRAM_START_DATE_KEY);
+    await AsyncStorage.removeItem(PROGRAM_WORKOUT_WEEKDAYS_KEY);
     await AsyncStorage.removeItem(EXERCISE_SWAPS_KEY);
     await AsyncStorage.removeItem(WORKOUT_LOGS_KEY);
     await AsyncStorage.removeItem(CUSTOM_SET_COUNTS_KEY);
