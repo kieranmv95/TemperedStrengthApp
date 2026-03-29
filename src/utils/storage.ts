@@ -1,6 +1,10 @@
 // Storage utilities for AsyncStorage
 import type { Program } from '@/src/types/program';
 import type {
+  StandaloneWorkoutLogEntry,
+  StandaloneWorkoutLogsStore,
+} from '@/src/types/standaloneWorkoutLogs';
+import type {
   ActiveSession,
   CompletedSession,
   CompletedSessions,
@@ -13,7 +17,9 @@ import type {
 } from '@/src/types/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export type ProgramWorkoutWeekdayKey = NonNullable<Program['daysSplit']>[number];
+export type ProgramWorkoutWeekdayKey = NonNullable<
+  Program['daysSplit']
+>[number];
 
 export type {
   ActiveSession,
@@ -27,6 +33,11 @@ export type {
   WorkoutLogs,
   WorkoutNotes,
 } from '@/src/types/storage';
+export type {
+  StandaloneLogPayload,
+  StandaloneWorkoutLogEntry,
+  StandaloneWorkoutLogsStore,
+} from '@/src/types/standaloneWorkoutLogs';
 
 const PROGRAM_STORAGE_KEY = 'active_program';
 const PROGRAM_START_DATE_KEY = 'program_start_date';
@@ -41,6 +52,7 @@ const FAVORITE_WORKOUTS_KEY = 'favorite_workouts';
 const REST_TIMER_KEY = 'rest_timer';
 const ACTIVE_SESSION_KEY = 'active_session';
 const COMPLETED_SESSIONS_KEY = 'completed_sessions';
+const STANDALONE_WORKOUT_LOGS_KEY = 'standalone_workout_logs';
 
 /**
  * Get the active program ID
@@ -97,19 +109,20 @@ export const setProgramStartDate = async (startDate: string): Promise<void> => {
 /**
  * Get stored workout weekday pattern (rolling-week training days), or null if unset (legacy).
  */
-export const getProgramWorkoutWeekdays =
-  async (): Promise<ProgramWorkoutWeekdayKey[] | null> => {
-    try {
-      const raw = await AsyncStorage.getItem(PROGRAM_WORKOUT_WEEKDAYS_KEY);
-      if (!raw) return null;
-      const parsed = JSON.parse(raw) as unknown;
-      if (!Array.isArray(parsed) || parsed.length === 0) return null;
-      return parsed as ProgramWorkoutWeekdayKey[];
-    } catch (error) {
-      console.error('Error getting program workout weekdays:', error);
-      return null;
-    }
-  };
+export const getProgramWorkoutWeekdays = async (): Promise<
+  ProgramWorkoutWeekdayKey[] | null
+> => {
+  try {
+    const raw = await AsyncStorage.getItem(PROGRAM_WORKOUT_WEEKDAYS_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed) || parsed.length === 0) return null;
+    return parsed as ProgramWorkoutWeekdayKey[];
+  } catch (error) {
+    console.error('Error getting program workout weekdays:', error);
+    return null;
+  }
+};
 
 /**
  * Persist workout weekday pattern alongside program start.
@@ -829,4 +842,83 @@ export const getWorkoutLogsForDay = async (
     console.error('Error getting workout logs for day:', error);
     return {};
   }
+};
+
+function sortStandaloneLogEntriesNewestFirst(
+  entries: StandaloneWorkoutLogEntry[]
+): StandaloneWorkoutLogEntry[] {
+  return [...entries].sort(
+    (a, b) => new Date(b.loggedAt).getTime() - new Date(a.loggedAt).getTime()
+  );
+}
+
+export const readStandaloneWorkoutLogsStore =
+  async (): Promise<StandaloneWorkoutLogsStore> => {
+    try {
+      const raw = await AsyncStorage.getItem(STANDALONE_WORKOUT_LOGS_KEY);
+      if (!raw) {
+        return {};
+      }
+      const parsed = JSON.parse(raw) as unknown;
+      if (
+        typeof parsed !== 'object' ||
+        parsed === null ||
+        Array.isArray(parsed)
+      ) {
+        return {};
+      }
+      return parsed as StandaloneWorkoutLogsStore;
+    } catch (error) {
+      console.error('Error reading standalone workout logs:', error);
+      return {};
+    }
+  };
+
+const writeStandaloneWorkoutLogsStore = async (
+  store: StandaloneWorkoutLogsStore
+): Promise<void> => {
+  await AsyncStorage.setItem(
+    STANDALONE_WORKOUT_LOGS_KEY,
+    JSON.stringify(store)
+  );
+};
+
+export const getStandaloneWorkoutLogsForWorkout = async (
+  workoutId: string
+): Promise<StandaloneWorkoutLogEntry[]> => {
+  const store = await readStandaloneWorkoutLogsStore();
+  return sortStandaloneLogEntriesNewestFirst(store[workoutId] ?? []);
+};
+
+export const upsertStandaloneWorkoutLogEntry = async (
+  entry: StandaloneWorkoutLogEntry
+): Promise<void> => {
+  const store = await readStandaloneWorkoutLogsStore();
+  const prev = [...(store[entry.workoutId] ?? [])];
+  const idx = prev.findIndex((e) => e.id === entry.id);
+  if (idx >= 0) {
+    prev[idx] = entry;
+  } else {
+    prev.push(entry);
+  }
+  store[entry.workoutId] = sortStandaloneLogEntriesNewestFirst(prev);
+  await writeStandaloneWorkoutLogsStore(store);
+};
+
+export const deleteStandaloneWorkoutLogEntry = async (
+  workoutId: string,
+  logId: string
+): Promise<void> => {
+  const store = await readStandaloneWorkoutLogsStore();
+  const list = store[workoutId];
+  if (!list) {
+    return;
+  }
+  const next = list.filter((e) => e.id !== logId);
+  if (next.length === 0) {
+    delete store[workoutId];
+  } else {
+    store[workoutId] = sortStandaloneLogEntriesNewestFirst(next);
+  }
+  await writeStandaloneWorkoutLogsStore(store);
 };

@@ -1,0 +1,791 @@
+[
+  {
+    "id": "f_01",
+    "title": "The 15-Min Engine",
+    "description": "Classic AMRAP. Aim for a consistent pace you can maintain for the full duration. Target 5+ rounds.",
+    "category": "WOD",
+    "difficulty": "Intermediate",
+    "estimatedTime": 25,
+    "tags": [
+      "AMRAP",
+      "No Equipment"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "2 Rounds: 200m Jog, 10 Air Squats, 10 Scapular Pushups"
+        ]
+      },
+      {
+        "name": "15 Min AMRAP",
+        "instructions": "As many rounds as possible in 15 mins. No scheduled rest; rest only as needed.",
+        "movements": [
+          "10 Burpees",
+          "20 Air Squats",
+          "30 Sit-ups"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_02",
+    "title": "Death by 10 Metres",
+    "description": "An EMOM (Every Minute on the Minute) shuttle test. This starts easy but becomes maximal effort quickly.",
+    "category": "Conditioning",
+    "difficulty": "Advanced",
+    "estimatedTime": 25,
+    "tags": [
+      "Sprint",
+      "Lungs"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "3 Rounds: 30s High Knees, 30s Butt Kicks, 5 Inchworms"
+        ]
+      },
+      {
+        "name": "EMOM",
+        "instructions": "Start clock. Min 1: 1 x 10m sprint. Min 2: 2 x 10m sprints. Continue until you cannot complete the required sprints within the minute.",
+        "movements": [
+          "10m Shuttles"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_03",
+    "title": "Core Tempering",
+    "description": "Focus on 'bracing' your midsection. Movement should be slow and controlled.",
+    "category": "Mobility",
+    "difficulty": "Beginner",
+    "estimatedTime": 15,
+    "tags": [
+      "Core",
+      "Abs"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "2 Rounds: 10 Cat-Cow, 10 Bird-Dogs"
+        ]
+      },
+      {
+        "name": "3 Rounds",
+        "instructions": "Rest 60s between rounds. Focus on keeping lower back glued to the floor during Hollow Rocks.",
+        "movements": [
+          "45s Plank",
+          "15 Hollow Rocks",
+          "30s Side Plank (L/R)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_04",
+    "title": "The Century",
+    "description": "A benchmark test of mental grit. The goal is to finish 100 burpees as fast as possible.",
+    "category": "WOD",
+    "difficulty": "Intermediate",
+    "estimatedTime": 15,
+    "tags": [
+      "Chipper",
+      "Full Body"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "5 mins joint Prep: Wrist circles, arm swings, 20 Jumping Jacks"
+        ]
+      },
+      {
+        "name": "For Time",
+        "instructions": "Go at 80% pace for the first 50, then accelerate. Target: Under 8 mins.",
+        "movements": [
+          "100 Burpees for time"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_05",
+    "title": "Leg Day Primer",
+    "description": "High volume bodyweight leg pump. Keep rest minimal to maximise metabolic stress.",
+    "category": "Strength",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": [
+      "Legs",
+      "Volume"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "10 World's Greatest Stretches, 20 Glute Bridges"
+        ]
+      },
+      {
+        "name": "4 Rounds",
+        "instructions": "Rest 90s between rounds. Focus on full range of motion.",
+        "movements": [
+          "20 Lunges",
+          "20 Glute Bridges",
+          "20 Sumo Squats",
+          "1 min Wall Sit"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_06",
+    "title": "Upper Body Blitz",
+    "description": "Hypertrophy focus. Control the eccentric (lowering) phase for 2 seconds on every rep.",
+    "category": "Strength",
+    "difficulty": "Intermediate",
+    "estimatedTime": 25,
+    "tags": [
+      "Upper Body",
+      "Pump"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "2 Rounds: 10 Pushups, 10 Prone Y-Raises, 10 Arm Circles"
+        ]
+      },
+      {
+        "name": "3 Rounds",
+        "instructions": "Rest 2 mins between rounds to allow for maximum effort on the next set.",
+        "movements": [
+          "Max Pushups",
+          "15 Inverted Rows (or Towel Rows)",
+          "12 Dips (on chair/bench)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_07",
+    "title": "The 500m Row Test",
+    "description": "Pure anaerobic power. This should be a 'sprint' where you finish completely breathless.",
+    "category": "Conditioning",
+    "difficulty": "Advanced",
+    "estimatedTime": 12,
+    "tags": [
+      "Benchmark",
+      "Row"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "500m Easy Row, then 3 x 10 stroke power bursts"
+        ]
+      },
+      {
+        "name": "Max Effort",
+        "instructions": "Secure feet tightly. Start with short, quick strokes to get the flywheel moving.",
+        "movements": [
+          "500m Row Sprint"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_08",
+    "title": "Desk Job Recovery",
+    "description": "The antidote to sitting. Focus on breathing deeply into each stretch.",
+    "category": "Mobility",
+    "difficulty": "Beginner",
+    "estimatedTime": 15,
+    "tags": [
+      "Recovery",
+      "Postures"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "2 mins light walking or jogging to warm the tissues"
+        ]
+      },
+      {
+        "name": "Flow",
+        "instructions": "Hold each pose for the specified time. Don't force the range; let gravity do the work.",
+        "movements": [
+          "Couch Stretch (2m/side)",
+          "Pigeon Pose (2m/side)",
+          "Thoracic Extensions (15 reps)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_09",
+    "title": "Standard PFT",
+    "description": "The official Hyrox Physical Fitness Test. Use this to gauge your current level.",
+    "category": "Hyrox",
+    "difficulty": "Intermediate",
+    "estimatedTime": 35,
+    "tags": [
+      "Hyrox",
+      "Test"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "800m Run, 10 Burpees, 10 Air Squats"
+        ]
+      },
+      {
+        "name": "For Time",
+        "instructions": "Minimal transition time between movements. Record your total time.",
+        "movements": [
+          "1000m Run",
+          "30 Burpee Broad Jumps",
+          "200m Sandbag Lunges",
+          "1000m Row",
+          "30 Wall Balls"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_10",
+    "title": "Kettlebell Swing Ladder",
+    "description": "Building posterior chain power. Maintain a flat back and snap the hips aggressively.",
+    "category": "Strength",
+    "difficulty": "Intermediate",
+    "estimatedTime": 15,
+    "tags": [
+      "KB",
+      "Power"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "20 Hip Hinges, 10 Yoga Pushups"
+        ]
+      },
+      {
+        "name": "EMOM 10",
+        "instructions": "Perform the reps at the start of every minute. Rest for the remainder of that minute.",
+        "movements": [
+          "15-20 KB Swings"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_11",
+    "title": "Sprint Intervals",
+    "description": "Developing top-end speed and aerobic recovery. Each 400m should be at 90-95% effort.",
+    "category": "Conditioning",
+    "difficulty": "Advanced",
+    "estimatedTime": 30,
+    "tags": [
+      "Running",
+      "Speed"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "1km Jog, Leg Swings, 2 x 50m Strides"
+        ]
+      },
+      {
+        "name": "5 Sets",
+        "instructions": "Rest 90s between sets. Focus on staying relaxed in the face and shoulders while sprinting.",
+        "movements": [
+          "400m Run (All out)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_12",
+    "title": "Pushup Pyramid",
+    "description": "Volume-based conditioning for the upper body. Form over speed.",
+    "category": "Strength",
+    "difficulty": "Intermediate",
+    "estimatedTime": 20,
+    "tags": [
+      "Chest",
+      "Bodyweight"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "2 Rounds: 10 Shoulder Taps, 10 Scapular Pushups"
+        ]
+      },
+      {
+        "name": "1 to 10 to 1",
+        "instructions": "Rest is equal to the time it took to do the reps. (e.g., 5 pushups, rest ~5-10s).",
+        "movements": [
+          "1-2-3-4-5-6-7-8-9-10-9-8-7-6-5-4-3-2-1 Pushups"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_13",
+    "title": "The 4-Min Tabata",
+    "description": "High intensity, short duration. Maximum intensity is required to see benefits.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 10,
+    "tags": [
+      "Tabata",
+      "Quick"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "2 mins Jumping Jacks, 10 Air Squats"
+        ]
+      },
+      {
+        "name": "20s Work / 10s Rest",
+        "instructions": "8 Rounds of 20 seconds of work followed by 10 seconds of rest.",
+        "movements": [
+          "Thrusters (or Jump Squats)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_14",
+    "title": "Handstand Prep",
+    "description": "Shoulder stability and technical positioning. Stop immediately if form breaks down.",
+    "category": "Mobility",
+    "difficulty": "Intermediate",
+    "estimatedTime": 25,
+    "tags": [
+      "Shoulders",
+      "Skill"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "3 Rounds: 10 Wrist Stretches, 10 Wall Slides"
+        ]
+      },
+      {
+        "name": "3 Rounds",
+        "instructions": "Rest 2 mins between rounds. Quality is the goal here, not fatigue.",
+        "movements": [
+          "30s Wall Walk/Hold",
+          "10 Scapular Pushups",
+          "20 Shoulder Taps"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_15",
+    "title": "Burpee/Squat Ascending",
+    "description": "A ladder format that challenges your pacing and leg endurance.",
+    "category": "WOD",
+    "difficulty": "Intermediate",
+    "estimatedTime": 18,
+    "tags": [
+      "Legs",
+      "Lungs"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "2 Rounds: 10 Air Squats, 5 Burpees"
+        ]
+      },
+      {
+        "name": "10 min AMRAP",
+        "instructions": "Round 1: 2 Reps each. Round 2: 4 Reps. Round 3: 6 Reps... continue until time is up.",
+        "movements": [
+          "2 Burpees, 2 Squats (+2 reps every round)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_16",
+    "title": "Shoulder Health Flow",
+    "description": "Prehab for athletes with stiff shoulders. Use a light resistance band.",
+    "category": "Mobility",
+    "difficulty": "Beginner",
+    "estimatedTime": 12,
+    "tags": [
+      "Shoulders",
+      "Prehab"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "2 mins Arm Swings and Thoracic Twists"
+        ]
+      },
+      {
+        "name": "Flow",
+        "instructions": "Move through the reps slowly. Focus on 'feeling' the scapula move on the ribcage.",
+        "movements": [
+          "Band Dislocates (20)",
+          "Face Pulls (20)",
+          "Wall Slides (15)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_17",
+    "title": "Jump Rope Skill",
+    "description": "Cardiovascular health and foot speed. Focus on staying light on the balls of your feet.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 20,
+    "tags": [
+      "Cardio",
+      "Jump Rope"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "Ankle circles, 50 Calf Raises"
+        ]
+      },
+      {
+        "name": "5 Rounds",
+        "instructions": "Rest 1 min between rounds. If you trip, just reset and keep going.",
+        "movements": [
+          "2 mins Steady Jump Rope",
+          "1 min Rest"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_18",
+    "title": "The Bear Crawl",
+    "description": "Building core tension and shoulder stability through crawling patterns.",
+    "category": "WOD",
+    "difficulty": "Intermediate",
+    "estimatedTime": 18,
+    "tags": [
+      "Full Body",
+      "Animal Flow"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "Wrist prep, 10 Cat-Cow, 10 Bird-Dog"
+        ]
+      },
+      {
+        "name": "EMOM 10",
+        "instructions": "Execute both movements within the minute. Rest for the remainder.",
+        "movements": [
+          "20m Bear Crawl",
+          "10 Air Squats"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_19",
+    "title": "Grip Strength 101",
+    "description": "Building the foundations for pullups and heavy deadlifts. Don't use straps.",
+    "category": "Strength",
+    "difficulty": "Beginner",
+    "estimatedTime": 20,
+    "tags": [
+      "Grip",
+      "Arms"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "Wrist circles, 20 Hand Clenches"
+        ]
+      },
+      {
+        "name": "3 Rounds",
+        "instructions": "Rest 2 mins between rounds. The goal is to reach near-failure on the hang.",
+        "movements": [
+          "Max Hang from Pull-up Bar",
+          "40m Farmers Walk (Heavy)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_20",
+    "title": "The 1km Row Benchmark",
+    "description": "A middle-distance engine test. Aim for a sub 4:00 time (Intermediate).",
+    "category": "Hyrox",
+    "difficulty": "Intermediate",
+    "estimatedTime": 15,
+    "tags": [
+      "Row",
+      "Benchmark"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "500m Easy Row + 5 High Power strokes"
+        ]
+      },
+      {
+        "name": "Max Effort",
+        "instructions": "Try to maintain a consistent '500m split' for the entire distance.",
+        "movements": [
+          "1000m Row"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_21",
+    "title": "Chest & Triceps",
+    "description": "A classic push session built around the bench press. Control the descent on every rep - the lowering phase is where the chest work really happens.",
+    "category": "Strength",
+    "difficulty": "Intermediate",
+    "estimatedTime": 50,
+    "tags": [
+      "Chest",
+      "Triceps",
+      "Gym"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "3 mins light cardio",
+          "10 arm circles forward / 10 arm circles backward",
+          "10 scapular push-ups",
+          "1 light set of 15 push-ups focusing on shoulder stability"
+        ]
+      },
+      {
+        "name": "Main Work",
+        "instructions": "Rest 90–120s between sets. Focus on a 2-second controlled descent on all pressing movements.",
+        "movements": [
+          {
+            "name": "Barbell or Dumbbell Bench Press",
+            "value": "4 x 10",
+            "note": "Touch chest lightly on each rep. Do not bounce."
+          },
+          {
+            "name": "Incline Dumbbell Press",
+            "value": "3 x 12",
+            "note": "30–45° incline. Feel the stretch at the bottom."
+          },
+          {
+            "name": "Dumbbell or Cable Flyes",
+            "value": "3 x 15",
+            "note": "Keep a slight bend in the elbow throughout. Squeeze at the top."
+          }
+        ]
+      },
+      {
+        "name": "Tricep Finisher",
+        "instructions": "Rest 60s between sets. Keep elbows pinned - only forearms should move.",
+        "movements": [
+          {
+            "name": "Dips (Bench or Bar)",
+            "value": "3 x 12",
+            "note": "Stay upright to keep the load on the triceps."
+          },
+          {
+            "name": "Overhead Tricep Extension (DB or Cable)",
+            "value": "3 x 12",
+            "note": "Full stretch at the bottom - do not rush."
+          }
+        ]
+      },
+      {
+        "name": "Shoulder Health",
+        "instructions": "Light weight only. This is prehab, not a strength exercise.",
+        "movements": [
+          {
+            "name": "Reverse Flyes or Band Pull-Aparts",
+            "value": "3 x 15",
+            "note": "Counterbalances the pressing work. Lead with the elbows."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_22",
+    "title": "Back & Biceps",
+    "description": "A pulling session focused on building lat width and mid-back thickness. Think of your hands as hooks - pull with your elbows, not your hands.",
+    "category": "Strength",
+    "difficulty": "Intermediate",
+    "estimatedTime": 50,
+    "tags": [
+      "Back",
+      "Biceps",
+      "Gym"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "3 mins light cardio (rower preferred)",
+          "10 band pull-aparts or scapular wall slides",
+          "10 dead bugs (controlled, alternating)",
+          "1 light set of 10 dumbbell rows each side"
+        ]
+      },
+      {
+        "name": "Main Work",
+        "instructions": "Rest 90–120s between sets. Initiate every pull by retracting your shoulder blade first.",
+        "movements": [
+          {
+            "name": "Barbell Row or Dumbbell Row",
+            "value": "4 x 10",
+            "note": "Keep torso parallel to floor. Pull elbows toward your back pockets."
+          },
+          {
+            "name": "Pull-ups or Lat Pulldown",
+            "value": "3 x 8–12",
+            "note": "Full dead hang at the bottom on every rep. Pull chest to bar."
+          },
+          {
+            "name": "Seated Cable Row or Inverted Row",
+            "value": "3 x 12",
+            "note": "Squeeze shoulder blades together and hold for a beat at the peak."
+          }
+        ]
+      },
+      {
+        "name": "Bicep Finisher",
+        "instructions": "Rest 60s between sets. No swinging - keep elbows pinned.",
+        "movements": [
+          {
+            "name": "Dumbbell Bicep Curls",
+            "value": "3 x 12",
+            "note": "Supinate (rotate) the wrist at the top to fully contract the bicep."
+          },
+          {
+            "name": "Hammer Curls",
+            "value": "3 x 12",
+            "note": "Neutral grip targets the brachialis. Keep wrists straight throughout."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_23",
+    "title": "Legs: Squat & Hinge",
+    "description": "A balanced lower body session covering both the anterior and posterior chain. The most important session of the week for overall strength and body composition.",
+    "category": "Strength",
+    "difficulty": "Intermediate",
+    "estimatedTime": 55,
+    "tags": [
+      "Legs",
+      "Squat",
+      "Gym"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "5 mins bike or rower",
+          "30s hip flexor stretch each side / 30s pigeon pose each side",
+          "10 glute bridges with 2s pause at the top",
+          "10 bodyweight squats with controlled tempo"
+        ]
+      },
+      {
+        "name": "Main Work",
+        "instructions": "Rest 2 mins between sets on squats. Rest 90s on accessory work.",
+        "movements": [
+          {
+            "name": "Barbell Back Squat or Leg Press",
+            "value": "4 x 10",
+            "note": "Sit back and down. Drive the floor away on the way up."
+          },
+          {
+            "name": "Romanian Deadlift (Barbell or Dumbbell)",
+            "value": "3 x 12",
+            "note": "Push hips back until you feel a deep hamstring stretch. Drive hips through at the top and squeeze glutes."
+          },
+          {
+            "name": "Walking Lunges or Split Squat",
+            "value": "3 x 10 each leg",
+            "note": "Keep your front shin vertical. Do not let the knee cave inward."
+          }
+        ]
+      },
+      {
+        "name": "Isolation Finisher",
+        "instructions": "Rest 60s between sets. Full range of motion on both movements.",
+        "movements": [
+          {
+            "name": "Leg Extension or Leg Curl",
+            "value": "3 x 15",
+            "note": "Pause for 1 second at peak contraction on each rep."
+          },
+          {
+            "name": "Calf Raises",
+            "value": "3 x 20",
+            "note": "All the way up, all the way down. Slow eccentric."
+          }
+        ]
+      },
+      {
+        "name": "Core Finisher",
+        "movements": [
+          {
+            "name": "Hanging Leg Raise or Plank",
+            "value": "3 x 12 / 3 x 45s",
+            "note": "No spinal load after heavy squats. Hip flexion only."
+          }
+        ]
+      }
+    ]
+  }
+]

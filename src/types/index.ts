@@ -19,4 +19,10 @@ export type {
   DetailedMovement,
   SingleWorkout,
   WorkoutCategory,
+  WorkoutLogSchema,
 } from './workouts';
+export type {
+  StandaloneLogPayload,
+  StandaloneWorkoutLogEntry,
+  StandaloneWorkoutLogsStore,
+} from './standaloneWorkoutLogs';

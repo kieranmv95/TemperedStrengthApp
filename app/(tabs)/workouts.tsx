@@ -1,9 +1,5 @@
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '@/src/constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import type { SingleWorkout, WorkoutCategory } from '@/src/types/workouts';
@@ -279,7 +275,11 @@ export default function WorkoutsScreen() {
               </Text>
             </View>
             <View style={styles.detailMetaItem}>
-              <Ionicons name="time-outline" size={16} color={Colors.textMuted} />
+              <Ionicons
+                name="time-outline"
+                size={16}
+                color={Colors.textMuted}
+              />
               <Text style={styles.detailMetaText}>
                 {selectedWorkout.estimatedTime} min
               </Text>
@@ -326,8 +326,9 @@ export default function WorkoutsScreen() {
                   const movementText =
                     typeof movement === 'string'
                       ? movement
-                      : `${movement.name}: ${movement.value}${movement.note ? ` (${movement.note})` : ''
-                      }`;
+                      : `${movement.name}: ${movement.value}${
+                          movement.note ? ` (${movement.note})` : ''
+                        }`;
                   return (
                     <View key={movementIndex} style={styles.movementItem}>
                       <Text style={styles.movementBullet}>•</Text>
@@ -338,6 +339,11 @@ export default function WorkoutsScreen() {
               </View>
             </View>
           ))}
+
+          <StandaloneWorkoutLogPanel
+            key={selectedWorkout.id}
+            workout={selectedWorkout}
+          />
         </ScrollView>
       </SafeAreaView>
     );
@@ -366,7 +372,7 @@ export default function WorkoutsScreen() {
                   : filter === 'Pro'
                     ? allStandaloneWorkouts.filter((w) => w.isPremium).length
                     : allStandaloneWorkouts.filter((w) => w.category === filter)
-                      .length;
+                        .length;
 
             return (
               <TouchableOpacity
