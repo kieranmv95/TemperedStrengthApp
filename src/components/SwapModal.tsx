@@ -17,7 +17,7 @@ import {
   Spacing,
 } from '../constants/theme';
 import { getAllExercises, getExerciseById } from '../data/exercises';
-import { findAlternatives } from '../utils/pivotEngine';
+import { findAlternatives, type ExerciseAlternative } from '../utils/pivotEngine';
 import {
   clearExerciseSwap,
   clearLoggedSetsForSlot,
@@ -53,8 +53,13 @@ export const SwapModal: React.FC<SwapModalProps> = ({
   const originalExercise = originalExerciseId
     ? getExerciseById(originalExerciseId)
     : null;
-  const alternatives = currentExerciseId
+  const rankedAlternatives: ExerciseAlternative[] = currentExerciseId
     ? findAlternatives(currentExerciseId, 10)
+    : [];
+  const bestMatches = rankedAlternatives.filter((a) => a.matchScore === 100);
+  const otherMatches = rankedAlternatives.filter((a) => a.matchScore === 50);
+  const allExercisesForEmptySlot = currentExerciseId
+    ? []
     : getAllExercises().slice(0, 15); // Show all exercises for empty slots
 
   // Check if the current exercise is swapped (different from original)
@@ -162,6 +167,29 @@ export const SwapModal: React.FC<SwapModalProps> = ({
       await onClearData();
     }
     onClose();
+  };
+
+  const renderAlternativeItem = (alternative: ExerciseAlternative) => {
+    const exercise = alternative.exercise;
+    return (
+      <TouchableOpacity
+        key={exercise.id}
+        style={styles.alternativeItem}
+        onPress={() => handleSelect(exercise.id)}
+      >
+        <View style={styles.alternativeContent}>
+          <Text style={styles.alternativeName}>{exercise.name}</Text>
+          <View style={styles.alternativeMeta}>
+            <Text style={styles.alternativeEquipment}>{exercise.equipment}</Text>
+            <Text style={styles.alternativeMuscle}>{exercise.muscle}</Text>
+            <Text style={styles.alternativeMatchScore}>
+              {alternative.matchScore}% match
+            </Text>
+          </View>
+        </View>
+        <Text style={styles.selectArrow}>→</Text>
+      </TouchableOpacity>
+    );
   };
 
   return (
@@ -279,31 +307,53 @@ export const SwapModal: React.FC<SwapModalProps> = ({
           )}
 
           <ScrollView style={styles.alternativesList}>
-            {alternatives.length === 0 && currentExerciseId && (
+            {rankedAlternatives.length === 0 && currentExerciseId && (
               <Text style={styles.noAlternatives}>
                 No alternatives found for this pattern.
               </Text>
             )}
-            {alternatives.map((exercise) => (
-              <TouchableOpacity
-                key={exercise.id}
-                style={styles.alternativeItem}
-                onPress={() => handleSelect(exercise.id)}
-              >
-                <View style={styles.alternativeContent}>
-                  <Text style={styles.alternativeName}>{exercise.name}</Text>
-                  <View style={styles.alternativeMeta}>
-                    <Text style={styles.alternativeEquipment}>
-                      {exercise.equipment}
+            {currentExerciseId ? (
+              <>
+                {bestMatches.length > 0 && (
+                  <>
+                    <Text style={styles.sectionTitle}>Best matches (100%)</Text>
+                    {bestMatches.map(renderAlternativeItem)}
+                  </>
+                )}
+
+                {otherMatches.length > 0 && (
+                  <>
+                    <Text style={styles.sectionTitle}>Other options (50%)</Text>
+                    <Text style={styles.sectionHelperText}>
+                      These keep the muscle group but may use a different
+                      movement pattern.
                     </Text>
-                    <Text style={styles.alternativeMuscle}>
-                      {exercise.muscle}
-                    </Text>
+                    {otherMatches.map(renderAlternativeItem)}
+                  </>
+                )}
+              </>
+            ) : (
+              allExercisesForEmptySlot.map((exercise) => (
+                <TouchableOpacity
+                  key={exercise.id}
+                  style={styles.alternativeItem}
+                  onPress={() => handleSelect(exercise.id)}
+                >
+                  <View style={styles.alternativeContent}>
+                    <Text style={styles.alternativeName}>{exercise.name}</Text>
+                    <View style={styles.alternativeMeta}>
+                      <Text style={styles.alternativeEquipment}>
+                        {exercise.equipment}
+                      </Text>
+                      <Text style={styles.alternativeMuscle}>
+                        {exercise.muscle}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <Text style={styles.selectArrow}>→</Text>
-              </TouchableOpacity>
-            ))}
+                  <Text style={styles.selectArrow}>→</Text>
+                </TouchableOpacity>
+              ))
+            )}
           </ScrollView>
         </View>
       </View>
@@ -359,7 +409,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   disclaimer: {
-    backgroundColor: Colors.warning,
+    backgroundColor: Colors.accentOverlay,
     padding: Spacing.xl,
     borderRadius: BorderRadius.lg,
     fontSize: FontSize.md,
@@ -433,6 +483,24 @@ const styles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.md,
     fontWeight: '500',
+  },
+  alternativeMatchScore: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '500',
+  },
+  sectionTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+    marginBottom: Spacing.lg,
+    marginTop: Spacing.xl,
+  },
+  sectionHelperText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '500',
+    marginBottom: Spacing.xl,
   },
   selectArrow: {
     color: Colors.accent,

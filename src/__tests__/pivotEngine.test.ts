@@ -56,6 +56,16 @@ const mockExercises = [
     updated_at: '2025-01-01',
     logging_type: 'reps' as const,
   },
+  {
+    id: 6,
+    name: 'Cable Flyes',
+    pattern: 'isolation',
+    muscle: 'upper chest',
+    equipment: 'cable',
+    created_at: '2025-01-01',
+    updated_at: '2025-01-01',
+    logging_type: 'reps' as const,
+  },
 ];
 
 describe('findAlternatives', () => {
@@ -73,7 +83,8 @@ describe('findAlternatives', () => {
     const alternatives = findAlternatives(1, 2);
 
     expect(alternatives).toHaveLength(2);
-    expect(alternatives.map((exercise) => exercise.id).sort()).toEqual([2, 3]);
+    expect(alternatives.map((a) => a.exercise.id).sort()).toEqual([2, 3]);
+    expect(alternatives.every((a) => a.matchScore === 100)).toBe(true);
 
     randomSpy.mockRestore();
   });
@@ -82,8 +93,25 @@ describe('findAlternatives', () => {
     const alternatives = findAlternatives(1, 3);
 
     expect(alternatives).toHaveLength(3);
-    expect(alternatives.map((exercise) => exercise.id)).toEqual(
+    expect(alternatives.map((a) => a.exercise.id)).toEqual(
       expect.arrayContaining([2, 3, 5])
+    );
+    expect(alternatives.every((a) => a.matchScore === 100)).toBe(true);
+  });
+
+  it('falls back to same muscle group when perfect matches are insufficient', () => {
+    const alternatives = findAlternatives(1, 4);
+
+    expect(alternatives).toHaveLength(4);
+    const byScore = alternatives.reduce<Record<number, number>>((acc, a) => {
+      acc[a.matchScore] = (acc[a.matchScore] ?? 0) + 1;
+      return acc;
+    }, {});
+
+    expect(byScore[100]).toBe(3);
+    expect(byScore[50]).toBe(1);
+    expect(alternatives.map((a) => a.exercise.id)).toEqual(
+      expect.arrayContaining([6])
     );
   });
 });
