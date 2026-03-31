@@ -653,6 +653,17 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     Keyboard.dismiss();
   }, []);
 
+  const toggleNotesExpanded = useCallback(() => {
+    setIsNotesExpanded((prev) => {
+      const next = !prev;
+      if (!next) {
+        notesInputRef.current?.blur();
+        Keyboard.dismiss();
+      }
+      return next;
+    });
+  }, []);
+
   const workoutDayIndices = useMemo(() => {
     if (!program || !startDate) {
       return [];
@@ -702,7 +713,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           ref={scrollViewRef}
           style={styles.scrollView}
           contentContainerStyle={styles.content}
-          keyboardShouldPersistTaps="handled"
+          keyboardShouldPersistTaps="always"
         >
           <View style={styles.header}>
             <View style={styles.headerTop}>
@@ -839,7 +850,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           <View style={styles.notesContainer}>
             <TouchableOpacity
               style={styles.notesHeader}
-              onPress={() => setIsNotesExpanded(!isNotesExpanded)}
+              onPress={toggleNotesExpanded}
               activeOpacity={0.7}
             >
               <Text style={styles.notesTitle}>Notes</Text>
@@ -870,6 +881,11 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                 }
                 blurOnSubmit={Platform.OS === 'android'}
                 returnKeyType={Platform.OS === 'android' ? 'done' : 'default'}
+                onSubmitEditing={() => {
+                  notesInputRef.current?.blur();
+                  Keyboard.dismiss();
+                  setIsNotesExpanded(false);
+                }}
               />
             )}
           </View>
