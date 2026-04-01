@@ -8,9 +8,9 @@ import { getArticleById } from '@/src/data/brief';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Image,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,

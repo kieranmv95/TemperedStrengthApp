@@ -2,10 +2,10 @@ import { ProgramStartDateCalendar } from '@/src/components/ProgramStartDateCalen
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Alert,
   Modal,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -296,7 +296,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.content}
