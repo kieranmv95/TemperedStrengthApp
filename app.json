@@ -2,7 +2,7 @@
   "expo": {
     "name": "tempered-strength-app",
     "slug": "tempered-strength-app",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "temperedstrengthapp",
@@ -24,7 +24,6 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "permissions": [
-        "android.permission.SCHEDULE_EXACT_ALARM",
         "android.permission.POST_NOTIFICATIONS"
       ],
       "edgeToEdgeEnabled": true,
@@ -37,6 +36,16 @@
     "plugins": [
       "expo-router",
       "expo-notifications",
+      [
+        "expo-navigation-bar",
+        {
+          "backgroundColor": "#121212",
+          "barStyle": "light",
+          "borderColor": "#2A2A2A",
+          "position": "relative",
+          "visibility": "visible"
+        }
+      ],
       [
         "expo-splash-screen",
         {
