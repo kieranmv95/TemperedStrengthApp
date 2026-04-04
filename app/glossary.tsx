@@ -10,9 +10,9 @@ import type { GlossaryTerm } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   FlatList,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,

@@ -2,10 +2,10 @@ import { ProgramStartDateCalendar } from '@/src/components/ProgramStartDateCalen
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Alert,
   Modal,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -74,6 +74,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   resetExistingProgramData = false,
   onClose,
 }) => {
+  const insets = useSafeAreaInsets();
   const { isPro } = useSubscription();
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [showProgramDetails, setShowProgramDetails] = useState(false);
@@ -296,7 +297,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.content}
@@ -498,7 +499,12 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
               ))}
             </ScrollView>
 
-            <View style={styles.modalFooter}>
+            <View
+              style={[
+                styles.modalFooter,
+                { paddingBottom: insets.bottom + Spacing.xl },
+              ]}
+            >
               {selectedProgram?.isPro && !isPro ? (
                 <TouchableOpacity
                   style={styles.upgradeProgramButton}

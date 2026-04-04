@@ -15,8 +15,10 @@ export function useTimerNotification() {
       // Ensure foreground notifications display correctly.
       Notifications.setNotificationHandler({
         handleNotification: async () => ({
+          shouldShowAlert: true,
           shouldPlaySound: false,
           shouldSetBadge: false,
+          // iOS-specific fields; safe no-ops on Android.
           shouldShowBanner: true,
           shouldShowList: true,
         }),

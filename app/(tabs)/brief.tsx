@@ -12,8 +12,9 @@ import type { Article } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  SafeAreaView,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -25,6 +26,7 @@ export default function BriefScreen() {
   const featuredArticle = getFeaturedArticle();
   const otherArticles = articles.filter((a) => !a.isFeatured);
   const previewGlossary = glossary.slice(0, 3);
+  const showSoundboard = Platform.OS !== 'android';
 
   const handleArticlePress = (article: Article) => {
     router.push({
@@ -38,7 +40,7 @@ export default function BriefScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.content}
@@ -87,25 +89,33 @@ export default function BriefScreen() {
           </ScrollView>
         </View>
 
-        {/* THE SOUNDBOARD - Playlists Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <View style={styles.sectionTitleRow}>
-              <Ionicons name="musical-notes" size={18} color={Colors.accent} />
-              <Text style={styles.sectionTitle}>THE SOUNDBOARD</Text>
-            </View>
-          </View>
+        {showSoundboard && (
+          <>
+            {/* THE SOUNDBOARD - Playlists Section */}
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <View style={styles.sectionTitleRow}>
+                  <Ionicons
+                    name="musical-notes"
+                    size={18}
+                    color={Colors.accent}
+                  />
+                  <Text style={styles.sectionTitle}>THE SOUNDBOARD</Text>
+                </View>
+              </View>
 
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.playlistsContainer}
-          >
-            {playlists.map((playlist) => (
-              <PlaylistCard key={playlist.id} playlist={playlist} />
-            ))}
-          </ScrollView>
-        </View>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.playlistsContainer}
+              >
+                {playlists.map((playlist) => (
+                  <PlaylistCard key={playlist.id} playlist={playlist} />
+                ))}
+              </ScrollView>
+            </View>
+          </>
+        )}
 
         {/* TERMINOLOGY - Glossary Section */}
         <View style={styles.section}>

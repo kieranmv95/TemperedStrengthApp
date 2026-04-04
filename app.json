@@ -2,7 +2,7 @@
   "expo": {
     "name": "tempered-strength-app",
     "slug": "tempered-strength-app",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "temperedstrengthapp",
@@ -16,13 +16,16 @@
       }
     },
     "android": {
+      "package": "com.kieranvenison.temperedstrengthapp",
       "adaptiveIcon": {
         "backgroundColor": "#121212",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "permissions": ["android.permission.SCHEDULE_EXACT_ALARM"],
+      "permissions": [
+        "android.permission.POST_NOTIFICATIONS"
+      ],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
@@ -33,6 +36,16 @@
     "plugins": [
       "expo-router",
       "expo-notifications",
+      [
+        "expo-navigation-bar",
+        {
+          "backgroundColor": "#121212",
+          "barStyle": "light",
+          "borderColor": "#2A2A2A",
+          "position": "relative",
+          "visibility": "visible"
+        }
+      ],
       [
         "expo-splash-screen",
         {

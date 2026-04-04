@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Alert,
   InputAccessoryView,
@@ -6,7 +8,6 @@ import {
   KeyboardAvoidingView,
   Modal,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -135,6 +136,8 @@ type WorkoutScreenProps = {
 export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   onProgramReset,
 }) => {
+  const insets = useSafeAreaInsets();
+  const tabBarHeight = useBottomTabBarHeight();
   const [slots, setSlots] = useState<WorkoutSlot[]>([]);
   const [currentWorkout, setCurrentWorkout] = useState<Workout | null>(null);
   const [dayIndex, setDayIndex] = useState<number | null>(null);
@@ -677,7 +680,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
@@ -712,7 +715,10 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         <ScrollView
           ref={scrollViewRef}
           style={styles.scrollView}
-          contentContainerStyle={styles.content}
+          contentContainerStyle={[
+            styles.content,
+            { paddingBottom: Spacing.xxl + tabBarHeight + insets.bottom },
+          ]}
           keyboardShouldPersistTaps="always"
         >
           <View style={styles.header}>
@@ -895,7 +901,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       {startDate && dayIndex !== null && (
         <DaySelector
           startDate={startDate}
