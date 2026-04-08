@@ -83,7 +83,7 @@ export const powerbuilding_4day_pro: Program = {
   description:
     '12-week powerbuilding programme across 3 phases: Accumulation, Intensification, and Realisation. 4 days per week blending heavy compound strength with targeted hypertrophy for both size and strength.',
   daysSplit: ['mon', 'tue', 'thu', 'fri'],
-  averageSessionDuration: '60 min',
+  averageSessionDuration: '60-75m',
   workouts: Array.from({ length: 12 }).flatMap((_, week) => {
     // ── Phase logic ──────────────────────────────────────
     const phase = week < 4 ? 0 : week < 8 ? 1 : 2;
@@ -187,7 +187,8 @@ export const powerbuilding_4day_pro: Program = {
             type: 'exercise',
             id: 26, // Barbell Overhead Press
             sets: compoundSets,
-            repRange: phase === 0 ? ([8, 10] as [number, number]) : compoundReps,
+            repRange:
+              phase === 0 ? ([8, 10] as [number, number]) : compoundReps,
             restTimeSeconds: compoundRest,
             additionalHeader: 'Secondary Press',
             additionalDescription:
@@ -209,9 +210,7 @@ export const powerbuilding_4day_pro: Program = {
             type: 'exercise',
             id: variantA ? 35 : 87, // Face Pulls / Close-Grip Bench Press
             sets: 3,
-            repRange: variantA
-              ? ([15, 20] as [number, number])
-              : accessoryReps,
+            repRange: variantA ? ([15, 20] as [number, number]) : accessoryReps,
             restTimeSeconds: variantA ? isolationRest : accessoryRest,
             additionalHeader: variantA ? 'Shoulder Health' : 'Lockout Strength',
             additionalDescription: variantA
@@ -344,7 +343,9 @@ export const powerbuilding_4day_pro: Program = {
             sets: 3,
             repRange: accessoryReps,
             restTimeSeconds: accessoryRest,
-            additionalHeader: variantA ? 'Shoulder Volume' : 'Full Delt Activation',
+            additionalHeader: variantA
+              ? 'Shoulder Volume'
+              : 'Full Delt Activation',
             additionalDescription: variantA
               ? 'Dumbbells allow each shoulder to work independently, exposing and correcting any imbalances. Press in a slight arc and stop just short of the weights touching at the top.'
               : 'The rotation from palms-in at the bottom to palms-forward at the top recruits all three heads of the deltoid. Slow and deliberate - do not rush the rotation.',
@@ -434,9 +435,9 @@ export const powerbuilding_4day_pro: Program = {
             id: variantA ? 14 : 68, // Barbell Deadlift / Front Squat
             sets: compoundSets,
             repRange: variantA
-              ? (phase === 0
-                  ? ([6, 10] as [number, number])
-                  : ([5, 8] as [number, number]))
+              ? phase === 0
+                ? ([6, 10] as [number, number])
+                : ([5, 8] as [number, number])
               : accessoryReps,
             restTimeSeconds: variantA
               ? Math.min(compoundRest + 30, 210)

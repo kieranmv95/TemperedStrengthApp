@@ -17,6 +17,7 @@ import {
   Spacing,
 } from '../constants/theme';
 import { getAllExercises, getExerciseById } from '../data/exercises';
+import { increment } from '../services/metricService';
 import { findAlternatives, type ExerciseAlternative } from '../utils/pivotEngine';
 import {
   clearExerciseSwap,
@@ -117,6 +118,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
               onPress: async () => {
                 try {
                   await clearLoggedSetsForSlot(dayIndex, slotIndex);
+                  await increment('exercises_swapped');
                   // Save the swap directly to storage
                   if (dayIndex !== null) {
                     await saveExerciseSwap(dayIndex, slotIndex, exerciseId);
@@ -159,6 +161,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
         originalExerciseId !== null &&
         exerciseId !== originalExerciseId
       ) {
+        await increment('exercises_swapped');
         await incrementSwapCount();
       }
     }

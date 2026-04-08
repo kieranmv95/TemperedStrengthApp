@@ -6,11 +6,11 @@ import {
   Spacing,
 } from '@/src/constants/theme';
 import { glossary, searchGlossary } from '@/src/data/brief';
+import { increment } from '@/src/services/metricService';
 import type { GlossaryTerm } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useMemo, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -19,6 +19,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type CategoryFilter = 'All' | GlossaryTerm['category'];
 
@@ -45,6 +46,10 @@ export default function GlossaryScreen() {
     // Sort alphabetically
     return results.sort((a, b) => a.term.localeCompare(b.term));
   }, [searchQuery, activeCategory]);
+
+  useEffect(() => {
+    increment('terminology_views');
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

@@ -95,7 +95,7 @@ export const bodybuilding_pro: Program = {
   description:
     '16-Week advanced bodybuilding program across 4 phases: Foundation, Hypertrophy, Intensification, and Peaking. 5 days per week with dedicated muscle group focus and systematic progressive overload.',
   daysSplit: ['mon', 'tue', 'wed', 'thu', 'fri'],
-  averageSessionDuration: '60 min',
+  averageSessionDuration: '60m',
   workouts: Array.from({ length: 16 }).flatMap((_, week) => {
     // ── Phase logic ──────────────────────────────────────
     const phase = week < 4 ? 0 : week < 8 ? 1 : week < 12 ? 2 : 3;

@@ -1,32 +1,33 @@
 import { ArticleCard } from '@/src/components/brief/ArticleCard';
 import { GlossaryItem } from '@/src/components/brief/GlossaryItem';
-import { PlaylistCard } from '@/src/components/brief/PlaylistCard';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import {
   articles,
   getFeaturedArticle,
   glossary,
-  playlists,
 } from '@/src/data/brief';
+import { increment } from '@/src/services/metricService';
 import type { Article } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect } from 'react';
 import {
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function BriefScreen() {
   const featuredArticle = getFeaturedArticle();
   const otherArticles = articles.filter((a) => !a.isFeatured);
   const previewGlossary = glossary.slice(0, 3);
-  const showSoundboard = Platform.OS !== 'android';
+
+  useEffect(() => {
+    increment('brief_visits');
+  }, []);
 
   const handleArticlePress = (article: Article) => {
     router.push({
@@ -88,34 +89,6 @@ export default function BriefScreen() {
             ))}
           </ScrollView>
         </View>
-
-        {showSoundboard && (
-          <>
-            {/* THE SOUNDBOARD - Playlists Section */}
-            <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <View style={styles.sectionTitleRow}>
-                  <Ionicons
-                    name="musical-notes"
-                    size={18}
-                    color={Colors.accent}
-                  />
-                  <Text style={styles.sectionTitle}>THE SOUNDBOARD</Text>
-                </View>
-              </View>
-
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.playlistsContainer}
-              >
-                {playlists.map((playlist) => (
-                  <PlaylistCard key={playlist.id} playlist={playlist} />
-                ))}
-              </ScrollView>
-            </View>
-          </>
-        )}
 
         {/* TERMINOLOGY - Glossary Section */}
         <View style={styles.section}>
@@ -201,9 +174,6 @@ const styles = StyleSheet.create({
     color: Colors.accent,
     fontSize: FontSize.base,
     fontWeight: '600',
-  },
-  playlistsContainer: {
-    paddingRight: Spacing.xxl,
   },
   moreArticlesLabel: {
     color: Colors.textPlaceholder,

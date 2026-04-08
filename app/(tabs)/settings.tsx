@@ -10,11 +10,10 @@ import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
 import { getActiveProgramId } from '@/src/utils/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
 import { useFocusEffect } from '@react-navigation/native';
+import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Alert,
   Modal,
@@ -24,6 +23,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {
   const [hasProgram, setHasProgram] = useState<boolean>(false);
@@ -164,6 +164,9 @@ export default function SettingsScreen() {
                   </Text>
                   <Text style={styles.proFeatureItem}>
                     - Early access to new features
+                  </Text>
+                  <Text style={styles.proFeatureItem}>
+                    - All awards unlocked
                   </Text>
                 </View>
               )}

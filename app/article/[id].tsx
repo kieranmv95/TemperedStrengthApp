@@ -5,10 +5,10 @@ import {
   Spacing,
 } from '@/src/constants/theme';
 import { getArticleById } from '@/src/data/brief';
+import { increment } from '@/src/services/metricService';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect } from 'react';
 import {
   Image,
   ScrollView,
@@ -17,10 +17,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ArticleScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const article = id ? getArticleById(id) : undefined;
+
+  useEffect(() => {
+    increment('articles_read');
+  }, []);
 
   if (!article) {
     return (

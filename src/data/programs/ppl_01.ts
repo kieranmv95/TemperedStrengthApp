@@ -20,7 +20,7 @@ export const ppl_01: Program = {
   description:
     '4-Week Hypertrophy block. Rotates intensity and exercise variations to maximise muscle fibre recruitment.',
   daysSplit: ['mon', 'wed', 'fri'],
-  averageSessionDuration: '60 min',
+  averageSessionDuration: '60m',
   workouts: Array.from({ length: 4 }).flatMap((_, week) => {
     // FIX: Intensity now trends upward (7→7→8→8) rather than oscillating
     // (7→8→7→8). The barbell/dumbbell variation already provides the weekly

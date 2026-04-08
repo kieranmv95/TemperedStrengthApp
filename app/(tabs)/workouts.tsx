@@ -1,5 +1,6 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { Pill } from '@/src/components/pill';
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import type { SingleWorkout, WorkoutCategory } from '@/src/types/workouts';
@@ -11,15 +12,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React, { useCallback, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   FlatList,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type TimeFilter = '≤15 min' | '16-30 min' | '31-45 min' | '46+ min' | null;
 type CategoryFilter = 'All' | WorkoutCategory | 'Favorites' | 'Pro';
@@ -158,6 +160,7 @@ function WorkoutCard({
 
 export default function WorkoutsScreen() {
   const { isPro } = useSubscription();
+  const [searchQuery, setSearchQuery] = useState('');
   const [activeTimeFilter, setActiveTimeFilter] = useState<TimeFilter>(null);
   const [activeCategoryFilter, setActiveCategoryFilter] =
     useState<CategoryFilter>('All');
@@ -199,8 +202,20 @@ export default function WorkoutsScreen() {
     router.push('/settings');
   };
 
-  // Filter workouts based on active filters (time and category work together)
   const filteredWorkouts = allStandaloneWorkouts.filter((workout) => {
+    // Apply text search
+    if (searchQuery.trim()) {
+      const query = searchQuery.trim().toLowerCase();
+      const matchesTitle = workout.title.toLowerCase().includes(query);
+      const matchesDescription = workout.description
+        .toLowerCase()
+        .includes(query);
+      const matchesTags = workout.tags.some((tag) =>
+        tag.toLowerCase().includes(query)
+      );
+      if (!matchesTitle && !matchesDescription && !matchesTags) return false;
+    }
+
     // Apply time filter
     if (activeTimeFilter === '≤15 min' && workout.estimatedTime > 15)
       return false;
@@ -326,9 +341,8 @@ export default function WorkoutsScreen() {
                   const movementText =
                     typeof movement === 'string'
                       ? movement
-                      : `${movement.name}: ${movement.value}${
-                          movement.note ? ` (${movement.note})` : ''
-                        }`;
+                      : `${movement.name}: ${movement.value}${movement.note ? ` (${movement.note})` : ''
+                      }`;
                   return (
                     <View key={movementIndex} style={styles.movementItem}>
                       <Text style={styles.movementBullet}>•</Text>
@@ -355,6 +369,38 @@ export default function WorkoutsScreen() {
         <Text style={styles.title}>Workouts</Text>
       </View>
 
+      {/* Search input */}
+      <View style={styles.searchContainer}>
+        <Ionicons
+          name="search"
+          size={18}
+          color={Colors.textPlaceholder}
+          style={styles.searchIcon}
+        />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search workouts..."
+          placeholderTextColor={Colors.textPlaceholder}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          returnKeyType="search"
+          autoCorrect={false}
+          autoCapitalize="none"
+        />
+        {searchQuery.length > 0 && (
+          <TouchableOpacity
+            onPress={() => setSearchQuery('')}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons
+              name="close-circle"
+              size={18}
+              color={Colors.textPlaceholder}
+            />
+          </TouchableOpacity>
+        )}
+      </View>
+
       {/* Category filter tabs */}
       <View style={styles.categoryFilterContainer}>
         <ScrollView
@@ -372,54 +418,25 @@ export default function WorkoutsScreen() {
                   : filter === 'Pro'
                     ? allStandaloneWorkouts.filter((w) => w.isPremium).length
                     : allStandaloneWorkouts.filter((w) => w.category === filter)
-                        .length;
+                      .length;
 
             return (
-              <TouchableOpacity
+
+              <Pill
                 key={filter}
-                style={[styles.filterTab, isActive && styles.filterTabActive]}
                 onPress={() => setActiveCategoryFilter(filter)}
-              >
-                {filter === 'Favorites' && (
-                  <Ionicons
-                    name="heart"
-                    size={14}
-                    color={isActive ? Colors.textOnAccent : Colors.textMuted}
-                    style={styles.filterIcon}
-                  />
-                )}
-                {filter === 'Pro' && (
-                  <Ionicons
-                    name="star"
-                    size={14}
-                    color={isActive ? Colors.textOnAccent : Colors.textMuted}
-                    style={styles.filterIcon}
-                  />
-                )}
-                <Text
-                  style={[
-                    styles.filterTabText,
-                    isActive && styles.filterTabTextActive,
-                  ]}
-                >
-                  {filter}
-                </Text>
-                <Text
-                  style={[
-                    styles.filterCount,
-                    isActive && styles.filterCountActive,
-                  ]}
-                >
-                  {count}
-                </Text>
-              </TouchableOpacity>
+                isActive={isActive}
+                label={filter}
+                icon={filter === 'Favorites' ? 'heart' : filter === 'Pro' ? 'star' : undefined}
+                count={count}
+              />
             );
           })}
         </ScrollView>
-      </View>
+      </View >
 
       {/* Time filter tabs */}
-      <View style={styles.filterContainer}>
+      <View style={styles.filterContainer} >
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -438,79 +455,63 @@ export default function WorkoutsScreen() {
             }).length;
 
             return (
-              <TouchableOpacity
+              <Pill
                 key={filter}
-                style={[styles.filterTab, isActive && styles.filterTabActive]}
                 onPress={() => setActiveTimeFilter(isActive ? null : filter)}
-              >
-                <Ionicons
-                  name="time-outline"
-                  size={14}
-                  color={isActive ? Colors.textOnAccent : Colors.textMuted}
-                  style={styles.filterIcon}
-                />
-                <Text
-                  style={[
-                    styles.filterTabText,
-                    isActive && styles.filterTabTextActive,
-                  ]}
-                >
-                  {filter}
-                </Text>
-                <Text
-                  style={[
-                    styles.filterCount,
-                    isActive && styles.filterCountActive,
-                  ]}
-                >
-                  {count}
-                </Text>
-              </TouchableOpacity>
+                isActive={isActive}
+                label={filter}
+                icon="time-outline"
+                count={count}
+              />
             );
           })}
         </ScrollView>
-      </View>
+      </View >
 
       {/* Workout list */}
-      {filteredWorkouts.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Ionicons
-            name={
-              activeCategoryFilter === 'Favorites' ? 'heart-outline' : 'barbell'
-            }
-            size={64}
-            color={Colors.backgroundSubtle}
-          />
-          <Text style={styles.emptyTitle}>
-            {activeCategoryFilter === 'Favorites'
-              ? 'No Favorites Yet'
-              : 'No Workouts Found'}
-          </Text>
-          <Text style={styles.emptyDescription}>
-            {activeCategoryFilter === 'Favorites'
-              ? 'Tap the heart icon on any workout to save it here.'
-              : 'Try selecting a different filter.'}
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={filteredWorkouts}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <WorkoutCard
-              workout={item}
-              isFavorite={favorites.includes(item.id)}
-              isPro={isPro}
-              onToggleFavorite={handleToggleFavorite}
-              onPress={handleWorkoutPress}
-              onLockedPress={handleLockedPress}
+      {
+        filteredWorkouts.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Ionicons
+              name={
+                activeCategoryFilter === 'Favorites' ? 'heart-outline' : 'barbell'
+              }
+              size={64}
+              color={Colors.backgroundSubtle}
             />
-          )}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
-    </SafeAreaView>
+            <Text style={styles.emptyTitle}>
+              {activeCategoryFilter === 'Favorites'
+                ? 'No Favorites Yet'
+                : 'No Workouts Found'}
+            </Text>
+            <Text style={styles.emptyDescription}>
+              {activeCategoryFilter === 'Favorites'
+                ? 'Tap the heart icon on any workout to save it here.'
+                : searchQuery.trim()
+                  ? 'No workouts match your search.'
+                  : 'Try selecting a different filter.'}
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={filteredWorkouts}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <WorkoutCard
+                workout={item}
+                isFavorite={favorites.includes(item.id)}
+                isPro={isPro}
+                onToggleFavorite={handleToggleFavorite}
+                onPress={handleWorkoutPress}
+                onLockedPress={handleLockedPress}
+              />
+            )}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+          />
+        )
+      }
+    </SafeAreaView >
   );
 }
 
@@ -529,6 +530,27 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     letterSpacing: -0.5,
   },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xl,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+    marginHorizontal: Spacing.xxl,
+    marginBottom: Spacing.xxl,
+    paddingHorizontal: Spacing.xl,
+    height: 44,
+  },
+  searchIcon: {
+    marginRight: Spacing.md,
+  },
+  searchInput: {
+    flex: 1,
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxl,
+    padding: 0,
+  },
   categoryFilterContainer: {
     // No border for category filters - they're on the first row
   },
@@ -540,41 +562,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
     paddingBottom: Spacing.xl,
     gap: Spacing.md,
-  },
-  filterTab: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 14,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundCard,
-    borderWidth: 1,
-    borderColor: Colors.borderDefault,
-  },
-  filterTabActive: {
-    backgroundColor: Colors.accent,
-    borderColor: Colors.accent,
-  },
-  filterIcon: {
-    marginRight: Spacing.xs,
-  },
-  filterTabText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
-  },
-  filterTabTextActive: {
-    color: Colors.textOnAccent,
-  },
-  filterCount: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    marginLeft: Spacing.sm,
-  },
-  filterCountActive: {
-    color: Colors.textOnAccent,
-    opacity: 0.7,
   },
   listContent: {
     padding: Spacing.xxl,
