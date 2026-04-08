@@ -15,11 +15,3 @@ export type GlossaryTerm = {
   definition: string;
   category?: 'Movements' | 'Equipment' | 'Training' | 'Nutrition' | 'General';
 };
-
-export type Playlist = {
-  id: string;
-  title: string;
-  subtitle: string;
-  artworkUrl: string;
-  itunesUrl: string;
-};
