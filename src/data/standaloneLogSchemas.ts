@@ -54,6 +54,11 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
     label: '1000m time',
     lowerIsBetter: true,
   },
+  f_24: {
+    kind: 'max_reps',
+    label: 'Calories per working minute',
+    higherIsBetter: true,
+  },
 
   // Pro — benchmarks & metcons
   p_01: {
