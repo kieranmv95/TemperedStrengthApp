@@ -32,7 +32,7 @@ export const Pill = ({ onPress, isActive, label, icon, count }: PillProps) => {
             >
                 {label}
             </Text>
-            {count && (
+            {typeof count === 'number' && (
                 <Text
                     style={[
                         styles.filterCount,

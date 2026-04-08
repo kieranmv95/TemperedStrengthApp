@@ -83,7 +83,7 @@ export const powerbuilding_4day_pro: Program = {
   description:
     '12-week powerbuilding programme across 3 phases: Accumulation, Intensification, and Realisation. 4 days per week blending heavy compound strength with targeted hypertrophy for both size and strength.',
   daysSplit: ['mon', 'tue', 'thu', 'fri'],
-  averageSessionDuration: '60 min - 75 min',
+  averageSessionDuration: '60-75m',
   workouts: Array.from({ length: 12 }).flatMap((_, week) => {
     // ── Phase logic ──────────────────────────────────────
     const phase = week < 4 ? 0 : week < 8 ? 1 : 2;
