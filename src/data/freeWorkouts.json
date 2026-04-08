@@ -6,26 +6,17 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 25,
-    "tags": [
-      "AMRAP",
-      "No Equipment"
-    ],
+    "tags": ["AMRAP", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 Rounds: 200m Jog, 10 Air Squats, 10 Scapular Pushups"
-        ]
+        "movements": ["2 Rounds: 200m Jog, 10 Air Squats, 10 Scapular Pushups"]
       },
       {
         "name": "15 Min AMRAP",
         "instructions": "As many rounds as possible in 15 mins. No scheduled rest; rest only as needed.",
-        "movements": [
-          "10 Burpees",
-          "20 Air Squats",
-          "30 Sit-ups"
-        ]
+        "movements": ["10 Burpees", "20 Air Squats", "30 Sit-ups"]
       }
     ]
   },
@@ -36,24 +27,17 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": [
-      "Sprint",
-      "Lungs"
-    ],
+    "tags": ["Sprint", "Lungs"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "3 Rounds: 30s High Knees, 30s Butt Kicks, 5 Inchworms"
-        ]
+        "movements": ["3 Rounds: 30s High Knees, 30s Butt Kicks, 5 Inchworms"]
       },
       {
         "name": "EMOM",
         "instructions": "Start clock. Min 1: 1 x 10m sprint. Min 2: 2 x 10m sprints. Continue until you cannot complete the required sprints within the minute.",
-        "movements": [
-          "10m Shuttles"
-        ]
+        "movements": ["10m Shuttles"]
       }
     ]
   },
@@ -64,26 +48,17 @@
     "category": "Mobility",
     "difficulty": "Beginner",
     "estimatedTime": 15,
-    "tags": [
-      "Core",
-      "Abs"
-    ],
+    "tags": ["Core", "Abs"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 Rounds: 10 Cat-Cow, 10 Bird-Dogs"
-        ]
+        "movements": ["2 Rounds: 10 Cat-Cow, 10 Bird-Dogs"]
       },
       {
         "name": "3 Rounds",
         "instructions": "Rest 60s between rounds. Focus on keeping lower back glued to the floor during Hollow Rocks.",
-        "movements": [
-          "45s Plank",
-          "15 Hollow Rocks",
-          "30s Side Plank (L/R)"
-        ]
+        "movements": ["45s Plank", "15 Hollow Rocks", "30s Side Plank (L/R)"]
       }
     ]
   },
@@ -94,10 +69,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 15,
-    "tags": [
-      "Chipper",
-      "Full Body"
-    ],
+    "tags": ["Chipper", "Full Body"],
     "isPremium": false,
     "blocks": [
       {
@@ -109,9 +81,7 @@
       {
         "name": "For Time",
         "instructions": "Go at 80% pace for the first 50, then accelerate. Target: Under 8 mins.",
-        "movements": [
-          "100 Burpees for time"
-        ]
+        "movements": ["100 Burpees for time"]
       }
     ]
   },
@@ -122,17 +92,12 @@
     "category": "Strength",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "Legs",
-      "Volume"
-    ],
+    "tags": ["Legs", "Volume"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "10 World's Greatest Stretches, 20 Glute Bridges"
-        ]
+        "movements": ["10 World's Greatest Stretches, 20 Glute Bridges"]
       },
       {
         "name": "4 Rounds",
@@ -153,17 +118,12 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 25,
-    "tags": [
-      "Upper Body",
-      "Pump"
-    ],
+    "tags": ["Upper Body", "Pump"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 Rounds: 10 Pushups, 10 Prone Y-Raises, 10 Arm Circles"
-        ]
+        "movements": ["2 Rounds: 10 Pushups, 10 Prone Y-Raises, 10 Arm Circles"]
       },
       {
         "name": "3 Rounds",
@@ -183,24 +143,17 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 12,
-    "tags": [
-      "Benchmark",
-      "Row"
-    ],
+    "tags": ["Benchmark", "Row"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "500m Easy Row, then 3 x 10 stroke power bursts"
-        ]
+        "movements": ["500m Easy Row, then 3 x 10 stroke power bursts"]
       },
       {
         "name": "Max Effort",
         "instructions": "Secure feet tightly. Start with short, quick strokes to get the flywheel moving.",
-        "movements": [
-          "500m Row Sprint"
-        ]
+        "movements": ["500m Row Sprint"]
       }
     ]
   },
@@ -211,17 +164,12 @@
     "category": "Mobility",
     "difficulty": "Beginner",
     "estimatedTime": 15,
-    "tags": [
-      "Recovery",
-      "Postures"
-    ],
+    "tags": ["Recovery", "Postures"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 mins light walking or jogging to warm the tissues"
-        ]
+        "movements": ["2 mins light walking or jogging to warm the tissues"]
       },
       {
         "name": "Flow",
@@ -241,17 +189,12 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 35,
-    "tags": [
-      "Hyrox",
-      "Test"
-    ],
+    "tags": ["Hyrox", "Test"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "800m Run, 10 Burpees, 10 Air Squats"
-        ]
+        "movements": ["800m Run, 10 Burpees, 10 Air Squats"]
       },
       {
         "name": "For Time",
@@ -273,24 +216,17 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 15,
-    "tags": [
-      "KB",
-      "Power"
-    ],
+    "tags": ["KB", "Power"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "20 Hip Hinges, 10 Yoga Pushups"
-        ]
+        "movements": ["20 Hip Hinges, 10 Yoga Pushups"]
       },
       {
         "name": "EMOM 10",
         "instructions": "Perform the reps at the start of every minute. Rest for the remainder of that minute.",
-        "movements": [
-          "15-20 KB Swings"
-        ]
+        "movements": ["15-20 KB Swings"]
       }
     ]
   },
@@ -301,24 +237,17 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "Running",
-      "Speed"
-    ],
+    "tags": ["Running", "Speed"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "1km Jog, Leg Swings, 2 x 50m Strides"
-        ]
+        "movements": ["1km Jog, Leg Swings, 2 x 50m Strides"]
       },
       {
         "name": "5 Sets",
         "instructions": "Rest 90s between sets. Focus on staying relaxed in the face and shoulders while sprinting.",
-        "movements": [
-          "400m Run (All out)"
-        ]
+        "movements": ["400m Run (All out)"]
       }
     ]
   },
@@ -329,24 +258,17 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 20,
-    "tags": [
-      "Chest",
-      "Bodyweight"
-    ],
+    "tags": ["Chest", "Bodyweight"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 Rounds: 10 Shoulder Taps, 10 Scapular Pushups"
-        ]
+        "movements": ["2 Rounds: 10 Shoulder Taps, 10 Scapular Pushups"]
       },
       {
         "name": "1 to 10 to 1",
         "instructions": "Rest is equal to the time it took to do the reps. (e.g., 5 pushups, rest ~5-10s).",
-        "movements": [
-          "1-2-3-4-5-6-7-8-9-10-9-8-7-6-5-4-3-2-1 Pushups"
-        ]
+        "movements": ["1-2-3-4-5-6-7-8-9-10-9-8-7-6-5-4-3-2-1 Pushups"]
       }
     ]
   },
@@ -357,24 +279,17 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 10,
-    "tags": [
-      "Tabata",
-      "Quick"
-    ],
+    "tags": ["Tabata", "Quick"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 mins Jumping Jacks, 10 Air Squats"
-        ]
+        "movements": ["2 mins Jumping Jacks, 10 Air Squats"]
       },
       {
         "name": "20s Work / 10s Rest",
         "instructions": "8 Rounds of 20 seconds of work followed by 10 seconds of rest.",
-        "movements": [
-          "Thrusters (or Jump Squats)"
-        ]
+        "movements": ["Thrusters (or Jump Squats)"]
       }
     ]
   },
@@ -385,17 +300,12 @@
     "category": "Mobility",
     "difficulty": "Intermediate",
     "estimatedTime": 25,
-    "tags": [
-      "Shoulders",
-      "Skill"
-    ],
+    "tags": ["Shoulders", "Skill"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "3 Rounds: 10 Wrist Stretches, 10 Wall Slides"
-        ]
+        "movements": ["3 Rounds: 10 Wrist Stretches, 10 Wall Slides"]
       },
       {
         "name": "3 Rounds",
@@ -415,24 +325,17 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 18,
-    "tags": [
-      "Legs",
-      "Lungs"
-    ],
+    "tags": ["Legs", "Lungs"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 Rounds: 10 Air Squats, 5 Burpees"
-        ]
+        "movements": ["2 Rounds: 10 Air Squats, 5 Burpees"]
       },
       {
         "name": "10 min AMRAP",
         "instructions": "Round 1: 2 Reps each. Round 2: 4 Reps. Round 3: 6 Reps... continue until time is up.",
-        "movements": [
-          "2 Burpees, 2 Squats (+2 reps every round)"
-        ]
+        "movements": ["2 Burpees, 2 Squats (+2 reps every round)"]
       }
     ]
   },
@@ -443,17 +346,12 @@
     "category": "Mobility",
     "difficulty": "Beginner",
     "estimatedTime": 12,
-    "tags": [
-      "Shoulders",
-      "Prehab"
-    ],
+    "tags": ["Shoulders", "Prehab"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 mins Arm Swings and Thoracic Twists"
-        ]
+        "movements": ["2 mins Arm Swings and Thoracic Twists"]
       },
       {
         "name": "Flow",
@@ -473,25 +371,17 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": [
-      "Cardio",
-      "Jump Rope"
-    ],
+    "tags": ["Cardio", "Jump Rope"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "Ankle circles, 50 Calf Raises"
-        ]
+        "movements": ["Ankle circles, 50 Calf Raises"]
       },
       {
         "name": "5 Rounds",
         "instructions": "Rest 1 min between rounds. If you trip, just reset and keep going.",
-        "movements": [
-          "2 mins Steady Jump Rope",
-          "1 min Rest"
-        ]
+        "movements": ["2 mins Steady Jump Rope", "1 min Rest"]
       }
     ]
   },
@@ -502,25 +392,17 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 18,
-    "tags": [
-      "Full Body",
-      "Animal Flow"
-    ],
+    "tags": ["Full Body", "Animal Flow"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "Wrist prep, 10 Cat-Cow, 10 Bird-Dog"
-        ]
+        "movements": ["Wrist prep, 10 Cat-Cow, 10 Bird-Dog"]
       },
       {
         "name": "EMOM 10",
         "instructions": "Execute both movements within the minute. Rest for the remainder.",
-        "movements": [
-          "20m Bear Crawl",
-          "10 Air Squats"
-        ]
+        "movements": ["20m Bear Crawl", "10 Air Squats"]
       }
     ]
   },
@@ -531,25 +413,17 @@
     "category": "Strength",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": [
-      "Grip",
-      "Arms"
-    ],
+    "tags": ["Grip", "Arms"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "Wrist circles, 20 Hand Clenches"
-        ]
+        "movements": ["Wrist circles, 20 Hand Clenches"]
       },
       {
         "name": "3 Rounds",
         "instructions": "Rest 2 mins between rounds. The goal is to reach near-failure on the hang.",
-        "movements": [
-          "Max Hang from Pull-up Bar",
-          "40m Farmers Walk (Heavy)"
-        ]
+        "movements": ["Max Hang from Pull-up Bar", "40m Farmers Walk (Heavy)"]
       }
     ]
   },
@@ -560,24 +434,17 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 15,
-    "tags": [
-      "Row",
-      "Benchmark"
-    ],
+    "tags": ["Row", "Benchmark"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "500m Easy Row + 5 High Power strokes"
-        ]
+        "movements": ["500m Easy Row + 5 High Power strokes"]
       },
       {
         "name": "Max Effort",
         "instructions": "Try to maintain a consistent '500m split' for the entire distance.",
-        "movements": [
-          "1000m Row"
-        ]
+        "movements": ["1000m Row"]
       }
     ]
   },
@@ -588,11 +455,7 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 50,
-    "tags": [
-      "Chest",
-      "Triceps",
-      "Gym"
-    ],
+    "tags": ["Chest", "Triceps", "Gym"],
     "isPremium": false,
     "blocks": [
       {
@@ -661,11 +524,7 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 50,
-    "tags": [
-      "Back",
-      "Biceps",
-      "Gym"
-    ],
+    "tags": ["Back", "Biceps", "Gym"],
     "isPremium": false,
     "blocks": [
       {
@@ -723,11 +582,7 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 55,
-    "tags": [
-      "Legs",
-      "Squat",
-      "Gym"
-    ],
+    "tags": ["Legs", "Squat", "Gym"],
     "isPremium": false,
     "blocks": [
       {
@@ -784,6 +639,34 @@
             "value": "3 x 12 / 3 x 45s",
             "note": "No spinal load after heavy squats. Hip flexion only."
           }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_24",
+    "title": "Mikko's Triangle",
+    "description": "A classic erg benchmark. Pick a single calorie target and complete that amount every working minute — every minute.",
+    "category": "Conditioning",
+    "difficulty": "Advanced",
+    "estimatedTime": 45,
+    "tags": ["Benchmark", "EMOM", "Row", "SkiErg", "Assault Bike"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Setup",
+        "movements": [
+          "Set up a rower, SkiErg, and Assault Bike (or Echo Bike)."
+        ]
+      },
+      {
+        "name": "EMOM 39",
+        "instructions": "Minute 1: Row. Minute 2: SkiErg. Minute 3: Assault Bike. Minute 4: Rest. Repeat this sequence until 39:00. Choose one calorie number and hit it on each working minute.",
+        "movements": [
+          "1 min Row (calories)",
+          "1 min SkiErg (calories)",
+          "1 min Assault Bike (calories)",
+          "1 min Rest"
         ]
       }
     ]
