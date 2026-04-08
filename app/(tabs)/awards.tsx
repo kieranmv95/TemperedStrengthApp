@@ -1,4 +1,5 @@
 import Award from '@/src/components/Award';
+import { Pill } from '@/src/components/pill';
 import {
   Colors,
   FontSize,
@@ -9,7 +10,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -67,37 +67,43 @@ export default function AwardsScreen() {
         </Text>
         <View style={styles.filters}>
           <View style={styles.filterRow}>
-            <FilterPill
+            <Pill
               label="All"
-              selected={statusFilter === 'all'}
+              isActive={statusFilter === 'all'}
               onPress={() => setStatusFilter('all')}
+              count={awardRows?.length}
             />
-            <FilterPill
+            <Pill
               label="Achieved"
-              selected={statusFilter === 'achieved'}
+              isActive={statusFilter === 'achieved'}
               onPress={() => setStatusFilter('achieved')}
+              count={awardRows?.filter((row) => row.granted).length}
             />
-            <FilterPill
+            <Pill
               label="Not achieved"
-              selected={statusFilter === 'not_achieved'}
+              isActive={statusFilter === 'not_achieved'}
               onPress={() => setStatusFilter('not_achieved')}
+              count={awardRows?.filter((row) => !row.granted).length}
             />
           </View>
           <View style={styles.filterRow}>
-            <FilterPill
+            <Pill
               label="All"
-              selected={accessFilter === 'all'}
+              isActive={accessFilter === 'all'}
               onPress={() => setAccessFilter('all')}
+              count={awardRows?.length}
             />
-            <FilterPill
+            <Pill
               label="Free"
-              selected={accessFilter === 'free'}
+              isActive={accessFilter === 'free'}
               onPress={() => setAccessFilter('free')}
+              count={awardRows?.filter((row) => !row.award.isPro).length}
             />
-            <FilterPill
+            <Pill
               label="Pro"
-              selected={accessFilter === 'pro'}
+              isActive={accessFilter === 'pro'}
               onPress={() => setAccessFilter('pro')}
+              count={awardRows?.filter((row) => row.award.isPro).length}
             />
           </View>
         </View>
@@ -132,38 +138,6 @@ export default function AwardsScreen() {
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
-}
-
-function FilterPill({
-  label,
-  selected,
-  onPress,
-}: {
-  label: string;
-  selected: boolean;
-  onPress: () => void;
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityState={{ selected }}
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.filterPill,
-        selected && styles.filterPillSelected,
-        pressed && styles.filterPillPressed,
-      ]}
-    >
-      <Text
-        style={[
-          styles.filterPillText,
-          selected && styles.filterPillTextSelected,
-        ]}
-      >
-        {label}
-      </Text>
-    </Pressable>
   );
 }
 
@@ -203,29 +177,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: Spacing.sm,
-  },
-  filterPill: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: Colors.borderDefault,
-    backgroundColor: Colors.backgroundScreen,
-  },
-  filterPillSelected: {
-    borderColor: Colors.accent,
-    backgroundColor: Colors.accent,
-  },
-  filterPillPressed: {
-    opacity: 0.85,
-  },
-  filterPillText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.md,
-    fontWeight: '700',
-  },
-  filterPillTextSelected: {
-    color: Colors.textOnAccent,
   },
   awardsContainer: {
     gap: Spacing.lg,
