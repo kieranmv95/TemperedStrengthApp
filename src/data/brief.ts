@@ -1,7 +1,6 @@
 import type { Article, GlossaryTerm } from '@/src/types/brief';
 import { articles } from './brief/articles';
 import { glossary } from './brief/glossary';
-import { playlists } from './brief/playlists';
 
 // Helper functions
 export const getFeaturedArticle = (): Article | undefined => {
@@ -29,4 +28,4 @@ export const getGlossaryByCategory = (
 
 // Re-export types and data for consumers
 export type { Article, GlossaryTerm, Playlist } from '@/src/types/brief';
-export { articles, glossary, playlists };
+export { articles, glossary };

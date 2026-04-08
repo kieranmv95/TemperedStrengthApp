@@ -1,8 +1,8 @@
 import { ProgramStartDateCalendar } from '@/src/components/ProgramStartDateCalendar';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { increment } from '@/src/services/metricService';
 import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Alert,
   Modal,
@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
 import type { Program } from '../types/program';
@@ -238,6 +239,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
       } else {
         await clearProgramWorkoutWeekdays();
       }
+      await increment('program_starts');
       setShowDatePicker(false);
       onProgramSelected();
     } catch (error) {
@@ -261,7 +263,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
         <View style={styles.programContent}>
           <View style={styles.programNameRow}>
             <Text
-              style={[styles.programName, isLocked && styles.programNameLocked]}
+              style={styles.programName}
             >
               {program.name}
             </Text>
@@ -271,12 +273,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
               </View>
             )}
           </View>
-          <Text
-            style={[
-              styles.programDescription,
-              isLocked && styles.programDescriptionLocked,
-            ]}
-          >
+          <Text style={styles.programDescription}>
             {program.description}
           </Text>
           <Text style={styles.programStats}>
@@ -287,11 +284,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
               ` • ${program.averageSessionDuration}`}
           </Text>
         </View>
-        <Text
-          style={[styles.selectArrow, isLocked && styles.selectArrowLocked]}
-        >
-          →
-        </Text>
+        <Text style={styles.selectArrow}>→</Text>
       </TouchableOpacity>
     );
   };
@@ -385,31 +378,23 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                         </View>
                       );
                     })()}
+                  {selectedProgram?.averageSessionDuration && (
+                    <View style={styles.statItem}>
+                      <Text style={styles.statValue}>
+                        {selectedProgram.averageSessionDuration}
+                      </Text>
+                      <Text style={styles.statLabel}>Duration</Text>
+                    </View>
+                  )}
                 </View>
-
-                {selectedProgram?.averageSessionDuration && (
-                  <View style={styles.statItem}>
-                    <Text style={styles.statValue}>
-                      {selectedProgram.averageSessionDuration}
-                    </Text>
-                    <Text style={styles.statLabel}>Avg Session</Text>
-                  </View>
-                )}
               </View>
 
               {selectedProgram?.daysSplit && (
                 <View>
                   <View style={styles.workoutDaysTitleBlock}>
-                    <Text style={styles.workoutTitle}>Workout Days</Text>
+                    <Text style={styles.workoutTitle}>Workout Days (tap to change)</Text>
                     <Text style={styles.workoutDaysHint}>
-                      The template recommends{' '}
-                      {selectedProgram.daysSplit
-                        .map((k) => programAnchorFullWeekdayName(k))
-                        .join(', ')}
-                      . Tap days below to match your real week. You need exactly{' '}
-                      {sessionsRequired} training days before you can start. Your
-                      start date will be on the first of those weekdays in
-                      calendar order (Mon→Sun).
+                      You need exactly {sessionsRequired} training days before you can start. Tap the days below to fit your scehdule
                     </Text>
                   </View>
                   {!weekdaySelectionReady && (
@@ -485,7 +470,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                             style={[
                               styles.workoutIntensityDot,
                               i < workout.intensity &&
-                                styles.workoutIntensityDotFilled,
+                              styles.workoutIntensityDotFilled,
                             ]}
                           />
                         ))}
@@ -663,7 +648,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   programCardLocked: {
-    opacity: 0.7,
     borderColor: Colors.accent,
   },
   programContent: {
@@ -681,17 +665,11 @@ const styles = StyleSheet.create({
     fontSize: FontSize.displayLg,
     fontWeight: '700',
   },
-  programNameLocked: {
-    color: Colors.textMuted,
-  },
   programDescription: {
     color: Colors.textSecondary,
     fontSize: FontSize.lg,
     marginBottom: Spacing.md,
     lineHeight: 20,
-  },
-  programDescriptionLocked: {
-    color: Colors.textPlaceholder,
   },
   programStats: {
     color: Colors.accent,
@@ -705,9 +683,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.displayXl,
     fontWeight: '600',
     marginLeft: Spacing.xxl,
-  },
-  selectArrowLocked: {
-    color: Colors.textPlaceholder,
   },
   proBadge: {
     backgroundColor: Colors.accent,
@@ -888,8 +863,7 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     flexDirection: 'row',
-    gap: Spacing.xxl,
-    marginBottom: Spacing.xxl,
+    gap: Spacing.xl,
   },
   statItem: {
     flex: 1,
@@ -901,13 +875,13 @@ const styles = StyleSheet.create({
   },
   statValue: {
     color: Colors.accent,
-    fontSize: FontSize.displayXl,
+    fontSize: FontSize.displaySm,
     fontWeight: '700',
     marginBottom: Spacing.xs,
   },
   statLabel: {
     color: Colors.textMuted,
-    fontSize: FontSize.md,
+    fontSize: FontSize.sm,
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,

@@ -1,9 +1,3 @@
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '../constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -14,7 +8,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  BorderRadius,
+  Colors,
+  FontSize,
+  Spacing,
+} from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
+import { increment } from '../services/metricService';
 import type { Exercise as ProgramExercise } from '../types/program';
 import type { RestTimerState } from '../types/storage';
 import {
@@ -284,6 +285,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     }
 
     setLoading(true);
+
     try {
       const currentState = setStates.get(setIndex);
       const newSetStates = new Map(setStates);
@@ -292,6 +294,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
       if (currentState === undefined) {
         // Default -> Completed (green)
         newSetStates.set(setIndex, 'completed');
+        await increment('sets_logged');
         await saveLoggedSet(
           dayIndex,
           slotIndex,
