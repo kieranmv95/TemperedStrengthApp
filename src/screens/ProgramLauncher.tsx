@@ -1,8 +1,8 @@
 import { ProgramStartDateCalendar } from '@/src/components/ProgramStartDateCalendar';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { increment } from '@/src/services/metricService';
 import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Alert,
   Modal,
@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
 import type { Program } from '../types/program';
@@ -238,6 +239,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
       } else {
         await clearProgramWorkoutWeekdays();
       }
+      await increment('program_starts');
       setShowDatePicker(false);
       onProgramSelected();
     } catch (error) {
@@ -485,7 +487,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                             style={[
                               styles.workoutIntensityDot,
                               i < workout.intensity &&
-                                styles.workoutIntensityDotFilled,
+                              styles.workoutIntensityDotFilled,
                             ]}
                           />
                         ))}

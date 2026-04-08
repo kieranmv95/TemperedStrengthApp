@@ -8,11 +8,11 @@ import {
   glossary,
   playlists,
 } from '@/src/data/brief';
+import { increment } from '@/src/services/metricService';
 import type { Article } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect } from 'react';
 import {
   Platform,
   ScrollView,
@@ -21,12 +21,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function BriefScreen() {
   const featuredArticle = getFeaturedArticle();
   const otherArticles = articles.filter((a) => !a.isFeatured);
   const previewGlossary = glossary.slice(0, 3);
   const showSoundboard = Platform.OS !== 'android';
+
+  useEffect(() => {
+    increment('brief_visits');
+  }, []);
 
   const handleArticlePress = (article: Article) => {
     router.push({

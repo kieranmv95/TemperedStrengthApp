@@ -23,7 +23,6 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import React, { useCallback, useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   ActivityIndicator,
   Alert,
@@ -38,6 +37,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { increment } from '../services/metricService';
 
 function newStandaloneLogId(): string {
   return `swl_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 12)}`;
@@ -502,22 +503,23 @@ export function StandaloneWorkoutLogPanel({
 
     const entry: StandaloneWorkoutLogEntry = editingEntry
       ? {
-          ...editingEntry,
-          loggedAt,
-          payload: built.payload,
-          notes: optionalSessionNotes,
-          updatedAt: now,
-        }
+        ...editingEntry,
+        loggedAt,
+        payload: built.payload,
+        notes: optionalSessionNotes,
+        updatedAt: now,
+      }
       : {
-          id: newStandaloneLogId(),
-          workoutId: workout.id,
-          loggedAt,
-          updatedAt: now,
-          payload: built.payload,
-          notes: optionalSessionNotes,
-        };
+        id: newStandaloneLogId(),
+        workoutId: workout.id,
+        loggedAt,
+        updatedAt: now,
+        payload: built.payload,
+        notes: optionalSessionNotes,
+      };
 
     try {
+      await increment('workouts_logged');
       await upsertStandaloneWorkoutLogEntry(entry);
       await refreshLogs();
       closeModal();

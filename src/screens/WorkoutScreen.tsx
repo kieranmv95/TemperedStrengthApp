@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
   InputAccessoryView,
@@ -15,6 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DaySelector } from '../components/DaySelector';
 import { ExerciseCard } from '../components/ExerciseCard';
 import { SessionSummaryModal } from '../components/SessionSummaryModal';
@@ -22,6 +22,7 @@ import { SessionTimer } from '../components/SessionTimer';
 import { SwapModal } from '../components/SwapModal';
 import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
 import { useTimerNotification } from '../hooks/useTimerNotification';
+import { increment } from '../services/metricService';
 import type {
   Exercise as ProgramExercise,
   Warmup,
@@ -43,8 +44,8 @@ import {
   clearCompletedSession,
   clearFutureWorkoutData,
   clearRestTimer,
-  getActiveSession,
   getActiveProgramId,
+  getActiveSession,
   getCompletedSession,
   getExerciseSwapsForDay,
   getProgramStartDate,
@@ -66,32 +67,32 @@ const INTENSITY_LEVELS: {
   label: string;
   feel: string;
 }[] = [
-  {
-    range: [1, 2],
-    label: 'Very Light',
-    feel: 'Minimal effort. Recovery-level work. You should feel refreshed, not fatigued.',
-  },
-  {
-    range: [3, 4],
-    label: 'Light',
-    feel: 'Easy effort. Good for technique practice and building volume without heavy strain.',
-  },
-  {
-    range: [5, 6],
-    label: 'Moderate',
-    feel: 'Noticeable effort. Challenging but sustainable. You could hold a short conversation.',
-  },
-  {
-    range: [7, 8],
-    label: 'Hard',
-    feel: 'Demanding effort. Requires real focus and grit. Expect to feel spent by the end.',
-  },
-  {
-    range: [9, 10],
-    label: 'Very Hard',
-    feel: 'Near-maximal effort. Highly taxing on the body and nervous system. Full recovery is essential.',
-  },
-];
+    {
+      range: [1, 2],
+      label: 'Very Light',
+      feel: 'Minimal effort. Recovery-level work. You should feel refreshed, not fatigued.',
+    },
+    {
+      range: [3, 4],
+      label: 'Light',
+      feel: 'Easy effort. Good for technique practice and building volume without heavy strain.',
+    },
+    {
+      range: [5, 6],
+      label: 'Moderate',
+      feel: 'Noticeable effort. Challenging but sustainable. You could hold a short conversation.',
+    },
+    {
+      range: [7, 8],
+      label: 'Hard',
+      feel: 'Demanding effort. Requires real focus and grit. Expect to feel spent by the end.',
+    },
+    {
+      range: [9, 10],
+      label: 'Very Hard',
+      feel: 'Near-maximal effort. Highly taxing on the body and nervous system. Full recovery is essential.',
+    },
+  ];
 
 const getIntensityLevel = (intensity: number) => {
   return (
@@ -273,11 +274,11 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       const workout =
         startISO !== null
           ? getWorkoutForDaySinceStart(
-              programToUse,
-              startISO,
-              effectivePattern,
-              dayIdx
-            )
+            programToUse,
+            startISO,
+            effectivePattern,
+            dayIdx
+          )
           : (programToUse.workouts.find((w) => w.dayIndex === dayIdx) ?? null);
 
       if (workout) {
@@ -407,6 +408,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
   const handleFinishSession = useCallback(async () => {
     if (!activeSession) return;
+
     try {
       const completedAt = Date.now();
       const duration = completedAt - activeSession.startedAt;
@@ -435,6 +437,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       };
 
       await saveCompletedSession(completed);
+      await increment('program_workouts_completed');
       await clearActiveSession();
       setActiveSession(null);
       setCompletedSession(completed);
@@ -549,6 +552,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     }) => {
       if (!payload.restTimeSeconds) return;
       try {
+        await increment('rest_timers_started');
         const startedAt = Date.now();
         const newTimer: RestTimerState = {
           dayIndex: payload.dayIndex,
@@ -570,6 +574,9 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
   const handleRestDismiss = useCallback(async () => {
     try {
+      if (restTimer && restTimer.status === 'completed') {
+        await increment('rest_timers_skipped');
+      }
       await cancelTimerNotification();
       setRestTimer(null);
       await clearRestTimer();
@@ -828,8 +835,8 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                 exerciseSlotIndex++;
                 const restTimerForSlot =
                   restTimer &&
-                  restTimer.dayIndex === selectedDayIndex &&
-                  restTimer.slotIndex === currentExerciseIndex
+                    restTimer.dayIndex === selectedDayIndex &&
+                    restTimer.slotIndex === currentExerciseIndex
                     ? restTimer
                     : null;
                 return (
