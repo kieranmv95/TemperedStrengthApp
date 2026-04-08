@@ -22,7 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -87,13 +87,52 @@ function LogFormModal({
   const [androidPickerStep, setAndroidPickerStep] = useState<
     'date' | 'time' | null
   >(null);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [notesActive, setNotesActive] = useState(false);
+  const notesBlurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!visible) {
       setWhenPickerVisible(false);
       setAndroidPickerStep(null);
+      setNotesActive(false);
     }
   }, [visible]);
+
+  useEffect(() => {
+    const showEvent =
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvent =
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const showSub = Keyboard.addListener(showEvent, (e) =>
+      setKeyboardHeight(e.endCoordinates.height)
+    );
+    const hideSub = Keyboard.addListener(hideEvent, () =>
+      setKeyboardHeight(0)
+    );
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+      if (notesBlurTimer.current) clearTimeout(notesBlurTimer.current);
+    };
+  }, []);
+
+  const handleNotesFocus = () => {
+    if (notesBlurTimer.current) clearTimeout(notesBlurTimer.current);
+    setNotesActive(true);
+  };
+
+  const handleNotesBlur = () => {
+    notesBlurTimer.current = setTimeout(
+      () => setNotesActive(false),
+      200
+    );
+  };
+
+  const handleNotesDone = () => {
+    setNotesActive(false);
+    Keyboard.dismiss();
+  };
 
   const whenLine = formatStandaloneLogCardTimestamp(
     new Date(form.loggedAtMs).toISOString()
@@ -305,6 +344,8 @@ function LogFormModal({
                       placeholderTextColor={Colors.textPlaceholder}
                       multiline
                       selectionColor={Colors.accent}
+                      onFocus={handleNotesFocus}
+                      onBlur={handleNotesBlur}
                     />
                   </>
                 )}
@@ -328,6 +369,8 @@ function LogFormModal({
                       placeholderTextColor={Colors.textPlaceholder}
                       multiline
                       selectionColor={Colors.accent}
+                      onFocus={handleNotesFocus}
+                      onBlur={handleNotesBlur}
                     />
                   </>
                 )}
@@ -418,6 +461,19 @@ function LogFormModal({
               )}
           </View>
         </KeyboardAvoidingView>
+        {notesActive && keyboardHeight > 0 && (
+          <View
+            style={[styles.keyboardDoneBar, { bottom: keyboardHeight }]}
+          >
+            <View style={styles.keyboardDoneBarSpacer} />
+            <TouchableOpacity
+              style={styles.keyboardDoneBtn}
+              onPress={handleNotesDone}
+            >
+              <Text style={styles.keyboardDoneText}>Done</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </Modal>
     </>
   );
@@ -956,6 +1012,31 @@ const styles = StyleSheet.create({
   btnPrimaryText: {
     fontSize: FontSize.xl,
     color: Colors.textOnAccent,
+    fontWeight: '700',
+  },
+  keyboardDoneBar: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    zIndex: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.backgroundElevated,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: Colors.borderDefault,
+    paddingHorizontal: Spacing.xxl,
+    paddingVertical: Spacing.lg,
+  },
+  keyboardDoneBarSpacer: {
+    flex: 1,
+  },
+  keyboardDoneBtn: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+  },
+  keyboardDoneText: {
+    color: Colors.accent,
+    fontSize: FontSize.xl,
     fontWeight: '700',
   },
 });

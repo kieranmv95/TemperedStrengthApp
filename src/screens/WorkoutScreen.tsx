@@ -2,7 +2,6 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
-  InputAccessoryView,
   Keyboard,
   KeyboardAvoidingView,
   Modal,
@@ -174,7 +173,9 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
   const notesInputRef = useRef<TextInput>(null);
-  const notesInputAccessoryViewID = 'notesInputAccessory';
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [notesActive, setNotesActive] = useState(false);
+  const notesBlurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const programRef = useRef<ReturnType<typeof getProgramById> | null>(null);
   const startDateRef = useRef<string | null>(null);
@@ -650,16 +651,41 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     };
   }, []);
 
-  // Handle notes input focus - scroll to bottom to keep notes visible
+  useEffect(() => {
+    const showEvent =
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvent =
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const showSub = Keyboard.addListener(showEvent, (e) =>
+      setKeyboardHeight(e.endCoordinates.height)
+    );
+    const hideSub = Keyboard.addListener(hideEvent, () =>
+      setKeyboardHeight(0)
+    );
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+      if (notesBlurTimer.current) clearTimeout(notesBlurTimer.current);
+    };
+  }, []);
+
   const handleNotesFocus = useCallback(() => {
-    // Small delay to let keyboard animation start
+    if (notesBlurTimer.current) clearTimeout(notesBlurTimer.current);
+    setNotesActive(true);
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
   }, []);
 
-  // Handle done button press - dismiss keyboard
+  const handleNotesBlur = useCallback(() => {
+    notesBlurTimer.current = setTimeout(
+      () => setNotesActive(false),
+      200
+    );
+  }, []);
+
   const handleNotesDone = useCallback(() => {
+    setNotesActive(false);
     Keyboard.dismiss();
   }, []);
 
@@ -885,20 +911,11 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
                 value={notes}
                 onChangeText={handleNotesChange}
                 onFocus={handleNotesFocus}
+                onBlur={handleNotesBlur}
                 placeholder="Add notes for this workout..."
                 placeholderTextColor={Colors.textPlaceholder}
                 multiline
                 textAlignVertical="top"
-                inputAccessoryViewID={
-                  Platform.OS === 'ios' ? notesInputAccessoryViewID : undefined
-                }
-                blurOnSubmit={Platform.OS === 'android'}
-                returnKeyType={Platform.OS === 'android' ? 'done' : 'default'}
-                onSubmitEditing={() => {
-                  notesInputRef.current?.blur();
-                  Keyboard.dismiss();
-                  setIsNotesExpanded(false);
-                }}
               />
             )}
           </View>
@@ -1035,19 +1052,21 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         onDismiss={() => setSessionSummary(null)}
       />
 
-      {/* Keyboard accessory view for notes input (iOS only) */}
-      {Platform.OS === 'ios' && (
-        <InputAccessoryView nativeID={notesInputAccessoryViewID}>
-          <View style={styles.keyboardAccessory}>
-            <View style={styles.keyboardAccessorySpacer} />
-            <TouchableOpacity
-              style={styles.keyboardDoneButton}
-              onPress={handleNotesDone}
-            >
-              <Text style={styles.keyboardDoneButtonText}>Done</Text>
-            </TouchableOpacity>
-          </View>
-        </InputAccessoryView>
+      {notesActive && keyboardHeight > 0 && (
+        <View
+          style={[
+            styles.keyboardDoneBar,
+            { bottom: keyboardHeight - tabBarHeight },
+          ]}
+        >
+          <View style={styles.keyboardDoneBarSpacer} />
+          <TouchableOpacity
+            style={styles.keyboardDoneBtn}
+            onPress={handleNotesDone}
+          >
+            <Text style={styles.keyboardDoneText}>Done</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </SafeAreaView>
   );
@@ -1342,6 +1361,31 @@ const styles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.md,
   },
+  keyboardDoneBar: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    zIndex: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.backgroundElevated,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: Colors.borderDefault,
+    paddingHorizontal: Spacing.xxl,
+    paddingVertical: Spacing.lg,
+  },
+  keyboardDoneBarSpacer: {
+    flex: 1,
+  },
+  keyboardDoneBtn: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+  },
+  keyboardDoneText: {
+    color: Colors.accent,
+    fontSize: FontSize.xl,
+    fontWeight: '700',
+  },
   notesInput: {
     color: Colors.textPrimary,
     fontSize: FontSize.lg,
@@ -1349,28 +1393,6 @@ const styles = StyleSheet.create({
     padding: Spacing.xxl,
     paddingTop: 0,
     minHeight: 100,
-  },
-  keyboardAccessory: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    backgroundColor: Colors.backgroundTertiary,
-    borderTopWidth: 0.5,
-    borderTopColor: Colors.backgroundDivider,
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
-  },
-  keyboardAccessorySpacer: {
-    flex: 1,
-  },
-  keyboardDoneButton: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.sm,
-  },
-  keyboardDoneButtonText: {
-    color: Colors.link,
-    fontSize: FontSize.xxxl,
-    fontWeight: '600',
   },
   startSessionButton: {
     borderWidth: 1,
