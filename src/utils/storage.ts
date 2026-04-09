@@ -16,6 +16,7 @@ import type {
   WorkoutNotes,
 } from '@/src/types/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { notifyLocalDomainChange } from '@/src/services/icloudSync/icloudSyncService';
 
 export type ProgramWorkoutWeekdayKey = NonNullable<
   Program['daysSplit']
@@ -74,6 +75,7 @@ export const getActiveProgramId = async (): Promise<string | null> => {
 export const setActiveProgramId = async (programId: string): Promise<void> => {
   try {
     await AsyncStorage.setItem(PROGRAM_STORAGE_KEY, programId);
+    await notifyLocalDomainChange('program_state');
   } catch (error) {
     console.error('Error setting active program:', error);
     throw error;
@@ -100,6 +102,7 @@ export const getProgramStartDate = async (): Promise<string | null> => {
 export const setProgramStartDate = async (startDate: string): Promise<void> => {
   try {
     await AsyncStorage.setItem(PROGRAM_START_DATE_KEY, startDate);
+    await notifyLocalDomainChange('program_state');
   } catch (error) {
     console.error('Error setting program start date:', error);
     throw error;
@@ -135,6 +138,7 @@ export const setProgramWorkoutWeekdays = async (
       PROGRAM_WORKOUT_WEEKDAYS_KEY,
       JSON.stringify(weekdays)
     );
+    await notifyLocalDomainChange('program_state');
   } catch (error) {
     console.error('Error setting program workout weekdays:', error);
     throw error;
@@ -144,6 +148,7 @@ export const setProgramWorkoutWeekdays = async (
 export const clearProgramWorkoutWeekdays = async (): Promise<void> => {
   try {
     await AsyncStorage.removeItem(PROGRAM_WORKOUT_WEEKDAYS_KEY);
+    await notifyLocalDomainChange('program_state');
   } catch (error) {
     console.error('Error clearing program workout weekdays:', error);
     throw error;
@@ -171,6 +176,7 @@ export const saveExerciseSwap = async (
     swaps[dayIndex][slotIndex] = exerciseId;
 
     await AsyncStorage.setItem(EXERCISE_SWAPS_KEY, JSON.stringify(swaps));
+    await notifyLocalDomainChange('program_swaps');
   } catch (error) {
     console.error('Error saving exercise swap:', error);
     throw error;
@@ -219,6 +225,7 @@ export const clearExerciseSwap = async (
 
       await AsyncStorage.setItem(EXERCISE_SWAPS_KEY, JSON.stringify(swaps));
       // Note: Resetting to original exercise does NOT count against swap limit
+      await notifyLocalDomainChange('program_swaps');
     }
   } catch (error) {
     console.error('Error clearing exercise swap:', error);
@@ -283,6 +290,7 @@ export const incrementSwapCount = async (): Promise<number> => {
 
     await AsyncStorage.setItem(SWAP_COUNT_KEY, newCount.toString());
     await AsyncStorage.setItem(SWAP_COUNT_MONTH_KEY, currentMonth.toString());
+    await notifyLocalDomainChange('program_quota');
 
     return newCount;
   } catch (error) {
@@ -334,6 +342,7 @@ export const saveLoggedSet = async (
     logs[dayIndex][slotIndex][setIndex] = setData;
 
     await AsyncStorage.setItem(WORKOUT_LOGS_KEY, JSON.stringify(logs));
+    await notifyLocalDomainChange('program_workoutLogs');
   } catch (error) {
     console.error('Error saving logged set:', error);
     throw error;
@@ -402,6 +411,7 @@ export const clearLoggedSetsForSlot = async (
       }
 
       await AsyncStorage.setItem(WORKOUT_LOGS_KEY, JSON.stringify(logs));
+      await notifyLocalDomainChange('program_workoutLogs');
     }
   } catch (error) {
     console.error('Error clearing logged sets for slot:', error);
@@ -430,6 +440,7 @@ export const saveCustomSetCount = async (
     counts[dayIndex][slotIndex] = setCount;
 
     await AsyncStorage.setItem(CUSTOM_SET_COUNTS_KEY, JSON.stringify(counts));
+    await notifyLocalDomainChange('program_customSetCounts');
   } catch (error) {
     console.error('Error saving custom set count:', error);
     throw error;
@@ -485,6 +496,7 @@ export const clearLoggedSet = async (
       }
 
       await AsyncStorage.setItem(WORKOUT_LOGS_KEY, JSON.stringify(logs));
+      await notifyLocalDomainChange('program_workoutLogs');
     }
   } catch (error) {
     console.error('Error clearing logged set:', error);
@@ -515,6 +527,7 @@ export const clearFutureWorkoutData = async (
         WORKOUT_LOGS_KEY,
         JSON.stringify(filteredLogs)
       );
+      await notifyLocalDomainChange('program_workoutLogs');
     }
 
     // Clear exercise swaps
@@ -532,6 +545,7 @@ export const clearFutureWorkoutData = async (
         EXERCISE_SWAPS_KEY,
         JSON.stringify(filteredSwaps)
       );
+      await notifyLocalDomainChange('program_swaps');
     }
   } catch (error) {
     console.error('Error clearing future workout data:', error);
@@ -560,6 +574,7 @@ export const saveWorkoutNotes = async (
     }
 
     await AsyncStorage.setItem(WORKOUT_NOTES_KEY, JSON.stringify(allNotes));
+    await notifyLocalDomainChange('program_notes');
   } catch (error) {
     console.error('Error saving workout notes:', error);
     throw error;
@@ -592,10 +607,12 @@ export const saveRestTimer = async (
   try {
     if (!timer) {
       await AsyncStorage.removeItem(REST_TIMER_KEY);
+      await notifyLocalDomainChange('program_restTimer');
       return;
     }
 
     await AsyncStorage.setItem(REST_TIMER_KEY, JSON.stringify(timer));
+    await notifyLocalDomainChange('program_restTimer');
   } catch (error) {
     console.error('Error saving rest timer:', error);
     throw error;
@@ -622,6 +639,7 @@ export const getRestTimer = async (): Promise<RestTimerState | null> => {
 export const clearRestTimer = async (): Promise<void> => {
   try {
     await AsyncStorage.removeItem(REST_TIMER_KEY);
+    await notifyLocalDomainChange('program_restTimer');
   } catch (error) {
     console.error('Error clearing rest timer:', error);
     throw error;
@@ -643,6 +661,14 @@ export const clearProgramData = async (): Promise<void> => {
     await AsyncStorage.removeItem(REST_TIMER_KEY);
     await AsyncStorage.removeItem(ACTIVE_SESSION_KEY);
     await AsyncStorage.removeItem(COMPLETED_SESSIONS_KEY);
+    await notifyLocalDomainChange('program_state');
+    await notifyLocalDomainChange('program_swaps');
+    await notifyLocalDomainChange('program_workoutLogs');
+    await notifyLocalDomainChange('program_customSetCounts');
+    await notifyLocalDomainChange('program_notes');
+    await notifyLocalDomainChange('program_restTimer');
+    await notifyLocalDomainChange('program_activeSession');
+    await notifyLocalDomainChange('program_completedSessions');
   } catch (error) {
     console.error('Error clearing program data:', error);
     throw error;
@@ -676,6 +702,7 @@ export const addFavoriteWorkout = async (workoutId: string): Promise<void> => {
         FAVORITE_WORKOUTS_KEY,
         JSON.stringify(favorites)
       );
+      await notifyLocalDomainChange('program_favorites');
     }
   } catch (error) {
     console.error('Error adding favorite workout:', error);
@@ -694,6 +721,7 @@ export const removeFavoriteWorkout = async (
     const favorites = await getFavoriteWorkouts();
     const filtered = favorites.filter((id) => id !== workoutId);
     await AsyncStorage.setItem(FAVORITE_WORKOUTS_KEY, JSON.stringify(filtered));
+    await notifyLocalDomainChange('program_favorites');
   } catch (error) {
     console.error('Error removing favorite workout:', error);
     throw error;
@@ -734,9 +762,11 @@ export const saveActiveSession = async (
   try {
     if (!session) {
       await AsyncStorage.removeItem(ACTIVE_SESSION_KEY);
+      await notifyLocalDomainChange('program_activeSession');
       return;
     }
     await AsyncStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(session));
+    await notifyLocalDomainChange('program_activeSession');
   } catch (error) {
     console.error('Error saving active session:', error);
     throw error;
@@ -762,6 +792,7 @@ export const getActiveSession = async (): Promise<ActiveSession | null> => {
 export const clearActiveSession = async (): Promise<void> => {
   try {
     await AsyncStorage.removeItem(ACTIVE_SESSION_KEY);
+    await notifyLocalDomainChange('program_activeSession');
   } catch (error) {
     console.error('Error clearing active session:', error);
     throw error;
@@ -782,6 +813,7 @@ export const saveCompletedSession = async (
       COMPLETED_SESSIONS_KEY,
       JSON.stringify(sessions)
     );
+    await notifyLocalDomainChange('program_completedSessions');
   } catch (error) {
     console.error('Error saving completed session:', error);
     throw error;
@@ -821,6 +853,7 @@ export const clearCompletedSession = async (
         COMPLETED_SESSIONS_KEY,
         JSON.stringify(sessions)
       );
+      await notifyLocalDomainChange('program_completedSessions');
     }
   } catch (error) {
     console.error('Error clearing completed session:', error);
@@ -903,6 +936,7 @@ export const upsertStandaloneWorkoutLogEntry = async (
   }
   store[entry.workoutId] = sortStandaloneLogEntriesNewestFirst(prev);
   await writeStandaloneWorkoutLogsStore(store);
+  await notifyLocalDomainChange('standalone_logs');
 };
 
 export const deleteStandaloneWorkoutLogEntry = async (
@@ -921,4 +955,5 @@ export const deleteStandaloneWorkoutLogEntry = async (
     store[workoutId] = sortStandaloneLogEntriesNewestFirst(next);
   }
   await writeStandaloneWorkoutLogsStore(store);
+  await notifyLocalDomainChange('standalone_logs');
 };

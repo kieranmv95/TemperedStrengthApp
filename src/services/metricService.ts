@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { notifyLocalDomainChange } from '@/src/services/icloudSync/icloudSyncService';
 
 export type TRACKED_METRIC =
   | 'program_starts'
@@ -54,6 +55,7 @@ async function writeTrackedMetrics(
       TRACKED_METRICS_STORAGE_KEY,
       JSON.stringify(metrics)
     );
+    await notifyLocalDomainChange('metrics_tracked');
   } catch (error) {
     console.error('Error writing tracked metrics:', error);
     throw error;
