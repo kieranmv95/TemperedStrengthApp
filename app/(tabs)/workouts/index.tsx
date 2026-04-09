@@ -234,7 +234,7 @@ export default function WorkoutsScreen() {
   return (
     <StandardLayout
       title="Workouts"
-      subtitle="All the workouts you've earned"
+      subtitle="Log your and track your progress"
       disableScroll
     >
       <StandardLayout.Filters>
@@ -366,6 +366,7 @@ export default function WorkoutsScreen() {
           <FlatList
             data={filteredWorkouts}
             keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContent}
             renderItem={({ item }) => (
               <WorkoutCard
                 workout={item}
@@ -392,7 +393,8 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xl,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
-    marginVertical: Spacing.xxl,
+    marginTop: Spacing.xl,
+    marginBottom: Spacing.xxl,
     paddingHorizontal: Spacing.xl,
     height: 44,
   },
@@ -411,6 +413,9 @@ const styles = StyleSheet.create({
   },
   lastFilterScrollContent: {
     paddingBottom: 0,
+  },
+  listContent: {
+    paddingTop: Spacing.xxl,
   },
   workoutCard: {
     backgroundColor: Colors.backgroundCard,

@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
     },
     nonScrollContent: {
+        paddingTop: 0,
         flex: 1,
     },
 });
