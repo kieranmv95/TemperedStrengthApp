@@ -18,6 +18,7 @@ export const StandardLayoutBody = ({ children }: StandardLayoutSectionProps) => 
 type StandardLayoutProps = {
     title: string;
     subtitle?: string;
+    disableScroll?: boolean;
     children?: React.ReactNode;
 };
 
@@ -26,7 +27,12 @@ type StandardLayoutCompound = React.FC<StandardLayoutProps> & {
     Body: typeof StandardLayoutBody;
 };
 
-const StandardLayoutBase: React.FC<StandardLayoutProps> = ({ title, subtitle, children }) => {
+const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
+    title,
+    subtitle,
+    disableScroll = false,
+    children,
+}) => {
     const insets = useSafeAreaInsets();
 
     let filters: React.ReactNode = null;
@@ -70,13 +76,20 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({ title, subtitle, ch
                 {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
                 {filters ? <StandardLayoutFilters>{filters}</StandardLayoutFilters> : null}
             </View>
-            <ScrollView
-                style={styles.scrollView}
-                contentContainerStyle={styles.content}
-            >
-                {body ? <StandardLayoutBody>{body}</StandardLayoutBody> : null}
-                {rest.length > 0 ? <View>{rest}</View> : null}
-            </ScrollView>
+            {disableScroll ? (
+                <View style={[styles.content, styles.nonScrollContent]}>
+                    {body ? <StandardLayoutBody>{body}</StandardLayoutBody> : null}
+                    {rest.length > 0 ? <View>{rest}</View> : null}
+                </View>
+            ) : (
+                <ScrollView
+                    style={styles.scrollView}
+                    contentContainerStyle={styles.content}
+                >
+                    {body ? <StandardLayoutBody>{body}</StandardLayoutBody> : null}
+                    {rest.length > 0 ? <View>{rest}</View> : null}
+                </ScrollView>
+            )}
         </View>
     );
 };
@@ -105,7 +118,7 @@ const styles = StyleSheet.create({
     headerContainer: {
         paddingHorizontal: Spacing.xxl,
         paddingTop: Spacing.xxl,
-        paddingBottom: Spacing.section,
+        paddingBottom: Spacing.xxl,
         borderBottomWidth: 1,
         borderBottomColor: Colors.borderDefault,
     },
@@ -116,5 +129,8 @@ const styles = StyleSheet.create({
     content: {
         padding: Spacing.xxl,
         flexGrow: 1,
+    },
+    nonScrollContent: {
+        flex: 1,
     },
 });

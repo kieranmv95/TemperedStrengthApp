@@ -12,7 +12,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StandardLayout } from '../components/StandardLayout';
 import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
 import type { Program } from '../types/program';
@@ -290,295 +291,284 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.content}
-      >
-        <View style={styles.header}>
-          <View style={styles.headerTop}>
-            <View style={styles.headerTextContainer}>
-              <Text style={styles.title}>Select a Program</Text>
-              <Text style={styles.subtitle}>
-                Choose your training program to get started
-              </Text>
-            </View>
-
-            {onClose && (
-              <TouchableOpacity
-                onPress={onClose}
-                style={styles.headerCloseButton}
-                accessibilityRole="button"
-              >
-                <Text style={styles.headerCloseButtonText}>✕</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-
+    <StandardLayout title="Programs" subtitle="Choose your training program to get started">
+      <StandardLayout.Body>
         {programs.map((program) =>
           renderProgramCard(program, program.isPro && !isPro)
         )}
-      </ScrollView>
-
-      <Modal
-        visible={showProgramDetails}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setShowProgramDetails(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.programDetailsModal}>
-            <View style={styles.modalHeader}>
-              <View style={styles.modalTitleRow}>
-                <Text style={styles.modalTitle}>
-                  {selectedProgram?.name || 'Program Details'}
-                </Text>
-                {selectedProgram?.isPro && (
-                  <View style={styles.proBadge}>
-                    <Text style={styles.proBadgeText}>PRO</Text>
-                  </View>
-                )}
+        <Modal
+          visible={showProgramDetails}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setShowProgramDetails(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.programDetailsModal}>
+              <View style={styles.modalHeader}>
+                <View style={styles.modalTitleRow}>
+                  <Text style={styles.modalTitle}>
+                    {selectedProgram?.name || 'Program Details'}
+                  </Text>
+                  {selectedProgram?.isPro && (
+                    <View style={styles.proBadge}>
+                      <Text style={styles.proBadgeText}>PRO</Text>
+                    </View>
+                  )}
+                </View>
+                <TouchableOpacity
+                  onPress={() => setShowProgramDetails(false)}
+                  style={styles.closeButton}
+                >
+                  <Text style={styles.closeButtonText}>✕</Text>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                onPress={() => setShowProgramDetails(false)}
-                style={styles.closeButton}
-              >
-                <Text style={styles.closeButtonText}>✕</Text>
-              </TouchableOpacity>
-            </View>
 
-            <ScrollView style={styles.modalContent}>
-              <Text style={styles.programDescription}>
-                {selectedProgram?.description}
-              </Text>
+              <ScrollView style={styles.modalContent}>
+                <Text style={styles.programDescription}>
+                  {selectedProgram?.description}
+                </Text>
 
-              <Text style={styles.sectionTitle}>Program Overview</Text>
+                <Text style={styles.sectionTitle}>Program Overview</Text>
 
-              <View style={styles.programOverviewContainer}>
-                <View style={styles.statsContainer}>
-                  <View style={styles.statItem}>
-                    <Text style={styles.statValue}>
-                      {selectedProgram?.workouts.length}
-                    </Text>
-                    <Text style={styles.statLabel}>Workouts</Text>
-                  </View>
-                  {selectedProgram &&
-                    (() => {
-                      const maxDayIndex = Math.max(
-                        ...selectedProgram.workouts.map((w) => w.dayIndex)
-                      );
-                      const weekCount = Math.ceil((maxDayIndex + 1) / 7);
-                      return (
-                        <View style={styles.statItem}>
-                          <Text style={styles.statValue}>{weekCount}</Text>
-                          <Text style={styles.statLabel}>
-                            {weekCount === 1 ? 'Week' : 'Weeks'}
-                          </Text>
-                        </View>
-                      );
-                    })()}
-                  {selectedProgram?.averageSessionDuration && (
+                <View style={styles.programOverviewContainer}>
+                  <View style={styles.statsContainer}>
                     <View style={styles.statItem}>
                       <Text style={styles.statValue}>
-                        {selectedProgram.averageSessionDuration}
+                        {selectedProgram?.workouts.length}
                       </Text>
-                      <Text style={styles.statLabel}>Duration</Text>
+                      <Text style={styles.statLabel}>Workouts</Text>
                     </View>
-                  )}
-                </View>
-              </View>
-
-              {selectedProgram?.daysSplit && (
-                <View>
-                  <View style={styles.workoutDaysTitleBlock}>
-                    <Text style={styles.workoutTitle}>Workout Days (tap to change)</Text>
-                    <Text style={styles.workoutDaysHint}>
-                      You need exactly {sessionsRequired} training days before you can start. Tap the days below to fit your scehdule
-                    </Text>
-                  </View>
-                  {!weekdaySelectionReady && (
-                    <Text style={styles.weekdaySelectionHint}>
-                      Select exactly {sessionsRequired} days (
-                      {selectedWeekdays.length} selected).
-                    </Text>
-                  )}
-                  <View style={styles.daysSplitContainer}>
-                    {CALENDAR_DAY_KEYS.map((key) => {
-                      const selected = selectedWeekdays.includes(key);
-                      return (
-                        <TouchableOpacity
-                          key={key}
-                          style={[
-                            styles.dayItem,
-                            selected && styles.dayItemSelected,
-                          ]}
-                          onPress={() => toggleWeekday(key)}
-                          accessibilityRole="checkbox"
-                          accessibilityState={{ checked: selected }}
-                          accessibilityLabel={`${programAnchorFullWeekdayName(key)} training day`}
-                        >
-                          <Text
-                            style={[
-                              styles.dayLabel,
-                              selected && styles.dayLabelSelected,
-                            ]}
-                          >
-                            {CAL_DAY_LABELS[key]}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
-                </View>
-              )}
-
-              <Text style={styles.sectionTitle}>Workouts</Text>
-              {selectedProgram?.workouts.map((workout, index) => (
-                <View key={index} style={styles.workoutItem}>
-                  <Text style={styles.workoutLabel}>{workout.label}</Text>
-                  {workout.description && (
-                    <Text style={styles.workoutDescription}>
-                      {workout.description}
-                    </Text>
-                  )}
-                  {(() => {
-                    const exerciseIds = workout.exercises
-                      .filter((ex) => ex.type === 'exercise')
-                      .map((ex) => (ex as { id: number }).id);
-                    const exerciseNames = exerciseIds
-                      .map((id) => getExerciseById(id)?.name)
-                      .filter((name): name is string => name !== undefined);
-                    return exerciseNames.length > 0 ? (
-                      <Text style={styles.workoutExercisesList}>
-                        {exerciseNames.join(', ')}
-                      </Text>
-                    ) : null;
-                  })()}
-                  <View style={styles.workoutMeta}>
-                    <Text style={styles.workoutExercises}>
-                      {workout.exercises.length} exercises
-                    </Text>
-                    <View style={styles.workoutIntensity}>
-                      <Text style={styles.workoutIntensityLabel}>
-                        Intensity:
-                      </Text>
-                      <View style={styles.workoutIntensityBar}>
-                        {Array.from({ length: 10 }).map((_, i) => (
-                          <View
-                            key={i}
-                            style={[
-                              styles.workoutIntensityDot,
-                              i < workout.intensity &&
-                              styles.workoutIntensityDotFilled,
-                            ]}
-                          />
-                        ))}
+                    {selectedProgram &&
+                      (() => {
+                        const maxDayIndex = Math.max(
+                          ...selectedProgram.workouts.map((w) => w.dayIndex)
+                        );
+                        const weekCount = Math.ceil((maxDayIndex + 1) / 7);
+                        return (
+                          <View style={styles.statItem}>
+                            <Text style={styles.statValue}>{weekCount}</Text>
+                            <Text style={styles.statLabel}>
+                              {weekCount === 1 ? 'Week' : 'Weeks'}
+                            </Text>
+                          </View>
+                        );
+                      })()}
+                    {selectedProgram?.averageSessionDuration && (
+                      <View style={styles.statItem}>
+                        <Text style={styles.statValue}>
+                          {selectedProgram.averageSessionDuration}
+                        </Text>
+                        <Text style={styles.statLabel}>Duration</Text>
                       </View>
-                      <Text style={styles.workoutIntensityValue}>
-                        {workout.intensity}/10
-                      </Text>
-                    </View>
+                    )}
                   </View>
                 </View>
-              ))}
-            </ScrollView>
 
-            <View
-              style={[
-                styles.modalFooter,
-                { paddingBottom: insets.bottom + Spacing.xl },
-              ]}
-            >
-              {selectedProgram?.isPro && !isPro ? (
-                <TouchableOpacity
-                  style={styles.upgradeProgramButton}
-                  onPress={() => {
-                    setShowProgramDetails(false);
-                    router.push('/settings');
-                  }}
-                >
-                  <Text style={styles.upgradeProgramButtonText}>
-                    Upgrade to Pro to Start
-                  </Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={[
-                    styles.startProgramButton,
-                    startBlockedByWeekdays && styles.startProgramButtonDisabled,
-                  ]}
-                  onPress={handleStartProgram}
-                  disabled={startBlockedByWeekdays}
-                >
-                  <Text style={styles.startProgramButtonText}>
-                    Start Program
-                  </Text>
-                </TouchableOpacity>
-              )}
+                {selectedProgram?.daysSplit && (
+                  <View>
+                    <View style={styles.workoutDaysTitleBlock}>
+                      <Text style={styles.workoutTitle}>Workout Days (tap to change)</Text>
+                      <Text style={styles.workoutDaysHint}>
+                        You need exactly {sessionsRequired} training days before you can start. Tap the days below to fit your scehdule
+                      </Text>
+                    </View>
+                    {!weekdaySelectionReady && (
+                      <Text style={styles.weekdaySelectionHint}>
+                        Select exactly {sessionsRequired} days (
+                        {selectedWeekdays.length} selected).
+                      </Text>
+                    )}
+                    <View style={styles.daysSplitContainer}>
+                      {CALENDAR_DAY_KEYS.map((key) => {
+                        const selected = selectedWeekdays.includes(key);
+                        return (
+                          <TouchableOpacity
+                            key={key}
+                            style={[
+                              styles.dayItem,
+                              selected && styles.dayItemSelected,
+                            ]}
+                            onPress={() => toggleWeekday(key)}
+                            accessibilityRole="checkbox"
+                            accessibilityState={{ checked: selected }}
+                            accessibilityLabel={`${programAnchorFullWeekdayName(key)} training day`}
+                          >
+                            <Text
+                              style={[
+                                styles.dayLabel,
+                                selected && styles.dayLabelSelected,
+                              ]}
+                            >
+                              {CAL_DAY_LABELS[key]}
+                            </Text>
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </View>
+                  </View>
+                )}
+
+                <Text style={styles.sectionTitle}>Workouts</Text>
+                {selectedProgram?.workouts.map((workout, index) => (
+                  <View key={index} style={styles.workoutItem}>
+                    <Text style={styles.workoutLabel}>{workout.label}</Text>
+                    {workout.description && (
+                      <Text style={styles.workoutDescription}>
+                        {workout.description}
+                      </Text>
+                    )}
+                    {(() => {
+                      const exerciseIds = workout.exercises
+                        .filter((ex) => ex.type === 'exercise')
+                        .map((ex) => (ex as { id: number }).id);
+                      const exerciseNames = exerciseIds
+                        .map((id) => getExerciseById(id)?.name)
+                        .filter((name): name is string => name !== undefined);
+                      return exerciseNames.length > 0 ? (
+                        <Text style={styles.workoutExercisesList}>
+                          {exerciseNames.join(', ')}
+                        </Text>
+                      ) : null;
+                    })()}
+                    <View style={styles.workoutMeta}>
+                      <Text style={styles.workoutExercises}>
+                        {workout.exercises.length} exercises
+                      </Text>
+                      <View style={styles.workoutIntensity}>
+                        <Text style={styles.workoutIntensityLabel}>
+                          Intensity:
+                        </Text>
+                        <View style={styles.workoutIntensityBar}>
+                          {Array.from({ length: 10 }).map((_, i) => (
+                            <View
+                              key={i}
+                              style={[
+                                styles.workoutIntensityDot,
+                                i < workout.intensity &&
+                                styles.workoutIntensityDotFilled,
+                              ]}
+                            />
+                          ))}
+                        </View>
+                        <Text style={styles.workoutIntensityValue}>
+                          {workout.intensity}/10
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                ))}
+              </ScrollView>
+
+              <View
+                style={[
+                  styles.modalFooter,
+                  { paddingBottom: insets.bottom + Spacing.xl },
+                ]}
+              >
+                {selectedProgram?.isPro && !isPro ? (
+                  <TouchableOpacity
+                    style={styles.upgradeProgramButton}
+                    onPress={() => {
+                      setShowProgramDetails(false);
+                      router.push('/settings');
+                    }}
+                  >
+                    <Text style={styles.upgradeProgramButtonText}>
+                      Upgrade to Pro to Start
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={[
+                      styles.startProgramButton,
+                      startBlockedByWeekdays && styles.startProgramButtonDisabled,
+                    ]}
+                    onPress={handleStartProgram}
+                    disabled={startBlockedByWeekdays}
+                  >
+                    <Text style={styles.startProgramButtonText}>
+                      Start Program
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
 
-      {showDatePicker && selectedProgram && (
-        <View style={styles.datePickerContainer}>
-          <View style={styles.datePickerHeader}>
-            <TouchableOpacity
-              onPress={() => setShowDatePicker(false)}
-              style={styles.cancelButton}
+        <Modal
+          visible={showDatePicker && !!selectedProgram}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setShowDatePicker(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View
+              style={[
+                styles.datePickerContainer,
+                { paddingBottom: insets.bottom + 40 },
+              ]}
             >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </TouchableOpacity>
-            <Text style={styles.datePickerTitle}>Select Start Date</Text>
-            <TouchableOpacity
-              onPress={handleConfirmDate}
-              style={styles.confirmButton}
-            >
-              <Text style={styles.confirmButtonText}>Confirm</Text>
-            </TouchableOpacity>
+              <View style={styles.datePickerHeader}>
+                <TouchableOpacity
+                  onPress={() => setShowDatePicker(false)}
+                  style={styles.cancelButton}
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+                <Text style={styles.datePickerTitle}>Select Start Date</Text>
+                <TouchableOpacity
+                  onPress={handleConfirmDate}
+                  style={styles.confirmButton}
+                >
+                  <Text style={styles.confirmButtonText}>Confirm</Text>
+                </TouchableOpacity>
+              </View>
+              <ScrollView
+                style={styles.datePickerScroll}
+                contentContainerStyle={styles.datePickerScrollContent}
+                keyboardShouldPersistTaps="handled"
+              >
+                <Text style={styles.datePickerExplanation}>
+                  {selectedProgram?.daysSplit?.length ? (
+                    <>
+                      Your first session each week is the earliest day you picked
+                      (Mon→Sun order). Pick a start date on{' '}
+                      <Text style={styles.datePickerExplanationEmphasis}>
+                        {`${programAnchorFullWeekdayName(
+                          startDatePickerAllowedWeekdays[0] ?? 'mon'
+                        )}s`}
+                      </Text>
+                      . Other weekdays are greyed out. Past dates cannot be
+                      selected.
+                    </>
+                  ) : (
+                    <>
+                      Your first session is always on{' '}
+                      <Text style={styles.datePickerExplanationEmphasis}>
+                        {selectedProgram
+                          ? `${programAnchorFullWeekdayName(
+                              getProgramAnchorWeekdayKey(selectedProgram)
+                            )}s`
+                          : null}
+                      </Text>
+                      . Only those dates can be your program start; other days
+                      are greyed out because they do not match day 1 of this
+                      template. Past dates cannot be selected.
+                    </>
+                  )}
+                </Text>
+                <ProgramStartDateCalendar
+                  value={startDate}
+                  onChange={setStartDate}
+                  allowedWeekdays={startDatePickerAllowedWeekdays}
+                />
+              </ScrollView>
+            </View>
           </View>
-          <ScrollView
-            style={styles.datePickerScroll}
-            contentContainerStyle={styles.datePickerScrollContent}
-            keyboardShouldPersistTaps="handled"
-          >
-            <Text style={styles.datePickerExplanation}>
-              {selectedProgram.daysSplit?.length ? (
-                <>
-                  Your first session each week is the earliest day you picked
-                  (Mon→Sun order). Pick a start date on{' '}
-                  <Text style={styles.datePickerExplanationEmphasis}>
-                    {`${programAnchorFullWeekdayName(
-                      startDatePickerAllowedWeekdays[0] ?? 'mon'
-                    )}s`}
-                  </Text>
-                  . Other weekdays are greyed out. Past dates cannot be
-                  selected.
-                </>
-              ) : (
-                <>
-                  Your first session is always on{' '}
-                  <Text style={styles.datePickerExplanationEmphasis}>
-                    {`${programAnchorFullWeekdayName(
-                      getProgramAnchorWeekdayKey(selectedProgram)
-                    )}s`}
-                  </Text>
-                  . Only those dates can be your program start; other days are
-                  greyed out because they do not match day 1 of this template.
-                  Past dates cannot be selected.
-                </>
-              )}
-            </Text>
-            <ProgramStartDateCalendar
-              value={startDate}
-              onChange={setStartDate}
-              allowedWeekdays={startDatePickerAllowedWeekdays}
-            />
-          </ScrollView>
-        </View>
-      )}
-    </SafeAreaView>
+        </Modal>
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 };
 
@@ -697,16 +687,11 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   datePickerContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
     backgroundColor: Colors.backgroundCard,
     borderTopLeftRadius: BorderRadius.pill,
     borderTopRightRadius: BorderRadius.pill,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
-    paddingBottom: 40,
     maxHeight: '75%',
   },
   datePickerHeader: {

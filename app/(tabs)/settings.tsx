@@ -218,22 +218,22 @@ export default function SettingsScreen() {
               <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
             </TouchableOpacity>
           )}
-        </View>
 
-        {programLauncherVisible && (
-          <Modal
-            visible={programLauncherVisible}
-            transparent
-            animationType="slide"
-            onRequestClose={() => setProgramLauncherVisible(false)}
-          >
-            <ProgramLauncher
-              resetExistingProgramData
-              onClose={() => setProgramLauncherVisible(false)}
-              onProgramSelected={handleProgramSelectedFromLauncher}
-            />
-          </Modal>
-        )}
+          {programLauncherVisible && (
+            <Modal
+              visible={programLauncherVisible}
+              transparent
+              animationType="slide"
+              onRequestClose={() => setProgramLauncherVisible(false)}
+            >
+              <ProgramLauncher
+                resetExistingProgramData
+                onClose={() => setProgramLauncherVisible(false)}
+                onProgramSelected={handleProgramSelectedFromLauncher}
+              />
+            </Modal>
+          )}
+        </View>
       </StandardLayout.Body>
     </StandardLayout>
   );
