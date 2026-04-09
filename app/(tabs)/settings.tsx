@@ -1,3 +1,4 @@
+import { StandardLayout } from '@/src/components/StandardLayout';
 import {
   BorderRadius,
   Colors,
@@ -17,13 +18,11 @@ import React, { useState } from 'react';
 import {
   Alert,
   Modal,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {
   const [hasProgram, setHasProgram] = useState<boolean>(false);
@@ -118,14 +117,8 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Settings</Text>
-      </View>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.content}
-      >
+    <StandardLayout title="Settings" subtitle="Manage your settings">
+      <StandardLayout.Body>
         <View style={styles.settingsList}>
           <TouchableOpacity
             style={[styles.settingItem, isPro && styles.proItem]}
@@ -226,49 +219,27 @@ export default function SettingsScreen() {
             </TouchableOpacity>
           )}
         </View>
-      </ScrollView>
 
-      {programLauncherVisible && (
-        <Modal
-          visible={programLauncherVisible}
-          transparent
-          animationType="slide"
-          onRequestClose={() => setProgramLauncherVisible(false)}
-        >
-          <ProgramLauncher
-            resetExistingProgramData
-            onClose={() => setProgramLauncherVisible(false)}
-            onProgramSelected={handleProgramSelectedFromLauncher}
-          />
-        </Modal>
-      )}
-    </SafeAreaView>
+        {programLauncherVisible && (
+          <Modal
+            visible={programLauncherVisible}
+            transparent
+            animationType="slide"
+            onRequestClose={() => setProgramLauncherVisible(false)}
+          >
+            <ProgramLauncher
+              resetExistingProgramData
+              onClose={() => setProgramLauncherVisible(false)}
+              onProgramSelected={handleProgramSelectedFromLauncher}
+            />
+          </Modal>
+        )}
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundScreen,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  content: {
-    padding: Spacing.section,
-  },
-  header: {
-    padding: Spacing.section,
-    paddingBottom: Spacing.xxl,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
-  },
-  title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXXXl,
-    fontWeight: '800',
-    letterSpacing: -0.5,
-  },
   settingsList: {
     gap: Spacing.xl,
   },

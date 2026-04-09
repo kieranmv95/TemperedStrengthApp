@@ -1,5 +1,6 @@
 import Award from '@/src/components/Award';
 import { Pill } from '@/src/components/pill';
+import { StandardLayout } from '@/src/components/StandardLayout';
 import {
   Colors,
   FontSize,
@@ -10,12 +11,10 @@ import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  ScrollView,
   StyleSheet,
   Text,
   View
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 type StatusFilter = 'all' | 'achieved' | 'not_achieved';
 type AccessFilter = 'all' | 'free' | 'pro';
@@ -59,12 +58,8 @@ export default function AwardsScreen() {
   }, [awardRows, statusFilter, accessFilter]);
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Awards</Text>
-        <Text style={styles.subtitle}>
-          All the awards you&apos;ve earned
-        </Text>
+    <StandardLayout title="Awards" subtitle="All the awards you've earned">
+      <StandardLayout.Filters>
         <View style={styles.filters}>
           <View style={styles.filterRow}>
             <Pill
@@ -107,14 +102,12 @@ export default function AwardsScreen() {
             />
           </View>
         </View>
-      </View>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.content}
-      >
+      </StandardLayout.Filters>
+
+      <StandardLayout.Body>
         <View style={styles.awardsContainer}>
           {visibleRows === null ? (
-            <ActivityIndicator />
+            <ActivityIndicator color={Colors.textMuted} />
           ) : visibleRows.length === 0 ? (
             <Text style={styles.emptyStateText}>
               No awards match your filters.
@@ -136,39 +129,12 @@ export default function AwardsScreen() {
             ))
           )}
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundScreen,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  subtitle: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
-  },
-  content: {
-    padding: Spacing.section,
-  },
-  header: {
-    padding: Spacing.section,
-    paddingBottom: Spacing.xxl,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
-  },
-  title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXXXl,
-    fontWeight: '800',
-    letterSpacing: -0.5,
-  },
   filters: {
     marginTop: Spacing.lg,
     gap: Spacing.sm,

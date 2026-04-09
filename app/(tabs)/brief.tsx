@@ -1,5 +1,6 @@
 import { ArticleCard } from '@/src/components/brief/ArticleCard';
 import { GlossaryItem } from '@/src/components/brief/GlossaryItem';
+import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import {
   articles,
@@ -18,7 +19,6 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function BriefScreen() {
   const featuredArticle = getFeaturedArticle();
@@ -41,20 +41,8 @@ export default function BriefScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>Brief</Text>
-          <Text style={styles.subtitle}>
-            Your daily intel for the iron game
-          </Text>
-        </View>
-
+    <StandardLayout title="Brief" subtitle="Your daily intel for the iron game">
+      <StandardLayout.Body>
         {/* FIELD INTEL - Articles Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -113,38 +101,12 @@ export default function BriefScreen() {
 
         {/* Bottom spacing */}
         <View style={styles.bottomSpacer} />
-      </ScrollView>
-    </SafeAreaView>
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundScreen,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  content: {
-    paddingHorizontal: Spacing.xxl,
-  },
-  header: {
-    paddingTop: Spacing.section,
-    paddingBottom: Spacing.section,
-  },
-  title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXXXl,
-    fontWeight: '800',
-    letterSpacing: -0.5,
-    marginBottom: Spacing.xs,
-  },
-  subtitle: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
-  },
   section: {
     marginBottom: 32,
   },
