@@ -6,10 +6,9 @@ import {
   Spacing,
 } from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
-import { ProgramLauncher } from '@/src/screens/ProgramLauncher';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
-import { getActiveProgramId } from '@/src/utils/storage';
+import { clearProgramData, getActiveProgramId } from '@/src/utils/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
@@ -17,7 +16,6 @@ import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
   Alert,
-  Modal,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -26,8 +24,7 @@ import {
 
 export default function SettingsScreen() {
   const [hasProgram, setHasProgram] = useState<boolean>(false);
-  const [activeProgram, setActiveProgram] = useState<Program | null>(null);
-  const [programLauncherVisible, setProgramLauncherVisible] = useState(false);
+  const [, setActiveProgram] = useState<Program | null>(null);
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
 
   const checkProgramStatus = async () => {
@@ -66,27 +63,48 @@ export default function SettingsScreen() {
     }
   };
 
-  const handleProgramSelectedFromLauncher = () => {
-    setProgramLauncherVisible(false);
+  const handleEndCurrentProgram = () => {
+    Alert.alert(
+      'End Current Program',
+      'This will permanently end your current program and clear all program data, including:\n\n• Program selection & start date\n• Program progress\n• Workout logs\n• Exercise swaps\n• Custom set counts\n• Workout notes\n• Rest timers / active session\n\nThis action cannot be undone.\n\nAre you sure you want to end your current program?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'End Program',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await Notifications.cancelAllScheduledNotificationsAsync();
+            } catch (error) {
+              console.error('Error cancelling scheduled notifications:', error);
+            }
 
-    void (async () => {
-      try {
-        // Changing a program can leave a scheduled rest timer around.
-        // Cancel everything to prevent notifications for the old program.
-        await Notifications.cancelAllScheduledNotificationsAsync();
-      } catch (error) {
-        console.error('Error cancelling scheduled notifications:', error);
-      } finally {
-        checkProgramStatus();
-        router.replace('/');
-      }
-    })();
+            try {
+              await clearProgramData();
+              setHasProgram(false);
+              setActiveProgram(null);
+              router.replace('/');
+              Alert.alert('Program Ended', 'Your current program has been cleared.');
+            } catch (error) {
+              console.error('Error ending current program:', error);
+              Alert.alert(
+                'Error',
+                'Failed to end your current program. Please try again.'
+              );
+            }
+          },
+        },
+      ]
+    );
   };
 
   const handleClearAllData = () => {
     Alert.alert(
       'Clear All Data',
-      'This will permanently delete ALL stored data including:\n\n• Program progress\n• Workout logs\n• Exercise swaps\n• Custom set counts\n• Exercise cache\n\nThis action cannot be undone.\n\nAre you sure you want to clear all data?',
+      'This will permanently delete ALL stored data including:\n\n• Program progress\n• Exercise swaps\n• Custom set counts\n• Exercise cache\n\nThis action cannot be undone.\n\nAre you sure you want to clear all data?',
       [
         {
           text: 'Cancel',
@@ -117,7 +135,7 @@ export default function SettingsScreen() {
   };
 
   return (
-    <StandardLayout title="Settings" subtitle="Manage your settings">
+    <StandardLayout title="Account" subtitle="Manage your account">
       <StandardLayout.Body>
         <View style={styles.settingsList}>
           <TouchableOpacity
@@ -172,29 +190,32 @@ export default function SettingsScreen() {
           <TouchableOpacity
             style={[
               styles.settingItem,
+              styles.dangerItem,
               !hasProgram && styles.settingItemDisabled,
             ]}
-            onPress={() => setProgramLauncherVisible(true)}
+            onPress={handleEndCurrentProgram}
             disabled={!hasProgram}
           >
             <View style={styles.settingContent}>
               <Text
                 style={[
                   styles.settingTitle,
+                  styles.dangerText,
                   !hasProgram && styles.settingTitleDisabled,
                 ]}
               >
-                Change Program
+                End Current Program
               </Text>
               <Text style={styles.settingDescription}>
-                {hasProgram && activeProgram
-                  ? activeProgram.name
-                  : 'Select a different program'}
+                {hasProgram
+                  ? 'Clear all program progress and related data'
+                  : 'No active program to end'}
               </Text>
             </View>
             <Text
               style={[
                 styles.settingArrow,
+                styles.dangerText,
                 !hasProgram && styles.settingArrowDisabled,
               ]}
             >
@@ -217,21 +238,6 @@ export default function SettingsScreen() {
               </View>
               <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
             </TouchableOpacity>
-          )}
-
-          {programLauncherVisible && (
-            <Modal
-              visible={programLauncherVisible}
-              transparent
-              animationType="slide"
-              onRequestClose={() => setProgramLauncherVisible(false)}
-            >
-              <ProgramLauncher
-                resetExistingProgramData
-                onClose={() => setProgramLauncherVisible(false)}
-                onProgramSelected={handleProgramSelectedFromLauncher}
-              />
-            </Modal>
           )}
         </View>
       </StandardLayout.Body>

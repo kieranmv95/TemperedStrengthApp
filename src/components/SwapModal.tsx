@@ -230,7 +230,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
             <Text style={styles.disclaimer}>
               Swapping an exercise will use one of your free swaps, you get 10
               per month, resetting on the 1st of each month. Upgrade to PRO in
-              the settings to get unlimited swaps.
+              the account to get unlimited swaps.
             </Text>
           )}
 

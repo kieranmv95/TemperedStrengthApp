@@ -138,7 +138,7 @@ export default function WorkoutDetailScreen() {
             Upgrade to Pro to unlock this workout.
           </Text>
           <TouchableOpacity style={styles.lockedCta} onPress={handleLockedPress}>
-            <Text style={styles.lockedCtaText}>Go to Settings</Text>
+            <Text style={styles.lockedCtaText}>Go to Account</Text>
             <Ionicons name="chevron-forward" size={18} color={Colors.textOnAccent} />
           </TouchableOpacity>
         </View>
@@ -202,9 +202,8 @@ export default function WorkoutDetailScreen() {
                   const movementText =
                     typeof movement === 'string'
                       ? movement
-                      : `${movement.name}: ${movement.value}${
-                          movement.note ? ` (${movement.note})` : ''
-                        }`;
+                      : `${movement.name}: ${movement.value}${movement.note ? ` (${movement.note})` : ''
+                      }`;
                   return (
                     <View key={movementIndex} style={styles.movementItem}>
                       <Text style={styles.movementBullet}>•</Text>
