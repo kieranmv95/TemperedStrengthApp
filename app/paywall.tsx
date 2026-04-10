@@ -2,14 +2,13 @@ import { Colors } from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { getOfferings } from '@/src/services/revenueCatService';
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
 import { PURCHASES_ERROR_CODE, PurchasesError } from 'react-native-purchases';
 import RevenueCatUI from 'react-native-purchases-ui';
 
 export default function PaywallScreen() {
   const { isPro, refresh } = useSubscription();
-  const [isPresenting, setIsPresenting] = useState(false);
 
   // Present the paywall from RevenueCat dashboard when screen mounts
   useEffect(() => {
@@ -21,8 +20,6 @@ export default function PaywallScreen() {
 
     const presentPaywall = async () => {
       try {
-        setIsPresenting(true);
-
         // Check if offerings are available before presenting paywall
         const offerings = await getOfferings();
         if (
@@ -152,7 +149,6 @@ export default function PaywallScreen() {
           ]
         );
       } finally {
-        setIsPresenting(false);
       }
     };
 

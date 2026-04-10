@@ -1,4 +1,4 @@
-export type { Article, GlossaryTerm, Playlist } from './brief';
+export type { Article, GlossaryTerm } from './brief';
 export type { Exercise } from './exercise';
 export type {
   Program,

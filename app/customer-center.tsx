@@ -1,13 +1,10 @@
 import { Colors } from '@/src/constants/theme';
-import { useSubscription } from '@/src/hooks/use-subscription';
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import RevenueCatUI from 'react-native-purchases-ui';
 
 export default function CustomerCenterScreen() {
-  const { refresh } = useSubscription();
-
   const handleDismiss = () => {
     router.back();
   };

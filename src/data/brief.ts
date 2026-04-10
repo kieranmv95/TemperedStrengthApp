@@ -27,5 +27,5 @@ export const getGlossaryByCategory = (
 };
 
 // Re-export types and data for consumers
-export type { Article, GlossaryTerm, Playlist } from '@/src/types/brief';
+export type { Article, GlossaryTerm } from '@/src/types/brief';
 export { articles, glossary };

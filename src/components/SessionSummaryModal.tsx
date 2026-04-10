@@ -51,7 +51,9 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
       <View style={styles.overlay}>
         <View style={styles.content}>
           <Text style={styles.title}>Session Complete</Text>
-          <Text style={styles.subtitle}>Great work. Here's your summary.</Text>
+          <Text style={styles.subtitle}>
+            Great work. Here&apos;s your summary.
+          </Text>
 
           <View style={styles.statsContainer}>
             <View style={styles.statCard}>

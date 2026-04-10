@@ -1,5 +1,4 @@
 import {
-  GAP,
   ITEM_WIDTH,
   SCROLL_PADDING_H,
 } from '@/src/components/daySelectorConstants';

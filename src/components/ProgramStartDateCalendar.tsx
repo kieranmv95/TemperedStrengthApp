@@ -75,11 +75,6 @@ export const ProgramStartDateCalendar: React.FC<
     });
   }, [visibleMonth]);
 
-  const lastDayOfPreviousMonth = useMemo(
-    () => normalizeToLocalMidnight(new Date(year, month, 0)),
-    [year, month]
-  );
-
   const canGoPrev = true;
 
   const goPrevMonth = () => {

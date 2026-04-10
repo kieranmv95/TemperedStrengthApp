@@ -1,7 +1,6 @@
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
 import type { SingleWorkout } from '@/src/types/workouts';
 import {
-  deleteStandaloneWorkoutLogEntry,
   getStandaloneWorkoutLogsForWorkout,
   upsertStandaloneWorkoutLogEntry,
 } from '@/src/utils/storage';
@@ -10,8 +9,7 @@ import React from 'react';
 import { Alert } from 'react-native';
 
 jest.mock('@expo/vector-icons', () => {
-  const React = require('react');
-  return { Ionicons: () => React.createElement(React.Fragment) };
+  return { Ionicons: () => null };
 });
 
 jest.mock('@react-native-community/datetimepicker', () => 'DateTimePicker');
