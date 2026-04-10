@@ -6,7 +6,7 @@ import {
   restorePurchases,
 } from '@/src/services/revenueCatService';
 import { getProgramById } from '@/src/utils/program';
-import { clearProgramData, getActiveProgramId } from '@/src/utils/storage';
+import { getActiveProgramId } from '@/src/utils/storage';
 import { router } from 'expo-router';
 import React, {
   createContext,
@@ -72,7 +72,8 @@ export function SubscriptionProvider({
   const initialLoadCompleteRef = useRef<boolean>(false);
 
   /**
-   * Handle subscription expiry - check if user was on a Pro program and reset it
+   * Handle subscription expiry - if the user is on a Pro program, preserve it
+   * and prompt them to re-enable Pro instead of wiping progress.
    */
   const handleSubscriptionExpiry = useCallback(async () => {
     try {
@@ -82,20 +83,21 @@ export function SubscriptionProvider({
       const program = getProgramById(programId);
       if (!program?.isPro) return;
 
-      // User was on a Pro program but subscription expired
-      console.log('Subscription expired while on Pro program, resetting...');
-      await clearProgramData();
-
-      // Show alert and navigate to program selection
+      // User was on a Pro program but subscription expired.
+      // Do NOT clear program/progress; keep it and prompt to renew.
+      console.log('Subscription expired while on Pro program, locking access...');
       Alert.alert(
         'Subscription Expired',
-        'Your Pro subscription has expired. Your Pro program has been reset. Please select a new program or renew your subscription to continue.',
+        'Your Pro subscription has expired. Your current program and progress are still saved, but you’ll need to re-enable Pro to continue this program.',
         [
           {
-            text: 'OK',
+            text: 'Not now',
+            style: 'cancel',
+          },
+          {
+            text: 'Manage Subscription',
             onPress: () => {
-              // Navigate to the home/program selection screen
-              router.replace('/');
+              router.push('/settings');
             },
           },
         ]

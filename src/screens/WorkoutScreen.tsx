@@ -1,18 +1,21 @@
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { DaySelector } from '@/src/components/DaySelector';
 import { IntensityLevelsModal } from '@/src/components/IntensityLevelsModal';
 import { SessionSummaryModal } from '@/src/components/SessionSummaryModal';
 import { SessionTimer } from '@/src/components/SessionTimer';
 import { SwapModal } from '@/src/components/SwapModal';
 import { WorkoutScreenBody } from '@/src/components/WorkoutScreenBody';
+import { useSubscription } from '@/src/hooks/use-subscription';
 import { useWorkoutScreenController } from '@/src/hooks/useWorkoutScreenController';
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { router } from 'expo-router';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import { StandardLayout } from '../components/StandardLayout';
 
 type WorkoutScreenProps = {
   onProgramReset?: () => void;
@@ -23,6 +26,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 }) => {
   const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
+  const { isPro, isLoading: subscriptionLoading } = useSubscription();
   const c = useWorkoutScreenController();
 
   if (c.loading) {
@@ -32,6 +36,25 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
       </SafeAreaView>
+    );
+  }
+
+  const isLockedProProgram = !!c.program?.isPro && !subscriptionLoading && !isPro;
+  if (isLockedProProgram) {
+    return (
+      <StandardLayout title="PRO Required" >
+        <StandardLayout.Body>
+          <Text style={styles.loadingText}>Your Subscription ended part way through your program. Please renew your subscription to continue.</Text>
+          <Text style={styles.loadingText}>Alternatively, you can start a new FREE program by ending your current program in your account.</Text>
+          <TouchableOpacity
+            onPress={() => router.push('/settings')}
+            activeOpacity={0.7}
+            style={styles.startSessionButton}
+          >
+            <Text style={styles.startSessionButtonText}>Manage subscription</Text>
+          </TouchableOpacity>
+        </StandardLayout.Body>
+      </StandardLayout>
     );
   }
 
@@ -111,7 +134,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         originalExerciseId={
           c.currentSwapSlot !== null
             ? c.getExerciseSlots()[c.currentSwapSlot]?.programExercise?.id ||
-              null
+            null
             : null
         }
         dayIndex={c.selectedDayIndex}

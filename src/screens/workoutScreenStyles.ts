@@ -134,6 +134,7 @@ export const workoutScreenStyles = StyleSheet.create({
   loadingText: {
     color: Colors.textPrimary,
     fontSize: FontSize.xxl,
+    marginBottom: Spacing.md,
   },
   warmupCard: {
     backgroundColor: Colors.backgroundCard,
@@ -256,8 +257,7 @@ export const workoutScreenStyles = StyleSheet.create({
     borderColor: Colors.accent,
     borderRadius: BorderRadius.lg,
     paddingVertical: Spacing.xl,
-    marginHorizontal: Spacing.xxl,
-    marginTop: Spacing.xl,
+    marginTop: Spacing.section,
     alignItems: 'center',
   },
   startSessionButtonText: {
