@@ -68,8 +68,7 @@ export function ProgramLauncherDatePickerModal({
                       startDatePickerAllowedWeekdays[0] ?? 'mon'
                     )}s`}
                   </Text>
-                  . Other weekdays are greyed out. Past dates cannot be
-                  selected.
+                  . Other weekdays are greyed out.
                 </>
               ) : (
                 <>
@@ -83,7 +82,6 @@ export function ProgramLauncherDatePickerModal({
                   </Text>
                   . Only those dates can be your program start; other days are
                   greyed out because they do not match day 1 of this template.
-                  Past dates cannot be selected.
                 </>
               )}
             </Text>

@@ -47,8 +47,6 @@ export const ProgramStartDateCalendar: React.FC<
     [allowedWeekdays]
   );
 
-  const todayStart = normalizeToLocalMidnight(new Date());
-
   const { year, month, cells } = useMemo(() => {
     const y = visibleMonth.getFullYear();
     const m = visibleMonth.getMonth();
@@ -82,7 +80,7 @@ export const ProgramStartDateCalendar: React.FC<
     [year, month]
   );
 
-  const canGoPrev = lastDayOfPreviousMonth.getTime() >= todayStart.getTime();
+  const canGoPrev = true;
 
   const goPrevMonth = () => {
     if (!canGoPrev) return;
@@ -135,10 +133,9 @@ export const ProgramStartDateCalendar: React.FC<
           cellDate.setHours(0, 0, 0, 0);
           const isAllowed =
             allowedJsDays.size > 0 && allowedJsDays.has(cellDate.getDay());
-          const isPast = cellDate.getTime() < todayStart.getTime();
           const selected = sameLocalCalendarDay(cellDate, normalizedValue);
 
-          if (!isAllowed || isPast) {
+          if (!isAllowed) {
             return (
               <View key={`d-${cell.day}`} style={styles.dayCell}>
                 <View style={[styles.dayInner, styles.dayInnerDisabled]}>

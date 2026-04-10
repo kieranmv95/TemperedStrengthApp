@@ -15,7 +15,6 @@ import {
   normalizeToLocalMidnight,
 } from '../utils/programStartWeekday';
 import {
-  clampStartDateToPatternAndToday,
   firstSessionWeekdayForPattern,
   nearestDateOnOrAfterAllowingWeekdays,
   sessionsPerWeekFromProgram,
@@ -86,6 +85,29 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
       )
     );
   }, [showDatePicker, selectedProgram, startDatePickerAllowedWeekdays]);
+
+  const handleChangeStartDate = (d: Date) => {
+    const chosen = normalizeToLocalMidnight(d);
+    const todayStart = normalizeToLocalMidnight(new Date());
+
+    if (chosen.getTime() < todayStart.getTime()) {
+      Alert.alert(
+        'Start in the past?',
+        'Selecting a start date in the past means your program will start part way.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Select Date',
+            style: 'default',
+            onPress: () => setStartDate(chosen),
+          },
+        ]
+      );
+      return;
+    }
+
+    setStartDate(chosen);
+  };
 
   const sessionsRequired = selectedProgram
     ? sessionsPerWeekFromProgram(selectedProgram)
@@ -166,7 +188,6 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const handleConfirmDate = async () => {
     if (!selectedProgram) return;
 
-    const today = new Date();
     let toSave: Date;
 
     if (selectedProgram.daysSplit?.length) {
@@ -178,20 +199,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
         return;
       }
       const startWeekday = firstSessionWeekdayForPattern(sortedPattern);
-      toSave = clampStartDateToPatternAndToday(startDate, today, [
-        startWeekday,
-      ]);
+      const normalized = normalizeToLocalMidnight(startDate);
+      toSave = nearestDateOnOrAfterAllowingWeekdays(normalized, [startWeekday]);
     } else {
       const anchor = getProgramAnchorWeekdayKey(selectedProgram);
       const normalized = normalizeToLocalMidnight(startDate);
       toSave = isProgramAnchorDate(normalized, anchor)
         ? normalized
         : nearestProgramAnchorOnOrAfter(normalized, anchor);
-
-      const todayStart = normalizeToLocalMidnight(today);
-      if (toSave.getTime() < todayStart.getTime()) {
-        toSave = nearestProgramAnchorOnOrAfter(todayStart, anchor);
-      }
     }
 
     try {
@@ -252,7 +267,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           visible={showDatePicker}
           onClose={() => setShowDatePicker(false)}
           startDate={startDate}
-          onChangeStartDate={setStartDate}
+          onChangeStartDate={handleChangeStartDate}
           selectedProgram={selectedProgram}
           startDatePickerAllowedWeekdays={startDatePickerAllowedWeekdays}
           onConfirm={handleConfirmDate}
