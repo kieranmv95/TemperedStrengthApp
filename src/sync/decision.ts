@@ -15,6 +15,10 @@ function hasData(value: string | null): boolean {
   return value !== null;
 }
 
+function effectiveCloudValue(input: SyncComparison['icloud']): string | null {
+  return input.deleted ? null : input.value;
+}
+
 export function decideWinner(input: SyncComparison): SyncWinner {
   const { local, icloud, key } = input;
 
@@ -34,8 +38,16 @@ export function decideWinner(input: SyncComparison): SyncWinner {
   if (localTs > cloudTs) return { kind: 'local' };
   if (cloudTs > localTs) return { kind: 'icloud' };
 
+  const cloudValue = effectiveCloudValue(icloud);
+  if (local.value === cloudValue) {
+    // Timestamps may be equal/unknown; if the values match, there is no real conflict.
+    return { kind: 'icloud' };
+  }
+
   const reason: SyncConflict['reason'] =
-    localTs === cloudTs ? 'timestamp_equal' : 'timestamp_unknown';
+    localTs === cloudTs && (localTs > 0 || cloudTs > 0)
+      ? 'timestamp_equal'
+      : 'timestamp_unknown';
 
   return {
     kind: 'conflict',
@@ -44,7 +56,7 @@ export function decideWinner(input: SyncComparison): SyncWinner {
       reason,
       local: { value: local.value, ts: localTs },
       icloud: {
-        value: icloud.value,
+        value: cloudValue,
         ts: cloudTs,
         deleted: icloud.deleted,
       },

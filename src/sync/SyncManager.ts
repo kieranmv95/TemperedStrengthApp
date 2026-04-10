@@ -137,12 +137,28 @@ export class SyncManager {
             : winner;
 
         if (effectiveWinner.kind === 'icloud') {
+          const shouldUpgradeICloudTs =
+            cmp.icloud.ts <= 0 && (cmp.icloud.deleted || cmp.icloud.value !== null);
+          const nextTs = shouldUpgradeICloudTs ? Date.now() : cmp.icloud.ts;
+
           if (cmp.icloud.deleted) {
             await AsyncStorage.removeItem(key);
-            await writeLocalTs(key, cmp.icloud.ts);
+            await writeLocalTs(key, nextTs);
+            if (shouldUpgradeICloudTs) {
+              await this.provider.setString(
+                key,
+                encodeICloudEnvelope({ v: null, ts: nextTs, deleted: true })
+              );
+            }
           } else if (cmp.icloud.value !== null) {
             await AsyncStorage.setItem(key, cmp.icloud.value);
-            await writeLocalTs(key, cmp.icloud.ts);
+            await writeLocalTs(key, nextTs);
+            if (shouldUpgradeICloudTs) {
+              await this.provider.setString(
+                key,
+                encodeICloudEnvelope({ v: cmp.icloud.value, ts: nextTs, deleted: false })
+              );
+            }
           }
           continue;
         }
