@@ -56,7 +56,6 @@ export const getMuscleGroup = (muscle: string): string => {
     'quadriceps/glutes': 'Legs',
     'quadriceps/core': 'Legs',
     'shoulders/legs': 'Legs',
-    'shoulders/legs': 'Legs',
     'legs/balance': 'Legs',
 
     'full body': 'Full Body',
@@ -86,4 +85,3 @@ export const getMuscleGroup = (muscle: string): string => {
   // Last resort: title-case-ish (keep dataset wording).
   return raw;
 };
-
