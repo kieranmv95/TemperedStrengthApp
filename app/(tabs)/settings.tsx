@@ -1,10 +1,5 @@
 import { StandardLayout } from '@/src/components/StandardLayout';
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '@/src/constants/theme';
+import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
@@ -14,13 +9,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 
 export default function SettingsScreen() {
   const [hasProgram, setHasProgram] = useState<boolean>(false);
@@ -87,7 +76,10 @@ export default function SettingsScreen() {
               setHasProgram(false);
               setActiveProgram(null);
               router.replace('/');
-              Alert.alert('Program Ended', 'Your current program has been cleared.');
+              Alert.alert(
+                'Program Ended',
+                'Your current program has been cleared.'
+              );
             } catch (error) {
               console.error('Error ending current program:', error);
               Alert.alert(
@@ -244,94 +236,3 @@ export default function SettingsScreen() {
     </StandardLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  settingsList: {
-    gap: Spacing.xl,
-  },
-  settingItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
-    borderWidth: 1,
-    borderColor: Colors.borderSubtle,
-  },
-  settingItemDisabled: {
-    opacity: 0.5,
-  },
-  settingContent: {
-    flex: 1,
-  },
-  settingTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-    marginBottom: Spacing.xs,
-  },
-  settingTitleDisabled: {
-    color: Colors.textMuted,
-  },
-  settingDescription: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-  },
-  settingArrow: {
-    color: Colors.accent,
-    fontSize: FontSize.displayXl,
-    fontWeight: '600',
-    marginLeft: Spacing.xl,
-  },
-  settingArrowDisabled: {
-    color: Colors.textPlaceholder,
-  },
-  dangerItem: {
-    borderColor: Colors.destructiveAlt,
-  },
-  dangerText: {
-    color: Colors.destructiveAlt,
-  },
-  proItem: {
-    borderColor: Colors.accent,
-  },
-  proArrow: {
-    color: Colors.accent,
-  },
-  settingTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-    marginBottom: Spacing.xs,
-  },
-  proBadge: {
-    backgroundColor: Colors.accent,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
-  },
-  proBadgeText: {
-    color: Colors.textBlack,
-    fontSize: FontSize.xxs,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  proTitle: {
-    color: Colors.accent,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
-    marginBottom: Spacing.xs,
-  },
-  proFeaturesList: {
-    marginTop: Spacing.md,
-    gap: Spacing.xs,
-  },
-  proFeatureItem: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
-    lineHeight: 20,
-  },
-});

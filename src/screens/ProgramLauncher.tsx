@@ -1,21 +1,10 @@
-import { ProgramStartDateCalendar } from '@/src/components/ProgramStartDateCalendar';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { increment } from '@/src/services/metricService';
 import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Alert,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StandardLayout } from '../components/StandardLayout';
-import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
-import { getExerciseById } from '../data/exercises';
 import type { Program } from '../types/program';
 import { programs } from '../utils/program';
 import {
@@ -24,7 +13,6 @@ import {
   isProgramAnchorDate,
   nearestProgramAnchorOnOrAfter,
   normalizeToLocalMidnight,
-  programAnchorFullWeekdayName,
 } from '../utils/programStartWeekday';
 import {
   clampStartDateToPatternAndToday,
@@ -40,33 +28,12 @@ import {
   setProgramStartDate,
   setProgramWorkoutWeekdays,
 } from '../utils/storage';
-
-const CALENDAR_DAY_KEYS: ProgramDaySplitKey[] = [
-  'mon',
-  'tue',
-  'wed',
-  'thu',
-  'fri',
-  'sat',
-  'sun',
-];
-
-const CAL_DAY_LABELS: Record<ProgramDaySplitKey, string> = {
-  mon: 'M',
-  tue: 'T',
-  wed: 'W',
-  thu: 'T',
-  fri: 'F',
-  sat: 'S',
-  sun: 'S',
-};
+import { ProgramLauncherDatePickerModal } from './ProgramLauncherDatePickerModal';
+import { ProgramLauncherDetailsModal } from './ProgramLauncherDetailsModal';
+import { ProgramLauncherProgramCard } from './ProgramLauncherProgramCard';
 
 type ProgramLauncherProps = {
   onProgramSelected: () => void;
-  /**
-   * When true, selecting a program is treated as a "switch".
-   * The app should clear current progress before starting the new program.
-   */
   resetExistingProgramData?: boolean;
   onClose?: () => void;
 };
@@ -74,7 +41,7 @@ type ProgramLauncherProps = {
 export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   onProgramSelected,
   resetExistingProgramData = false,
-  onClose,
+  onClose: _onClose,
 }) => {
   const insets = useSafeAreaInsets();
   const { isPro } = useSubscription();
@@ -82,9 +49,9 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const [showProgramDetails, setShowProgramDetails] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
-  const [selectedWeekdays, setSelectedWeekdays] = useState<ProgramDaySplitKey[]>(
-    []
-  );
+  const [selectedWeekdays, setSelectedWeekdays] = useState<
+    ProgramDaySplitKey[]
+  >([]);
 
   useEffect(() => {
     if (!selectedProgram) return;
@@ -142,13 +109,11 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   };
 
   const handleSelectProgram = (program: Program) => {
-    // Allow viewing program details regardless of Pro status
     setSelectedProgram(program);
     setShowProgramDetails(true);
   };
 
   const handleStartProgram = () => {
-    // Double check Pro status before starting (in case entitlement changed)
     if (selectedProgram?.isPro && !isPro) {
       Alert.alert(
         'Pro Required',
@@ -213,7 +178,9 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
         return;
       }
       const startWeekday = firstSessionWeekdayForPattern(sortedPattern);
-      toSave = clampStartDateToPatternAndToday(startDate, today, [startWeekday]);
+      toSave = clampStartDateToPatternAndToday(startDate, today, [
+        startWeekday,
+      ]);
     } else {
       const anchor = getProgramAnchorWeekdayKey(selectedProgram);
       const normalized = normalizeToLocalMidnight(startDate);
@@ -248,733 +215,50 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     }
   };
 
-  const renderProgramCard = (program: Program, isLocked: boolean) => {
-    // Calculate number of weeks from the maximum dayIndex
-    const maxDayIndex = Math.max(...program.workouts.map((w) => w.dayIndex));
-    const weekCount = Math.ceil((maxDayIndex + 1) / 7);
-    const sessionsPerWeek = sessionsPerWeekFromProgram(program);
-
-    return (
-      <TouchableOpacity
-        key={program.id}
-        style={[styles.programCard, isLocked && styles.programCardLocked]}
-        onPress={() => handleSelectProgram(program)}
-        disabled={false} // Always allow press to show upgrade prompt
-      >
-        <View style={styles.programContent}>
-          <View style={styles.programNameRow}>
-            <Text
-              style={styles.programName}
-            >
-              {program.name}
-            </Text>
-            {program.isPro && (
-              <View style={styles.proBadge}>
-                <Text style={styles.proBadgeText}>PRO</Text>
-              </View>
-            )}
-          </View>
-          <Text style={styles.programDescription}>
-            {program.description}
-          </Text>
-          <Text style={styles.programStats}>
-            {program.workouts.length} workouts • {weekCount}{' '}
-            {weekCount === 1 ? 'week' : 'weeks'}
-            {sessionsPerWeek > 0 && ` • ${sessionsPerWeek} sessions/week`}
-            {program.averageSessionDuration &&
-              ` • ${program.averageSessionDuration}`}
-          </Text>
-        </View>
-        <Text style={styles.selectArrow}>→</Text>
-      </TouchableOpacity>
-    );
-  };
-
   return (
-    <StandardLayout title="Programs" subtitle="Choose your training program to get started">
+    <StandardLayout
+      title="Programs"
+      subtitle="Choose your training program to get started"
+    >
       <StandardLayout.Body>
-        {programs.map((program) =>
-          renderProgramCard(program, program.isPro && !isPro)
-        )}
-        <Modal
+        {programs.map((program) => (
+          <ProgramLauncherProgramCard
+            key={program.id}
+            program={program}
+            isLocked={program.isPro && !isPro}
+            onSelect={handleSelectProgram}
+          />
+        ))}
+
+        <ProgramLauncherDetailsModal
           visible={showProgramDetails}
-          transparent
-          animationType="slide"
-          onRequestClose={() => setShowProgramDetails(false)}
-        >
-          <View style={styles.modalOverlay}>
-            <View style={styles.programDetailsModal}>
-              <View style={styles.modalHeader}>
-                <View style={styles.modalTitleRow}>
-                  <Text style={styles.modalTitle}>
-                    {selectedProgram?.name || 'Program Details'}
-                  </Text>
-                  {selectedProgram?.isPro && (
-                    <View style={styles.proBadge}>
-                      <Text style={styles.proBadgeText}>PRO</Text>
-                    </View>
-                  )}
-                </View>
-                <TouchableOpacity
-                  onPress={() => setShowProgramDetails(false)}
-                  style={styles.closeButton}
-                >
-                  <Text style={styles.closeButtonText}>✕</Text>
-                </TouchableOpacity>
-              </View>
+          onClose={() => setShowProgramDetails(false)}
+          selectedProgram={selectedProgram}
+          isPro={isPro}
+          selectedWeekdays={selectedWeekdays}
+          onToggleWeekday={toggleWeekday}
+          sessionsRequired={sessionsRequired}
+          weekdaySelectionReady={weekdaySelectionReady}
+          startBlockedByWeekdays={startBlockedByWeekdays}
+          onStartProgram={handleStartProgram}
+          onUpgradePress={() => {
+            setShowProgramDetails(false);
+            router.push('/settings');
+          }}
+          bottomInset={insets.bottom}
+        />
 
-              <ScrollView style={styles.modalContent}>
-                <Text style={styles.programDescription}>
-                  {selectedProgram?.description}
-                </Text>
-
-                <Text style={styles.sectionTitle}>Program Overview</Text>
-
-                <View style={styles.programOverviewContainer}>
-                  <View style={styles.statsContainer}>
-                    <View style={styles.statItem}>
-                      <Text style={styles.statValue}>
-                        {selectedProgram?.workouts.length}
-                      </Text>
-                      <Text style={styles.statLabel}>Workouts</Text>
-                    </View>
-                    {selectedProgram &&
-                      (() => {
-                        const maxDayIndex = Math.max(
-                          ...selectedProgram.workouts.map((w) => w.dayIndex)
-                        );
-                        const weekCount = Math.ceil((maxDayIndex + 1) / 7);
-                        return (
-                          <View style={styles.statItem}>
-                            <Text style={styles.statValue}>{weekCount}</Text>
-                            <Text style={styles.statLabel}>
-                              {weekCount === 1 ? 'Week' : 'Weeks'}
-                            </Text>
-                          </View>
-                        );
-                      })()}
-                    {selectedProgram?.averageSessionDuration && (
-                      <View style={styles.statItem}>
-                        <Text style={styles.statValue}>
-                          {selectedProgram.averageSessionDuration}
-                        </Text>
-                        <Text style={styles.statLabel}>Duration</Text>
-                      </View>
-                    )}
-                  </View>
-                </View>
-
-                {selectedProgram?.daysSplit && (
-                  <View>
-                    <View style={styles.workoutDaysTitleBlock}>
-                      <Text style={styles.workoutTitle}>Workout Days (tap to change)</Text>
-                      <Text style={styles.workoutDaysHint}>
-                        You need exactly {sessionsRequired} training days before you can start. Tap the days below to fit your scehdule
-                      </Text>
-                    </View>
-                    {!weekdaySelectionReady && (
-                      <Text style={styles.weekdaySelectionHint}>
-                        Select exactly {sessionsRequired} days (
-                        {selectedWeekdays.length} selected).
-                      </Text>
-                    )}
-                    <View style={styles.daysSplitContainer}>
-                      {CALENDAR_DAY_KEYS.map((key) => {
-                        const selected = selectedWeekdays.includes(key);
-                        return (
-                          <TouchableOpacity
-                            key={key}
-                            style={[
-                              styles.dayItem,
-                              selected && styles.dayItemSelected,
-                            ]}
-                            onPress={() => toggleWeekday(key)}
-                            accessibilityRole="checkbox"
-                            accessibilityState={{ checked: selected }}
-                            accessibilityLabel={`${programAnchorFullWeekdayName(key)} training day`}
-                          >
-                            <Text
-                              style={[
-                                styles.dayLabel,
-                                selected && styles.dayLabelSelected,
-                              ]}
-                            >
-                              {CAL_DAY_LABELS[key]}
-                            </Text>
-                          </TouchableOpacity>
-                        );
-                      })}
-                    </View>
-                  </View>
-                )}
-
-                <Text style={styles.sectionTitle}>Workouts</Text>
-                {selectedProgram?.workouts.map((workout, index) => (
-                  <View key={index} style={styles.workoutItem}>
-                    <Text style={styles.workoutLabel}>{workout.label}</Text>
-                    {workout.description && (
-                      <Text style={styles.workoutDescription}>
-                        {workout.description}
-                      </Text>
-                    )}
-                    {(() => {
-                      const exerciseIds = workout.exercises
-                        .filter((ex) => ex.type === 'exercise')
-                        .map((ex) => (ex as { id: number }).id);
-                      const exerciseNames = exerciseIds
-                        .map((id) => getExerciseById(id)?.name)
-                        .filter((name): name is string => name !== undefined);
-                      return exerciseNames.length > 0 ? (
-                        <Text style={styles.workoutExercisesList}>
-                          {exerciseNames.join(', ')}
-                        </Text>
-                      ) : null;
-                    })()}
-                    <View style={styles.workoutMeta}>
-                      <Text style={styles.workoutExercises}>
-                        {workout.exercises.length} exercises
-                      </Text>
-                      <View style={styles.workoutIntensity}>
-                        <Text style={styles.workoutIntensityLabel}>
-                          Intensity:
-                        </Text>
-                        <View style={styles.workoutIntensityBar}>
-                          {Array.from({ length: 10 }).map((_, i) => (
-                            <View
-                              key={i}
-                              style={[
-                                styles.workoutIntensityDot,
-                                i < workout.intensity &&
-                                styles.workoutIntensityDotFilled,
-                              ]}
-                            />
-                          ))}
-                        </View>
-                        <Text style={styles.workoutIntensityValue}>
-                          {workout.intensity}/10
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                ))}
-              </ScrollView>
-
-              <View
-                style={[
-                  styles.modalFooter,
-                  { paddingBottom: insets.bottom + Spacing.xl },
-                ]}
-              >
-                {selectedProgram?.isPro && !isPro ? (
-                  <TouchableOpacity
-                    style={styles.upgradeProgramButton}
-                    onPress={() => {
-                      setShowProgramDetails(false);
-                      router.push('/settings');
-                    }}
-                  >
-                    <Text style={styles.upgradeProgramButtonText}>
-                      Upgrade to Pro to Start
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    style={[
-                      styles.startProgramButton,
-                      startBlockedByWeekdays && styles.startProgramButtonDisabled,
-                    ]}
-                    onPress={handleStartProgram}
-                    disabled={startBlockedByWeekdays}
-                  >
-                    <Text style={styles.startProgramButtonText}>
-                      Start Program
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            </View>
-          </View>
-        </Modal>
-
-        <Modal
-          visible={showDatePicker && !!selectedProgram}
-          transparent
-          animationType="slide"
-          onRequestClose={() => setShowDatePicker(false)}
-        >
-          <View style={styles.modalOverlay}>
-            <View
-              style={[
-                styles.datePickerContainer,
-                { paddingBottom: insets.bottom + 40 },
-              ]}
-            >
-              <View style={styles.datePickerHeader}>
-                <TouchableOpacity
-                  onPress={() => setShowDatePicker(false)}
-                  style={styles.cancelButton}
-                >
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
-                <Text style={styles.datePickerTitle}>Select Start Date</Text>
-                <TouchableOpacity
-                  onPress={handleConfirmDate}
-                  style={styles.confirmButton}
-                >
-                  <Text style={styles.confirmButtonText}>Confirm</Text>
-                </TouchableOpacity>
-              </View>
-              <ScrollView
-                style={styles.datePickerScroll}
-                contentContainerStyle={styles.datePickerScrollContent}
-                keyboardShouldPersistTaps="handled"
-              >
-                <Text style={styles.datePickerExplanation}>
-                  {selectedProgram?.daysSplit?.length ? (
-                    <>
-                      Your first session each week is the earliest day you picked
-                      (Mon→Sun order). Pick a start date on{' '}
-                      <Text style={styles.datePickerExplanationEmphasis}>
-                        {`${programAnchorFullWeekdayName(
-                          startDatePickerAllowedWeekdays[0] ?? 'mon'
-                        )}s`}
-                      </Text>
-                      . Other weekdays are greyed out. Past dates cannot be
-                      selected.
-                    </>
-                  ) : (
-                    <>
-                      Your first session is always on{' '}
-                      <Text style={styles.datePickerExplanationEmphasis}>
-                        {selectedProgram
-                          ? `${programAnchorFullWeekdayName(
-                              getProgramAnchorWeekdayKey(selectedProgram)
-                            )}s`
-                          : null}
-                      </Text>
-                      . Only those dates can be your program start; other days
-                      are greyed out because they do not match day 1 of this
-                      template. Past dates cannot be selected.
-                    </>
-                  )}
-                </Text>
-                <ProgramStartDateCalendar
-                  value={startDate}
-                  onChange={setStartDate}
-                  allowedWeekdays={startDatePickerAllowedWeekdays}
-                />
-              </ScrollView>
-            </View>
-          </View>
-        </Modal>
+        <ProgramLauncherDatePickerModal
+          visible={showDatePicker}
+          onClose={() => setShowDatePicker(false)}
+          startDate={startDate}
+          onChangeStartDate={setStartDate}
+          selectedProgram={selectedProgram}
+          startDatePickerAllowedWeekdays={startDatePickerAllowedWeekdays}
+          onConfirm={handleConfirmDate}
+          bottomInset={insets.bottom}
+        />
       </StandardLayout.Body>
     </StandardLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundScreen,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  content: {
-    padding: Spacing.xxl,
-  },
-  header: {
-    marginBottom: Spacing.section,
-  },
-  headerTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  headerTextContainer: {
-    flex: 1,
-    paddingRight: Spacing.md,
-  },
-  headerCloseButton: {
-    width: 36,
-    height: 36,
-    borderRadius: BorderRadius.full,
-    backgroundColor: Colors.backgroundElevated,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: Colors.borderDefault,
-  },
-  headerCloseButtonText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '600',
-    lineHeight: 18,
-  },
-  title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXXXl,
-    fontWeight: '800',
-    marginBottom: Spacing.md,
-    letterSpacing: -0.5,
-  },
-  subtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.xxl,
-    fontWeight: '500',
-  },
-  programOverviewContainer: {
-    marginBottom: Spacing.section,
-  },
-  programCard: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxxl,
-    marginBottom: Spacing.xxl,
-    borderWidth: 1,
-    borderColor: Colors.borderDefault,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  programCardLocked: {
-    borderColor: Colors.accent,
-  },
-  programContent: {
-    flex: 1,
-  },
-  programNameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-    marginBottom: Spacing.md,
-    flexWrap: 'wrap',
-  },
-  programName: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayLg,
-    fontWeight: '700',
-  },
-  programDescription: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    marginBottom: Spacing.md,
-    lineHeight: 20,
-  },
-  programStats: {
-    color: Colors.accent,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  selectArrow: {
-    color: Colors.accent,
-    fontSize: FontSize.displayXl,
-    fontWeight: '600',
-    marginLeft: Spacing.xxl,
-  },
-  proBadge: {
-    backgroundColor: Colors.accent,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.sm,
-  },
-  proBadgeText: {
-    color: Colors.textBlack,
-    fontSize: FontSize.xxs,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  datePickerContainer: {
-    backgroundColor: Colors.backgroundCard,
-    borderTopLeftRadius: BorderRadius.pill,
-    borderTopRightRadius: BorderRadius.pill,
-    borderWidth: 1,
-    borderColor: Colors.borderDefault,
-    maxHeight: '75%',
-  },
-  datePickerHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: Spacing.xxl,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
-  },
-  datePickerTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-    flex: 1,
-    textAlign: 'center',
-  },
-  cancelButton: {
-    padding: Spacing.md,
-  },
-  cancelButtonText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.xxl,
-    fontWeight: '600',
-  },
-  confirmButton: {
-    padding: Spacing.md,
-  },
-  confirmButtonText: {
-    color: Colors.accent,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
-  },
-  datePickerScroll: {
-    maxHeight: 420,
-    width: '100%',
-  },
-  datePickerScrollContent: {
-    paddingBottom: Spacing.xxl,
-  },
-  datePickerExplanation: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-    paddingHorizontal: Spacing.xxl,
-    paddingTop: Spacing.md,
-    paddingBottom: Spacing.lg,
-    textAlign: 'center',
-  },
-  datePickerExplanationEmphasis: {
-    color: Colors.textPrimary,
-    fontWeight: '700',
-  },
-  workoutDaysTitleBlock: {
-    marginBottom: Spacing.md,
-    marginTop: Spacing.md,
-  },
-  workoutDaysHint: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    lineHeight: 18,
-    marginTop: Spacing.xs,
-  },
-  weekdaySelectionHint: {
-    color: Colors.accent,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    marginBottom: Spacing.md,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: Colors.overlay,
-    justifyContent: 'flex-end',
-  },
-  programDetailsModal: {
-    backgroundColor: Colors.backgroundCard,
-    borderTopLeftRadius: BorderRadius.pill,
-    borderTopRightRadius: BorderRadius.pill,
-    padding: Spacing.section,
-    maxHeight: '95%',
-    borderWidth: 1,
-    borderColor: Colors.borderDefault,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: Spacing.xxxl,
-  },
-  modalTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-    flex: 1,
-    flexWrap: 'wrap',
-  },
-  modalTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXl,
-    fontWeight: '700',
-  },
-  closeButton: {
-    width: 32,
-    height: 32,
-    borderRadius: BorderRadius.full,
-    backgroundColor: Colors.backgroundElevated,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  daysSplitContainer: {
-    flexDirection: 'row',
-    gap: Spacing.md,
-    marginBottom: Spacing.section,
-  },
-  dayItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.lg,
-    padding: Spacing.md,
-  },
-  dayLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
-    marginBottom: Spacing.xs,
-  },
-  dayItemSelected: {
-    backgroundColor: Colors.accent,
-  },
-  dayLabelSelected: {
-    color: Colors.textBlack,
-  },
-  closeButtonText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '600',
-  },
-  modalContent: {
-    maxHeight: 500,
-  },
-  sectionTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-    marginBottom: Spacing.xxl,
-    marginTop: Spacing.md,
-  },
-  workoutTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    gap: Spacing.xl,
-  },
-  statItem: {
-    flex: 1,
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
-    alignItems: 'center',
-    minWidth: 100,
-  },
-  statValue: {
-    color: Colors.accent,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-    marginBottom: Spacing.xs,
-  },
-  statLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.sm,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  workoutItem: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
-    marginBottom: Spacing.xl,
-    borderWidth: 1,
-    borderColor: Colors.borderSubtle,
-  },
-  workoutLabel: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
-    marginBottom: Spacing.xs,
-  },
-  workoutDescription: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-    marginBottom: Spacing.xl,
-  },
-  workoutExercisesList: {
-    color: Colors.accent,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-    marginBottom: Spacing.xl,
-    fontStyle: 'italic',
-  },
-  workoutMeta: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: Spacing.md,
-  },
-  workoutExercises: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-  },
-  workoutIntensity: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-  },
-  workoutIntensityLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  workoutIntensityBar: {
-    flexDirection: 'row',
-    gap: Spacing.xxs,
-    alignItems: 'center',
-  },
-  workoutIntensityDot: {
-    width: 6,
-    height: 6,
-    borderRadius: BorderRadius.xs,
-    backgroundColor: Colors.backgroundSubtle,
-  },
-  workoutIntensityDotFilled: {
-    backgroundColor: Colors.accent,
-  },
-  workoutIntensityValue: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-  },
-  modalFooter: {
-    marginTop: Spacing.section,
-    paddingTop: Spacing.xxl,
-    borderTopWidth: 1,
-    borderTopColor: Colors.borderDefault,
-  },
-  startProgramButton: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
-    alignItems: 'center',
-  },
-  startProgramButtonDisabled: {
-    opacity: 0.4,
-  },
-  startProgramButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  upgradeProgramButton: {
-    backgroundColor: 'transparent',
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: Colors.accent,
-  },
-  upgradeProgramButtonText: {
-    color: Colors.accent,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-});
