@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { syncSetItem } from '@/src/sync/syncStorage';
 
 export type TRACKED_METRIC =
   | 'program_starts'
@@ -50,7 +51,7 @@ async function writeTrackedMetrics(
   metrics: Partial<TrackedMetrics>
 ): Promise<void> {
   try {
-    await AsyncStorage.setItem(
+    await syncSetItem(
       TRACKED_METRICS_STORAGE_KEY,
       JSON.stringify(metrics)
     );

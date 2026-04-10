@@ -1,5 +1,6 @@
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
+import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
@@ -9,12 +10,13 @@ import { useFocusEffect } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Platform, Switch, Text, TouchableOpacity, View } from 'react-native';
 
 export default function SettingsScreen() {
   const [hasProgram, setHasProgram] = useState<boolean>(false);
   const [, setActiveProgram] = useState<Program | null>(null);
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
+  const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
 
   const checkProgramStatus = async () => {
     try {
@@ -130,6 +132,41 @@ export default function SettingsScreen() {
     <StandardLayout title="Account" subtitle="Manage your account">
       <StandardLayout.Body>
         <View style={styles.settingsList}>
+          {Platform.OS === 'ios' && (
+            <View style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>iCloud Sync</Text>
+                <Text style={styles.settingDescription}>
+                  Keep a backup of your data in iCloud. AsyncStorage stays
+                  primary; iCloud is used for backup and restore.
+                </Text>
+                {iCloudSyncEnabled && !isAvailable && (
+                  <Text style={styles.settingDescription}>
+                    iCloud is currently unavailable on this device/account.
+                  </Text>
+                )}
+              </View>
+              <Switch
+                value={iCloudSyncEnabled}
+                onValueChange={async (next) => {
+                  if (!next) {
+                    await setEnabled(false);
+                    return;
+                  }
+
+                  const result = await setEnabled(true);
+                  if (!result.isAvailable) {
+                    Alert.alert(
+                      'iCloud Unavailable',
+                      "We couldn't access iCloud on this device/account. Your data will remain local only."
+                    );
+                    await setEnabled(false);
+                  }
+                }}
+              />
+            </View>
+          )}
+
           <TouchableOpacity
             style={[styles.settingItem, isPro && styles.proItem]}
             onPress={handleSubscriptionPress}
