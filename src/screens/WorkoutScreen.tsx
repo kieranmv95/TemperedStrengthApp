@@ -107,13 +107,15 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         !c.activeSession &&
         !c.completedSession &&
         c.currentWorkout && (
-          <TouchableOpacity
-            style={styles.startSessionButton}
-            onPress={c.handleStartSession}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.startSessionButtonText}>Start Session</Text>
-          </TouchableOpacity>
+          <View style={styles.startSessionButtonContainer}>
+            <TouchableOpacity
+              style={styles.startSessionButton}
+              onPress={c.handleStartSession}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.startSessionButtonText}>Start Session</Text>
+            </TouchableOpacity>
+          </View>
         )}
 
       <WorkoutScreenBody
@@ -151,7 +153,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         originalExerciseId={
           c.currentSwapSlot !== null
             ? c.getExerciseSlots()[c.currentSwapSlot]?.programExercise?.id ||
-              null
+            null
             : null
         }
         dayIndex={c.selectedDayIndex}
