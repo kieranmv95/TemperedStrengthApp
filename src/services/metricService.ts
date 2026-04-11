@@ -11,7 +11,8 @@ export type TRACKED_METRIC =
   | 'articles_read'
   | 'terminology_views'
   | 'workouts_logged'
-  | 'exercises_swapped';
+  | 'exercises_swapped'
+  | 'pbs_logged';
 
 type TrackedMetrics = { [K in TRACKED_METRIC]: number };
 
@@ -28,6 +29,7 @@ const ALL_TRACKED_METRICS: TRACKED_METRIC[] = [
   'terminology_views',
   'workouts_logged',
   'exercises_swapped',
+  'pbs_logged',
 ];
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {

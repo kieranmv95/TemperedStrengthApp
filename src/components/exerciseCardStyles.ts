@@ -22,6 +22,12 @@ export const exerciseCardStyles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: Spacing.xs,
   },
+  pbSubtitle: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '500',
+    marginBottom: Spacing.xs,
+  },
   additionalHeader: {
     color: Colors.textSecondary,
     fontSize: FontSize.md,

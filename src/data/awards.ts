@@ -238,6 +238,36 @@ export const awards: Award[] = [
     group: 'exercises_swapped',
     threshold: 50,
   },
+  {
+    id: 23,
+    name: 'First PB',
+    badgeTitle: 'First PB',
+    description: 'Log your first personal best',
+    isPro: false,
+    tier: 'bronze',
+    group: 'pbs_logged',
+    threshold: 1,
+  },
+  {
+    id: 24,
+    name: 'Record Breaker',
+    badgeTitle: 'Record Breaker',
+    description: 'Log 10 personal bests',
+    isPro: false,
+    tier: 'silver',
+    group: 'pbs_logged',
+    threshold: 10,
+  },
+  {
+    id: 25,
+    name: 'Record Setter',
+    badgeTitle: 'Record Setter',
+    description: 'Log 50 personal bests',
+    isPro: true,
+    tier: 'platinum',
+    group: 'pbs_logged',
+    threshold: 50,
+  },
 ];
 
 export const getAll = async () => {

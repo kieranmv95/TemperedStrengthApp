@@ -1,14 +1,34 @@
 import { increment } from '@/src/services/metricService';
+import type { Exercise as CatalogExercise } from '@/src/types/exercise';
 import type { Exercise as ProgramExercise } from '@/src/types/program';
+import type {
+  ExercisePersonalBestsLedger,
+  RepMax,
+} from '@/src/types/personalBests';
+import {
+  formatExercisePbSubtitle,
+  previewPersonalBestLog,
+  repCountToTier,
+} from '@/src/utils/personalBests';
 import {
   clearLoggedSet,
   getCustomSetCount,
   getLoggedSets,
+  getPersonalBestsForExercise,
   getRemainingSwapCount,
   saveCustomSetCount,
   saveLoggedSet,
+  savePersonalBest,
 } from '@/src/utils/storage';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+export type ExerciseCardPbPrompt = {
+  exerciseId: number;
+  setIndex: number;
+  primaryTier: RepMax;
+  weight: number;
+  newRecords: RepMax[];
+};
 
 type UseExerciseCardStateArgs = {
   isPro: boolean;
@@ -16,6 +36,7 @@ type UseExerciseCardStateArgs = {
   programExercise: ProgramExercise | null;
   dayIndex: number | null;
   slotIndex: number;
+  exerciseLoggingType: CatalogExercise['logging_type'];
 };
 
 export function useExerciseCardState({
@@ -24,6 +45,7 @@ export function useExerciseCardState({
   programExercise,
   dayIndex,
   slotIndex,
+  exerciseLoggingType,
 }: UseExerciseCardStateArgs) {
   const [weights, setWeights] = useState<string[]>([]);
   const [reps, setReps] = useState<string[]>([]);
@@ -32,9 +54,23 @@ export function useExerciseCardState({
   >(new Map());
   const [loading, setLoading] = useState(false);
   const [remainingSwaps, setRemainingSwaps] = useState<number | null>(null);
+  const [pbPrompt, setPbPrompt] = useState<ExerciseCardPbPrompt | null>(null);
+  const [pbLedger, setPbLedger] = useState<ExercisePersonalBestsLedger | null>(
+    null
+  );
   const saveTimersRef = useRef<{
     [key: number]: ReturnType<typeof setTimeout>;
   }>({});
+  const pbDebounceRef = useRef<{
+    [key: number]: ReturnType<typeof setTimeout>;
+  }>({});
+  const setStatesRef = useRef(setStates);
+  const weightsRef = useRef(weights);
+  const repsRef = useRef(reps);
+
+  setStatesRef.current = setStates;
+  weightsRef.current = weights;
+  repsRef.current = reps;
 
   const defaultNumberOfSets = programExercise?.sets || 1;
   const [numberOfSets, setNumberOfSets] = useState(defaultNumberOfSets);
@@ -68,6 +104,32 @@ export function useExerciseCardState({
     };
     loadSwapCount();
   }, [isPro]);
+
+  const loadPbLedger = useCallback(async () => {
+    if (!exerciseId || exerciseLoggingType !== 'reps') {
+      setPbLedger(null);
+      return;
+    }
+    try {
+      const ledger = await getPersonalBestsForExercise(exerciseId);
+      setPbLedger(ledger);
+    } catch (error) {
+      console.error('Error loading personal bests for card:', error);
+      setPbLedger({});
+    }
+  }, [exerciseId, exerciseLoggingType]);
+
+  useEffect(() => {
+    loadPbLedger();
+  }, [loadPbLedger]);
+
+  useEffect(() => {
+    setPbPrompt(null);
+    Object.values(pbDebounceRef.current).forEach((t) => {
+      if (t) clearTimeout(t);
+    });
+    pbDebounceRef.current = {};
+  }, [exerciseId, dayIndex, slotIndex]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -141,6 +203,91 @@ export function useExerciseCardState({
       });
     };
   }, []);
+
+  useEffect(() => {
+    return () => {
+      Object.values(pbDebounceRef.current).forEach((timer) => {
+        if (timer) clearTimeout(timer);
+      });
+    };
+  }, []);
+
+  const clearPbDebounce = useCallback((setIndex: number) => {
+    const t = pbDebounceRef.current[setIndex];
+    if (t) clearTimeout(t);
+    delete pbDebounceRef.current[setIndex];
+  }, []);
+
+  const schedulePbCheck = useCallback(
+    (setIndex: number, weight: number, repsNum: number) => {
+      if (!exerciseId || exerciseLoggingType !== 'reps') {
+        return;
+      }
+      clearPbDebounce(setIndex);
+      pbDebounceRef.current[setIndex] = setTimeout(async () => {
+        if (setStatesRef.current.get(setIndex) !== 'completed') {
+          return;
+        }
+        const wStr = weightsRef.current[setIndex] ?? '';
+        const rStr = repsRef.current[setIndex] ?? '';
+        const w = wStr ? parseFloat(wStr) : null;
+        const r = parseInt(rStr, 10);
+        if (w === null || isNaN(w) || w <= 0 || isNaN(r) || r <= 0) {
+          return;
+        }
+        if (w !== weight || r !== repsNum) {
+          return;
+        }
+        const tier = repCountToTier(r);
+        if (!tier || !exerciseId) {
+          return;
+        }
+        try {
+          const current = await getPersonalBestsForExercise(exerciseId);
+          const { isPR, newRecords } = previewPersonalBestLog(current, tier, w);
+          if (!isPR || newRecords.length === 0) {
+            return;
+          }
+          setPbPrompt({
+            exerciseId,
+            setIndex,
+            primaryTier: tier,
+            weight: w,
+            newRecords,
+          });
+        } catch (error) {
+          console.error('Error checking personal best:', error);
+        }
+      }, 250);
+    },
+    [exerciseId, exerciseLoggingType, clearPbDebounce]
+  );
+
+  const dismissPbPrompt = useCallback(() => {
+    setPbPrompt(null);
+  }, []);
+
+  const confirmPbPrompt = useCallback(async () => {
+    if (!pbPrompt) {
+      return;
+    }
+    try {
+      await savePersonalBest(
+        pbPrompt.exerciseId,
+        pbPrompt.primaryTier,
+        pbPrompt.weight
+      );
+      setPbPrompt(null);
+      await loadPbLedger();
+    } catch (error) {
+      console.error('Error saving personal best:', error);
+    }
+  }, [pbPrompt, loadPbLedger]);
+
+  const exercisePbSubtitle = useMemo(
+    () => formatExercisePbSubtitle(pbLedger ?? undefined),
+    [pbLedger]
+  );
 
   const autoSaveSet = async (
     setIndex: number,
@@ -236,7 +383,16 @@ export function useExerciseCardState({
           repsNum,
           'completed'
         );
+        if (
+          exerciseLoggingType === 'reps' &&
+          weightNum !== null &&
+          !isNaN(weightNum) &&
+          weightNum > 0
+        ) {
+          schedulePbCheck(setIndex, weightNum, repsNum);
+        }
       } else if (currentState === 'completed') {
+        clearPbDebounce(setIndex);
         newSetStates.set(setIndex, 'failed');
         await saveLoggedSet(
           dayIndex,
@@ -247,6 +403,7 @@ export function useExerciseCardState({
           'failed'
         );
       } else if (currentState === 'failed') {
+        clearPbDebounce(setIndex);
         newSetStates.delete(setIndex);
         await saveLoggedSet(
           dayIndex,
@@ -276,6 +433,7 @@ export function useExerciseCardState({
       const newSetStates = new Map(setStates);
       for (let i = newCount; i < numberOfSets; i++) {
         newSetStates.delete(i);
+        clearPbDebounce(i);
       }
       setSetStates(newSetStates);
 
@@ -318,5 +476,9 @@ export function useExerciseCardState({
     handleToggleSetState,
     decrementSets,
     incrementSets,
+    pbPrompt,
+    dismissPbPrompt,
+    confirmPbPrompt,
+    exercisePbSubtitle,
   };
 }
