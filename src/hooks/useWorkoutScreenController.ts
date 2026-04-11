@@ -19,7 +19,6 @@ import {
 import {
   clearActiveSession,
   clearCompletedSession,
-  clearFutureWorkoutData,
   clearRestTimer,
   getActiveProgramId,
   getActiveSession,
@@ -34,7 +33,6 @@ import {
   saveCompletedSession,
   saveRestTimer,
   saveWorkoutNotes,
-  setProgramStartDate,
 } from '@/src/utils/storage';
 import { Alert, Keyboard, Platform } from 'react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -377,56 +375,6 @@ export function useWorkoutScreenController() {
     scrollViewRef.current?.scrollTo({ y: 0, animated: false });
   };
 
-  const handleSetAsCurrentDay = async () => {
-    if (
-      selectedDayIndex === null ||
-      dayIndex === null ||
-      dayIndex < 0 ||
-      selectedDayIndex === dayIndex
-    ) {
-      return;
-    }
-
-    Alert.alert(
-      'Set as Current Session?',
-      'Setting this workout as the current session will adjust the program start date so this session becomes day 0, and clear any completed days ahead of this date. Are you sure?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Yes',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              if (startDate) {
-                const selectedDayDate = new Date();
-                selectedDayDate.setDate(
-                  selectedDayDate.getDate() - selectedDayIndex
-                );
-                selectedDayDate.setHours(0, 0, 0, 0);
-
-                await clearFutureWorkoutData(selectedDayIndex);
-
-                await setProgramStartDate(selectedDayDate.toISOString());
-                setStartDate(selectedDayDate.toISOString());
-
-                await loadWorkoutData();
-              }
-            } catch (error) {
-              console.error('Error setting current session:', error);
-              Alert.alert(
-                'Error',
-                'Failed to set current session. Please try again.'
-              );
-            }
-          },
-        },
-      ]
-    );
-  };
-
   const handleSwapClick = (exerciseSlotIndex: number) => {
     setCurrentSwapSlot(exerciseSlotIndex);
     setSwapModalVisible(true);
@@ -633,7 +581,6 @@ export function useWorkoutScreenController() {
     handleFinishSession,
     handleRedoWorkout,
     handleDaySelect,
-    handleSetAsCurrentDay,
     handleSwapClick,
     handleRestStart,
     handleRestDismiss,

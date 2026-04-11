@@ -20,7 +20,6 @@ type DaySelectorProps = {
   workoutDayIndices: number[];
   currentDayIndex: number;
   onDaySelect: (dayIndex: number) => void;
-  onSetAsToday?: () => void;
 };
 
 export const DaySelector: React.FC<DaySelectorProps> = ({
@@ -28,7 +27,6 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   workoutDayIndices,
   currentDayIndex,
   onDaySelect,
-  onSetAsToday,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const lastStartDateRef = useRef<string>(startDate);
@@ -175,8 +173,6 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   const showJumpToToday =
     isTodayInRange && (!isTodayVisible || !isTodaySelected);
 
-  const showSetAsToday = isTodayInRange && !isTodaySelected && !!onSetAsToday;
-
   return (
     <View style={styles.container}>
       <ScrollView
@@ -211,28 +207,15 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
           );
         })}
       </ScrollView>
-      {(showJumpToToday || showSetAsToday) && (
+      {showJumpToToday && (
         <View style={styles.timelineActionRow}>
-          {showJumpToToday && (
-            <TouchableOpacity
-              style={styles.jumpToTodayButton}
-              onPress={handleJumpToToday}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.jumpToTodayText}>Jump to Today</Text>
-            </TouchableOpacity>
-          )}
-          {showSetAsToday && (
-            <TouchableOpacity
-              style={styles.jumpToTodayButton}
-              onPress={onSetAsToday}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.jumpToTodayText} numberOfLines={2}>
-                Set as Today&apos;s Session
-              </Text>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            style={styles.jumpToTodayButton}
+            onPress={handleJumpToToday}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.jumpToTodayText}>Jump to Today</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>

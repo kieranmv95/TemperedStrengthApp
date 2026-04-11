@@ -83,11 +83,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           workoutDayIndices={c.workoutDayIndices}
           currentDayIndex={c.selectedDayIndex ?? c.dayIndex}
           onDaySelect={c.handleDaySelect}
-          onSetAsToday={
-            c.dayIndex !== null && c.dayIndex >= 0
-              ? c.handleSetAsCurrentDay
-              : undefined
-          }
         />
       )}
 
