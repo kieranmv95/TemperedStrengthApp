@@ -1,5 +1,6 @@
 import { DaySelector } from '@/src/components/DaySelector';
 import { IntensityLevelsModal } from '@/src/components/IntensityLevelsModal';
+import { RestTimer } from '@/src/components/RestTimer';
 import { SessionSummaryModal } from '@/src/components/SessionSummaryModal';
 import { SessionTimer } from '@/src/components/SessionTimer';
 import { SwapModal } from '@/src/components/SwapModal';
@@ -39,24 +40,40 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     );
   }
 
-  const isLockedProProgram = !!c.program?.isPro && !subscriptionLoading && !isPro;
+  const isLockedProProgram =
+    !!c.program?.isPro && !subscriptionLoading && !isPro;
   if (isLockedProProgram) {
     return (
-      <StandardLayout title="PRO Required" >
+      <StandardLayout title="PRO Required">
         <StandardLayout.Body>
-          <Text style={styles.loadingText}>Your Subscription ended part way through your program. Please renew your subscription to continue.</Text>
-          <Text style={styles.loadingText}>Alternatively, you can start a new FREE program by ending your current program in your account.</Text>
+          <Text style={styles.loadingText}>
+            Your Subscription ended part way through your program. Please renew
+            your subscription to continue.
+          </Text>
+          <Text style={styles.loadingText}>
+            Alternatively, you can start a new FREE program by ending your
+            current program in your account.
+          </Text>
           <TouchableOpacity
             onPress={() => router.push('/settings')}
             activeOpacity={0.7}
             style={styles.startSessionButton}
           >
-            <Text style={styles.startSessionButtonText}>Manage subscription</Text>
+            <Text style={styles.startSessionButtonText}>
+              Manage subscription
+            </Text>
           </TouchableOpacity>
         </StandardLayout.Body>
       </StandardLayout>
     );
   }
+
+  const showRestTimerBar =
+    !c.isRestDay &&
+    !c.loading &&
+    c.restTimer !== null &&
+    c.selectedDayIndex !== null &&
+    c.restTimer.dayIndex === c.selectedDayIndex;
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
@@ -81,6 +98,15 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         />
       )}
 
+      {showRestTimerBar && c.restTimer && (
+        <RestTimer
+          timer={c.restTimer}
+          onDismiss={c.handleRestDismiss}
+          onComplete={c.handleRestComplete}
+          onRestart={c.handleRestRestart}
+        />
+      )}
+
       {!c.isRestDay &&
         !c.loading &&
         !c.activeSession &&
@@ -101,7 +127,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         onProgramReset={onProgramReset}
         currentWorkout={c.currentWorkout}
         slots={c.slots}
-        restTimer={c.restTimer}
         swapRefreshCounter={c.swapRefreshCounter}
         completedSession={c.completedSession}
         activeSession={c.activeSession}
@@ -115,9 +140,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         handleRedoWorkout={c.handleRedoWorkout}
         handleSwapClick={c.handleSwapClick}
         handleRestStart={c.handleRestStart}
-        handleRestDismiss={c.handleRestDismiss}
-        handleRestComplete={c.handleRestComplete}
-        handleRestRestart={c.handleRestRestart}
         handleNotesChange={c.handleNotesChange}
         handleNotesFocus={c.handleNotesFocus}
         handleNotesBlur={c.handleNotesBlur}
@@ -134,7 +156,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         originalExerciseId={
           c.currentSwapSlot !== null
             ? c.getExerciseSlots()[c.currentSwapSlot]?.programExercise?.id ||
-            null
+              null
             : null
         }
         dayIndex={c.selectedDayIndex}

@@ -6,11 +6,7 @@ import {
 } from '@/src/screens/workoutScreenConstants';
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
 import type { Workout } from '@/src/types/program';
-import type {
-  ActiveSession,
-  CompletedSession,
-  RestTimerState,
-} from '@/src/types/storage';
+import type { ActiveSession, CompletedSession } from '@/src/types/storage';
 import React from 'react';
 import {
   KeyboardAvoidingView,
@@ -32,7 +28,6 @@ type WorkoutScreenBodyProps = {
   onProgramReset?: () => void;
   currentWorkout: Workout | null;
   slots: WorkoutSlot[];
-  restTimer: RestTimerState | null;
   swapRefreshCounter: number;
   completedSession: CompletedSession | null;
   activeSession: ActiveSession | null;
@@ -46,9 +41,6 @@ type WorkoutScreenBodyProps = {
   handleRedoWorkout: () => void | Promise<void>;
   handleSwapClick: (exerciseSlotIndex: number) => void;
   handleRestStart: (payload: RestTimerStartPayload) => void | Promise<void>;
-  handleRestDismiss: () => void | Promise<void>;
-  handleRestComplete: () => void | Promise<void>;
-  handleRestRestart: () => void | Promise<void>;
   handleNotesChange: (text: string) => void;
   handleNotesFocus: () => void;
   handleNotesBlur: () => void;
@@ -61,7 +53,6 @@ export function WorkoutScreenBody({
   onProgramReset,
   currentWorkout,
   slots,
-  restTimer,
   swapRefreshCounter,
   completedSession,
   activeSession,
@@ -75,9 +66,6 @@ export function WorkoutScreenBody({
   handleRedoWorkout,
   handleSwapClick,
   handleRestStart,
-  handleRestDismiss,
-  handleRestComplete,
-  handleRestRestart,
   handleNotesChange,
   handleNotesFocus,
   handleNotesBlur,
@@ -217,12 +205,6 @@ export function WorkoutScreenBody({
             } else {
               const currentExerciseIndex = exerciseSlotIndex;
               exerciseSlotIndex++;
-              const restTimerForSlot =
-                restTimer &&
-                restTimer.dayIndex === selectedDayIndex &&
-                restTimer.slotIndex === currentExerciseIndex
-                  ? restTimer
-                  : null;
               return (
                 <ExerciseCard
                   key={`${selectedDayIndex}-${index}-${slot.exerciseId}-${swapRefreshCounter}`}
@@ -232,11 +214,7 @@ export function WorkoutScreenBody({
                   dayIndex={selectedDayIndex}
                   slotIndex={currentExerciseIndex}
                   onSwap={() => handleSwapClick(currentExerciseIndex)}
-                  restTimer={restTimerForSlot}
                   onRestStart={handleRestStart}
-                  onRestDismiss={handleRestDismiss}
-                  onRestComplete={handleRestComplete}
-                  onRestRestart={handleRestRestart}
                 />
               );
             }

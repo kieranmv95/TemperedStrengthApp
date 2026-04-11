@@ -16,6 +16,10 @@ jest.mock('react-native', () => ({
   View: 'View',
 }));
 
+jest.mock('@expo/vector-icons', () => ({
+  Ionicons: 'Ionicons',
+}));
+
 describe('RestTimer', () => {
   beforeEach(() => {
     jest.useFakeTimers();
@@ -46,13 +50,13 @@ describe('RestTimer', () => {
       />
     );
 
-    expect(getByText('0:05')).toBeTruthy();
+    expect(getByText('00:05')).toBeTruthy();
 
     act(() => {
       jest.advanceTimersByTime(4000);
     });
 
-    expect(getByText('0:01')).toBeTruthy();
+    expect(getByText('00:01')).toBeTruthy();
     expect(onComplete).not.toHaveBeenCalled();
 
     act(() => {
@@ -63,7 +67,7 @@ describe('RestTimer', () => {
   });
 
   it('shows completed state when status is completed', () => {
-    const { getByText } = render(
+    const { getByText, getByTestId } = render(
       <RestTimer
         timer={{
           dayIndex: 2,
@@ -80,7 +84,7 @@ describe('RestTimer', () => {
       />
     );
 
-    expect(getByText('Rest complete')).toBeTruthy();
-    expect(getByText('Dismiss')).toBeTruthy();
+    expect(getByText('Rest Complete')).toBeTruthy();
+    expect(getByTestId('rest-timer-dismiss')).toBeTruthy();
   });
 });

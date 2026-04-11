@@ -1,18 +1,9 @@
+import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  AppState,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '../constants/theme';
+import { AppState, Text, TouchableOpacity, View } from 'react-native';
+import { Colors } from '../constants/theme';
 import type { RestTimerState } from '../types/storage';
+import { workoutTimerBarStyles } from './workoutTimerBarStyles';
 
 type RestTimerProps = {
   timer: RestTimerState;
@@ -24,7 +15,8 @@ type RestTimerProps = {
 const formatDuration = (totalSeconds: number): string => {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  return `${pad(minutes)}:${pad(seconds)}`;
 };
 
 export const RestTimer: React.FC<RestTimerProps> = ({
@@ -72,76 +64,41 @@ export const RestTimer: React.FC<RestTimerProps> = ({
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.label}>Rest Timer</Text>
-        <View style={styles.headerButtons}>
-          <TouchableOpacity onPress={onRestart} style={styles.dismissButton}>
-            <Text style={styles.dismissText}>Restart</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onDismiss} style={styles.dismissButton}>
-            <Text style={styles.dismissText}>
-              {isRunning ? 'Skip' : 'Dismiss'}
-            </Text>
-          </TouchableOpacity>
-        </View>
+    <View style={workoutTimerBarStyles.bar}>
+      <View style={workoutTimerBarStyles.timerSection}>
+        <View style={workoutTimerBarStyles.dot} />
+        {isRunning ? (
+          <Text style={workoutTimerBarStyles.timerText}>
+            Rest: {formatDuration(remainingSeconds)}
+          </Text>
+        ) : (
+          <Text style={workoutTimerBarStyles.timerText}>Rest Complete</Text>
+        )}
       </View>
-      {isRunning ? (
-        <Text style={styles.timerText}>{formatDuration(remainingSeconds)}</Text>
-      ) : (
-        <Text style={styles.completeText}>Rest complete</Text>
-      )}
+      <View style={workoutTimerBarStyles.iconButtonGroup}>
+        <TouchableOpacity
+          style={workoutTimerBarStyles.iconButton}
+          onPress={onRestart}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel="Restart rest timer"
+          testID="rest-timer-restart"
+        >
+          <Ionicons name="refresh" size={20} color={Colors.textOnAccent} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={workoutTimerBarStyles.iconButton}
+          onPress={onDismiss}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel={
+            isRunning ? 'Skip rest timer' : 'Dismiss rest timer'
+          }
+          testID="rest-timer-dismiss"
+        >
+          <Ionicons name="close" size={20} color={Colors.textOnAccent} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: Spacing.xl,
-    borderRadius: BorderRadius.xl,
-    backgroundColor: Colors.backgroundDark,
-    borderWidth: 1,
-    borderColor: Colors.borderDefault,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: Spacing.md,
-  },
-  label: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  headerButtons: {
-    flexDirection: 'row',
-    gap: Spacing.sm,
-  },
-  dismissButton: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.md,
-    borderWidth: 1,
-    borderColor: Colors.borderSubtle,
-  },
-  dismissText: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-  },
-  timerText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXl,
-    fontWeight: '800',
-    textAlign: 'center',
-  },
-  completeText: {
-    color: Colors.accent,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-});

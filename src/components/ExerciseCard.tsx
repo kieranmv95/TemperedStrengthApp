@@ -6,10 +6,8 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
 import type { Exercise as ProgramExercise } from '../types/program';
-import type { RestTimerState } from '../types/storage';
 import { exerciseCardStyles as styles } from './exerciseCardStyles';
 import { ExerciseCardSetRow } from './ExerciseCardSetRow';
-import { RestTimer } from './RestTimer';
 
 export type RestTimerStartPayload = {
   dayIndex: number;
@@ -25,11 +23,7 @@ type ExerciseCardProps = {
   dayIndex: number | null;
   slotIndex: number;
   onSwap: () => void;
-  restTimer: RestTimerState | null;
   onRestStart: (payload: RestTimerStartPayload) => void;
-  onRestDismiss: () => void;
-  onRestComplete: () => void;
-  onRestRestart: () => void;
 };
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
@@ -39,11 +33,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   dayIndex,
   slotIndex,
   onSwap,
-  restTimer,
   onRestStart,
-  onRestDismiss,
-  onRestComplete,
-  onRestRestart,
 }) => {
   const { isPro } = useSubscription();
   const exercise = exerciseId ? getExerciseById(exerciseId) : null;
@@ -183,17 +173,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           )}
         </View>
       </View>
-
-      {restTimer && (
-        <View style={styles.restTimerContainer}>
-          <RestTimer
-            timer={restTimer}
-            onDismiss={onRestDismiss}
-            onComplete={onRestComplete}
-            onRestart={onRestRestart}
-          />
-        </View>
-      )}
 
       {Array.from({ length: numberOfSets }).map((_, setIndex) => {
         const setState = setStates.get(setIndex);

@@ -1,6 +1,6 @@
+import * as Notifications from 'expo-notifications';
 import { useCallback, useEffect, useRef } from 'react';
 import { Platform } from 'react-native';
-import * as Notifications from 'expo-notifications';
 
 const NOTIFICATION_CHANNEL_ID = 'rest-timer';
 const NOTIFICATION_TITLE = '⏰ Timer Finished — get back to work!';
@@ -15,10 +15,8 @@ export function useTimerNotification() {
       // Ensure foreground notifications display correctly.
       Notifications.setNotificationHandler({
         handleNotification: async () => ({
-          shouldShowAlert: true,
-          shouldPlaySound: false,
+          shouldPlaySound: true,
           shouldSetBadge: false,
-          // iOS-specific fields; safe no-ops on Android.
           shouldShowBanner: true,
           shouldShowList: true,
         }),
@@ -101,4 +99,3 @@ export function useTimerNotification() {
     cancelTimerNotification,
   };
 }
-

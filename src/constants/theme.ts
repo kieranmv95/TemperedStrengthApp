@@ -3,6 +3,8 @@ export const Colors = {
   backgroundScreen: '#121212',
   backgroundDark: '#151515',
   backgroundCard: '#1E1E1E',
+  /** Workout header timer strips (session + rest) */
+  timerBarBackground: '#1A1A1A',
   backgroundElevated: '#2A2A2A',
   backgroundTertiary: '#2C2C2E',
   backgroundSubtle: '#333',

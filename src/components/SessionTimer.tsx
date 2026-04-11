@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '../constants/theme';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { workoutTimerBarStyles } from './workoutTimerBarStyles';
 
 type SessionTimerProps = {
   startedAt: number;
@@ -41,61 +36,20 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
   }, [startedAt]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.timerSection}>
-        <View style={styles.dot} />
-        <Text style={styles.timerText}>{formatElapsed(elapsed)}</Text>
+    <View style={workoutTimerBarStyles.bar}>
+      <View style={workoutTimerBarStyles.timerSection}>
+        <View style={workoutTimerBarStyles.dot} />
+        <Text style={workoutTimerBarStyles.timerText}>
+          {formatElapsed(elapsed)}
+        </Text>
       </View>
       <TouchableOpacity
-        style={styles.finishButton}
+        style={workoutTimerBarStyles.finishButton}
         onPress={onFinish}
         activeOpacity={0.7}
       >
-        <Text style={styles.finishButtonText}>Finish</Text>
+        <Text style={workoutTimerBarStyles.finishButtonText}>Finish</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: Colors.backgroundCard,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.xl,
-  },
-  timerSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.accent,
-  },
-  timerText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-    fontVariant: ['tabular-nums'],
-  },
-  finishButton: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.lg,
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.md,
-  },
-  finishButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-});

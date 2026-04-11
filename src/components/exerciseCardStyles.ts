@@ -94,9 +94,6 @@ export const exerciseCardStyles = StyleSheet.create({
   inputGroup: {
     flex: 1,
   },
-  restTimerContainer: {
-    marginBottom: Spacing.xl,
-  },
   inputGroupWithCheckmark: {
     flex: 1,
     flexDirection: 'row',
