@@ -1,5 +1,5 @@
+import { act, render } from '@testing-library/react-native';
 import React from 'react';
-import { render, act } from '@testing-library/react-native';
 import { RestTimer } from '../components/RestTimer';
 
 jest.mock('react-native', () => ({
@@ -50,13 +50,13 @@ describe('RestTimer', () => {
       />
     );
 
-    expect(getByText('00:05')).toBeTruthy();
+    expect(getByText('Rest: 00:05')).toBeTruthy();
 
     act(() => {
       jest.advanceTimersByTime(4000);
     });
 
-    expect(getByText('00:01')).toBeTruthy();
+    expect(getByText('Rest: 00:01')).toBeTruthy();
     expect(onComplete).not.toHaveBeenCalled();
 
     act(() => {

@@ -47,9 +47,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="awards"
+        name="records"
         options={{
-          title: 'Awards',
+          title: 'Records',
           tabBarIcon: ({ color }) => (
             <IconSymbol size={24} name="trophy.fill" color={color} />
           ),

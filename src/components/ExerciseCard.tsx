@@ -1,3 +1,4 @@
+import { PBDetectedModal } from '@/src/components/PBDetectedModal';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useExerciseCardState } from '@/src/hooks/useExerciseCardState';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,8 +7,8 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
 import type { Exercise as ProgramExercise } from '../types/program';
-import { exerciseCardStyles as styles } from './exerciseCardStyles';
 import { ExerciseCardSetRow } from './ExerciseCardSetRow';
+import { exerciseCardStyles as styles } from './exerciseCardStyles';
 
 export type RestTimerStartPayload = {
   dayIndex: number;
@@ -51,12 +52,17 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     handleToggleSetState,
     decrementSets,
     incrementSets,
+    pbPrompt,
+    dismissPbPrompt,
+    confirmPbPrompt,
+    exercisePbSubtitle,
   } = useExerciseCardState({
     isPro,
     exerciseId,
     programExercise,
     dayIndex,
     slotIndex,
+    exerciseLoggingType: exercise?.logging_type ?? 'reps',
   });
 
   const isSwapped =
@@ -106,6 +112,9 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
               </Text>
             )}
           </Text>
+          {exercisePbSubtitle ? (
+            <Text style={styles.pbSubtitle}>{exercisePbSubtitle}</Text>
+          ) : null}
           {repRangeText && (
             <Text
               style={[
@@ -113,7 +122,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                 programExercise?.isAmrap && styles.amrapLabel,
               ]}
             >
-              {repRangeText}
+              {exercise.logging_type === 'time' ? 'Time:' : 'Reps:'} {repRangeText}
             </Text>
           )}
           {(() => {
@@ -203,13 +212,24 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             <Text style={styles.swapButtonText}>
               {isPro
                 ? 'Swap Exercise'
-                : `Swap Exercise${
-                    remainingSwaps !== null ? ` (${remainingSwaps})` : ''
-                  }`}
+                : `Swap Exercise${remainingSwaps !== null ? ` (${remainingSwaps})` : ''
+                }`}
             </Text>
           </TouchableOpacity>
         </View>
       )}
+
+      {pbPrompt && exercise ? (
+        <PBDetectedModal
+          visible
+          exerciseName={exercise.name}
+          primaryTier={pbPrompt.primaryTier}
+          weight={pbPrompt.weight}
+          newRecords={pbPrompt.newRecords}
+          onDismiss={dismissPbPrompt}
+          onUpdate={confirmPbPrompt}
+        />
+      ) : null}
     </View>
   );
 };

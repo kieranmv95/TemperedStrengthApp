@@ -15,6 +15,18 @@ import type {
   WorkoutLogs,
   WorkoutNotes,
 } from '@/src/types/storage';
+import type {
+  ExercisePersonalBestsLedger,
+  PersonalBestsStore,
+  RepMax,
+} from '@/src/types/personalBests';
+import {
+  appendCascadeToLowerTiersOnly,
+  currentMaxWeight,
+  logPersonalBestIntoLedger,
+  newPbEntryId,
+} from '@/src/utils/personalBests';
+import { increment } from '@/src/services/metricService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { syncRemoveItem, syncSetItem } from '@/src/sync/syncStorage';
 
@@ -39,6 +51,12 @@ export type {
   StandaloneWorkoutLogEntry,
   StandaloneWorkoutLogsStore,
 } from '@/src/types/standaloneWorkoutLogs';
+export type {
+  ExercisePersonalBestsLedger,
+  PersonalBestsStore,
+  PersonalBestHistoryEntry,
+  RepMax,
+} from '@/src/types/personalBests';
 
 const PROGRAM_STORAGE_KEY = 'active_program';
 const PROGRAM_START_DATE_KEY = 'program_start_date';
@@ -54,6 +72,7 @@ const REST_TIMER_KEY = 'rest_timer';
 const ACTIVE_SESSION_KEY = 'active_session';
 const COMPLETED_SESSIONS_KEY = 'completed_sessions';
 const STANDALONE_WORKOUT_LOGS_KEY = 'standalone_workout_logs';
+const PERSONAL_BESTS_KEY = 'personal_bests';
 
 /**
  * Get the active program ID
@@ -922,4 +941,173 @@ export const deleteStandaloneWorkoutLogEntry = async (
     store[workoutId] = sortStandaloneLogEntriesNewestFirst(next);
   }
   await writeStandaloneWorkoutLogsStore(store);
+};
+
+async function readPersonalBestsStore(): Promise<PersonalBestsStore> {
+  try {
+    const raw = await AsyncStorage.getItem(PERSONAL_BESTS_KEY);
+    if (!raw) {
+      return {};
+    }
+    const parsed = JSON.parse(raw) as unknown;
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+      return {};
+    }
+    return parsed as PersonalBestsStore;
+  } catch (error) {
+    console.error('Error reading personal bests:', error);
+    return {};
+  }
+}
+
+async function writePersonalBestsStore(
+  store: PersonalBestsStore
+): Promise<void> {
+  await syncSetItem(PERSONAL_BESTS_KEY, JSON.stringify(store));
+}
+
+export const getPersonalBestsStore =
+  async (): Promise<PersonalBestsStore> => {
+    return readPersonalBestsStore();
+  };
+
+export const getPersonalBestsForExercise = async (
+  exerciseId: number
+): Promise<ExercisePersonalBestsLedger> => {
+  const store = await readPersonalBestsStore();
+  return store[exerciseId] ?? {};
+};
+
+export type SavePersonalBestResult = {
+  isPR: boolean;
+  tiersWithNewRows: RepMax[];
+};
+
+/**
+ * Appends a lift to the chosen rep tier. Downward cascade runs only when it is a PR
+ * for that tier. Increments `pbs_logged` when `isPR` is true.
+ */
+export const savePersonalBest = async (
+  exerciseId: number,
+  primaryTier: RepMax,
+  weight: number,
+  achievedAtIso?: string
+): Promise<SavePersonalBestResult> => {
+  const achievedAt = achievedAtIso ?? new Date().toISOString();
+  const store = await readPersonalBestsStore();
+  const current = store[exerciseId] ?? {};
+  const { updated, isPR, tiersWithNewRows } = logPersonalBestIntoLedger(
+    current,
+    primaryTier,
+    weight,
+    achievedAt,
+    newPbEntryId
+  );
+
+  if (tiersWithNewRows.length === 0) {
+    return { isPR: false, tiersWithNewRows: [] };
+  }
+
+  const nextStore: PersonalBestsStore = { ...store, [exerciseId]: updated };
+  await writePersonalBestsStore(nextStore);
+  if (isPR) {
+    await increment('pbs_logged');
+  }
+  return { isPR, tiersWithNewRows };
+};
+
+/**
+ * Same as {@link savePersonalBest} (alias for tier history “add” flows).
+ */
+export const appendSingleTierPersonalBest = savePersonalBest;
+
+export const updatePersonalBestEntry = async (
+  exerciseId: number,
+  tier: RepMax,
+  entryId: string,
+  patch: { weight?: number; achievedAt?: string }
+): Promise<boolean> => {
+  const store = await readPersonalBestsStore();
+  const ledger = store[exerciseId];
+  const rows = ledger?.[tier];
+  if (!rows?.length) {
+    return false;
+  }
+  const idx = rows.findIndex((r) => r.id === entryId);
+  if (idx < 0) {
+    return false;
+  }
+  if (
+    patch.weight !== undefined &&
+    (!Number.isFinite(patch.weight) || patch.weight <= 0)
+  ) {
+    throw new Error('Invalid weight');
+  }
+
+  const oldTierMax = currentMaxWeight(ledger, tier);
+  const nextRows = [...rows];
+  nextRows[idx] = { ...nextRows[idx], ...patch };
+  let nextLedger: ExercisePersonalBestsLedger = {
+    ...ledger,
+    [tier]: nextRows,
+  };
+
+  const newTierMax = currentMaxWeight(nextLedger, tier);
+  if (
+    patch.weight !== undefined &&
+    newTierMax !== undefined &&
+    (oldTierMax === undefined || newTierMax > oldTierMax)
+  ) {
+    const merged = nextRows[idx];
+    const { updated, appendedTiers } = appendCascadeToLowerTiersOnly(
+      nextLedger,
+      tier,
+      newTierMax,
+      merged.achievedAt,
+      newPbEntryId
+    );
+    if (appendedTiers.length > 0) {
+      nextLedger = updated;
+    }
+  }
+
+  await writePersonalBestsStore({
+    ...store,
+    [exerciseId]: nextLedger,
+  });
+  return true;
+};
+
+export const deletePersonalBestEntry = async (
+  exerciseId: number,
+  tier: RepMax,
+  entryId: string
+): Promise<boolean> => {
+  const store = await readPersonalBestsStore();
+  const ledger = store[exerciseId];
+  const rows = ledger?.[tier];
+  if (!rows?.length) {
+    return false;
+  }
+  const nextRows = rows.filter((r) => r.id !== entryId);
+  if (nextRows.length === rows.length) {
+    return false;
+  }
+  const nextLedger: ExercisePersonalBestsLedger = { ...ledger };
+  if (nextRows.length === 0) {
+    delete nextLedger[tier];
+  } else {
+    nextLedger[tier] = nextRows;
+  }
+  if (Object.keys(nextLedger).length === 0) {
+    const nextStore = { ...store };
+    delete nextStore[exerciseId];
+    await writePersonalBestsStore(nextStore);
+  } else {
+    await writePersonalBestsStore({
+      ...store,
+      [exerciseId]: nextLedger,
+    });
+  }
+  return true;
 };
