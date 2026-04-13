@@ -2,6 +2,7 @@ import { PbModalDateTimeField } from '@/src/components/PbModalDateTimeField';
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getExerciseById } from '@/src/data/exercises';
+import { useCelebration } from '@/src/components/celebration/CelebrationProvider';
 import type { RepMax } from '@/src/types/personalBests';
 import {
   formatRepMaxLabel,
@@ -50,6 +51,7 @@ export default function ExercisePersonalBestsScreen() {
   const [weightInput, setWeightInput] = useState('');
   const [logDate, setLogDate] = useState(() => new Date());
   const [saving, setSaving] = useState(false);
+  const { celebrateConfetti } = useCelebration();
 
   const loadPbs = useCallback(async () => {
     if (!Number.isFinite(exerciseId)) return;
@@ -97,6 +99,7 @@ export default function ExercisePersonalBestsScreen() {
         Alert.alert('Error', 'Could not save lift.');
       } else if (isPR) {
         const labels = tiersWithNewRows.map(formatRepMaxLabel).join(', ');
+        celebrateConfetti();
         Alert.alert('New personal best', `Updated: ${labels}.`);
         setLogModalVisible(false);
         await loadPbs();
@@ -114,7 +117,7 @@ export default function ExercisePersonalBestsScreen() {
     } finally {
       setSaving(false);
     }
-  }, [exerciseId, selectedTier, weightInput, logDate, loadPbs]);
+  }, [exerciseId, selectedTier, weightInput, logDate, loadPbs, celebrateConfetti]);
 
   if (!Number.isFinite(exerciseId) || !exercise) {
     return (

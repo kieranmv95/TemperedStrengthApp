@@ -1,4 +1,5 @@
 import { PbModalDateTimeField } from '@/src/components/PbModalDateTimeField';
+import { useCelebration } from '@/src/components/celebration/CelebrationProvider';
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getExerciseById } from '@/src/data/exercises';
@@ -63,6 +64,7 @@ export default function RepMaxHistoryScreen() {
   const [editWeight, setEditWeight] = useState('');
   const [editDate, setEditDate] = useState(new Date());
   const [editSaving, setEditSaving] = useState(false);
+  const { celebrateConfetti } = useCelebration();
 
   const load = useCallback(async () => {
     if (!Number.isFinite(exerciseId)) return;
@@ -175,6 +177,7 @@ export default function RepMaxHistoryScreen() {
         addDate.toISOString()
       );
       if (isPR) {
+        celebrateConfetti();
         Alert.alert(
           'New personal best',
           'Saved and updated lower rep maxes where applicable.'
@@ -191,7 +194,7 @@ export default function RepMaxHistoryScreen() {
     } finally {
       setAddSaving(false);
     }
-  }, [tier, exerciseId, addWeight, addDate, load]);
+  }, [tier, exerciseId, addWeight, addDate, load, celebrateConfetti]);
 
   if (!Number.isFinite(exerciseId) || !exercise || tier === null) {
     return (

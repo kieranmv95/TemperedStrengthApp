@@ -1,5 +1,6 @@
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
+import { useCelebration } from '@/src/components/celebration/CelebrationProvider';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import type { Program } from '@/src/types/program';
@@ -17,6 +18,7 @@ export default function SettingsScreen() {
   const [, setActiveProgram] = useState<Program | null>(null);
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
   const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
+  const { celebrationEffectsEnabled, setCelebrationEffectsEnabled } = useCelebration();
 
   const checkProgramStatus = async () => {
     try {
@@ -132,41 +134,6 @@ export default function SettingsScreen() {
     <StandardLayout title="Account" subtitle="Manage your account">
       <StandardLayout.Body>
         <View style={styles.settingsList}>
-          {Platform.OS === 'ios' && (
-            <View style={styles.settingItem}>
-              <View style={styles.settingContent}>
-                <Text style={styles.settingTitle}>iCloud Sync</Text>
-                <Text style={styles.settingDescription}>
-                  Keep a backup of your data in iCloud. AsyncStorage stays
-                  primary; iCloud is used for backup and restore.
-                </Text>
-                {iCloudSyncEnabled && !isAvailable && (
-                  <Text style={styles.settingDescription}>
-                    iCloud is currently unavailable on this device/account.
-                  </Text>
-                )}
-              </View>
-              <Switch
-                value={iCloudSyncEnabled}
-                onValueChange={async (next) => {
-                  if (!next) {
-                    await setEnabled(false);
-                    return;
-                  }
-
-                  const result = await setEnabled(true);
-                  if (!result.isAvailable) {
-                    Alert.alert(
-                      'iCloud Unavailable',
-                      "We couldn't access iCloud on this device/account. Your data will remain local only."
-                    );
-                    await setEnabled(false);
-                  }
-                }}
-              />
-            </View>
-          )}
-
           <TouchableOpacity
             style={[styles.settingItem, isPro && styles.proItem]}
             onPress={handleSubscriptionPress}
@@ -215,6 +182,64 @@ export default function SettingsScreen() {
               →
             </Text>
           </TouchableOpacity>
+
+          {Platform.OS === 'ios' && (
+            <View style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>iCloud Sync</Text>
+                <Text style={styles.settingDescription}>
+                  Keep a backup of your data in iCloud. AsyncStorage stays
+                  primary; iCloud is used for backup and restore.
+                </Text>
+                {iCloudSyncEnabled && !isAvailable && (
+                  <Text style={styles.settingDescription}>
+                    iCloud is currently unavailable on this device/account.
+                  </Text>
+                )}
+              </View>
+              <Switch
+                value={iCloudSyncEnabled}
+                onValueChange={async (next) => {
+                  if (!next) {
+                    await setEnabled(false);
+                    return;
+                  }
+
+                  const result = await setEnabled(true);
+                  if (!result.isAvailable) {
+                    Alert.alert(
+                      'iCloud Unavailable',
+                      "We couldn't access iCloud on this device/account. Your data will remain local only."
+                    );
+                    await setEnabled(false);
+                  }
+                }}
+              />
+            </View>
+          )}
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Celebration effects</Text>
+              <Text style={styles.settingDescription}>
+                Show full-screen celebration effects when you hit a new personal best.
+              </Text>
+            </View>
+            <Switch
+              value={celebrationEffectsEnabled}
+              onValueChange={async (next) => {
+                try {
+                  await setCelebrationEffectsEnabled(next);
+                } catch (error) {
+                  console.error('Error saving celebration effects setting:', error);
+                  Alert.alert(
+                    'Error',
+                    'Could not update celebration effects setting. Please try again.'
+                  );
+                }
+              }}
+            />
+          </View>
 
           <TouchableOpacity
             style={[
