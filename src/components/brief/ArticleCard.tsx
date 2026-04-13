@@ -14,14 +14,23 @@ import { articleCardStyles as styles } from './articleCardStyles';
 type ArticleCardProps = {
   article: Article;
   onPress: (article: Article) => void;
-  variant?: 'hero' | 'compact' | 'horizontal';
+  variant?: 'compact' | 'horizontal';
+  isFavorite?: boolean;
+  onToggleFavorite?: (articleId: string) => void;
 };
 
 export function ArticleCard({
   article,
   onPress,
   variant = 'compact',
+  isFavorite = false,
+  onToggleFavorite,
 }: ArticleCardProps) {
+  const canFavorite = Boolean(onToggleFavorite);
+  const handleToggleFavorite = () => {
+    onToggleFavorite?.(article.id);
+  };
+
   if (variant === 'horizontal') {
     return (
       <TouchableOpacity
@@ -34,6 +43,19 @@ export function ArticleCard({
           style={styles.horizontalImage}
           imageStyle={styles.horizontalImageStyle}
         >
+          {canFavorite && (
+            <TouchableOpacity
+              style={styles.favoriteButton}
+              onPress={handleToggleFavorite}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Ionicons
+                name={isFavorite ? 'bookmark' : 'bookmark-outline'}
+                size={18}
+                color={isFavorite ? Colors.accent : Colors.textPlaceholder}
+              />
+            </TouchableOpacity>
+          )}
           <View style={styles.horizontalOverlay}>
             <View style={styles.horizontalCategoryBadge}>
               <Text style={styles.horizontalCategoryText}>
@@ -52,48 +74,6 @@ export function ArticleCard({
                 />
                 <Text style={styles.horizontalMetaText}>
                   {article.readTime} min
-                </Text>
-              </View>
-            </View>
-          </View>
-        </ImageBackground>
-      </TouchableOpacity>
-    );
-  }
-
-  if (variant === 'hero') {
-    return (
-      <TouchableOpacity
-        style={styles.heroCard}
-        onPress={() => onPress(article)}
-        activeOpacity={0.8}
-      >
-        <ImageBackground
-          source={{ uri: article.image }}
-          style={styles.heroImage}
-          imageStyle={styles.heroImageStyle}
-        >
-          <View style={styles.heroOverlay}>
-            <View style={styles.heroBadgeRow}>
-              <View style={styles.categoryBadge}>
-                <Text style={styles.categoryBadgeText}>{article.category}</Text>
-              </View>
-              <View style={styles.featuredBadge}>
-                <Ionicons name="star" size={12} color={Colors.textOnAccent} />
-                <Text style={styles.featuredBadgeText}>Featured</Text>
-              </View>
-            </View>
-            <View style={styles.heroContent}>
-              <Text style={styles.heroTitle}>{article.title}</Text>
-              <Text style={styles.heroSubtitle}>{article.subtitle}</Text>
-              <View style={styles.heroMeta}>
-                <Ionicons
-                  name="time-outline"
-                  size={14}
-                  color={Colors.textMuted}
-                />
-                <Text style={styles.heroMetaText}>
-                  {article.readTime} min read
                 </Text>
               </View>
             </View>
@@ -126,7 +106,21 @@ export function ArticleCard({
           <Text style={styles.compactMetaText}>{article.readTime} min</Text>
         </View>
       </View>
-      <Ionicons name="chevron-forward" size={20} color={Colors.textOnDark} />
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        {canFavorite && (
+          <TouchableOpacity
+            onPress={handleToggleFavorite}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons
+              name={isFavorite ? 'bookmark' : 'bookmark-outline'}
+              size={22}
+              color={isFavorite ? Colors.accent : Colors.textPlaceholder}
+            />
+          </TouchableOpacity>
+        )}
+        <Ionicons name="chevron-forward" size={20} color={Colors.textOnDark} />
+      </View>
     </TouchableOpacity>
   );
 }

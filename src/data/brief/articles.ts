@@ -5,12 +5,12 @@ export type { Article } from '@/src/types/brief';
 export const articles: Article[] = [
   {
     id: 'article_001',
+    slug: 'https://www.temperedstrength.com/articles/the-science-of-progressive-overload',
     title: 'The Science of Progressive Overload',
     subtitle: "Why adding weight isn't the only way to grow stronger",
     category: 'Methodology',
     readTime: 4,
     image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800',
-    isFeatured: true,
     content: `Progressive overload is the gradual increase of stress placed upon the body during training. While most people think this means simply adding more weight to the bar, there are actually multiple ways to achieve progressive overload.
     
     ## Methods of Progressive Overload
@@ -50,6 +50,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_002',
+    slug: 'https://www.temperedstrength.com/articles/nutrition-timing-does-it-really-matter',
     title: 'Nutrition Timing: Does It Really Matter?',
     subtitle: 'Separating fact from fitness industry fiction',
     category: 'Nutrition',
@@ -87,6 +88,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_003',
+    slug: 'https://www.temperedstrength.com/articles/sleep-the-ultimate-performance-enhancer',
     title: 'Sleep: The Ultimate Performance Enhancer',
     subtitle: 'How 8 hours beats any supplement on the market',
     category: 'Recovery',
@@ -130,6 +132,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_004',
+    slug: 'https://www.temperedstrength.com/articles/mental-toughness-in-training',
     title: 'Mental Toughness in Training',
     subtitle: 'Building an unbreakable mindset under the bar',
     category: 'Mindset',
@@ -184,6 +187,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_005',
+    slug: 'https://www.temperedstrength.com/articles/mastering-the-squat-depth',
     title: 'Mastering the Squat Depth',
     subtitle: 'How to improve mobility for a deeper, safer squat',
     category: 'Technique',
@@ -237,6 +241,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_006',
+    slug: 'https://www.temperedstrength.com/articles/active-recovery-vs-passive-rest',
     title: 'Active Recovery vs. Passive Rest',
     subtitle: 'When to move and when to sit still',
     category: 'Recovery',
@@ -301,6 +306,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_007',
+    slug: 'https://www.temperedstrength.com/articles/the-hierarchy-of-hydration',
     title: 'The Hierarchy of Hydration',
     subtitle: 'Why water is the most underrated ergogenic aid',
     category: 'Nutrition',
@@ -365,6 +371,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_008',
+    slug: 'https://www.temperedstrength.com/articles/mastering-the-conventional-deadlift',
     title: 'Mastering the Conventional Deadlift',
     subtitle: 'Technical pillars for a powerful, pain-free pull',
     category: 'Technique',
@@ -427,6 +434,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_009',
+    slug: 'https://www.temperedstrength.com/articles/consistency-vs-intensity',
     title: 'Consistency vs. Intensity',
     subtitle: 'The math of long-term body transformation',
     category: 'Mindset',
@@ -488,6 +496,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_010',
+    slug: 'https://www.temperedstrength.com/articles/injury-prevention-101',
     title: 'Injury Prevention 101',
     subtitle: 'Understanding the difference between pain and strain',
     category: 'Recovery',
@@ -585,6 +594,7 @@ export const articles: Article[] = [
 
   {
     id: 'article_011',
+    slug: 'https://www.temperedstrength.com/articles/mastering-the-bench-press',
     title: 'Mastering the Bench Press',
     subtitle: 'The setup secrets behind a bigger, safer press',
     category: 'Technique',
@@ -638,6 +648,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_012',
+    slug: 'https://www.temperedstrength.com/articles/how-to-squat-the-complete-guide',
     title: 'How to Squat: The Complete Guide',
     subtitle: 'Building the foundation of lower body strength',
     category: 'Technique',
@@ -686,6 +697,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_013',
+    slug: 'https://www.temperedstrength.com/articles/protein-the-complete-guide',
     title: 'Protein: The Complete Guide',
     subtitle: 'How much you need, when to eat it, and why it matters',
     category: 'Nutrition',
@@ -744,6 +756,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_014',
+    slug: 'https://www.temperedstrength.com/articles/how-to-choose-your-training-split',
     title: 'How to Choose Your Training Split',
     subtitle: 'Full body, PPL, upper/lower - which structure is right for you?',
     category: 'Methodology',
@@ -797,6 +810,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_015',
+    slug: 'https://www.temperedstrength.com/articles/the-deload-why-doing-less-gets-you-more',
     title: 'The Deload: Why Doing Less Gets You More',
     subtitle: 'How planned rest weeks unlock your next level of performance',
     category: 'Methodology',
@@ -841,6 +855,7 @@ export const articles: Article[] = [
   },
   {
     id: 'article_016',
+    slug: 'https://www.temperedstrength.com/articles/introduction-to-olympic-weightlifting',
     title: 'Introduction to Olympic Weightlifting',
     subtitle: 'What the snatch and clean & jerk are, and why athletes use them',
     category: 'Methodology',

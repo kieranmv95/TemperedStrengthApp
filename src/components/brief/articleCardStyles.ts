@@ -2,6 +2,17 @@ import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { StyleSheet } from 'react-native';
 
 export const articleCardStyles = StyleSheet.create({
+  favoriteButton: {
+    position: 'absolute',
+    top: Spacing.lg,
+    right: Spacing.lg,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.overlayLighter,
+  },
   heroCard: {
     borderRadius: BorderRadius.full,
     overflow: 'hidden',

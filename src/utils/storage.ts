@@ -68,6 +68,7 @@ const SWAP_COUNT_KEY = 'swap_count';
 const SWAP_COUNT_MONTH_KEY = 'swap_count_month';
 const WORKOUT_NOTES_KEY = 'workout_notes';
 const FAVORITE_WORKOUTS_KEY = 'favorite_workouts';
+const FAVORITE_ARTICLES_KEY = 'favorite_articles';
 const REST_TIMER_KEY = 'rest_timer';
 const ACTIVE_SESSION_KEY = 'active_session';
 const COMPLETED_SESSIONS_KEY = 'completed_sessions';
@@ -741,6 +742,82 @@ export const toggleFavoriteWorkout = async (
     }
   } catch (error) {
     console.error('Error toggling favorite workout:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get favorite article IDs
+ * @returns Array of article IDs
+ */
+export const getFavoriteArticles = async (): Promise<string[]> => {
+  try {
+    const data = await AsyncStorage.getItem(FAVORITE_ARTICLES_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Error getting favorite articles:', error);
+    return [];
+  }
+};
+
+/**
+ * Add an article to favorites
+ * @param articleId - Article ID to add
+ */
+export const addFavoriteArticle = async (articleId: string): Promise<void> => {
+  try {
+    const favorites = await getFavoriteArticles();
+    if (!favorites.includes(articleId)) {
+      favorites.push(articleId);
+      await syncSetItem(
+        FAVORITE_ARTICLES_KEY,
+        JSON.stringify(favorites)
+      );
+    }
+  } catch (error) {
+    console.error('Error adding favorite article:', error);
+    throw error;
+  }
+};
+
+/**
+ * Remove an article from favorites
+ * @param articleId - Article ID to remove
+ */
+export const removeFavoriteArticle = async (
+  articleId: string
+): Promise<void> => {
+  try {
+    const favorites = await getFavoriteArticles();
+    const filtered = favorites.filter((id) => id !== articleId);
+    await syncSetItem(FAVORITE_ARTICLES_KEY, JSON.stringify(filtered));
+  } catch (error) {
+    console.error('Error removing favorite article:', error);
+    throw error;
+  }
+};
+
+/**
+ * Toggle an article's favorite status
+ * @param articleId - Article ID to toggle
+ * @returns New favorite status (true if now favorited)
+ */
+export const toggleFavoriteArticle = async (
+  articleId: string
+): Promise<boolean> => {
+  try {
+    const favorites = await getFavoriteArticles();
+    const isFavorite = favorites.includes(articleId);
+
+    if (isFavorite) {
+      await removeFavoriteArticle(articleId);
+      return false;
+    } else {
+      await addFavoriteArticle(articleId);
+      return true;
+    }
+  } catch (error) {
+    console.error('Error toggling favorite article:', error);
     throw error;
   }
 };

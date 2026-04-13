@@ -6,12 +6,28 @@ import { increment } from '@/src/services/metricService';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect } from 'react';
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  Linking,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+function normalizeUrl(raw: string): string {
+  const trimmed = raw.trim();
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    return trimmed;
+  }
+  return `https://${trimmed}`;
+}
+
 export default function ArticleScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, url } = useLocalSearchParams<{ id: string; url?: string }>();
   const article = id ? getArticleById(id) : undefined;
+  const articleUrl = normalizeUrl(url ?? 'https://www.test.com');
 
   useEffect(() => {
     increment('articles_read');
@@ -67,6 +83,18 @@ export default function ArticleScreen() {
 
         <Text style={styles.title}>{article.title}</Text>
         <Text style={styles.subtitle}>{article.subtitle}</Text>
+
+        <TouchableOpacity
+          style={styles.readOnWebButton}
+          onPress={() => {
+            Linking.openURL(articleUrl).catch((error) => {
+              console.error('Failed to open article URL:', error);
+            });
+          }}
+        >
+          <Ionicons name="globe-outline" size={16} color={Colors.accent} />
+          <Text style={styles.readOnWebText}>Read on web</Text>
+        </TouchableOpacity>
 
         <View style={styles.divider} />
 
