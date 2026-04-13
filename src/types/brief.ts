@@ -1,12 +1,12 @@
 export type Article = {
   id: string;
+  slug: string;
   title: string;
   subtitle: string;
   category: 'Methodology' | 'Nutrition' | 'Recovery' | 'Mindset' | 'Technique';
   readTime: number; // in minutes
   image: string;
   content: string;
-  isFeatured?: boolean;
 };
 
 export type GlossaryTerm = {

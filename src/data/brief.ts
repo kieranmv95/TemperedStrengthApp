@@ -2,11 +2,6 @@ import type { Article, GlossaryTerm } from '@/src/types/brief';
 import { articles } from './brief/articles';
 import { glossary } from './brief/glossary';
 
-// Helper functions
-export const getFeaturedArticle = (): Article | undefined => {
-  return articles.find((article) => article.isFeatured);
-};
-
 export const getArticleById = (id: string): Article | undefined => {
   return articles.find((article) => article.id === id);
 };

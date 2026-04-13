@@ -1,4 +1,5 @@
 import { increment } from '@/src/services/metricService';
+import { useCelebration } from '@/src/components/celebration/CelebrationProvider';
 import type { Exercise as CatalogExercise } from '@/src/types/exercise';
 import type { Exercise as ProgramExercise } from '@/src/types/program';
 import type {
@@ -58,6 +59,7 @@ export function useExerciseCardState({
   const [pbLedger, setPbLedger] = useState<ExercisePersonalBestsLedger | null>(
     null
   );
+  const { celebrateConfetti } = useCelebration();
   const saveTimersRef = useRef<{
     [key: number]: ReturnType<typeof setTimeout>;
   }>({});
@@ -272,17 +274,20 @@ export function useExerciseCardState({
       return;
     }
     try {
-      await savePersonalBest(
+      const { isPR } = await savePersonalBest(
         pbPrompt.exerciseId,
         pbPrompt.primaryTier,
         pbPrompt.weight
       );
+      if (isPR) {
+        celebrateConfetti();
+      }
       setPbPrompt(null);
       await loadPbLedger();
     } catch (error) {
       console.error('Error saving personal best:', error);
     }
-  }, [pbPrompt, loadPbLedger]);
+  }, [pbPrompt, loadPbLedger, celebrateConfetti]);
 
   const exercisePbSubtitle = useMemo(
     () => formatExercisePbSubtitle(pbLedger ?? undefined),
