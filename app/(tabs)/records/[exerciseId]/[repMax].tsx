@@ -1,5 +1,8 @@
 import { PbModalDateTimeField } from '@/src/components/PbModalDateTimeField';
-import { useCelebration } from '@/src/components/celebration/CelebrationProvider';
+import {
+  IOS_KEYBOARD_DONE_ACCESSORY_ID,
+  IosKeyboardDoneAccessory,
+} from '@/src/components/forms/IosKeyboardDoneAccessory';
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getExerciseById } from '@/src/data/exercises';
@@ -23,7 +26,9 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  Keyboard,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -64,8 +69,6 @@ export default function RepMaxHistoryScreen() {
   const [editWeight, setEditWeight] = useState('');
   const [editDate, setEditDate] = useState(new Date());
   const [editSaving, setEditSaving] = useState(false);
-  const { celebrateConfetti } = useCelebration();
-
   const load = useCallback(async () => {
     if (!Number.isFinite(exerciseId)) return;
     setLoading(true);
@@ -177,15 +180,17 @@ export default function RepMaxHistoryScreen() {
         addDate.toISOString()
       );
       if (isPR) {
-        celebrateConfetti();
+        Keyboard.dismiss();
+        setAddVisible(false);
         Alert.alert(
           'New personal best',
           'Saved and updated lower rep maxes where applicable.'
         );
       } else {
+        Keyboard.dismiss();
+        setAddVisible(false);
         Alert.alert('Lift logged', 'Saved to history.');
       }
-      setAddVisible(false);
       setAddWeight('');
       await load();
     } catch (error) {
@@ -194,7 +199,7 @@ export default function RepMaxHistoryScreen() {
     } finally {
       setAddSaving(false);
     }
-  }, [tier, exerciseId, addWeight, addDate, load, celebrateConfetti]);
+  }, [tier, exerciseId, addWeight, addDate, load]);
 
   if (!Number.isFinite(exerciseId) || !exercise || tier === null) {
     return (
@@ -322,7 +327,10 @@ export default function RepMaxHistoryScreen() {
         visible={addVisible}
         transparent
         animationType="fade"
-        onRequestClose={() => setAddVisible(false)}
+        onRequestClose={() => {
+          Keyboard.dismiss();
+          setAddVisible(false);
+        }}
       >
         <View style={localStyles.modalOverlay}>
           <View style={localStyles.modalCard}>
@@ -341,14 +349,22 @@ export default function RepMaxHistoryScreen() {
               value={addWeight}
               onChangeText={setAddWeight}
               keyboardType="decimal-pad"
+              inputAccessoryViewID={
+                Platform.OS === 'ios' ? IOS_KEYBOARD_DONE_ACCESSORY_ID : undefined
+              }
+              onSubmitEditing={() => Keyboard.dismiss()}
               placeholder="0"
               placeholderTextColor={Colors.textPlaceholder}
             />
             <PbModalDateTimeField value={addDate} onChange={setAddDate} />
+            <IosKeyboardDoneAccessory />
             <View style={localStyles.modalActions}>
               <TouchableOpacity
                 style={localStyles.modalCancel}
-                onPress={() => setAddVisible(false)}
+                onPress={() => {
+                  Keyboard.dismiss();
+                  setAddVisible(false);
+                }}
                 disabled={addSaving}
               >
                 <Text style={localStyles.modalCancelText}>Cancel</Text>
@@ -372,7 +388,10 @@ export default function RepMaxHistoryScreen() {
         visible={editEntry !== null}
         transparent
         animationType="fade"
-        onRequestClose={closeEdit}
+        onRequestClose={() => {
+          Keyboard.dismiss();
+          closeEdit();
+        }}
       >
         <View style={localStyles.modalOverlay}>
           <View style={localStyles.modalCard}>
@@ -387,14 +406,22 @@ export default function RepMaxHistoryScreen() {
               value={editWeight}
               onChangeText={setEditWeight}
               keyboardType="decimal-pad"
+              inputAccessoryViewID={
+                Platform.OS === 'ios' ? IOS_KEYBOARD_DONE_ACCESSORY_ID : undefined
+              }
+              onSubmitEditing={() => Keyboard.dismiss()}
               placeholder="0"
               placeholderTextColor={Colors.textPlaceholder}
             />
             <PbModalDateTimeField value={editDate} onChange={setEditDate} />
+            <IosKeyboardDoneAccessory />
             <View style={localStyles.modalActions}>
               <TouchableOpacity
                 style={localStyles.modalCancel}
-                onPress={closeEdit}
+                onPress={() => {
+                  Keyboard.dismiss();
+                  closeEdit();
+                }}
                 disabled={editSaving}
               >
                 <Text style={localStyles.modalCancelText}>Cancel</Text>

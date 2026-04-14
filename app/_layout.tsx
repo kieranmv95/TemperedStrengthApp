@@ -1,6 +1,5 @@
 import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
-import { CelebrationProvider } from '@/src/components/celebration/CelebrationProvider';
 import { initializeRevenueCat } from '@/src/services/revenueCatService';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
@@ -38,7 +37,6 @@ export default function RootLayout() {
     <ThemeProvider value={DarkTheme}>
       <SyncManagerProvider>
         <SubscriptionProvider>
-          <CelebrationProvider>
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="glossary" options={{ headerShown: false }} />
@@ -53,7 +51,6 @@ export default function RootLayout() {
               />
             </Stack>
             <StatusBar style="light" />
-          </CelebrationProvider>
         </SubscriptionProvider>
       </SyncManagerProvider>
     </ThemeProvider>

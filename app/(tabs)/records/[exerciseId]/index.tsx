@@ -2,7 +2,10 @@ import { PbModalDateTimeField } from '@/src/components/PbModalDateTimeField';
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getExerciseById } from '@/src/data/exercises';
-import { useCelebration } from '@/src/components/celebration/CelebrationProvider';
+import {
+  IOS_KEYBOARD_DONE_ACCESSORY_ID,
+  IosKeyboardDoneAccessory,
+} from '@/src/components/forms/IosKeyboardDoneAccessory';
 import type { RepMax } from '@/src/types/personalBests';
 import {
   formatRepMaxLabel,
@@ -22,7 +25,9 @@ import React, { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Keyboard,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -51,8 +56,6 @@ export default function ExercisePersonalBestsScreen() {
   const [weightInput, setWeightInput] = useState('');
   const [logDate, setLogDate] = useState(() => new Date());
   const [saving, setSaving] = useState(false);
-  const { celebrateConfetti } = useCelebration();
-
   const loadPbs = useCallback(async () => {
     if (!Number.isFinite(exerciseId)) return;
     setLoading(true);
@@ -99,11 +102,12 @@ export default function ExercisePersonalBestsScreen() {
         Alert.alert('Error', 'Could not save lift.');
       } else if (isPR) {
         const labels = tiersWithNewRows.map(formatRepMaxLabel).join(', ');
-        celebrateConfetti();
-        Alert.alert('New personal best', `Updated: ${labels}.`);
+        Keyboard.dismiss();
         setLogModalVisible(false);
+        Alert.alert('New personal best', `Updated: ${labels}.`);
         await loadPbs();
       } else {
+        Keyboard.dismiss();
         Alert.alert(
           'Lift logged',
           `Saved to ${formatRepMaxLabel(selectedTier)} history.`
@@ -117,7 +121,7 @@ export default function ExercisePersonalBestsScreen() {
     } finally {
       setSaving(false);
     }
-  }, [exerciseId, selectedTier, weightInput, logDate, loadPbs, celebrateConfetti]);
+  }, [exerciseId, selectedTier, weightInput, logDate, loadPbs]);
 
   if (!Number.isFinite(exerciseId) || !exercise) {
     return (
@@ -288,7 +292,10 @@ export default function ExercisePersonalBestsScreen() {
         visible={logModalVisible}
         transparent
         animationType="fade"
-        onRequestClose={() => setLogModalVisible(false)}
+        onRequestClose={() => {
+          Keyboard.dismiss();
+          setLogModalVisible(false);
+        }}
       >
         <View style={localStyles.modalOverlay}>
           <View style={localStyles.modalCard}>
@@ -329,14 +336,22 @@ export default function ExercisePersonalBestsScreen() {
               value={weightInput}
               onChangeText={setWeightInput}
               keyboardType="decimal-pad"
+              inputAccessoryViewID={
+                Platform.OS === 'ios' ? IOS_KEYBOARD_DONE_ACCESSORY_ID : undefined
+              }
+              onSubmitEditing={() => Keyboard.dismiss()}
               placeholder="0"
               placeholderTextColor={Colors.textPlaceholder}
             />
             <PbModalDateTimeField value={logDate} onChange={setLogDate} />
+            <IosKeyboardDoneAccessory />
             <View style={localStyles.modalActions}>
               <TouchableOpacity
                 style={localStyles.modalCancel}
-                onPress={() => setLogModalVisible(false)}
+                onPress={() => {
+                  Keyboard.dismiss();
+                  setLogModalVisible(false);
+                }}
                 disabled={saving}
               >
                 <Text style={localStyles.modalCancelText}>Cancel</Text>

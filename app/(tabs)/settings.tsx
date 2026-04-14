@@ -1,6 +1,5 @@
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
-import { useCelebration } from '@/src/components/celebration/CelebrationProvider';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import type { Program } from '@/src/types/program';
@@ -18,7 +17,6 @@ export default function SettingsScreen() {
   const [, setActiveProgram] = useState<Program | null>(null);
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
   const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
-  const { celebrationEffectsEnabled, setCelebrationEffectsEnabled } = useCelebration();
 
   const checkProgramStatus = async () => {
     try {
@@ -217,29 +215,6 @@ export default function SettingsScreen() {
               />
             </View>
           )}
-
-          <View style={styles.settingItem}>
-            <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Celebration effects</Text>
-              <Text style={styles.settingDescription}>
-                Show full-screen celebration effects when you hit a new personal best.
-              </Text>
-            </View>
-            <Switch
-              value={celebrationEffectsEnabled}
-              onValueChange={async (next) => {
-                try {
-                  await setCelebrationEffectsEnabled(next);
-                } catch (error) {
-                  console.error('Error saving celebration effects setting:', error);
-                  Alert.alert(
-                    'Error',
-                    'Could not update celebration effects setting. Please try again.'
-                  );
-                }
-              }}
-            />
-          </View>
 
           <TouchableOpacity
             style={[

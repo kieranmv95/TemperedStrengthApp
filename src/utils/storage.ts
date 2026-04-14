@@ -74,29 +74,6 @@ const ACTIVE_SESSION_KEY = 'active_session';
 const COMPLETED_SESSIONS_KEY = 'completed_sessions';
 const STANDALONE_WORKOUT_LOGS_KEY = 'standalone_workout_logs';
 const PERSONAL_BESTS_KEY = 'personal_bests';
-const CELEBRATION_EFFECTS_ENABLED_KEY = 'celebration_effects_enabled';
-
-export const getCelebrationEffectsEnabled = async (): Promise<boolean> => {
-  try {
-    const raw = await AsyncStorage.getItem(CELEBRATION_EFFECTS_ENABLED_KEY);
-    if (raw === null) return true; // default on
-    return raw === 'true';
-  } catch (error) {
-    console.error('Error reading celebration effects setting:', error);
-    return true;
-  }
-};
-
-export const setCelebrationEffectsEnabled = async (
-  enabled: boolean
-): Promise<void> => {
-  try {
-    await syncSetItem(CELEBRATION_EFFECTS_ENABLED_KEY, enabled ? 'true' : 'false');
-  } catch (error) {
-    console.error('Error saving celebration effects setting:', error);
-    throw error;
-  }
-};
 
 /**
  * Get the active program ID
