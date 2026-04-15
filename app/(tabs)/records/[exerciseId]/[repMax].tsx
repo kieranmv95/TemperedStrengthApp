@@ -11,6 +11,7 @@ import {
   formatRepMaxLabel,
   parseRepMaxParam,
 } from '@/src/utils/personalBests';
+import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { asStringId } from '@/src/utils/routeParams';
 import {
   appendSingleTierPersonalBest,
@@ -18,6 +19,11 @@ import {
   getPersonalBestsForExercise,
   updatePersonalBestEntry,
 } from '@/src/utils/storage';
+import {
+  formatWeightFromKg,
+  formatWeightValueFromKg,
+  parseUserWeightInputToKg,
+} from '@/src/utils/weightUnits';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -39,6 +45,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function RepMaxHistoryScreen() {
+  const { unit: weightUnit } = useWeightUnit();
   const { exerciseId: idParam, repMax: repParam } = useLocalSearchParams<{
     exerciseId: string | string[];
     repMax: string | string[];
@@ -100,9 +107,9 @@ export default function RepMaxHistoryScreen() {
 
   const openEdit = useCallback((e: PersonalBestHistoryEntry) => {
     setEditEntry(e);
-    setEditWeight(e.weight.toString());
+    setEditWeight(formatWeightValueFromKg(e.weight, weightUnit));
     setEditDate(new Date(e.achievedAt));
-  }, []);
+  }, [weightUnit]);
 
   const closeEdit = useCallback(() => {
     setEditEntry(null);
@@ -116,15 +123,15 @@ export default function RepMaxHistoryScreen() {
 
   const saveEdit = useCallback(async () => {
     if (!editEntry || !tier || !Number.isFinite(exerciseId)) return;
-    const w = parseFloat(editWeight);
-    if (!Number.isFinite(w) || w <= 0) {
+    const wKg = parseUserWeightInputToKg(editWeight, weightUnit);
+    if (wKg === null || !Number.isFinite(wKg) || wKg <= 0) {
       Alert.alert('Invalid weight', 'Enter a weight greater than zero.');
       return;
     }
     setEditSaving(true);
     try {
       await updatePersonalBestEntry(exerciseId, tier, editEntry.id, {
-        weight: w,
+        weight: wKg,
         achievedAt: editDate.toISOString(),
       });
       closeEdit();
@@ -135,14 +142,23 @@ export default function RepMaxHistoryScreen() {
     } finally {
       setEditSaving(false);
     }
-  }, [editEntry, tier, exerciseId, editWeight, editDate, load, closeEdit]);
+  }, [
+    editEntry,
+    tier,
+    exerciseId,
+    editWeight,
+    weightUnit,
+    editDate,
+    load,
+    closeEdit,
+  ]);
 
   const confirmDelete = useCallback(
     (e: PersonalBestHistoryEntry) => {
       if (!tier || !Number.isFinite(exerciseId)) return;
       Alert.alert(
         'Delete entry',
-        `Remove ${e.weight} kg on ${new Date(e.achievedAt).toLocaleString()}?`,
+        `Remove ${formatWeightFromKg(e.weight, weightUnit)} on ${new Date(e.achievedAt).toLocaleString()}?`,
         [
           { text: 'Cancel', style: 'cancel' },
           {
@@ -161,13 +177,13 @@ export default function RepMaxHistoryScreen() {
         ]
       );
     },
-    [exerciseId, tier, load]
+    [exerciseId, tier, load, weightUnit]
   );
 
   const saveAdd = useCallback(async () => {
     if (!tier || !Number.isFinite(exerciseId)) return;
-    const w = parseFloat(addWeight);
-    if (!Number.isFinite(w) || w <= 0) {
+    const wKg = parseUserWeightInputToKg(addWeight, weightUnit);
+    if (wKg === null || !Number.isFinite(wKg) || wKg <= 0) {
       Alert.alert('Invalid weight', 'Enter a weight greater than zero.');
       return;
     }
@@ -176,7 +192,7 @@ export default function RepMaxHistoryScreen() {
       const { isPR } = await appendSingleTierPersonalBest(
         exerciseId,
         tier,
-        w,
+        wKg,
         addDate.toISOString()
       );
       if (isPR) {
@@ -199,7 +215,7 @@ export default function RepMaxHistoryScreen() {
     } finally {
       setAddSaving(false);
     }
-  }, [tier, exerciseId, addWeight, addDate, load]);
+  }, [tier, exerciseId, addWeight, weightUnit, addDate, load]);
 
   if (!Number.isFinite(exerciseId) || !exercise || tier === null) {
     return (
@@ -289,7 +305,9 @@ export default function RepMaxHistoryScreen() {
           renderItem={({ item }) => (
             <View style={localStyles.row}>
               <View style={localStyles.rowMain}>
-                <Text style={localStyles.rowWeight}>{item.weight} kg</Text>
+                <Text style={localStyles.rowWeight}>
+                  {formatWeightFromKg(item.weight, weightUnit)}
+                </Text>
                 <Text style={localStyles.rowDate}>
                   {new Date(item.achievedAt).toLocaleString()}
                 </Text>
@@ -343,7 +361,7 @@ export default function RepMaxHistoryScreen() {
               Every save is added to history. If this is a personal best for this
               rep max, lower rep maxes update too when the weight beats them.
             </Text>
-            <Text style={localStyles.modalLabel}>Weight (kg)</Text>
+            <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
             <TextInput
               style={localStyles.weightInput}
               value={addWeight}
@@ -400,7 +418,7 @@ export default function RepMaxHistoryScreen() {
               showsVerticalScrollIndicator={false}
             >
             <Text style={localStyles.modalTitle}>Edit entry</Text>
-            <Text style={localStyles.modalLabel}>Weight (kg)</Text>
+            <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
             <TextInput
               style={localStyles.weightInput}
               value={editWeight}

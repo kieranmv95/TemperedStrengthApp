@@ -4,7 +4,13 @@ import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
-import { clearProgramData, getActiveProgramId } from '@/src/utils/storage';
+import {
+  clearProgramData,
+  getActiveProgramId,
+  getWeightUnit,
+  setWeightUnit,
+  type WeightUnit,
+} from '@/src/utils/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
@@ -15,6 +21,8 @@ import { Alert, Platform, Switch, Text, TouchableOpacity, View } from 'react-nat
 export default function SettingsScreen() {
   const [hasProgram, setHasProgram] = useState<boolean>(false);
   const [, setActiveProgram] = useState<Program | null>(null);
+  const [weightUnit, setWeightUnitState] = useState<WeightUnit>('kg');
+  const [weightUnitLoading, setWeightUnitLoading] = useState<boolean>(true);
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
   const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
 
@@ -37,9 +45,33 @@ export default function SettingsScreen() {
     }
   };
 
+  const loadWeightUnit = async () => {
+    try {
+      const u = await getWeightUnit();
+      setWeightUnitState(u);
+    } catch (error) {
+      console.error('Error loading weight unit:', error);
+      setWeightUnitState('kg');
+    } finally {
+      setWeightUnitLoading(false);
+    }
+  };
+
+  const persistWeightUnit = async (u: WeightUnit) => {
+    setWeightUnitState(u);
+    try {
+      await setWeightUnit(u);
+    } catch (error) {
+      console.error('Error saving weight unit:', error);
+      const prev = await getWeightUnit();
+      setWeightUnitState(prev);
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       checkProgramStatus();
+      loadWeightUnit();
       refresh(); // Refresh subscription status when screen is focused
     }, [refresh])
   );
@@ -180,6 +212,62 @@ export default function SettingsScreen() {
               →
             </Text>
           </TouchableOpacity>
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Weight units</Text>
+              <Text style={styles.settingDescription}>
+                Show and enter weights in {weightUnit === 'lb' ? 'lbs' : 'kg'}.
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.unitToggle,
+                weightUnitLoading && styles.unitToggleDisabled,
+              ]}
+              accessibilityRole="radiogroup"
+              accessibilityLabel="Weight units"
+            >
+              <TouchableOpacity
+                style={[
+                  styles.unitToggleOption,
+                  weightUnit === 'kg' && styles.unitToggleOptionActive,
+                ]}
+                onPress={() => persistWeightUnit('kg')}
+                disabled={weightUnitLoading}
+                accessibilityRole="radio"
+                accessibilityState={{ selected: weightUnit === 'kg', disabled: weightUnitLoading }}
+              >
+                <Text
+                  style={[
+                    styles.unitToggleText,
+                    weightUnit === 'kg' && styles.unitToggleTextActive,
+                  ]}
+                >
+                  kg
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.unitToggleOption,
+                  weightUnit === 'lb' && styles.unitToggleOptionActive,
+                ]}
+                onPress={() => persistWeightUnit('lb')}
+                disabled={weightUnitLoading}
+                accessibilityRole="radio"
+                accessibilityState={{ selected: weightUnit === 'lb', disabled: weightUnitLoading }}
+              >
+                <Text
+                  style={[
+                    styles.unitToggleText,
+                    weightUnit === 'lb' && styles.unitToggleTextActive,
+                  ]}
+                >
+                  lb
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
           {Platform.OS === 'ios' && (
             <View style={styles.settingItem}>

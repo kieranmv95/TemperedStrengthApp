@@ -7,6 +7,7 @@ import { getAllExercises } from '@/src/data/exercises';
 import type { Exercise } from '@/src/types/exercise';
 import { summarizePersonalBests } from '@/src/utils/personalBests';
 import { getPersonalBestsStore } from '@/src/utils/storage';
+import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
@@ -26,6 +27,7 @@ type StatusFilter = 'all' | 'achieved' | 'not_achieved';
 type RecordsSection = 'awards' | 'personal_bests';
 
 export default function RecordsScreen() {
+  const { unit: weightUnit } = useWeightUnit();
   const [section, setSection] = useState<RecordsSection>('personal_bests');
   const [awardRows, setAwardRows] = useState<
     Awaited<ReturnType<typeof getAll>> | null
@@ -108,7 +110,7 @@ export default function RecordsScreen() {
   const renderPbRow = useCallback(
     ({ item }: { item: Exercise }) => {
       const summary = pbStore
-        ? summarizePersonalBests(pbStore[item.id] ?? {})
+        ? summarizePersonalBests(pbStore[item.id] ?? {}, weightUnit)
         : '…';
       return (
         <TouchableOpacity
@@ -136,7 +138,7 @@ export default function RecordsScreen() {
         </TouchableOpacity>
       );
     },
-    [pbStore]
+    [pbStore, weightUnit]
   );
 
   return (

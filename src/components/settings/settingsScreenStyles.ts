@@ -90,4 +90,31 @@ export const settingsScreenStyles = StyleSheet.create({
     fontWeight: '500',
     lineHeight: 20,
   },
+  unitToggle: {
+    flexDirection: 'row',
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.pill,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+    overflow: 'hidden',
+    marginLeft: Spacing.xl,
+  },
+  unitToggleDisabled: {
+    opacity: 0.5,
+  },
+  unitToggleOption: {
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+  },
+  unitToggleOptionActive: {
+    backgroundColor: Colors.accent,
+  },
+  unitToggleText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+  },
+  unitToggleTextActive: {
+    color: Colors.textOnAccent,
+  },
 });

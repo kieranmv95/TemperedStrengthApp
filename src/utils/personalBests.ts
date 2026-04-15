@@ -4,6 +4,8 @@ import type {
   PersonalBestHistoryEntry,
   RepMax,
 } from '@/src/types/personalBests';
+import type { WeightUnit } from '@/src/utils/storage';
+import { formatWeightFromKg, formatWeightValueFromKg } from '@/src/utils/weightUnits';
 
 export const REP_MAX_ORDER: RepMax[] = [1, 2, 3, 5, 10, 15, 20];
 
@@ -231,13 +233,14 @@ export function parseRepMaxParam(raw: string | undefined): RepMax | null {
 }
 
 export function summarizePersonalBests(
-  ledger: ExercisePersonalBestsLedger
+  ledger: ExercisePersonalBestsLedger,
+  unit: WeightUnit = 'kg'
 ): string {
   const parts: string[] = [];
   for (const tier of REP_MAX_ORDER) {
     const best = getCurrentBestForTier(ledger, tier);
     if (best) {
-      parts.push(`${formatRepMaxLabel(tier)}: ${best.weight} kg`);
+      parts.push(`${formatRepMaxLabel(tier)}: ${formatWeightFromKg(best.weight, unit)}`);
     }
   }
   return parts.length > 0 ? parts.join(' | ') : 'No PBs logged';
@@ -251,7 +254,8 @@ const EXERCISE_CARD_PB_TIER: RepMax = 1;
  * Ignores other rep-max tiers. When the latest 1RM entry matches peak weight, only Best is shown.
  */
 export function formatExercisePbSubtitle(
-  ledger: ExercisePersonalBestsLedger | null | undefined
+  ledger: ExercisePersonalBestsLedger | null | undefined,
+  unit: WeightUnit = 'kg'
 ): string | null {
   if (!ledger) {
     return null;
@@ -261,8 +265,11 @@ export function formatExercisePbSubtitle(
   if (!best || !latest) {
     return null;
   }
+  const unitSuffix = unit === 'lb' ? 'lb' : 'kg';
+  const bestText = `${formatWeightValueFromKg(best.weight, unit)}${unitSuffix}`;
+  const latestText = `${formatWeightValueFromKg(latest.weight, unit)}${unitSuffix}`;
   if (latest.weight !== best.weight) {
-    return `Best Single: ${String(best.weight)}kg Latest Single: ${String(latest.weight)}kg`;
+    return `Best Single: ${bestText} Latest Single: ${latestText}`;
   }
-  return `Best Single: ${String(best.weight)}kg`;
+  return `Best Single: ${bestText}`;
 }

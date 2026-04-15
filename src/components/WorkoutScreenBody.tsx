@@ -7,6 +7,8 @@ import {
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
 import type { Workout } from '@/src/types/program';
 import type { ActiveSession, CompletedSession } from '@/src/types/storage';
+import { useWeightUnit } from '@/src/hooks/useWeightUnit';
+import { formatVolumeFromKg } from '@/src/utils/weightUnits';
 import React from 'react';
 import {
   KeyboardAvoidingView,
@@ -71,6 +73,7 @@ export function WorkoutScreenBody({
   handleNotesBlur,
   toggleNotesExpanded,
 }: WorkoutScreenBodyProps) {
+  const { unit: weightUnit } = useWeightUnit();
   if (selectedDayIndex !== null && selectedDayIndex < 0) {
     return <ProgramStartingInXScreen daysUntilStart={-selectedDayIndex} />;
   }
@@ -129,7 +132,7 @@ export function WorkoutScreenBody({
               </View>
               <View style={styles.completedSessionStat}>
                 <Text style={styles.completedSessionStatValue}>
-                  {completedSession.totalVolume.toLocaleString()}kg
+                  {formatVolumeFromKg(completedSession.totalVolume, weightUnit)}
                 </Text>
                 <Text style={styles.completedSessionStatLabel}>Volume</Text>
               </View>

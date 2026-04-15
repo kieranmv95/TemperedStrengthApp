@@ -194,6 +194,18 @@ describe('formatExercisePbSubtitle', () => {
       })
     ).toBe('Best Single: 70kg Latest Single: 50kg');
   });
+
+  it('formats lb values rounded to nearest whole lb', () => {
+    // 100kg ≈ 220.462lb → 220lb
+    expect(
+      formatExercisePbSubtitle(
+        {
+          1: [{ id: 'a', weight: 100, achievedAt: t1 }],
+        },
+        'lb'
+      )
+    ).toBe('Best Single: 220lb');
+  });
 });
 
 describe('summarizePersonalBests', () => {
@@ -213,5 +225,16 @@ describe('summarizePersonalBests', () => {
     });
     expect(s).toContain('1RM: 100 kg');
     expect(s).toContain('5RM: 85 kg');
+  });
+
+  it('supports lb summaries rounded to nearest whole lb', () => {
+    const t1 = '2026-01-01T00:00:00.000Z';
+    const s = summarizePersonalBests(
+      {
+        1: [{ id: 'a', weight: 100, achievedAt: t1 }],
+      },
+      'lb'
+    );
+    expect(s).toContain('1RM: 220 lb');
   });
 });

@@ -34,6 +34,8 @@ export type ProgramWorkoutWeekdayKey = NonNullable<
   Program['daysSplit']
 >[number];
 
+export type WeightUnit = 'kg' | 'lb';
+
 export type {
   ActiveSession,
   CompletedSession,
@@ -74,6 +76,26 @@ const ACTIVE_SESSION_KEY = 'active_session';
 const COMPLETED_SESSIONS_KEY = 'completed_sessions';
 const STANDALONE_WORKOUT_LOGS_KEY = 'standalone_workout_logs';
 const PERSONAL_BESTS_KEY = 'personal_bests';
+const WEIGHT_UNIT_KEY = 'weight_unit';
+
+export const getWeightUnit = async (): Promise<WeightUnit> => {
+  try {
+    const raw = await AsyncStorage.getItem(WEIGHT_UNIT_KEY);
+    return raw === 'lb' || raw === 'kg' ? raw : 'kg';
+  } catch (error) {
+    console.error('Error getting weight unit:', error);
+    return 'kg';
+  }
+};
+
+export const setWeightUnit = async (unit: WeightUnit): Promise<void> => {
+  try {
+    await syncSetItem(WEIGHT_UNIT_KEY, unit);
+  } catch (error) {
+    console.error('Error setting weight unit:', error);
+    throw error;
+  }
+};
 
 /**
  * Get the active program ID

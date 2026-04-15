@@ -13,11 +13,16 @@ import {
   getLatestEntryForTier,
   REP_MAX_ORDER,
 } from '@/src/utils/personalBests';
+import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import {
   getPersonalBestsForExercise,
   savePersonalBest,
 } from '@/src/utils/storage';
 import { asStringId } from '@/src/utils/routeParams';
+import {
+  formatWeightFromKg,
+  parseUserWeightInputToKg,
+} from '@/src/utils/weightUnits';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -38,6 +43,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ExercisePersonalBestsScreen() {
+  const { unit: weightUnit } = useWeightUnit();
   const { exerciseId: idParam } = useLocalSearchParams();
   const idStr = asStringId(idParam);
   const exerciseId = idStr ? parseInt(idStr, 10) : NaN;
@@ -84,8 +90,8 @@ export default function ExercisePersonalBestsScreen() {
   }, []);
 
   const handleSaveLog = useCallback(async () => {
-    const w = parseFloat(weightInput);
-    if (!Number.isFinite(w) || w <= 0) {
+    const wKg = parseUserWeightInputToKg(weightInput, weightUnit);
+    if (wKg === null || !Number.isFinite(wKg) || wKg <= 0) {
       Alert.alert('Invalid weight', 'Enter a weight greater than zero.');
       return;
     }
@@ -95,7 +101,7 @@ export default function ExercisePersonalBestsScreen() {
       const { isPR, tiersWithNewRows } = await savePersonalBest(
         exerciseId,
         selectedTier,
-        w,
+        wKg,
         logDate.toISOString()
       );
       if (tiersWithNewRows.length === 0) {
@@ -121,7 +127,7 @@ export default function ExercisePersonalBestsScreen() {
     } finally {
       setSaving(false);
     }
-  }, [exerciseId, selectedTier, weightInput, logDate, loadPbs]);
+  }, [exerciseId, selectedTier, weightInput, weightUnit, logDate, loadPbs]);
 
   if (!Number.isFinite(exerciseId) || !exercise) {
     return (
@@ -240,7 +246,7 @@ export default function ExercisePersonalBestsScreen() {
                           <>
                             <Text style={localStyles.tierSubLabel}>Best</Text>
                             <Text style={localStyles.tierWeight}>
-                              {best.weight} kg
+                              {formatWeightFromKg(best.weight, weightUnit)}
                             </Text>
                             <Text style={localStyles.tierDate}>
                               {new Date(best.achievedAt).toLocaleDateString()}
@@ -254,7 +260,7 @@ export default function ExercisePersonalBestsScreen() {
                               Latest
                             </Text>
                             <Text style={localStyles.tierWeight}>
-                              {latest.weight} kg
+                              {formatWeightFromKg(latest.weight, weightUnit)}
                             </Text>
                             <Text style={localStyles.tierDate}>
                               {new Date(latest.achievedAt).toLocaleDateString()}
@@ -263,7 +269,7 @@ export default function ExercisePersonalBestsScreen() {
                         ) : (
                           <>
                             <Text style={localStyles.tierWeight}>
-                              {best.weight} kg
+                              {formatWeightFromKg(best.weight, weightUnit)}
                             </Text>
                             <Text style={localStyles.tierDate}>
                               {new Date(best.achievedAt).toLocaleDateString()}
@@ -330,7 +336,7 @@ export default function ExercisePersonalBestsScreen() {
                 </TouchableOpacity>
               ))}
             </ScrollView>
-            <Text style={localStyles.modalLabel}>Weight (kg)</Text>
+            <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
             <TextInput
               style={localStyles.weightInput}
               value={weightInput}

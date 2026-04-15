@@ -6,12 +6,15 @@ import {
   FontSize,
   Spacing,
 } from '../constants/theme';
+import type { WeightUnit } from '../utils/storage';
+import { formatVolumeFromKg } from '../utils/weightUnits';
 
 type SessionSummaryModalProps = {
   visible: boolean;
   duration: number;
   totalVolume: number;
   setsCompleted: number;
+  weightUnit: WeightUnit;
   onDismiss: () => void;
 };
 
@@ -30,15 +33,12 @@ const formatDuration = (ms: number): string => {
   return `${seconds}s`;
 };
 
-const formatVolume = (kg: number): string => {
-  return `${kg.toLocaleString()}KG`;
-};
-
 export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
   visible,
   duration,
   totalVolume,
   setsCompleted,
+  weightUnit,
   onDismiss,
 }) => {
   return (
@@ -62,7 +62,9 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
             </View>
 
             <View style={styles.statCard}>
-              <Text style={styles.statValue}>{formatVolume(totalVolume)}</Text>
+              <Text style={styles.statValue}>
+                {formatVolumeFromKg(totalVolume, weightUnit).toUpperCase()}
+              </Text>
               <Text style={styles.statLabel}>Total Volume</Text>
             </View>
 

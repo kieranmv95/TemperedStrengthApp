@@ -1,12 +1,14 @@
 import { PBDetectedModal } from '@/src/components/PBDetectedModal';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useExerciseCardState } from '@/src/hooks/useExerciseCardState';
+import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
 import type { Exercise as ProgramExercise } from '../types/program';
+import { formatWeightFromKg } from '../utils/weightUnits';
 import { ExerciseCardSetRow } from './ExerciseCardSetRow';
 import { exerciseCardStyles as styles } from './exerciseCardStyles';
 
@@ -37,6 +39,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   onRestStart,
 }) => {
   const { isPro } = useSubscription();
+  const { unit: weightUnit } = useWeightUnit();
   const exercise = exerciseId ? getExerciseById(exerciseId) : null;
 
   const {
@@ -63,6 +66,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     dayIndex,
     slotIndex,
     exerciseLoggingType: exercise?.logging_type ?? 'reps',
+    weightUnit,
   });
 
   const isSwapped =
@@ -194,6 +198,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             setIndex={setIndex}
             isFirstSet={isFirstSet}
             loggingType={exercise.logging_type}
+            weightUnit={weightUnit}
             weightValue={weights[setIndex] || ''}
             repsValue={reps[setIndex] || ''}
             setState={setState}
@@ -224,7 +229,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           visible
           exerciseName={exercise.name}
           primaryTier={pbPrompt.primaryTier}
-          weight={pbPrompt.weight}
+          weightText={formatWeightFromKg(pbPrompt.weight, weightUnit)}
           newRecords={pbPrompt.newRecords}
           onDismiss={dismissPbPrompt}
           onUpdate={confirmPbPrompt}

@@ -6,6 +6,7 @@ import { SessionTimer } from '@/src/components/SessionTimer';
 import { SwapModal } from '@/src/components/SwapModal';
 import { WorkoutScreenBody } from '@/src/components/WorkoutScreenBody';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { useWorkoutScreenController } from '@/src/hooks/useWorkoutScreenController';
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -29,6 +30,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const tabBarHeight = useBottomTabBarHeight();
   const { isPro, isLoading: subscriptionLoading } = useSubscription();
   const c = useWorkoutScreenController();
+  const { unit: weightUnit } = useWeightUnit();
 
   if (c.loading) {
     return (
@@ -173,6 +175,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         duration={c.sessionSummary?.duration ?? 0}
         totalVolume={c.sessionSummary?.totalVolume ?? 0}
         setsCompleted={c.sessionSummary?.setsCompleted ?? 0}
+        weightUnit={weightUnit}
         onDismiss={() => c.setSessionSummary(null)}
       />
 

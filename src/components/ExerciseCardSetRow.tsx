@@ -3,12 +3,14 @@ import type { Exercise } from '@/src/types/exercise';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import type { WeightUnit } from '@/src/utils/storage';
 import { exerciseCardStyles as styles } from './exerciseCardStyles';
 
 type ExerciseCardSetRowProps = {
   setIndex: number;
   isFirstSet: boolean;
   loggingType: Exercise['logging_type'];
+  weightUnit: WeightUnit;
   weightValue: string;
   repsValue: string;
   setState: 'completed' | 'failed' | undefined;
@@ -23,6 +25,7 @@ export function ExerciseCardSetRow({
   setIndex,
   isFirstSet,
   loggingType,
+  weightUnit,
   weightValue,
   repsValue,
   setState,
@@ -39,7 +42,9 @@ export function ExerciseCardSetRow({
     <View style={styles.setContainer}>
       <View style={styles.inputContainer}>
         <View style={styles.inputGroup}>
-          {isFirstSet && <Text style={styles.inputLabel}>Weight (kg)</Text>}
+          {isFirstSet && (
+            <Text style={styles.inputLabel}>Weight ({weightUnit})</Text>
+          )}
           <TextInput
             style={[
               styles.input,

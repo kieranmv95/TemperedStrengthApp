@@ -5,6 +5,7 @@ import type {
   ExercisePersonalBestsLedger,
   RepMax,
 } from '@/src/types/personalBests';
+import type { WeightUnit } from '@/src/utils/storage';
 import {
   formatExercisePbSubtitle,
   previewPersonalBestLog,
@@ -20,6 +21,10 @@ import {
   saveLoggedSet,
   savePersonalBest,
 } from '@/src/utils/storage';
+import {
+  formatWeightValueFromKg,
+  parseUserWeightInputToKg,
+} from '@/src/utils/weightUnits';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export type ExerciseCardPbPrompt = {
@@ -37,6 +42,7 @@ type UseExerciseCardStateArgs = {
   dayIndex: number | null;
   slotIndex: number;
   exerciseLoggingType: CatalogExercise['logging_type'];
+  weightUnit: WeightUnit;
 };
 
 export function useExerciseCardState({
@@ -46,6 +52,7 @@ export function useExerciseCardState({
   dayIndex,
   slotIndex,
   exerciseLoggingType,
+  weightUnit,
 }: UseExerciseCardStateArgs) {
   const [weights, setWeights] = useState<string[]>([]);
   const [reps, setReps] = useState<string[]>([]);
@@ -152,7 +159,9 @@ export function useExerciseCardState({
             const savedSet = savedSets[i];
             if (savedSet) {
               initialWeights[i] =
-                savedSet.weight === null ? '' : savedSet.weight.toString();
+                savedSet.weight === null
+                  ? ''
+                  : formatWeightValueFromKg(savedSet.weight, weightUnit);
               initialReps[i] = savedSet.reps.toString();
               if (savedSet.state && savedSet.state !== null) {
                 const state = savedSet.state;
@@ -193,6 +202,7 @@ export function useExerciseCardState({
     slotIndex,
     exerciseId,
     getDefaultRepValue,
+    weightUnit,
   ]);
 
   useEffect(() => {
@@ -285,8 +295,8 @@ export function useExerciseCardState({
   }, [pbPrompt, loadPbLedger]);
 
   const exercisePbSubtitle = useMemo(
-    () => formatExercisePbSubtitle(pbLedger ?? undefined),
-    [pbLedger]
+    () => formatExercisePbSubtitle(pbLedger ?? undefined, weightUnit),
+    [pbLedger, weightUnit]
   );
 
   const autoSaveSet = async (
@@ -298,10 +308,10 @@ export function useExerciseCardState({
       return;
     }
 
-    const weightNum = weightStr ? parseFloat(weightStr) : null;
+    const weightKg = parseUserWeightInputToKg(weightStr, weightUnit);
     const repsNum = parseInt(repsStr, 10);
 
-    if (weightNum !== null && (isNaN(weightNum) || weightNum < 0)) {
+    if (weightKg !== null && (!Number.isFinite(weightKg) || weightKg < 0)) {
       return;
     }
     if (isNaN(repsNum) || repsNum <= 0) {
@@ -314,7 +324,7 @@ export function useExerciseCardState({
         dayIndex,
         slotIndex,
         setIndex,
-        weightNum,
+        weightKg,
         repsNum,
         currentState
       );
@@ -356,10 +366,10 @@ export function useExerciseCardState({
       return;
     }
 
-    const weightNum = weights[setIndex] ? parseFloat(weights[setIndex]) : null;
+    const weightKg = parseUserWeightInputToKg(weights[setIndex] ?? '', weightUnit);
     const repsNum = parseInt(reps[setIndex], 10);
 
-    if (weightNum !== null && (isNaN(weightNum) || weightNum < 0)) {
+    if (weightKg !== null && (!Number.isFinite(weightKg) || weightKg < 0)) {
       return;
     }
     if (isNaN(repsNum) || repsNum <= 0) {
@@ -379,17 +389,17 @@ export function useExerciseCardState({
           dayIndex,
           slotIndex,
           setIndex,
-          weightNum,
+          weightKg,
           repsNum,
           'completed'
         );
         if (
           exerciseLoggingType === 'reps' &&
-          weightNum !== null &&
-          !isNaN(weightNum) &&
-          weightNum > 0
+          weightKg !== null &&
+          Number.isFinite(weightKg) &&
+          weightKg > 0
         ) {
-          schedulePbCheck(setIndex, weightNum, repsNum);
+          schedulePbCheck(setIndex, weightKg, repsNum);
         }
       } else if (currentState === 'completed') {
         clearPbDebounce(setIndex);
@@ -398,7 +408,7 @@ export function useExerciseCardState({
           dayIndex,
           slotIndex,
           setIndex,
-          weightNum,
+          weightKg,
           repsNum,
           'failed'
         );
@@ -409,7 +419,7 @@ export function useExerciseCardState({
           dayIndex,
           slotIndex,
           setIndex,
-          weightNum,
+          weightKg,
           repsNum,
           null
         );

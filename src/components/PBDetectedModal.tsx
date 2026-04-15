@@ -14,7 +14,7 @@ export type PBDetectedModalProps = {
   visible: boolean;
   exerciseName: string;
   primaryTier: RepMax;
-  weight: number;
+  weightText: string;
   newRecords: RepMax[];
   onDismiss: () => void;
   onUpdate: () => void;
@@ -24,7 +24,7 @@ export function PBDetectedModal({
   visible,
   exerciseName,
   primaryTier,
-  weight,
+  weightText,
   newRecords,
   onDismiss,
   onUpdate,
@@ -43,7 +43,7 @@ export function PBDetectedModal({
         <View style={styles.card}>
           <Text style={styles.title}>New personal best</Text>
           <Text style={styles.body}>
-            Update your {primaryLabel} for {exerciseName} to {weight} kg?
+            Update your {primaryLabel} for {exerciseName} to {weightText}?
           </Text>
           {cascadeTiers.length > 0 ? (
             <Text style={styles.cascade}>
