@@ -36,6 +36,8 @@ export const bodybuilding_free: Program = {
   name: 'Traditional Bodybuilding Split',
   description:
     '4-Week classic bodybuilding block. Chest & Triceps, Back & Biceps, Legs & Shoulders. Rep ranges taper weeks 3–4 to drive progressive overload.',
+  categories: ['bodybuilding'],
+  difficulty: 'beginner',
   daysSplit: ['mon', 'wed', 'fri'],
   averageSessionDuration: '60m',
   workouts: Array.from({ length: 4 }).flatMap((_, week) => {

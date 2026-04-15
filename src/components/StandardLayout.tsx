@@ -1,5 +1,6 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, FontSize, Spacing } from '../constants/theme';
 
@@ -11,9 +12,17 @@ export const StandardLayoutFilters = ({ children }: StandardLayoutSectionProps) 
     return <>{children}</>;
 };
 
+export const StandardLayoutAdvancedFilters = ({ children }: StandardLayoutSectionProps) => {
+    return <>{children}</>;
+};
+
 export const StandardLayoutBody = ({ children }: StandardLayoutSectionProps) => {
     return <>{children}</>;
 };
+
+StandardLayoutFilters.displayName = 'StandardLayout.Filters';
+StandardLayoutAdvancedFilters.displayName = 'StandardLayout.AdvancedFilters';
+StandardLayoutBody.displayName = 'StandardLayout.Body';
 
 type StandardLayoutProps = {
     title: string;
@@ -24,6 +33,7 @@ type StandardLayoutProps = {
 
 type StandardLayoutCompound = React.FC<StandardLayoutProps> & {
     Filters: typeof StandardLayoutFilters;
+    AdvancedFilters: typeof StandardLayoutAdvancedFilters;
     Body: typeof StandardLayoutBody;
 };
 
@@ -34,9 +44,12 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
     children,
 }) => {
     const insets = useSafeAreaInsets();
+    const [filtersExpanded, setFiltersExpanded] = React.useState(false);
 
     let filters: React.ReactNode = null;
+    let advancedFilters: React.ReactNode = null;
     let body: React.ReactNode = null;
+
     const rest: React.ReactNode[] = [];
 
     React.Children.forEach(children, (child) => {
@@ -45,13 +58,26 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
             return;
         }
 
-        if (child.type === StandardLayoutFilters) {
+        const childType = child.type as any;
+
+        if (
+            child.type === StandardLayoutFilters ||
+            childType?.displayName === StandardLayoutFilters.displayName
+        ) {
             const el = child as React.ReactElement<StandardLayoutSectionProps>;
             filters = el.props.children;
             return;
         }
 
-        if (child.type === StandardLayoutBody) {
+        if (childType === StandardLayoutAdvancedFilters ||
+            childType?.displayName === StandardLayoutAdvancedFilters.displayName
+        ) {
+            const el = child as React.ReactElement<StandardLayoutSectionProps>;
+            advancedFilters = el.props.children;
+            return;
+        }
+
+        if (child.type === StandardLayoutBody || childType?.displayName === StandardLayoutBody.displayName) {
             const el = child as React.ReactElement<StandardLayoutSectionProps>;
             body = el.props.children;
             return;
@@ -59,6 +85,9 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
 
         rest.push(child);
     });
+
+    const hasFilters = !!filters;
+    const hasAdvancedFilters = !!advancedFilters;
 
     return (
         <View
@@ -74,7 +103,30 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
             <View style={styles.headerContainer}>
                 <Text style={styles.title}>{title}</Text>
                 {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
-                {filters ? <StandardLayoutFilters>{filters}</StandardLayoutFilters> : null}
+                {hasFilters ? (
+                    <View style={styles.filtersContainer}>
+                        <StandardLayoutFilters>{filters}</StandardLayoutFilters>
+                    </View>
+                ) : null}
+                {hasAdvancedFilters ? (
+                    <View style={styles.advancedFiltersContainer}>
+                        <TouchableOpacity
+                            style={styles.filtersToggle}
+                            onPress={() => setFiltersExpanded((v) => !v)}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={styles.filtersToggleText}>
+                                {filtersExpanded ? 'Hide filters' : 'Show filters'}
+                            </Text>
+                            <Ionicons name="filter" size={16} color={Colors.textMuted} />
+                        </TouchableOpacity>
+                        {filtersExpanded ? (
+                            <View style={styles.advancedFiltersContent}>
+                                <StandardLayoutAdvancedFilters>{advancedFilters}</StandardLayoutAdvancedFilters>
+                            </View>
+                        ) : null}
+                    </View>
+                ) : null}
             </View>
             {disableScroll ? (
                 <View style={[styles.content, styles.nonScrollContent]}>
@@ -96,6 +148,7 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
 
 export const StandardLayout: StandardLayoutCompound = Object.assign(StandardLayoutBase, {
     Filters: StandardLayoutFilters,
+    AdvancedFilters: StandardLayoutAdvancedFilters,
     Body: StandardLayoutBody,
 });
 
@@ -121,6 +174,37 @@ const styles = StyleSheet.create({
         paddingBottom: Spacing.xxl,
         borderBottomWidth: 1,
         borderBottomColor: Colors.borderDefault,
+    },
+    filtersContainer: {
+        marginTop: Spacing.xl,
+        gap: Spacing.md,
+    },
+    advancedFiltersContainer: {
+        marginTop: Spacing.xl,
+    },
+    filtersToggle: {
+        alignSelf: 'flex-start',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        gap: Spacing.sm,
+        paddingVertical: Spacing.sm,
+        paddingHorizontal: Spacing.md,
+        borderRadius: 12,
+        backgroundColor: Colors.backgroundCard,
+        borderWidth: 1,
+        borderColor: Colors.borderDefault,
+    },
+    filtersToggleText: {
+        color: Colors.textPrimary,
+        fontSize: FontSize.base,
+        fontWeight: '700',
+    },
+    filtersContent: {
+        paddingTop: Spacing.sm,
+    },
+    advancedFiltersContent: {
+        paddingTop: 0,
     },
     scrollView: {
         flex: 1,

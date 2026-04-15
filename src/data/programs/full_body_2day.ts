@@ -20,6 +20,8 @@ export const full_body_2day: Program = {
   name: '2 Day Full Body',
   description:
     '12-Week Full Body Maintenance. Alternates movement variants monthly to prevent plateaus.',
+  categories: ['strength'],
+  difficulty: 'beginner',
   daysSplit: ['sat', 'sun'],
   averageSessionDuration: '60m',
   workouts: Array.from({ length: 12 }).flatMap((_, week) => {

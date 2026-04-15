@@ -1,13 +1,13 @@
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
+import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
 import {
   CATEGORY_FILTERS,
   TIME_FILTERS,
   type CategoryFilter,
   type TimeFilter,
 } from '@/src/components/workouts/workoutsScreenConstants';
-import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
 import { Colors } from '@/src/constants/theme';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
@@ -109,7 +109,7 @@ export default function WorkoutsScreen() {
       subtitle="Log your and track your progress"
       disableScroll
     >
-      <StandardLayout.Filters>
+      <StandardLayout.AdvancedFilters>
         <View style={styles.searchContainer}>
           <Ionicons
             name="search"
@@ -157,8 +157,8 @@ export default function WorkoutsScreen() {
                     : filter === 'Pro'
                       ? allStandaloneWorkouts.filter((w) => w.isPremium).length
                       : allStandaloneWorkouts.filter(
-                          (w) => w.category === filter
-                        ).length;
+                        (w) => w.category === filter
+                      ).length;
 
               return (
                 <Pill
@@ -214,7 +214,7 @@ export default function WorkoutsScreen() {
             })}
           </ScrollView>
         </View>
-      </StandardLayout.Filters>
+      </StandardLayout.AdvancedFilters>
       <StandardLayout.Body>
         {filteredWorkouts.length === 0 ? (
           <View style={styles.emptyState}>

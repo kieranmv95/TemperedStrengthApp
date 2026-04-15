@@ -44,6 +44,8 @@ export const powerlifting_3day: Program = {
   name: 'Traditional Powerlifting (SBD)',
   description:
     '8-Week Peaking Program. Volume drops as intensity climbs to a Week 8 testing session.',
+  categories: ['powerlifting', 'strength'],
+  difficulty: 'intermediate',
   daysSplit: ['mon', 'wed', 'fri'],
   averageSessionDuration: '60m',
   workouts: Array.from({ length: 8 }).flatMap((_, week) => {

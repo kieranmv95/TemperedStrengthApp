@@ -25,6 +25,16 @@ export type Workout = {
   exercises: (Exercise | Warmup)[];
 };
 
+type ProgramCategory =
+  | 'strength'
+  | 'hyrox'
+  | 'conditioning'
+  | 'powerlifting'
+  | 'bodybuilding'
+  | 'plyometrics'
+  | 'olympic'
+  | 'functional';
+
 export type Program = {
   id: string;
   name: string;
@@ -33,4 +43,6 @@ export type Program = {
   isPro: boolean;
   daysSplit?: ('mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')[];
   averageSessionDuration?: string;
+  categories: ProgramCategory[];
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
 };

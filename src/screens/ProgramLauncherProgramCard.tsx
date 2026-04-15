@@ -28,11 +28,19 @@ export function ProgramLauncherProgramCard({
       <View style={styles.programContent}>
         <View style={styles.programNameRow}>
           <Text style={styles.programName}>{program.name}</Text>
+        </View>
+        <View style={styles.programCategoryRow}>
           {program.isPro && (
             <View style={styles.proBadge}>
               <Text style={styles.proBadgeText}>PRO</Text>
             </View>
           )}
+          <Text style={styles.programCategoryText}>{program.difficulty}</Text>
+          {program.categories.map((category) => (
+            <Text key={category} style={styles.programCategoryText}>
+              {category}
+            </Text>
+          ))}
         </View>
         <Text style={styles.programDescription}>{program.description}</Text>
         <Text style={styles.programStats}>

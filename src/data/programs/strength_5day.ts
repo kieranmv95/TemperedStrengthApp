@@ -19,6 +19,8 @@ export const strength_5day: Program = {
   name: '5-Day Power & Strength',
   description:
     '6-Week Strength Peak. Intensifies every 2 weeks through progressive overload and rep-range tapering.',
+  categories: ['strength'],
+  difficulty: 'advanced',
   daysSplit: ['mon', 'tue', 'wed', 'thu', 'fri'],
   averageSessionDuration: '60m',
   workouts: Array.from({ length: 6 }).flatMap((_, week) => {

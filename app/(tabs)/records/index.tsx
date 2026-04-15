@@ -23,7 +23,6 @@ import {
 } from 'react-native';
 
 type StatusFilter = 'all' | 'achieved' | 'not_achieved';
-type AccessFilter = 'all' | 'free' | 'pro';
 type RecordsSection = 'awards' | 'personal_bests';
 
 export default function RecordsScreen() {
@@ -32,7 +31,6 @@ export default function RecordsScreen() {
     Awaited<ReturnType<typeof getAll>> | null
   >(null);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
-  const [accessFilter, setAccessFilter] = useState<AccessFilter>('all');
 
   const repsExercises = useMemo(
     () => getAllExercises().filter((e) => e.logging_type === 'reps'),
@@ -84,12 +82,9 @@ export default function RecordsScreen() {
       if (statusFilter === 'achieved' && !row.granted) return false;
       if (statusFilter === 'not_achieved' && row.granted) return false;
 
-      if (accessFilter === 'free' && row.award.isPro) return false;
-      if (accessFilter === 'pro' && !row.award.isPro) return false;
-
       return true;
     });
-  }, [awardRows, statusFilter, accessFilter]);
+  }, [awardRows, statusFilter]);
 
   const filteredPbExercises = useMemo(() => {
     return repsExercises.filter((ex) => {
@@ -158,12 +153,45 @@ export default function RecordsScreen() {
             onPress={() => setSection('personal_bests')}
           />
           <Pill
-            label="Awards"
+            label="Trophies"
             isActive={section === 'awards'}
             onPress={() => setSection('awards')}
           />
         </View>
-
+        {section === 'personal_bests' && (
+          <View style={styles.searchContainer}>
+            <Ionicons
+              name="search"
+              size={18}
+              color={Colors.textPlaceholder}
+              style={styles.searchIcon}
+            />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search exercises..."
+              placeholderTextColor={Colors.textPlaceholder}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              returnKeyType="search"
+              autoCorrect={false}
+              autoCapitalize="none"
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity
+                onPress={() => setSearchQuery('')}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <Ionicons
+                  name="close-circle"
+                  size={18}
+                  color={Colors.textPlaceholder}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+      </StandardLayout.Filters>
+      <StandardLayout.AdvancedFilters>
         {section === 'awards' ? (
           <View style={styles.filters}>
             <View style={styles.filterRow}>
@@ -186,59 +214,9 @@ export default function RecordsScreen() {
                 count={awardRows?.filter((row) => !row.granted).length}
               />
             </View>
-            <View style={styles.filterRow}>
-              <Pill
-                label="All"
-                isActive={accessFilter === 'all'}
-                onPress={() => setAccessFilter('all')}
-                count={awardRows?.length}
-              />
-              <Pill
-                label="Free"
-                isActive={accessFilter === 'free'}
-                onPress={() => setAccessFilter('free')}
-                count={awardRows?.filter((row) => !row.award.isPro).length}
-              />
-              <Pill
-                label="Pro"
-                isActive={accessFilter === 'pro'}
-                onPress={() => setAccessFilter('pro')}
-                count={awardRows?.filter((row) => row.award.isPro).length}
-              />
-            </View>
           </View>
         ) : (
           <View style={styles.pbFilters}>
-            <View style={styles.searchContainer}>
-              <Ionicons
-                name="search"
-                size={18}
-                color={Colors.textPlaceholder}
-                style={styles.searchIcon}
-              />
-              <TextInput
-                style={styles.searchInput}
-                placeholder="Search exercises..."
-                placeholderTextColor={Colors.textPlaceholder}
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                returnKeyType="search"
-                autoCorrect={false}
-                autoCapitalize="none"
-              />
-              {searchQuery.length > 0 && (
-                <TouchableOpacity
-                  onPress={() => setSearchQuery('')}
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                >
-                  <Ionicons
-                    name="close-circle"
-                    size={18}
-                    color={Colors.textPlaceholder}
-                  />
-                </TouchableOpacity>
-              )}
-            </View>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -255,7 +233,7 @@ export default function RecordsScreen() {
             </ScrollView>
           </View>
         )}
-      </StandardLayout.Filters>
+      </StandardLayout.AdvancedFilters>
 
       <StandardLayout.Body>
         {section === 'awards' ? (

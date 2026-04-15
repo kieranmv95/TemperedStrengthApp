@@ -89,7 +89,7 @@ export default function BriefScreen() {
       subtitle="Your daily intel for the iron game"
       disableScroll
     >
-      <StandardLayout.Filters>
+      <StandardLayout.AdvancedFilters>
         <View style={styles.searchContainer}>
           <Ionicons
             name="search"
@@ -173,7 +173,7 @@ export default function BriefScreen() {
             }}
           />
         </View>
-      </StandardLayout.Filters>
+      </StandardLayout.AdvancedFilters>
       <StandardLayout.Body>
         <FlatList
           data={visibleArticles}
