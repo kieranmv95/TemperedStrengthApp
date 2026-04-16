@@ -65,6 +65,8 @@ export function useWorkoutScreenController() {
   const [isRestDay, setIsRestDay] = useState(false);
   const [loading, setLoading] = useState(true);
   const [swapModalVisible, setSwapModalVisible] = useState(false);
+  const [copyWorkoutNotesModalVisible, setCopyWorkoutNotesModalVisible] =
+    useState(false);
   const [currentSwapSlot, setCurrentSwapSlot] = useState<number | null>(null);
   const [swapRefreshCounter, setSwapRefreshCounter] = useState(0);
   const [notes, setNotes] = useState<string>('');
@@ -474,6 +476,14 @@ export function useWorkoutScreenController() {
     [selectedDayIndex]
   );
 
+  const handleApplyCopiedWorkoutNotes = useCallback(
+    (text: string) => {
+      setIsNotesExpanded(true);
+      handleNotesChange(text);
+    },
+    [handleNotesChange]
+  );
+
   useEffect(() => {
     return () => {
       if (notesDebounceRef.current) {
@@ -542,6 +552,14 @@ export function useWorkoutScreenController() {
     setCurrentSwapSlot(null);
   }, []);
 
+  const openCopyWorkoutNotesModal = useCallback(() => {
+    setCopyWorkoutNotesModalVisible(true);
+  }, []);
+
+  const closeCopyWorkoutNotesModal = useCallback(() => {
+    setCopyWorkoutNotesModalVisible(false);
+  }, []);
+
   const onSwapClearData = useCallback(async () => {
     if (selectedDayIndex !== null) {
       await loadWorkoutForDay(selectedDayIndex);
@@ -559,6 +577,9 @@ export function useWorkoutScreenController() {
     isRestDay,
     loading,
     swapModalVisible,
+    copyWorkoutNotesModalVisible,
+    openCopyWorkoutNotesModal,
+    closeCopyWorkoutNotesModal,
     currentSwapSlot,
     swapRefreshCounter,
     notes,
@@ -588,6 +609,7 @@ export function useWorkoutScreenController() {
     handleRestRestart,
     getExerciseSlots,
     handleNotesChange,
+    handleApplyCopiedWorkoutNotes,
     handleNotesFocus,
     handleNotesBlur,
     handleNotesDone,

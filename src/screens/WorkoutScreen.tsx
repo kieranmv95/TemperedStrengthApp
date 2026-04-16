@@ -3,6 +3,7 @@ import { IntensityLevelsModal } from '@/src/components/IntensityLevelsModal';
 import { RestTimer } from '@/src/components/RestTimer';
 import { SessionSummaryModal } from '@/src/components/SessionSummaryModal';
 import { SessionTimer } from '@/src/components/SessionTimer';
+import { CopyWorkoutNotesModal } from '@/src/components/CopyWorkoutNotesModal';
 import { SwapModal } from '@/src/components/SwapModal';
 import { WorkoutScreenBody } from '@/src/components/WorkoutScreenBody';
 import { useSubscription } from '@/src/hooks/use-subscription';
@@ -143,6 +144,11 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         handleNotesFocus={c.handleNotesFocus}
         handleNotesBlur={c.handleNotesBlur}
         toggleNotesExpanded={c.toggleNotesExpanded}
+        onOpenCopyWorkoutNotesModal={
+          c.program != null && c.selectedDayIndex !== null
+            ? c.openCopyWorkoutNotesModal
+            : undefined
+        }
       />
 
       <SwapModal
@@ -177,6 +183,17 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         setsCompleted={c.sessionSummary?.setsCompleted ?? 0}
         weightUnit={weightUnit}
         onDismiss={() => c.setSessionSummary(null)}
+      />
+
+      <CopyWorkoutNotesModal
+        visible={c.copyWorkoutNotesModalVisible}
+        onClose={c.closeCopyWorkoutNotesModal}
+        program={c.program ?? null}
+        startDate={c.startDate}
+        workoutWeekPattern={c.workoutWeekPattern}
+        selectedDayIndex={c.selectedDayIndex}
+        currentNotes={c.notes}
+        onApplyNotes={c.handleApplyCopiedWorkoutNotes}
       />
 
       {c.notesActive && c.keyboardHeight > 0 && (

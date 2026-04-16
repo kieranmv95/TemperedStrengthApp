@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   getActiveProgramId,
+  getAllWorkoutNotes,
   getFavoriteWorkouts,
   getRestTimer,
   getWorkoutNotes,
@@ -36,6 +37,16 @@ describe('storage utilities', () => {
     await saveWorkoutNotes(2, '  ');
 
     await expect(getWorkoutNotes(2)).resolves.toBe('');
+  });
+
+  it('returns all workout notes with numeric keys', async () => {
+    await saveWorkoutNotes(0, 'A');
+    await saveWorkoutNotes(3, 'B');
+
+    await expect(getAllWorkoutNotes()).resolves.toEqual({
+      0: 'A',
+      3: 'B',
+    });
   });
 
   it('toggles favorites on and off', async () => {

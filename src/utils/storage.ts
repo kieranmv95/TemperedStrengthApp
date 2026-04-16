@@ -626,6 +626,32 @@ export const getWorkoutNotes = async (dayIndex: number): Promise<string> => {
 };
 
 /**
+ * All saved workout notes keyed by program day index.
+ * Normalizes JSON object keys to numbers.
+ */
+export const getAllWorkoutNotes = async (): Promise<WorkoutNotes> => {
+  try {
+    const data = await AsyncStorage.getItem(WORKOUT_NOTES_KEY);
+    const raw: unknown = data ? JSON.parse(data) : {};
+    if (typeof raw !== 'object' || raw === null) {
+      return {};
+    }
+    const out: WorkoutNotes = {};
+    for (const [key, value] of Object.entries(raw as Record<string, unknown>)) {
+      const dayIndex = parseInt(key, 10);
+      if (Number.isNaN(dayIndex) || typeof value !== 'string') {
+        continue;
+      }
+      out[dayIndex] = value;
+    }
+    return out;
+  } catch (error) {
+    console.error('Error getting all workout notes:', error);
+    return {};
+  }
+};
+
+/**
  * Save the active rest timer state (or clear if null)
  * @param timer - Rest timer state or null to clear
  */

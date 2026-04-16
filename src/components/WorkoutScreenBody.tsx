@@ -1,4 +1,7 @@
 import { Colors, Spacing } from '@/src/constants/theme';
+import { useWeightUnit } from '@/src/hooks/useWeightUnit';
+import { ProgramStartingInXScreen } from '@/src/screens/ProgramStartingInXScreen';
+import { RestDayScreen } from '@/src/screens/RestDayScreen';
 import {
   formatSessionDuration,
   getIntensityLevel,
@@ -7,7 +10,6 @@ import {
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
 import type { Workout } from '@/src/types/program';
 import type { ActiveSession, CompletedSession } from '@/src/types/storage';
-import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { formatVolumeFromKg } from '@/src/utils/weightUnits';
 import React from 'react';
 import {
@@ -21,8 +23,6 @@ import {
 } from 'react-native';
 import type { RestTimerStartPayload } from './ExerciseCard';
 import { ExerciseCard } from './ExerciseCard';
-import { ProgramStartingInXScreen } from '@/src/screens/ProgramStartingInXScreen';
-import { RestDayScreen } from '@/src/screens/RestDayScreen';
 
 type WorkoutScreenBodyProps = {
   selectedDayIndex: number | null;
@@ -47,6 +47,7 @@ type WorkoutScreenBodyProps = {
   handleNotesFocus: () => void;
   handleNotesBlur: () => void;
   toggleNotesExpanded: () => void;
+  onOpenCopyWorkoutNotesModal?: () => void;
 };
 
 export function WorkoutScreenBody({
@@ -72,6 +73,7 @@ export function WorkoutScreenBody({
   handleNotesFocus,
   handleNotesBlur,
   toggleNotesExpanded,
+  onOpenCopyWorkoutNotesModal,
 }: WorkoutScreenBodyProps) {
   const { unit: weightUnit } = useWeightUnit();
   if (selectedDayIndex !== null && selectedDayIndex < 0) {
@@ -223,6 +225,18 @@ export function WorkoutScreenBody({
             }
           });
         })()}
+
+        {onOpenCopyWorkoutNotesModal && selectedDayIndex !== null && (
+          <TouchableOpacity
+            style={styles.notesCopyTopStrip}
+            onPress={onOpenCopyWorkoutNotesModal}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.notesCopyLink}>
+              Copy notes from another workout
+            </Text>
+          </TouchableOpacity>
+        )}
 
         <View style={styles.notesContainer}>
           <TouchableOpacity

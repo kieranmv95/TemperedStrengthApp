@@ -219,6 +219,16 @@ export const workoutScreenStyles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.md,
   },
+  notesCopyTopStrip: {
+    marginTop: Spacing.md,
+    marginBottom: Spacing.xl,
+    paddingVertical: Spacing.sm,
+  },
+  notesCopyLink: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '600',
+  },
   keyboardDoneBar: {
     position: 'absolute',
     left: 0,
