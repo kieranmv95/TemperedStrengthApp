@@ -27,7 +27,13 @@ export function ArticleCard({
   onToggleFavorite,
 }: ArticleCardProps) {
   const canFavorite = Boolean(onToggleFavorite);
-  const handleToggleFavorite = () => {
+  // The bookmark button sits inside the card's press target. Stop propagation
+  // on every touch phase so tapping the bookmark never also opens the article.
+  const stopPropagation = (event: { stopPropagation: () => void }) => {
+    event.stopPropagation();
+  };
+  const handleToggleFavorite = (event: { stopPropagation: () => void }) => {
+    event.stopPropagation();
     onToggleFavorite?.(article.id);
   };
 
@@ -47,6 +53,7 @@ export function ArticleCard({
             <TouchableOpacity
               style={styles.favoriteButton}
               onPress={handleToggleFavorite}
+              onPressIn={stopPropagation}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <Ionicons
@@ -110,6 +117,7 @@ export function ArticleCard({
         {canFavorite && (
           <TouchableOpacity
             onPress={handleToggleFavorite}
+            onPressIn={stopPropagation}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Ionicons

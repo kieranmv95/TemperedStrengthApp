@@ -7,11 +7,11 @@ import {
 } from '@/src/data/brief';
 import { increment } from '@/src/services/metricService';
 import type { Article } from '@/src/types/brief';
-import { getFavoriteArticles, toggleFavoriteArticle } from '@/src/utils/storage';
+import { getFavoriteArticles, setFavoriteArticles } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -27,35 +27,62 @@ export default function BriefScreen() {
     useState<Article['category'] | 'All'>('All');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
+  // The UI is the source of truth for favorites once mounted. We keep a ref
+  // mirror so tap handlers always compute the next list from the latest value
+  // without depending on state closure timing.
+  const favoritesRef = useRef<string[]>([]);
+  // Serialize persistence so rapid toggles write to storage in order and the
+  // last write always reflects the latest UI state. By not re-reading storage
+  // on focus we avoid overwriting optimistic state with a stale snapshot from
+  // AsyncStorage + iCloud mirror while pending writes are still flushing.
+  const persistChainRef = useRef<Promise<void>>(Promise.resolve());
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const favs = await getFavoriteArticles();
+      if (cancelled) return;
+      favoritesRef.current = favs;
+      setFavorites(favs);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
       increment('brief_visits');
-      void loadFavorites();
     }, [])
   );
 
-  const loadFavorites = async () => {
-    const favs = await getFavoriteArticles();
-    setFavorites(favs);
-  };
+  const handleToggleFavorite = useCallback((articleId: string) => {
+    const prev = favoritesRef.current;
+    const next = prev.includes(articleId)
+      ? prev.filter((id) => id !== articleId)
+      : [...prev, articleId];
 
-  const handleToggleFavorite = async (articleId: string) => {
-    const newStatus = await toggleFavoriteArticle(articleId);
-    if (newStatus) {
-      setFavorites((prev) => [...prev, articleId]);
-    } else {
-      setFavorites((prev) => prev.filter((id) => id !== articleId));
-    }
-  };
+    favoritesRef.current = next;
+    setFavorites(next);
+
+    persistChainRef.current = persistChainRef.current
+      .then(() => setFavoriteArticles(next))
+      .catch((error) => {
+        console.error('Failed to persist favorite articles:', error);
+      });
+  }, []);
 
   const visibleArticles = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
     return articles.filter((article) => {
-      if (showFavoritesOnly && !favorites.includes(article.id)) return false;
-      if (activeCategory !== 'All' && article.category !== activeCategory)
+      // Saved is mutually exclusive with category filters in the chip row,
+      // so when showing favorites ignore the lingering activeCategory.
+      if (showFavoritesOnly) {
+        if (!favorites.includes(article.id)) return false;
+      } else if (activeCategory !== 'All' && article.category !== activeCategory) {
         return false;
+      }
 
       if (!query) return true;
 
@@ -178,6 +205,7 @@ export default function BriefScreen() {
         <FlatList
           data={visibleArticles}
           keyExtractor={(item) => item.id}
+          extraData={favorites}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
           ListHeaderComponent={
