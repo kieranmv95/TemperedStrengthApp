@@ -1,4 +1,5 @@
 import { useTimerNotification } from '@/src/hooks/useTimerNotification';
+import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import type {
   ExerciseSlot,
   WorkoutSlot,
@@ -34,7 +35,8 @@ import {
   saveRestTimer,
   saveWorkoutNotes,
 } from '@/src/utils/storage';
-import { Alert, Keyboard, Platform } from 'react-native';
+import { buildWorkoutExportText } from '@/src/utils/workoutExport';
+import { Alert, Keyboard, Platform, Share } from 'react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ScrollView, TextInput } from 'react-native';
 
@@ -85,6 +87,7 @@ export function useWorkoutScreenController() {
   } | null>(null);
   const { scheduleTimerNotification, cancelTimerNotification } =
     useTimerNotification();
+  const { unit: weightUnit } = useWeightUnit();
   const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
   const notesInputRef = useRef<TextInput>(null);
@@ -484,6 +487,35 @@ export function useWorkoutScreenController() {
     [handleNotesChange]
   );
 
+  const handleExportWorkoutText = useCallback(async () => {
+    if (selectedDayIndex === null || !currentWorkout || slots.length === 0) {
+      return;
+    }
+
+    try {
+      const dayLogs = await getWorkoutLogsForDay(selectedDayIndex);
+      const text = buildWorkoutExportText(
+        currentWorkout.label,
+        slots,
+        dayLogs,
+        weightUnit
+      );
+
+      if (!text) {
+        Alert.alert(
+          'Nothing to export',
+          'Log at least one set to export your workout.'
+        );
+        return;
+      }
+
+      await Share.share({ message: text });
+    } catch (error) {
+      console.error('Error exporting workout text:', error);
+      Alert.alert('Export failed', 'Could not export workout. Please try again.');
+    }
+  }, [selectedDayIndex, currentWorkout, slots, weightUnit]);
+
   useEffect(() => {
     return () => {
       if (notesDebounceRef.current) {
@@ -610,6 +642,7 @@ export function useWorkoutScreenController() {
     getExerciseSlots,
     handleNotesChange,
     handleApplyCopiedWorkoutNotes,
+    handleExportWorkoutText,
     handleNotesFocus,
     handleNotesBlur,
     handleNotesDone,

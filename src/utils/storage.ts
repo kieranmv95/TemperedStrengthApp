@@ -809,6 +809,25 @@ export const getFavoriteArticles = async (): Promise<string[]> => {
 };
 
 /**
+ * Replace the full list of favorite article IDs.
+ *
+ * Prefer this over {@link addFavoriteArticle}/{@link removeFavoriteArticle}
+ * when the caller already knows the authoritative next list (e.g. when the
+ * UI owns the state). It avoids the read-modify-write race that happens
+ * when two toggles run concurrently.
+ */
+export const setFavoriteArticles = async (
+  articleIds: string[]
+): Promise<void> => {
+  try {
+    await syncSetItem(FAVORITE_ARTICLES_KEY, JSON.stringify(articleIds));
+  } catch (error) {
+    console.error('Error setting favorite articles:', error);
+    throw error;
+  }
+};
+
+/**
  * Add an article to favorites
  * @param articleId - Article ID to add
  */

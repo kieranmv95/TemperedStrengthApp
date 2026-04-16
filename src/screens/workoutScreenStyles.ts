@@ -328,4 +328,19 @@ export const workoutScreenStyles = StyleSheet.create({
     fontSize: FontSize.base,
     fontWeight: '600',
   },
+  exportWorkoutButton: {
+    borderWidth: 1,
+    borderColor: Colors.accent,
+    borderRadius: BorderRadius.lg,
+    paddingVertical: Spacing.xl,
+    alignItems: 'center',
+    marginTop: Spacing.md,
+  },
+  exportWorkoutButtonText: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
 });

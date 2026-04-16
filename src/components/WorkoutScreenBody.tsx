@@ -48,6 +48,7 @@ type WorkoutScreenBodyProps = {
   handleNotesBlur: () => void;
   toggleNotesExpanded: () => void;
   onOpenCopyWorkoutNotesModal?: () => void;
+  onExportWorkoutText: () => void | Promise<void>;
 };
 
 export function WorkoutScreenBody({
@@ -74,6 +75,7 @@ export function WorkoutScreenBody({
   handleNotesBlur,
   toggleNotesExpanded,
   onOpenCopyWorkoutNotesModal,
+  onExportWorkoutText,
 }: WorkoutScreenBodyProps) {
   const { unit: weightUnit } = useWeightUnit();
   if (selectedDayIndex !== null && selectedDayIndex < 0) {
@@ -271,6 +273,16 @@ export function WorkoutScreenBody({
             />
           )}
         </View>
+
+        <TouchableOpacity
+          style={styles.exportWorkoutButton}
+          onPress={onExportWorkoutText}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.exportWorkoutButtonText}>
+            Export Workout as Text
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
   );

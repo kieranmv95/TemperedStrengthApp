@@ -149,6 +149,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             ? c.openCopyWorkoutNotesModal
             : undefined
         }
+        onExportWorkoutText={c.handleExportWorkoutText}
       />
 
       <SwapModal
