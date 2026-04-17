@@ -220,14 +220,20 @@ export const workoutScreenStyles = StyleSheet.create({
     fontSize: FontSize.md,
   },
   notesCopyTopStrip: {
+    borderWidth: 1,
+    borderColor: Colors.accent,
+    borderRadius: BorderRadius.lg,
+    paddingVertical: Spacing.xl,
+    alignItems: 'center',
     marginTop: Spacing.md,
     marginBottom: Spacing.xl,
-    paddingVertical: Spacing.sm,
   },
   notesCopyLink: {
     color: Colors.accent,
     fontSize: FontSize.lg,
-    fontWeight: '600',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   keyboardDoneBar: {
     position: 'absolute',
@@ -329,18 +335,12 @@ export const workoutScreenStyles = StyleSheet.create({
     fontWeight: '600',
   },
   exportWorkoutButton: {
-    borderWidth: 1,
-    borderColor: Colors.accent,
-    borderRadius: BorderRadius.lg,
-    paddingVertical: Spacing.xl,
-    alignItems: 'center',
     marginTop: Spacing.md,
+    paddingVertical: Spacing.sm,
   },
   exportWorkoutButtonText: {
     color: Colors.accent,
     fontSize: FontSize.lg,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    fontWeight: '600',
   },
 });
