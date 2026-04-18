@@ -633,16 +633,45 @@ export const getAllWorkoutNotes = async (): Promise<WorkoutNotes> => {
   try {
     const data = await AsyncStorage.getItem(WORKOUT_NOTES_KEY);
     const raw: unknown = data ? JSON.parse(data) : {};
+    const out: WorkoutNotes = {};
+
+    const coerceNoteValue = (value: unknown): string | null => {
+      if (typeof value === 'string') {
+        return value;
+      }
+      // Back-compat: older/bad writes may have stored an object shape.
+      if (
+        typeof value === 'object' &&
+        value !== null &&
+        'text' in value &&
+        typeof (value as { text?: unknown }).text === 'string'
+      ) {
+        return (value as { text: string }).text;
+      }
+      return null;
+    };
+
+    // Back-compat: accept either a JSON object map or an array indexed by dayIndex.
+    if (Array.isArray(raw)) {
+      raw.forEach((value, idx) => {
+        const text = coerceNoteValue(value);
+        if (text === null) return;
+        out[idx] = text;
+      });
+      return out;
+    }
+
     if (typeof raw !== 'object' || raw === null) {
       return {};
     }
-    const out: WorkoutNotes = {};
+
     for (const [key, value] of Object.entries(raw as Record<string, unknown>)) {
       const dayIndex = parseInt(key, 10);
-      if (Number.isNaN(dayIndex) || typeof value !== 'string') {
+      const text = coerceNoteValue(value);
+      if (Number.isNaN(dayIndex) || text === null) {
         continue;
       }
-      out[dayIndex] = value;
+      out[dayIndex] = text;
     }
     return out;
   } catch (error) {

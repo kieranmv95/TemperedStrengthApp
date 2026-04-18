@@ -46,7 +46,8 @@ function resolveWorkoutLabel(
     startISO !== null
       ? getWorkoutForDaySinceStart(program, startISO, pattern, dayIndex)
       : program.workouts.find((w) => w.dayIndex === dayIndex) ?? null;
-  return workout?.label ?? `Day ${dayIndex}`;
+  // Day indices are 0-based internally; keep fallback user-facing.
+  return workout?.label ?? `Day ${dayIndex + 1}`;
 }
 
 function buildPreview(text: string): string {

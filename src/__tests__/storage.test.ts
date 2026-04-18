@@ -49,6 +49,34 @@ describe('storage utilities', () => {
     });
   });
 
+  it('returns all workout notes from legacy object shapes', async () => {
+    await AsyncStorage.setItem(
+      'workout_notes',
+      JSON.stringify({
+        0: { text: 'Legacy A' },
+        2: { text: 'Legacy B', updatedAt: 123 },
+        nope: { text: 'Ignored' },
+      })
+    );
+
+    await expect(getAllWorkoutNotes()).resolves.toEqual({
+      0: 'Legacy A',
+      2: 'Legacy B',
+    });
+  });
+
+  it('returns all workout notes from legacy array shapes', async () => {
+    await AsyncStorage.setItem(
+      'workout_notes',
+      JSON.stringify(['Zero', null, { text: 'Two' }])
+    );
+
+    await expect(getAllWorkoutNotes()).resolves.toEqual({
+      0: 'Zero',
+      2: 'Two',
+    });
+  });
+
   it('toggles favorites on and off', async () => {
     await expect(toggleFavoriteWorkout('workout-1')).resolves.toBe(true);
     await expect(getFavoriteWorkouts()).resolves.toEqual(['workout-1']);
