@@ -1,0 +1,26 @@
+---
+description: What Tempered Strength is and where code lives
+---
+
+# Project
+
+**Tempered Strength** is a React Native (Expo) strength-training app: built-in programs, standalone workouts, personal records, and a Brief tab (articles, glossary, playlists). It targets anyone who runs in-gym programs or one-off sessions and wants structured logging, timers, and training content in one place.
+
+## Stack
+
+- **Expo Router** (file-based routing) — `app/` is thin route files; screens live under `src/screens/`.
+- **React Native / TypeScript** — Expo SDK 54, React 19.
+- **State** — No Redux/Zustand-style global store. **React Context** for subscription (RevenueCat) and sync; otherwise **local component state** and hooks. **AsyncStorage** (via `src/utils/storage.ts`) for persisted app data.
+- **Data** — **Local-first**: programs, workouts, exercises, and Brief content ship as **bundled data** in `src/data/` (and JSON where used). Subscriptions via **RevenueCat** (`src/services/revenueCatService.ts`). Optional **iCloud KVS** sync under `src/sync/`.
+
+## Structure
+
+- **`app/`** — Routes only: `(tabs)/` (program home, workouts, brief, settings, records), `paywall`, `customer-center`, `glossary`, `article/[id]`, nested workout and record routes.
+- **`src/screens/`** — Screen implementations wired from routes.
+- **`src/components/`** — Shared UI (`components/brief/`, `components/ui/`, etc.).
+- **`src/hooks/`** — Logic, contexts (`subscription-context`, `sync-manager-context`), feature hooks.
+- **`src/data/`** — Programs (`data/programs/`), workouts, exercises, Brief (`data/brief/`).
+- **`src/utils/`** — Storage, program math, pivot/swap engine, formatting helpers.
+- **`src/services/`** — External integrations (e.g. RevenueCat, metrics).
+- **`src/sync/`** — Sync manager and iCloud provider plumbing.
+- **`src/types/`** — Shared TypeScript types.
