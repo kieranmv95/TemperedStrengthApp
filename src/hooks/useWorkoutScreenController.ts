@@ -628,6 +628,7 @@ export function useWorkoutScreenController() {
     scrollViewRef,
     notesInputRef,
     workoutDayIndices,
+    workoutWeekPattern,
     loadWorkoutForDay,
     loadWorkoutData,
     handleStartSession,
