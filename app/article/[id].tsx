@@ -1,12 +1,15 @@
 import { ArticleMarkdownContent } from '@/src/components/brief/ArticleMarkdownContent';
 import { articleScreenStyles as styles } from '@/src/components/brief/articleScreenStyles';
 import { Colors } from '@/src/constants/theme';
-import { getArticleById } from '@/src/data/brief';
+import { fetchArticleBySlug } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
+import type { Article } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { router, useLocalSearchParams } from 'expo-router';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Image,
   Linking,
   ScrollView,
@@ -16,28 +19,81 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-function normalizeUrl(raw: string): string {
-  const trimmed = raw.trim();
-  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-    return trimmed;
-  }
-  return `https://${trimmed}`;
-}
-
 export default function ArticleScreen() {
-  const { id, url } = useLocalSearchParams<{ id: string; url?: string }>();
-  const article = id ? getArticleById(id) : undefined;
-  const articleUrl = normalizeUrl(url ?? 'https://www.test.com');
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const [article, setArticle] = useState<Article | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isOffline, setIsOffline] = useState(false);
 
   useEffect(() => {
     increment('articles_read');
   }, []);
 
-  if (!article) {
+  useFocusEffect(
+    useCallback(() => {
+      if (!id) return;
+
+      let cancelled = false;
+
+      (async () => {
+        setIsLoading(true);
+        try {
+          const data = await fetchArticleBySlug(id);
+          if (cancelled) return;
+          setArticle(data);
+          setIsOffline(false);
+        } catch {
+          if (cancelled) return;
+          setIsOffline(true);
+        } finally {
+          if (!cancelled) setIsLoading(false);
+        }
+      })();
+
+      return () => {
+        cancelled = true;
+      };
+    }, [id])
+  );
+
+  if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.headerBackButton}
+            onPress={() => router.back()}
+          >
+            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
+          </TouchableOpacity>
+          <View style={styles.headerSpacer} />
+        </View>
         <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Article not found</Text>
+          <ActivityIndicator size="large" color={Colors.accent} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (isOffline || !article) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.headerBackButton}
+            onPress={() => router.back()}
+          >
+            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
+          </TouchableOpacity>
+          <View style={styles.headerSpacer} />
+        </View>
+        <View style={styles.errorContainer}>
+          <Ionicons name="wifi-outline" size={64} color={Colors.backgroundSubtle} />
+          <Text style={styles.errorText}>
+            {isOffline
+              ? 'No connection — article unavailable'
+              : 'Article not found'}
+          </Text>
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => router.back()}
@@ -48,6 +104,8 @@ export default function ArticleScreen() {
       </SafeAreaView>
     );
   }
+
+  const articleUrl = `https://www.temperedstrength.com/articles/${id}`;
 
   return (
     <SafeAreaView style={styles.container}>

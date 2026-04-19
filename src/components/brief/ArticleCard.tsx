@@ -1,4 +1,4 @@
-import type { Article } from '@/src/types/brief';
+import type { ArticleListItem } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/src/constants/theme';
 import React from 'react';
@@ -12,11 +12,11 @@ import {
 import { articleCardStyles as styles } from './articleCardStyles';
 
 type ArticleCardProps = {
-  article: Article;
-  onPress: (article: Article) => void;
+  article: ArticleListItem;
+  onPress: (article: ArticleListItem) => void;
   variant?: 'compact' | 'horizontal';
   isFavorite?: boolean;
-  onToggleFavorite?: (articleId: string) => void;
+  onToggleFavorite?: (slug: string) => void;
 };
 
 export function ArticleCard({
@@ -34,7 +34,7 @@ export function ArticleCard({
   };
   const handleToggleFavorite = (event: { stopPropagation: () => void }) => {
     event.stopPropagation();
-    onToggleFavorite?.(article.id);
+    onToggleFavorite?.(article.slug);
   };
 
   if (variant === 'horizontal') {

@@ -5,13 +5,16 @@ import {
   FontSize,
   Spacing,
 } from '@/src/constants/theme';
-import { glossary, searchGlossary } from '@/src/data/brief';
+import { getGlossaryByCategory, searchGlossary } from '@/src/data/brief';
 import { increment } from '@/src/services/metricService';
+import { fetchGlossary } from '@/src/services/briefApiService';
 import type { GlossaryTerm } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -33,23 +36,100 @@ const CATEGORY_FILTERS: CategoryFilter[] = [
 ];
 
 export default function GlossaryScreen() {
+  const [terms, setTerms] = useState<GlossaryTerm[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isOffline, setIsOffline] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
-
-  const filteredTerms = useMemo(() => {
-    let results = searchQuery ? searchGlossary(searchQuery) : glossary;
-
-    if (activeCategory !== 'All') {
-      results = results.filter((term) => term.category === activeCategory);
-    }
-
-    // Sort alphabetically
-    return results.sort((a, b) => a.term.localeCompare(b.term));
-  }, [searchQuery, activeCategory]);
 
   useEffect(() => {
     increment('terminology_views');
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+
+      (async () => {
+        setIsLoading(true);
+        try {
+          const data = await fetchGlossary();
+          if (cancelled) return;
+          setTerms(data);
+          setIsOffline(false);
+        } catch {
+          if (cancelled) return;
+          setIsOffline(true);
+        } finally {
+          if (!cancelled) setIsLoading(false);
+        }
+      })();
+
+      return () => {
+        cancelled = true;
+      };
+    }, [])
+  );
+
+  const filteredTerms = useMemo(() => {
+    let results = searchQuery ? searchGlossary(terms, searchQuery) : terms;
+
+    if (activeCategory !== 'All') {
+      results = getGlossaryByCategory(results, activeCategory);
+    }
+
+    return [...results].sort((a, b) => a.term.localeCompare(b.term));
+  }, [searchQuery, activeCategory, terms]);
+
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <View style={styles.centeredState}>
+          <ActivityIndicator size="large" color={Colors.accent} />
+        </View>
+      );
+    }
+
+    if (isOffline) {
+      return (
+        <View style={styles.centeredState}>
+          <Ionicons name="wifi-outline" size={64} color={Colors.backgroundSubtle} />
+          <Text style={styles.emptyTitle}>Connect to the internet to see this</Text>
+          <Text style={styles.emptyDescription}>
+            The glossary requires a connection to load.
+          </Text>
+        </View>
+      );
+    }
+
+    if (filteredTerms.length === 0) {
+      return (
+        <View style={styles.emptyState}>
+          <Ionicons name="search-outline" size={64} color={Colors.backgroundSubtle} />
+          <Text style={styles.emptyTitle}>No Terms Found</Text>
+          <Text style={styles.emptyDescription}>
+            Try adjusting your search or filter.
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <FlatList
+        data={filteredTerms}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <GlossaryItem term={item} />}
+        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          <Text style={styles.resultsCount}>
+            {filteredTerms.length}{' '}
+            {filteredTerms.length === 1 ? 'term' : 'terms'}
+          </Text>
+        }
+      />
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -98,8 +178,8 @@ export default function GlossaryScreen() {
             const isActive = activeCategory === item;
             const count =
               item === 'All'
-                ? glossary.length
-                : glossary.filter((t) => t.category === item).length;
+                ? terms.length
+                : terms.filter((t) => t.category === item).length;
 
             return (
               <TouchableOpacity
@@ -128,30 +208,7 @@ export default function GlossaryScreen() {
         />
       </View>
 
-      {/* Results */}
-      {filteredTerms.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Ionicons name="search-outline" size={64} color={Colors.backgroundSubtle} />
-          <Text style={styles.emptyTitle}>No Terms Found</Text>
-          <Text style={styles.emptyDescription}>
-            Try adjusting your search or filter.
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={filteredTerms}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <GlossaryItem term={item} />}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            <Text style={styles.resultsCount}>
-              {filteredTerms.length}{' '}
-              {filteredTerms.length === 1 ? 'term' : 'terms'}
-            </Text>
-          }
-        />
-      )}
+      {renderContent()}
     </SafeAreaView>
   );
 }
@@ -251,6 +308,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginBottom: Spacing.xl,
   },
+  centeredState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 48,
+    gap: Spacing.xxl,
+  },
   emptyState: {
     flex: 1,
     alignItems: 'center',
@@ -263,6 +327,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginTop: Spacing.xxl,
     marginBottom: Spacing.md,
+    textAlign: 'center',
   },
   emptyDescription: {
     color: Colors.textMuted,

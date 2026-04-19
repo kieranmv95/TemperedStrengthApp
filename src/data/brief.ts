@@ -1,14 +1,11 @@
-import type { Article, GlossaryTerm } from '@/src/types/brief';
-import { articles } from './brief/articles';
-import { glossary } from './brief/glossary';
+import type { GlossaryTerm } from '@/src/types/brief';
 
-export const getArticleById = (id: string): Article | undefined => {
-  return articles.find((article) => article.id === id);
-};
-
-export const searchGlossary = (query: string): GlossaryTerm[] => {
+export const searchGlossary = (
+  terms: GlossaryTerm[],
+  query: string
+): GlossaryTerm[] => {
   const lowercaseQuery = query.toLowerCase();
-  return glossary.filter(
+  return terms.filter(
     (term) =>
       term.term.toLowerCase().includes(lowercaseQuery) ||
       term.definition.toLowerCase().includes(lowercaseQuery)
@@ -16,11 +13,10 @@ export const searchGlossary = (query: string): GlossaryTerm[] => {
 };
 
 export const getGlossaryByCategory = (
+  terms: GlossaryTerm[],
   category: GlossaryTerm['category']
 ): GlossaryTerm[] => {
-  return glossary.filter((term) => term.category === category);
+  return terms.filter((term) => term.category === category);
 };
 
-// Re-export types and data for consumers
-export type { Article, GlossaryTerm } from '@/src/types/brief';
-export { articles, glossary };
+export type { Article, ArticleCategory, ArticleListItem, GlossaryTerm } from '@/src/types/brief';
