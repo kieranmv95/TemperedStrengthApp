@@ -1,5 +1,6 @@
 import { getExerciseById } from '@/src/data/exercises';
 import type { WorkoutSlot } from '@/src/screens/workoutScreenConstants';
+import type { Exercise } from '@/src/types/exercise';
 import type { LoggedSet } from '@/src/types/storage';
 import type { WeightUnit } from '@/src/utils/storage';
 import { formatWeightValueFromKg } from '@/src/utils/weightUnits';
@@ -8,7 +9,7 @@ type DayLogs = { [slotIndex: number]: { [setIndex: number]: LoggedSet } };
 
 function formatSetLine(
   set: LoggedSet,
-  loggingType: 'reps' | 'time',
+  loggingType: Exercise['logging_type'],
   weightUnit: WeightUnit
 ): string {
   if (loggingType === 'time') {

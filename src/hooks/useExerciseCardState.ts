@@ -113,7 +113,7 @@ export function useExerciseCardState({
   }, [isPro]);
 
   const loadPbLedger = useCallback(async () => {
-    if (!exerciseId || exerciseLoggingType !== 'reps') {
+    if (!exerciseId || exerciseLoggingType !== 'reps_and_weight') {
       setPbLedger(null);
       return;
     }
@@ -230,7 +230,7 @@ export function useExerciseCardState({
 
   const schedulePbCheck = useCallback(
     (setIndex: number, weight: number, repsNum: number) => {
-      if (!exerciseId || exerciseLoggingType !== 'reps') {
+      if (!exerciseId || exerciseLoggingType !== 'reps_and_weight') {
         return;
       }
       clearPbDebounce(setIndex);
@@ -394,7 +394,7 @@ export function useExerciseCardState({
           'completed'
         );
         if (
-          exerciseLoggingType === 'reps' &&
+          exerciseLoggingType === 'reps_and_weight' &&
           weightKg !== null &&
           Number.isFinite(weightKg) &&
           weightKg > 0

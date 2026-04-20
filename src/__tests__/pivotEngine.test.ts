@@ -14,7 +14,7 @@ const mockExercises = [
     equipment: 'barbell',
     created_at: '2025-01-01',
     updated_at: '2025-01-01',
-    logging_type: 'reps' as const,
+    logging_type: 'reps_and_weight' as const,
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ const mockExercises = [
     equipment: 'dumbbell',
     created_at: '2025-01-01',
     updated_at: '2025-01-01',
-    logging_type: 'reps' as const,
+    logging_type: 'reps_and_weight' as const,
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ const mockExercises = [
     equipment: 'machine',
     created_at: '2025-01-01',
     updated_at: '2025-01-01',
-    logging_type: 'reps' as const,
+    logging_type: 'reps_and_weight' as const,
   },
   {
     id: 4,
@@ -44,7 +44,7 @@ const mockExercises = [
     equipment: 'barbell',
     created_at: '2025-01-01',
     updated_at: '2025-01-01',
-    logging_type: 'reps' as const,
+    logging_type: 'reps_and_weight' as const,
   },
   {
     id: 5,
@@ -54,7 +54,7 @@ const mockExercises = [
     equipment: 'barbell',
     created_at: '2025-01-01',
     updated_at: '2025-01-01',
-    logging_type: 'reps' as const,
+    logging_type: 'reps_and_weight' as const,
   },
   {
     id: 6,
@@ -64,7 +64,7 @@ const mockExercises = [
     equipment: 'cable',
     created_at: '2025-01-01',
     updated_at: '2025-01-01',
-    logging_type: 'reps' as const,
+    logging_type: 'reps_and_weight' as const,
   },
 ];
 

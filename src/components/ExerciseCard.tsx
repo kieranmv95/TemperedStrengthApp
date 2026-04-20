@@ -65,7 +65,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     programExercise,
     dayIndex,
     slotIndex,
-    exerciseLoggingType: exercise?.logging_type ?? 'reps',
+    exerciseLoggingType: exercise?.logging_type ?? 'reps_and_weight',
     weightUnit,
   });
 

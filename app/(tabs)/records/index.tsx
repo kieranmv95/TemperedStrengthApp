@@ -35,7 +35,7 @@ export default function RecordsScreen() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
   const repsExercises = useMemo(
-    () => getAllExercises().filter((e) => e.logging_type === 'reps'),
+    () => getAllExercises().filter((e) => e.logging_type === 'reps_and_weight'),
     []
   );
 
