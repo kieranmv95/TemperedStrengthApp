@@ -76,7 +76,7 @@ export function ExerciseCardSetRow({
                   ]}
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
-                  <Ionicons name="trash-outline" size={18} color={Colors.backgroundCard} />
+                  <Ionicons name="trash-outline" size={18} color={Colors.accent} />
                 </TouchableOpacity>
               )}
               <TextInput
@@ -113,7 +113,7 @@ export function ExerciseCardSetRow({
         )}
 
         <View style={styles.inputGroupWithCheckmark}>
-          <View style={styles.inputGroup}>
+          <View style={[styles.inputGroup, styles.inputGroupRepsOrTime]}>
             {isFirstSet && (
               <Text style={styles.inputLabel}>
                 {loggingType === 'time' ? 'Time' : 'Reps'}

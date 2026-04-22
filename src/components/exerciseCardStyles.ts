@@ -100,11 +100,14 @@ export const exerciseCardStyles = StyleSheet.create({
   inputGroup: {
     flex: 1,
   },
+  inputGroupRepsOrTime: {
+    flex: 1,
+  },
   inputGroupGoldButton: {
     backgroundColor: Colors.accent,
   },
   inputGroupWithCheckmark: {
-    flex: 1,
+    flex: 0.5,
     flexDirection: 'row',
     alignItems: 'flex-end',
     gap: Spacing.md,
@@ -139,7 +142,7 @@ export const exerciseCardStyles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: BorderRadius.lg,
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.backgroundElevated,
     borderWidth: 2,
     borderColor: Colors.accent,
     alignItems: 'center',
