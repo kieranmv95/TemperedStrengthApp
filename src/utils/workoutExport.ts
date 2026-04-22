@@ -16,6 +16,14 @@ function formatSetLine(
     return `${set.reps}s`;
   }
 
+  if (loggingType === 'reps') {
+    if (set.weight !== null && set.weight > 0) {
+      const value = formatWeightValueFromKg(set.weight, weightUnit);
+      return `x${set.reps} (+${value}${weightUnit})`;
+    }
+    return `x${set.reps}`;
+  }
+
   if (set.weight !== null && set.weight > 0) {
     const value = formatWeightValueFromKg(set.weight, weightUnit);
     return `${value}${weightUnit}x${set.reps}`;

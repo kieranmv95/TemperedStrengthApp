@@ -2,7 +2,7 @@ import { Colors } from '@/src/constants/theme';
 import type { Exercise } from '@/src/types/exercise';
 import type { WeightUnit } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { exerciseCardStyles as styles } from './exerciseCardStyles';
 
@@ -37,29 +37,59 @@ export function ExerciseCardSetRow({
 }: ExerciseCardSetRowProps) {
   const isCompleted = setState === 'completed';
   const isFailed = setState === 'failed';
+  const isRepsOnly = loggingType === 'reps';
+  const [showWeight, setShowWeight] = useState(!isRepsOnly);
+
+  useEffect(() => {
+    if (!isRepsOnly) {
+      setShowWeight(true);
+      return;
+    }
+    if (weightValue.trim().length > 0) {
+      setShowWeight(true);
+    }
+  }, [isRepsOnly, weightValue]);
 
   return (
     <View style={styles.setContainer}>
       <View style={styles.inputContainer}>
-        <View style={styles.inputGroup}>
-          {isFirstSet && (
-            <Text style={styles.inputLabel}>Weight ({weightUnit})</Text>
-          )}
-          <TextInput
-            style={[
-              styles.input,
-              isCompleted && styles.inputCompleted,
-              isFailed && styles.inputFailed,
-            ]}
-            value={weightValue || ''}
-            onChangeText={(value) => onWeightChange(setIndex, value)}
-            keyboardType="numeric"
-            returnKeyType="done"
-            blurOnSubmit={true}
-            placeholder="0"
-            placeholderTextColor={Colors.textPlaceholder}
-          />
-        </View>
+        {showWeight ? (
+          <View style={styles.inputGroup}>
+            {isFirstSet && (
+              <Text style={styles.inputLabel}>
+                {isRepsOnly ? 'Added weight' : 'Weight'} ({weightUnit})
+              </Text>
+            )}
+            <TextInput
+              style={[
+                styles.input,
+                isCompleted && styles.inputCompleted,
+                isFailed && styles.inputFailed,
+              ]}
+              value={weightValue || ''}
+              onChangeText={(value) => onWeightChange(setIndex, value)}
+              keyboardType="numeric"
+              returnKeyType="done"
+              blurOnSubmit={true}
+              placeholder="0"
+              placeholderTextColor={Colors.textPlaceholder}
+            />
+          </View>
+        ) : (
+          <View style={styles.inputGroup}>
+            {isFirstSet && <Text style={styles.inputLabel}>Added weight</Text>}
+            <TouchableOpacity
+              onPress={() => setShowWeight(true)}
+              disabled={loading}
+              style={[styles.input, { justifyContent: 'center' }]}
+              accessibilityLabel="Add weight"
+            >
+              <Text style={{ color: Colors.textPlaceholder, fontWeight: '600' }}>
+                Add weight
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         <View style={styles.inputGroupWithCheckmark}>
           <View style={styles.inputGroup}>
