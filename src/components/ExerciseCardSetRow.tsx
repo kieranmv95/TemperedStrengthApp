@@ -1,9 +1,9 @@
 import { Colors } from '@/src/constants/theme';
 import type { Exercise } from '@/src/types/exercise';
+import type { WeightUnit } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import type { WeightUnit } from '@/src/utils/storage';
 import { exerciseCardStyles as styles } from './exerciseCardStyles';
 
 type ExerciseCardSetRowProps = {

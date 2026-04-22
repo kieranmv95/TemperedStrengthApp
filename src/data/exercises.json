@@ -818,7 +818,7 @@
     "description": "Lie on your side propped on your forearm, keeping your body in a straight line.",
     "equipment": "Bodyweight",
     "id": 50,
-    "logging_type": "reps_and_weight",
+    "logging_type": "time",
     "muscle": "Obliques",
     "name": "Side Plank",
     "pattern": "Core",
