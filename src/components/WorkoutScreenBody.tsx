@@ -43,6 +43,7 @@ type WorkoutScreenBodyProps = {
   handleRedoWorkout: () => void | Promise<void>;
   handleSwapClick: (exerciseSlotIndex: number) => void;
   handleRestStart: (payload: RestTimerStartPayload) => void | Promise<void>;
+  handleRestDismiss: () => void | Promise<void>;
   handleNotesChange: (text: string) => void;
   handleNotesFocus: () => void;
   handleNotesBlur: () => void;
@@ -70,6 +71,7 @@ export function WorkoutScreenBody({
   handleRedoWorkout,
   handleSwapClick,
   handleRestStart,
+  handleRestDismiss,
   handleNotesChange,
   handleNotesFocus,
   handleNotesBlur,
@@ -222,6 +224,7 @@ export function WorkoutScreenBody({
                   slotIndex={currentExerciseIndex}
                   onSwap={() => handleSwapClick(currentExerciseIndex)}
                   onRestStart={handleRestStart}
+                  onRestDismiss={handleRestDismiss}
                 />
               );
             }

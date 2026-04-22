@@ -77,6 +77,7 @@ const COMPLETED_SESSIONS_KEY = 'completed_sessions';
 const STANDALONE_WORKOUT_LOGS_KEY = 'standalone_workout_logs';
 const PERSONAL_BESTS_KEY = 'personal_bests';
 const WEIGHT_UNIT_KEY = 'weight_unit';
+const AUTO_REST_TIMERS_ENABLED_KEY = 'auto_rest_timers_enabled';
 
 export const getWeightUnit = async (): Promise<WeightUnit> => {
   try {
@@ -93,6 +94,26 @@ export const setWeightUnit = async (unit: WeightUnit): Promise<void> => {
     await syncSetItem(WEIGHT_UNIT_KEY, unit);
   } catch (error) {
     console.error('Error setting weight unit:', error);
+    throw error;
+  }
+};
+
+export const getAutoRestTimersEnabled = async (): Promise<boolean> => {
+  try {
+    const raw = await AsyncStorage.getItem(AUTO_REST_TIMERS_ENABLED_KEY);
+    if (raw === null) return true;
+    return raw === 'true';
+  } catch (error) {
+    console.error('Error getting auto rest timers enabled:', error);
+    return true;
+  }
+};
+
+export const setAutoRestTimersEnabled = async (enabled: boolean): Promise<void> => {
+  try {
+    await syncSetItem(AUTO_REST_TIMERS_ENABLED_KEY, enabled ? 'true' : 'false');
+  } catch (error) {
+    console.error('Error setting auto rest timers enabled:', error);
     throw error;
   }
 };

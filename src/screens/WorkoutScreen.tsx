@@ -141,6 +141,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         handleRedoWorkout={c.handleRedoWorkout}
         handleSwapClick={c.handleSwapClick}
         handleRestStart={c.handleRestStart}
+        handleRestDismiss={c.handleRestDismiss}
         handleNotesChange={c.handleNotesChange}
         handleNotesFocus={c.handleNotesFocus}
         handleNotesBlur={c.handleNotesBlur}

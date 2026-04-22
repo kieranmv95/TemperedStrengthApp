@@ -361,22 +361,25 @@ export function useExerciseCardState({
     }, 500);
   };
 
-  const handleToggleSetState = async (setIndex: number) => {
+  const handleToggleSetState = async (
+    setIndex: number
+  ): Promise<'completed' | 'failed' | undefined> => {
     if (!exerciseId || !reps[setIndex] || dayIndex === null) {
-      return;
+      return undefined;
     }
 
     const weightKg = parseUserWeightInputToKg(weights[setIndex] ?? '', weightUnit);
     const repsNum = parseInt(reps[setIndex], 10);
 
     if (weightKg !== null && (!Number.isFinite(weightKg) || weightKg < 0)) {
-      return;
+      return undefined;
     }
     if (isNaN(repsNum) || repsNum <= 0) {
-      return;
+      return undefined;
     }
 
     setLoading(true);
+    let nextState: 'completed' | 'failed' | undefined = undefined;
 
     try {
       const currentState = setStates.get(setIndex);
@@ -384,6 +387,7 @@ export function useExerciseCardState({
 
       if (currentState === undefined) {
         newSetStates.set(setIndex, 'completed');
+        nextState = 'completed';
         await increment('sets_logged');
         await saveLoggedSet(
           dayIndex,
@@ -404,6 +408,7 @@ export function useExerciseCardState({
       } else if (currentState === 'completed') {
         clearPbDebounce(setIndex);
         newSetStates.set(setIndex, 'failed');
+        nextState = 'failed';
         await saveLoggedSet(
           dayIndex,
           slotIndex,
@@ -415,6 +420,7 @@ export function useExerciseCardState({
       } else if (currentState === 'failed') {
         clearPbDebounce(setIndex);
         newSetStates.delete(setIndex);
+        nextState = undefined;
         await saveLoggedSet(
           dayIndex,
           slotIndex,
@@ -431,6 +437,8 @@ export function useExerciseCardState({
     } finally {
       setLoading(false);
     }
+
+    return nextState;
   };
 
   const decrementSets = async () => {

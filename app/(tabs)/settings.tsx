@@ -7,7 +7,9 @@ import { getProgramById } from '@/src/utils/program';
 import {
   clearProgramData,
   getActiveProgramId,
+  getAutoRestTimersEnabled,
   getWeightUnit,
+  setAutoRestTimersEnabled,
   setWeightUnit,
   type WeightUnit,
 } from '@/src/utils/storage';
@@ -23,6 +25,8 @@ export default function SettingsScreen() {
   const [, setActiveProgram] = useState<Program | null>(null);
   const [weightUnit, setWeightUnitState] = useState<WeightUnit>('kg');
   const [weightUnitLoading, setWeightUnitLoading] = useState<boolean>(true);
+  const [autoTimersEnabled, setAutoTimersEnabledState] = useState<boolean>(true);
+  const [autoTimersLoading, setAutoTimersLoading] = useState<boolean>(true);
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
   const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
 
@@ -57,6 +61,18 @@ export default function SettingsScreen() {
     }
   };
 
+  const loadAutoTimersEnabled = async () => {
+    try {
+      const enabled = await getAutoRestTimersEnabled();
+      setAutoTimersEnabledState(enabled);
+    } catch (error) {
+      console.error('Error loading auto timers enabled:', error);
+      setAutoTimersEnabledState(true);
+    } finally {
+      setAutoTimersLoading(false);
+    }
+  };
+
   const persistWeightUnit = async (u: WeightUnit) => {
     setWeightUnitState(u);
     try {
@@ -68,10 +84,22 @@ export default function SettingsScreen() {
     }
   };
 
+  const persistAutoTimersEnabled = async (next: boolean) => {
+    setAutoTimersEnabledState(next);
+    try {
+      await setAutoRestTimersEnabled(next);
+    } catch (error) {
+      console.error('Error saving auto timers enabled:', error);
+      const prev = await getAutoRestTimersEnabled();
+      setAutoTimersEnabledState(prev);
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       checkProgramStatus();
       loadWeightUnit();
+      loadAutoTimersEnabled();
       refresh(); // Refresh subscription status when screen is focused
     }, [refresh])
   );
@@ -267,6 +295,23 @@ export default function SettingsScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
+          </View>
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Auto rest timers</Text>
+              <Text style={styles.settingDescription}>
+                When enabled, completing a set will automatically start (or restart) the rest timer. The timer closes after the last set.
+              </Text>
+            </View>
+            <Switch
+              value={autoTimersEnabled}
+              onValueChange={(next) => {
+                if (autoTimersLoading) return;
+                persistAutoTimersEnabled(next);
+              }}
+              disabled={autoTimersLoading}
+            />
           </View>
 
           {Platform.OS === 'ios' && (
