@@ -102,6 +102,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           onDismiss={c.handleRestDismiss}
           onComplete={c.handleRestComplete}
           onRestart={c.handleRestRestart}
+          onAdjust={c.handleRestAdjust}
         />
       )}
 
@@ -140,6 +141,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         handleRedoWorkout={c.handleRedoWorkout}
         handleSwapClick={c.handleSwapClick}
         handleRestStart={c.handleRestStart}
+        handleRestDismiss={c.handleRestDismiss}
         handleNotesChange={c.handleNotesChange}
         handleNotesFocus={c.handleNotesFocus}
         handleNotesBlur={c.handleNotesBlur}

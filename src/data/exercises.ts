@@ -1,12 +1,20 @@
 // Exercise data - loaded directly from bundled JSON
 import type { Exercise } from '../types/exercise';
-import exercisesData from './exercises.json';
+import exercisesRepsData from './exercises_reps.json';
+import exercisesRepsAndWeightData from './exercises_reps_and_weight.json';
+import exercisesTimeData from './exercises_time.json';
 
 // Re-export Exercise type
 export type { Exercise } from '../types/exercise';
 
 // Sort exercises by name once at module load
-const exercises: Exercise[] = (exercisesData as Exercise[])
+const exercises: Exercise[] = (
+  [
+    ...(exercisesRepsData as Exercise[]),
+    ...(exercisesRepsAndWeightData as Exercise[]),
+    ...(exercisesTimeData as Exercise[]),
+  ] as Exercise[]
+)
   .slice()
   .sort((a, b) => a.name.localeCompare(b.name));
 

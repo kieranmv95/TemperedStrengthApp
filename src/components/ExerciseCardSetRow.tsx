@@ -1,9 +1,9 @@
 import { Colors } from '@/src/constants/theme';
 import type { Exercise } from '@/src/types/exercise';
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import type { WeightUnit } from '@/src/utils/storage';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { exerciseCardStyles as styles } from './exerciseCardStyles';
 
 type ExerciseCardSetRowProps = {
@@ -37,32 +37,83 @@ export function ExerciseCardSetRow({
 }: ExerciseCardSetRowProps) {
   const isCompleted = setState === 'completed';
   const isFailed = setState === 'failed';
+  const isRepsOnly = loggingType === 'reps';
+  const [showWeight, setShowWeight] = useState(!isRepsOnly);
+  const showOptionalWeightReset = isRepsOnly && showWeight;
+
+  useEffect(() => {
+    if (!isRepsOnly) {
+      setShowWeight(true);
+      return;
+    }
+    if (weightValue.trim().length > 0) {
+      setShowWeight(true);
+    }
+  }, [isRepsOnly, weightValue]);
 
   return (
     <View style={styles.setContainer}>
       <View style={styles.inputContainer}>
-        <View style={styles.inputGroup}>
-          {isFirstSet && (
-            <Text style={styles.inputLabel}>Weight ({weightUnit})</Text>
-          )}
-          <TextInput
-            style={[
-              styles.input,
-              isCompleted && styles.inputCompleted,
-              isFailed && styles.inputFailed,
-            ]}
-            value={weightValue || ''}
-            onChangeText={(value) => onWeightChange(setIndex, value)}
-            keyboardType="numeric"
-            returnKeyType="done"
-            blurOnSubmit={true}
-            placeholder="0"
-            placeholderTextColor={Colors.textPlaceholder}
-          />
-        </View>
+        {showWeight ? (
+          <View style={styles.inputGroup}>
+            {isFirstSet && (
+              <Text style={styles.inputLabel}>
+                {isRepsOnly ? 'Added weight' : 'Weight'} ({weightUnit})
+              </Text>
+            )}
+            <View style={showOptionalWeightReset ? styles.inputWithLeadingButtonRow : undefined}>
+              {showOptionalWeightReset && (
+                <TouchableOpacity
+                  onPress={() => {
+                    onWeightChange(setIndex, '');
+                    setShowWeight(false);
+                  }}
+                  disabled={loading}
+                  accessibilityLabel="Remove weight"
+                  style={[
+                    styles.leadingIconButton,
+                    loading && styles.leadingIconButtonDisabled,
+                  ]}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <Ionicons name="trash-outline" size={18} color={Colors.accent} />
+                </TouchableOpacity>
+              )}
+              <TextInput
+                style={[
+                  styles.input,
+                  showOptionalWeightReset && styles.inputFlex,
+                  isCompleted && styles.inputCompleted,
+                  isFailed && styles.inputFailed,
+                ]}
+                value={weightValue || ''}
+                onChangeText={(value) => onWeightChange(setIndex, value)}
+                keyboardType="numeric"
+                returnKeyType="done"
+                blurOnSubmit={true}
+                placeholder="0"
+                placeholderTextColor={Colors.textPlaceholder}
+              />
+            </View>
+          </View>
+        ) : (
+          <View style={styles.inputGroup}>
+            {isFirstSet && <Text style={styles.inputLabel}>Added weight</Text>}
+            <TouchableOpacity
+              onPress={() => setShowWeight(true)}
+              disabled={loading}
+              style={[styles.input, styles.inputButton, { justifyContent: 'center' }]}
+              accessibilityLabel="Add weight"
+            >
+              <Text style={styles.inputButtonText}>
+                Add weight
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         <View style={styles.inputGroupWithCheckmark}>
-          <View style={styles.inputGroup}>
+          <View style={[styles.inputGroup, styles.inputGroupRepsOrTime]}>
             {isFirstSet && (
               <Text style={styles.inputLabel}>
                 {loggingType === 'time' ? 'Time' : 'Reps'}

@@ -1,0 +1,11 @@
+[
+  {
+    "description": "Hold a push-up position on your forearms, keeping your body in a straight line.",
+    "equipment": "Bodyweight",
+    "id": 13,
+    "logging_type": "time",
+    "muscle": "Abs",
+    "name": "Plank",
+    "pattern": "Core"
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "description": "Kneel and roll the wheel forward, extending your body, then pull back using your core.",
+    "equipment": "Bodyweight",
+    "id": 15,
+    "logging_type": "reps",
+    "muscle": "Abs",
+    "name": "Ab Wheel Rollout",
+    "pattern": "Core"
+  },
+  {
+    "description": "Stand with feet shoulder-width apart, squat down until thighs are parallel, then stand up.",
+    "equipment": "Bodyweight",
+    "id": 21,
+    "logging_type": "reps",
+    "muscle": "Quadriceps",
+    "name": "Bodyweight Squats",
+    "pattern": "Knee Dominant"
+  },
+  {
+    "description": "Hang with an underhand grip and pull your chin above the bar.",
+    "equipment": "Bodyweight",
+    "id": 12,
+    "logging_type": "reps",
+    "muscle": "Back",
+    "name": "Chin-ups",
+    "pattern": "Vertical Pull"
+  },
+  {
+    "description": "Grip parallel bars, lower your body until your upper arms are parallel, then press up.",
+    "equipment": "Bodyweight",
+    "id": 17,
+    "logging_type": "reps",
+    "muscle": "Triceps/Chest",
+    "name": "Dips",
+    "pattern": "Horizontal Push"
+  },
+  {
+    "description": "Lie on your back with knees bent and drive your hips up by squeezing your glutes.",
+    "equipment": "Bodyweight",
+    "id": 25,
+    "logging_type": "reps",
+    "muscle": "Glutes",
+    "name": "Glute Bridge",
+    "pattern": "Hip Hinge"
+  },
+  {
+    "description": "Hang from a bar and raise your legs until they are parallel to the ground or higher.",
+    "equipment": "Bodyweight",
+    "id": 31,
+    "logging_type": "reps",
+    "muscle": "Abs",
+    "name": "Hanging Leg Raise",
+    "pattern": "Core"
+  },
+  {
+    "description": "Hang beneath a bar set at waist height and pull your chest up to the bar.",
+    "equipment": "Bodyweight",
+    "id": 9,
+    "logging_type": "reps",
+    "muscle": "Back",
+    "name": "Inverted Row",
+    "pattern": "Horizontal Pull"
+  },
+  {
+    "description": "Start in a push-up position with hips raised high and press your head towards the floor.",
+    "equipment": "Bodyweight",
+    "id": 29,
+    "logging_type": "reps",
+    "muscle": "Shoulders",
+    "name": "Pike Push-ups",
+    "pattern": "Vertical Push"
+  },
+  {
+    "description": "Hang with an overhand grip and pull your chin above the bar.",
+    "equipment": "Bodyweight",
+    "id": 10,
+    "logging_type": "reps",
+    "muscle": "Back",
+    "name": "Pull-ups",
+    "pattern": "Vertical Pull"
+  },
+  {
+    "description": "Place your hands shoulder-width apart on the floor, lower your chest down, then push back up.",
+    "equipment": "Bodyweight",
+    "id": 3,
+    "logging_type": "reps",
+    "muscle": "Chest",
+    "name": "Push-ups",
+    "pattern": "Horizontal Push"
+  },
+  {
+    "description": "Lie on your side propped on your forearm, keeping your body in a straight line.",
+    "equipment": "Bodyweight",
+    "id": 50,
+    "logging_type": "reps",
+    "muscle": "Obliques",
+    "name": "Side Plank",
+    "pattern": "Core"
+  },
+  {
+    "description": "Lie on your back with knees bent and curl your torso up off the floor.",
+    "equipment": "Bodyweight",
+    "id": 86,
+    "logging_type": "reps",
+    "muscle": "Abs",
+    "name": "Sit-ups",
+    "pattern": "Core"
+  }
+]

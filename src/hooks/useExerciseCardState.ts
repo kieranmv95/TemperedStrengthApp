@@ -15,6 +15,7 @@ import {
   clearLoggedSet,
   getCustomSetCount,
   getLoggedSets,
+  getAutoPbDetectionInProgramsEnabled,
   getPersonalBestsForExercise,
   getRemainingSwapCount,
   saveCustomSetCount,
@@ -113,7 +114,7 @@ export function useExerciseCardState({
   }, [isPro]);
 
   const loadPbLedger = useCallback(async () => {
-    if (!exerciseId || exerciseLoggingType !== 'reps') {
+    if (!exerciseId || exerciseLoggingType !== 'reps_and_weight') {
       setPbLedger(null);
       return;
     }
@@ -230,11 +231,17 @@ export function useExerciseCardState({
 
   const schedulePbCheck = useCallback(
     (setIndex: number, weight: number, repsNum: number) => {
-      if (!exerciseId || exerciseLoggingType !== 'reps') {
+      if (!exerciseId || exerciseLoggingType !== 'reps_and_weight') {
         return;
       }
       clearPbDebounce(setIndex);
       pbDebounceRef.current[setIndex] = setTimeout(async () => {
+        if (dayIndex !== null) {
+          const enabled = await getAutoPbDetectionInProgramsEnabled();
+          if (!enabled) {
+            return;
+          }
+        }
         if (setStatesRef.current.get(setIndex) !== 'completed') {
           return;
         }
@@ -270,7 +277,7 @@ export function useExerciseCardState({
         }
       }, 250);
     },
-    [exerciseId, exerciseLoggingType, clearPbDebounce]
+    [exerciseId, exerciseLoggingType, clearPbDebounce, dayIndex]
   );
 
   const dismissPbPrompt = useCallback(() => {
@@ -361,22 +368,25 @@ export function useExerciseCardState({
     }, 500);
   };
 
-  const handleToggleSetState = async (setIndex: number) => {
+  const handleToggleSetState = async (
+    setIndex: number
+  ): Promise<'completed' | 'failed' | undefined> => {
     if (!exerciseId || !reps[setIndex] || dayIndex === null) {
-      return;
+      return undefined;
     }
 
     const weightKg = parseUserWeightInputToKg(weights[setIndex] ?? '', weightUnit);
     const repsNum = parseInt(reps[setIndex], 10);
 
     if (weightKg !== null && (!Number.isFinite(weightKg) || weightKg < 0)) {
-      return;
+      return undefined;
     }
     if (isNaN(repsNum) || repsNum <= 0) {
-      return;
+      return undefined;
     }
 
     setLoading(true);
+    let nextState: 'completed' | 'failed' | undefined = undefined;
 
     try {
       const currentState = setStates.get(setIndex);
@@ -384,6 +394,7 @@ export function useExerciseCardState({
 
       if (currentState === undefined) {
         newSetStates.set(setIndex, 'completed');
+        nextState = 'completed';
         await increment('sets_logged');
         await saveLoggedSet(
           dayIndex,
@@ -394,7 +405,7 @@ export function useExerciseCardState({
           'completed'
         );
         if (
-          exerciseLoggingType === 'reps' &&
+          exerciseLoggingType === 'reps_and_weight' &&
           weightKg !== null &&
           Number.isFinite(weightKg) &&
           weightKg > 0
@@ -404,6 +415,7 @@ export function useExerciseCardState({
       } else if (currentState === 'completed') {
         clearPbDebounce(setIndex);
         newSetStates.set(setIndex, 'failed');
+        nextState = 'failed';
         await saveLoggedSet(
           dayIndex,
           slotIndex,
@@ -415,6 +427,7 @@ export function useExerciseCardState({
       } else if (currentState === 'failed') {
         clearPbDebounce(setIndex);
         newSetStates.delete(setIndex);
+        nextState = undefined;
         await saveLoggedSet(
           dayIndex,
           slotIndex,
@@ -431,6 +444,8 @@ export function useExerciseCardState({
     } finally {
       setLoading(false);
     }
+
+    return nextState;
   };
 
   const decrementSets = async () => {

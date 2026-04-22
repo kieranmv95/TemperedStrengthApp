@@ -3,6 +3,8 @@ import {
   getActiveProgramId,
   getAllWorkoutNotes,
   getFavoriteWorkouts,
+  getAutoRestTimersEnabled,
+  getAutoPbDetectionInProgramsEnabled,
   getRestTimer,
   getWorkoutNotes,
   incrementSwapCount,
@@ -10,6 +12,8 @@ import {
   saveWorkoutNotes,
   clearRestTimer,
   setActiveProgramId,
+  setAutoRestTimersEnabled,
+  setAutoPbDetectionInProgramsEnabled,
   toggleFavoriteWorkout,
 } from '../utils/storage';
 
@@ -83,6 +87,30 @@ describe('storage utilities', () => {
 
     await expect(toggleFavoriteWorkout('workout-1')).resolves.toBe(false);
     await expect(getFavoriteWorkouts()).resolves.toEqual([]);
+  });
+
+  it('defaults auto rest timers enabled to true', async () => {
+    await expect(getAutoRestTimersEnabled()).resolves.toBe(true);
+  });
+
+  it('persists auto rest timers enabled flag', async () => {
+    await setAutoRestTimersEnabled(false);
+    await expect(getAutoRestTimersEnabled()).resolves.toBe(false);
+
+    await setAutoRestTimersEnabled(true);
+    await expect(getAutoRestTimersEnabled()).resolves.toBe(true);
+  });
+
+  it('defaults auto PB detection in programs enabled to true', async () => {
+    await expect(getAutoPbDetectionInProgramsEnabled()).resolves.toBe(true);
+  });
+
+  it('persists auto PB detection in programs enabled flag', async () => {
+    await setAutoPbDetectionInProgramsEnabled(false);
+    await expect(getAutoPbDetectionInProgramsEnabled()).resolves.toBe(false);
+
+    await setAutoPbDetectionInProgramsEnabled(true);
+    await expect(getAutoPbDetectionInProgramsEnabled()).resolves.toBe(true);
   });
 
   it('saves and restores rest timer state', async () => {

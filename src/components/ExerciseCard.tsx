@@ -8,6 +8,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
 import type { Exercise as ProgramExercise } from '../types/program';
+import { getAutoRestTimersEnabled } from '../utils/storage';
 import { formatWeightFromKg } from '../utils/weightUnits';
 import { ExerciseCardSetRow } from './ExerciseCardSetRow';
 import { exerciseCardStyles as styles } from './exerciseCardStyles';
@@ -27,6 +28,7 @@ type ExerciseCardProps = {
   slotIndex: number;
   onSwap: () => void;
   onRestStart: (payload: RestTimerStartPayload) => void;
+  onRestDismiss: () => void;
 };
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
@@ -37,6 +39,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   slotIndex,
   onSwap,
   onRestStart,
+  onRestDismiss,
 }) => {
   const { isPro } = useSubscription();
   const { unit: weightUnit } = useWeightUnit();
@@ -65,7 +68,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     programExercise,
     dayIndex,
     slotIndex,
-    exerciseLoggingType: exercise?.logging_type ?? 'reps',
+    exerciseLoggingType: exercise?.logging_type ?? 'reps_and_weight',
     weightUnit,
   });
 
@@ -206,7 +209,27 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             canLog={canLog}
             onWeightChange={handleWeightChange}
             onRepsChange={handleRepsChange}
-            onToggleSetState={handleToggleSetState}
+            onToggleSetState={async (idx) => {
+              const nextState = await handleToggleSetState(idx);
+              if (nextState !== 'completed') return;
+              if (!restTimeSeconds || dayIndex === null) return;
+
+              const autoTimersEnabled = await getAutoRestTimersEnabled();
+              if (!autoTimersEnabled) return;
+
+              const isLastSet = idx === numberOfSets - 1;
+              if (isLastSet) {
+                onRestDismiss();
+                return;
+              }
+
+              onRestStart({
+                dayIndex,
+                slotIndex,
+                exerciseId,
+                restTimeSeconds,
+              });
+            }}
           />
         );
       })}

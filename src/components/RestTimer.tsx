@@ -10,6 +10,7 @@ type RestTimerProps = {
   onDismiss: () => void;
   onComplete: () => void;
   onRestart: () => void;
+  onAdjust: (deltaSeconds: number) => void;
 };
 
 const formatDuration = (totalSeconds: number): string => {
@@ -24,6 +25,7 @@ export const RestTimer: React.FC<RestTimerProps> = ({
   onDismiss,
   onComplete,
   onRestart,
+  onAdjust,
 }) => {
   const [now, setNow] = useState(Date.now());
   const completedRef = useRef(false);
@@ -77,7 +79,7 @@ export const RestTimer: React.FC<RestTimerProps> = ({
       </View>
       <View style={workoutTimerBarStyles.iconButtonGroup}>
         <TouchableOpacity
-          style={workoutTimerBarStyles.iconButton}
+          style={[workoutTimerBarStyles.iconButton, workoutTimerBarStyles.buttonSize]}
           onPress={onRestart}
           activeOpacity={0.7}
           accessibilityRole="button"
@@ -86,8 +88,32 @@ export const RestTimer: React.FC<RestTimerProps> = ({
         >
           <Ionicons name="refresh" size={20} color={Colors.textOnAccent} />
         </TouchableOpacity>
+        {isRunning && (
+          <>
+            <TouchableOpacity
+              style={[workoutTimerBarStyles.adjustButton, workoutTimerBarStyles.buttonSize]}
+              onPress={() => onAdjust(-15)}
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel="Subtract 15 seconds from rest timer"
+              testID="rest-timer-minus-15"
+            >
+              <Text style={workoutTimerBarStyles.adjustButtonText}>-15</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[workoutTimerBarStyles.adjustButton, workoutTimerBarStyles.buttonSize]}
+              onPress={() => onAdjust(15)}
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel="Add 15 seconds to rest timer"
+              testID="rest-timer-plus-15"
+            >
+              <Text style={workoutTimerBarStyles.adjustButtonText}>+15</Text>
+            </TouchableOpacity>
+          </>
+        )}
         <TouchableOpacity
-          style={workoutTimerBarStyles.iconButton}
+          style={[workoutTimerBarStyles.iconButton, workoutTimerBarStyles.buttonSize]}
           onPress={onDismiss}
           activeOpacity={0.7}
           accessibilityRole="button"

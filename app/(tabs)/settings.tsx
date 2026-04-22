@@ -7,7 +7,11 @@ import { getProgramById } from '@/src/utils/program';
 import {
   clearProgramData,
   getActiveProgramId,
+  getAutoPbDetectionInProgramsEnabled,
+  getAutoRestTimersEnabled,
   getWeightUnit,
+  setAutoPbDetectionInProgramsEnabled,
+  setAutoRestTimersEnabled,
   setWeightUnit,
   type WeightUnit,
 } from '@/src/utils/storage';
@@ -23,6 +27,10 @@ export default function SettingsScreen() {
   const [, setActiveProgram] = useState<Program | null>(null);
   const [weightUnit, setWeightUnitState] = useState<WeightUnit>('kg');
   const [weightUnitLoading, setWeightUnitLoading] = useState<boolean>(true);
+  const [autoTimersEnabled, setAutoTimersEnabledState] = useState<boolean>(true);
+  const [autoTimersLoading, setAutoTimersLoading] = useState<boolean>(true);
+  const [autoPbEnabled, setAutoPbEnabledState] = useState<boolean>(true);
+  const [autoPbLoading, setAutoPbLoading] = useState<boolean>(true);
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
   const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
 
@@ -57,6 +65,30 @@ export default function SettingsScreen() {
     }
   };
 
+  const loadAutoTimersEnabled = async () => {
+    try {
+      const enabled = await getAutoRestTimersEnabled();
+      setAutoTimersEnabledState(enabled);
+    } catch (error) {
+      console.error('Error loading auto timers enabled:', error);
+      setAutoTimersEnabledState(true);
+    } finally {
+      setAutoTimersLoading(false);
+    }
+  };
+
+  const loadAutoPbEnabled = async () => {
+    try {
+      const enabled = await getAutoPbDetectionInProgramsEnabled();
+      setAutoPbEnabledState(enabled);
+    } catch (error) {
+      console.error('Error loading auto PB detection enabled:', error);
+      setAutoPbEnabledState(true);
+    } finally {
+      setAutoPbLoading(false);
+    }
+  };
+
   const persistWeightUnit = async (u: WeightUnit) => {
     setWeightUnitState(u);
     try {
@@ -68,10 +100,34 @@ export default function SettingsScreen() {
     }
   };
 
+  const persistAutoTimersEnabled = async (next: boolean) => {
+    setAutoTimersEnabledState(next);
+    try {
+      await setAutoRestTimersEnabled(next);
+    } catch (error) {
+      console.error('Error saving auto timers enabled:', error);
+      const prev = await getAutoRestTimersEnabled();
+      setAutoTimersEnabledState(prev);
+    }
+  };
+
+  const persistAutoPbEnabled = async (next: boolean) => {
+    setAutoPbEnabledState(next);
+    try {
+      await setAutoPbDetectionInProgramsEnabled(next);
+    } catch (error) {
+      console.error('Error saving auto PB detection enabled:', error);
+      const prev = await getAutoPbDetectionInProgramsEnabled();
+      setAutoPbEnabledState(prev);
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       checkProgramStatus();
       loadWeightUnit();
+      loadAutoTimersEnabled();
+      loadAutoPbEnabled();
       refresh(); // Refresh subscription status when screen is focused
     }, [refresh])
   );
@@ -269,6 +325,40 @@ export default function SettingsScreen() {
             </View>
           </View>
 
+          <View style={styles.settingItem}>
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Auto rest timers</Text>
+              <Text style={styles.settingDescription}>
+                When enabled, completing a set will automatically start (or restart) the rest timer. The timer closes after the last set.
+              </Text>
+            </View>
+            <Switch
+              value={autoTimersEnabled}
+              onValueChange={(next) => {
+                if (autoTimersLoading) return;
+                persistAutoTimersEnabled(next);
+              }}
+              disabled={autoTimersLoading}
+            />
+          </View>
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Auto-detect PBs (Programs)</Text>
+              <Text style={styles.settingDescription}>
+                When enabled, if we detect a new PB we’ll prompt you to update personal bests after sets during program workouts.
+              </Text>
+            </View>
+            <Switch
+              value={autoPbEnabled}
+              onValueChange={(next) => {
+                if (autoPbLoading) return;
+                persistAutoPbEnabled(next);
+              }}
+              disabled={autoPbLoading}
+            />
+          </View>
+
           {Platform.OS === 'ios' && (
             <View style={styles.settingItem}>
               <View style={styles.settingContent}>
@@ -303,6 +393,16 @@ export default function SettingsScreen() {
               />
             </View>
           )}
+
+          <TouchableOpacity style={styles.settingItem} onPress={() => router.push('/patch-notes')}>
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Patch Notes</Text>
+              <Text style={styles.settingDescription}>
+                See what’s new in the latest versions.
+              </Text>
+            </View>
+            <Text style={styles.settingArrow}>→</Text>
+          </TouchableOpacity>
 
           <TouchableOpacity
             style={[

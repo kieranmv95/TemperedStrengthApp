@@ -100,8 +100,14 @@ export const exerciseCardStyles = StyleSheet.create({
   inputGroup: {
     flex: 1,
   },
-  inputGroupWithCheckmark: {
+  inputGroupRepsOrTime: {
     flex: 1,
+  },
+  inputGroupGoldButton: {
+    backgroundColor: Colors.accent,
+  },
+  inputGroupWithCheckmark: {
+    flex: 0.5,
     flexDirection: 'row',
     alignItems: 'flex-end',
     gap: Spacing.md,
@@ -121,8 +127,38 @@ export const exerciseCardStyles = StyleSheet.create({
     color: Colors.textPrimary,
     fontSize: FontSize.xxl,
     fontWeight: '600',
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: Colors.borderSubtle,
+  },
+  inputFlex: {
+    flex: 1,
+  },
+  inputWithLeadingButtonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  leadingIconButton: {
+    width: 48,
+    height: 48,
+    borderRadius: BorderRadius.lg,
+    backgroundColor: Colors.backgroundElevated,
+    borderWidth: 2,
+    borderColor: Colors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  leadingIconButtonDisabled: {
+    opacity: 0.5,
+  },
+  inputButton: {
+    borderColor: Colors.accent,
+  },
+  inputButtonText: {
+    paddingVertical: 1,
+    color: Colors.accent,
+    fontWeight: '700',
+    textAlign: 'center',
   },
   inputCompleted: {
     borderColor: Colors.accent,

@@ -77,6 +77,9 @@ const COMPLETED_SESSIONS_KEY = 'completed_sessions';
 const STANDALONE_WORKOUT_LOGS_KEY = 'standalone_workout_logs';
 const PERSONAL_BESTS_KEY = 'personal_bests';
 const WEIGHT_UNIT_KEY = 'weight_unit';
+const AUTO_REST_TIMERS_ENABLED_KEY = 'auto_rest_timers_enabled';
+const AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY =
+  'auto_pb_detection_in_programs_enabled';
 
 export const getWeightUnit = async (): Promise<WeightUnit> => {
   try {
@@ -93,6 +96,57 @@ export const setWeightUnit = async (unit: WeightUnit): Promise<void> => {
     await syncSetItem(WEIGHT_UNIT_KEY, unit);
   } catch (error) {
     console.error('Error setting weight unit:', error);
+    throw error;
+  }
+};
+
+export const getAutoRestTimersEnabled = async (): Promise<boolean> => {
+  try {
+    const raw = await AsyncStorage.getItem(AUTO_REST_TIMERS_ENABLED_KEY);
+    if (raw === null) return true;
+    return raw === 'true';
+  } catch (error) {
+    console.error('Error getting auto rest timers enabled:', error);
+    return true;
+  }
+};
+
+export const setAutoRestTimersEnabled = async (enabled: boolean): Promise<void> => {
+  try {
+    await syncSetItem(AUTO_REST_TIMERS_ENABLED_KEY, enabled ? 'true' : 'false');
+  } catch (error) {
+    console.error('Error setting auto rest timers enabled:', error);
+    throw error;
+  }
+};
+
+/**
+ * Controls whether the app should automatically detect potential personal bests
+ * during program workouts and show the “New personal best” prompt.
+ */
+export const getAutoPbDetectionInProgramsEnabled = async (): Promise<boolean> => {
+  try {
+    const raw = await AsyncStorage.getItem(
+      AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY
+    );
+    if (raw === null) return true;
+    return raw === 'true';
+  } catch (error) {
+    console.error('Error getting auto PB detection in programs enabled:', error);
+    return true;
+  }
+};
+
+export const setAutoPbDetectionInProgramsEnabled = async (
+  enabled: boolean
+): Promise<void> => {
+  try {
+    await syncSetItem(
+      AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY,
+      enabled ? 'true' : 'false'
+    );
+  } catch (error) {
+    console.error('Error setting auto PB detection in programs enabled:', error);
     throw error;
   }
 };
