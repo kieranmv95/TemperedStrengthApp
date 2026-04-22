@@ -7,11 +7,11 @@ import { getProgramById } from '@/src/utils/program';
 import {
   clearProgramData,
   getActiveProgramId,
-  getAutoRestTimersEnabled,
   getAutoPbDetectionInProgramsEnabled,
+  getAutoRestTimersEnabled,
   getWeightUnit,
-  setAutoRestTimersEnabled,
   setAutoPbDetectionInProgramsEnabled,
+  setAutoRestTimersEnabled,
   setWeightUnit,
   type WeightUnit,
 } from '@/src/utils/storage';
@@ -346,7 +346,7 @@ export default function SettingsScreen() {
             <View style={styles.settingContent}>
               <Text style={styles.settingTitle}>Auto-detect PBs (Programs)</Text>
               <Text style={styles.settingDescription}>
-                When enabled, we’ll prompt you to update personal bests after sets during program workouts.
+                When enabled, if we detect a new PB we’ll prompt you to update personal bests after sets during program workouts.
               </Text>
             </View>
             <Switch
