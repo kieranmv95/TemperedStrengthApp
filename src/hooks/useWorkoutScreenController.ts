@@ -401,6 +401,7 @@ export function useWorkoutScreenController() {
           slotIndex: payload.slotIndex,
           exerciseId: payload.exerciseId,
           restTimeSeconds: payload.restTimeSeconds,
+          originalRestTimeSeconds: payload.restTimeSeconds,
           startedAt,
           status: 'running',
         };
@@ -448,9 +449,56 @@ export function useWorkoutScreenController() {
       dayIndex: restTimer.dayIndex,
       slotIndex: restTimer.slotIndex,
       exerciseId: restTimer.exerciseId,
-      restTimeSeconds: restTimer.restTimeSeconds,
+      restTimeSeconds: restTimer.originalRestTimeSeconds ?? restTimer.restTimeSeconds,
     });
   }, [restTimer, handleRestStart]);
+
+  const handleRestAdjust = useCallback(
+    async (deltaSeconds: number) => {
+      if (!restTimer || restTimer.status !== 'running') return;
+
+      try {
+        const now = Date.now();
+        const currentEndTime = restTimer.startedAt + restTimer.restTimeSeconds * 1000;
+        const currentRemainingSeconds = Math.max(
+          0,
+          Math.ceil((currentEndTime - now) / 1000)
+        );
+
+        const nextRemainingSeconds = currentRemainingSeconds + deltaSeconds;
+
+        if (nextRemainingSeconds <= 0) {
+          await cancelTimerNotification();
+          const completedTimer: RestTimerState = {
+            ...restTimer,
+            status: 'completed',
+            completedAt: now,
+          };
+          setRestTimer(completedTimer);
+          await saveRestTimer(completedTimer);
+          return;
+        }
+
+        const desiredEndTime = now + nextRemainingSeconds * 1000;
+        const nextRestTimeSeconds = Math.max(
+          1,
+          Math.ceil((desiredEndTime - restTimer.startedAt) / 1000)
+        );
+
+        const updatedTimer: RestTimerState = {
+          ...restTimer,
+          restTimeSeconds: nextRestTimeSeconds,
+        };
+
+        setRestTimer(updatedTimer);
+        await scheduleTimerNotification(nextRemainingSeconds);
+        await saveRestTimer(updatedTimer);
+      } catch (error) {
+        console.error('Error adjusting rest timer:', error);
+      }
+    },
+    [restTimer, cancelTimerNotification, scheduleTimerNotification]
+  );
 
   const getExerciseSlots = useCallback(() => {
     return slots.filter(
@@ -640,6 +688,7 @@ export function useWorkoutScreenController() {
     handleRestDismiss,
     handleRestComplete,
     handleRestRestart,
+    handleRestAdjust,
     getExerciseSlots,
     handleNotesChange,
     handleApplyCopiedWorkoutNotes,

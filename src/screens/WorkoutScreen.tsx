@@ -102,6 +102,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           onDismiss={c.handleRestDismiss}
           onComplete={c.handleRestComplete}
           onRestart={c.handleRestRestart}
+          onAdjust={c.handleRestAdjust}
         />
       )}
 

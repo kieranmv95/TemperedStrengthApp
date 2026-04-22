@@ -40,6 +40,12 @@ export type RestTimerState = {
   slotIndex: number;
   exerciseId: number | null;
   restTimeSeconds: number;
+  /**
+   * Duration the timer was originally started with.
+   * Used so "Restart" always resets to the original time even if the user adjusts
+   * the timer mid-countdown.
+   */
+  originalRestTimeSeconds?: number;
   startedAt: number;
   status: 'running' | 'completed';
   completedAt?: number;

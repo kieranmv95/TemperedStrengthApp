@@ -52,10 +52,29 @@ export const workoutTimerBarStyles = StyleSheet.create({
   iconButton: {
     backgroundColor: Colors.accent,
     borderRadius: BorderRadius.lg,
-    padding: Spacing.md,
-    minWidth: 32,
-    minHeight: 32,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  adjustButton: {
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  adjustButtonText: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.md,
+    fontWeight: '800',
+    fontVariant: ['tabular-nums'],
+    letterSpacing: 0.2,
+  },
+  buttonSize: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 42,
+    height: 42,
   },
 });
