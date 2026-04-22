@@ -8,8 +8,10 @@ import {
   clearProgramData,
   getActiveProgramId,
   getAutoRestTimersEnabled,
+  getAutoPbDetectionInProgramsEnabled,
   getWeightUnit,
   setAutoRestTimersEnabled,
+  setAutoPbDetectionInProgramsEnabled,
   setWeightUnit,
   type WeightUnit,
 } from '@/src/utils/storage';
@@ -27,6 +29,8 @@ export default function SettingsScreen() {
   const [weightUnitLoading, setWeightUnitLoading] = useState<boolean>(true);
   const [autoTimersEnabled, setAutoTimersEnabledState] = useState<boolean>(true);
   const [autoTimersLoading, setAutoTimersLoading] = useState<boolean>(true);
+  const [autoPbEnabled, setAutoPbEnabledState] = useState<boolean>(true);
+  const [autoPbLoading, setAutoPbLoading] = useState<boolean>(true);
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
   const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
 
@@ -73,6 +77,18 @@ export default function SettingsScreen() {
     }
   };
 
+  const loadAutoPbEnabled = async () => {
+    try {
+      const enabled = await getAutoPbDetectionInProgramsEnabled();
+      setAutoPbEnabledState(enabled);
+    } catch (error) {
+      console.error('Error loading auto PB detection enabled:', error);
+      setAutoPbEnabledState(true);
+    } finally {
+      setAutoPbLoading(false);
+    }
+  };
+
   const persistWeightUnit = async (u: WeightUnit) => {
     setWeightUnitState(u);
     try {
@@ -95,11 +111,23 @@ export default function SettingsScreen() {
     }
   };
 
+  const persistAutoPbEnabled = async (next: boolean) => {
+    setAutoPbEnabledState(next);
+    try {
+      await setAutoPbDetectionInProgramsEnabled(next);
+    } catch (error) {
+      console.error('Error saving auto PB detection enabled:', error);
+      const prev = await getAutoPbDetectionInProgramsEnabled();
+      setAutoPbEnabledState(prev);
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       checkProgramStatus();
       loadWeightUnit();
       loadAutoTimersEnabled();
+      loadAutoPbEnabled();
       refresh(); // Refresh subscription status when screen is focused
     }, [refresh])
   );
@@ -311,6 +339,23 @@ export default function SettingsScreen() {
                 persistAutoTimersEnabled(next);
               }}
               disabled={autoTimersLoading}
+            />
+          </View>
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Auto-detect PBs (Programs)</Text>
+              <Text style={styles.settingDescription}>
+                When enabled, we’ll prompt you to update personal bests after sets during program workouts.
+              </Text>
+            </View>
+            <Switch
+              value={autoPbEnabled}
+              onValueChange={(next) => {
+                if (autoPbLoading) return;
+                persistAutoPbEnabled(next);
+              }}
+              disabled={autoPbLoading}
             />
           </View>
 

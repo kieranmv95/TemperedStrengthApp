@@ -15,6 +15,7 @@ import {
   clearLoggedSet,
   getCustomSetCount,
   getLoggedSets,
+  getAutoPbDetectionInProgramsEnabled,
   getPersonalBestsForExercise,
   getRemainingSwapCount,
   saveCustomSetCount,
@@ -235,6 +236,12 @@ export function useExerciseCardState({
       }
       clearPbDebounce(setIndex);
       pbDebounceRef.current[setIndex] = setTimeout(async () => {
+        if (dayIndex !== null) {
+          const enabled = await getAutoPbDetectionInProgramsEnabled();
+          if (!enabled) {
+            return;
+          }
+        }
         if (setStatesRef.current.get(setIndex) !== 'completed') {
           return;
         }
@@ -270,7 +277,7 @@ export function useExerciseCardState({
         }
       }, 250);
     },
-    [exerciseId, exerciseLoggingType, clearPbDebounce]
+    [exerciseId, exerciseLoggingType, clearPbDebounce, dayIndex]
   );
 
   const dismissPbPrompt = useCallback(() => {
