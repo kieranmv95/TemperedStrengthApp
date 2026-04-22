@@ -12,8 +12,6 @@ const mockExercises = [
     pattern: 'push',
     muscle: 'chest',
     equipment: 'barbell',
-    created_at: '2025-01-01',
-    updated_at: '2025-01-01',
     logging_type: 'reps_and_weight' as const,
   },
   {
@@ -22,8 +20,6 @@ const mockExercises = [
     pattern: 'push',
     muscle: 'chest',
     equipment: 'dumbbell',
-    created_at: '2025-01-01',
-    updated_at: '2025-01-01',
     logging_type: 'reps_and_weight' as const,
   },
   {
@@ -32,8 +28,6 @@ const mockExercises = [
     pattern: 'push',
     muscle: 'chest',
     equipment: 'machine',
-    created_at: '2025-01-01',
-    updated_at: '2025-01-01',
     logging_type: 'reps_and_weight' as const,
   },
   {
@@ -42,8 +36,6 @@ const mockExercises = [
     pattern: 'pull',
     muscle: 'back',
     equipment: 'barbell',
-    created_at: '2025-01-01',
-    updated_at: '2025-01-01',
     logging_type: 'reps_and_weight' as const,
   },
   {
@@ -52,8 +44,6 @@ const mockExercises = [
     pattern: 'push',
     muscle: 'chest',
     equipment: 'barbell',
-    created_at: '2025-01-01',
-    updated_at: '2025-01-01',
     logging_type: 'reps_and_weight' as const,
   },
   {
@@ -62,8 +52,6 @@ const mockExercises = [
     pattern: 'isolation',
     muscle: 'upper chest',
     equipment: 'cable',
-    created_at: '2025-01-01',
-    updated_at: '2025-01-01',
     logging_type: 'reps_and_weight' as const,
   },
 ];

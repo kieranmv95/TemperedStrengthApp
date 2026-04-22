@@ -1,959 +1,668 @@
 [
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Kneel and roll the wheel forward, extending your body, then pull back using your core.",
-    "equipment": "Bodyweight",
-    "id": 15,
-    "logging_type": "reps",
-    "muscle": "Abs",
-    "name": "Ab Wheel Rollout",
-    "pattern": "Core",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit in the machine with pads on your outer thighs and press your legs apart.",
     "equipment": "Machine",
     "id": 83,
     "logging_type": "reps_and_weight",
     "muscle": "Glute Medius",
     "name": "Abductor Machine",
-    "pattern": "Isolation",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Isolation"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit in the machine with pads on your inner thighs and squeeze your legs together.",
     "equipment": "Machine",
     "id": 82,
     "logging_type": "reps_and_weight",
     "muscle": "Adductors",
     "name": "Adductor Machine",
-    "pattern": "Knee Dominant",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Knee Dominant"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Start with palms facing you at shoulder height, rotate outward as you press overhead.",
     "equipment": "Dumbbell",
     "id": 43,
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders",
     "name": "Arnold Press",
-    "pattern": "Vertical Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Vertical Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Stand on the platform, grip the handles and pull yourself up with the machine assisting.",
     "equipment": "Machine",
     "id": 84,
     "logging_type": "reps_and_weight",
     "muscle": "Back",
     "name": "Assisted Pull-up Machine",
-    "pattern": "Vertical Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Vertical Pull"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Bar on upper back, squat down until thighs are parallel, then drive back up.",
     "equipment": "Barbell",
     "id": 4,
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps",
     "name": "Barbell Back Squat",
-    "pattern": "Knee Dominant",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Knee Dominant"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Lie flat, grip the bar slightly wider than shoulder-width, lower to chest and press up.",
     "equipment": "Barbell",
     "id": 1,
     "logging_type": "reps_and_weight",
     "muscle": "Chest",
     "name": "Barbell Bench Press",
-    "pattern": "Horizontal Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Stand over the bar, hinge at the hips, grip and drive through your feet to stand up.",
     "equipment": "Barbell",
     "id": 14,
     "logging_type": "reps_and_weight",
     "muscle": "Posterior Chain",
     "name": "Barbell Deadlift",
-    "pattern": "Hip Hinge",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Hip Hinge"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Unrack the bar at shoulder height and press directly overhead to full lockout.",
     "equipment": "Barbell",
     "id": 26,
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders",
     "name": "Barbell Overhead Press",
-    "pattern": "Vertical Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Vertical Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Hinge forward, pull the bar to your lower chest, squeezing your shoulder blades together.",
     "equipment": "Barbell",
     "id": 7,
     "logging_type": "reps_and_weight",
     "muscle": "Back",
     "name": "Barbell Row",
-    "pattern": "Horizontal Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Pull"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Stand with feet shoulder-width apart, squat down until thighs are parallel, then stand up.",
-    "equipment": "Bodyweight",
-    "id": 21,
-    "logging_type": "reps",
-    "muscle": "Quadriceps",
-    "name": "Bodyweight Squats",
-    "pattern": "Knee Dominant",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Rear foot elevated on a bench, lower into a lunge, then drive up through the front leg.",
     "equipment": "Dumbbell",
     "id": 6,
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps",
     "name": "Bulgarian Split Squat",
-    "pattern": "Knee Dominant",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Knee Dominant"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Set cables high, step forward and press handles down and together in an arc.",
     "equipment": "Cable",
     "id": 79,
     "logging_type": "reps_and_weight",
     "muscle": "Lower Chest",
     "name": "Cable Crossover (High to Low)",
-    "pattern": "Horizontal Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Kneel facing a high cable, grip the rope and crunch down by flexing your abs.",
     "equipment": "Cable",
     "id": 48,
     "logging_type": "reps_and_weight",
     "muscle": "Abs",
     "name": "Cable Crunch",
-    "pattern": "Core",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Core"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Stand between cables set at chest height and bring handles together with a slight bend in your elbows.",
     "equipment": "Cable",
     "id": 36,
     "logging_type": "reps_and_weight",
     "muscle": "Chest",
     "name": "Cable Flyes",
-    "pattern": "Horizontal Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Place the balls of your feet on the platform and raise your heels as high as possible.",
     "equipment": "Machine",
     "id": 55,
     "logging_type": "reps_and_weight",
     "muscle": "Calves",
     "name": "Calf Raises",
-    "pattern": "Isolation",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Isolation"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit in the machine, grip the handles and press forward until your arms are extended.",
     "equipment": "Machine",
     "id": 16,
     "logging_type": "reps_and_weight",
     "muscle": "Chest",
     "name": "Chest Press Machine",
-    "pattern": "Horizontal Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Hang with an underhand grip and pull your chin above the bar.",
-    "equipment": "Bodyweight",
-    "id": 12,
-    "logging_type": "reps",
-    "muscle": "Back",
-    "name": "Chin-ups",
-    "pattern": "Vertical Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Lie flat, grip the bar with hands closer than shoulder-width apart, lower to chest and press up.",
     "equipment": "Barbell",
     "id": 87,
     "logging_type": "reps_and_weight",
     "muscle": "Triceps/Chest",
     "name": "Close-Grip Bench Press",
-    "pattern": "Horizontal Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Pull the bar from the floor to your shoulders, then drive it overhead in one sequence.",
     "equipment": "Barbell",
     "id": 63,
     "logging_type": "reps_and_weight",
     "muscle": "Full Body",
     "name": "Clean & Jerk",
-    "pattern": "Olympic (Clean & Jerk)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Clean & Jerk)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Pull the bar explosively from the floor to chin height using hip drive and a high elbow pull.",
     "equipment": "Barbell",
     "id": 69,
     "logging_type": "reps_and_weight",
     "muscle": "Back/Traps",
     "name": "Clean High Pull",
-    "pattern": "Olympic (Clean & Jerk)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Clean & Jerk)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Hold a dumbbell at chest height with both hands and squat to depth with an upright torso.",
     "equipment": "Dumbbell",
     "id": 74,
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps/Core",
     "name": "DB Goblet Front Squat",
-    "pattern": "Olympic (Clean & Jerk)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Clean & Jerk)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Hold a dumbbell at chest height with both hands and squat down between your legs.",
     "equipment": "Dumbbell",
     "id": 5,
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps",
     "name": "DB Goblet Squat",
-    "pattern": "Knee Dominant",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Knee Dominant"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Swing a dumbbell from between your legs and pull it overhead in one smooth motion.",
     "equipment": "Dumbbell",
     "id": 77,
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders/Traps",
     "name": "DB Muscle Snatch",
-    "pattern": "Olympic (Snatch)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Snatch)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Explosively pull a dumbbell from the floor and catch it at shoulder height.",
     "equipment": "Dumbbell",
     "id": 72,
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Back",
     "name": "DB Power Clean",
-    "pattern": "Olympic (Clean & Jerk)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Clean & Jerk)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Dip slightly at the knees, then drive the dumbbells overhead using leg and shoulder power.",
     "equipment": "Dumbbell",
     "id": 73,
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders/Legs",
     "name": "DB Push Press",
-    "pattern": "Olympic (Clean & Jerk)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Clean & Jerk)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Hold dumbbells at your hips, hinge forward with a slight knee bend, then return to standing.",
     "equipment": "Dumbbell",
     "id": 23,
     "logging_type": "reps_and_weight",
     "muscle": "Hamstrings",
     "name": "DB Romanian Deadlift",
-    "pattern": "Hip Hinge",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Hip Hinge"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Explosively pull a dumbbell from the floor and catch it overhead with a locked arm.",
     "equipment": "Dumbbell",
     "id": 71,
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Shoulders",
     "name": "DB Snatch",
-    "pattern": "Olympic (Snatch)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Snatch)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Hold dumbbells at your sides and lower into a split stance with a jerk-width foot position.",
     "equipment": "Dumbbell",
     "id": 76,
     "logging_type": "reps_and_weight",
     "muscle": "Legs/Balance",
     "name": "DB Split Squat (Jerk Stance)",
-    "pattern": "Olympic (Clean & Jerk)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Clean & Jerk)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Grip parallel bars, lower your body until your upper arms are parallel, then press up.",
-    "equipment": "Bodyweight",
-    "id": 17,
-    "logging_type": "reps",
-    "muscle": "Triceps/Chest",
-    "name": "Dips",
-    "pattern": "Horizontal Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Lie flat with a dumbbell in each hand, lower to chest level, then press up.",
     "equipment": "Dumbbell",
     "id": 2,
     "logging_type": "reps_and_weight",
     "muscle": "Chest",
     "name": "Dumbbell Bench Press",
-    "pattern": "Horizontal Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Stand with dumbbells at your sides and curl them up by bending at the elbow.",
     "equipment": "Dumbbell",
     "id": 32,
     "logging_type": "reps_and_weight",
     "muscle": "Biceps",
     "name": "Dumbbell Bicep Curls",
-    "pattern": "Isolation",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Isolation"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Place one hand and knee on a bench, pull the dumbbell to your hip with the other arm.",
     "equipment": "Dumbbell",
     "id": 8,
     "logging_type": "reps_and_weight",
     "muscle": "Back",
     "name": "Dumbbell Row",
-    "pattern": "Horizontal Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Pull"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit or stand with dumbbells at shoulder height and press directly overhead.",
     "equipment": "Dumbbell",
     "id": 27,
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders",
     "name": "Dumbbell Shoulder Press",
-    "pattern": "Vertical Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Vertical Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Pull a rope attachment towards your face, separating the ends and squeezing your rear delts.",
     "equipment": "Cable",
     "id": 35,
     "logging_type": "reps_and_weight",
     "muscle": "Rear Delts",
     "name": "Face Pulls",
-    "pattern": "Isolation",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Isolation"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Lie on the floor with dumbbells, press up from the bottom position with elbows touching the ground.",
     "equipment": "Dumbbell",
     "id": 37,
     "logging_type": "reps_and_weight",
     "muscle": "Triceps/Chest",
     "name": "Floor Press",
-    "pattern": "Horizontal Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Bar resting on the front of your shoulders, squat to depth keeping your torso upright.",
     "equipment": "Barbell",
     "id": 68,
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps/Core",
     "name": "Front Squat",
-    "pattern": "Olympic (Clean & Jerk)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Clean & Jerk)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Pull the bar from the floor and catch it overhead in a full squat position.",
     "equipment": "Barbell",
     "id": 57,
     "logging_type": "reps_and_weight",
     "muscle": "Full Body",
     "name": "Full Snatch",
-    "pattern": "Olympic (Snatch)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Snatch)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Lie on your back with knees bent and drive your hips up by squeezing your glutes.",
-    "equipment": "Bodyweight",
-    "id": 25,
-    "logging_type": "reps",
-    "muscle": "Glutes",
-    "name": "Glute Bridge",
-    "pattern": "Hip Hinge",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Bar on your upper back, hinge forward at the hips keeping your legs nearly straight, then return.",
     "equipment": "Barbell",
     "id": 42,
     "logging_type": "reps_and_weight",
     "muscle": "Hamstrings/Lower Back",
     "name": "Good Mornings",
-    "pattern": "Hip Hinge",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Hip Hinge"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Position your feet on the platform, lower the sled by bending your knees, then press back up.",
     "equipment": "Machine",
     "id": 20,
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps",
     "name": "Hack Squat",
-    "pattern": "Knee Dominant",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Knee Dominant"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Hold dumbbells with a neutral grip and curl them up, keeping your palms facing each other.",
     "equipment": "Dumbbell",
     "id": 51,
     "logging_type": "reps_and_weight",
     "muscle": "Biceps/Forearms",
     "name": "Hammer Curls",
-    "pattern": "Isolation",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Isolation"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Start with the bar at hip height, explosively extend and catch it at your shoulders.",
     "equipment": "Barbell",
     "id": 65,
     "logging_type": "reps_and_weight",
     "muscle": "Full Body",
     "name": "Hang Clean",
-    "pattern": "Olympic (Clean & Jerk)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Clean & Jerk)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Start with the bar at hip height, explosively extend and catch it overhead.",
     "equipment": "Barbell",
     "id": 59,
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Traps",
     "name": "Hang Snatch",
-    "pattern": "Olympic (Snatch)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Snatch)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Hang from a bar and raise your legs until they are parallel to the ground or higher.",
-    "equipment": "Bodyweight",
-    "id": 31,
-    "logging_type": "reps",
-    "muscle": "Abs",
-    "name": "Hanging Leg Raise",
-    "pattern": "Core",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit with your upper back against a bench, bar over your hips, and drive upward by squeezing your glutes.",
     "equipment": "Barbell",
     "id": 41,
     "logging_type": "reps_and_weight",
     "muscle": "Glutes",
     "name": "Hip Thrust",
-    "pattern": "Hip Hinge",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Hip Hinge"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Lie on an incline bench with dumbbells and press them up from chest level.",
     "equipment": "Dumbbell",
     "id": 18,
     "logging_type": "reps_and_weight",
     "muscle": "Upper Chest",
     "name": "Incline DB Press",
-    "pattern": "Horizontal Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Hang beneath a bar set at waist height and pull your chest up to the bar.",
-    "equipment": "Bodyweight",
-    "id": 9,
-    "logging_type": "reps",
-    "muscle": "Back",
-    "name": "Inverted Row",
-    "pattern": "Horizontal Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Hinge at the hips and swing the kettlebell to shoulder height using hip drive.",
     "equipment": "Kettlebell",
     "id": 24,
     "logging_type": "reps_and_weight",
     "muscle": "Glutes",
     "name": "Kettlebell Swing",
-    "pattern": "Hip Hinge",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Hip Hinge"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit and pull the bar down to your upper chest, squeezing your lats at the bottom.",
     "equipment": "Machine",
     "id": 11,
     "logging_type": "reps_and_weight",
     "muscle": "Back",
     "name": "Lat Pulldown",
-    "pattern": "Vertical Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Vertical Pull"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Stand and raise dumbbells out to your sides until your arms are parallel to the floor.",
     "equipment": "Dumbbell",
     "id": 34,
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders",
     "name": "Lateral Raises",
-    "pattern": "Isolation",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Isolation"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Lie face down or sit on the machine and curl your heels towards your glutes.",
     "equipment": "Machine",
     "id": 40,
     "logging_type": "reps_and_weight",
     "muscle": "Hamstrings",
     "name": "Leg Curl",
-    "pattern": "Hip Hinge",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Hip Hinge"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit on the machine and extend your legs until they are straight, squeezing your quads at the top.",
     "equipment": "Machine",
     "id": 39,
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps",
     "name": "Leg Extensions",
-    "pattern": "Knee Dominant",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Knee Dominant"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit in the machine, place your feet on the platform and press the sled away by extending your legs.",
     "equipment": "Machine",
     "id": 19,
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps",
     "name": "Leg Press",
-    "pattern": "Knee Dominant",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Knee Dominant"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Set the cable low, grip with one hand and row towards your hip, squeezing your lat.",
     "equipment": "Cable",
     "id": 85,
     "logging_type": "reps_and_weight",
     "muscle": "Lats/Mid-Back",
     "name": "Low Row Cable (Single Arm)",
-    "pattern": "Horizontal Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Pull"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Lie face down on the machine and curl your heels towards your glutes.",
     "equipment": "Machine",
     "id": 81,
     "logging_type": "reps_and_weight",
     "muscle": "Hamstrings",
     "name": "Lying Leg Curl Machine",
-    "pattern": "Hip Hinge",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Hip Hinge"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit in the machine, grip the handles and press overhead to full extension.",
     "equipment": "Machine",
     "id": 28,
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders",
     "name": "Machine Shoulder Press",
-    "pattern": "Vertical Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Vertical Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Pull the bar from the floor to your shoulders using a slow, controlled turnover without dropping under.",
     "equipment": "Barbell",
     "id": 70,
     "logging_type": "reps_and_weight",
     "muscle": "Upper Body/Back",
     "name": "Muscle Clean",
-    "pattern": "Olympic (Clean & Jerk)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Clean & Jerk)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Hold the bar overhead with a wide grip and squat to full depth while keeping the bar stable.",
     "equipment": "Barbell",
     "id": 61,
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps/Core",
     "name": "Overhead Squat",
-    "pattern": "Olympic (Snatch)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Snatch)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Hold a dumbbell overhead with both hands and lower it behind your head, then extend back up.",
     "equipment": "Dumbbell",
     "id": 53,
     "logging_type": "reps_and_weight",
     "muscle": "Triceps",
     "name": "Overhead Tricep Extension",
-    "pattern": "Isolation",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Isolation"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit in the machine and bring the pads together in front of your chest, squeezing your pecs.",
     "equipment": "Machine",
     "id": 78,
     "logging_type": "reps_and_weight",
     "muscle": "Chest",
     "name": "Pec Deck Machine",
-    "pattern": "Horizontal Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Push"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Start in a push-up position with hips raised high and press your head towards the floor.",
-    "equipment": "Bodyweight",
-    "id": 29,
-    "logging_type": "reps",
-    "muscle": "Shoulders",
-    "name": "Pike Push-ups",
-    "pattern": "Vertical Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Hold a push-up position on your forearms, keeping your body in a straight line.",
-    "equipment": "Bodyweight",
-    "id": 13,
-    "logging_type": "time",
-    "muscle": "Abs",
-    "name": "Plank",
-    "pattern": "Core",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Pull the bar explosively from the floor and catch it at your shoulders without squatting below parallel.",
     "equipment": "Barbell",
     "id": 64,
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Back",
     "name": "Power Clean",
-    "pattern": "Olympic (Clean & Jerk)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Clean & Jerk)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Pull the bar explosively from the floor and catch it overhead without squatting below parallel.",
     "equipment": "Barbell",
     "id": 58,
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Shoulders",
     "name": "Power Snatch",
-    "pattern": "Olympic (Snatch)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Snatch)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Rest your upper arms on the pad, curl the bar up by bending at the elbows.",
     "equipment": "Barbell",
     "id": 52,
     "logging_type": "reps_and_weight",
     "muscle": "Biceps",
     "name": "Preacher Curls",
-    "pattern": "Isolation",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Isolation"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Hang with an overhand grip and pull your chin above the bar.",
-    "equipment": "Bodyweight",
-    "id": 10,
-    "logging_type": "reps",
-    "muscle": "Back",
-    "name": "Pull-ups",
-    "pattern": "Vertical Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Dip slightly at the knees, then drive the bar overhead and catch with straight arms.",
     "equipment": "Barbell",
     "id": 67,
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders/Legs",
     "name": "Push Jerk",
-    "pattern": "Olympic (Clean & Jerk)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Clean & Jerk)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Place your hands shoulder-width apart on the floor, lower your chest down, then push back up.",
-    "equipment": "Bodyweight",
-    "id": 3,
-    "logging_type": "reps",
-    "muscle": "Chest",
-    "name": "Push-ups",
-    "pattern": "Horizontal Push",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Bend forward with dumbbells and raise them out to the sides, squeezing your rear delts.",
     "equipment": "Dumbbell",
     "id": 56,
     "logging_type": "reps_and_weight",
     "muscle": "Rear Delts",
     "name": "Reverse Flyes",
-    "pattern": "Isolation",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Isolation"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Hold the bar at your hips, hinge forward with a slight knee bend, then return to standing.",
     "equipment": "Barbell",
     "id": 22,
     "logging_type": "reps_and_weight",
     "muscle": "Hamstrings",
     "name": "Romanian Deadlift",
-    "pattern": "Hip Hinge",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Hip Hinge"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit with knees bent, lean back slightly and rotate a weight from side to side.",
     "equipment": "Dumbbell",
     "id": 49,
     "logging_type": "reps_and_weight",
     "muscle": "Obliques",
     "name": "Russian Twists",
-    "pattern": "Core",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Core"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit upright, pull the handle to your lower chest and squeeze your shoulder blades together.",
     "equipment": "Machine",
     "id": 30,
     "logging_type": "reps_and_weight",
     "muscle": "Back",
     "name": "Seated Cable Row",
-    "pattern": "Horizontal Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Pull"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Sit on the machine with the pad behind your ankles and curl your heels towards your glutes.",
     "equipment": "Machine",
     "id": 80,
     "logging_type": "reps_and_weight",
     "muscle": "Hamstrings",
     "name": "Seated Leg Curl Machine",
-    "pattern": "Hip Hinge",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Hip Hinge"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Lie on your side propped on your forearm, keeping your body in a straight line.",
-    "equipment": "Bodyweight",
-    "id": 50,
-    "logging_type": "reps",
-    "muscle": "Obliques",
-    "name": "Side Plank",
-    "pattern": "Core",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Set the cable at mid-height, grip with one hand and row towards your hip.",
     "equipment": "Cable",
     "id": 44,
     "logging_type": "reps_and_weight",
     "muscle": "Back",
     "name": "Single Arm Cable Row",
-    "pattern": "Horizontal Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Pull"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Hold a dumbbell overhead with one arm and squat to depth while keeping the weight stable.",
     "equipment": "Dumbbell",
     "id": 75,
     "logging_type": "reps_and_weight",
     "muscle": "Core/Shoulder Stability",
     "name": "Single Arm DB Overhead Squat",
-    "pattern": "Olympic (Snatch)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Snatch)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Grip the handle with one hand and pull down towards your side, squeezing your lat.",
     "equipment": "Cable",
     "id": 47,
     "logging_type": "reps_and_weight",
     "muscle": "Lats",
     "name": "Single Arm Lat Pulldown",
-    "pattern": "Vertical Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Vertical Pull"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
-    "description": "Lie on your back with knees bent and curl your torso up off the floor.",
-    "equipment": "Bodyweight",
-    "id": 86,
-    "logging_type": "reps",
-    "muscle": "Abs",
-    "name": "Sit-ups",
-    "pattern": "Core",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
-  },
-  {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Lie flat, hold the bar above your chest and lower it towards your forehead, then extend back up.",
     "equipment": "Barbell",
     "id": 54,
     "logging_type": "reps_and_weight",
     "muscle": "Triceps",
     "name": "Skull Crushers",
-    "pattern": "Isolation",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Isolation"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Press the bar overhead from your shoulders and drop under it into a full overhead squat.",
     "equipment": "Barbell",
     "id": 60,
     "logging_type": "reps_and_weight",
     "muscle": "Legs/Shoulders",
     "name": "Snatch Balance",
-    "pattern": "Olympic (Snatch)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Snatch)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Pull the bar explosively from the floor to chin height with a wide grip and high elbows.",
     "equipment": "Barbell",
     "id": 62,
     "logging_type": "reps_and_weight",
     "muscle": "Back/Traps",
     "name": "Snatch High Pull",
-    "pattern": "Olympic (Snatch)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Snatch)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Drive the bar overhead from your shoulders and split your feet into a lunge to catch it.",
     "equipment": "Barbell",
     "id": 66,
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders/Legs",
     "name": "Split Jerk",
-    "pattern": "Olympic (Clean & Jerk)",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Olympic (Clean & Jerk)"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Stand facing a high cable, pull the bar down with straight arms until your hands reach your thighs.",
     "equipment": "Cable",
     "id": 46,
     "logging_type": "reps_and_weight",
     "muscle": "Lats",
     "name": "Straight Arm Pulldown",
-    "pattern": "Vertical Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Vertical Pull"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Straddle the T-bar, hinge forward and pull the handle towards your chest.",
     "equipment": "Barbell",
     "id": 45,
     "logging_type": "reps_and_weight",
     "muscle": "Back",
     "name": "T-Bar Row",
-    "pattern": "Horizontal Pull",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Horizontal Pull"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Face the cable machine, grip the attachment and push down by extending your elbows.",
     "equipment": "Cable",
     "id": 33,
     "logging_type": "reps_and_weight",
     "muscle": "Triceps",
     "name": "Tricep Pushdowns",
-    "pattern": "Isolation",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Isolation"
   },
   {
-    "created_at": "2026-01-09T11:01:39.971167+00:00",
     "description": "Step forward into a lunge, alternating legs with each step while holding dumbbells.",
     "equipment": "Dumbbell",
     "id": 38,
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps/Glutes",
     "name": "Walking Lunges",
-    "pattern": "Knee Dominant",
-    "updated_at": "2026-01-09T11:01:39.971167+00:00"
+    "pattern": "Knee Dominant"
   }
 ]
