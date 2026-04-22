@@ -39,6 +39,7 @@ export function ExerciseCardSetRow({
   const isFailed = setState === 'failed';
   const isRepsOnly = loggingType === 'reps';
   const [showWeight, setShowWeight] = useState(!isRepsOnly);
+  const showOptionalWeightReset = isRepsOnly && showWeight;
 
   useEffect(() => {
     if (!isRepsOnly) {
@@ -60,20 +61,40 @@ export function ExerciseCardSetRow({
                 {isRepsOnly ? 'Added weight' : 'Weight'} ({weightUnit})
               </Text>
             )}
-            <TextInput
-              style={[
-                styles.input,
-                isCompleted && styles.inputCompleted,
-                isFailed && styles.inputFailed,
-              ]}
-              value={weightValue || ''}
-              onChangeText={(value) => onWeightChange(setIndex, value)}
-              keyboardType="numeric"
-              returnKeyType="done"
-              blurOnSubmit={true}
-              placeholder="0"
-              placeholderTextColor={Colors.textPlaceholder}
-            />
+            <View style={showOptionalWeightReset ? styles.inputWithLeadingButtonRow : undefined}>
+              {showOptionalWeightReset && (
+                <TouchableOpacity
+                  onPress={() => {
+                    onWeightChange(setIndex, '');
+                    setShowWeight(false);
+                  }}
+                  disabled={loading}
+                  accessibilityLabel="Remove weight"
+                  style={[
+                    styles.leadingIconButton,
+                    loading && styles.leadingIconButtonDisabled,
+                  ]}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <Ionicons name="trash-outline" size={18} color={Colors.backgroundCard} />
+                </TouchableOpacity>
+              )}
+              <TextInput
+                style={[
+                  styles.input,
+                  showOptionalWeightReset && styles.inputFlex,
+                  isCompleted && styles.inputCompleted,
+                  isFailed && styles.inputFailed,
+                ]}
+                value={weightValue || ''}
+                onChangeText={(value) => onWeightChange(setIndex, value)}
+                keyboardType="numeric"
+                returnKeyType="done"
+                blurOnSubmit={true}
+                placeholder="0"
+                placeholderTextColor={Colors.textPlaceholder}
+              />
+            </View>
           </View>
         ) : (
           <View style={styles.inputGroup}>
@@ -81,10 +102,10 @@ export function ExerciseCardSetRow({
             <TouchableOpacity
               onPress={() => setShowWeight(true)}
               disabled={loading}
-              style={[styles.input, { justifyContent: 'center' }]}
+              style={[styles.input, styles.inputButton, { justifyContent: 'center' }]}
               accessibilityLabel="Add weight"
             >
-              <Text style={{ color: Colors.textPlaceholder, fontWeight: '600' }}>
+              <Text style={styles.inputButtonText}>
                 Add weight
               </Text>
             </TouchableOpacity>
