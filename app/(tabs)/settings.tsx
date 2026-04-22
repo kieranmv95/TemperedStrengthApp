@@ -394,6 +394,16 @@ export default function SettingsScreen() {
             </View>
           )}
 
+          <TouchableOpacity style={styles.settingItem} onPress={() => router.push('/patch-notes')}>
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Patch Notes</Text>
+              <Text style={styles.settingDescription}>
+                See what’s new in the latest versions.
+              </Text>
+            </View>
+            <Text style={styles.settingArrow}>→</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity
             style={[
               styles.settingItem,
