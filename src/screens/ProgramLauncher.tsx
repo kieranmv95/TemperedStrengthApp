@@ -56,6 +56,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 
   type ProgramCategory = Program['categories'][number];
   type ProgramDifficulty = Program['difficulty'];
+  type ProgramGoal = Program['goals'][number];
 
   const [selectedCategory, setSelectedCategory] = useState<
     ProgramCategory | 'all'
@@ -63,6 +64,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     ProgramDifficulty | 'all'
   >('all');
+  const [selectedGoal, setSelectedGoal] = useState<ProgramGoal | 'all'>('all');
 
   useEffect(() => {
     if (!selectedProgram) return;
@@ -124,15 +126,41 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     return order.filter((d) => set.has(d));
   }, []);
 
+  const availableGoals = useMemo((): ProgramGoal[] => {
+    const set = new Set<ProgramGoal>();
+    for (const p of programs) {
+      for (const g of p.goals) set.add(g);
+    }
+
+    // Keep a stable, intentional order (not runtime-dependent).
+    const preferredOrder = (
+      [
+        'cutting',
+        'leaner',
+        'bulking',
+        'hypertrophy',
+        'stronger',
+        'maintenance',
+        'endurance',
+        'athletic',
+        'mobility',
+      ] as const
+    ).filter((g): g is ProgramGoal => set.has(g));
+
+    const rest = [...set].filter((g) => !preferredOrder.includes(g)).sort();
+    return [...preferredOrder, ...rest];
+  }, []);
+
   const filteredPrograms = useMemo(() => {
     return programs.filter((p) => {
       if (selectedCategory !== 'all' && !p.categories.includes(selectedCategory))
         return false;
       if (selectedDifficulty !== 'all' && p.difficulty !== selectedDifficulty)
         return false;
+      if (selectedGoal !== 'all' && !p.goals.includes(selectedGoal)) return false;
       return true;
     });
-  }, [selectedCategory, selectedDifficulty]);
+  }, [selectedCategory, selectedDifficulty, selectedGoal]);
 
   const categoryCount = useMemo(() => {
     const map = new Map<ProgramCategory, number>();
@@ -150,13 +178,27 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const difficultyCount = useMemo(() => {
     const map = new Map<ProgramDifficulty, number>();
     for (const p of programs) {
-      if (selectedCategory !== 'all' && !p.categories.includes(selectedCategory)) {
+      if (selectedCategory !== 'all' && !p.categories.includes(selectedCategory))
         continue;
-      }
+      if (selectedGoal !== 'all' && !p.goals.includes(selectedGoal)) continue;
       map.set(p.difficulty, (map.get(p.difficulty) ?? 0) + 1);
     }
     return map;
-  }, [selectedCategory]);
+  }, [selectedCategory, selectedGoal]);
+
+  const goalCount = useMemo(() => {
+    const map = new Map<ProgramGoal, number>();
+    for (const p of programs) {
+      if (selectedCategory !== 'all' && !p.categories.includes(selectedCategory))
+        continue;
+      if (selectedDifficulty !== 'all' && p.difficulty !== selectedDifficulty)
+        continue;
+      for (const g of p.goals) {
+        map.set(g, (map.get(g) ?? 0) + 1);
+      }
+    }
+    return map;
+  }, [selectedCategory, selectedDifficulty]);
 
   const titleCase = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
@@ -320,6 +362,21 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
       subtitle="Choose your training program to get started"
     >
       <StandardLayout.AdvancedFilters>
+        <View style={styles.glossaryCtaWrap}>
+          <Text style={styles.glossaryCtaTitle}>New to the gym?</Text>
+          <Text style={styles.glossaryCtaSubtitle}>
+            Tap into the glossary any time, no judgement, just clarity.
+          </Text>
+          <View style={styles.glossaryCtaRow}>
+            <Pill
+              label="Gym terminology glossary"
+              isActive={false}
+              onPress={() => router.push('/glossary')}
+              icon="book-outline"
+            />
+          </View>
+        </View>
+
         <View style={styles.filtersWrap}>
           <View style={styles.filtersRow}>
             <Text style={styles.filtersLabel}>Category</Text>
@@ -384,6 +441,50 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
               ))}
             </ScrollView>
           </View>
+
+          <View style={styles.filtersRow}>
+            <Text style={styles.filtersLabel}>Goals</Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.pillsScrollContent}
+            >
+              <Pill
+                label="All"
+                isActive={selectedGoal === 'all'}
+                onPress={() => setSelectedGoal('all')}
+                count={
+                  selectedCategory === 'all' && selectedDifficulty === 'all'
+                    ? programs.length
+                    : programs.filter((p) => {
+                        if (
+                          selectedCategory !== 'all' &&
+                          !p.categories.includes(selectedCategory)
+                        )
+                          return false;
+                        if (
+                          selectedDifficulty !== 'all' &&
+                          p.difficulty !== selectedDifficulty
+                        )
+                          return false;
+                        return true;
+                      }).length
+                }
+              />
+              {availableGoals.map((goal) => {
+                const count = goalCount.get(goal) ?? 0;
+                return (
+                  <Pill
+                    key={goal}
+                    label={titleCase(goal)}
+                    isActive={selectedGoal === goal}
+                    onPress={() => setSelectedGoal(goal)}
+                    count={count}
+                  />
+                );
+              })}
+            </ScrollView>
+          </View>
         </View>
       </StandardLayout.AdvancedFilters>
       <StandardLayout.Body>
@@ -430,8 +531,26 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 };
 
 const styles = StyleSheet.create({
-  filtersWrap: {
+  glossaryCtaWrap: {
     marginTop: Spacing.xxl,
+    marginBottom: Spacing.xl,
+    gap: Spacing.xs,
+  },
+  glossaryCtaTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displaySm,
+    fontWeight: '800',
+  },
+  glossaryCtaSubtitle: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    fontWeight: '500',
+    lineHeight: 20,
+  },
+  glossaryCtaRow: {
+    marginTop: Spacing.md,
+  },
+  filtersWrap: {
     gap: Spacing.xl,
   },
   filtersRow: {

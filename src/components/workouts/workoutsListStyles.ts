@@ -24,14 +24,113 @@ export const workoutsListStyles = StyleSheet.create({
     padding: 0,
   },
   filterScrollContent: {
-    paddingBottom: Spacing.xl,
+    paddingBottom: Spacing.md,
     gap: Spacing.md,
+    paddingRight: Spacing.xxl,
   },
-  lastFilterScrollContent: {
-    paddingBottom: 0,
+  quickFiltersRow: {
+    marginTop: Spacing.sm,
   },
   listContent: {
     paddingTop: Spacing.xxl,
+  },
+  curatedSection: {
+    marginBottom: Spacing.xxl,
+  },
+  curatedSectionHeader: {
+    marginBottom: Spacing.lg,
+  },
+  curatedSectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    marginBottom: Spacing.xs,
+  },
+  curatedSectionKicker: {
+    color: Colors.accent,
+    fontSize: FontSize.sm,
+    fontWeight: '800',
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+  },
+  curatedSectionTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displaySm,
+    fontWeight: '800',
+    marginBottom: 4,
+  },
+  curatedSectionHelper: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+  },
+  curatedScrollContent: {
+    gap: Spacing.lg,
+    paddingRight: Spacing.xl,
+  },
+  curatedCard: {
+    width: 240,
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xl,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+    borderLeftWidth: 2,
+    borderLeftColor: Colors.accent,
+  },
+  curatedCardLocked: {
+    borderColor: Colors.accent,
+    borderWidth: 2,
+    opacity: 0.6,
+  },
+  curatedCardTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: Spacing.md,
+  },
+  curatedCardCategory: {
+    color: Colors.textMuted,
+    fontSize: FontSize.sm,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  curatedCardProBadge: {
+    backgroundColor: Colors.accent,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+  },
+  curatedCardProBadgeText: {
+    color: Colors.textOnAccent,
+    fontSize: FontSize.xxs,
+    fontWeight: '700',
+  },
+  curatedCardTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxl,
+    fontWeight: '800',
+    marginBottom: Spacing.md,
+  },
+  curatedCardMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+  },
+  curatedCardMetaText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '600',
+  },
+  allWorkoutsHeader: {
+    marginTop: Spacing.xxl,
+    marginBottom: Spacing.lg,
+  },
+  allWorkoutsTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displaySm,
+    fontWeight: '800',
   },
   workoutCard: {
     backgroundColor: Colors.backgroundCard,

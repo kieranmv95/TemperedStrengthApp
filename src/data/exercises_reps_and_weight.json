@@ -664,5 +664,32 @@
     "muscle": "Quadriceps/Glutes",
     "name": "Walking Lunges",
     "pattern": "Knee Dominant"
+  },
+  {
+    "description": "Stand on one leg, hold a dumbbell, hinge forward until your torso is parallel, then return.",
+    "equipment": "Dumbbell",
+    "id": 88,
+    "logging_type": "reps_and_weight",
+    "muscle": "Glutes/Hamstrings",
+    "name": "Single-Leg DB Deadlift",
+    "pattern": "Hip Hinge"
+  },
+  {
+    "description": "Hold dumbbells at your sides, step onto a box or bench and drive through the front leg to stand.",
+    "equipment": "Dumbbell",
+    "id": 91,
+    "logging_type": "reps_and_weight",
+    "muscle": "Quadriceps/Glutes",
+    "name": "Weighted Step-ups",
+    "pattern": "Knee Dominant"
+  },
+  {
+    "description": "Hold a heavy dumbbell in each hand at your sides and walk for distance or time, keeping your posture tall.",
+    "equipment": "Dumbbell",
+    "id": 92,
+    "logging_type": "reps_and_weight",
+    "muscle": "Full Body/Core",
+    "name": "DB Farmer Carry",
+    "pattern": "Carry"
   }
 ]

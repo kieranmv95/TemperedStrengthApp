@@ -1,8 +1,9 @@
 import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
 import { initializeRevenueCat } from '@/src/services/revenueCatService';
+import { getOnboarded } from '@/src/utils/storage';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
@@ -12,24 +13,44 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
-  const [isRevenueCatReady, setIsRevenueCatReady] = useState(false);
+  const [isBootReady, setIsBootReady] = useState(false);
+  const [needsOnboarding, setNeedsOnboarding] = useState(false);
 
   useEffect(() => {
-    // Initialize RevenueCat when app starts
-    initializeRevenueCat()
-      .then(() => {
-        setIsRevenueCatReady(true);
-      })
-      .catch((error) => {
+    let cancelled = false;
+    (async () => {
+      try {
+        await initializeRevenueCat();
+      } catch (error) {
         console.error('Failed to initialize RevenueCat:', error);
-        // Still allow app to load even if RevenueCat fails
-        setIsRevenueCatReady(true);
-      });
+      }
+      try {
+        const done = await getOnboarded();
+        if (!cancelled) {
+          setNeedsOnboarding(!done);
+        }
+      } catch (error) {
+        console.error('Failed to read onboarding state:', error);
+      }
+      if (!cancelled) {
+        setIsBootReady(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  // Wait for RevenueCat to initialize before rendering
-  // This ensures the SDK is ready before SubscriptionProvider tries to add listeners
-  if (!isRevenueCatReady) {
+  // Once the Stack is mounted and we know the user has not onboarded,
+  // push them into the onboarding flow. Using router.replace avoids
+  // leaving the tabs in the back-stack.
+  useEffect(() => {
+    if (isBootReady && needsOnboarding) {
+      router.replace('/onboarding');
+    }
+  }, [isBootReady, needsOnboarding]);
+
+  if (!isBootReady) {
     return null;
   }
 
@@ -42,6 +63,14 @@ export default function RootLayout() {
               <Stack.Screen name="glossary" options={{ headerShown: false }} />
               <Stack.Screen name="article/[id]" options={{ headerShown: false }} />
               <Stack.Screen name="patch-notes" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="onboarding"
+                options={{
+                  headerShown: false,
+                  gestureEnabled: false,
+                  animation: 'fade',
+                }}
+              />
               <Stack.Screen
                 name="paywall"
                 options={{ presentation: 'modal', title: 'Upgrade to Pro' }}

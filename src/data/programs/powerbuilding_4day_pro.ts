@@ -83,6 +83,7 @@ export const powerbuilding_4day_pro: Program = {
   description:
     '12-week powerbuilding programme across 3 phases: Accumulation, Intensification, and Realisation. 4 days per week blending heavy compound strength with targeted hypertrophy for both size and strength.',
   categories: ['strength', 'bodybuilding'],
+  goals: ['stronger', 'hypertrophy', 'bulking', 'athletic'],
   difficulty: 'advanced',
   daysSplit: ['mon', 'tue', 'thu', 'fri'],
   averageSessionDuration: '60-75m',

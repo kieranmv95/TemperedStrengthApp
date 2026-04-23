@@ -7,5 +7,14 @@
     "muscle": "Abs",
     "name": "Plank",
     "pattern": "Core"
+  },
+  {
+    "description": "Start on all fours and move forward by advancing opposite hand and foot simultaneously, keeping hips low.",
+    "equipment": "Bodyweight",
+    "id": 94,
+    "logging_type": "time",
+    "muscle": "Abs",
+    "name": "Bear Crawl",
+    "pattern": "Core"
   }
 ]

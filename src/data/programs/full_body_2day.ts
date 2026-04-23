@@ -21,6 +21,7 @@ export const full_body_2day: Program = {
   description:
     '12-Week Full Body Maintenance. Alternates movement variants monthly to prevent plateaus.',
   categories: ['strength'],
+  goals: ['maintenance', 'stronger', 'hypertrophy'],
   difficulty: 'beginner',
   daysSplit: ['sat', 'sun'],
   averageSessionDuration: '60m',

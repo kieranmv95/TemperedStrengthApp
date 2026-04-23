@@ -11,11 +11,15 @@ const collectSwappableExerciseIds = (): SwappableExerciseRef[] => {
   const refs: SwappableExerciseRef[] = [];
 
   for (const program of programList) {
-    const days = (program as any).days as unknown;
-    if (!Array.isArray(days)) continue;
+    const workouts = (program as any).workouts as unknown;
+    if (!Array.isArray(workouts)) continue;
 
-    for (const day of days) {
-      const exercises = (day as any)?.exercises as unknown;
+    for (const workout of workouts) {
+      if ((workout as any)?.format === 'v2') {
+        continue;
+      }
+
+      const exercises = (workout as any)?.exercises as unknown;
       if (!Array.isArray(exercises)) continue;
 
       for (const item of exercises) {

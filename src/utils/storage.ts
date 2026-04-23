@@ -1,4 +1,5 @@
 // Storage utilities for AsyncStorage
+import type { OnboardingProfile } from '@/src/types/onboarding';
 import type { Program } from '@/src/types/program';
 import type {
   StandaloneWorkoutLogEntry,
@@ -8,6 +9,7 @@ import type {
   ActiveSession,
   CompletedSession,
   CompletedSessions,
+  ConditioningWorkoutLogs,
   CustomSetCounts,
   ExerciseSwaps,
   LoggedSet,
@@ -40,6 +42,7 @@ export type {
   ActiveSession,
   CompletedSession,
   CompletedSessions,
+  ConditioningWorkoutLogs,
   CustomSetCounts,
   ExerciseSwap,
   ExerciseSwaps,
@@ -74,12 +77,76 @@ const FAVORITE_ARTICLES_KEY = 'favorite_articles';
 const REST_TIMER_KEY = 'rest_timer';
 const ACTIVE_SESSION_KEY = 'active_session';
 const COMPLETED_SESSIONS_KEY = 'completed_sessions';
+const CONDITIONING_WORKOUT_LOGS_KEY = 'conditioning_workout_logs';
 const STANDALONE_WORKOUT_LOGS_KEY = 'standalone_workout_logs';
 const PERSONAL_BESTS_KEY = 'personal_bests';
 const WEIGHT_UNIT_KEY = 'weight_unit';
 const AUTO_REST_TIMERS_ENABLED_KEY = 'auto_rest_timers_enabled';
 const AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY =
   'auto_pb_detection_in_programs_enabled';
+const PROGRAM_WARMUP_MODULE_ENABLED_KEY = 'program_warmup_module_enabled';
+const PROGRAM_COOLDOWN_MODULE_ENABLED_KEY = 'program_cooldown_module_enabled';
+const ONBOARDED_KEY = 'onboarded';
+const ONBOARDING_PROFILE_KEY = 'onboarding_profile';
+
+export const getOnboarded = async (): Promise<boolean> => {
+  try {
+    const raw = await AsyncStorage.getItem(ONBOARDED_KEY);
+    return raw === 'true';
+  } catch (error) {
+    console.error('Error getting onboarded flag:', error);
+    return false;
+  }
+};
+
+export const setOnboarded = async (next: boolean): Promise<void> => {
+  try {
+    await syncSetItem(ONBOARDED_KEY, next ? 'true' : 'false');
+  } catch (error) {
+    console.error('Error setting onboarded flag:', error);
+    throw error;
+  }
+};
+
+export const getOnboardingProfile = async (): Promise<OnboardingProfile | null> => {
+  try {
+    const raw = await AsyncStorage.getItem(ONBOARDING_PROFILE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as unknown;
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+      return null;
+    }
+    return parsed as OnboardingProfile;
+  } catch (error) {
+    console.error('Error getting onboarding profile:', error);
+    return null;
+  }
+};
+
+export const setOnboardingProfile = async (
+  profile: OnboardingProfile
+): Promise<void> => {
+  try {
+    await syncSetItem(ONBOARDING_PROFILE_KEY, JSON.stringify(profile));
+  } catch (error) {
+    console.error('Error setting onboarding profile:', error);
+    throw error;
+  }
+};
+
+/**
+ * Clears both the `onboarded` flag and the stored `onboarding_profile`.
+ * Used by dev tooling to fully reset onboarding for testing.
+ */
+export const clearOnboarding = async (): Promise<void> => {
+  try {
+    await syncRemoveItem(ONBOARDED_KEY);
+    await syncRemoveItem(ONBOARDING_PROFILE_KEY);
+  } catch (error) {
+    console.error('Error clearing onboarding:', error);
+    throw error;
+  }
+};
 
 export const getWeightUnit = async (): Promise<WeightUnit> => {
   try {
@@ -147,6 +214,53 @@ export const setAutoPbDetectionInProgramsEnabled = async (
     );
   } catch (error) {
     console.error('Error setting auto PB detection in programs enabled:', error);
+    throw error;
+  }
+};
+
+export const getProgramWarmupModuleEnabled = async (): Promise<boolean> => {
+  try {
+    const raw = await AsyncStorage.getItem(PROGRAM_WARMUP_MODULE_ENABLED_KEY);
+    if (raw === null) return false;
+    return raw === 'true';
+  } catch (error) {
+    console.error('Error getting program warmup module enabled:', error);
+    return false;
+  }
+};
+
+export const setProgramWarmupModuleEnabled = async (
+  enabled: boolean
+): Promise<void> => {
+  try {
+    await syncSetItem(PROGRAM_WARMUP_MODULE_ENABLED_KEY, enabled ? 'true' : 'false');
+  } catch (error) {
+    console.error('Error setting program warmup module enabled:', error);
+    throw error;
+  }
+};
+
+export const getProgramCooldownModuleEnabled = async (): Promise<boolean> => {
+  try {
+    const raw = await AsyncStorage.getItem(PROGRAM_COOLDOWN_MODULE_ENABLED_KEY);
+    if (raw === null) return false;
+    return raw === 'true';
+  } catch (error) {
+    console.error('Error getting program cooldown module enabled:', error);
+    return false;
+  }
+};
+
+export const setProgramCooldownModuleEnabled = async (
+  enabled: boolean
+): Promise<void> => {
+  try {
+    await syncSetItem(
+      PROGRAM_COOLDOWN_MODULE_ENABLED_KEY,
+      enabled ? 'true' : 'false'
+    );
+  } catch (error) {
+    console.error('Error setting program cooldown module enabled:', error);
     throw error;
   }
 };
@@ -790,6 +904,7 @@ export const clearProgramData = async (): Promise<void> => {
     await syncRemoveItem(PROGRAM_WORKOUT_WEEKDAYS_KEY);
     await syncRemoveItem(EXERCISE_SWAPS_KEY);
     await syncRemoveItem(WORKOUT_LOGS_KEY);
+    await syncRemoveItem(CONDITIONING_WORKOUT_LOGS_KEY);
     await syncRemoveItem(CUSTOM_SET_COUNTS_KEY);
     await syncRemoveItem(WORKOUT_NOTES_KEY);
     await syncRemoveItem(REST_TIMER_KEY);
@@ -1088,6 +1203,78 @@ export const getWorkoutLogsForDay = async (
   } catch (error) {
     console.error('Error getting workout logs for day:', error);
     return {};
+  }
+};
+
+/**
+ * Get conditioning completion logs for a specific day.
+ */
+export const getConditioningLogsForDay = async (
+  dayIndex: number
+): Promise<{ [blockId: string]: { completed: boolean; completedAt?: number } }> => {
+  try {
+    const raw = await AsyncStorage.getItem(CONDITIONING_WORKOUT_LOGS_KEY);
+    const logs: ConditioningWorkoutLogs = raw ? JSON.parse(raw) : {};
+    return logs[dayIndex] ?? {};
+  } catch (error) {
+    console.error('Error getting conditioning logs for day:', error);
+    return {};
+  }
+};
+
+/**
+ * Toggle completion for a conditioning workout block.
+ * Returns the next completed state.
+ */
+export const toggleConditioningBlockCompleted = async (
+  dayIndex: number,
+  blockId: string
+): Promise<boolean> => {
+  try {
+    const raw = await AsyncStorage.getItem(CONDITIONING_WORKOUT_LOGS_KEY);
+    const logs: ConditioningWorkoutLogs = raw ? JSON.parse(raw) : {};
+    if (!logs[dayIndex]) {
+      logs[dayIndex] = {};
+    }
+
+    const prev = logs[dayIndex][blockId];
+    const nextCompleted = !(prev?.completed ?? false);
+
+    if (!nextCompleted) {
+      delete logs[dayIndex][blockId];
+      if (Object.keys(logs[dayIndex]).length === 0) {
+        delete logs[dayIndex];
+      }
+      await syncSetItem(CONDITIONING_WORKOUT_LOGS_KEY, JSON.stringify(logs));
+      return false;
+    }
+
+    logs[dayIndex][blockId] = {
+      completed: true,
+      completedAt: Date.now(),
+    };
+    await syncSetItem(CONDITIONING_WORKOUT_LOGS_KEY, JSON.stringify(logs));
+    return true;
+  } catch (error) {
+    console.error('Error toggling conditioning block completion:', error);
+    throw error;
+  }
+};
+
+export const clearConditioningLogsForDay = async (
+  dayIndex: number
+): Promise<void> => {
+  try {
+    const raw = await AsyncStorage.getItem(CONDITIONING_WORKOUT_LOGS_KEY);
+    if (!raw) return;
+    const logs: ConditioningWorkoutLogs = JSON.parse(raw);
+    if (logs[dayIndex] !== undefined) {
+      delete logs[dayIndex];
+      await syncSetItem(CONDITIONING_WORKOUT_LOGS_KEY, JSON.stringify(logs));
+    }
+  } catch (error) {
+    console.error('Error clearing conditioning logs for day:', error);
+    throw error;
   }
 };
 

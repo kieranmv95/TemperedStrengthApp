@@ -11,6 +11,7 @@ import type {
   CompletedSession,
   RestTimerState,
 } from '@/src/types/storage';
+import { fiveMinuteCooldown, fiveMinuteWarmup } from '@/src/data/programModules';
 import { getProgramById } from '@/src/utils/program';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import {
@@ -25,9 +26,14 @@ import {
   getActiveSession,
   getCompletedSession,
   getExerciseSwapsForDay,
+  getProgramCooldownModuleEnabled,
   getProgramStartDate,
+  getProgramWarmupModuleEnabled,
   getProgramWorkoutWeekdays,
   getRestTimer,
+  getConditioningLogsForDay,
+  setProgramCooldownModuleEnabled,
+  setProgramWarmupModuleEnabled,
   getWorkoutLogsForDay,
   getWorkoutNotes,
   saveActiveSession,
@@ -94,25 +100,45 @@ export function useWorkoutScreenController() {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [notesActive, setNotesActive] = useState(false);
   const notesBlurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [warmupModuleEnabled, setWarmupModuleEnabled] = useState(false);
+  const [cooldownModuleEnabled, setCooldownModuleEnabled] = useState(false);
 
   const programRef = useRef<ReturnType<typeof getProgramById> | null>(null);
   const startDateRef = useRef<string | null>(null);
   const workoutWeekPatternRef = useRef<ProgramDaySplitKey[] | null>(null);
+  const warmupModuleEnabledRef = useRef(false);
+  const cooldownModuleEnabledRef = useRef(false);
 
   useEffect(() => {
     programRef.current = program;
     startDateRef.current = startDate;
     workoutWeekPatternRef.current = workoutWeekPattern;
-  }, [program, startDate, workoutWeekPattern]);
+    warmupModuleEnabledRef.current = warmupModuleEnabled;
+    cooldownModuleEnabledRef.current = cooldownModuleEnabled;
+  }, [program, startDate, workoutWeekPattern, warmupModuleEnabled, cooldownModuleEnabled]);
 
   const loadExerciseSlots = useCallback(
-    async (workout: Workout, dayIdx: number) => {
+    async (
+      workout: Workout & { exercises: Workout['exercises'] },
+      dayIdx: number,
+      options?: { warmupEnabled?: boolean; cooldownEnabled?: boolean }
+    ) => {
       try {
         const swaps = await getExerciseSwapsForDay(dayIdx);
+        const warmupEnabled =
+          options?.warmupEnabled ?? warmupModuleEnabledRef.current;
+        const cooldownEnabled =
+          options?.cooldownEnabled ?? cooldownModuleEnabledRef.current;
+
+        const exercises = [
+          ...(warmupEnabled ? [fiveMinuteWarmup] : []),
+          ...workout.exercises,
+          ...(cooldownEnabled ? [fiveMinuteCooldown] : []),
+        ];
 
         let exerciseSlotIndex = 0;
 
-        const workoutSlots: WorkoutSlot[] = workout.exercises.map((item) => {
+        const workoutSlots: WorkoutSlot[] = exercises.map((item) => {
           if (item.type === 'warmup') {
             return {
               type: 'warmup' as const,
@@ -135,6 +161,25 @@ export function useWorkoutScreenController() {
         console.error('Error loading exercise slots:', error);
         setSlots([]);
       }
+    },
+    []
+  );
+
+  const getWorkoutForDayIndex = useCallback(
+    (
+      programToUse: ReturnType<typeof getProgramById>,
+      startISO: string | null,
+      effectivePattern: ProgramDaySplitKey[] | null,
+      dayIdx: number
+    ): Workout | null => {
+      return startISO !== null
+        ? getWorkoutForDaySinceStart(
+            programToUse,
+            startISO,
+            effectivePattern,
+            dayIdx
+          )
+        : (programToUse.workouts.find((w) => w.dayIndex === dayIdx) ?? null);
     },
     []
   );
@@ -176,20 +221,21 @@ export function useWorkoutScreenController() {
           ? patternOverride
           : workoutWeekPatternRef.current;
 
-      const workout =
-        startISO !== null
-          ? getWorkoutForDaySinceStart(
-              programToUse,
-              startISO,
-              effectivePattern,
-              dayIdx
-            )
-          : (programToUse.workouts.find((w) => w.dayIndex === dayIdx) ?? null);
+      const workout = getWorkoutForDayIndex(
+        programToUse,
+        startISO,
+        effectivePattern,
+        dayIdx
+      );
 
       if (workout) {
         setCurrentWorkout(workout);
         setIsRestDay(false);
-        await loadExerciseSlots(workout, dayIdx);
+        if (workout.format !== 'v2') {
+          await loadExerciseSlots(workout, dayIdx);
+        } else {
+          setSlots([]);
+        }
       } else {
         setIsRestDay(true);
         setCurrentWorkout(null);
@@ -202,9 +248,19 @@ export function useWorkoutScreenController() {
   const loadWorkoutData = useCallback(async () => {
     try {
       setLoading(true);
-      const programId = await getActiveProgramId();
-      const savedStartDate = await getProgramStartDate();
-      const savedWeekPattern = await getProgramWorkoutWeekdays();
+      const [
+        programId,
+        savedStartDate,
+        savedWeekPattern,
+        savedWarmupEnabled,
+        savedCooldownEnabled,
+      ] = await Promise.all([
+        getActiveProgramId(),
+        getProgramStartDate(),
+        getProgramWorkoutWeekdays(),
+        getProgramWarmupModuleEnabled(),
+        getProgramCooldownModuleEnabled(),
+      ]);
 
       if (!programId || !savedStartDate) {
         setLoading(false);
@@ -225,6 +281,8 @@ export function useWorkoutScreenController() {
           ? savedWeekPattern
           : null
       );
+      setWarmupModuleEnabled(savedWarmupEnabled);
+      setCooldownModuleEnabled(savedCooldownEnabled);
 
       const daysSinceStart = calculateDaysSinceStart(savedStartDate);
       setDayIndex(daysSinceStart);
@@ -245,6 +303,34 @@ export function useWorkoutScreenController() {
       setLoading(false);
     }
   }, [loadWorkoutForDay]);
+
+  const toggleWarmupModule = useCallback(async () => {
+    const next = !warmupModuleEnabledRef.current;
+    setWarmupModuleEnabled(next);
+    try {
+      await setProgramWarmupModuleEnabled(next);
+    } catch (error) {
+      // revert on failure
+      setWarmupModuleEnabled(!next);
+    }
+    if (selectedDayIndex !== null) {
+      await loadWorkoutForDay(selectedDayIndex);
+    }
+  }, [loadWorkoutForDay, selectedDayIndex]);
+
+  const toggleCooldownModule = useCallback(async () => {
+    const next = !cooldownModuleEnabledRef.current;
+    setCooldownModuleEnabled(next);
+    try {
+      await setProgramCooldownModuleEnabled(next);
+    } catch (error) {
+      // revert on failure
+      setCooldownModuleEnabled(!next);
+    }
+    if (selectedDayIndex !== null) {
+      await loadWorkoutForDay(selectedDayIndex);
+    }
+  }, [loadWorkoutForDay, selectedDayIndex]);
 
   useEffect(() => {
     loadWorkoutData();
@@ -316,16 +402,36 @@ export function useWorkoutScreenController() {
       const completedAt = Date.now();
       const duration = completedAt - activeSession.startedAt;
 
-      const dayLogs = await getWorkoutLogsForDay(activeSession.dayIndex);
       let totalVolume = 0;
       let setsCompleted = 0;
 
-      for (const slotSets of Object.values(dayLogs)) {
-        for (const set of Object.values(slotSets)) {
-          if (set.state === 'completed' || set.state === 'failed') {
-            setsCompleted++;
-            if (set.weight !== null && set.weight > 0) {
-              totalVolume += set.weight * set.reps;
+      const programToUse = programRef.current;
+      const startISO = startDateRef.current;
+      const effectivePattern = workoutWeekPatternRef.current;
+
+      const workoutForSessionDay =
+        programToUse != null
+          ? getWorkoutForDayIndex(
+              programToUse,
+              startISO,
+              effectivePattern,
+              activeSession.dayIndex
+            )
+          : null;
+
+      if (workoutForSessionDay?.format === 'v2') {
+        const completion = await getConditioningLogsForDay(activeSession.dayIndex);
+        setsCompleted = Object.values(completion).filter((b) => b.completed).length;
+        totalVolume = 0;
+      } else {
+        const dayLogs = await getWorkoutLogsForDay(activeSession.dayIndex);
+        for (const slotSets of Object.values(dayLogs)) {
+          for (const set of Object.values(slotSets)) {
+            if (set.state === 'completed' || set.state === 'failed') {
+              setsCompleted++;
+              if (set.weight !== null && set.weight > 0) {
+                totalVolume += set.weight * set.reps;
+              }
             }
           }
         }
@@ -677,6 +783,10 @@ export function useWorkoutScreenController() {
     notesInputRef,
     workoutDayIndices,
     workoutWeekPattern,
+    warmupModuleEnabled,
+    cooldownModuleEnabled,
+    toggleWarmupModule,
+    toggleCooldownModule,
     loadWorkoutForDay,
     loadWorkoutData,
     handleStartSession,

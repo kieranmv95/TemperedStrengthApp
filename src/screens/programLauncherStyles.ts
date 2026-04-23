@@ -290,6 +290,28 @@ export const programLauncherStyles = StyleSheet.create({
   modalContent: {
     maxHeight: 500,
   },
+  bodyChangesCard: {
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxl,
+    marginBottom: Spacing.xxl,
+    borderWidth: 1,
+    borderColor: Colors.borderSubtle,
+  },
+  bodyChangesTitle: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '800',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: Spacing.md,
+  },
+  bodyChangesText: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+    fontWeight: '500',
+  },
   sectionTitle: {
     color: Colors.textPrimary,
     fontSize: FontSize.displaySm,

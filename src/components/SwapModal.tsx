@@ -30,6 +30,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
   onClearData,
 }) => {
   const { isPro } = useSubscription();
+  const [noEquipmentOnly, setNoEquipmentOnly] = React.useState(false);
   const { handleSelect, handleResetPress } = useSwapModalActions({
     isPro,
     dayIndex,
@@ -48,11 +49,17 @@ export const SwapModal: React.FC<SwapModalProps> = ({
   const rankedAlternatives: ExerciseAlternative[] = currentExerciseId
     ? findAlternatives(currentExerciseId, 10)
     : [];
-  const bestMatches = rankedAlternatives.filter((a) => a.matchScore === 100);
-  const otherMatches = rankedAlternatives.filter((a) => a.matchScore === 50);
+  const filteredAlternatives = noEquipmentOnly
+    ? rankedAlternatives.filter((a) => a.exercise.equipment === 'Bodyweight')
+    : rankedAlternatives;
+  const bestMatches = filteredAlternatives.filter((a) => a.matchScore === 100);
+  const otherMatches = filteredAlternatives.filter((a) => a.matchScore === 50);
   const allExercisesForEmptySlot = currentExerciseId
     ? []
-    : getAllExercises().slice(0, 15);
+    : (noEquipmentOnly
+        ? getAllExercises().filter((e) => e.equipment === 'Bodyweight')
+        : getAllExercises()
+      ).slice(0, 15);
 
   const isSwapped =
     currentExerciseId !== null &&
@@ -85,6 +92,24 @@ export const SwapModal: React.FC<SwapModalProps> = ({
               : 'Choose an exercise'}
           </Text>
 
+          <TouchableOpacity
+            style={[
+              styles.equipmentToggle,
+              noEquipmentOnly && styles.equipmentToggleActive,
+            ]}
+            onPress={() => setNoEquipmentOnly((prev) => !prev)}
+            activeOpacity={0.7}
+          >
+            <Text
+              style={[
+                styles.equipmentToggleText,
+                noEquipmentOnly && styles.equipmentToggleTextActive,
+              ]}
+            >
+              No equipment (bodyweight only)
+            </Text>
+          </TouchableOpacity>
+
           <Text style={styles.deviationTitle}>
             Deviating from too many exercises could reduce the effectiveness of
             the overall program.
@@ -110,9 +135,9 @@ export const SwapModal: React.FC<SwapModalProps> = ({
           )}
 
           <ScrollView style={styles.alternativesList}>
-            {rankedAlternatives.length === 0 && currentExerciseId && (
+            {filteredAlternatives.length === 0 && currentExerciseId && (
               <Text style={styles.noAlternatives}>
-                No alternatives found for this pattern.
+                No matches found with this filter.
               </Text>
             )}
             {currentExerciseId ? (

@@ -2,16 +2,21 @@ import { StandardLayout } from '@/src/components/StandardLayout';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import type { OnboardingProfile } from '@/src/types/onboarding';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
 import {
+  clearOnboarding,
   clearProgramData,
   getActiveProgramId,
   getAutoPbDetectionInProgramsEnabled,
   getAutoRestTimersEnabled,
+  getOnboarded,
+  getOnboardingProfile,
   getWeightUnit,
   setAutoPbDetectionInProgramsEnabled,
   setAutoRestTimersEnabled,
+  setOnboarded,
   setWeightUnit,
   type WeightUnit,
 } from '@/src/utils/storage';
@@ -31,6 +36,9 @@ export default function SettingsScreen() {
   const [autoTimersLoading, setAutoTimersLoading] = useState<boolean>(true);
   const [autoPbEnabled, setAutoPbEnabledState] = useState<boolean>(true);
   const [autoPbLoading, setAutoPbLoading] = useState<boolean>(true);
+  const [onboardedState, setOnboardedState] = useState<boolean>(false);
+  const [onboardingProfileState, setOnboardingProfileState] =
+    useState<OnboardingProfile | null>(null);
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
   const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
 
@@ -89,6 +97,21 @@ export default function SettingsScreen() {
     }
   };
 
+  const loadOnboardingState = async () => {
+    try {
+      const [done, profile] = await Promise.all([
+        getOnboarded(),
+        getOnboardingProfile(),
+      ]);
+      setOnboardedState(done);
+      setOnboardingProfileState(profile);
+    } catch (error) {
+      console.error('Error loading onboarding state:', error);
+      setOnboardedState(false);
+      setOnboardingProfileState(null);
+    }
+  };
+
   const persistWeightUnit = async (u: WeightUnit) => {
     setWeightUnitState(u);
     try {
@@ -128,6 +151,7 @@ export default function SettingsScreen() {
       loadWeightUnit();
       loadAutoTimersEnabled();
       loadAutoPbEnabled();
+      loadOnboardingState();
       refresh(); // Refresh subscription status when screen is focused
     }, [refresh])
   );
@@ -175,6 +199,46 @@ export default function SettingsScreen() {
               Alert.alert(
                 'Error',
                 'Failed to end your current program. Please try again.'
+              );
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleUpdatePreferences = async () => {
+    try {
+      await setOnboarded(false);
+      router.push('/onboarding');
+    } catch (error) {
+      console.error('Error starting onboarding replay:', error);
+      Alert.alert(
+        'Error',
+        'Failed to start onboarding. Please try again.'
+      );
+    }
+  };
+
+  const handleResetOnboarding = () => {
+    Alert.alert(
+      'Reset Onboarding',
+      'This clears the onboarded flag and the stored onboarding profile.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Reset',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await clearOnboarding();
+              setOnboardedState(false);
+              setOnboardingProfileState(null);
+            } catch (error) {
+              console.error('Error resetting onboarding:', error);
+              Alert.alert(
+                'Error',
+                'Failed to reset onboarding. Please try again.'
               );
             }
           },
@@ -405,6 +469,20 @@ export default function SettingsScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
+            style={styles.settingItem}
+            onPress={handleUpdatePreferences}
+          >
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Update Preferences</Text>
+              <Text style={styles.settingDescription}>
+                Replay onboarding to update your name, gender, interests, and
+                experience level.
+              </Text>
+            </View>
+            <Text style={styles.settingArrow}>→</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             style={[
               styles.settingItem,
               styles.dangerItem,
@@ -451,6 +529,40 @@ export default function SettingsScreen() {
                 </Text>
                 <Text style={styles.settingDescription}>
                   Permanently delete all stored data
+                </Text>
+              </View>
+              <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
+            </TouchableOpacity>
+          )}
+
+          {__DEV__ && (
+            <View style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>Developer · Onboarding</Text>
+                <Text style={styles.settingDescription}>
+                  onboarded: {onboardedState ? 'true' : 'false'}
+                </Text>
+                <Text style={styles.settingDescription}>
+                  onboarding_profile:{'\n'}
+                  {onboardingProfileState
+                    ? JSON.stringify(onboardingProfileState, null, 2)
+                    : 'null'}
+                </Text>
+              </View>
+            </View>
+          )}
+
+          {__DEV__ && (
+            <TouchableOpacity
+              style={[styles.settingItem, styles.dangerItem]}
+              onPress={handleResetOnboarding}
+            >
+              <View style={styles.settingContent}>
+                <Text style={[styles.settingTitle, styles.dangerText]}>
+                  Reset Onboarding
+                </Text>
+                <Text style={styles.settingDescription}>
+                  Clear onboarded flag and stored profile for testing
                 </Text>
               </View>
               <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>

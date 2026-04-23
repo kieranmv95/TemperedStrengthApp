@@ -57,6 +57,35 @@ export const workoutScreenStyles = StyleSheet.create({
     marginBottom: Spacing.xl,
     lineHeight: 20,
   },
+  moduleToggleRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
+    marginTop: Spacing.md,
+  },
+  moduleToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.pill,
+    backgroundColor: Colors.backgroundCard,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+  },
+  moduleToggleActive: {
+    backgroundColor: Colors.accent,
+    borderColor: Colors.accent,
+  },
+  moduleToggleText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '700',
+  },
+  moduleToggleTextActive: {
+    color: Colors.textOnAccent,
+  },
   intensityCard: {
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,

@@ -66,6 +66,17 @@ export function ProgramLauncherDetailsModal({
               {selectedProgram?.description}
             </Text>
 
+            {selectedProgram?.bodyChangesSummary && (
+              <View style={styles.bodyChangesCard}>
+                <Text style={styles.bodyChangesTitle}>
+                  How this program can change your body
+                </Text>
+                <Text style={styles.bodyChangesText}>
+                  {selectedProgram.bodyChangesSummary}
+                </Text>
+              </View>
+            )}
+
             <Text style={styles.sectionTitle}>Program Overview</Text>
 
             <View style={styles.programOverviewContainer}>
