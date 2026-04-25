@@ -11,9 +11,11 @@ import {
 import { Colors, Spacing } from '@/src/constants/theme';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import type { OnboardingGender } from '@/src/types/onboarding';
 import type { SingleWorkout } from '@/src/types/workouts';
 import {
   getFavoriteWorkouts,
+  getOnboardingProfile,
   toggleFavoriteWorkout,
 } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
@@ -94,16 +96,24 @@ export default function WorkoutsScreen() {
     useState<CategoryFilter>('All');
   const [noEquipmentOnly, setNoEquipmentOnly] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [onboardingGender, setOnboardingGender] =
+    useState<OnboardingGender | null>(null);
 
   useFocusEffect(
     useCallback(() => {
       loadFavorites();
+      loadOnboardingGender();
     }, [])
   );
 
   const loadFavorites = async () => {
     const favs = await getFavoriteWorkouts();
     setFavorites(favs);
+  };
+
+  const loadOnboardingGender = async () => {
+    const profile = await getOnboardingProfile();
+    setOnboardingGender(profile?.gender ?? null);
   };
 
   const handleToggleFavorite = async (workoutId: string) => {
@@ -184,6 +194,12 @@ export default function WorkoutsScreen() {
   const getBigWorkouts = filteredWorkouts.filter((w) =>
     workoutHasTag(w, GET_BIG_TAG)
   );
+
+  const showS1AndS2 = onboardingGender === 'female';
+  const showS3 =
+    onboardingGender === null ||
+    onboardingGender === 'male' ||
+    onboardingGender === 'prefer_not_to_say';
 
   return (
     <StandardLayout
@@ -338,7 +354,7 @@ export default function WorkoutsScreen() {
             contentContainerStyle={styles.listContent}
             ListHeaderComponent={
               <>
-                {womensPicksWorkouts.length > 0 && (
+                {showS1AndS2 && womensPicksWorkouts.length > 0 && (
                   <View style={styles.curatedSection}>
                     <View style={styles.curatedSectionHeader}>
                       <View style={styles.curatedSectionHeaderRow}>
@@ -369,7 +385,7 @@ export default function WorkoutsScreen() {
                   </View>
                 )}
 
-                {legsAndGlutesWorkouts.length > 0 && (
+                {showS1AndS2 && legsAndGlutesWorkouts.length > 0 && (
                   <View style={styles.curatedSection}>
                     <View style={styles.curatedSectionHeader}>
                       <View style={styles.curatedSectionHeaderRow}>
@@ -400,7 +416,7 @@ export default function WorkoutsScreen() {
                   </View>
                 )}
 
-                {getBigWorkouts.length > 0 && (
+                {showS3 && getBigWorkouts.length > 0 && (
                   <View style={styles.curatedSection}>
                     <View style={styles.curatedSectionHeader}>
                       <View style={styles.curatedSectionHeaderRow}>
