@@ -46,10 +46,15 @@ const INTEREST_OPTIONS: { value: OnboardingInterest; label: string }[] = [
   { value: 'hyrox', label: 'Hyrox' },
   { value: 'strength', label: 'Strength' },
   { value: 'powerlifting', label: 'Powerlifting' },
+  { value: 'bodybuilding', label: 'Bodybuilding' },
+  { value: 'hypertrophy', label: 'Build Muscle' },
   { value: 'conditioning', label: 'Conditioning' },
+  { value: 'hiit', label: 'HIIT' },
   { value: 'olympic_lifting', label: 'Olympic Lifting' },
+  { value: 'pilates', label: 'Pilates' },
   { value: 'mobility', label: 'Mobility' },
   { value: 'endurance', label: 'Endurance' },
+  { value: 'fat_loss', label: 'Fat Loss' },
 ];
 
 const EXPERIENCE_OPTIONS: {

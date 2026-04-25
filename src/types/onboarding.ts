@@ -5,10 +5,15 @@ export type OnboardingInterest =
   | 'hyrox'
   | 'strength'
   | 'powerlifting'
+  | 'bodybuilding'
+  | 'hypertrophy'
   | 'conditioning'
+  | 'hiit'
   | 'olympic_lifting'
+  | 'pilates'
   | 'mobility'
-  | 'endurance';
+  | 'endurance'
+  | 'fat_loss';
 
 export type OnboardingExperienceLevel = 'beginner' | 'intermediate' | 'advanced';
 

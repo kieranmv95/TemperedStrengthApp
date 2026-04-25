@@ -1,3 +1,4 @@
+import { useOnboardingProfile } from '@/src/hooks/useOnboardingProfile';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { increment } from '@/src/services/metricService';
 import { router } from 'expo-router';
@@ -9,6 +10,7 @@ import { StandardLayout } from '../components/StandardLayout';
 import { Colors, FontSize, Spacing } from '../constants/theme';
 import type { Program } from '../types/program';
 import { programs } from '../utils/program';
+import { sortProgramsByRecommendation } from '../utils/programRecommendation';
 import {
   type ProgramDaySplitKey,
   getProgramAnchorWeekdayKey,
@@ -46,6 +48,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 }) => {
   const insets = useSafeAreaInsets();
   const { isPro } = useSubscription();
+  const { profile } = useOnboardingProfile();
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [showProgramDetails, setShowProgramDetails] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -152,7 +155,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   }, []);
 
   const filteredPrograms = useMemo(() => {
-    return programs.filter((p) => {
+    const filtered = programs.filter((p) => {
       if (selectedCategory !== 'all' && !p.categories.includes(selectedCategory))
         return false;
       if (selectedDifficulty !== 'all' && p.difficulty !== selectedDifficulty)
@@ -160,7 +163,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
       if (selectedGoal !== 'all' && !p.goals.includes(selectedGoal)) return false;
       return true;
     });
-  }, [selectedCategory, selectedDifficulty, selectedGoal]);
+    return sortProgramsByRecommendation(filtered, profile);
+  }, [selectedCategory, selectedDifficulty, selectedGoal, profile]);
 
   const categoryCount = useMemo(() => {
     const map = new Map<ProgramCategory, number>();
@@ -473,11 +477,12 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
         </View>
       </StandardLayout.AdvancedFilters>
       <StandardLayout.Body>
-        {filteredPrograms.map((program) => (
+        {filteredPrograms.map(({ program, isRecommended }) => (
           <ProgramLauncherProgramCard
             key={program.id}
             program={program}
             isLocked={program.isPro && !isPro}
+            isRecommended={isRecommended}
             onSelect={handleSelectProgram}
           />
         ))}

@@ -7,12 +7,14 @@ import { programLauncherStyles as styles } from './programLauncherStyles';
 type ProgramLauncherProgramCardProps = {
   program: Program;
   isLocked: boolean;
+  isRecommended?: boolean;
   onSelect: (program: Program) => void;
 };
 
 export function ProgramLauncherProgramCard({
   program,
   isLocked,
+  isRecommended = false,
   onSelect,
 }: ProgramLauncherProgramCardProps) {
   const maxDayIndex = Math.max(...program.workouts.map((w) => w.dayIndex));
@@ -21,11 +23,21 @@ export function ProgramLauncherProgramCard({
 
   return (
     <TouchableOpacity
-      style={[styles.programCard, isLocked && styles.programCardLocked]}
+      style={[
+        styles.programCard,
+        isLocked && styles.programCardLocked,
+      ]}
       onPress={() => onSelect(program)}
       disabled={false}
     >
       <View style={styles.programContent}>
+        {isRecommended && (
+          <View style={styles.recommendedBadge}>
+            <Text style={styles.recommendedBadgeText}>
+              {'\u2605'} Recommended for you
+            </Text>
+          </View>
+        )}
         <View style={styles.programNameRow}>
           <Text style={styles.programName}>{program.name}</Text>
         </View>

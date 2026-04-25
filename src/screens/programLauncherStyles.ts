@@ -69,6 +69,21 @@ export const programLauncherStyles = StyleSheet.create({
   programCardLocked: {
     borderColor: Colors.accent,
   },
+  recommendedBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: Colors.recommended,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
+    marginBottom: Spacing.md,
+  },
+  recommendedBadgeText: {
+    color: Colors.textBlack,
+    fontSize: FontSize.sm,
+    fontWeight: '800',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
   programContent: {
     flex: 1,
   },
