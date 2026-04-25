@@ -493,17 +493,6 @@ function OnboardingFlow() {
               >
                 <Text style={styles.finalActionSecondaryText}>Chase PBs</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.finalActionSecondary}
-                onPress={() => completeOnboarding(profile, '/glossary')}
-                disabled={completing}
-                accessibilityRole="button"
-                accessibilityLabel="Open glossary"
-              >
-                <Text style={styles.finalActionSecondaryText}>
-                  Learn the lingo
-                </Text>
-              </TouchableOpacity>
             </View>
 
             <Text style={styles.finalFinePrint}>
