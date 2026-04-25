@@ -169,6 +169,11 @@ export const onboardingStyles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: Colors.borderDefault,
   },
+  footerSecondaryRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   primaryButton: {
     backgroundColor: Colors.accent,
     borderRadius: BorderRadius.xxl,
@@ -187,6 +192,9 @@ export const onboardingStyles = StyleSheet.create({
   },
   skipStepButton: {
     alignSelf: 'center',
+    paddingVertical: Spacing.md,
+  },
+  backStepButton: {
     paddingVertical: Spacing.md,
   },
   skipStepText: {

@@ -11,8 +11,11 @@ import type {
 } from '@/src/types/onboarding';
 import {
   getOnboardingProfile,
+  getWeightUnit,
   setOnboarded,
   setOnboardingProfile,
+  setWeightUnit,
+  type WeightUnit,
 } from '@/src/utils/storage';
 import { router } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
@@ -30,7 +33,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6;
 
 const GENDER_OPTIONS: { value: OnboardingGender; label: string }[] = [
   { value: 'male', label: 'Male' },
@@ -71,6 +74,8 @@ function OnboardingFlow() {
     useState<OnboardingExperienceLevel | null>(null);
   const [iCloudStepToggle, setICloudStepToggle] = useState(false);
   const [iCloudSaving, setICloudSaving] = useState(false);
+  const [weightUnitStep, setWeightUnitStep] = useState<WeightUnit>('kg');
+  const [weightUnitSaving, setWeightUnitSaving] = useState(false);
   const [completing, setCompleting] = useState(false);
 
   // Preload any existing profile so "Update Preferences" replays with current values.
@@ -79,6 +84,10 @@ function OnboardingFlow() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      const existingWeightUnit = await getWeightUnit();
+      if (cancelled) return;
+      setWeightUnitStep(existingWeightUnit);
+
       const existing = await getOnboardingProfile();
       if (cancelled) return;
       if (!existing) {
@@ -162,6 +171,11 @@ function OnboardingFlow() {
     animateStepChange(() => setStepIndex((i) => i + 1));
   };
 
+  const handleBackStep = () => {
+    if (stepIndex <= 0) return;
+    animateStepChange(() => setStepIndex((i) => Math.max(0, i - 1)));
+  };
+
   const handleSkipSetup = () => {
     Alert.alert(
       'Skip setup?',
@@ -202,6 +216,22 @@ function OnboardingFlow() {
     const next: OnboardingProfile = { ...profile };
     if (experienceLevel) next.experienceLevel = experienceLevel;
     advanceOrFinish(next);
+  };
+
+  const handleContinueWeightUnit = async () => {
+    setWeightUnitSaving(true);
+    try {
+      await setWeightUnit(weightUnitStep);
+      advanceOrFinish(profile);
+    } catch (error) {
+      console.error('Error saving weight unit during onboarding:', error);
+      Alert.alert(
+        'Something went wrong',
+        'We could not save your weight unit preference. Please try again.'
+      );
+    } finally {
+      setWeightUnitSaving(false);
+    }
   };
 
   const handleContinueICloud = async () => {
@@ -327,6 +357,27 @@ function OnboardingFlow() {
       case 4:
         return (
           <View style={styles.stepBody}>
+            <Text style={styles.stepTitle}>Weight units</Text>
+            <Text style={styles.stepSubtitle}>
+              Choose how you want to view and enter weights.
+            </Text>
+            <View style={styles.optionList}>
+              <OnboardingOptionCard
+                label="kg"
+                selected={weightUnitStep === 'kg'}
+                onPress={() => setWeightUnitStep('kg')}
+              />
+              <OnboardingOptionCard
+                label="lb"
+                selected={weightUnitStep === 'lb'}
+                onPress={() => setWeightUnitStep('lb')}
+              />
+            </View>
+          </View>
+        );
+      case 5:
+        return (
+          <View style={styles.stepBody}>
             <Text style={styles.stepTitle}>Back up to iCloud</Text>
             <Text style={styles.stepSubtitle}>
               Keep your programs, logs, and personal bests safe across devices.
@@ -390,6 +441,12 @@ function OnboardingFlow() {
         };
       case 4:
         return {
+          label: 'Continue',
+          onPress: handleContinueWeightUnit,
+          disabled: weightUnitSaving || completing,
+        };
+      case 5:
+        return {
           label: 'Finish',
           onPress: handleContinueICloud,
           disabled: iCloudSaving || completing,
@@ -401,6 +458,7 @@ function OnboardingFlow() {
 
   const cta = primaryCta();
   const isLastStep = stepIndex === TOTAL_STEPS - 1;
+  const canGoBack = stepIndex > 0;
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
@@ -450,17 +508,42 @@ function OnboardingFlow() {
             >
               <Text style={styles.primaryButtonText}>{cta.label}</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.skipStepButton}
-              onPress={handleSkipStep}
-              disabled={completing}
-              accessibilityRole="button"
-              accessibilityLabel={
-                isLastStep ? 'Skip this step and finish' : 'Skip this step'
-              }
-            >
-              <Text style={styles.skipStepText}>Skip</Text>
-            </TouchableOpacity>
+            {canGoBack ? (
+              <View style={styles.footerSecondaryRow}>
+                <TouchableOpacity
+                  style={styles.backStepButton}
+                  onPress={handleBackStep}
+                  disabled={completing || iCloudSaving || weightUnitSaving}
+                  accessibilityRole="button"
+                  accessibilityLabel="Go back"
+                >
+                  <Text style={styles.skipStepText}>Back</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.skipStepButton}
+                  onPress={handleSkipStep}
+                  disabled={completing}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    isLastStep ? 'Skip this step and finish' : 'Skip this step'
+                  }
+                >
+                  <Text style={styles.skipStepText}>Skip</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity
+                style={styles.skipStepButton}
+                onPress={handleSkipStep}
+                disabled={completing}
+                accessibilityRole="button"
+                accessibilityLabel={
+                  isLastStep ? 'Skip this step and finish' : 'Skip this step'
+                }
+              >
+                <Text style={styles.skipStepText}>Skip</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </SafeAreaView>
       </KeyboardAvoidingView>
