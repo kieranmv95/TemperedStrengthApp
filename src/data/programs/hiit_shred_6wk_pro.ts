@@ -273,7 +273,7 @@ export const hiit_shred_6wk_pro: Program = {
                 id: 'm1',
                 exerciseId: 72, // DB Power Clean
                 prescription: '6–10 reps',
-                notes: `Explosive pull, then stand tall. Keep reps crisp — swap to a goblet squat if technique isn't there today.'`,
+                notes: `Explosive pull, then stand tall. Keep reps crisp — swap to a goblet squat if technique isn't there today.`,
               },
               {
                 id: 'm2',

@@ -17,10 +17,8 @@ export const pilates_intro_4wk_free: Program = {
   id: 'pilates_intro_4wk_free',
   isPro: false,
   name: 'Pilates Intro (4 Weeks)',
-  description:
-    'A beginner-friendly 4-week intro focused on core strength, control, and mobility. You’ll leave sessions feeling taller, steadier, and more switched on.',
-  bodyChangesSummary:
-    'You’ll feel stronger through your core and more stable in everyday movement. Expect better posture, improved mobility, and a “tighter” feel around your midsection as you build control and consistency.',
+  description: `A beginner-friendly 4-week intro focused on core strength, control, and mobility. You'll leave sessions feeling taller, steadier, and more switched on.`,
+  bodyChangesSummary: `You'll feel stronger through your core and more stable in everyday movement. Expect better posture, improved mobility, and a "tighter" feel around your midsection as you build control and consistency.`,
   categories: ['functional'],
   goals: ['mobility', 'stronger', 'leaner', 'maintenance'],
   difficulty: 'beginner',
@@ -31,6 +29,7 @@ export const pilates_intro_4wk_free: Program = {
     const intensity: number = week < 2 ? 4 : 5;
 
     return [
+      // ─── Pilates A — Core + glutes ───────────────────────────────────────────
       {
         dayIndex: week * 7 + 0,
         label: `Pilates A (Week ${wk})`,
@@ -50,25 +49,27 @@ export const pilates_intro_4wk_free: Program = {
             movements: [
               {
                 id: 'm1',
-                exerciseId: 13,
+                exerciseId: 13, // Plank — kept in Pilates A as primary plank session
                 prescription: '20–40s',
-                notes: 'Think ribs down, glutes on. Knees down is a great option.',
+                notes:
+                  'Think ribs down, glutes on. Knees down is a great option.',
               },
               {
                 id: 'm2',
-                exerciseId: 25,
+                exerciseId: 25, // Glute Bridge
                 prescription: '12–20 reps',
-                notes: 'Squeeze for a full second at the top. Keep your ribs down.',
+                notes:
+                  'Squeeze for a full second at the top. Keep your ribs down.',
               },
               {
                 id: 'm3',
-                exerciseId: 50,
+                exerciseId: 50, // Side Plank — kept in Pilates where it fits the tone best
                 prescription: '20–30s/side',
                 notes: 'Keep it smooth. Drop the bottom knee if needed.',
               },
               {
                 id: 'm4',
-                exerciseId: 86,
+                exerciseId: 86, // Sit-ups
                 prescription: '8–15 reps',
                 notes: 'Slow down the lower. Exhale as you come up.',
               },
@@ -106,10 +107,13 @@ export const pilates_intro_4wk_free: Program = {
           },
         ],
       },
+
+      // ─── Pilates B — Mobility + core ─────────────────────────────────────────
       {
         dayIndex: week * 7 + 2,
         label: `Pilates B (Week ${wk})`,
-        description: 'Mobility + core. You should finish feeling better than you started.',
+        description:
+          'Mobility + core. You should finish feeling better than you started.',
         intensity,
         format: 'v2',
         blocks: [
@@ -123,25 +127,31 @@ export const pilates_intro_4wk_free: Program = {
             movements: [
               { id: 'm1', label: 'Cat-cow', prescription: '6–8 reps' },
               { id: 'm2', label: 'Thread the needle', prescription: '5/side' },
-              { id: 'm3', label: 'World’s greatest stretch', prescription: '3–4/side' },
+              {
+                id: 'm3',
+                label: "World's greatest stretch",
+                prescription: '3–4/side',
+              },
             ],
           },
           {
             id: 'core',
             type: 'rounds',
             title: 'Core Control',
-            instructions: 'Calm, steady reps. Keep tension through the midline.',
+            instructions:
+              'Calm, steady reps. Keep tension through the midline.',
             rounds: 2,
             movements: [
               {
                 id: 'm1',
-                exerciseId: 13,
-                prescription: '20–40s',
-                notes: 'Breathe slowly and keep your neck relaxed.',
+                // No plank here — plank lives in Pilates A and C. Pilates B uses mobility as its anchor.
+                exerciseId: 86, // Sit-ups — replaces the duplicate plank from the original
+                prescription: '8–15 reps',
+                notes: 'Slow and controlled. Exhale as you come up.',
               },
               {
                 id: 'm2',
-                exerciseId: 25,
+                exerciseId: 25, // Glute Bridge
                 prescription: '12–20 reps',
                 notes: 'Smooth reps. Squeeze at the top.',
               },
@@ -153,16 +163,16 @@ export const pilates_intro_4wk_free: Program = {
               },
               {
                 id: 'm4',
-                exerciseId: 50,
+                exerciseId: 50, // Side Plank
                 prescription: '20–30s/side',
                 notes: 'Keep hips stacked. Knee-down is fine.',
               },
               {
                 id: 'm5',
-                exerciseId: 31,
-                prescription: '6–12 reps (optional)',
+                exerciseId: 15, // Ab Wheel Rollout — replaces hanging leg raise (too advanced / out of tone for beginner Pilates)
+                prescription: '6–10 reps',
                 notes:
-                  'If hanging raises aren’t for you yet, swap to a simpler core move and keep it controlled.',
+                  'Start from a kneeling position. Only go as far as you can keep your back flat. Swap to dead bug if this feels like too much.',
               },
             ],
           },
@@ -174,12 +184,22 @@ export const pilates_intro_4wk_free: Program = {
               'Every minute: 40s smooth work, 20s breathe. Keep shoulders down and neck relaxed.',
             minutes: 8,
             movements: [
-              { id: 'm1', label: 'Wall angels (or band pull-aparts)', prescription: '40s' },
-              { id: 'm2', label: 'Breathing reset (nasal)', prescription: '20s' },
+              {
+                id: 'm1',
+                label: 'Wall angels (or band pull-aparts)',
+                prescription: '40s',
+              },
+              {
+                id: 'm2',
+                label: 'Breathing reset (nasal)',
+                prescription: '20s',
+              },
             ],
           },
         ],
       },
+
+      // ─── Pilates C — Core endurance ──────────────────────────────────────────
       {
         dayIndex: week * 7 + 4,
         label: `Pilates C (Week ${wk})`,
@@ -197,7 +217,7 @@ export const pilates_intro_4wk_free: Program = {
             movements: [
               {
                 id: 'm1',
-                exerciseId: 13,
+                exerciseId: 13, // Plank — kept in Pilates C as the second plank session of the week
                 prescription: '20–45s',
                 notes: 'Quality over time. Breathe.',
               },
@@ -209,19 +229,19 @@ export const pilates_intro_4wk_free: Program = {
               },
               {
                 id: 'm3',
-                exerciseId: 25,
-                prescription: '12–20 reps',
-                notes: 'Squeeze at the top and control the lower.',
-              },
-              {
-                id: 'm4',
-                exerciseId: 86,
+                exerciseId: 86, // Sit-ups
                 prescription: '8–15 reps',
                 notes: 'Slow, controlled reps.',
               },
               {
+                id: 'm4',
+                exerciseId: 93, // Bodyweight Calf Raises — new, replaces a second glute bridge to add variety
+                prescription: '15–20 reps',
+                notes: 'Slow and steady. Pause at the top, lower with control.',
+              },
+              {
                 id: 'm5',
-                exerciseId: 50,
+                exerciseId: 50, // Side Plank
                 prescription: '20–30s/side',
                 notes: 'Finish steady. Knee-down is fine.',
               },
@@ -235,9 +255,22 @@ export const pilates_intro_4wk_free: Program = {
               'Repeat smooth rounds. Stop before your form breaks down.',
             minutes: 8,
             movements: [
-              { id: 'm1', label: 'Glute bridge', prescription: '12 reps' },
-              { id: 'm2', label: 'Heel taps (or dead bug)', prescription: '10/side' },
-              { id: 'm3', label: 'Quadruped thoracic rotations', prescription: '6/side' },
+              {
+                id: 'm1',
+                exerciseId: 25, // Glute Bridge
+                prescription: '12 reps',
+                notes: 'Smooth reps. Squeeze at the top.',
+              },
+              {
+                id: 'm2',
+                label: 'Heel taps (or dead bug)',
+                prescription: '10/side',
+              },
+              {
+                id: 'm3',
+                label: 'Quadruped thoracic rotations',
+                prescription: '6/side',
+              },
             ],
           },
         ],
@@ -245,4 +278,3 @@ export const pilates_intro_4wk_free: Program = {
     ];
   }),
 };
-
