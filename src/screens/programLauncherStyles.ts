@@ -313,19 +313,32 @@ export const programLauncherStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.borderSubtle,
   },
-  bodyChangesTitle: {
+  bodyChangesLinkRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.lg,
+  },
+  bodyChangesLinkText: {
     color: Colors.accent,
     fontSize: FontSize.lg,
-    fontWeight: '800',
+    fontWeight: '700',
+    textDecorationLine: 'underline',
+    flex: 1,
+  },
+  bodyChangesLinkChevron: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
-    marginBottom: Spacing.md,
   },
   bodyChangesText: {
     color: Colors.textSecondary,
     fontSize: FontSize.lg,
     lineHeight: 20,
     fontWeight: '500',
+    marginTop: Spacing.md,
   },
   sectionTitle: {
     color: Colors.textPrimary,
