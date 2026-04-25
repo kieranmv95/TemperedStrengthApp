@@ -17,14 +17,16 @@ import {
   setWeightUnit,
   type WeightUnit,
 } from '@/src/utils/storage';
-import { router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import { ResizeMode, Video, type AVPlaybackStatus } from 'expo-av';
+import { router, type Href } from 'expo-router';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Animated,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StyleSheet,
   Switch,
   Text,
   TextInput,
@@ -33,7 +35,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 8;
+const TOTAL_PROGRESS_STEPS = TOTAL_STEPS - 1;
 
 const GENDER_OPTIONS: { value: OnboardingGender; label: string }[] = [
   { value: 'male', label: 'Male' },
@@ -71,6 +74,7 @@ function OnboardingFlow() {
 
   const [stepIndex, setStepIndex] = useState(0);
   const [profile, setProfile] = useState<OnboardingProfile>({});
+  const [introDone, setIntroDone] = useState(false);
 
   const [name, setName] = useState('');
   const [gender, setGender] = useState<OnboardingGender | null>(null);
@@ -121,20 +125,29 @@ function OnboardingFlow() {
 
   const fade = useRef(new Animated.Value(1)).current;
 
-  const animateStepChange = (updateStep: () => void) => {
-    Animated.timing(fade, {
-      toValue: 0,
-      duration: 140,
-      useNativeDriver: true,
-    }).start(() => {
-      updateStep();
+  const animateStepChange = useCallback(
+    (updateStep: () => void) => {
       Animated.timing(fade, {
-        toValue: 1,
-        duration: 180,
+        toValue: 0,
+        duration: 140,
         useNativeDriver: true,
-      }).start();
-    });
-  };
+      }).start(() => {
+        updateStep();
+        Animated.timing(fade, {
+          toValue: 1,
+          duration: 180,
+          useNativeDriver: true,
+        }).start();
+      });
+    },
+    [fade]
+  );
+
+  const goToNameStep = useCallback(() => {
+    if (introDone || completing) return;
+    setIntroDone(true);
+    animateStepChange(() => setStepIndex(1));
+  }, [animateStepChange, completing, introDone]);
 
   const toggleInterest = (value: OnboardingInterest) => {
     setInterests((prev) =>
@@ -142,12 +155,15 @@ function OnboardingFlow() {
     );
   };
 
-  const completeOnboarding = async (finalProfile: OnboardingProfile) => {
+  const completeOnboarding = async (
+    finalProfile: OnboardingProfile,
+    destination: Href = '/'
+  ) => {
     setCompleting(true);
     try {
       await setOnboardingProfile(finalProfile);
       await setOnboarded(true);
-      router.replace('/');
+      router.replace(destination);
     } catch (error) {
       console.error('Error completing onboarding:', error);
       Alert.alert(
@@ -169,6 +185,10 @@ function OnboardingFlow() {
 
   const handleSkipStep = () => {
     // Advance without committing this step's field to the profile.
+    if (stepIndex === 0) {
+      goToNameStep();
+      return;
+    }
     if (stepIndex >= TOTAL_STEPS - 1) {
       completeOnboarding(profile);
       return;
@@ -177,7 +197,7 @@ function OnboardingFlow() {
   };
 
   const handleBackStep = () => {
-    if (stepIndex <= 0) return;
+    if (stepIndex <= 1) return;
     animateStepChange(() => setStepIndex((i) => Math.max(0, i - 1)));
   };
 
@@ -279,13 +299,15 @@ function OnboardingFlow() {
   const renderStep = () => {
     switch (stepIndex) {
       case 0:
+        return null;
+      case 1:
         return (
           <View style={styles.stepBody}>
             <Text style={styles.stepTitle}>
-              Hi, we’re Tempered Strength.
+              What can we call you?
             </Text>
             <Text style={styles.stepSubtitle}>
-              What can we call you?
+              Add a name so we can make the app feel a bit more yours.
             </Text>
             <TextInput
               value={name}
@@ -302,7 +324,7 @@ function OnboardingFlow() {
             />
           </View>
         );
-      case 1:
+      case 2:
         return (
           <View style={styles.stepBody}>
             <Text style={styles.stepTitle}>Gender</Text>
@@ -321,7 +343,7 @@ function OnboardingFlow() {
             </View>
           </View>
         );
-      case 2:
+      case 3:
         return (
           <View style={styles.stepBody}>
             <Text style={styles.stepTitle}>What interests you?</Text>
@@ -341,7 +363,7 @@ function OnboardingFlow() {
             </View>
           </View>
         );
-      case 3:
+      case 4:
         return (
           <View style={styles.stepBody}>
             <Text style={styles.stepTitle}>Experience level</Text>
@@ -360,7 +382,7 @@ function OnboardingFlow() {
             </View>
           </View>
         );
-      case 4:
+      case 5:
         return (
           <View style={styles.stepBody}>
             <Text style={styles.stepTitle}>Weight units</Text>
@@ -381,7 +403,7 @@ function OnboardingFlow() {
             </View>
           </View>
         );
-      case 5:
+      case 6:
         return (
           <View style={styles.stepBody}>
             <Text style={styles.stepTitle}>Back up to iCloud</Text>
@@ -414,6 +436,81 @@ function OnboardingFlow() {
             </View>
           </View>
         );
+      case 7:
+        return (
+          <View style={styles.stepBody}>
+            <Text style={styles.stepTitle}>You’re in.</Text>
+            <Text style={styles.stepSubtitle}>
+              Time to lift, log, and level up.
+            </Text>
+            <View style={styles.finalCard}>
+              <Text style={styles.finalCardTitle}>What you can do now</Text>
+              <View style={styles.finalBullets}>
+                <Text style={styles.finalBullet}>
+                  Start a program and follow it week by week
+                </Text>
+                <Text style={styles.finalBullet}>
+                  Hit a standalone workout when you want to move today
+                </Text>
+                <Text style={styles.finalBullet}>
+                  Log sets fast and keep training honest
+                </Text>
+                <Text style={styles.finalBullet}>
+                  Chase PBs and watch your numbers climb
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.finalActions}>
+              <TouchableOpacity
+                style={styles.finalActionPrimary}
+                onPress={() => completeOnboarding(profile, '/')}
+                disabled={completing}
+                accessibilityRole="button"
+                accessibilityLabel="Start a program"
+              >
+                <Text style={styles.finalActionPrimaryText}>
+                  Start a program
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.finalActionSecondary}
+                onPress={() => completeOnboarding(profile, '/workouts')}
+                disabled={completing}
+                accessibilityRole="button"
+                accessibilityLabel="Browse workouts"
+              >
+                <Text style={styles.finalActionSecondaryText}>
+                  Browse workouts
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.finalActionSecondary}
+                onPress={() => completeOnboarding(profile, '/records')}
+                disabled={completing}
+                accessibilityRole="button"
+                accessibilityLabel="Chase personal bests"
+              >
+                <Text style={styles.finalActionSecondaryText}>Chase PBs</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.finalActionSecondary}
+                onPress={() => completeOnboarding(profile, '/glossary')}
+                disabled={completing}
+                accessibilityRole="button"
+                accessibilityLabel="Open glossary"
+              >
+                <Text style={styles.finalActionSecondaryText}>
+                  Learn the lingo
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.finalFinePrint}>
+              You can tweak preferences any time in Account.
+            </Text>
+          </View>
+        );
       default:
         return null;
     }
@@ -422,40 +519,48 @@ function OnboardingFlow() {
   const primaryCta = () => {
     switch (stepIndex) {
       case 0:
+        return { label: 'Continue', onPress: goToNameStep, disabled: completing };
+      case 1:
         return {
           label: 'Continue',
           onPress: handleContinueName,
-          disabled: completing,
+          disabled: name.trim().length === 0 || completing,
         };
-      case 1:
+      case 2:
         return {
           label: 'Continue',
           onPress: handleContinueGender,
           disabled: !gender || completing,
         };
-      case 2:
+      case 3:
         return {
           label: 'Continue',
           onPress: handleContinueInterests,
           disabled: interests.length === 0 || completing,
         };
-      case 3:
+      case 4:
         return {
           label: 'Continue',
           onPress: handleContinueExperience,
           disabled: !experienceLevel || completing,
         };
-      case 4:
+      case 5:
         return {
           label: 'Continue',
           onPress: handleContinueWeightUnit,
           disabled: weightUnitSaving || completing,
         };
-      case 5:
+      case 6:
         return {
-          label: 'Finish',
+          label: 'Continue',
           onPress: handleContinueICloud,
           disabled: iCloudSaving || completing,
+        };
+      case 7:
+        return {
+          label: "Let's go",
+          onPress: () => completeOnboarding(profile, '/'),
+          disabled: completing,
         };
       default:
         return { label: 'Continue', onPress: () => { }, disabled: true };
@@ -464,94 +569,136 @@ function OnboardingFlow() {
 
   const cta = primaryCta();
   const isLastStep = stepIndex === TOTAL_STEPS - 1;
-  const canGoBack = stepIndex > 0;
+  const canGoBack = stepIndex > 1;
+  const showIntro = stepIndex === 0;
+  const progressCurrent = Math.max(1, Math.min(stepIndex, TOTAL_PROGRESS_STEPS));
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+    <SafeAreaView
+      style={styles.container}
+      edges={showIntro ? ['top', 'left', 'right', 'bottom'] : ['top', 'left', 'right']}
+    >
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <View style={styles.header}>
-          <View style={styles.headerRow}>
-            <OnboardingProgressBar
-              currentStep={stepIndex + 1}
-              totalSteps={TOTAL_STEPS}
+        {showIntro ? (
+          <View style={{ flex: 1 }}>
+            <Video
+              source={require('../../assets/onboarding.mp4')}
+              style={StyleSheet.absoluteFillObject}
+              resizeMode={ResizeMode.COVER}
+              shouldPlay
+              isLooping={false}
+              isMuted
+              onPlaybackStatusUpdate={(status: AVPlaybackStatus) => {
+                if (!status.isLoaded) return;
+                if (status.didJustFinish) goToNameStep();
+              }}
+              accessibilityLabel="Onboarding intro video"
             />
-            <TouchableOpacity
-              style={styles.skipSetupButton}
-              onPress={handleSkipSetup}
-              accessibilityRole="button"
-              accessibilityLabel="Skip onboarding"
-              disabled={completing}
-            >
-              <Text style={styles.skipSetupText}>Skip setup</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
 
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-        >
-          <Animated.View style={{ flex: 1, opacity: fade }}>
-            {renderStep()}
-          </Animated.View>
-        </ScrollView>
-
-        <SafeAreaView edges={['bottom']}>
-          <View style={styles.footer}>
-            <TouchableOpacity
-              style={[
-                styles.primaryButton,
-                cta.disabled && styles.primaryButtonDisabled,
-              ]}
-              onPress={cta.onPress}
-              disabled={cta.disabled}
-              accessibilityRole="button"
-              accessibilityLabel={cta.label}
-            >
-              <Text style={styles.primaryButtonText}>{cta.label}</Text>
-            </TouchableOpacity>
-            {canGoBack ? (
-              <View style={styles.footerSecondaryRow}>
+            <View style={{ flex: 1, padding: 24, justifyContent: 'space-between' }}>
+              <View style={{ alignItems: 'flex-end' }}>
                 <TouchableOpacity
-                  style={styles.backStepButton}
-                  onPress={handleBackStep}
-                  disabled={completing || iCloudSaving || weightUnitSaving}
+                  onPress={goToNameStep}
                   accessibilityRole="button"
-                  accessibilityLabel="Go back"
-                >
-                  <Text style={styles.skipStepText}>Back</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.skipStepButton}
-                  onPress={handleSkipStep}
+                  accessibilityLabel="Skip intro"
                   disabled={completing}
-                  accessibilityRole="button"
-                  accessibilityLabel={
-                    isLastStep ? 'Skip this step and finish' : 'Skip this step'
-                  }
                 >
-                  <Text style={styles.skipStepText}>Skip</Text>
+                  <Text style={{ color: 'white', fontSize: 16, fontWeight: '700' }}>
+                    Skip
+                  </Text>
                 </TouchableOpacity>
               </View>
-            ) : (
-              <TouchableOpacity
-                style={styles.skipStepButton}
-                onPress={handleSkipStep}
-                disabled={completing}
-                accessibilityRole="button"
-                accessibilityLabel={
-                  isLastStep ? 'Skip this step and finish' : 'Skip this step'
-                }
-              >
-                <Text style={styles.skipStepText}>Skip</Text>
-              </TouchableOpacity>
-            )}
+
+              <View style={{ gap: 12 }} />
+            </View>
           </View>
-        </SafeAreaView>
+        ) : (
+          <>
+            <View style={styles.header}>
+              <View style={styles.headerRow}>
+                <OnboardingProgressBar
+                  currentStep={progressCurrent}
+                  totalSteps={TOTAL_PROGRESS_STEPS}
+                />
+                <TouchableOpacity
+                  style={styles.skipSetupButton}
+                  onPress={handleSkipSetup}
+                  accessibilityRole="button"
+                  accessibilityLabel="Skip onboarding"
+                  disabled={completing}
+                >
+                  <Text style={styles.skipSetupText}>Skip setup</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <ScrollView
+              style={styles.scroll}
+              contentContainerStyle={styles.scrollContent}
+              keyboardShouldPersistTaps="handled"
+            >
+              <Animated.View style={{ flex: 1, opacity: fade }}>
+                {renderStep()}
+              </Animated.View>
+            </ScrollView>
+
+            <SafeAreaView edges={['bottom']}>
+              <View style={styles.footer}>
+                <TouchableOpacity
+                  style={[
+                    styles.primaryButton,
+                    cta.disabled && styles.primaryButtonDisabled,
+                  ]}
+                  onPress={cta.onPress}
+                  disabled={cta.disabled}
+                  accessibilityRole="button"
+                  accessibilityLabel={cta.label}
+                >
+                  <Text style={styles.primaryButtonText}>{cta.label}</Text>
+                </TouchableOpacity>
+                {canGoBack ? (
+                  <View style={styles.footerSecondaryRow}>
+                    <TouchableOpacity
+                      style={styles.backStepButton}
+                      onPress={handleBackStep}
+                      disabled={completing || iCloudSaving || weightUnitSaving}
+                      accessibilityRole="button"
+                      accessibilityLabel="Go back"
+                    >
+                      <Text style={styles.skipStepText}>Back</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.skipStepButton}
+                      onPress={handleSkipStep}
+                      disabled={completing}
+                      accessibilityRole="button"
+                      accessibilityLabel={
+                        isLastStep ? 'Skip this step and finish' : 'Skip this step'
+                      }
+                    >
+                      <Text style={styles.skipStepText}>Skip</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.skipStepButton}
+                    onPress={handleSkipStep}
+                    disabled={completing}
+                    accessibilityRole="button"
+                    accessibilityLabel={
+                      isLastStep ? 'Skip this step and finish' : 'Skip this step'
+                    }
+                  >
+                    <Text style={styles.skipStepText}>Skip</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </SafeAreaView>
+          </>
+        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
