@@ -315,18 +315,6 @@ export function WorkoutScreenBody({
           });
         })()}
 
-        {onOpenCopyWorkoutNotesModal && selectedDayIndex !== null && (
-          <TouchableOpacity
-            style={styles.notesCopyTopStrip}
-            onPress={onOpenCopyWorkoutNotesModal}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.notesCopyLink}>
-              Copy notes from another workout
-            </Text>
-          </TouchableOpacity>
-        )}
-
         <View style={styles.notesContainer}>
           <TouchableOpacity
             style={styles.notesHeader}
@@ -361,15 +349,32 @@ export function WorkoutScreenBody({
           )}
         </View>
 
-        <TouchableOpacity
-          style={styles.exportWorkoutButton}
-          onPress={onExportWorkoutText}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.exportWorkoutButtonText}>
-            Export Workout as Text
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.notesActionsContainer}>
+          {onOpenCopyWorkoutNotesModal && selectedDayIndex !== null && (
+            <TouchableOpacity
+              style={styles.notesAction}
+              onPress={onOpenCopyWorkoutNotesModal}
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel="Copy notes from another workout"
+            >
+              <Text style={styles.notesActionText}>
+                Copy notes from another workout
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity
+            style={styles.notesAction}
+            onPress={onExportWorkoutText}
+            activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel="Export workout as text"
+          >
+            <Text style={styles.notesActionText}>Export workout as text</Text>
+          </TouchableOpacity>
+        </View>
+
       </ScrollView>
     </KeyboardAvoidingView>
   );

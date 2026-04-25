@@ -211,8 +211,7 @@ export const workoutScreenStyles = StyleSheet.create({
   notesContainer: {
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
-    marginTop: Spacing.md,
-    marginBottom: Spacing.section,
+    marginTop: Spacing.xxl,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
     overflow: 'hidden',
@@ -263,6 +262,19 @@ export const workoutScreenStyles = StyleSheet.create({
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
+  },
+  notesActionsContainer: {
+    marginTop: Spacing.xl,
+    marginBottom: Spacing.xl,
+    gap: Spacing.sm,
+  },
+  notesAction: {
+    paddingVertical: Spacing.sm,
+  },
+  notesActionText: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '600',
   },
   keyboardDoneBar: {
     position: 'absolute',
