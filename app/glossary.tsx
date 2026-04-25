@@ -6,8 +6,8 @@ import {
   Spacing,
 } from '@/src/constants/theme';
 import { getGlossaryByCategory, searchGlossary } from '@/src/data/brief';
-import { increment } from '@/src/services/metricService';
 import { fetchGlossary } from '@/src/services/briefApiService';
+import { increment } from '@/src/services/metricService';
 import type { GlossaryTerm } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
@@ -206,6 +206,9 @@ export default function GlossaryScreen() {
             );
           }}
         />
+        <Text style={styles.searchDescription}>
+          Tap into the glossary any time, no judgement, just clarity.
+        </Text>
       </View>
 
       {renderContent()}
@@ -214,6 +217,14 @@ export default function GlossaryScreen() {
 }
 
 const styles = StyleSheet.create({
+  searchDescription: {
+    paddingHorizontal: Spacing.xxl,
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    fontWeight: '500',
+    lineHeight: 20,
+    marginBottom: Spacing.xl,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.backgroundScreen,

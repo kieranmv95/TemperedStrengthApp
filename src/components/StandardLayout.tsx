@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -121,25 +122,40 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
                         <StandardLayoutFilters>{filters}</StandardLayoutFilters>
                     </View>
                 ) : null}
-                {hasAdvancedFilters ? (
-                    <View style={styles.advancedFiltersContainer}>
-                        <TouchableOpacity
-                            style={styles.filtersToggle}
-                            onPress={() => setFiltersExpanded((v) => !v)}
-                            activeOpacity={0.8}
-                        >
-                            <Text style={styles.filtersToggleText}>
-                                {filtersExpanded ? 'Hide filters' : 'Show filters'}
-                            </Text>
-                            <Ionicons name="filter" size={16} color={Colors.textMuted} />
-                        </TouchableOpacity>
-                        {filtersExpanded ? (
-                            <View style={styles.advancedFiltersContent}>
-                                <StandardLayoutAdvancedFilters>{advancedFilters}</StandardLayoutAdvancedFilters>
+                <View>
+                    {hasAdvancedFilters ? (
+                        <View style={styles.advancedFiltersContainer}>
+                            <View style={styles.advancedFiltersButtons}>
+                                <TouchableOpacity
+                                    style={styles.filtersToggle}
+                                    onPress={() => setFiltersExpanded((v) => !v)}
+                                    activeOpacity={0.8}
+                                >
+                                    <Text style={styles.filtersToggleText}>
+                                        {filtersExpanded ? 'Hide filters' : 'Show filters'}
+                                    </Text>
+                                    <Ionicons name="filter" size={16} color={Colors.textMuted} />
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.filtersToggle}
+                                    onPress={() => router.push('/glossary')}
+                                    activeOpacity={0.8}
+                                >
+                                    <Text style={styles.filtersToggleText}>
+                                        Glossary
+                                    </Text>
+                                    <Ionicons name="book" size={16} color={Colors.textMuted} />
+                                </TouchableOpacity>
                             </View>
-                        ) : null}
-                    </View>
-                ) : null}
+                            {filtersExpanded ? (
+                                <View style={styles.advancedFiltersContent}>
+                                    <StandardLayoutAdvancedFilters>{advancedFilters}</StandardLayoutAdvancedFilters>
+                                </View>
+                            ) : null}
+                        </View>
+                    ) : null}
+
+                </View>
             </View>
             {disableScroll ? (
                 <View style={[styles.content, styles.nonScrollContent]}>
@@ -223,6 +239,11 @@ const styles = StyleSheet.create({
     },
     advancedFiltersContent: {
         paddingTop: 0,
+    },
+    advancedFiltersButtons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: Spacing.md,
     },
     scrollView: {
         flex: 1,

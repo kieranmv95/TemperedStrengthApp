@@ -362,21 +362,6 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
       subtitle="Choose your training program to get started"
     >
       <StandardLayout.AdvancedFilters>
-        <View style={styles.glossaryCtaWrap}>
-          <Text style={styles.glossaryCtaTitle}>New to the gym?</Text>
-          <Text style={styles.glossaryCtaSubtitle}>
-            Tap into the glossary any time, no judgement, just clarity.
-          </Text>
-          <View style={styles.glossaryCtaRow}>
-            <Pill
-              label="Gym terminology glossary"
-              isActive={false}
-              onPress={() => router.push('/glossary')}
-              icon="book-outline"
-            />
-          </View>
-        </View>
-
         <View style={styles.filtersWrap}>
           <View style={styles.filtersRow}>
             <Text style={styles.filtersLabel}>Category</Text>
@@ -457,18 +442,18 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   selectedCategory === 'all' && selectedDifficulty === 'all'
                     ? programs.length
                     : programs.filter((p) => {
-                        if (
-                          selectedCategory !== 'all' &&
-                          !p.categories.includes(selectedCategory)
-                        )
-                          return false;
-                        if (
-                          selectedDifficulty !== 'all' &&
-                          p.difficulty !== selectedDifficulty
-                        )
-                          return false;
-                        return true;
-                      }).length
+                      if (
+                        selectedCategory !== 'all' &&
+                        !p.categories.includes(selectedCategory)
+                      )
+                        return false;
+                      if (
+                        selectedDifficulty !== 'all' &&
+                        p.difficulty !== selectedDifficulty
+                      )
+                        return false;
+                      return true;
+                    }).length
                 }
               />
               {availableGoals.map((goal) => {
@@ -531,26 +516,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 };
 
 const styles = StyleSheet.create({
-  glossaryCtaWrap: {
-    marginTop: Spacing.xxl,
-    marginBottom: Spacing.xl,
-    gap: Spacing.xs,
-  },
-  glossaryCtaTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '800',
-  },
-  glossaryCtaSubtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
-    lineHeight: 20,
-  },
-  glossaryCtaRow: {
-    marginTop: Spacing.md,
-  },
   filtersWrap: {
+    marginTop: Spacing.xxl,
     gap: Spacing.xl,
   },
   filtersRow: {
