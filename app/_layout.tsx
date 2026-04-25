@@ -63,6 +63,8 @@ export default function RootLayout() {
               <Stack.Screen name="glossary" options={{ headerShown: false }} />
               <Stack.Screen name="article/[id]" options={{ headerShown: false }} />
               <Stack.Screen name="patch-notes" options={{ headerShown: false }} />
+              <Stack.Screen name="account/general" options={{ headerShown: false }} />
+              <Stack.Screen name="account/program" options={{ headerShown: false }} />
               <Stack.Screen
                 name="onboarding"
                 options={{

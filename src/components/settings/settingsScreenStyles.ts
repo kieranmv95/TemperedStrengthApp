@@ -5,6 +5,15 @@ export const settingsScreenStyles = StyleSheet.create({
   settingsList: {
     gap: Spacing.xl,
   },
+  settingsSection: {
+    gap: Spacing.md,
+  },
+  settingsSectionTitle: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+    paddingHorizontal: Spacing.sm,
+  },
   settingItem: {
     flexDirection: 'row',
     alignItems: 'center',

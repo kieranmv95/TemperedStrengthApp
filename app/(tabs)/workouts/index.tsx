@@ -361,7 +361,7 @@ export default function WorkoutsScreen() {
                         <Text style={styles.curatedSectionKicker}>Curated</Text>
                       </View>
                       <Text style={styles.curatedSectionTitle}>
-                        Women’s Picks
+                        Recommended for you
                       </Text>
                       <Text style={styles.curatedSectionHelper}>
                         A feel-good place to start.

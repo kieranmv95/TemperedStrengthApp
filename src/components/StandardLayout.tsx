@@ -28,6 +28,7 @@ type StandardLayoutProps = {
     title: string;
     subtitle?: string;
     disableScroll?: boolean;
+    onBackPress?: () => void;
     children?: React.ReactNode;
 };
 
@@ -41,6 +42,7 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
     title,
     subtitle,
     disableScroll = false,
+    onBackPress,
     children,
 }) => {
     const insets = useSafeAreaInsets();
@@ -101,6 +103,17 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
             ]}
         >
             <View style={styles.headerContainer}>
+                {onBackPress ? (
+                    <TouchableOpacity
+                        style={styles.backButton}
+                        onPress={onBackPress}
+                        accessibilityRole="button"
+                        accessibilityLabel="Back"
+                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    >
+                        <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
+                    </TouchableOpacity>
+                ) : null}
                 <Text style={styles.title}>{title}</Text>
                 {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
                 {hasFilters ? (
@@ -174,6 +187,11 @@ const styles = StyleSheet.create({
         paddingBottom: Spacing.xxl,
         borderBottomWidth: 1,
         borderBottomColor: Colors.borderDefault,
+    },
+    backButton: {
+        alignSelf: 'flex-start',
+        marginBottom: Spacing.md,
+        paddingVertical: Spacing.xs,
     },
     filtersContainer: {
         marginTop: Spacing.xl,
