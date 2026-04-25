@@ -56,10 +56,10 @@ const EXPERIENCE_OPTIONS: {
   value: OnboardingExperienceLevel;
   label: string;
 }[] = [
-  { value: 'beginner', label: 'Beginner' },
-  { value: 'intermediate', label: 'Intermediate' },
-  { value: 'advanced', label: 'Advanced' },
-];
+    { value: 'beginner', label: 'Beginner' },
+    { value: 'intermediate', label: 'Intermediate' },
+    { value: 'advanced', label: 'Advanced' },
+  ];
 
 function OnboardingFlow() {
   const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
@@ -323,11 +323,12 @@ function OnboardingFlow() {
             <Text style={styles.stepSubtitle}>
               Pick as many as you like.
             </Text>
-            <View style={styles.optionList}>
+            <View style={styles.optionListInline}>
               {INTEREST_OPTIONS.map((opt) => (
                 <OnboardingOptionCard
                   key={opt.value}
                   label={opt.label}
+                  fullWidth={false}
                   selected={interests.includes(opt.value)}
                   onPress={() => toggleInterest(opt.value)}
                 />
@@ -452,7 +453,7 @@ function OnboardingFlow() {
           disabled: iCloudSaving || completing,
         };
       default:
-        return { label: 'Continue', onPress: () => {}, disabled: true };
+        return { label: 'Continue', onPress: () => { }, disabled: true };
     }
   };
 

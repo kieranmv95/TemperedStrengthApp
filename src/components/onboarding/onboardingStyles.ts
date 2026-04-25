@@ -91,6 +91,11 @@ export const onboardingStyles = StyleSheet.create({
   optionList: {
     gap: Spacing.md,
   },
+  optionListInline: {
+    gap: Spacing.md,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+  },
   optionCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -104,6 +109,12 @@ export const onboardingStyles = StyleSheet.create({
   },
   optionCardSelected: {
     borderColor: Colors.accent,
+  },
+  optionCardNotFullWidth: {
+    alignSelf: 'flex-start',
+  },
+  optionLabelNotFullWidth: {
+    flex: 0,
   },
   optionLabel: {
     color: Colors.textPrimary,
