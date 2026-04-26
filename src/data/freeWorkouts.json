@@ -6,7 +6,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 25,
-    "tags": ["AMRAP", "No Equipment"],
+    "tags": ["AMRAP", "No Equipment", "Women’s Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -27,7 +27,7 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": ["Sprint", "Lungs"],
+    "tags": ["Sprint", "Lungs", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -48,7 +48,7 @@
     "category": "Mobility",
     "difficulty": "Beginner",
     "estimatedTime": 15,
-    "tags": ["Core", "Abs"],
+    "tags": ["Core", "Abs", "Women’s Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -69,7 +69,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 15,
-    "tags": ["Chipper", "Full Body"],
+    "tags": ["Chipper", "Full Body", "No Equipment", "Women’s Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -92,7 +92,7 @@
     "category": "Strength",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": ["Legs", "Volume"],
+    "tags": ["Legs", "Volume", "No Equipment", "Legs & Glutes", "Women’s Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -118,7 +118,7 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 25,
-    "tags": ["Upper Body", "Pump"],
+    "tags": ["Upper Body", "Pump", "No Equipment", "Women’s Picks", "Get Big"],
     "isPremium": false,
     "blocks": [
       {
@@ -164,7 +164,7 @@
     "category": "Mobility",
     "difficulty": "Beginner",
     "estimatedTime": 15,
-    "tags": ["Recovery", "Postures"],
+    "tags": ["Recovery", "Postures", "Women’s Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -237,7 +237,7 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": ["Running", "Speed"],
+    "tags": ["Running", "Speed", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -258,7 +258,7 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 20,
-    "tags": ["Chest", "Bodyweight"],
+    "tags": ["Chest", "Bodyweight", "No Equipment", "Women’s Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -279,7 +279,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 10,
-    "tags": ["Tabata", "Quick"],
+    "tags": ["Tabata", "Quick", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -300,7 +300,7 @@
     "category": "Mobility",
     "difficulty": "Intermediate",
     "estimatedTime": 25,
-    "tags": ["Shoulders", "Skill"],
+    "tags": ["Shoulders", "Skill", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -325,7 +325,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 18,
-    "tags": ["Legs", "Lungs"],
+    "tags": ["Legs", "Lungs", "No Equipment", "Legs & Glutes"],
     "isPremium": false,
     "blocks": [
       {
@@ -346,7 +346,7 @@
     "category": "Mobility",
     "difficulty": "Beginner",
     "estimatedTime": 12,
-    "tags": ["Shoulders", "Prehab"],
+    "tags": ["Shoulders", "Prehab", "Women’s Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -371,7 +371,7 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": ["Cardio", "Jump Rope"],
+    "tags": ["Cardio", "Jump Rope", "Women’s Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -392,7 +392,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 18,
-    "tags": ["Full Body", "Animal Flow"],
+    "tags": ["Full Body", "Animal Flow", "No Equipment", "Women’s Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -455,7 +455,7 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 50,
-    "tags": ["Chest", "Triceps", "Gym"],
+    "tags": ["Chest", "Triceps", "Gym", "Women’s Picks", "Get Big"],
     "isPremium": false,
     "blocks": [
       {
@@ -524,7 +524,7 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 50,
-    "tags": ["Back", "Biceps", "Gym"],
+    "tags": ["Back", "Biceps", "Gym", "Women’s Picks", "Get Big"],
     "isPremium": false,
     "blocks": [
       {
@@ -582,7 +582,7 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 55,
-    "tags": ["Legs", "Squat", "Gym"],
+    "tags": ["Legs", "Squat", "Gym", "Legs & Glutes", "Women’s Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -667,6 +667,176 @@
           "1 min SkiErg (calories)",
           "1 min Assault Bike (calories)",
           "1 min Rest"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_25",
+    "title": "Boxing HIIT: Power Jabs",
+    "description": "Upper body sweat with a boxing vibe. Keep your hands up, stay relaxed, and move with purpose.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": ["Boxing", "Boxing HIIT", "No Equipment", "Women’s Picks"],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "2 mins easy shadowboxing (light punches, light feet)",
+          "10 shoulder circles each way",
+          "10 inchworms",
+          "20s plank (knees down is fine)"
+        ]
+      },
+      {
+        "name": "10-Min Boxing HIIT",
+        "instructions": "Alternate 40s work / 20s easy. Keep punches snappy, not tense.",
+        "movements": [
+          "Jab-cross",
+          "Fast feet + light jabs",
+          "Hooks (left/right)",
+          "Uppercuts (left/right)",
+          "Jab-cross (pick up pace)"
+        ]
+      },
+      {
+        "name": "Finisher",
+        "instructions": "Rest 30–45s between rounds. Move with control.",
+        "movements": [
+          "3 Rounds: 10 push-ups (elevated is fine), 20 air squats, 30s shadowboxing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_26",
+    "title": "Boxing HIIT: Uppercut Burner",
+    "description": "A short, punchy upper body session. Breathe, keep your shoulders down, and stay moving.",
+    "category": "Conditioning",
+    "difficulty": "Intermediate",
+    "estimatedTime": 25,
+    "tags": ["Boxing", "Boxing HIIT", "No Equipment", "Women’s Picks"],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "90s easy shadowboxing",
+          "10 scapular push-ups",
+          "10 glute bridges",
+          "20s side plank each side (knee down is fine)"
+        ]
+      },
+      {
+        "name": "12-Min Circuit",
+        "instructions": "Work 45s / rest 15s. Aim for steady effort the whole way.",
+        "movements": [
+          "Uppercuts (light + fast)",
+          "Jab-cross (strong reps)",
+          "Hooks (hips drive the punch)",
+          "High knees (or march fast)"
+        ]
+      },
+      {
+        "name": "Cool Down",
+        "movements": [
+          "60s slow breathing",
+          "60s chest/shoulder stretch",
+          "60s gentle forward fold (soft knees)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_27",
+    "title": "Boxing HIIT: Round-by-Round",
+    "description": "Three short rounds that build. You choose the intensity—keep it empowering, not punishing.",
+    "category": "WOD",
+    "difficulty": "Beginner",
+    "estimatedTime": 20,
+    "tags": ["Boxing", "Boxing HIIT", "No Equipment"],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "2 mins easy shadowboxing",
+          "10 bodyweight squats",
+          "10 inchworms"
+        ]
+      },
+      {
+        "name": "3 Rounds",
+        "instructions": "Each round is 4 mins work + 1 min rest. Keep moving—slow is allowed.",
+        "movements": [
+          "4 mins shadowboxing (mix jab-cross, hooks, uppercuts)",
+          "1 min rest"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_28",
+    "title": "Boxing HIIT: Arms on Fire",
+    "description": "Upper body endurance with a boxing feel. If your shoulders burn, drop the pace—not your form.",
+    "category": "Conditioning",
+    "difficulty": "Intermediate",
+    "estimatedTime": 30,
+    "tags": ["Boxing", "Boxing HIIT", "No Equipment", "Women’s Picks"],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "2 mins easy shadowboxing",
+          "10 shoulder circles each way",
+          "10 push-ups (elevated is fine)"
+        ]
+      },
+      {
+        "name": "E2MOM 16",
+        "instructions": "Every 2 mins for 16 mins: 75s work, then rest the remainder. Keep it smooth.",
+        "movements": [
+          "75s shadowboxing (continuous punches, light feet)"
+        ]
+      },
+      {
+        "name": "Core Finish",
+        "instructions": "Rest 30s between sets.",
+        "movements": [
+          "3 x 30–45s plank",
+          "3 x 20–30s side plank each side"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_29",
+    "title": "Boxing HIIT: Sweat & Smile",
+    "description": "A feel-good finisher session. High energy, low pressure. You’ll be glad you did it.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 15,
+    "tags": ["Boxing", "Boxing HIIT", "No Equipment", "Women’s Picks"],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "60s easy shadowboxing",
+          "10 bodyweight squats"
+        ]
+      },
+      {
+        "name": "10-Min Sweat",
+        "instructions": "Work 30s / rest 15s. Stay light on your feet.",
+        "movements": [
+          "Jab-cross",
+          "Hooks",
+          "Uppercuts",
+          "Fast feet (or march fast)"
         ]
       }
     ]

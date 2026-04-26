@@ -45,6 +45,7 @@ export const powerlifting_3day: Program = {
   description:
     '8-Week Peaking Program. Volume drops as intensity climbs to a Week 8 testing session.',
   categories: ['powerlifting', 'strength'],
+  goals: ['stronger', 'athletic'],
   difficulty: 'intermediate',
   daysSplit: ['mon', 'wed', 'fri'],
   averageSessionDuration: '60m',

@@ -25,6 +25,21 @@ export type WorkoutLogs = {
   };
 };
 
+export type ConditioningBlockLog = {
+  completed: boolean;
+  completedAt?: number;
+};
+
+/**
+ * Completion logs for conditioning-style workouts.
+ * Keyed by program dayIndex, then by stable workout block id.
+ */
+export type ConditioningWorkoutLogs = {
+  [dayIndex: number]: {
+    [blockId: string]: ConditioningBlockLog;
+  };
+};
+
 export type CustomSetCounts = {
   [dayIndex: number]: {
     [slotIndex: number]: number; // custom set count

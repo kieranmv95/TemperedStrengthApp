@@ -1,38 +1,28 @@
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
-import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import type { OnboardingProfile } from '@/src/types/onboarding';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
 import {
-  clearProgramData,
+  clearOnboarding,
   getActiveProgramId,
-  getAutoPbDetectionInProgramsEnabled,
-  getAutoRestTimersEnabled,
-  getWeightUnit,
-  setAutoPbDetectionInProgramsEnabled,
-  setAutoRestTimersEnabled,
-  setWeightUnit,
-  type WeightUnit,
+  getOnboarded,
+  getOnboardingProfile,
 } from '@/src/utils/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Platform, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 
 export default function SettingsScreen() {
-  const [hasProgram, setHasProgram] = useState<boolean>(false);
+  const [, setHasProgram] = useState<boolean>(false);
   const [, setActiveProgram] = useState<Program | null>(null);
-  const [weightUnit, setWeightUnitState] = useState<WeightUnit>('kg');
-  const [weightUnitLoading, setWeightUnitLoading] = useState<boolean>(true);
-  const [autoTimersEnabled, setAutoTimersEnabledState] = useState<boolean>(true);
-  const [autoTimersLoading, setAutoTimersLoading] = useState<boolean>(true);
-  const [autoPbEnabled, setAutoPbEnabledState] = useState<boolean>(true);
-  const [autoPbLoading, setAutoPbLoading] = useState<boolean>(true);
+  const [onboardedState, setOnboardedState] = useState<boolean>(false);
+  const [onboardingProfileState, setOnboardingProfileState] =
+    useState<OnboardingProfile | null>(null);
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
-  const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
 
   const checkProgramStatus = async () => {
     try {
@@ -53,81 +43,25 @@ export default function SettingsScreen() {
     }
   };
 
-  const loadWeightUnit = async () => {
+  const loadOnboardingState = async () => {
     try {
-      const u = await getWeightUnit();
-      setWeightUnitState(u);
+      const [done, profile] = await Promise.all([
+        getOnboarded(),
+        getOnboardingProfile(),
+      ]);
+      setOnboardedState(done);
+      setOnboardingProfileState(profile);
     } catch (error) {
-      console.error('Error loading weight unit:', error);
-      setWeightUnitState('kg');
-    } finally {
-      setWeightUnitLoading(false);
-    }
-  };
-
-  const loadAutoTimersEnabled = async () => {
-    try {
-      const enabled = await getAutoRestTimersEnabled();
-      setAutoTimersEnabledState(enabled);
-    } catch (error) {
-      console.error('Error loading auto timers enabled:', error);
-      setAutoTimersEnabledState(true);
-    } finally {
-      setAutoTimersLoading(false);
-    }
-  };
-
-  const loadAutoPbEnabled = async () => {
-    try {
-      const enabled = await getAutoPbDetectionInProgramsEnabled();
-      setAutoPbEnabledState(enabled);
-    } catch (error) {
-      console.error('Error loading auto PB detection enabled:', error);
-      setAutoPbEnabledState(true);
-    } finally {
-      setAutoPbLoading(false);
-    }
-  };
-
-  const persistWeightUnit = async (u: WeightUnit) => {
-    setWeightUnitState(u);
-    try {
-      await setWeightUnit(u);
-    } catch (error) {
-      console.error('Error saving weight unit:', error);
-      const prev = await getWeightUnit();
-      setWeightUnitState(prev);
-    }
-  };
-
-  const persistAutoTimersEnabled = async (next: boolean) => {
-    setAutoTimersEnabledState(next);
-    try {
-      await setAutoRestTimersEnabled(next);
-    } catch (error) {
-      console.error('Error saving auto timers enabled:', error);
-      const prev = await getAutoRestTimersEnabled();
-      setAutoTimersEnabledState(prev);
-    }
-  };
-
-  const persistAutoPbEnabled = async (next: boolean) => {
-    setAutoPbEnabledState(next);
-    try {
-      await setAutoPbDetectionInProgramsEnabled(next);
-    } catch (error) {
-      console.error('Error saving auto PB detection enabled:', error);
-      const prev = await getAutoPbDetectionInProgramsEnabled();
-      setAutoPbEnabledState(prev);
+      console.error('Error loading onboarding state:', error);
+      setOnboardedState(false);
+      setOnboardingProfileState(null);
     }
   };
 
   useFocusEffect(
     React.useCallback(() => {
       checkProgramStatus();
-      loadWeightUnit();
-      loadAutoTimersEnabled();
-      loadAutoPbEnabled();
+      loadOnboardingState();
       refresh(); // Refresh subscription status when screen is focused
     }, [refresh])
   );
@@ -142,39 +76,25 @@ export default function SettingsScreen() {
     }
   };
 
-  const handleEndCurrentProgram = () => {
+  const handleResetOnboarding = () => {
     Alert.alert(
-      'End Current Program',
-      'This will permanently end your current program and clear all program data, including:\n\n• Program selection & start date\n• Program progress\n• Workout logs\n• Exercise swaps\n• Custom set counts\n• Workout notes\n• Rest timers / active session\n\nThis action cannot be undone.\n\nAre you sure you want to end your current program?',
+      'Reset Onboarding',
+      'This clears the onboarded flag and the stored onboarding profile.',
       [
+        { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'End Program',
+          text: 'Reset',
           style: 'destructive',
           onPress: async () => {
             try {
-              await Notifications.cancelAllScheduledNotificationsAsync();
+              await clearOnboarding();
+              setOnboardedState(false);
+              setOnboardingProfileState(null);
             } catch (error) {
-              console.error('Error cancelling scheduled notifications:', error);
-            }
-
-            try {
-              await clearProgramData();
-              setHasProgram(false);
-              setActiveProgram(null);
-              router.replace('/');
-              Alert.alert(
-                'Program Ended',
-                'Your current program has been cleared.'
-              );
-            } catch (error) {
-              console.error('Error ending current program:', error);
+              console.error('Error resetting onboarding:', error);
               Alert.alert(
                 'Error',
-                'Failed to end your current program. Please try again.'
+                'Failed to reset onboarding. Please try again.'
               );
             }
           },
@@ -220,6 +140,9 @@ export default function SettingsScreen() {
     <StandardLayout title="Account" subtitle="Manage your account">
       <StandardLayout.Body>
         <View style={styles.settingsList}>
+          {onboardingProfileState?.name && (
+            <Text style={styles.settingTitle}>Hi {onboardingProfileState?.name}</Text>
+          )}
           <TouchableOpacity
             style={[styles.settingItem, isPro && styles.proItem]}
             onPress={handleSubscriptionPress}
@@ -269,132 +192,36 @@ export default function SettingsScreen() {
             </Text>
           </TouchableOpacity>
 
-          <View style={styles.settingItem}>
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={() => router.push('/account/general')}
+          >
             <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Weight units</Text>
+              <Text style={styles.settingTitle}>General settings</Text>
               <Text style={styles.settingDescription}>
-                Show and enter weights in {weightUnit === 'lb' ? 'lbs' : 'kg'}.
+                Weight units, iCloud sync, onboarding preferences.
               </Text>
             </View>
-            <View
-              style={[
-                styles.unitToggle,
-                weightUnitLoading && styles.unitToggleDisabled,
-              ]}
-              accessibilityRole="radiogroup"
-              accessibilityLabel="Weight units"
-            >
-              <TouchableOpacity
-                style={[
-                  styles.unitToggleOption,
-                  weightUnit === 'kg' && styles.unitToggleOptionActive,
-                ]}
-                onPress={() => persistWeightUnit('kg')}
-                disabled={weightUnitLoading}
-                accessibilityRole="radio"
-                accessibilityState={{ selected: weightUnit === 'kg', disabled: weightUnitLoading }}
-              >
-                <Text
-                  style={[
-                    styles.unitToggleText,
-                    weightUnit === 'kg' && styles.unitToggleTextActive,
-                  ]}
-                >
-                  kg
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.unitToggleOption,
-                  weightUnit === 'lb' && styles.unitToggleOptionActive,
-                ]}
-                onPress={() => persistWeightUnit('lb')}
-                disabled={weightUnitLoading}
-                accessibilityRole="radio"
-                accessibilityState={{ selected: weightUnit === 'lb', disabled: weightUnitLoading }}
-              >
-                <Text
-                  style={[
-                    styles.unitToggleText,
-                    weightUnit === 'lb' && styles.unitToggleTextActive,
-                  ]}
-                >
-                  lb
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+            <Text style={styles.settingArrow}>→</Text>
+          </TouchableOpacity>
 
-          <View style={styles.settingItem}>
+          <TouchableOpacity
+            onPress={() => router.push('/account/program')}
+            style={styles.settingItem}
+          >
             <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Auto rest timers</Text>
+              <Text style={styles.settingTitle}>Program settings</Text>
               <Text style={styles.settingDescription}>
-                When enabled, completing a set will automatically start (or restart) the rest timer. The timer closes after the last set.
+                Auto timers, PB detection, end current program.
               </Text>
             </View>
-            <Switch
-              value={autoTimersEnabled}
-              onValueChange={(next) => {
-                if (autoTimersLoading) return;
-                persistAutoTimersEnabled(next);
-              }}
-              disabled={autoTimersLoading}
-            />
-          </View>
+            <Text style={styles.settingArrow}>→</Text>
+          </TouchableOpacity>
 
-          <View style={styles.settingItem}>
-            <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Auto-detect PBs (Programs)</Text>
-              <Text style={styles.settingDescription}>
-                When enabled, if we detect a new PB we’ll prompt you to update personal bests after sets during program workouts.
-              </Text>
-            </View>
-            <Switch
-              value={autoPbEnabled}
-              onValueChange={(next) => {
-                if (autoPbLoading) return;
-                persistAutoPbEnabled(next);
-              }}
-              disabled={autoPbLoading}
-            />
-          </View>
-
-          {Platform.OS === 'ios' && (
-            <View style={styles.settingItem}>
-              <View style={styles.settingContent}>
-                <Text style={styles.settingTitle}>iCloud Sync</Text>
-                <Text style={styles.settingDescription}>
-                  Keep a backup of your data in iCloud. AsyncStorage stays
-                  primary; iCloud is used for backup and restore.
-                </Text>
-                {iCloudSyncEnabled && !isAvailable && (
-                  <Text style={styles.settingDescription}>
-                    iCloud is currently unavailable on this device/account.
-                  </Text>
-                )}
-              </View>
-              <Switch
-                value={iCloudSyncEnabled}
-                onValueChange={async (next) => {
-                  if (!next) {
-                    await setEnabled(false);
-                    return;
-                  }
-
-                  const result = await setEnabled(true);
-                  if (!result.isAvailable) {
-                    Alert.alert(
-                      'iCloud Unavailable',
-                      "We couldn't access iCloud on this device/account. Your data will remain local only."
-                    );
-                    await setEnabled(false);
-                  }
-                }}
-              />
-            </View>
-          )}
-
-          <TouchableOpacity style={styles.settingItem} onPress={() => router.push('/patch-notes')}>
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={() => router.push('/patch-notes')}
+          >
             <View style={styles.settingContent}>
               <Text style={styles.settingTitle}>Patch Notes</Text>
               <Text style={styles.settingDescription}>
@@ -404,60 +231,46 @@ export default function SettingsScreen() {
             <Text style={styles.settingArrow}>→</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[
-              styles.settingItem,
-              styles.dangerItem,
-              !hasProgram && styles.settingItemDisabled,
-            ]}
-            onPress={handleEndCurrentProgram}
-            disabled={!hasProgram}
-          >
-            <View style={styles.settingContent}>
-              <Text
-                style={[
-                  styles.settingTitle,
-                  styles.dangerText,
-                  !hasProgram && styles.settingTitleDisabled,
-                ]}
-              >
-                End Current Program
-              </Text>
-              <Text style={styles.settingDescription}>
-                {hasProgram
-                  ? 'Clear all program progress and related data'
-                  : 'No active program to end'}
-              </Text>
-            </View>
-            <Text
-              style={[
-                styles.settingArrow,
-                styles.dangerText,
-                !hasProgram && styles.settingArrowDisabled,
-              ]}
-            >
-              →
-            </Text>
-          </TouchableOpacity>
-
           {__DEV__ && (
-            <TouchableOpacity
-              style={[styles.settingItem, styles.dangerItem]}
-              onPress={handleClearAllData}
-            >
-              <View style={styles.settingContent}>
-                <Text style={[styles.settingTitle, styles.dangerText]}>
-                  Clear All Data
-                </Text>
-                <Text style={styles.settingDescription}>
-                  Permanently delete all stored data
-                </Text>
+            <View style={styles.settingsSection}>
+              <Text style={styles.settingsSectionTitle}>Dev settings</Text>
+
+              <TouchableOpacity style={[styles.settingItem, styles.dangerItem]} onPress={handleClearAllData}>
+                <View style={styles.settingContent}>
+                  <Text style={[styles.settingTitle, styles.dangerText]}>Clear All Data</Text>
+                  <Text style={styles.settingDescription}>Permanently delete all stored data</Text>
+                </View>
+                <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
+              </TouchableOpacity>
+
+              <View style={styles.settingItem}>
+                <View style={styles.settingContent}>
+                  <Text style={styles.settingTitle}>Developer · Onboarding</Text>
+                  <Text style={styles.settingDescription}>
+                    onboarded: {onboardedState ? 'true' : 'false'}
+                  </Text>
+                  <Text style={styles.settingDescription}>
+                    onboarding_profile:{'\n'}
+                    {onboardingProfileState
+                      ? JSON.stringify(onboardingProfileState, null, 2)
+                      : 'null'}
+                  </Text>
+                </View>
               </View>
-              <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
-            </TouchableOpacity>
+
+              <TouchableOpacity style={[styles.settingItem, styles.dangerItem]} onPress={handleResetOnboarding}>
+                <View style={styles.settingContent}>
+                  <Text style={[styles.settingTitle, styles.dangerText]}>Reset Onboarding</Text>
+                  <Text style={styles.settingDescription}>
+                    Clear onboarded flag and stored profile for testing
+                  </Text>
+                </View>
+                <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
+              </TouchableOpacity>
+            </View>
           )}
         </View>
       </StandardLayout.Body>
-    </StandardLayout>
+    </StandardLayout >
   );
 }

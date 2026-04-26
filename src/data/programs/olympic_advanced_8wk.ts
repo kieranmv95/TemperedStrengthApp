@@ -16,6 +16,7 @@ export const olympic_advanced_8wk: Program = {
   description:
     '8-Week peak. Phase 1: Volume & Positional Strength. Phase 2: Speed & Maximal Singles.',
   categories: ['olympic'],
+  goals: ['stronger', 'athletic', 'mobility'],
   difficulty: 'advanced',
   daysSplit: ['mon', 'wed', 'fri'],
   averageSessionDuration: '60m',

@@ -7,6 +7,17 @@ export type ExerciseAlternative = {
   matchScore: 100 | 50;
 };
 
+export type FindAlternativesOptions = {
+  equipmentMode?: 'any' | 'bodyweight';
+};
+
+function isAllowedByEquipment(exercise: Exercise, options?: FindAlternativesOptions) {
+  if (options?.equipmentMode === 'bodyweight') {
+    return exercise.equipment === 'Bodyweight';
+  }
+  return true;
+}
+
 /**
  * Finds alternative exercises that share the same movement pattern.
  *
@@ -16,11 +27,13 @@ export type ExerciseAlternative = {
  * Within each tier, prefer different equipment first.
  * @param currentExerciseId - ID of the current exercise
  * @param count - Number of alternatives to return (default: 3)
+ * @param options - Optional filters (e.g. equipment)
  * @returns Array of alternative exercises
  */
 export const findAlternatives = (
   currentExerciseId: number,
-  count: number = 3
+  count: number = 3,
+  options?: FindAlternativesOptions
 ): ExerciseAlternative[] => {
   const exercises = getAllExercises();
   const currentExercise = exercises.find((ex) => ex.id === currentExerciseId);
@@ -29,10 +42,17 @@ export const findAlternatives = (
     return [];
   }
 
+  if (!isAllowedByEquipment(currentExercise, options)) {
+    return [];
+  }
+
   const currentGroup = getMuscleGroup(currentExercise.muscle);
 
   const samePattern = exercises.filter(
-    (ex) => ex.pattern === currentExercise.pattern && ex.id !== currentExerciseId
+    (ex) =>
+      ex.pattern === currentExercise.pattern &&
+      ex.id !== currentExerciseId &&
+      isAllowedByEquipment(ex, options)
   );
 
   const perfect = samePattern.filter(
@@ -56,6 +76,7 @@ export const findAlternatives = (
     (ex) =>
       ex.id !== currentExerciseId &&
       !pickedIds.has(ex.id) &&
+      isAllowedByEquipment(ex, options) &&
       getMuscleGroup(ex.muscle) === currentGroup &&
       ex.pattern !== currentExercise.pattern
   );

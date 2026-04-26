@@ -11,6 +11,7 @@ import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles
 import type { Workout } from '@/src/types/program';
 import type { ActiveSession, CompletedSession } from '@/src/types/storage';
 import { formatVolumeFromKg } from '@/src/utils/weightUnits';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
   KeyboardAvoidingView,
@@ -23,6 +24,7 @@ import {
 } from 'react-native';
 import type { RestTimerStartPayload } from './ExerciseCard';
 import { ExerciseCard } from './ExerciseCard';
+import { ConditioningWorkoutBody } from './conditioning/ConditioningWorkoutBody';
 
 type WorkoutScreenBodyProps = {
   selectedDayIndex: number | null;
@@ -39,6 +41,10 @@ type WorkoutScreenBodyProps = {
   notesInputRef: React.RefObject<TextInput | null>;
   tabBarHeight: number;
   bottomInset: number;
+  warmupModuleEnabled: boolean;
+  cooldownModuleEnabled: boolean;
+  onToggleWarmupModule: () => void | Promise<void>;
+  onToggleCooldownModule: () => void | Promise<void>;
   onIntensityInfoPress: () => void;
   handleRedoWorkout: () => void | Promise<void>;
   handleSwapClick: (exerciseSlotIndex: number) => void;
@@ -67,6 +73,10 @@ export function WorkoutScreenBody({
   notesInputRef,
   tabBarHeight,
   bottomInset,
+  warmupModuleEnabled,
+  cooldownModuleEnabled,
+  onToggleWarmupModule,
+  onToggleCooldownModule,
   onIntensityInfoPress,
   handleRedoWorkout,
   handleSwapClick,
@@ -88,13 +98,15 @@ export function WorkoutScreenBody({
     return <RestDayScreen onProgramReset={onProgramReset} />;
   }
 
-  if (!currentWorkout || slots.length === 0) {
+  if (!currentWorkout) {
     return (
       <View style={styles.loadingContainer}>
         <Text style={styles.loadingText}>No workout found</Text>
       </View>
     );
   }
+
+  const isV2 = currentWorkout.format === 'v2';
 
   return (
     <KeyboardAvoidingView
@@ -120,6 +132,67 @@ export function WorkoutScreenBody({
                   {currentWorkout.description}
                 </Text>
               )}
+              <View style={styles.moduleToggleRow}>
+                {!isV2 ? (
+                  <>
+                    <TouchableOpacity
+                      style={[
+                        styles.moduleToggle,
+                        warmupModuleEnabled && styles.moduleToggleActive,
+                      ]}
+                      onPress={onToggleWarmupModule}
+                      activeOpacity={0.7}
+                    >
+                      <Ionicons
+                        name={
+                          warmupModuleEnabled ? 'checkmark-circle' : 'add-circle-outline'
+                        }
+                        size={16}
+                        color={
+                          warmupModuleEnabled ? Colors.textOnAccent : Colors.textMuted
+                        }
+                      />
+                      <Text
+                        style={[
+                          styles.moduleToggleText,
+                          warmupModuleEnabled && styles.moduleToggleTextActive,
+                        ]}
+                      >
+                        Add a 5-min warm-up
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[
+                        styles.moduleToggle,
+                        cooldownModuleEnabled && styles.moduleToggleActive,
+                      ]}
+                      onPress={onToggleCooldownModule}
+                      activeOpacity={0.7}
+                    >
+                      <Ionicons
+                        name={
+                          cooldownModuleEnabled ? 'checkmark-circle' : 'add-circle-outline'
+                        }
+                        size={16}
+                        color={
+                          cooldownModuleEnabled
+                            ? Colors.textOnAccent
+                            : Colors.textMuted
+                        }
+                      />
+                      <Text
+                        style={[
+                          styles.moduleToggleText,
+                          cooldownModuleEnabled && styles.moduleToggleTextActive,
+                        ]}
+                      >
+                        Add a 5-min cool-down
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                ) : null}
+              </View>
             </View>
           </View>
         </View>
@@ -190,12 +263,23 @@ export function WorkoutScreenBody({
         </View>
 
         {(() => {
+          if (isV2 && selectedDayIndex !== null) {
+            return (
+              <ConditioningWorkoutBody
+                dayIndex={selectedDayIndex}
+                blocks={currentWorkout.blocks}
+              />
+            );
+          }
+
           let exerciseSlotIndex = 0;
           return slots.map((slot, index) => {
             if (slot.type === 'warmup') {
               return (
                 <View key={`warmup-${index}`} style={styles.warmupCard}>
-                  <Text style={styles.warmupTitle}>Warm-Up</Text>
+                  <Text style={styles.warmupTitle}>
+                    {slot.warmup.title ?? 'Warm-Up'}
+                  </Text>
                   {slot.warmup.additionalDescription && (
                     <Text style={styles.warmupDescription}>
                       {slot.warmup.additionalDescription}
@@ -231,18 +315,6 @@ export function WorkoutScreenBody({
           });
         })()}
 
-        {onOpenCopyWorkoutNotesModal && selectedDayIndex !== null && (
-          <TouchableOpacity
-            style={styles.notesCopyTopStrip}
-            onPress={onOpenCopyWorkoutNotesModal}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.notesCopyLink}>
-              Copy notes from another workout
-            </Text>
-          </TouchableOpacity>
-        )}
-
         <View style={styles.notesContainer}>
           <TouchableOpacity
             style={styles.notesHeader}
@@ -277,15 +349,32 @@ export function WorkoutScreenBody({
           )}
         </View>
 
-        <TouchableOpacity
-          style={styles.exportWorkoutButton}
-          onPress={onExportWorkoutText}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.exportWorkoutButtonText}>
-            Export Workout as Text
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.notesActionsContainer}>
+          {onOpenCopyWorkoutNotesModal && selectedDayIndex !== null && (
+            <TouchableOpacity
+              style={styles.notesAction}
+              onPress={onOpenCopyWorkoutNotesModal}
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel="Copy notes from another workout"
+            >
+              <Text style={styles.notesActionText}>
+                Copy notes from another workout
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity
+            style={styles.notesAction}
+            onPress={onExportWorkoutText}
+            activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel="Export workout as text"
+          >
+            <Text style={styles.notesActionText}>Export workout as text</Text>
+          </TouchableOpacity>
+        </View>
+
       </ScrollView>
     </KeyboardAvoidingView>
   );

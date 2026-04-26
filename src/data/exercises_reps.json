@@ -106,5 +106,14 @@
     "muscle": "Abs",
     "name": "Sit-ups",
     "pattern": "Core"
+  },
+  {
+    "description": "Stand with feet hip-width apart, raise up onto the balls of your feet, then lower slowly.",
+    "equipment": "Bodyweight",
+    "id": 93,
+    "logging_type": "reps",
+    "muscle": "Calves",
+    "name": "Bodyweight Calf Raises",
+    "pattern": "Isolation"
   }
 ]

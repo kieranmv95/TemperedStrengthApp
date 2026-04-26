@@ -57,6 +57,35 @@ export const workoutScreenStyles = StyleSheet.create({
     marginBottom: Spacing.xl,
     lineHeight: 20,
   },
+  moduleToggleRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
+    marginTop: Spacing.md,
+  },
+  moduleToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.pill,
+    backgroundColor: Colors.backgroundCard,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+  },
+  moduleToggleActive: {
+    backgroundColor: Colors.accent,
+    borderColor: Colors.accent,
+  },
+  moduleToggleText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '700',
+  },
+  moduleToggleTextActive: {
+    color: Colors.textOnAccent,
+  },
   intensityCard: {
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
@@ -182,8 +211,7 @@ export const workoutScreenStyles = StyleSheet.create({
   notesContainer: {
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
-    marginTop: Spacing.md,
-    marginBottom: Spacing.section,
+    marginTop: Spacing.xxl,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
     overflow: 'hidden',
@@ -234,6 +262,19 @@ export const workoutScreenStyles = StyleSheet.create({
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
+  },
+  notesActionsContainer: {
+    marginTop: Spacing.xl,
+    marginBottom: Spacing.xl,
+    gap: Spacing.sm,
+  },
+  notesAction: {
+    paddingVertical: Spacing.sm,
+  },
+  notesActionText: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '600',
   },
   keyboardDoneBar: {
     position: 'absolute',

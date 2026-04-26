@@ -37,6 +37,7 @@ export const bodybuilding_free: Program = {
   description:
     '4-Week classic bodybuilding block. Chest & Triceps, Back & Biceps, Legs & Shoulders. Rep ranges taper weeks 3–4 to drive progressive overload.',
   categories: ['bodybuilding'],
+  goals: ['bulking', 'hypertrophy', 'stronger'],
   difficulty: 'beginner',
   daysSplit: ['mon', 'wed', 'fri'],
   averageSessionDuration: '60m',

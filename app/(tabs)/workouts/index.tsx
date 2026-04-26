@@ -8,12 +8,14 @@ import {
   type CategoryFilter,
   type TimeFilter,
 } from '@/src/components/workouts/workoutsScreenConstants';
-import { Colors } from '@/src/constants/theme';
+import { Colors, Spacing } from '@/src/constants/theme';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import type { OnboardingGender } from '@/src/types/onboarding';
 import type { SingleWorkout } from '@/src/types/workouts';
 import {
   getFavoriteWorkouts,
+  getOnboardingProfile,
   toggleFavoriteWorkout,
 } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
@@ -29,23 +31,89 @@ import {
   View,
 } from 'react-native';
 
+const NO_EQUIPMENT_TAG = 'No Equipment';
+const WOMENS_PICKS_TAG = "Women’s Picks";
+const LEGS_AND_GLUTES_TAG = 'Legs & Glutes';
+const GET_BIG_TAG = 'Get Big';
+
+function workoutHasTag(workout: SingleWorkout, tag: string): boolean {
+  return workout.tags.includes(tag);
+}
+
+function CuratedWorkoutCard({
+  workout,
+  isPro,
+  onPress,
+  onLockedPress,
+}: {
+  workout: SingleWorkout;
+  isPro: boolean;
+  onPress: (workout: SingleWorkout) => void;
+  onLockedPress: () => void;
+}) {
+  const isLocked = workout.isPremium && !isPro;
+
+  const handlePress = () => {
+    if (isLocked) {
+      onLockedPress();
+      return;
+    }
+    onPress(workout);
+  };
+
+  return (
+    <TouchableOpacity
+      style={[styles.curatedCard, isLocked && styles.curatedCardLocked]}
+      onPress={handlePress}
+      activeOpacity={isLocked ? 0.5 : 0.7}
+    >
+      <View style={styles.curatedCardTopRow}>
+        <Text style={styles.curatedCardCategory}>{workout.category}</Text>
+        {workout.isPremium && (
+          <View style={styles.curatedCardProBadge}>
+            <Text style={styles.curatedCardProBadgeText}>PRO</Text>
+          </View>
+        )}
+      </View>
+      <Text style={styles.curatedCardTitle} numberOfLines={2}>
+        {workout.title}
+      </Text>
+      <View style={styles.curatedCardMeta}>
+        <Ionicons name="time-outline" size={14} color={Colors.textMuted} />
+        <Text style={styles.curatedCardMetaText}>
+          {workout.estimatedTime} min
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
 export default function WorkoutsScreen() {
   const { isPro } = useSubscription();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTimeFilter, setActiveTimeFilter] = useState<TimeFilter>(null);
   const [activeCategoryFilter, setActiveCategoryFilter] =
     useState<CategoryFilter>('All');
+  const [noEquipmentOnly, setNoEquipmentOnly] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [onboardingGender, setOnboardingGender] =
+    useState<OnboardingGender | null>(null);
 
   useFocusEffect(
     useCallback(() => {
       loadFavorites();
+      loadOnboardingGender();
     }, [])
   );
 
   const loadFavorites = async () => {
     const favs = await getFavoriteWorkouts();
     setFavorites(favs);
+  };
+
+  const loadOnboardingGender = async () => {
+    const profile = await getOnboardingProfile();
+    setOnboardingGender(profile?.gender ?? null);
   };
 
   const handleToggleFavorite = async (workoutId: string) => {
@@ -68,6 +136,15 @@ export default function WorkoutsScreen() {
     router.push('/settings');
   };
 
+  const handleSelectCategoryFilter = (filter: CategoryFilter) => {
+    setActiveCategoryFilter(filter);
+
+    if (filter === 'All') {
+      setActiveTimeFilter(null);
+      setNoEquipmentOnly(false);
+    }
+  };
+
   const filteredWorkouts = allStandaloneWorkouts.filter((workout) => {
     if (searchQuery.trim()) {
       const query = searchQuery.trim().toLowerCase();
@@ -80,6 +157,9 @@ export default function WorkoutsScreen() {
       );
       if (!matchesTitle && !matchesDescription && !matchesTags) return false;
     }
+
+    if (noEquipmentOnly && !workoutHasTag(workout, NO_EQUIPMENT_TAG))
+      return false;
 
     if (activeTimeFilter === '≤15 min' && workout.estimatedTime > 15)
       return false;
@@ -102,6 +182,24 @@ export default function WorkoutsScreen() {
     if (activeCategoryFilter === 'Pro') return workout.isPremium;
     return workout.category === activeCategoryFilter;
   });
+
+  const womensPicksWorkouts = filteredWorkouts.filter((w) =>
+    workoutHasTag(w, WOMENS_PICKS_TAG)
+  );
+
+  const legsAndGlutesWorkouts = filteredWorkouts.filter((w) =>
+    workoutHasTag(w, LEGS_AND_GLUTES_TAG)
+  );
+
+  const getBigWorkouts = filteredWorkouts.filter((w) =>
+    workoutHasTag(w, GET_BIG_TAG)
+  );
+
+  const showS1AndS2 = onboardingGender === 'female';
+  const showS3 =
+    onboardingGender === null ||
+    onboardingGender === 'male' ||
+    onboardingGender === 'prefer_not_to_say';
 
   return (
     <StandardLayout
@@ -163,7 +261,7 @@ export default function WorkoutsScreen() {
               return (
                 <Pill
                   key={filter}
-                  onPress={() => setActiveCategoryFilter(filter)}
+                  onPress={() => handleSelectCategoryFilter(filter)}
                   isActive={isActive}
                   label={filter}
                   icon={
@@ -177,17 +275,26 @@ export default function WorkoutsScreen() {
                 />
               );
             })}
+
+            <Pill
+              onPress={() => setNoEquipmentOnly((prev) => !prev)}
+              isActive={noEquipmentOnly}
+              label="No equipment"
+              icon="home-outline"
+              count={
+                allStandaloneWorkouts.filter((w) =>
+                  workoutHasTag(w, NO_EQUIPMENT_TAG)
+                ).length
+              }
+            />
           </ScrollView>
         </View>
 
-        <View>
+        <View style={{ marginTop: Spacing.sm }}>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={[
-              styles.filterScrollContent,
-              styles.lastFilterScrollContent,
-            ]}
+            contentContainerStyle={styles.filterScrollContent}
           >
             {TIME_FILTERS.map((filter) => {
               const isActive = activeTimeFilter === filter;
@@ -245,6 +352,104 @@ export default function WorkoutsScreen() {
             data={filteredWorkouts}
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.listContent}
+            ListHeaderComponent={
+              <>
+                {showS1AndS2 && womensPicksWorkouts.length > 0 && (
+                  <View style={styles.curatedSection}>
+                    <View style={styles.curatedSectionHeader}>
+                      <View style={styles.curatedSectionHeaderRow}>
+                        <Text style={styles.curatedSectionKicker}>Curated</Text>
+                      </View>
+                      <Text style={styles.curatedSectionTitle}>
+                        Recommended for you
+                      </Text>
+                      <Text style={styles.curatedSectionHelper}>
+                        A feel-good place to start.
+                      </Text>
+                    </View>
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      contentContainerStyle={styles.curatedScrollContent}
+                    >
+                      {womensPicksWorkouts.map((workout) => (
+                        <CuratedWorkoutCard
+                          key={workout.id}
+                          workout={workout}
+                          isPro={isPro}
+                          onPress={handleWorkoutPress}
+                          onLockedPress={handleLockedPress}
+                        />
+                      ))}
+                    </ScrollView>
+                  </View>
+                )}
+
+                {showS1AndS2 && legsAndGlutesWorkouts.length > 0 && (
+                  <View style={styles.curatedSection}>
+                    <View style={styles.curatedSectionHeader}>
+                      <View style={styles.curatedSectionHeaderRow}>
+                        <Text style={styles.curatedSectionKicker}>Curated</Text>
+                      </View>
+                      <Text style={styles.curatedSectionTitle}>
+                        Legs &amp; Glutes
+                      </Text>
+                      <Text style={styles.curatedSectionHelper}>
+                        Strong legs, confident you.
+                      </Text>
+                    </View>
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      contentContainerStyle={styles.curatedScrollContent}
+                    >
+                      {legsAndGlutesWorkouts.map((workout) => (
+                        <CuratedWorkoutCard
+                          key={workout.id}
+                          workout={workout}
+                          isPro={isPro}
+                          onPress={handleWorkoutPress}
+                          onLockedPress={handleLockedPress}
+                        />
+                      ))}
+                    </ScrollView>
+                  </View>
+                )}
+
+                {showS3 && getBigWorkouts.length > 0 && (
+                  <View style={styles.curatedSection}>
+                    <View style={styles.curatedSectionHeader}>
+                      <View style={styles.curatedSectionHeaderRow}>
+                        <Text style={styles.curatedSectionKicker}>Curated</Text>
+                      </View>
+                      <Text style={styles.curatedSectionTitle}>Get Big</Text>
+                      <Text style={styles.curatedSectionHelper}>
+                        Big pump. Feel strong.
+                      </Text>
+                    </View>
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      contentContainerStyle={styles.curatedScrollContent}
+                    >
+                      {getBigWorkouts.map((workout) => (
+                        <CuratedWorkoutCard
+                          key={workout.id}
+                          workout={workout}
+                          isPro={isPro}
+                          onPress={handleWorkoutPress}
+                          onLockedPress={handleLockedPress}
+                        />
+                      ))}
+                    </ScrollView>
+                  </View>
+                )}
+
+                <View style={styles.allWorkoutsHeader}>
+                  <Text style={styles.allWorkoutsTitle}>All Workouts</Text>
+                </View>
+              </>
+            }
             renderItem={({ item }) => (
               <WorkoutCard
                 workout={item}

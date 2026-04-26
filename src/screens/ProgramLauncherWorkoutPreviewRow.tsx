@@ -11,12 +11,19 @@ type ProgramLauncherWorkoutPreviewRowProps = {
 export function ProgramLauncherWorkoutPreviewRow({
   workout,
 }: ProgramLauncherWorkoutPreviewRowProps) {
-  const exerciseIds = workout.exercises
-    .filter((ex) => ex.type === 'exercise')
-    .map((ex) => (ex as { id: number }).id);
-  const exerciseNames = exerciseIds
-    .map((id) => getExerciseById(id)?.name)
-    .filter((name): name is string => name !== undefined);
+  const isV2 = workout.format === 'v2';
+
+  const exerciseNames = !isV2
+    ? workout.exercises
+        .filter((ex) => ex.type === 'exercise')
+        .map((ex) => (ex as { id: number }).id)
+        .map((id) => getExerciseById(id)?.name)
+        .filter((name): name is string => name !== undefined)
+    : [];
+
+  const blockTitles = isV2
+    ? workout.blocks.map((b) => b.title).filter((t) => t.trim().length > 0)
+    : [];
 
   return (
     <View style={styles.workoutItem}>
@@ -28,10 +35,14 @@ export function ProgramLauncherWorkoutPreviewRow({
         <Text style={styles.workoutExercisesList}>
           {exerciseNames.join(', ')}
         </Text>
+      ) : blockTitles.length > 0 ? (
+        <Text style={styles.workoutExercisesList}>
+          {blockTitles.join(' • ')}
+        </Text>
       ) : null}
       <View style={styles.workoutMeta}>
         <Text style={styles.workoutExercises}>
-          {workout.exercises.length} exercises
+          {isV2 ? `${workout.blocks.length} blocks` : `${workout.exercises.length} exercises`}
         </Text>
         <View style={styles.workoutIntensity}>
           <Text style={styles.workoutIntensityLabel}>Intensity:</Text>

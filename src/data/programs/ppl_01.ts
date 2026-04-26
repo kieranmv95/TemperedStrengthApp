@@ -20,6 +20,7 @@ export const ppl_01: Program = {
   description:
     '4-Week Hypertrophy block. Rotates intensity and exercise variations to maximise muscle fibre recruitment.',
   categories: ['bodybuilding'],
+  goals: ['hypertrophy', 'bulking', 'leaner'],
   difficulty: 'beginner',
   daysSplit: ['mon', 'wed', 'fri'],
   averageSessionDuration: '60m',

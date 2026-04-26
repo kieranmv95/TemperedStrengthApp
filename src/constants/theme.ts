@@ -35,6 +35,9 @@ export const Colors = {
   accent: '#c9b072',
   accentOverlay: 'rgba(201, 176, 114, 0.9)',
 
+  // Recommended (personalization signal — intentionally distinct from accent)
+  recommended: '#1abc9c',
+
   // Semantic
   destructive: '#FF6B6B',
   destructiveAlt: '#FF4444',

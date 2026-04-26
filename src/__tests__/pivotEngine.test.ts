@@ -102,4 +102,9 @@ describe('findAlternatives', () => {
       expect.arrayContaining([6])
     );
   });
+
+  it('can filter alternatives to bodyweight only', () => {
+    const alternatives = findAlternatives(1, 10, { equipmentMode: 'bodyweight' });
+    expect(alternatives).toEqual([]);
+  });
 });

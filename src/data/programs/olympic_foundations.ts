@@ -16,6 +16,7 @@ export const olympic_foundations: Program = {
   description:
     '4-Week technical build-up for Snatch and Clean & Jerk. Focuses on bar path, speed, and overhead stability.',
   categories: ['olympic'],
+  goals: ['stronger', 'athletic', 'mobility'],
   difficulty: 'intermediate',
   daysSplit: ['mon', 'wed', 'fri'],
   averageSessionDuration: '60m',

@@ -1,11 +1,15 @@
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
 import { Colors } from '@/src/constants/theme';
+import type { OnboardingGender } from '@/src/types/onboarding';
 import type { SingleWorkout } from '@/src/types/workouts';
+import { getOnboardingProfile } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { CATEGORY_ICONS, DIFFICULTY_COLORS } from './workoutUiConstants';
 import { workoutDetailStyles as styles } from './workoutDetailStyles';
+
+const WOMENS_PICKS_TAG = "Women’s Picks";
 
 type WorkoutDetailScrollContentProps = {
   workout: SingleWorkout;
@@ -14,6 +18,26 @@ type WorkoutDetailScrollContentProps = {
 export function WorkoutDetailScrollContent({
   workout,
 }: WorkoutDetailScrollContentProps) {
+  const [onboardingGender, setOnboardingGender] =
+    useState<OnboardingGender | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const profile = await getOnboardingProfile();
+      if (cancelled) return;
+      setOnboardingGender(profile?.gender ?? null);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const visibleTags = useMemo(() => {
+    if (onboardingGender === 'female') return workout.tags;
+    return workout.tags.filter((t) => t !== WOMENS_PICKS_TAG);
+  }, [onboardingGender, workout.tags]);
+
   return (
     <ScrollView
       style={styles.detailContent}
@@ -52,7 +76,7 @@ export function WorkoutDetailScrollContent({
       <Text style={styles.detailDescription}>{workout.description}</Text>
 
       <View style={styles.detailTagsContainer}>
-        {workout.tags.map((tag, index) => (
+        {visibleTags.map((tag, index) => (
           <View key={index} style={styles.tag}>
             <Text style={styles.tagText}>{tag}</Text>
           </View>

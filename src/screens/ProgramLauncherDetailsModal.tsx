@@ -36,6 +36,8 @@ export function ProgramLauncherDetailsModal({
   onUpgradePress,
   bottomInset,
 }: ProgramLauncherDetailsModalProps) {
+  const [bodyChangesExpanded, setBodyChangesExpanded] = React.useState(false);
+
   return (
     <Modal
       visible={visible}
@@ -65,6 +67,29 @@ export function ProgramLauncherDetailsModal({
             <Text style={styles.programDescription}>
               {selectedProgram?.description}
             </Text>
+
+            {selectedProgram?.bodyChangesSummary && (
+              <View style={styles.bodyChangesCard}>
+                <TouchableOpacity
+                  onPress={() => setBodyChangesExpanded((v) => !v)}
+                  accessibilityRole="button"
+                  accessibilityState={{ expanded: bodyChangesExpanded }}
+                  style={styles.bodyChangesLinkRow}
+                >
+                  <Text style={styles.bodyChangesLinkText}>
+                    How this program can change your body
+                  </Text>
+                  <Text style={styles.bodyChangesLinkChevron}>
+                    {bodyChangesExpanded ? 'Hide' : 'Show'}
+                  </Text>
+                </TouchableOpacity>
+                {bodyChangesExpanded && (
+                  <Text style={styles.bodyChangesText}>
+                    {selectedProgram.bodyChangesSummary}
+                  </Text>
+                )}
+              </View>
+            )}
 
             <Text style={styles.sectionTitle}>Program Overview</Text>
 

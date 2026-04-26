@@ -3,11 +3,11 @@ import { workoutDetailStyles as styles } from '@/src/components/workouts/workout
 import { Colors } from '@/src/constants/theme';
 import { getStandaloneWorkoutById } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { asStringId } from '@/src/utils/routeParams';
 import {
   getFavoriteWorkouts,
-  toggleFavoriteWorkout,
+  toggleFavoriteWorkout
 } from '@/src/utils/storage';
-import { asStringId } from '@/src/utils/routeParams';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router, useLocalSearchParams } from 'expo-router';

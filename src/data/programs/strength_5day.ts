@@ -20,6 +20,7 @@ export const strength_5day: Program = {
   description:
     '6-Week Strength Peak. Intensifies every 2 weeks through progressive overload and rep-range tapering.',
   categories: ['strength'],
+  goals: ['stronger', 'athletic', 'hypertrophy'],
   difficulty: 'advanced',
   daysSplit: ['mon', 'tue', 'wed', 'thu', 'fri'],
   averageSessionDuration: '60m',

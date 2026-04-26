@@ -137,6 +137,10 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         notesInputRef={c.notesInputRef}
         tabBarHeight={tabBarHeight}
         bottomInset={insets.bottom}
+        warmupModuleEnabled={c.warmupModuleEnabled}
+        cooldownModuleEnabled={c.cooldownModuleEnabled}
+        onToggleWarmupModule={c.toggleWarmupModule}
+        onToggleCooldownModule={c.toggleCooldownModule}
         onIntensityInfoPress={() => c.setIntensityModalVisible(true)}
         handleRedoWorkout={c.handleRedoWorkout}
         handleSwapClick={c.handleSwapClick}

@@ -69,6 +69,21 @@ export const programLauncherStyles = StyleSheet.create({
   programCardLocked: {
     borderColor: Colors.accent,
   },
+  recommendedBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: Colors.recommended,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
+    marginBottom: Spacing.md,
+  },
+  recommendedBadgeText: {
+    color: Colors.textBlack,
+    fontSize: FontSize.sm,
+    fontWeight: '800',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
   programContent: {
     flex: 1,
   },
@@ -289,6 +304,41 @@ export const programLauncherStyles = StyleSheet.create({
   },
   modalContent: {
     maxHeight: 500,
+  },
+  bodyChangesCard: {
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxl,
+    marginBottom: Spacing.xxl,
+    borderWidth: 1,
+    borderColor: Colors.borderSubtle,
+  },
+  bodyChangesLinkRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.lg,
+  },
+  bodyChangesLinkText: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+    textDecorationLine: 'underline',
+    flex: 1,
+  },
+  bodyChangesLinkChevron: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  bodyChangesText: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+    fontWeight: '500',
+    marginTop: Spacing.md,
   },
   sectionTitle: {
     color: Colors.textPrimary,

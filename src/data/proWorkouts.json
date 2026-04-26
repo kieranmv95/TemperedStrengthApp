@@ -154,7 +154,8 @@
     "estimatedTime": 25,
     "tags": [
       "Legs",
-      "Squat"
+      "Squat",
+      "Legs & Glutes"
     ],
     "isPremium": true,
     "blocks": [
@@ -182,7 +183,8 @@
     "estimatedTime": 60,
     "tags": [
       "Hero WOD",
-      "Long"
+      "Long",
+      "No Equipment"
     ],
     "isPremium": true,
     "blocks": [
@@ -242,7 +244,9 @@
     "estimatedTime": 30,
     "tags": [
       "Legs",
-      "Balance"
+      "Balance",
+      "No Equipment",
+      "Legs & Glutes"
     ],
     "isPremium": true,
     "blocks": [
@@ -357,7 +361,8 @@
     "estimatedTime": 50,
     "tags": [
       "Squat",
-      "Pause"
+      "Pause",
+      "Legs & Glutes"
     ],
     "isPremium": true,
     "blocks": [
@@ -590,7 +595,8 @@
     "tags": [
       "Chest",
       "Triceps",
-      "Hypertrophy"
+      "Hypertrophy",
+      "Get Big"
     ],
     "isPremium": true,
     "blocks": [
@@ -686,7 +692,8 @@
     "tags": [
       "Back",
       "Lats",
-      "Hypertrophy"
+      "Hypertrophy",
+      "Get Big"
     ],
     "isPremium": true,
     "blocks": [
@@ -777,7 +784,8 @@
       "Legs",
       "Quads",
       "Hamstrings",
-      "Glutes"
+      "Glutes",
+      "Legs & Glutes"
     ],
     "isPremium": true,
     "blocks": [
@@ -872,7 +880,8 @@
     "tags": [
       "Shoulders",
       "Delts",
-      "Hypertrophy"
+      "Hypertrophy",
+      "Get Big"
     ],
     "isPremium": true,
     "blocks": [
@@ -969,7 +978,8 @@
       "Arms",
       "Biceps",
       "Triceps",
-      "Hypertrophy"
+      "Hypertrophy",
+      "Get Big"
     ],
     "isPremium": true,
     "blocks": [

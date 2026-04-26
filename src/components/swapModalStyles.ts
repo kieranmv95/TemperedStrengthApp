@@ -48,6 +48,28 @@ export const swapModalStyles = StyleSheet.create({
     marginBottom: Spacing.xl,
     fontWeight: '500',
   },
+  equipmentToggle: {
+    alignSelf: 'flex-start',
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.pill,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+    marginBottom: Spacing.xl,
+  },
+  equipmentToggleActive: {
+    backgroundColor: Colors.accent,
+    borderColor: Colors.accent,
+  },
+  equipmentToggleText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '700',
+  },
+  equipmentToggleTextActive: {
+    color: Colors.textOnAccent,
+  },
   disclaimer: {
     backgroundColor: Colors.accentOverlay,
     padding: Spacing.xl,
