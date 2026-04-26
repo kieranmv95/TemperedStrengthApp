@@ -691,5 +691,68 @@
     "muscle": "Full Body/Core",
     "name": "DB Farmer Carry",
     "pattern": "Carry"
+  },
+  {
+    "description": "From lying flat with a kettlebell locked overhead, move through a precise series of positions to standing, keeping the bell overhead throughout.",
+    "equipment": "Kettlebell",
+    "id": 95,
+    "logging_type": "reps_and_weight",
+    "muscle": "Full Body/Core",
+    "name": "KB Turkish Get-Up",
+    "pattern": "Core"
+  },
+  {
+    "description": "Hinge at the hips, swing the kettlebell between your legs, then pull it to shoulder height using hip drive and a high elbow.",
+    "equipment": "Kettlebell",
+    "id": 96,
+    "logging_type": "reps_and_weight",
+    "muscle": "Full Body/Back",
+    "name": "KB Clean",
+    "pattern": "Hip Hinge"
+  },
+  {
+    "description": "With the kettlebell in the rack position at shoulder height, press it directly overhead to full lockout, then lower with control.",
+    "equipment": "Kettlebell",
+    "id": 97,
+    "logging_type": "reps_and_weight",
+    "muscle": "Shoulders/Core",
+    "name": "KB Press (Single Arm)",
+    "pattern": "Vertical Push"
+  },
+  {
+    "description": "Hold a kettlebell by the horns at chest height and squat to depth, keeping your torso upright and elbows inside your knees.",
+    "equipment": "Kettlebell",
+    "id": 98,
+    "logging_type": "reps_and_weight",
+    "muscle": "Quadriceps",
+    "name": "KB Goblet Squat",
+    "pattern": "Knee Dominant"
+  },
+  {
+    "description": "Hold a kettlebell by the handle with both hands and rotate it in a slow circle around your head, alternating directions each set.",
+    "equipment": "Kettlebell",
+    "id": 99,
+    "logging_type": "reps_and_weight",
+    "muscle": "Shoulders/Core",
+    "name": "KB Halo",
+    "pattern": "Core"
+  },
+  {
+    "description": "Hold a dumbbell in each hand at shoulder height, squat down, then drive through your legs and press the dumbbells overhead in one movement.",
+    "equipment": "Dumbbell",
+    "id": 100,
+    "logging_type": "reps_and_weight",
+    "muscle": "Full Body",
+    "name": "DB Thruster",
+    "pattern": "Olympic (Clean & Jerk)"
+  },
+  {
+    "description": "In a push-up position with a dumbbell in each hand, row one dumbbell to your hip while the other arm stays planted, alternating sides.",
+    "equipment": "Dumbbell",
+    "id": 101,
+    "logging_type": "reps_and_weight",
+    "muscle": "Back/Core",
+    "name": "DB Renegade Row",
+    "pattern": "Horizontal Pull"
   }
 ]
