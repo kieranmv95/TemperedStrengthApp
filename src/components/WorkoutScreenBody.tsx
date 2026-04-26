@@ -11,7 +11,6 @@ import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles
 import type { Workout } from '@/src/types/program';
 import type { ActiveSession, CompletedSession } from '@/src/types/storage';
 import { formatVolumeFromKg } from '@/src/utils/weightUnits';
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
   KeyboardAvoidingView,
@@ -41,10 +40,6 @@ type WorkoutScreenBodyProps = {
   notesInputRef: React.RefObject<TextInput | null>;
   tabBarHeight: number;
   bottomInset: number;
-  warmupModuleEnabled: boolean;
-  cooldownModuleEnabled: boolean;
-  onToggleWarmupModule: () => void | Promise<void>;
-  onToggleCooldownModule: () => void | Promise<void>;
   onIntensityInfoPress: () => void;
   handleRedoWorkout: () => void | Promise<void>;
   handleSwapClick: (exerciseSlotIndex: number) => void;
@@ -73,10 +68,6 @@ export function WorkoutScreenBody({
   notesInputRef,
   tabBarHeight,
   bottomInset,
-  warmupModuleEnabled,
-  cooldownModuleEnabled,
-  onToggleWarmupModule,
-  onToggleCooldownModule,
   onIntensityInfoPress,
   handleRedoWorkout,
   handleSwapClick,
@@ -106,8 +97,6 @@ export function WorkoutScreenBody({
     );
   }
 
-  const isV2 = currentWorkout.format === 'v2';
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -132,67 +121,6 @@ export function WorkoutScreenBody({
                   {currentWorkout.description}
                 </Text>
               )}
-              <View style={styles.moduleToggleRow}>
-                {!isV2 ? (
-                  <>
-                    <TouchableOpacity
-                      style={[
-                        styles.moduleToggle,
-                        warmupModuleEnabled && styles.moduleToggleActive,
-                      ]}
-                      onPress={onToggleWarmupModule}
-                      activeOpacity={0.7}
-                    >
-                      <Ionicons
-                        name={
-                          warmupModuleEnabled ? 'checkmark-circle' : 'add-circle-outline'
-                        }
-                        size={16}
-                        color={
-                          warmupModuleEnabled ? Colors.textOnAccent : Colors.textMuted
-                        }
-                      />
-                      <Text
-                        style={[
-                          styles.moduleToggleText,
-                          warmupModuleEnabled && styles.moduleToggleTextActive,
-                        ]}
-                      >
-                        Add a 5-min warm-up
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={[
-                        styles.moduleToggle,
-                        cooldownModuleEnabled && styles.moduleToggleActive,
-                      ]}
-                      onPress={onToggleCooldownModule}
-                      activeOpacity={0.7}
-                    >
-                      <Ionicons
-                        name={
-                          cooldownModuleEnabled ? 'checkmark-circle' : 'add-circle-outline'
-                        }
-                        size={16}
-                        color={
-                          cooldownModuleEnabled
-                            ? Colors.textOnAccent
-                            : Colors.textMuted
-                        }
-                      />
-                      <Text
-                        style={[
-                          styles.moduleToggleText,
-                          cooldownModuleEnabled && styles.moduleToggleTextActive,
-                        ]}
-                      >
-                        Add a 5-min cool-down
-                      </Text>
-                    </TouchableOpacity>
-                  </>
-                ) : null}
-              </View>
             </View>
           </View>
         </View>
@@ -263,7 +191,7 @@ export function WorkoutScreenBody({
         </View>
 
         {(() => {
-          if (isV2 && selectedDayIndex !== null) {
+          if (currentWorkout.format === 'v2' && selectedDayIndex !== null) {
             return (
               <ConditioningWorkoutBody
                 dayIndex={selectedDayIndex}
