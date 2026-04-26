@@ -329,13 +329,16 @@ const styles = StyleSheet.create({
   movementTopRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    justifyContent: 'space-between',
     gap: Spacing.md,
+    flexWrap: 'wrap',
   },
   movementName: {
     color: Colors.textPrimary,
     fontWeight: '800',
     fontSize: FontSize.lg,
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
   },
   movementPrescription: {
     color: Colors.textMuted,
@@ -343,6 +346,8 @@ const styles = StyleSheet.create({
     fontSize: FontSize.md,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
+    flexShrink: 1,
+    textAlign: 'right',
   },
   movementDivider: {
     height: 0,

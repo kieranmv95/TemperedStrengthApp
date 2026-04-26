@@ -1,3 +1,7 @@
+import {
+  fiveMinuteCooldown,
+  fiveMinuteWarmup,
+} from '@/src/data/programModules';
 import { useTimerNotification } from '@/src/hooks/useTimerNotification';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import type {
@@ -5,13 +9,12 @@ import type {
   WorkoutSlot,
 } from '@/src/screens/workoutScreenConstants';
 import { increment } from '@/src/services/metricService';
-import type { Workout } from '@/src/types/program';
+import type { Workout, WorkoutV1 } from '@/src/types/program';
 import type {
   ActiveSession,
   CompletedSession,
   RestTimerState,
 } from '@/src/types/storage';
-import { fiveMinuteCooldown, fiveMinuteWarmup } from '@/src/data/programModules';
 import { getProgramById } from '@/src/utils/program';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import {
@@ -25,26 +28,26 @@ import {
   getActiveProgramId,
   getActiveSession,
   getCompletedSession,
+  getConditioningLogsForDay,
   getExerciseSwapsForDay,
   getProgramCooldownModuleEnabled,
   getProgramStartDate,
   getProgramWarmupModuleEnabled,
   getProgramWorkoutWeekdays,
   getRestTimer,
-  getConditioningLogsForDay,
-  setProgramCooldownModuleEnabled,
-  setProgramWarmupModuleEnabled,
   getWorkoutLogsForDay,
   getWorkoutNotes,
   saveActiveSession,
   saveCompletedSession,
   saveRestTimer,
   saveWorkoutNotes,
+  setProgramCooldownModuleEnabled,
+  setProgramWarmupModuleEnabled,
 } from '@/src/utils/storage';
 import { buildWorkoutExportText } from '@/src/utils/workoutExport';
-import { Alert, Keyboard, Platform, Share } from 'react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ScrollView, TextInput } from 'react-native';
+import { Alert, Keyboard, Platform, Share } from 'react-native';
 
 function calculateDaysSinceStart(startDateStr: string): number {
   const start = new Date(startDateStr);
@@ -115,11 +118,17 @@ export function useWorkoutScreenController() {
     workoutWeekPatternRef.current = workoutWeekPattern;
     warmupModuleEnabledRef.current = warmupModuleEnabled;
     cooldownModuleEnabledRef.current = cooldownModuleEnabled;
-  }, [program, startDate, workoutWeekPattern, warmupModuleEnabled, cooldownModuleEnabled]);
+  }, [
+    program,
+    startDate,
+    workoutWeekPattern,
+    warmupModuleEnabled,
+    cooldownModuleEnabled,
+  ]);
 
   const loadExerciseSlots = useCallback(
     async (
-      workout: Workout & { exercises: Workout['exercises'] },
+      workout: WorkoutV1,
       dayIdx: number,
       options?: { warmupEnabled?: boolean; cooldownEnabled?: boolean }
     ) => {
@@ -167,11 +176,12 @@ export function useWorkoutScreenController() {
 
   const getWorkoutForDayIndex = useCallback(
     (
-      programToUse: ReturnType<typeof getProgramById>,
+      programToUse: ReturnType<typeof getProgramById> | null | undefined,
       startISO: string | null,
       effectivePattern: ProgramDaySplitKey[] | null,
       dayIdx: number
     ): Workout | null => {
+      if (!programToUse) return null;
       return startISO !== null
         ? getWorkoutForDaySinceStart(
             programToUse,
@@ -242,7 +252,7 @@ export function useWorkoutScreenController() {
         setSlots([]);
       }
     },
-    [loadExerciseSlots]
+    [getWorkoutForDayIndex, loadExerciseSlots]
   );
 
   const loadWorkoutData = useCallback(async () => {
@@ -309,7 +319,7 @@ export function useWorkoutScreenController() {
     setWarmupModuleEnabled(next);
     try {
       await setProgramWarmupModuleEnabled(next);
-    } catch (error) {
+    } catch {
       // revert on failure
       setWarmupModuleEnabled(!next);
     }
@@ -323,7 +333,7 @@ export function useWorkoutScreenController() {
     setCooldownModuleEnabled(next);
     try {
       await setProgramCooldownModuleEnabled(next);
-    } catch (error) {
+    } catch {
       // revert on failure
       setCooldownModuleEnabled(!next);
     }
@@ -420,8 +430,12 @@ export function useWorkoutScreenController() {
           : null;
 
       if (workoutForSessionDay?.format === 'v2') {
-        const completion = await getConditioningLogsForDay(activeSession.dayIndex);
-        setsCompleted = Object.values(completion).filter((b) => b.completed).length;
+        const completion = await getConditioningLogsForDay(
+          activeSession.dayIndex
+        );
+        setsCompleted = Object.values(completion).filter(
+          (b) => b.completed
+        ).length;
         totalVolume = 0;
       } else {
         const dayLogs = await getWorkoutLogsForDay(activeSession.dayIndex);
@@ -454,7 +468,7 @@ export function useWorkoutScreenController() {
     } catch (error) {
       console.error('Error finishing session:', error);
     }
-  }, [activeSession]);
+  }, [activeSession, getWorkoutForDayIndex]);
 
   const handleRedoWorkout = useCallback(async () => {
     if (selectedDayIndex === null) return;
@@ -555,7 +569,8 @@ export function useWorkoutScreenController() {
       dayIndex: restTimer.dayIndex,
       slotIndex: restTimer.slotIndex,
       exerciseId: restTimer.exerciseId,
-      restTimeSeconds: restTimer.originalRestTimeSeconds ?? restTimer.restTimeSeconds,
+      restTimeSeconds:
+        restTimer.originalRestTimeSeconds ?? restTimer.restTimeSeconds,
     });
   }, [restTimer, handleRestStart]);
 
@@ -565,7 +580,8 @@ export function useWorkoutScreenController() {
 
       try {
         const now = Date.now();
-        const currentEndTime = restTimer.startedAt + restTimer.restTimeSeconds * 1000;
+        const currentEndTime =
+          restTimer.startedAt + restTimer.restTimeSeconds * 1000;
         const currentRemainingSeconds = Math.max(
           0,
           Math.ceil((currentEndTime - now) / 1000)
@@ -666,7 +682,10 @@ export function useWorkoutScreenController() {
       await Share.share({ message: text });
     } catch (error) {
       console.error('Error exporting workout text:', error);
-      Alert.alert('Export failed', 'Could not export workout. Please try again.');
+      Alert.alert(
+        'Export failed',
+        'Could not export workout. Please try again.'
+      );
     }
   }, [selectedDayIndex, currentWorkout, slots, weightUnit]);
 
