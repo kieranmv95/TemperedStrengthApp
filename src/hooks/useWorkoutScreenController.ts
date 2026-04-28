@@ -93,6 +93,7 @@ export function useWorkoutScreenController() {
     duration: number;
     totalVolume: number;
     setsCompleted: number;
+    showStrengthStats: boolean;
   } | null>(null);
   const { scheduleTimerNotification, cancelTimerNotification } =
     useTimerNotification();
@@ -414,6 +415,7 @@ export function useWorkoutScreenController() {
 
       let totalVolume = 0;
       let setsCompleted = 0;
+      let showStrengthStats = true;
 
       const programToUse = programRef.current;
       const startISO = startDateRef.current;
@@ -437,6 +439,7 @@ export function useWorkoutScreenController() {
           (b) => b.completed
         ).length;
         totalVolume = 0;
+        showStrengthStats = false;
       } else {
         const dayLogs = await getWorkoutLogsForDay(activeSession.dayIndex);
         for (const slotSets of Object.values(dayLogs)) {
@@ -464,7 +467,7 @@ export function useWorkoutScreenController() {
       await clearActiveSession();
       setActiveSession(null);
       setCompletedSession(completed);
-      setSessionSummary({ duration, totalVolume, setsCompleted });
+      setSessionSummary({ duration, totalVolume, setsCompleted, showStrengthStats });
     } catch (error) {
       console.error('Error finishing session:', error);
     }

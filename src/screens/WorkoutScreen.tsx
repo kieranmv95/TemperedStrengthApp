@@ -184,6 +184,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         duration={c.sessionSummary?.duration ?? 0}
         totalVolume={c.sessionSummary?.totalVolume ?? 0}
         setsCompleted={c.sessionSummary?.setsCompleted ?? 0}
+        showStrengthStats={c.sessionSummary?.showStrengthStats ?? true}
         weightUnit={weightUnit}
         onDismiss={() => c.setSessionSummary(null)}
       />

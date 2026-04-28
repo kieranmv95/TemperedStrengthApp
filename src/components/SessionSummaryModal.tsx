@@ -14,6 +14,7 @@ type SessionSummaryModalProps = {
   duration: number;
   totalVolume: number;
   setsCompleted: number;
+  showStrengthStats?: boolean;
   weightUnit: WeightUnit;
   onDismiss: () => void;
 };
@@ -38,6 +39,7 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
   duration,
   totalVolume,
   setsCompleted,
+  showStrengthStats = true,
   weightUnit,
   onDismiss,
 }) => {
@@ -61,17 +63,21 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
               <Text style={styles.statLabel}>Duration</Text>
             </View>
 
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>
-                {formatVolumeFromKg(totalVolume, weightUnit).toUpperCase()}
-              </Text>
-              <Text style={styles.statLabel}>Total Volume</Text>
-            </View>
+            {showStrengthStats && (
+              <>
+                <View style={styles.statCard}>
+                  <Text style={styles.statValue}>
+                    {formatVolumeFromKg(totalVolume, weightUnit).toUpperCase()}
+                  </Text>
+                  <Text style={styles.statLabel}>Total Volume</Text>
+                </View>
 
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{setsCompleted}</Text>
-              <Text style={styles.statLabel}>Sets Completed</Text>
-            </View>
+                <View style={styles.statCard}>
+                  <Text style={styles.statValue}>{setsCompleted}</Text>
+                  <Text style={styles.statLabel}>Sets Completed</Text>
+                </View>
+              </>
+            )}
           </View>
 
           <TouchableOpacity

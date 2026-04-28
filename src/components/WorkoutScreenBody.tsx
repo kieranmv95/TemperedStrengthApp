@@ -137,18 +137,25 @@ export function WorkoutScreenBody({
                 </Text>
                 <Text style={styles.completedSessionStatLabel}>Duration</Text>
               </View>
-              <View style={styles.completedSessionStat}>
-                <Text style={styles.completedSessionStatValue}>
-                  {formatVolumeFromKg(completedSession.totalVolume, weightUnit)}
-                </Text>
-                <Text style={styles.completedSessionStatLabel}>Volume</Text>
-              </View>
-              <View style={styles.completedSessionStat}>
-                <Text style={styles.completedSessionStatValue}>
-                  {completedSession.setsCompleted}
-                </Text>
-                <Text style={styles.completedSessionStatLabel}>Sets</Text>
-              </View>
+              {currentWorkout.format !== 'v2' && (
+                <>
+                  <View style={styles.completedSessionStat}>
+                    <Text style={styles.completedSessionStatValue}>
+                      {formatVolumeFromKg(
+                        completedSession.totalVolume,
+                        weightUnit
+                      )}
+                    </Text>
+                    <Text style={styles.completedSessionStatLabel}>Volume</Text>
+                  </View>
+                  <View style={styles.completedSessionStat}>
+                    <Text style={styles.completedSessionStatValue}>
+                      {completedSession.setsCompleted}
+                    </Text>
+                    <Text style={styles.completedSessionStatLabel}>Sets</Text>
+                  </View>
+                </>
+              )}
             </View>
             <TouchableOpacity
               style={styles.redoButton}
@@ -292,15 +299,17 @@ export function WorkoutScreenBody({
             </TouchableOpacity>
           )}
 
-          <TouchableOpacity
-            style={styles.notesAction}
-            onPress={onExportWorkoutText}
-            activeOpacity={0.7}
-            accessibilityRole="button"
-            accessibilityLabel="Export workout as text"
-          >
-            <Text style={styles.notesActionText}>Export workout as text</Text>
-          </TouchableOpacity>
+          {currentWorkout.format !== 'v2' && (
+            <TouchableOpacity
+              style={styles.notesAction}
+              onPress={onExportWorkoutText}
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel="Export workout as text"
+            >
+              <Text style={styles.notesActionText}>Export workout as text</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
       </ScrollView>
