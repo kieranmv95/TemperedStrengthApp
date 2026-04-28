@@ -14,6 +14,22 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.0.0',
+    dateLabel: '03 Jul 2026',
+    notes: [
+      'New onboarding flow to capture name, gender preferences, interests, and key settings up front',
+      'More guided first experience with better defaults and a more personal app experience',
+      'Hybrid & Conditioning upgrades with new workout blocks (Tabata, AMRAP, For Time, and more)',
+      'New HIIT-focused content with 5 new HIIT-style workouts',
+      'Preference-based workout sections so sessions better match what you care about',
+      'Smarter program discovery: programs ordered and recommended based on your onboarding answers',
+      '4 new programs added: DB+KB Bootcamp (Pro), HIIT Shred (Free), HIIT Shred (Pro), and Pilates Intro (Free)',
+      'Account section refresh with clearer categorised settings to reduce clutter',
+      'Re-onboarding enabled so you can redo onboarding and update preferences anytime',
+      'Friendlier account greeting with “Hi, your name!” in the Account area',
+    ],
+  },
+  {
     version: '1.9.0',
     dateLabel: '24 Apr 2026',
     articleUrl: 'https://temperedstrength.com/patch-notes/1.9.0',
