@@ -101,35 +101,36 @@ export function ConditioningWorkoutBody({
                 </View>
                 <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
               </View>
-              <TouchableOpacity
-                onPress={() => handleToggle(block.id)}
-                activeOpacity={0.7}
+            </View>
+
+            <TouchableOpacity
+              onPress={() => handleToggle(block.id)}
+              activeOpacity={0.7}
+              style={[
+                styles.completeButton,
+                isCompleted && styles.completeButtonActive,
+              ]}
+            >
+              <Ionicons
+                name={isCompleted ? 'checkmark-circle' : 'ellipse-outline'}
+                size={18}
+                color={isCompleted ? Colors.textOnAccent : Colors.textMuted}
+              />
+              <Text
                 style={[
-                  styles.completeButton,
-                  isCompleted && styles.completeButtonActive,
+                  styles.completeButtonText,
+                  isCompleted && styles.completeButtonTextActive,
                 ]}
               >
-                <Ionicons
-                  name={isCompleted ? 'checkmark-circle' : 'ellipse-outline'}
-                  size={18}
-                  color={isCompleted ? Colors.textOnAccent : Colors.textMuted}
-                />
-                <Text
-                  style={[
-                    styles.completeButtonText,
-                    isCompleted && styles.completeButtonTextActive,
-                  ]}
-                >
-                  {isCompleted ? 'Completed' : 'Mark complete'}
-                </Text>
-              </TouchableOpacity>
-            </View>
+                {isCompleted ? 'Completed' : 'Mark complete'}
+              </Text>
+            </TouchableOpacity>
 
             {block.instructions ? (
               <Text style={styles.blockInstructions}>{block.instructions}</Text>
             ) : null}
 
-            {block.type === 'warmup' ? (
+            {block.type === 'warmup' || block.type === 'cooldown' ? (
               <View style={styles.warmupList}>
                 {block.description.map((item, idx) => (
                   <View key={idx} style={styles.warmupItem}>
@@ -175,6 +176,8 @@ function formatBlockMeta(block: WorkoutBlock): string {
   switch (block.type) {
     case 'warmup':
       return 'Warm-up';
+    case 'cooldown':
+      return 'Cool down';
     case 'rounds': {
       const rest = block.restSecondsBetweenRounds
         ? ` • Rest ${block.restSecondsBetweenRounds}s`
@@ -227,13 +230,9 @@ const styles = StyleSheet.create({
     borderColor: Colors.accent,
   },
   blockHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: Spacing.md,
+    gap: Spacing.xs,
   },
   blockHeaderLeft: {
-    flex: 1,
     gap: Spacing.xs,
   },
   blockTitleRow: {
@@ -271,9 +270,11 @@ const styles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.lg,
     fontWeight: '600',
-    lineHeight: 20,
+    lineHeight: 22,
+    paddingBottom: 2,
   },
   completeButton: {
+    alignSelf: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.xs,

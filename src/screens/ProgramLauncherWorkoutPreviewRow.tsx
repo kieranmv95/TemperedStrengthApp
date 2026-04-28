@@ -6,10 +6,12 @@ import { programLauncherStyles as styles } from './programLauncherStyles';
 
 type ProgramLauncherWorkoutPreviewRowProps = {
   workout: Workout;
+  showIntensity?: boolean;
 };
 
 export function ProgramLauncherWorkoutPreviewRow({
   workout,
+  showIntensity = true,
 }: ProgramLauncherWorkoutPreviewRowProps) {
   const isV2 = workout.format === 'v2';
 
@@ -44,23 +46,25 @@ export function ProgramLauncherWorkoutPreviewRow({
         <Text style={styles.workoutExercises}>
           {isV2 ? `${workout.blocks.length} blocks` : `${workout.exercises.length} exercises`}
         </Text>
-        <View style={styles.workoutIntensity}>
-          <Text style={styles.workoutIntensityLabel}>Intensity:</Text>
-          <View style={styles.workoutIntensityBar}>
-            {Array.from({ length: 10 }).map((_, i) => (
-              <View
-                key={i}
-                style={[
-                  styles.workoutIntensityDot,
-                  i < workout.intensity && styles.workoutIntensityDotFilled,
-                ]}
-              />
-            ))}
+        {showIntensity ? (
+          <View style={styles.workoutIntensity}>
+            <Text style={styles.workoutIntensityLabel}>Intensity:</Text>
+            <View style={styles.workoutIntensityBar}>
+              {Array.from({ length: 10 }).map((_, i) => (
+                <View
+                  key={i}
+                  style={[
+                    styles.workoutIntensityDot,
+                    i < workout.intensity && styles.workoutIntensityDotFilled,
+                  ]}
+                />
+              ))}
+            </View>
+            <Text style={styles.workoutIntensityValue}>
+              {workout.intensity}/10
+            </Text>
           </View>
-          <Text style={styles.workoutIntensityValue}>
-            {workout.intensity}/10
-          </Text>
-        </View>
+        ) : null}
       </View>
     </View>
   );

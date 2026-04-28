@@ -30,6 +30,7 @@ type WorkoutScreenBodyProps = {
   isRestDay: boolean;
   onProgramReset?: () => void;
   currentWorkout: Workout | null;
+  showIntensity?: boolean;
   slots: WorkoutSlot[];
   swapRefreshCounter: number;
   completedSession: CompletedSession | null;
@@ -58,6 +59,7 @@ export function WorkoutScreenBody({
   isRestDay,
   onProgramReset,
   currentWorkout,
+  showIntensity = true,
   slots,
   swapRefreshCounter,
   completedSession,
@@ -167,35 +169,37 @@ export function WorkoutScreenBody({
           </View>
         )}
 
-        <View style={styles.intensityCard}>
-          <View style={styles.intensityCardHeader}>
-            <Text style={styles.intensityLabel}>Intensity</Text>
-            <Text style={styles.intensityValue}>
-              {currentWorkout.intensity}/10
+        {showIntensity ? (
+          <View style={styles.intensityCard}>
+            <View style={styles.intensityCardHeader}>
+              <Text style={styles.intensityLabel}>Intensity</Text>
+              <Text style={styles.intensityValue}>
+                {currentWorkout.intensity}/10
+              </Text>
+            </View>
+            <View style={styles.intensityBarTrack}>
+              <View
+                style={[
+                  styles.intensityBarFill,
+                  { width: `${currentWorkout.intensity * 10}%` },
+                ]}
+              />
+            </View>
+            <Text style={styles.intensityFeel}>
+              {getIntensityLevel(currentWorkout.intensity).label}.{' '}
+              {getIntensityLevel(currentWorkout.intensity).feel}
             </Text>
+            <TouchableOpacity
+              style={styles.intensityCta}
+              onPress={onIntensityInfoPress}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.intensityCtaText}>
+                View all intensity levels
+              </Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.intensityBarTrack}>
-            <View
-              style={[
-                styles.intensityBarFill,
-                { width: `${currentWorkout.intensity * 10}%` },
-              ]}
-            />
-          </View>
-          <Text style={styles.intensityFeel}>
-            {getIntensityLevel(currentWorkout.intensity).label}.{' '}
-            {getIntensityLevel(currentWorkout.intensity).feel}
-          </Text>
-          <TouchableOpacity
-            style={styles.intensityCta}
-            onPress={onIntensityInfoPress}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.intensityCtaText}>
-              View all intensity levels
-            </Text>
-          </TouchableOpacity>
-        </View>
+        ) : null}
 
         {(() => {
           if (currentWorkout.format === 'v2' && selectedDayIndex !== null) {

@@ -127,6 +127,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         isRestDay={c.isRestDay}
         onProgramReset={onProgramReset}
         currentWorkout={c.currentWorkout}
+        showIntensity={!!c.program?.categories.includes('strength')}
         slots={c.slots}
         swapRefreshCounter={c.swapRefreshCounter}
         completedSession={c.completedSession}
@@ -137,7 +138,11 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         notesInputRef={c.notesInputRef}
         tabBarHeight={tabBarHeight}
         bottomInset={insets.bottom}
-        onIntensityInfoPress={() => c.setIntensityModalVisible(true)}
+        onIntensityInfoPress={() => {
+          if (c.program?.categories.includes('strength')) {
+            c.setIntensityModalVisible(true);
+          }
+        }}
         handleRedoWorkout={c.handleRedoWorkout}
         handleSwapClick={c.handleSwapClick}
         handleRestStart={c.handleRestStart}
@@ -173,11 +178,13 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         onClearData={c.onSwapClearData}
       />
 
-      <IntensityLevelsModal
-        visible={c.intensityModalVisible}
-        currentIntensity={c.currentWorkout?.intensity}
-        onClose={() => c.setIntensityModalVisible(false)}
-      />
+      {c.program?.categories.includes('strength') ? (
+        <IntensityLevelsModal
+          visible={c.intensityModalVisible}
+          currentIntensity={c.currentWorkout?.intensity}
+          onClose={() => c.setIntensityModalVisible(false)}
+        />
+      ) : null}
 
       <SessionSummaryModal
         visible={c.sessionSummary !== null}

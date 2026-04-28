@@ -138,7 +138,11 @@ export function ProgramLauncherDetailsModal({
 
             <Text style={styles.sectionTitle}>Workouts</Text>
             {selectedProgram?.workouts.map((workout, index) => (
-              <ProgramLauncherWorkoutPreviewRow key={index} workout={workout} />
+              <ProgramLauncherWorkoutPreviewRow
+                key={index}
+                workout={workout}
+                showIntensity={selectedProgram.categories.includes('strength')}
+              />
             ))}
           </ScrollView>
 
