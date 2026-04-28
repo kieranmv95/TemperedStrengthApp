@@ -16,6 +16,9 @@ function threeDayMiniProgram(): Program {
     name: 'Mini',
     description: '',
     isPro: false,
+    categories: ['strength'],
+    difficulty: 'beginner',
+    goals: ['stronger'],
     daysSplit: ['mon', 'wed', 'fri'],
     workouts: [
       {

@@ -115,5 +115,104 @@
     "muscle": "Calves",
     "name": "Bodyweight Calf Raises",
     "pattern": "Isolation"
+  },
+  {
+    "description": "Stand with feet shoulder-width apart, squat to parallel, then explode upward. Land softly with bent knees and go straight into the next rep.",
+    "equipment": "Bodyweight",
+    "id": 102,
+    "logging_type": "reps",
+    "muscle": "Quadriceps/Glutes",
+    "name": "Squat Jumps",
+    "pattern": "Knee Dominant"
+  },
+  {
+    "description": "From standing, drop your hands to the floor, jump your feet back to a plank, perform a push-up, jump your feet in and explosively stand. Keep the movement fluid.",
+    "equipment": "Bodyweight",
+    "id": 103,
+    "logging_type": "reps",
+    "muscle": "Full Body",
+    "name": "Burpees",
+    "pattern": "Core"
+  },
+  {
+    "description": "Perform a burpee but at the jump phase drive forward off both feet, landing as far ahead as possible with soft knees.",
+    "equipment": "Bodyweight",
+    "id": 104,
+    "logging_type": "reps",
+    "muscle": "Full Body",
+    "name": "Burpee Broad Jumps",
+    "pattern": "Core"
+  },
+  {
+    "description": "Stand in front of a box, hinge slightly and explode upward, landing softly on top with both feet. Step down and reset.",
+    "equipment": "Bodyweight",
+    "id": 105,
+    "logging_type": "reps",
+    "muscle": "Quadriceps/Glutes",
+    "name": "Box Jumps",
+    "pattern": "Knee Dominant"
+  },
+  {
+    "description": "Hold a wall ball at chest height, squat to depth, then drive up and throw the ball to a target on the wall. Catch and go straight into the next rep.",
+    "equipment": "Bodyweight",
+    "id": 106,
+    "logging_type": "reps",
+    "muscle": "Full Body/Conditioning",
+    "name": "Wall Balls",
+    "pattern": "Knee Dominant"
+  },
+  {
+    "description": "Hold a slam ball overhead, brace your core and slam it into the ground as hard as possible. Pick it up and repeat.",
+    "equipment": "Bodyweight",
+    "id": 107,
+    "logging_type": "reps",
+    "muscle": "Full Body/Core",
+    "name": "Ball Slams",
+    "pattern": "Core"
+  },
+  {
+    "description": "Perform a bicycle crunch by lying on your back, hands behind your head, and rotating your elbow to the opposite knee in a slow, controlled movement.",
+    "equipment": "Bodyweight",
+    "id": 108,
+    "logging_type": "reps",
+    "muscle": "Abs",
+    "name": "Bicycle Crunch",
+    "pattern": "Core"
+  },
+  {
+    "description": "Step back into a reverse lunge, lowering your back knee to just above the floor. Drive through the front heel to return. Alternate sides.",
+    "equipment": "Bodyweight",
+    "id": 109,
+    "logging_type": "reps",
+    "muscle": "Quadriceps/Glutes",
+    "name": "Reverse Lunge",
+    "pattern": "Knee Dominant"
+  },
+  {
+    "description": "From a glute bridge position, march alternate feet off the floor keeping hips level and maintaining constant glute tension.",
+    "equipment": "Bodyweight",
+    "id": 110,
+    "logging_type": "reps",
+    "muscle": "Glutes",
+    "name": "Glute Bridge March",
+    "pattern": "Hip Hinge"
+  },
+  {
+    "description": "Stand with your back against a wall, slide down until your thighs are parallel to the floor and hold the position.",
+    "equipment": "Bodyweight",
+    "id": 111,
+    "logging_type": "reps",
+    "muscle": "Quadriceps",
+    "name": "Wall Sit",
+    "pattern": "Knee Dominant"
+  },
+  {
+    "description": "Stand tall, hinge at the hips and walk your hands out to a plank position. Pause, then walk your hands back and stand. Keep legs as straight as possible throughout.",
+    "equipment": "Bodyweight",
+    "id": 112,
+    "logging_type": "reps",
+    "muscle": "Full Body",
+    "name": "Inchworm",
+    "pattern": "Core"
   }
 ]

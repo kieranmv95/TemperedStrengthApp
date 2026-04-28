@@ -85,8 +85,14 @@ export type WorkoutBlockWarmup = WorkoutBlockBase & {
   description: string[];
 };
 
+export type WorkoutBlockCooldown = WorkoutBlockBase & {
+  type: 'cooldown';
+  description: string[];
+};
+
 export type WorkoutBlock =
   | WorkoutBlockWarmup
+  | WorkoutBlockCooldown
   | WorkoutBlockRounds
   | WorkoutBlockTabata
   | WorkoutBlockEmom
