@@ -17,6 +17,7 @@ const PATCH_NOTES: PatchNote[] = [
     version: '2.0.1',
     dateLabel: '30 Apr 2026',
     notes: [
+      'Program starting in X screen improved',
       'Rest day screen improved',
       'Program completed screen improved',
       'Program starting in X screen improved',
@@ -76,6 +77,7 @@ const PATCH_NOTES: PatchNote[] = [
       'Copy notes from past sessions',
       'Export workout as text',
       'Fix sketchy article saving bug',
+      'Program setting to hide the “Start Session” button',
     ],
   },
   {

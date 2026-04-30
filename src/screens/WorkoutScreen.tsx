@@ -145,6 +145,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         !c.loading &&
         !c.activeSession &&
         !c.completedSession &&
+        c.showStartSessionButton &&
         c.currentWorkout && (
           <View style={styles.startSessionButtonContainer}>
             <TouchableOpacity

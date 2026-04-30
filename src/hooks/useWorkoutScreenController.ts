@@ -30,6 +30,7 @@ import {
   getCompletedSession,
   getConditioningLogsForDay,
   getExerciseSwapsForDay,
+  getProgramShowStartSessionButton,
   getProgramCooldownModuleEnabled,
   getProgramStartDate,
   getProgramWarmupModuleEnabled,
@@ -45,6 +46,7 @@ import {
   setProgramWarmupModuleEnabled,
 } from '@/src/utils/storage';
 import { buildWorkoutExportText } from '@/src/utils/workoutExport';
+import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ScrollView, TextInput } from 'react-native';
 import { Alert, Keyboard, Platform, Share } from 'react-native';
@@ -119,6 +121,7 @@ export function useWorkoutScreenController() {
   const [warmupModuleEnabled, setWarmupModuleEnabled] = useState(false);
   const [cooldownModuleEnabled, setCooldownModuleEnabled] = useState(false);
   const [showProgramCompleted, setShowProgramCompleted] = useState(false);
+  const [showStartSessionButton, setShowStartSessionButton] = useState(true);
 
   const programRef = useRef<ReturnType<typeof getProgramById> | null>(null);
   const startDateRef = useRef<string | null>(null);
@@ -397,6 +400,24 @@ export function useWorkoutScreenController() {
   useEffect(() => {
     loadWorkoutData();
   }, [loadWorkoutData]);
+
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+      (async () => {
+        try {
+          const enabled = await getProgramShowStartSessionButton();
+          if (isActive) setShowStartSessionButton(enabled);
+        } catch (error) {
+          console.error('Error loading show start session button:', error);
+          if (isActive) setShowStartSessionButton(true);
+        }
+      })();
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
   const loadRestTimerState = useCallback(async () => {
     try {
@@ -863,6 +884,7 @@ export function useWorkoutScreenController() {
     toggleWarmupModule,
     toggleCooldownModule,
     showProgramCompleted,
+    showStartSessionButton,
     loadWorkoutForDay,
     loadWorkoutData,
     handleStartSession,

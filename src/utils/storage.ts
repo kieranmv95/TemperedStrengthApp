@@ -86,6 +86,8 @@ const AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY =
   'auto_pb_detection_in_programs_enabled';
 const PROGRAM_WARMUP_MODULE_ENABLED_KEY = 'program_warmup_module_enabled';
 const PROGRAM_COOLDOWN_MODULE_ENABLED_KEY = 'program_cooldown_module_enabled';
+const PROGRAM_SHOW_START_SESSION_BUTTON_KEY =
+  'program_show_start_session_button';
 const ONBOARDED_KEY = 'onboarded';
 const ONBOARDING_PROFILE_KEY = 'onboarding_profile';
 
@@ -261,6 +263,31 @@ export const setProgramCooldownModuleEnabled = async (
     );
   } catch (error) {
     console.error('Error setting program cooldown module enabled:', error);
+    throw error;
+  }
+};
+
+export const getProgramShowStartSessionButton = async (): Promise<boolean> => {
+  try {
+    const raw = await AsyncStorage.getItem(PROGRAM_SHOW_START_SESSION_BUTTON_KEY);
+    if (raw === null) return true;
+    return raw === 'true';
+  } catch (error) {
+    console.error('Error getting program show start session button:', error);
+    return true;
+  }
+};
+
+export const setProgramShowStartSessionButton = async (
+  enabled: boolean
+): Promise<void> => {
+  try {
+    await syncSetItem(
+      PROGRAM_SHOW_START_SESSION_BUTTON_KEY,
+      enabled ? 'true' : 'false'
+    );
+  } catch (error) {
+    console.error('Error setting program show start session button:', error);
     throw error;
   }
 };
