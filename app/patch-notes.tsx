@@ -14,6 +14,16 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.0.1',
+    dateLabel: '30 Apr 2026',
+    notes: [
+      '50 new standalone workouts added: 40 Free + 10 Pro',
+      'Big focus on Hyrox and CrossFit-style benchmark workouts',
+      'Partner workouts added, plus a new Partner filter',
+      'Workouts filters improved: curated sections now stay visible under filters (when they have matches), and filter counts update dynamically',
+    ],
+  },
+  {
     version: '2.0.0',
     dateLabel: '03 Jul 2026',
     notes: [
