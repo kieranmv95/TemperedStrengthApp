@@ -40,19 +40,6 @@ export const workoutsListStyles = StyleSheet.create({
   curatedSectionHeader: {
     marginBottom: Spacing.lg,
   },
-  curatedSectionHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-    marginBottom: Spacing.xs,
-  },
-  curatedSectionKicker: {
-    color: Colors.accent,
-    fontSize: FontSize.sm,
-    fontWeight: '800',
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
   curatedSectionTitle: {
     color: Colors.textPrimary,
     fontSize: FontSize.displaySm,

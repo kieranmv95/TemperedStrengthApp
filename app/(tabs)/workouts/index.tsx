@@ -448,9 +448,6 @@ export default function WorkoutsScreen() {
                 {showS1AndS2 && womensPicksWorkouts.length > 0 && (
                   <View style={styles.curatedSection}>
                     <View style={styles.curatedSectionHeader}>
-                      <View style={styles.curatedSectionHeaderRow}>
-                        <Text style={styles.curatedSectionKicker}>Curated</Text>
-                      </View>
                       <Text style={styles.curatedSectionTitle}>
                         Recommended for you
                       </Text>
@@ -479,9 +476,6 @@ export default function WorkoutsScreen() {
                 {showS1AndS2 && legsAndGlutesWorkouts.length > 0 && (
                   <View style={styles.curatedSection}>
                     <View style={styles.curatedSectionHeader}>
-                      <View style={styles.curatedSectionHeaderRow}>
-                        <Text style={styles.curatedSectionKicker}>Curated</Text>
-                      </View>
                       <Text style={styles.curatedSectionTitle}>
                         Legs &amp; Glutes
                       </Text>
@@ -510,9 +504,6 @@ export default function WorkoutsScreen() {
                 {showS3 && getBigWorkouts.length > 0 && (
                   <View style={styles.curatedSection}>
                     <View style={styles.curatedSectionHeader}>
-                      <View style={styles.curatedSectionHeaderRow}>
-                        <Text style={styles.curatedSectionKicker}>Curated</Text>
-                      </View>
                       <Text style={styles.curatedSectionTitle}>Get Big</Text>
                       <Text style={styles.curatedSectionHelper}>
                         Big pump. Feel strong.
