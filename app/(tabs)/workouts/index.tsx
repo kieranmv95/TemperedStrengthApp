@@ -35,6 +35,7 @@ const NO_EQUIPMENT_TAG = 'No Equipment';
 const WOMENS_PICKS_TAG = "Women’s Picks";
 const LEGS_AND_GLUTES_TAG = 'Legs & Glutes';
 const GET_BIG_TAG = 'Get Big';
+const CROSSFIT_TAG = 'CrossFit';
 
 function workoutHasTag(workout: SingleWorkout, tag: string): boolean {
   return workout.tags.includes(tag);
@@ -95,6 +96,7 @@ export default function WorkoutsScreen() {
   const [activeCategoryFilter, setActiveCategoryFilter] =
     useState<CategoryFilter>('All');
   const [noEquipmentOnly, setNoEquipmentOnly] = useState(false);
+  const [partnerOnly, setPartnerOnly] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [onboardingGender, setOnboardingGender] =
     useState<OnboardingGender | null>(null);
@@ -142,6 +144,7 @@ export default function WorkoutsScreen() {
     if (filter === 'All') {
       setActiveTimeFilter(null);
       setNoEquipmentOnly(false);
+      setPartnerOnly(false);
     }
   };
 
@@ -160,6 +163,8 @@ export default function WorkoutsScreen() {
 
     if (noEquipmentOnly && !workoutHasTag(workout, NO_EQUIPMENT_TAG))
       return false;
+
+    if (partnerOnly && workout.partner !== true) return false;
 
     if (activeTimeFilter === '≤15 min' && workout.estimatedTime > 15)
       return false;
@@ -193,6 +198,14 @@ export default function WorkoutsScreen() {
 
   const getBigWorkouts = filteredWorkouts.filter((w) =>
     workoutHasTag(w, GET_BIG_TAG)
+  );
+
+  const crossfitCuratedWorkouts = filteredWorkouts.filter((w) =>
+    workoutHasTag(w, CROSSFIT_TAG)
+  );
+
+  const hyroxCuratedWorkouts = filteredWorkouts.filter(
+    (w) => w.category === 'Hyrox'
   );
 
   const showS1AndS2 = onboardingGender === 'female';
@@ -247,6 +260,7 @@ export default function WorkoutsScreen() {
           >
             {CATEGORY_FILTERS.map((filter) => {
               const isActive = activeCategoryFilter === filter;
+              const displayLabel = filter === 'WOD' ? 'CrossFit' : filter;
               const count =
                 filter === 'All'
                   ? allStandaloneWorkouts.length
@@ -263,7 +277,7 @@ export default function WorkoutsScreen() {
                   key={filter}
                   onPress={() => handleSelectCategoryFilter(filter)}
                   isActive={isActive}
-                  label={filter}
+                  label={displayLabel}
                   icon={
                     filter === 'Favorites'
                       ? 'heart'
@@ -286,6 +300,14 @@ export default function WorkoutsScreen() {
                   workoutHasTag(w, NO_EQUIPMENT_TAG)
                 ).length
               }
+            />
+
+            <Pill
+              onPress={() => setPartnerOnly((prev) => !prev)}
+              isActive={partnerOnly}
+              label="Partner"
+              icon="people-outline"
+              count={allStandaloneWorkouts.filter((w) => w.partner === true).length}
             />
           </ScrollView>
         </View>
@@ -354,6 +376,66 @@ export default function WorkoutsScreen() {
             contentContainerStyle={styles.listContent}
             ListHeaderComponent={
               <>
+                {activeCategoryFilter === 'All' &&
+                  crossfitCuratedWorkouts.length > 0 && (
+                    <View style={styles.curatedSection}>
+                      <View style={styles.curatedSectionHeader}>
+                        <View style={styles.curatedSectionHeaderRow}>
+                          <Text style={styles.curatedSectionKicker}>Curated</Text>
+                        </View>
+                        <Text style={styles.curatedSectionTitle}>CrossFit</Text>
+                        <Text style={styles.curatedSectionHelper}>
+                          Classic benchmarks and WODs.
+                        </Text>
+                      </View>
+                      <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={styles.curatedScrollContent}
+                      >
+                        {crossfitCuratedWorkouts.map((workout) => (
+                          <CuratedWorkoutCard
+                            key={workout.id}
+                            workout={workout}
+                            isPro={isPro}
+                            onPress={handleWorkoutPress}
+                            onLockedPress={handleLockedPress}
+                          />
+                        ))}
+                      </ScrollView>
+                    </View>
+                  )}
+
+                {activeCategoryFilter === 'All' &&
+                  hyroxCuratedWorkouts.length > 0 && (
+                    <View style={styles.curatedSection}>
+                      <View style={styles.curatedSectionHeader}>
+                        <View style={styles.curatedSectionHeaderRow}>
+                          <Text style={styles.curatedSectionKicker}>Curated</Text>
+                        </View>
+                        <Text style={styles.curatedSectionTitle}>Hyrox</Text>
+                        <Text style={styles.curatedSectionHelper}>
+                          Race-style prep sessions and tests.
+                        </Text>
+                      </View>
+                      <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={styles.curatedScrollContent}
+                      >
+                        {hyroxCuratedWorkouts.map((workout) => (
+                          <CuratedWorkoutCard
+                            key={workout.id}
+                            workout={workout}
+                            isPro={isPro}
+                            onPress={handleWorkoutPress}
+                            onLockedPress={handleLockedPress}
+                          />
+                        ))}
+                      </ScrollView>
+                    </View>
+                  )}
+
                 {showS1AndS2 && womensPicksWorkouts.length > 0 && (
                   <View style={styles.curatedSection}>
                     <View style={styles.curatedSectionHeader}>

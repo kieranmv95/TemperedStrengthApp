@@ -6,7 +6,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 25,
-    "tags": ["AMRAP", "No Equipment", "Women’s Picks"],
+    "tags": ["CrossFit", "AMRAP", "No Equipment", "Women’s Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -69,7 +69,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 15,
-    "tags": ["Chipper", "Full Body", "No Equipment", "Women’s Picks"],
+    "tags": ["CrossFit", "Chipper", "Full Body", "No Equipment", "Women’s Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -434,7 +434,7 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 15,
-    "tags": ["Row", "Benchmark"],
+    "tags": ["Hyrox", "Row", "Benchmark"],
     "isPremium": false,
     "blocks": [
       {
@@ -837,6 +837,752 @@
           "Hooks",
           "Uppercuts",
           "Fast feet (or march fast)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_30",
+    "title": "Cindy",
+    "description": "The classic 20-minute bodyweight engine test. Smooth is fast. Keep sets crisp.",
+    "category": "WOD",
+    "difficulty": "Intermediate",
+    "estimatedTime": 30,
+    "tags": ["CrossFit", "AMRAP", "Benchmark", "Bodyweight"],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "6 mins easy cardio",
+          "2 Rounds: 6–8 pull-ups (or ring rows), 8 push-ups, 10 air squats"
+        ]
+      },
+      {
+        "name": "20 Min AMRAP",
+        "instructions": "As many rounds as possible in 20 mins.",
+        "movements": ["5 Pull-ups", "10 Push-ups", "15 Air Squats"]
+      }
+    ]
+  },
+  {
+    "id": "f_31",
+    "title": "Fran",
+    "description": "A fast, brutal classic. Sprint the barbell, survive the pull-ups.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 15,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Thrusters", "Pull-ups"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["500m Row", "2 x 10 Thrusters (empty bar)", "2 x 6 Pull-ups (or ring rows)"] },
+      {
+        "name": "21-15-9 For Time",
+        "instructions": "43/30kg suggested. Scale load to keep the thrusters unbroken or 2 sets max.",
+        "movements": ["Thrusters", "Pull-ups"]
+      }
+    ]
+  },
+  {
+    "id": "f_32",
+    "title": "Helen",
+    "description": "Short rounds, high output. The run is your limiter. The swings are your tax.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 25,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Run", "KB"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["800m Easy Run", "2 Rounds: 10 KB swings (light), 5 pull-ups (or ring rows)"] },
+      {
+        "name": "3 Rounds For Time",
+        "instructions": "Scale the swing weight so every rep is powerful and unbroken.",
+        "movements": ["400m Run", "21 KB Swings", "12 Pull-ups"]
+      }
+    ]
+  },
+  {
+    "id": "f_33",
+    "title": "Annie",
+    "description": "A pure midline and engine burner. Keep the jump rope relaxed and efficient.",
+    "category": "WOD",
+    "difficulty": "Intermediate",
+    "estimatedTime": 20,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Core", "Rope"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["3 mins easy skipping", "2 Rounds: 15 sit-ups, 30 single-unders"] },
+      {
+        "name": "For Time",
+        "instructions": "50-40-30-20-10. Double-unders and sit-ups.",
+        "movements": ["Double-Unders", "Sit-ups"]
+      }
+    ]
+  },
+  {
+    "id": "f_34",
+    "title": "Grace",
+    "description": "Power, speed, and composure under fatigue. Every rep should be snappy.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 15,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Clean and Jerk", "Barbell"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["3 mins easy row", "Build: 5-3-2 clean & jerks (light → working)"] },
+      {
+        "name": "For Time",
+        "instructions": "30 clean & jerks (60/40kg suggested). Scale so you can cycle fast singles or small sets.",
+        "movements": ["30 Clean & Jerks"]
+      }
+    ]
+  },
+  {
+    "id": "f_35",
+    "title": "Karen",
+    "description": "Simple on paper. Mentally heavy in reality. Small sets from the start.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 25,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Wall Balls"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["800m Easy Jog", "3 x 10 Wall balls (light, easy)"] },
+      {
+        "name": "For Time",
+        "instructions": "150 wall balls. Target: consistent set size and short rests.",
+        "movements": ["150 Wall Balls"]
+      }
+    ]
+  },
+  {
+    "id": "f_36",
+    "title": "Jackie",
+    "description": "Engine into grip and shoulders. Keep the row controlled and the thrusters smooth.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 20,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Row", "Thrusters"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["500m easy row", "2 x 10 thrusters (empty bar)", "2 x 5 pull-ups (or ring rows)"] },
+      {
+        "name": "For Time",
+        "instructions": "1000m row, then 50 thrusters (20/15kg), then 30 pull-ups.",
+        "movements": ["1000m Row", "50 Thrusters", "30 Pull-ups"]
+      }
+    ]
+  },
+  {
+    "id": "f_37",
+    "title": "Nancy",
+    "description": "Legs and lungs. The overhead squat demands patience and positioning.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 30,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Run", "Overhead Squat"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["800m easy run", "2 x 8 overhead squats (PVC/empty bar)"] },
+      {
+        "name": "5 Rounds For Time",
+        "instructions": "15 OHS at 43/30kg suggested. Scale to stay unbroken or 2 sets.",
+        "movements": ["400m Run", "15 Overhead Squats"]
+      }
+    ]
+  },
+  {
+    "id": "f_38",
+    "title": "Diane",
+    "description": "Heavy hinge plus inverted pressing. Keep your back safe and your sets smart.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 20,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Deadlift", "HSPU"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["2 rounds: 8 deadlifts (light), 8 pike push-ups, 8 hollow rocks"] },
+      {
+        "name": "21-15-9 For Time",
+        "instructions": "Deadlift 102/70kg suggested. Scale both movements to keep form.",
+        "movements": ["Deadlifts", "Handstand Push-ups"]
+      }
+    ]
+  },
+  {
+    "id": "f_39",
+    "title": "Isabel",
+    "description": "Speed under a bar. Your best score is the fastest safe cycling you can manage.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 15,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Snatch", "Barbell"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["3 mins easy cardio", "Build: 3-3-2 snatch (light → working)"] },
+      {
+        "name": "For Time",
+        "instructions": "30 snatches (61/43kg suggested). Scale to fast singles.",
+        "movements": ["30 Snatches"]
+      }
+    ]
+  },
+  {
+    "id": "f_40",
+    "title": "Elizabeth",
+    "description": "Fast rounds. Clean technique, stable shoulders, and short rests.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 20,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Clean", "Ring Dips"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["500m row", "2 x 6 power cleans (light)", "2 x 6 box dips (easy)"] },
+      {
+        "name": "21-15-9 For Time",
+        "instructions": "Cleans at 61/43kg suggested. Scale dips to maintain quality reps.",
+        "movements": ["Squat Cleans", "Ring Dips"]
+      }
+    ]
+  },
+  {
+    "id": "f_41",
+    "title": "Angie",
+    "description": "A simple bodyweight chipper. Stay disciplined with sets so you don’t crater.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 40,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Chipper", "Bodyweight"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["6 mins easy cardio", "2 rounds: 5 pull-ups, 10 push-ups, 10 sit-ups, 10 squats"] },
+      {
+        "name": "For Time",
+        "instructions": "100 pull-ups, 100 push-ups, 100 sit-ups, 100 air squats.",
+        "movements": ["100 Pull-ups", "100 Push-ups", "100 Sit-ups", "100 Air Squats"]
+      }
+    ]
+  },
+  {
+    "id": "f_42",
+    "title": "Barbara",
+    "description": "High output rounds with enforced rest. Sprint the work, then recover with intent.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 35,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Intervals", "Bodyweight"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["5 mins easy cardio", "2 rounds: 10 sit-ups, 8 push-ups, 6 pull-ups, 10 squats"] },
+      {
+        "name": "5 Rounds (Time Each)",
+        "instructions": "Complete each round for time. Rest exactly 3 mins between rounds.",
+        "movements": ["20 Pull-ups", "30 Push-ups", "40 Sit-ups", "50 Air Squats"]
+      }
+    ]
+  },
+  {
+    "id": "f_43",
+    "title": "Chelsea",
+    "description": "A 30-minute EMOM. Keep moving, never sprint the early minutes.",
+    "category": "WOD",
+    "difficulty": "Intermediate",
+    "estimatedTime": 40,
+    "tags": ["CrossFit", "EMOM", "Benchmark", "Bodyweight"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["6 mins easy cardio", "Practice: 3 rounds easy (5 pull-ups, 10 push-ups, 15 squats)"] },
+      {
+        "name": "EMOM 30",
+        "instructions": "Every minute for 30 mins: 5 pull-ups, 10 push-ups, 15 squats.",
+        "movements": ["5 Pull-ups", "10 Push-ups", "15 Air Squats"]
+      }
+    ]
+  },
+  {
+    "id": "f_44",
+    "title": "Fight Gone Bad (Classic)",
+    "description": "A points-style benchmark. Output matters, but transitions matter more.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 30,
+    "tags": ["CrossFit", "Benchmark", "Intervals", "For Score"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["800m easy jog", "1 round easy: 10 wall balls, 8 push press, 10 box step-ups"] },
+      {
+        "name": "3 Rounds",
+        "instructions": "1 min each station, 1 min rest between rounds. Score = total reps.",
+        "movements": ["Wall Balls", "Sumo Deadlift High Pull", "Box Jumps", "Push Press", "Calories Row"]
+      }
+    ]
+  },
+  {
+    "id": "f_45",
+    "title": "The Chief",
+    "description": "Short windows, high pace. The only goal is consistent output across sets.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 30,
+    "tags": ["CrossFit", "Benchmark", "AMRAP", "Intervals", "Barbell"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["500m row", "Build: light power cleans + push press + front squats"] },
+      {
+        "name": "5 Cycles",
+        "instructions": "Each cycle: 3 mins AMRAP, then rest 1 min. Score = total rounds across all cycles.",
+        "movements": ["3 Power Cleans", "6 Push-ups", "9 Air Squats"]
+      }
+    ]
+  },
+  {
+    "id": "f_46",
+    "title": "DT",
+    "description": "Grip and barbell cycling. Break early to keep the bar moving.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 25,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Barbell", "Chipper"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["3 mins easy cardio", "2 rounds: 6 deadlifts (light), 6 hang power cleans (light), 6 push jerks (light)"] },
+      {
+        "name": "5 Rounds For Time",
+        "instructions": "12 deadlifts, 9 hang power cleans, 6 push jerks (70/47.5kg suggested).",
+        "movements": ["Deadlifts", "Hang Power Cleans", "Push Jerks"]
+      }
+    ]
+  },
+  {
+    "id": "f_47",
+    "title": "Kelly",
+    "description": "Longer benchmark with consistent rounds. Smooth transitions win.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 45,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Run", "Wall Balls"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["800m easy run", "2 rounds: 10 wall balls, 10 box step-ups"] },
+      {
+        "name": "5 Rounds For Time",
+        "instructions": "400m run, 30 box jumps, 30 wall balls.",
+        "movements": ["400m Run", "30 Box Jumps", "30 Wall Balls"]
+      }
+    ]
+  },
+  {
+    "id": "f_48",
+    "title": "Lynne",
+    "description": "Max reps under fatigue. Keep strict form, track total reps honestly.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 35,
+    "tags": ["CrossFit", "Benchmark", "For Score", "Bench Press", "Pull-ups"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["500m row", "2 x 10 light bench press", "2 x 6 easy pull-ups (or ring rows)"] },
+      {
+        "name": "5 Rounds (Not For Time)",
+        "instructions": "Bench press bodyweight (or challenging load) max reps, then pull-ups max reps. Rest as needed.",
+        "movements": ["Bench Press (max reps)", "Pull-ups (max reps)"]
+      }
+    ]
+  },
+  {
+    "id": "f_49",
+    "title": "Kalsu",
+    "description": "A brutal thruster benchmark. Every minute you pay the burpee tax.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 30,
+    "tags": ["CrossFit", "For Time", "Benchmark", "Thrusters", "Burpees"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["500m row", "2 x 8 thrusters (empty bar)", "2 x 5 burpees"] },
+      {
+        "name": "For Time",
+        "instructions": "100 thrusters. At the start of every minute: 5 burpees. Then continue thrusters with remaining time.",
+        "movements": ["100 Thrusters", "Burpees (5 every minute)"]
+      }
+    ]
+  },
+  {
+    "id": "f_50",
+    "title": "Hyrox Prep: 4x (Run + Row)",
+    "description": "A simple Hyrox-style engine session. Keep transitions fast and breathing controlled.",
+    "category": "Hyrox",
+    "difficulty": "Intermediate",
+    "estimatedTime": 35,
+    "tags": ["Hyrox", "Engine", "Run", "Row"],
+    "isPremium": false,
+    "partner": true,
+    "blocks": [
+      { "name": "Warmup", "movements": ["800m easy run", "500m easy row", "10 air squats, 10 lunges"] },
+      {
+        "name": "4 Rounds",
+        "instructions": "Partner option: alternate full rounds. Partner A completes the full round while Partner B rests. Swap each round. Record each person’s split times if you want.",
+        "movements": ["800m Run", "500m Row"]
+      }
+    ]
+  },
+  {
+    "id": "f_51",
+    "title": "Sled Exposure (Light)",
+    "description": "Technique first. Learn bracing, posture, and smooth drive without redlining.",
+    "category": "Hyrox",
+    "difficulty": "Beginner",
+    "estimatedTime": 35,
+    "tags": ["Hyrox", "Sled", "Technique"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["6 mins easy cardio", "2 x 20m empty sled push (or incline walk)", "2 x 20m light sled pull"] },
+      {
+        "name": "Skill + Work",
+        "instructions": "Record loads used. Keep every rep crisp.",
+        "movements": ["6 x 20m Sled Push (light)", "6 x 20m Sled Pull (light)", "6 x 10 Wall Balls (easy)"]
+      }
+    ]
+  },
+  {
+    "id": "f_52",
+    "title": "Wall Ball Density 10",
+    "description": "Hyrox-specific density test. Pick a target pace and hold it without long breaks.",
+    "category": "Hyrox",
+    "difficulty": "Intermediate",
+    "estimatedTime": 20,
+    "tags": ["Hyrox", "Wall Balls", "Benchmark", "For Score"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["5 mins easy cardio", "3 x 10 wall balls (light → working)"] },
+      {
+        "name": "10 Min For Total Reps",
+        "instructions": "Score = total wall balls. Keep sets small and steady.",
+        "movements": ["Wall Balls"]
+      }
+    ]
+  },
+  {
+    "id": "f_53",
+    "title": "Burpee Broad Jump Intervals",
+    "description": "A Hyrox-style station focus. Strong hips, long jumps, and calm breathing.",
+    "category": "Hyrox",
+    "difficulty": "Intermediate",
+    "estimatedTime": 30,
+    "tags": ["Hyrox", "Intervals", "Burpees", "Jumps"],
+    "isPremium": false,
+    "partner": true,
+    "blocks": [
+      { "name": "Warmup", "movements": ["6 mins easy cardio", "2 x 10 burpees (easy)", "2 x 20m broad jump practice"] },
+      {
+        "name": "E2MOM 16",
+        "instructions": "Partner option: you-go-I-go. Partner A works for the first 60s, Partner B works for the second 60s. The team goal is smooth, consistent distance every round.",
+        "movements": ["Burpee Broad Jumps"]
+      }
+    ]
+  },
+  {
+    "id": "f_54",
+    "title": "Carry Capacity Builder",
+    "description": "Grip and posture under fatigue. Walk tall, breathe steady.",
+    "category": "Hyrox",
+    "difficulty": "Intermediate",
+    "estimatedTime": 35,
+    "tags": ["Hyrox", "Carry", "Grip", "Run"],
+    "isPremium": false,
+    "partner": true,
+    "blocks": [
+      { "name": "Warmup", "movements": ["800m easy jog", "2 x 40m light carry", "10 reverse lunges each side"] },
+      {
+        "name": "5 Rounds",
+        "instructions": "Partner option: split the carry. Run together, then alternate 25m/25m on the carry. Switch quickly - no standing around with the implement.",
+        "movements": ["600m Run", "100m Farmers Carry"]
+      }
+    ]
+  },
+  {
+    "id": "f_55",
+    "title": "Sandbag Lunge Repeatability",
+    "description": "Leg endurance with a Hyrox bias. Keep steps consistent and upright.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 40,
+    "tags": ["Hyrox", "Lunges", "Sandbag", "Run"],
+    "isPremium": false,
+    "partner": true,
+    "blocks": [
+      { "name": "Warmup", "movements": ["6 mins easy cardio", "2 x 10 lunges (bodyweight)", "2 x 100m easy carry"] },
+      {
+        "name": "4 Sets",
+        "instructions": "Partner option: split the lunges. Run together, then alternate 25m/25m lunges (or 10 steps/10 steps). Record load and keep switchovers fast.",
+        "movements": ["800m Run", "200m Sandbag Lunges"]
+      }
+    ]
+  },
+  {
+    "id": "f_56",
+    "title": "Row 2k TT",
+    "description": "A classic engine benchmark used in Hyrox prep. Even splits, then empty the tank.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 15,
+    "tags": ["Hyrox", "Row", "Benchmark"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["8 mins row build: easy → moderate, then 3 x 10 strokes hard"] },
+      { "name": "For Time", "instructions": "2000m row. Record your time.", "movements": ["2000m Row"] }
+    ]
+  },
+  {
+    "id": "f_57",
+    "title": "Ski Sub: Row + Run",
+    "description": "If you don’t have a SkiErg, this mimics the same upper-body breathing demand.",
+    "category": "Hyrox",
+    "difficulty": "Intermediate",
+    "estimatedTime": 35,
+    "tags": ["Hyrox", "Engine", "Row", "Run"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["800m easy run", "500m easy row", "10 push-ups, 10 air squats"] },
+      {
+        "name": "5 Rounds",
+        "instructions": "Keep the row powerful, keep the run smooth.",
+        "movements": ["600m Run", "300m Row"]
+      }
+    ]
+  },
+  {
+    "id": "f_58",
+    "title": "Wall Balls Under Fatigue",
+    "description": "Run hard enough to make wall balls feel heavy, then stay composed anyway.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 35,
+    "tags": ["Hyrox", "Wall Balls", "Run", "Intervals"],
+    "isPremium": false,
+    "partner": true,
+    "blocks": [
+      { "name": "Warmup", "movements": ["800m easy run", "2 x 10 wall balls (easy)", "10 burpees (easy)"] },
+      {
+        "name": "6 Rounds",
+        "instructions": "Partner option: alternate wall balls. Run together, then Partner A does 10 wall balls while Partner B rests, then switch for the next 10. Keep the run pace honest.",
+        "movements": ["500m Run", "20 Wall Balls"]
+      }
+    ]
+  },
+  {
+    "id": "f_59",
+    "title": "Stations Only Circuit",
+    "description": "Hyrox-style stations with minimal running. Great when space is limited.",
+    "category": "Hyrox",
+    "difficulty": "Intermediate",
+    "estimatedTime": 30,
+    "tags": ["Hyrox", "Stations", "Circuit"],
+    "isPremium": false,
+    "partner": true,
+    "blocks": [
+      { "name": "Warmup", "movements": ["6 mins easy cardio", "10 air squats, 10 lunges, 10 push-ups"] },
+      {
+        "name": "4 Rounds For Time",
+        "instructions": "Partner option: split the reps. For each movement, partner A completes the first half, partner B completes the second half, then move on together. Keep transitions tight.",
+        "movements": [
+          "500m Row",
+          "25 Wall Balls",
+          "20 Burpee Broad Jumps",
+          "50m Farmers Carry"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f_60",
+    "title": "Engine Builder 30",
+    "description": "Steady, aerobic, and repeatable. The goal is to finish feeling better than you started.",
+    "category": "Hyrox",
+    "difficulty": "Beginner",
+    "estimatedTime": 35,
+    "tags": ["Hyrox", "Aerobic", "Zone 2", "Engine"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["5 mins easy cardio"] },
+      {
+        "name": "30 Min Steady",
+        "instructions": "Maintain conversational pace.",
+        "movements": ["Run / Bike / Row (steady)"]
+      }
+    ]
+  },
+  {
+    "id": "f_61",
+    "title": "Sled Push Intervals (Moderate)",
+    "description": "Hyrox sled push practice. Record load and quality. Smooth drive, no collapsing.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 35,
+    "tags": ["Hyrox", "Sled", "Intervals"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["6 mins easy cardio", "2 x 20m light sled push", "10 wall balls (easy)"] },
+      {
+        "name": "Work",
+        "instructions": "Rest 90s between efforts. Record loads.",
+        "movements": ["8 x 20m Sled Push (moderate)", "4 x 15 Wall Balls (steady)"]
+      }
+    ]
+  },
+  {
+    "id": "f_62",
+    "title": "Sled Pull Intervals (Moderate)",
+    "description": "Hyrox sled pull practice. Keep torso tall and stride consistent.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 35,
+    "tags": ["Hyrox", "Sled", "Intervals"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["6 mins easy cardio", "2 x 20m light sled pull", "10 reverse lunges each side"] },
+      {
+        "name": "Work",
+        "instructions": "Rest 90s between efforts. Record loads.",
+        "movements": ["8 x 20m Sled Pull (moderate)", "4 x 200m Run (steady)"]
+      }
+    ]
+  },
+  {
+    "id": "f_63",
+    "title": "Roxzone Transitions",
+    "description": "Run in, get working fast. A session built around Hyrox transitions and composure.",
+    "category": "Hyrox",
+    "difficulty": "Intermediate",
+    "estimatedTime": 30,
+    "tags": ["Hyrox", "Transitions", "Run"],
+    "isPremium": false,
+    "partner": true,
+    "blocks": [
+      { "name": "Warmup", "movements": ["800m easy jog", "10 burpees", "10 wall balls"] },
+      {
+        "name": "6 Rounds",
+        "instructions": "Partner option: you-go-I-go on stations. Run together. At the station, Partner A completes burpees while Partner B rests, then switch for wall balls (or alternate round-by-round).",
+        "movements": ["600m Run", "10 Burpees", "15 Wall Balls"]
+      }
+    ]
+  },
+  {
+    "id": "f_64",
+    "title": "Hyrox Mini AMRAP 12",
+    "description": "A short Hyrox-style effort when you want intensity without a long session.",
+    "category": "Hyrox",
+    "difficulty": "Intermediate",
+    "estimatedTime": 20,
+    "tags": ["Hyrox", "AMRAP", "For Score", "Engine"],
+    "isPremium": false,
+    "partner": true,
+    "blocks": [
+      { "name": "Warmup", "movements": ["6 mins easy cardio", "10 air squats, 10 push-ups, 250m row"] },
+      {
+        "name": "12 Min AMRAP",
+        "instructions": "Partner option: alternate full rounds. Partner A completes one full round while Partner B rests. Swap each round. Score = total rounds + reps as a team.",
+        "movements": ["400m Run", "250m Row", "15 Wall Balls", "10 Burpees"]
+      }
+    ]
+  },
+  {
+    "id": "f_65",
+    "title": "PFT Variant A",
+    "description": "A Hyrox-style benchmark with accessible swaps. Minimal transition time.",
+    "category": "Hyrox",
+    "difficulty": "Intermediate",
+    "estimatedTime": 35,
+    "tags": ["Hyrox", "Benchmark", "Test"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["800m run", "10 burpees", "10 air squats"] },
+      {
+        "name": "For Time",
+        "instructions": "Record total time.",
+        "movements": ["1000m Run", "50m Farmers Carry", "1000m Row", "50 Wall Balls"]
+      }
+    ]
+  },
+  {
+    "id": "f_66",
+    "title": "Run Pacing Ladders",
+    "description": "A pacing session that teaches you how to control effort and recover quickly.",
+    "category": "Hyrox",
+    "difficulty": "Intermediate",
+    "estimatedTime": 35,
+    "tags": ["Hyrox", "Run", "Pacing", "Engine"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["10 mins easy jog + drills"] },
+      {
+        "name": "Ladder",
+        "instructions": "Rest 2 mins between reps. Aim for negative splits.",
+        "movements": ["1000m Run", "800m Run", "600m Run", "400m Run"]
+      }
+    ]
+  },
+  {
+    "id": "f_67",
+    "title": "Carry + Grip Destroyer",
+    "description": "Carry medley under fatigue. Your job is to keep posture tall and steps clean.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 30,
+    "tags": ["Hyrox", "Carry", "Grip", "Benchmark"],
+    "isPremium": false,
+    "partner": true,
+    "blocks": [
+      { "name": "Warmup", "movements": ["6 mins easy cardio", "2 x 40m light carry", "10 glute bridges"] },
+      {
+        "name": "For Time",
+        "instructions": "Partner option: split each carry evenly (e.g. 50m each on farmers, 100m each on sandbag, 50m each overhead). Switch quickly and keep the implement moving.",
+        "movements": ["400m Farmers Carry", "200m Sandbag Carry", "100m Overhead Plate Carry"]
+      }
+    ]
+  },
+  {
+    "id": "f_68",
+    "title": "Wall Ball 150 Test",
+    "description": "A Hyrox-flavoured benchmark. One movement. One goal. Keep moving.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 25,
+    "tags": ["Hyrox", "Wall Balls", "Benchmark", "For Time"],
+    "isPremium": false,
+    "blocks": [
+      { "name": "Warmup", "movements": ["800m easy jog", "3 x 10 wall balls (easy)"] },
+      {
+        "name": "For Time",
+        "instructions": "150 wall balls. Record finish time.",
+        "movements": ["150 Wall Balls"]
+      }
+    ]
+  },
+  {
+    "id": "f_69",
+    "title": "Race Sim: Half",
+    "description": "A half-distance Hyrox-style simulation. Focus on steady output and smooth transitions.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 45,
+    "tags": ["Hyrox", "Simulation", "Run", "Stations"],
+    "isPremium": false,
+    "partner": true,
+    "blocks": [
+      { "name": "Warmup", "movements": ["10 mins easy jog + drills", "10 wall balls, 10 burpees"] },
+      {
+        "name": "For Time",
+        "instructions": "Partner format: split stations, run together. Keep all running as written. At each station, split the work 50/50 (or alternate small chunks). Record total team time and keep transitions tight.",
+        "movements": [
+          "1000m Run",
+          "500m Row",
+          "1000m Run",
+          "50m Farmers Carry",
+          "1000m Run",
+          "30 Burpee Broad Jumps",
+          "1000m Run",
+          "50 Wall Balls"
         ]
       }
     ]

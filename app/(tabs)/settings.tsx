@@ -231,6 +231,20 @@ export default function SettingsScreen() {
             <Text style={styles.settingArrow}>→</Text>
           </TouchableOpacity>
 
+          <View style={styles.settingsSection}>
+            <Text style={styles.settingsSectionTitle}>Legal</Text>
+            <View style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>Trademarks</Text>
+                <Text style={styles.settingDescription}>
+                  CrossFit and HYROX are trademarks of their respective owners.
+                  Tempered Strength is not affiliated with, endorsed by, or
+                  sponsored by them.
+                </Text>
+              </View>
+            </View>
+          </View>
+
           {__DEV__ && (
             <View style={styles.settingsSection}>
               <Text style={styles.settingsSectionTitle}>Dev settings</Text>

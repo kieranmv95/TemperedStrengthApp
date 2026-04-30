@@ -116,4 +116,70 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
     label: 'Finish time',
     lowerIsBetter: true,
   },
+
+  // ---------------------------------------------------------------------------
+  // CrossFit-style (WOD) — Free
+  // ---------------------------------------------------------------------------
+  f_30: { kind: 'amrap', timeCapMinutes: 20, roundsLabel: 'Rounds', extraRepsLabel: 'Extra reps' },
+  f_31: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_32: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_33: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_34: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_35: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_36: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_37: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_38: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_39: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_40: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_41: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_42: { kind: 'duration', label: 'Total time (all rounds)', lowerIsBetter: true },
+  f_43: { kind: 'max_reps', label: 'Last completed minute', higherIsBetter: true },
+  f_44: { kind: 'max_reps', label: 'Total reps', higherIsBetter: true },
+  f_45: { kind: 'max_reps', label: 'Total rounds', higherIsBetter: true },
+  f_46: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_47: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_48: { kind: 'max_reps', label: 'Total reps', higherIsBetter: true },
+  f_49: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+
+  // ---------------------------------------------------------------------------
+  // Hyrox-style — Free
+  // ---------------------------------------------------------------------------
+  f_50: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+  f_51: { kind: 'notes_only', placeholder: 'Record sled loads, notes, and how it felt.' },
+  f_52: { kind: 'max_reps', label: 'Total reps', higherIsBetter: true },
+  f_53: { kind: 'max_reps', label: 'Total reps', higherIsBetter: true },
+  f_54: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+  f_55: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+  f_56: { kind: 'duration', label: '2000m time', lowerIsBetter: true },
+  f_57: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+  f_58: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+  f_59: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+  f_60: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+  f_61: { kind: 'notes_only', placeholder: 'Record sled load, rest, and completion notes.' },
+  f_62: { kind: 'notes_only', placeholder: 'Record sled load, rest, and completion notes.' },
+  f_63: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+  f_64: { kind: 'amrap', timeCapMinutes: 12, roundsLabel: 'Rounds', extraRepsLabel: 'Extra reps' },
+  f_65: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_66: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+  f_67: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_68: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_69: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+
+  // ---------------------------------------------------------------------------
+  // CrossFit-style (WOD) — Pro
+  // ---------------------------------------------------------------------------
+  p_26: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  p_27: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  p_28: { kind: 'amrap', timeCapMinutes: 20, roundsLabel: 'Rounds', extraRepsLabel: 'Extra reps' },
+  p_29: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  p_30: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+
+  // ---------------------------------------------------------------------------
+  // Hyrox-style — Pro
+  // ---------------------------------------------------------------------------
+  p_31: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  p_32: { kind: 'notes_only', placeholder: 'Record sled loads and how the session felt.' },
+  p_33: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  p_34: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  p_35: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
 };

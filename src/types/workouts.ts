@@ -49,6 +49,8 @@ export type SingleWorkout = {
   tags: string[];
   isPremium: boolean;
   logSchema: WorkoutLogSchema;
+  /** True when designed to be done with a partner. */
+  partner?: boolean;
 
   blocks: {
     name: string;

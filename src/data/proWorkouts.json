@@ -67,6 +67,7 @@
     "difficulty": "Advanced",
     "estimatedTime": 20,
     "tags": [
+      "CrossFit",
       "Row",
       "Barbell",
       "Sprint"
@@ -182,6 +183,7 @@
     "difficulty": "Advanced",
     "estimatedTime": 60,
     "tags": [
+      "CrossFit",
       "Hero WOD",
       "Long",
       "No Equipment"
@@ -301,6 +303,7 @@
     "difficulty": "Advanced",
     "estimatedTime": 15,
     "tags": [
+      "CrossFit",
       "Barbell",
       "Power"
     ],
@@ -389,6 +392,7 @@
     "difficulty": "Advanced",
     "estimatedTime": 25,
     "tags": [
+      "CrossFit",
       "Explosive",
       "Lungs"
     ],
@@ -1071,6 +1075,281 @@
             "note": "Focus on the forearm and brachioradialis at the top. Full extension at the bottom."
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "p_26",
+    "title": "Eva",
+    "description": "A high-volume benchmark. Long rounds, constant grip demand, and a steady run pace.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 55,
+    "tags": ["CrossFit", "Benchmark", "For Time", "Run", "KB"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "10 mins easy run + drills",
+          "2 rounds: 10 KB swings (light), 6 pull-ups (easy)"
+        ]
+      },
+      {
+        "name": "5 Rounds For Time",
+        "instructions": "Keep the run smooth and the swings powerful. Break pull-ups before you fail reps.",
+        "movements": ["800m Run", "30 KB Swings", "30 Pull-ups"]
+      }
+    ]
+  },
+  {
+    "id": "p_27",
+    "title": "King Kong",
+    "description": "A heavy classic. Only for athletes with solid technique and strict standards.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 25,
+    "tags": ["CrossFit", "Benchmark", "For Time", "Heavy"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": ["10 mins progressive warmup", "Build to moderate heavy deadlift + squat clean"]
+      },
+      {
+        "name": "3 Rounds For Time",
+        "instructions": "Scale loads and/or skills to keep reps safe and clean.",
+        "movements": [
+          "1 Deadlift (heavy)",
+          "2 Muscle-ups",
+          "3 Squat Cleans (heavy)",
+          "4 Handstand Push-ups"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_28",
+    "title": "Nate",
+    "description": "A 20-minute AMRAP that rewards efficient gymnastics and a strong hinge.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 30,
+    "tags": ["CrossFit", "Benchmark", "AMRAP", "Gymnastics"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "8 mins easy cardio",
+          "Skill: 5–10 mins muscle-up practice (or strict pull-up + dip)"
+        ]
+      },
+      {
+        "name": "20 Min AMRAP",
+        "instructions": "Score = rounds + reps. Stay efficient on transitions.",
+        "movements": ["2 Muscle-ups", "4 Handstand Push-ups", "8 KB Swings"]
+      }
+    ]
+  },
+  {
+    "id": "p_29",
+    "title": "Randy",
+    "description": "A fast barbell benchmark. Crisp reps only. Grip and lungs will be tested.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 20,
+    "tags": ["CrossFit", "Benchmark", "For Time", "Snatch", "Barbell"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "6 mins easy cardio",
+          "Build: 5-3-2 power snatch (light → working)"
+        ]
+      },
+      {
+        "name": "For Time",
+        "instructions": "75 power snatches (34/25kg suggested). Scale to safe cycling.",
+        "movements": ["75 Power Snatches"]
+      }
+    ]
+  },
+  {
+    "id": "p_30",
+    "title": "Amanda",
+    "description": "A sharp classic: high-skill and fast reps. Scale to maintain standards.",
+    "category": "WOD",
+    "difficulty": "Advanced",
+    "estimatedTime": 20,
+    "tags": ["CrossFit", "Benchmark", "For Time", "Gymnastics"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "8 mins warmup",
+          "Build: 3-2-1 snatch (light → working)",
+          "Skill: muscle-up progressions"
+        ]
+      },
+      {
+        "name": "9-7-5 For Time",
+        "instructions": "Muscle-ups + snatches (heavy). Scale both to keep reps safe.",
+        "movements": ["Muscle-ups", "Snatches"]
+      }
+    ]
+  },
+  {
+    "id": "p_31",
+    "title": "Race Sim: Full",
+    "description": "A full Hyrox-style simulation. Long, demanding, and specific. Keep moving.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 85,
+    "tags": ["Hyrox", "Simulation", "Run", "Stations"],
+    "isPremium": true,
+    "partner": true,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "12 mins easy jog + drills",
+          "10 wall balls, 10 burpees, 500m easy row"
+        ]
+      },
+      {
+        "name": "For Time",
+        "instructions": "Partner format: split stations, run together. Keep all running as written. At each station, split the work 50/50 (or alternate small chunks). Record total team time. Scale stations if needed, but keep the run volume.",
+        "movements": [
+          "1000m Run",
+          "1000m SkiErg (or 1000m Row)",
+          "1000m Run",
+          "50m Sled Push",
+          "1000m Run",
+          "50m Sled Pull",
+          "1000m Run",
+          "80m Burpee Broad Jumps",
+          "1000m Run",
+          "1000m Row",
+          "1000m Run",
+          "200m Farmers Carry",
+          "1000m Run",
+          "100m Sandbag Lunges",
+          "1000m Run",
+          "100 Wall Balls"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_32",
+    "title": "Sled Heavy Day",
+    "description": "Hyrox sled day. Heavy exposure with enough aerobic work to keep you honest.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 60,
+    "tags": ["Hyrox", "Sled", "Heavy", "Run"],
+    "isPremium": true,
+    "partner": true,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "10 mins easy cardio",
+          "2 x 20m light sled push, 2 x 20m light sled pull"
+        ]
+      },
+      {
+        "name": "Work",
+        "instructions": "Partner format: alternate efforts. Partner A completes one sled push + one sled pull while Partner B rests, then swap. Run reps together at steady pace. Record loads used.",
+        "movements": [
+          "6 x 20m Sled Push (heavy)",
+          "6 x 20m Sled Pull (heavy)",
+          "4 x 600m Run (steady)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_33",
+    "title": "Elite Stations Repeat",
+    "description": "High output station repeats. Big breathing. Tight transitions.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 55,
+    "tags": ["Hyrox", "Stations", "Intervals", "Elite"],
+    "isPremium": true,
+    "partner": true,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "10 mins easy cardio",
+          "Practice: 10 wall balls, 250m row, 10 burpees"
+        ]
+      },
+      {
+        "name": "4 Rounds",
+        "instructions": "Partner format: split stations, run together. For each station, split reps/distance 50/50. Rest 2 mins between rounds. Keep intensity high but repeatable.",
+        "movements": [
+          "800m Run",
+          "500m Row",
+          "30 Wall Balls",
+          "20 Burpee Broad Jumps",
+          "100m Farmers Carry"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_34",
+    "title": "Hyrox PFT (Pro Standard)",
+    "description": "A higher-standard Hyrox fitness test. Record finish time and station notes.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 40,
+    "tags": ["Hyrox", "Benchmark", "Test"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "800m run",
+          "10 burpees, 10 air squats",
+          "500m easy row"
+        ]
+      },
+      {
+        "name": "For Time",
+        "instructions": "Minimal transition time. Record total time.",
+        "movements": [
+          "1000m Run",
+          "30 Burpee Broad Jumps",
+          "200m Sandbag Lunges",
+          "1000m Row",
+          "50 Wall Balls"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_35",
+    "title": "Roxzone Killer",
+    "description": "Shorter runs, brutal transitions, dense stations. Designed to make you better at the messy middle.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 55,
+    "tags": ["Hyrox", "Transitions", "Intervals", "Stations"],
+    "isPremium": true,
+    "partner": true,
+    "blocks": [
+      { "name": "Warmup", "movements": ["10 mins easy jog + drills", "10 wall balls, 10 burpees"] },
+      {
+        "name": "8 Rounds",
+        "instructions": "Partner format: alternate rounds. Partner A completes one full round while Partner B rests, then swap next round. Keep transitions fast and form clean.",
+        "movements": ["600m Run", "12 Wall Balls", "8 Burpees", "250m Row"]
       }
     ]
   }
