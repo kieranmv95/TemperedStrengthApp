@@ -1,5 +1,6 @@
 import { Colors, Spacing } from '@/src/constants/theme';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
+import { ProgramCompletedScreen } from '@/src/screens/ProgramCompletedScreen';
 import { ProgramStartingInXScreen } from '@/src/screens/ProgramStartingInXScreen';
 import { RestDayScreen } from '@/src/screens/RestDayScreen';
 import {
@@ -29,6 +30,8 @@ type WorkoutScreenBodyProps = {
   selectedDayIndex: number | null;
   isRestDay: boolean;
   onProgramReset?: () => void;
+  showProgramCompleted: boolean;
+  onViewAllPrograms: () => void | Promise<void>;
   currentWorkout: Workout | null;
   showIntensity?: boolean;
   slots: WorkoutSlot[];
@@ -58,6 +61,8 @@ export function WorkoutScreenBody({
   selectedDayIndex,
   isRestDay,
   onProgramReset,
+  showProgramCompleted,
+  onViewAllPrograms,
   currentWorkout,
   showIntensity = true,
   slots,
@@ -83,6 +88,10 @@ export function WorkoutScreenBody({
   onExportWorkoutText,
 }: WorkoutScreenBodyProps) {
   const { unit: weightUnit } = useWeightUnit();
+  if (showProgramCompleted) {
+    return <ProgramCompletedScreen onViewAllPrograms={onViewAllPrograms} />;
+  }
+
   if (selectedDayIndex !== null && selectedDayIndex < 0) {
     return <ProgramStartingInXScreen daysUntilStart={-selectedDayIndex} />;
   }

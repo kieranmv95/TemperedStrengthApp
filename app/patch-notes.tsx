@@ -17,6 +17,10 @@ const PATCH_NOTES: PatchNote[] = [
     version: '2.0.1',
     dateLabel: '30 Apr 2026',
     notes: [
+      'Rest day screen improved',
+      'Program completed screen improved',
+      'Program starting in X screen improved',
+      'Updated the app icon to be more consistent with the brand',
       '50 new standalone workouts added: 40 Free + 10 Pro',
       'Big focus on Hyrox and CrossFit-style benchmark workouts',
       'Partner workouts added, plus a new Partner filter',

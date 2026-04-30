@@ -10,10 +10,12 @@ import { useSubscription } from '@/src/hooks/use-subscription';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { useWorkoutScreenController } from '@/src/hooks/useWorkoutScreenController';
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
+import { clearProgramData } from '@/src/utils/storage';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { router } from 'expo-router';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import * as Notifications from 'expo-notifications';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -32,6 +34,39 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const { isPro, isLoading: subscriptionLoading } = useSubscription();
   const c = useWorkoutScreenController();
   const { unit: weightUnit } = useWeightUnit();
+
+  const handleViewAllPrograms = async () => {
+    Alert.alert(
+      'End Program?',
+      'To view all programs, we’ll end your current program and clear its data. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'View all programs',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await Notifications.cancelAllScheduledNotificationsAsync();
+            } catch (error) {
+              console.error('Error cancelling scheduled notifications:', error);
+            }
+
+            try {
+              await clearProgramData();
+              onProgramReset?.();
+              router.replace('/');
+            } catch (error) {
+              console.error('Error ending current program:', error);
+              Alert.alert(
+                'Error',
+                'Failed to end your current program. Please try again.'
+              );
+            }
+          },
+        },
+      ]
+    );
+  };
 
   if (c.loading) {
     return (
@@ -126,6 +161,8 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         selectedDayIndex={c.selectedDayIndex}
         isRestDay={c.isRestDay}
         onProgramReset={onProgramReset}
+        showProgramCompleted={c.showProgramCompleted}
+        onViewAllPrograms={handleViewAllPrograms}
         currentWorkout={c.currentWorkout}
         showIntensity={!!c.program?.categories.includes('strength')}
         slots={c.slots}

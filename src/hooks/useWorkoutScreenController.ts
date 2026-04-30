@@ -61,6 +61,18 @@ function calculateDaysSinceStart(startDateStr: string): number {
   return diffDays;
 }
 
+function normalizeToLocalMidnight(d: Date): Date {
+  const out = new Date(d);
+  out.setHours(0, 0, 0, 0);
+  return out;
+}
+
+function isTodayOnOrAfterLocalDate(target: Date): boolean {
+  const today = normalizeToLocalMidnight(new Date());
+  const t = normalizeToLocalMidnight(target);
+  return today.getTime() >= t.getTime();
+}
+
 export function useWorkoutScreenController() {
   const [slots, setSlots] = useState<WorkoutSlot[]>([]);
   const [currentWorkout, setCurrentWorkout] = useState<Workout | null>(null);
@@ -106,6 +118,7 @@ export function useWorkoutScreenController() {
   const notesBlurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [warmupModuleEnabled, setWarmupModuleEnabled] = useState(false);
   const [cooldownModuleEnabled, setCooldownModuleEnabled] = useState(false);
+  const [showProgramCompleted, setShowProgramCompleted] = useState(false);
 
   const programRef = useRef<ReturnType<typeof getProgramById> | null>(null);
   const startDateRef = useRef<string | null>(null);
@@ -126,6 +139,42 @@ export function useWorkoutScreenController() {
     warmupModuleEnabled,
     cooldownModuleEnabled,
   ]);
+
+  const recomputeProgramCompleted = useCallback(
+    async (
+      programToUse?: ReturnType<typeof getProgramById> | null,
+      startISOOverride?: string | null,
+      patternOverride?: ProgramDaySplitKey[] | null
+    ) => {
+      const p = programToUse ?? programRef.current;
+      const startISO =
+        startISOOverride !== undefined ? startISOOverride : startDateRef.current;
+      const pattern =
+        patternOverride !== undefined
+          ? patternOverride
+          : workoutWeekPatternRef.current;
+
+      if (!p || !startISO) {
+        setShowProgramCompleted(false);
+        return;
+      }
+
+      const trainingDeltas = listTrainingDayDeltasForProgram(p, startISO, pattern);
+      if (trainingDeltas.length === 0) {
+        setShowProgramCompleted(false);
+        return;
+      }
+
+      const start = normalizeToLocalMidnight(new Date(startISO));
+      const lastDelta = Math.max(...trainingDeltas);
+      const programEndDate = new Date(start);
+      programEndDate.setDate(start.getDate() + lastDelta);
+      programEndDate.setHours(0, 0, 0, 0);
+      const endDatePassed = isTodayOnOrAfterLocalDate(programEndDate);
+      setShowProgramCompleted(endDatePassed);
+    },
+    []
+  );
 
   const loadExerciseSlots = useCallback(
     async (
@@ -299,21 +348,23 @@ export function useWorkoutScreenController() {
       setDayIndex(daysSinceStart);
       setSelectedDayIndex(daysSinceStart);
 
+      const effectivePattern =
+        savedWeekPattern && savedWeekPattern.length > 0 ? savedWeekPattern : null;
+
       await loadWorkoutForDay(
         daysSinceStart,
         loadedProgram,
         savedStartDate,
-        savedWeekPattern && savedWeekPattern.length > 0
-          ? savedWeekPattern
-          : null
+        effectivePattern
       );
 
+      await recomputeProgramCompleted(loadedProgram, savedStartDate, effectivePattern);
       setLoading(false);
     } catch (error) {
       console.error('Error loading workout data:', error);
       setLoading(false);
     }
-  }, [loadWorkoutForDay]);
+  }, [loadWorkoutForDay, recomputeProgramCompleted]);
 
   const toggleWarmupModule = useCallback(async () => {
     const next = !warmupModuleEnabledRef.current;
@@ -468,10 +519,11 @@ export function useWorkoutScreenController() {
       setActiveSession(null);
       setCompletedSession(completed);
       setSessionSummary({ duration, totalVolume, setsCompleted, showStrengthStats });
+      await recomputeProgramCompleted();
     } catch (error) {
       console.error('Error finishing session:', error);
     }
-  }, [activeSession, getWorkoutForDayIndex]);
+  }, [activeSession, getWorkoutForDayIndex, recomputeProgramCompleted]);
 
   const handleRedoWorkout = useCallback(async () => {
     if (selectedDayIndex === null) return;
@@ -488,6 +540,7 @@ export function useWorkoutScreenController() {
             try {
               await clearCompletedSession(selectedDayIndex);
               setCompletedSession(null);
+              await recomputeProgramCompleted();
             } catch (error) {
               console.error('Error clearing completed session:', error);
             }
@@ -495,7 +548,7 @@ export function useWorkoutScreenController() {
         },
       ]
     );
-  }, [selectedDayIndex]);
+  }, [selectedDayIndex, recomputeProgramCompleted]);
 
   const handleDaySelect = async (dayIdx: number) => {
     setSelectedDayIndex(dayIdx);
@@ -809,6 +862,7 @@ export function useWorkoutScreenController() {
     cooldownModuleEnabled,
     toggleWarmupModule,
     toggleCooldownModule,
+    showProgramCompleted,
     loadWorkoutForDay,
     loadWorkoutData,
     handleStartSession,
