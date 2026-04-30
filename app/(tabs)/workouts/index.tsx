@@ -41,6 +41,20 @@ function workoutHasTag(workout: SingleWorkout, tag: string): boolean {
   return workout.tags.includes(tag);
 }
 
+function matchesTimeFilter(
+  workout: SingleWorkout,
+  timeFilter: TimeFilter
+): boolean {
+  if (timeFilter === null) return true;
+  if (timeFilter === '≤15 min') return workout.estimatedTime <= 15;
+  if (timeFilter === '16-30 min')
+    return workout.estimatedTime >= 16 && workout.estimatedTime <= 30;
+  if (timeFilter === '31-45 min')
+    return workout.estimatedTime >= 31 && workout.estimatedTime <= 45;
+  if (timeFilter === '46+ min') return workout.estimatedTime >= 46;
+  return true;
+}
+
 function CuratedWorkoutCard({
   workout,
   isPro,
@@ -148,9 +162,26 @@ export default function WorkoutsScreen() {
     }
   };
 
-  const filteredWorkouts = allStandaloneWorkouts.filter((workout) => {
-    if (searchQuery.trim()) {
-      const query = searchQuery.trim().toLowerCase();
+  function matchesWorkout(
+    workout: SingleWorkout,
+    overrides?: Partial<{
+      searchQuery: string;
+      activeTimeFilter: TimeFilter;
+      activeCategoryFilter: CategoryFilter;
+      noEquipmentOnly: boolean;
+      partnerOnly: boolean;
+    }>
+  ): boolean {
+    const effectiveSearchQuery = overrides?.searchQuery ?? searchQuery;
+    const effectiveTimeFilter = overrides?.activeTimeFilter ?? activeTimeFilter;
+    const effectiveCategoryFilter =
+      overrides?.activeCategoryFilter ?? activeCategoryFilter;
+    const effectiveNoEquipmentOnly =
+      overrides?.noEquipmentOnly ?? noEquipmentOnly;
+    const effectivePartnerOnly = overrides?.partnerOnly ?? partnerOnly;
+
+    if (effectiveSearchQuery.trim()) {
+      const query = effectiveSearchQuery.trim().toLowerCase();
       const matchesTitle = workout.title.toLowerCase().includes(query);
       const matchesDescription = workout.description
         .toLowerCase()
@@ -161,32 +192,27 @@ export default function WorkoutsScreen() {
       if (!matchesTitle && !matchesDescription && !matchesTags) return false;
     }
 
-    if (noEquipmentOnly && !workoutHasTag(workout, NO_EQUIPMENT_TAG))
-      return false;
-
-    if (partnerOnly && workout.partner !== true) return false;
-
-    if (activeTimeFilter === '≤15 min' && workout.estimatedTime > 15)
-      return false;
     if (
-      activeTimeFilter === '16-30 min' &&
-      (workout.estimatedTime < 16 || workout.estimatedTime > 30)
-    )
+      effectiveNoEquipmentOnly &&
+      !workoutHasTag(workout, NO_EQUIPMENT_TAG)
+    ) {
       return false;
-    if (
-      activeTimeFilter === '31-45 min' &&
-      (workout.estimatedTime < 31 || workout.estimatedTime > 45)
-    )
-      return false;
-    if (activeTimeFilter === '46+ min' && workout.estimatedTime < 46)
-      return false;
+    }
 
-    if (activeCategoryFilter === 'All') return true;
-    if (activeCategoryFilter === 'Favorites')
+    if (effectivePartnerOnly && workout.partner !== true) return false;
+
+    if (!matchesTimeFilter(workout, effectiveTimeFilter)) return false;
+
+    if (effectiveCategoryFilter === 'All') return true;
+    if (effectiveCategoryFilter === 'Favorites')
       return favorites.includes(workout.id);
-    if (activeCategoryFilter === 'Pro') return workout.isPremium;
-    return workout.category === activeCategoryFilter;
-  });
+    if (effectiveCategoryFilter === 'Pro') return workout.isPremium;
+    return workout.category === effectiveCategoryFilter;
+  }
+
+  const filteredWorkouts = allStandaloneWorkouts.filter((workout) =>
+    matchesWorkout(workout)
+  );
 
   const womensPicksWorkouts = filteredWorkouts.filter((w) =>
     workoutHasTag(w, WOMENS_PICKS_TAG)
@@ -261,16 +287,9 @@ export default function WorkoutsScreen() {
             {CATEGORY_FILTERS.map((filter) => {
               const isActive = activeCategoryFilter === filter;
               const displayLabel = filter === 'WOD' ? 'CrossFit' : filter;
-              const count =
-                filter === 'All'
-                  ? allStandaloneWorkouts.length
-                  : filter === 'Favorites'
-                    ? favorites.length
-                    : filter === 'Pro'
-                      ? allStandaloneWorkouts.filter((w) => w.isPremium).length
-                      : allStandaloneWorkouts.filter(
-                        (w) => w.category === filter
-                      ).length;
+              const count = allStandaloneWorkouts.filter((w) =>
+                matchesWorkout(w, { activeCategoryFilter: filter })
+              ).length;
 
               return (
                 <Pill
@@ -297,7 +316,7 @@ export default function WorkoutsScreen() {
               icon="home-outline"
               count={
                 allStandaloneWorkouts.filter((w) =>
-                  workoutHasTag(w, NO_EQUIPMENT_TAG)
+                  matchesWorkout(w, { noEquipmentOnly: true })
                 ).length
               }
             />
@@ -307,7 +326,11 @@ export default function WorkoutsScreen() {
               isActive={partnerOnly}
               label="Partner"
               icon="people-outline"
-              count={allStandaloneWorkouts.filter((w) => w.partner === true).length}
+              count={
+                allStandaloneWorkouts.filter((w) =>
+                  matchesWorkout(w, { partnerOnly: true })
+                ).length
+              }
             />
           </ScrollView>
         </View>
@@ -320,15 +343,9 @@ export default function WorkoutsScreen() {
           >
             {TIME_FILTERS.map((filter) => {
               const isActive = activeTimeFilter === filter;
-              const count = allStandaloneWorkouts.filter((w) => {
-                if (filter === '≤15 min') return w.estimatedTime <= 15;
-                if (filter === '16-30 min')
-                  return w.estimatedTime >= 16 && w.estimatedTime <= 30;
-                if (filter === '31-45 min')
-                  return w.estimatedTime >= 31 && w.estimatedTime <= 45;
-                if (filter === '46+ min') return w.estimatedTime >= 46;
-                return false;
-              }).length;
+              const count = allStandaloneWorkouts.filter((w) =>
+                matchesWorkout(w, { activeTimeFilter: filter })
+              ).length;
 
               return (
                 <Pill
@@ -376,65 +393,57 @@ export default function WorkoutsScreen() {
             contentContainerStyle={styles.listContent}
             ListHeaderComponent={
               <>
-                {activeCategoryFilter === 'All' &&
-                  crossfitCuratedWorkouts.length > 0 && (
-                    <View style={styles.curatedSection}>
-                      <View style={styles.curatedSectionHeader}>
-                        <View style={styles.curatedSectionHeaderRow}>
-                          <Text style={styles.curatedSectionKicker}>Curated</Text>
-                        </View>
-                        <Text style={styles.curatedSectionTitle}>CrossFit</Text>
-                        <Text style={styles.curatedSectionHelper}>
-                          Classic benchmarks and WODs.
-                        </Text>
-                      </View>
-                      <ScrollView
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={styles.curatedScrollContent}
-                      >
-                        {crossfitCuratedWorkouts.map((workout) => (
-                          <CuratedWorkoutCard
-                            key={workout.id}
-                            workout={workout}
-                            isPro={isPro}
-                            onPress={handleWorkoutPress}
-                            onLockedPress={handleLockedPress}
-                          />
-                        ))}
-                      </ScrollView>
+                {crossfitCuratedWorkouts.length > 0 && (
+                  <View style={styles.curatedSection}>
+                    <View style={styles.curatedSectionHeader}>
+                      <Text style={styles.curatedSectionTitle}>CrossFit</Text>
+                      <Text style={styles.curatedSectionHelper}>
+                        Classic benchmarks and WODs.
+                      </Text>
                     </View>
-                  )}
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      contentContainerStyle={styles.curatedScrollContent}
+                    >
+                      {crossfitCuratedWorkouts.map((workout) => (
+                        <CuratedWorkoutCard
+                          key={workout.id}
+                          workout={workout}
+                          isPro={isPro}
+                          onPress={handleWorkoutPress}
+                          onLockedPress={handleLockedPress}
+                        />
+                      ))}
+                    </ScrollView>
+                  </View>
+                )}
 
-                {activeCategoryFilter === 'All' &&
-                  hyroxCuratedWorkouts.length > 0 && (
-                    <View style={styles.curatedSection}>
-                      <View style={styles.curatedSectionHeader}>
-                        <View style={styles.curatedSectionHeaderRow}>
-                          <Text style={styles.curatedSectionKicker}>Curated</Text>
-                        </View>
-                        <Text style={styles.curatedSectionTitle}>Hyrox</Text>
-                        <Text style={styles.curatedSectionHelper}>
-                          Race-style prep sessions and tests.
-                        </Text>
-                      </View>
-                      <ScrollView
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={styles.curatedScrollContent}
-                      >
-                        {hyroxCuratedWorkouts.map((workout) => (
-                          <CuratedWorkoutCard
-                            key={workout.id}
-                            workout={workout}
-                            isPro={isPro}
-                            onPress={handleWorkoutPress}
-                            onLockedPress={handleLockedPress}
-                          />
-                        ))}
-                      </ScrollView>
+                {hyroxCuratedWorkouts.length > 0 && (
+                  <View style={styles.curatedSection}>
+                    <View style={styles.curatedSectionHeader}>
+                      <Text style={styles.curatedSectionTitle}>Hyrox</Text>
+                      <Text style={styles.curatedSectionHelper}>
+                        Race-style prep sessions and tests.
+                      </Text>
                     </View>
-                  )}
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      contentContainerStyle={styles.curatedScrollContent}
+                    >
+                      {hyroxCuratedWorkouts.map((workout) => (
+                        <CuratedWorkoutCard
+                          key={workout.id}
+                          workout={workout}
+                          isPro={isPro}
+                          onPress={handleWorkoutPress}
+                          onLockedPress={handleLockedPress}
+                        />
+                      ))}
+                    </ScrollView>
+                  </View>
+                )}
 
                 {showS1AndS2 && womensPicksWorkouts.length > 0 && (
                   <View style={styles.curatedSection}>
