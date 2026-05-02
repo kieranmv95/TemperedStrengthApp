@@ -2,6 +2,7 @@ import { ArticleCard } from '@/src/components/brief/ArticleCard';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { fetchArticles } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
 import type { ArticleCategory, ArticleListItem } from '@/src/types/brief';
@@ -9,6 +10,7 @@ import { getFavoriteArticles, setFavoriteArticles } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
+import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -21,6 +23,7 @@ import {
 } from 'react-native';
 
 export default function BriefScreen() {
+  const posthog = usePostHog();
   const [articles, setArticles] = useState<ArticleListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
@@ -70,9 +73,15 @@ export default function BriefScreen() {
 
   const handleToggleFavorite = useCallback((slug: string) => {
     const prev = favoritesRef.current;
-    const next = prev.includes(slug)
-      ? prev.filter((s) => s !== slug)
-      : [...prev, slug];
+    const isAdd = !prev.includes(slug);
+    const next = isAdd
+      ? [...prev, slug]
+      : prev.filter((s) => s !== slug);
+
+    posthog.capture(posthogEventsNames.content.articleFavourite, {
+      article_id: slug,
+      action: isAdd ? 'add' : 'remove',
+    });
 
     favoritesRef.current = next;
     setFavorites(next);
@@ -82,7 +91,7 @@ export default function BriefScreen() {
       .catch((error) => {
         console.error('Failed to persist favorite articles:', error);
       });
-  }, []);
+  }, [posthog]);
 
   const visibleArticles = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();

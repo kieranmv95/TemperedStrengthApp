@@ -2,8 +2,10 @@ import { Colors, Spacing } from '@/src/constants/theme';
 import type { Program } from '@/src/types/program';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import { getWorkoutForDaySinceStart } from '@/src/utils/programWeekPattern';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { getAllWorkoutNotes } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
+import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -68,6 +70,7 @@ export function CopyWorkoutNotesModal({
   currentNotes,
   onApplyNotes,
 }: CopyWorkoutNotesModalProps) {
+  const posthog = usePostHog();
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState<NoteSourceRow[]>([]);
 
@@ -120,10 +123,13 @@ export function CopyWorkoutNotesModal({
 
   const applyText = useCallback(
     (text: string) => {
+      posthog.capture(posthogEventsNames.app.notesCopied, {
+        source: 'programme',
+      });
       onApplyNotes(text);
       onClose();
     },
-    [onApplyNotes, onClose]
+    [onApplyNotes, onClose, posthog]
   );
 
   const handleCopyPress = useCallback(

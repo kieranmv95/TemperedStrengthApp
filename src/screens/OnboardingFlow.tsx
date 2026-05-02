@@ -9,6 +9,7 @@ import type {
   OnboardingInterest,
   OnboardingProfile,
 } from '@/src/types/onboarding';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
   getOnboardingProfile,
   getWeightUnit,
@@ -19,6 +20,7 @@ import {
 } from '@/src/utils/storage';
 import { ResizeMode, Video, type AVPlaybackStatus } from 'expo-av';
 import { router, type Href } from 'expo-router';
+import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Alert,
@@ -37,6 +39,27 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TOTAL_STEPS = 8;
 const TOTAL_PROGRESS_STEPS = TOTAL_STEPS - 1;
+
+function onboardingStepName(stepIndex: number): string {
+  switch (stepIndex) {
+    case 1:
+      return 'name';
+    case 2:
+      return 'gender';
+    case 3:
+      return 'interests';
+    case 4:
+      return 'experience';
+    case 5:
+      return 'weight_units';
+    case 6:
+      return 'icloud_backup';
+    case 7:
+      return 'welcome_final';
+    default:
+      return `step_${stepIndex}`;
+  }
+}
 
 const GENDER_OPTIONS: { value: OnboardingGender; label: string }[] = [
   { value: 'male', label: 'Male' },
@@ -70,6 +93,7 @@ const EXPERIENCE_OPTIONS: {
   ];
 
 function OnboardingFlow() {
+  const posthog = usePostHog();
   const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
 
   const [stepIndex, setStepIndex] = useState(0);
@@ -149,6 +173,13 @@ function OnboardingFlow() {
     animateStepChange(() => setStepIndex(1));
   }, [animateStepChange, completing, introDone]);
 
+  const skipIntro = useCallback(() => {
+    posthog.capture(posthogEventsNames.onboarding.skip, {
+      step_name: 'intro',
+    });
+    goToNameStep();
+  }, [posthog, goToNameStep]);
+
   const toggleInterest = (value: OnboardingInterest) => {
     setInterests((prev) =>
       prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
@@ -189,6 +220,9 @@ function OnboardingFlow() {
       goToNameStep();
       return;
     }
+    posthog.capture(posthogEventsNames.onboarding.skip, {
+      step_name: onboardingStepName(stepIndex),
+    });
     if (stepIndex >= TOTAL_STEPS - 1) {
       completeOnboarding(profile);
       return;
@@ -210,7 +244,12 @@ function OnboardingFlow() {
         {
           text: 'Skip anyway',
           style: 'destructive',
-          onPress: () => completeOnboarding(profile),
+          onPress: () => {
+            posthog.capture(posthogEventsNames.onboarding.sectionSkip, {
+              section_name: 'full_setup',
+            });
+            completeOnboarding(profile);
+          },
         },
       ]
     );
@@ -590,7 +629,7 @@ function OnboardingFlow() {
             <View style={{ flex: 1, padding: 24, justifyContent: 'space-between' }}>
               <View style={{ alignItems: 'flex-end' }}>
                 <TouchableOpacity
-                  onPress={goToNameStep}
+                  onPress={skipIntro}
                   accessibilityRole="button"
                   accessibilityLabel="Skip intro"
                   disabled={completing}

@@ -1,4 +1,6 @@
+import { getExerciseById } from '@/src/data/exercises';
 import { increment } from '@/src/services/metricService';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { Exercise as CatalogExercise } from '@/src/types/exercise';
 import type { Exercise as ProgramExercise } from '@/src/types/program';
 import type {
@@ -26,6 +28,7 @@ import {
   formatWeightValueFromKg,
   parseUserWeightInputToKg,
 } from '@/src/utils/weightUnits';
+import { usePostHog } from 'posthog-react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export type ExerciseCardPbPrompt = {
@@ -55,6 +58,7 @@ export function useExerciseCardState({
   exerciseLoggingType,
   weightUnit,
 }: UseExerciseCardStateArgs) {
+  const posthog = usePostHog();
   const [weights, setWeights] = useState<string[]>([]);
   const [reps, setReps] = useState<string[]>([]);
   const [setStates, setSetStates] = useState<
@@ -281,25 +285,40 @@ export function useExerciseCardState({
   );
 
   const dismissPbPrompt = useCallback(() => {
+    if (pbPrompt) {
+      posthog.capture(posthogEventsNames.pb.modalDismissed, {
+        exercise_id: String(pbPrompt.exerciseId),
+      });
+    }
     setPbPrompt(null);
-  }, []);
+  }, [pbPrompt, posthog]);
 
   const confirmPbPrompt = useCallback(async () => {
     if (!pbPrompt) {
       return;
     }
+    const exId = pbPrompt.exerciseId;
+    posthog.capture(posthogEventsNames.pb.modalAccepted, {
+      exercise_id: String(exId),
+    });
     try {
       await savePersonalBest(
         pbPrompt.exerciseId,
         pbPrompt.primaryTier,
         pbPrompt.weight
       );
+      const ex = getExerciseById(exId);
+      posthog.capture(posthogEventsNames.pb.logged, {
+        exercise_id: String(exId),
+        exercise_name: ex?.name ?? 'unknown',
+        value: pbPrompt.weight,
+      });
       setPbPrompt(null);
       await loadPbLedger();
     } catch (error) {
       console.error('Error saving personal best:', error);
     }
-  }, [pbPrompt, loadPbLedger]);
+  }, [pbPrompt, loadPbLedger, posthog]);
 
   const exercisePbSubtitle = useMemo(
     () => formatExercisePbSubtitle(pbLedger ?? undefined, weightUnit),

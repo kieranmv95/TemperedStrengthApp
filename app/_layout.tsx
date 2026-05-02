@@ -5,6 +5,7 @@ import { getOnboarded } from '@/src/utils/storage';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { PostHogProvider } from 'posthog-react-native';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 
@@ -55,9 +56,19 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={DarkTheme}>
-      <SyncManagerProvider>
-        <SubscriptionProvider>
+    <PostHogProvider
+      apiKey="phc_qNQGZv7zvPaZr9GwisqwcJfgkVauS9QmVZEC3Dko6Sbj"
+      debug={__DEV__}
+      options={{
+        // If your PostHog project is EU-hosted, this must be "https://eu.i.posthog.com"
+        host: 'https://us.i.posthog.com',
+        // Make dev verification easier without impacting prod battery/network.
+        ...(__DEV__ ? { flushAt: 1, flushInterval: 2_000 } : null),
+      }}
+    >
+      <ThemeProvider value={DarkTheme}>
+        <SyncManagerProvider>
+          <SubscriptionProvider>
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="glossary" options={{ headerShown: false }} />
@@ -83,8 +94,9 @@ export default function RootLayout() {
               />
             </Stack>
             <StatusBar style="light" />
-        </SubscriptionProvider>
-      </SyncManagerProvider>
-    </ThemeProvider>
+          </SubscriptionProvider>
+        </SyncManagerProvider>
+      </ThemeProvider>
+    </PostHogProvider>
   );
 }

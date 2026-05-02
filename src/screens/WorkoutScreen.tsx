@@ -212,6 +212,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         }
         dayIndex={c.selectedDayIndex}
         slotIndex={c.currentSwapSlot !== null ? c.currentSwapSlot : 0}
+        programId={c.program?.id ?? null}
         onClose={c.closeSwapModal}
         onClearData={c.onSwapClearData}
       />

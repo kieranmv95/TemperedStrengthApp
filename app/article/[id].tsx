@@ -1,12 +1,14 @@
 import { ArticleMarkdownContent } from '@/src/components/brief/ArticleMarkdownContent';
 import { articleScreenStyles as styles } from '@/src/components/brief/articleScreenStyles';
 import { Colors } from '@/src/constants/theme';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { fetchArticleBySlug } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
 import type { Article } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router, useLocalSearchParams } from 'expo-router';
+import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -21,6 +23,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ArticleScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const posthog = usePostHog();
   const [article, setArticle] = useState<Article | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
@@ -41,6 +44,12 @@ export default function ArticleScreen() {
           const data = await fetchArticleBySlug(id);
           if (cancelled) return;
           setArticle(data);
+          if (data) {
+            posthog.capture(posthogEventsNames.content.articleView, {
+              article_id: data.id,
+              article_title: data.title,
+            });
+          }
           setIsOffline(false);
         } catch {
           if (cancelled) return;
@@ -53,7 +62,7 @@ export default function ArticleScreen() {
       return () => {
         cancelled = true;
       };
-    }, [id])
+    }, [id, posthog])
   );
 
   if (isLoading) {

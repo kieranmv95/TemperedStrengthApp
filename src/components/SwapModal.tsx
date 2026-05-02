@@ -16,6 +16,7 @@ type SwapModalProps = {
   originalExerciseId: number | null;
   dayIndex: number | null;
   slotIndex: number;
+  programId: string | null;
   onClose: () => void;
   onClearData?: () => void;
 };
@@ -26,6 +27,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
   originalExerciseId,
   dayIndex,
   slotIndex,
+  programId,
   onClose,
   onClearData,
 }) => {
@@ -36,6 +38,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
     dayIndex,
     slotIndex,
     originalExerciseId,
+    programId,
     onClose,
     onClearData,
   });
