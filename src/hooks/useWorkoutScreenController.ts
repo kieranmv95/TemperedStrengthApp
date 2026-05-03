@@ -30,8 +30,8 @@ import {
   getCompletedSession,
   getConditioningLogsForDay,
   getExerciseSwapsForDay,
-  getProgramShowStartSessionButton,
   getProgramCooldownModuleEnabled,
+  getProgramShowStartSessionButton,
   getProgramStartDate,
   getProgramWarmupModuleEnabled,
   getProgramWorkoutWeekdays,
@@ -47,9 +47,14 @@ import {
 } from '@/src/utils/storage';
 import { buildWorkoutExportText } from '@/src/utils/workoutExport';
 import { useFocusEffect } from '@react-navigation/native';
+import { usePostHog } from 'posthog-react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ScrollView, TextInput } from 'react-native';
 import { Alert, Keyboard, Platform, Share } from 'react-native';
+import {
+  analyticsWeekDayFromDayIndex,
+  posthogEventsNames,
+} from '../services/posthogEvents';
 
 function calculateDaysSinceStart(startDateStr: string): number {
   const start = new Date(startDateStr);
@@ -128,6 +133,7 @@ export function useWorkoutScreenController() {
   const workoutWeekPatternRef = useRef<ProgramDaySplitKey[] | null>(null);
   const warmupModuleEnabledRef = useRef(false);
   const cooldownModuleEnabledRef = useRef(false);
+  const posthog = usePostHog();
 
   useEffect(() => {
     programRef.current = program;
@@ -151,7 +157,9 @@ export function useWorkoutScreenController() {
     ) => {
       const p = programToUse ?? programRef.current;
       const startISO =
-        startISOOverride !== undefined ? startISOOverride : startDateRef.current;
+        startISOOverride !== undefined
+          ? startISOOverride
+          : startDateRef.current;
       const pattern =
         patternOverride !== undefined
           ? patternOverride
@@ -162,7 +170,11 @@ export function useWorkoutScreenController() {
         return;
       }
 
-      const trainingDeltas = listTrainingDayDeltasForProgram(p, startISO, pattern);
+      const trainingDeltas = listTrainingDayDeltasForProgram(
+        p,
+        startISO,
+        pattern
+      );
       if (trainingDeltas.length === 0) {
         setShowProgramCompleted(false);
         return;
@@ -352,7 +364,9 @@ export function useWorkoutScreenController() {
       setSelectedDayIndex(daysSinceStart);
 
       const effectivePattern =
-        savedWeekPattern && savedWeekPattern.length > 0 ? savedWeekPattern : null;
+        savedWeekPattern && savedWeekPattern.length > 0
+          ? savedWeekPattern
+          : null;
 
       await loadWorkoutForDay(
         daysSinceStart,
@@ -361,7 +375,11 @@ export function useWorkoutScreenController() {
         effectivePattern
       );
 
-      await recomputeProgramCompleted(loadedProgram, savedStartDate, effectivePattern);
+      await recomputeProgramCompleted(
+        loadedProgram,
+        savedStartDate,
+        effectivePattern
+      );
       setLoading(false);
     } catch (error) {
       console.error('Error loading workout data:', error);
@@ -471,12 +489,18 @@ export function useWorkoutScreenController() {
         dayIndex: selectedDayIndex,
         startedAt: Date.now(),
       };
+      const wk = analyticsWeekDayFromDayIndex(selectedDayIndex);
+      posthog.capture(posthogEventsNames.program.sessionStarted, {
+        program_id: program?.id ?? '',
+        week: wk.week,
+        day: wk.day,
+      });
       await saveActiveSession(session);
       setActiveSession(session);
     } catch (error) {
       console.error('Error starting session:', error);
     }
-  }, [selectedDayIndex]);
+  }, [selectedDayIndex, program, posthog]);
 
   const handleFinishSession = useCallback(async () => {
     if (!activeSession) return;
@@ -503,6 +527,8 @@ export function useWorkoutScreenController() {
             )
           : null;
 
+      let exerciseCountForAnalytics = 0;
+
       if (workoutForSessionDay?.format === 'v2') {
         const completion = await getConditioningLogsForDay(
           activeSession.dayIndex
@@ -510,10 +536,12 @@ export function useWorkoutScreenController() {
         setsCompleted = Object.values(completion).filter(
           (b) => b.completed
         ).length;
+        exerciseCountForAnalytics = setsCompleted;
         totalVolume = 0;
         showStrengthStats = false;
       } else {
         const dayLogs = await getWorkoutLogsForDay(activeSession.dayIndex);
+        exerciseCountForAnalytics = Object.keys(dayLogs).length;
         for (const slotSets of Object.values(dayLogs)) {
           for (const set of Object.values(slotSets)) {
             if (set.state === 'completed' || set.state === 'failed') {
@@ -536,15 +564,43 @@ export function useWorkoutScreenController() {
 
       await saveCompletedSession(completed);
       await increment('program_workouts_completed');
+
+      const durationMins = Math.max(0, Math.round(duration / 60_000));
+      const wkFinish = analyticsWeekDayFromDayIndex(activeSession.dayIndex);
+      const programId = programToUse?.id ?? '';
+
+      posthog.capture(posthogEventsNames.program.sessionFinished, {
+        program_id: programId,
+        week: wkFinish.week,
+        day: wkFinish.day,
+        duration_mins: durationMins,
+      });
+
+      posthog.capture(posthogEventsNames.workout.logged, {
+        workout_id: `${programId}_${activeSession.dayIndex}`,
+        exercise_count: exerciseCountForAnalytics,
+        duration_mins: durationMins,
+      });
       await clearActiveSession();
       setActiveSession(null);
       setCompletedSession(completed);
-      setSessionSummary({ duration, totalVolume, setsCompleted, showStrengthStats });
+      setSessionSummary({
+        duration,
+        totalVolume,
+        setsCompleted,
+        showStrengthStats,
+      });
       await recomputeProgramCompleted();
     } catch (error) {
       console.error('Error finishing session:', error);
     }
-  }, [activeSession, getWorkoutForDayIndex, recomputeProgramCompleted]);
+  }, [
+    activeSession,
+    getWorkoutForDayIndex,
+    recomputeProgramCompleted,
+    program,
+    posthog,
+  ]);
 
   const handleRedoWorkout = useCallback(async () => {
     if (selectedDayIndex === null) return;
@@ -559,6 +615,14 @@ export function useWorkoutScreenController() {
           style: 'destructive',
           onPress: async () => {
             try {
+              if (program?.id != null && selectedDayIndex !== null) {
+                const wkRedo = analyticsWeekDayFromDayIndex(selectedDayIndex);
+                posthog.capture(posthogEventsNames.program.workoutRedo, {
+                  program_id: program.id,
+                  week: wkRedo.week,
+                  day: wkRedo.day,
+                });
+              }
               await clearCompletedSession(selectedDayIndex);
               setCompletedSession(null);
               await recomputeProgramCompleted();
@@ -569,7 +633,7 @@ export function useWorkoutScreenController() {
         },
       ]
     );
-  }, [selectedDayIndex, recomputeProgramCompleted]);
+  }, [selectedDayIndex, recomputeProgramCompleted, program, posthog]);
 
   const handleDaySelect = async (dayIdx: number) => {
     setSelectedDayIndex(dayIdx);
@@ -577,10 +641,23 @@ export function useWorkoutScreenController() {
     scrollViewRef.current?.scrollTo({ y: 0, animated: false });
   };
 
-  const handleSwapClick = (exerciseSlotIndex: number) => {
-    setCurrentSwapSlot(exerciseSlotIndex);
-    setSwapModalVisible(true);
-  };
+  const handleSwapClick = useCallback(
+    (exerciseSlotIndex: number) => {
+      const exerciseSlots = slots.filter(
+        (slot): slot is ExerciseSlot => slot.type === 'exercise'
+      );
+      const slot = exerciseSlots[exerciseSlotIndex];
+      if (program?.id && slot) {
+        posthog.capture(posthogEventsNames.program.swapClick, {
+          program_id: program.id,
+          exercise_id: String(slot.exerciseId),
+        });
+      }
+      setCurrentSwapSlot(exerciseSlotIndex);
+      setSwapModalVisible(true);
+    },
+    [slots, program, posthog]
+  );
 
   const handleRestStart = useCallback(
     async (payload: {
@@ -592,6 +669,9 @@ export function useWorkoutScreenController() {
       if (!payload.restTimeSeconds) return;
       try {
         await increment('rest_timers_started');
+        posthog.capture(posthogEventsNames.timer.started, {
+          timer_duration_secs: payload.restTimeSeconds,
+        });
         const startedAt = Date.now();
         const newTimer: RestTimerState = {
           dayIndex: payload.dayIndex,
@@ -609,11 +689,23 @@ export function useWorkoutScreenController() {
         console.error('Error starting rest timer:', error);
       }
     },
-    [scheduleTimerNotification]
+    [scheduleTimerNotification, posthog]
   );
 
   const handleRestDismiss = useCallback(async () => {
     try {
+      let timeRemainingSecs = 0;
+      if (restTimer?.status === 'running') {
+        const endTime =
+          restTimer.startedAt + restTimer.restTimeSeconds * 1000;
+        timeRemainingSecs = Math.max(
+          0,
+          Math.ceil((endTime - Date.now()) / 1000)
+        );
+      }
+      posthog.capture(posthogEventsNames.timer.dismissed, {
+        time_remaining_secs: timeRemainingSecs,
+      });
       if (restTimer && restTimer.status === 'completed') {
         await increment('rest_timers_skipped');
       }
@@ -623,7 +715,7 @@ export function useWorkoutScreenController() {
     } catch (error) {
       console.error('Error clearing rest timer:', error);
     }
-  }, [cancelTimerNotification, restTimer]);
+  }, [cancelTimerNotification, restTimer, posthog]);
 
   const handleRestComplete = useCallback(async () => {
     if (!restTimer || restTimer.status === 'completed') return;
@@ -692,11 +784,20 @@ export function useWorkoutScreenController() {
         setRestTimer(updatedTimer);
         await scheduleTimerNotification(nextRemainingSeconds);
         await saveRestTimer(updatedTimer);
+        if (deltaSeconds > 0) {
+          posthog.capture(posthogEventsNames.timer.incremented, {
+            increment_secs: deltaSeconds,
+          });
+        } else if (deltaSeconds < 0) {
+          posthog.capture(posthogEventsNames.timer.decremented, {
+            decrement_secs: Math.abs(deltaSeconds),
+          });
+        }
       } catch (error) {
         console.error('Error adjusting rest timer:', error);
       }
     },
-    [restTimer, cancelTimerNotification, scheduleTimerNotification]
+    [restTimer, cancelTimerNotification, scheduleTimerNotification, posthog]
   );
 
   const getExerciseSlots = useCallback(() => {
@@ -756,7 +857,14 @@ export function useWorkoutScreenController() {
         return;
       }
 
-      await Share.share({ message: text });
+      const shareResult = await Share.share({ message: text });
+      if (shareResult.action === 'sharedAction') {
+        if (program?.id) {
+          posthog.capture(posthogEventsNames.program.exported, {
+            program_id: program.id,
+          });
+        }
+      }
     } catch (error) {
       console.error('Error exporting workout text:', error);
       Alert.alert(
@@ -764,7 +872,7 @@ export function useWorkoutScreenController() {
         'Could not export workout. Please try again.'
       );
     }
-  }, [selectedDayIndex, currentWorkout, slots, weightUnit]);
+  }, [selectedDayIndex, currentWorkout, slots, weightUnit, program, posthog]);
 
   useEffect(() => {
     return () => {

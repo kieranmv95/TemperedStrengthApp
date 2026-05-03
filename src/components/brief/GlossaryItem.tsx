@@ -1,3 +1,4 @@
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { GlossaryTerm } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import {
@@ -16,6 +17,7 @@ import {
   UIManager,
   View,
 } from 'react-native';
+import { usePostHog } from 'posthog-react-native';
 
 // Enable LayoutAnimation on Android
 if (Platform.OS === 'android') {
@@ -30,9 +32,15 @@ type GlossaryItemProps = {
 };
 
 export function GlossaryItem({ term, variant = 'compact' }: GlossaryItemProps) {
+  const posthog = usePostHog();
   const [isExpanded, setIsExpanded] = useState(variant === 'expanded');
 
   const handleToggle = () => {
+    if (!isExpanded) {
+      posthog.capture(posthogEventsNames.content.glossaryView, {
+        term: term.term,
+      });
+    }
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsExpanded(!isExpanded);
   };

@@ -1,6 +1,7 @@
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
   getWeightUnit,
   setOnboarded,
@@ -10,6 +11,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
+import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
 import {
   Alert,
@@ -24,6 +26,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AccountGeneralSettingsScreen() {
+  const posthog = usePostHog();
   const [weightUnit, setWeightUnitState] = useState<WeightUnit>('kg');
   const [weightUnitLoading, setWeightUnitLoading] = useState<boolean>(true);
   const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
@@ -44,6 +47,10 @@ export default function AccountGeneralSettingsScreen() {
     setWeightUnitState(u);
     try {
       await setWeightUnit(u);
+      posthog.capture(posthogEventsNames.app.settingChanged, {
+        setting_name: 'weight_unit',
+        new_value: u,
+      });
     } catch (error) {
       console.error('Error saving weight unit:', error);
       const prev = await getWeightUnit();
@@ -168,6 +175,10 @@ export default function AccountGeneralSettingsScreen() {
                 onValueChange={async (next) => {
                   if (!next) {
                     await setEnabled(false);
+                    posthog.capture(posthogEventsNames.app.settingChanged, {
+                      setting_name: 'icloud_sync',
+                      new_value: 'false',
+                    });
                     return;
                   }
 
@@ -178,6 +189,15 @@ export default function AccountGeneralSettingsScreen() {
                       "We couldn't access iCloud on this device/account. Your data will remain local only."
                     );
                     await setEnabled(false);
+                    posthog.capture(posthogEventsNames.app.settingChanged, {
+                      setting_name: 'icloud_sync',
+                      new_value: 'false',
+                    });
+                  } else {
+                    posthog.capture(posthogEventsNames.app.settingChanged, {
+                      setting_name: 'icloud_sync',
+                      new_value: 'true',
+                    });
                   }
                 }}
               />

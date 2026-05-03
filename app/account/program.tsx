@@ -1,6 +1,7 @@
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import type { Program } from '@/src/types/program';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { getProgramById } from '@/src/utils/program';
 import {
   clearProgramData,
@@ -16,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
+import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
 import {
   Alert,
@@ -29,6 +31,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AccountProgramSettingsScreen() {
+  const posthog = usePostHog();
   const [hasProgram, setHasProgram] = useState<boolean>(false);
   const [, setActiveProgram] = useState<Program | null>(null);
   const [autoTimersEnabled, setAutoTimersEnabledState] = useState<boolean>(true);
@@ -99,6 +102,10 @@ export default function AccountProgramSettingsScreen() {
     setAutoTimersEnabledState(next);
     try {
       await setAutoRestTimersEnabled(next);
+      posthog.capture(posthogEventsNames.app.settingChanged, {
+        setting_name: 'auto_rest_timers',
+        new_value: next ? 'true' : 'false',
+      });
     } catch (error) {
       console.error('Error saving auto timers enabled:', error);
       const prev = await getAutoRestTimersEnabled();
@@ -110,6 +117,10 @@ export default function AccountProgramSettingsScreen() {
     setAutoPbEnabledState(next);
     try {
       await setAutoPbDetectionInProgramsEnabled(next);
+      posthog.capture(posthogEventsNames.app.settingChanged, {
+        setting_name: 'auto_pb_detection',
+        new_value: next ? 'true' : 'false',
+      });
     } catch (error) {
       console.error('Error saving auto PB detection enabled:', error);
       const prev = await getAutoPbDetectionInProgramsEnabled();
@@ -121,6 +132,10 @@ export default function AccountProgramSettingsScreen() {
     setShowStartSessionButtonState(next);
     try {
       await setProgramShowStartSessionButton(next);
+      posthog.capture(posthogEventsNames.app.settingChanged, {
+        setting_name: 'show_start_session_button',
+        new_value: next ? 'true' : 'false',
+      });
     } catch (error) {
       console.error('Error saving show start session button:', error);
       const prev = await getProgramShowStartSessionButton();

@@ -11,6 +11,7 @@ import {
 import { Colors, Spacing } from '@/src/constants/theme';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { OnboardingGender } from '@/src/types/onboarding';
 import type { SingleWorkout } from '@/src/types/workouts';
 import {
@@ -21,7 +22,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
-import React, { useCallback, useState } from 'react';
+import { usePostHog } from 'posthog-react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   ScrollView,
@@ -105,6 +107,7 @@ function CuratedWorkoutCard({
 
 export default function WorkoutsScreen() {
   const { isPro } = useSubscription();
+  const posthog = usePostHog();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTimeFilter, setActiveTimeFilter] = useState<TimeFilter>(null);
   const [activeCategoryFilter, setActiveCategoryFilter] =
@@ -114,6 +117,35 @@ export default function WorkoutsScreen() {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [onboardingGender, setOnboardingGender] =
     useState<OnboardingGender | null>(null);
+
+  const captureFilter = useCallback(
+    (filterType: string, filterValue: string) => {
+      posthog.capture(posthogEventsNames.workout.filtersApplied, {
+        filter_type: filterType,
+        filter_value: filterValue,
+      });
+    },
+    [posthog]
+  );
+
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (searchDebounceRef.current) {
+      clearTimeout(searchDebounceRef.current);
+    }
+    const q = searchQuery.trim();
+    if (q.length < 2) {
+      return;
+    }
+    searchDebounceRef.current = setTimeout(() => {
+      captureFilter('search', q.slice(0, 120));
+    }, 600);
+    return () => {
+      if (searchDebounceRef.current) {
+        clearTimeout(searchDebounceRef.current);
+      }
+    };
+  }, [searchQuery, captureFilter]);
 
   useFocusEffect(
     useCallback(() => {
@@ -134,6 +166,10 @@ export default function WorkoutsScreen() {
 
   const handleToggleFavorite = async (workoutId: string) => {
     const newStatus = await toggleFavoriteWorkout(workoutId);
+    posthog.capture(posthogEventsNames.workout.favourite, {
+      workout_id: workoutId,
+      action: newStatus ? 'add' : 'remove',
+    });
     if (newStatus) {
       setFavorites([...favorites, workoutId]);
     } else {
@@ -142,9 +178,10 @@ export default function WorkoutsScreen() {
   };
 
   const handleWorkoutPress = (workout: SingleWorkout) => {
+    const source = searchQuery.trim().length > 0 ? 'search' : 'browse';
     router.push({
       pathname: '/workouts/[id]',
-      params: { id: workout.id },
+      params: { id: workout.id, view_source: source },
     });
   };
 
@@ -153,6 +190,7 @@ export default function WorkoutsScreen() {
   };
 
   const handleSelectCategoryFilter = (filter: CategoryFilter) => {
+    captureFilter('category', filter);
     setActiveCategoryFilter(filter);
 
     if (filter === 'All') {
@@ -310,7 +348,13 @@ export default function WorkoutsScreen() {
             })}
 
             <Pill
-              onPress={() => setNoEquipmentOnly((prev) => !prev)}
+              onPress={() =>
+                setNoEquipmentOnly((prev) => {
+                  const next = !prev;
+                  captureFilter('no_equipment', next ? 'true' : 'false');
+                  return next;
+                })
+              }
               isActive={noEquipmentOnly}
               label="No equipment"
               icon="home-outline"
@@ -322,7 +366,13 @@ export default function WorkoutsScreen() {
             />
 
             <Pill
-              onPress={() => setPartnerOnly((prev) => !prev)}
+              onPress={() =>
+                setPartnerOnly((prev) => {
+                  const next = !prev;
+                  captureFilter('partner', next ? 'true' : 'false');
+                  return next;
+                })
+              }
               isActive={partnerOnly}
               label="Partner"
               icon="people-outline"
@@ -350,7 +400,11 @@ export default function WorkoutsScreen() {
               return (
                 <Pill
                   key={filter}
-                  onPress={() => setActiveTimeFilter(isActive ? null : filter)}
+                  onPress={() => {
+                    const next = isActive ? null : filter;
+                    captureFilter('time', next ?? 'none');
+                    setActiveTimeFilter(next);
+                  }}
                   isActive={isActive}
                   label={filter}
                   icon="time-outline"

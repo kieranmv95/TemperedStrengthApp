@@ -1,4 +1,5 @@
 import { increment } from '@/src/services/metricService';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
   clearExerciseSwap,
   clearLoggedSetsForSlot,
@@ -8,6 +9,7 @@ import {
   saveExerciseSwap,
 } from '@/src/utils/storage';
 import { router } from 'expo-router';
+import { usePostHog } from 'posthog-react-native';
 import { Alert } from 'react-native';
 import { useCallback } from 'react';
 
@@ -16,6 +18,7 @@ type UseSwapModalActionsArgs = {
   dayIndex: number | null;
   slotIndex: number;
   originalExerciseId: number | null;
+  programId: string | null;
   onClose: () => void;
   onClearData?: () => void;
 };
@@ -25,9 +28,12 @@ export function useSwapModalActions({
   dayIndex,
   slotIndex,
   originalExerciseId,
+  programId,
   onClose,
   onClearData,
 }: UseSwapModalActionsArgs) {
+  const posthog = usePostHog();
+
   const handleSelect = useCallback(
     async (exerciseId: number) => {
       if (!isPro && dayIndex !== null && originalExerciseId !== null) {
@@ -89,6 +95,13 @@ export function useSwapModalActions({
                     if (onClearData) {
                       await onClearData();
                     }
+                    if (programId && originalExerciseId !== null) {
+                      posthog.capture(posthogEventsNames.program.swapAccept, {
+                        program_id: programId,
+                        exercise_id: String(originalExerciseId),
+                        replacement_exercise_id: String(exerciseId),
+                      });
+                    }
                     onClose();
                   } catch (error) {
                     console.error('Error clearing logged sets:', error);
@@ -119,9 +132,25 @@ export function useSwapModalActions({
       if (onClearData) {
         await onClearData();
       }
+      if (programId && originalExerciseId !== null) {
+        posthog.capture(posthogEventsNames.program.swapAccept, {
+          program_id: programId,
+          exercise_id: String(originalExerciseId),
+          replacement_exercise_id: String(exerciseId),
+        });
+      }
       onClose();
     },
-    [isPro, dayIndex, slotIndex, originalExerciseId, onClose, onClearData]
+    [
+      isPro,
+      dayIndex,
+      slotIndex,
+      originalExerciseId,
+      programId,
+      onClose,
+      onClearData,
+      posthog,
+    ]
   );
 
   const handleResetPress = useCallback(async () => {

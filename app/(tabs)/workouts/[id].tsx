@@ -3,6 +3,7 @@ import { workoutDetailStyles as styles } from '@/src/components/workouts/workout
 import { Colors } from '@/src/constants/theme';
 import { getStandaloneWorkoutById } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { asStringId } from '@/src/utils/routeParams';
 import {
   getFavoriteWorkouts,
@@ -11,12 +12,19 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router, useLocalSearchParams } from 'expo-router';
+import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+const VIEW_SOURCES = new Set(['browse', 'search', 'programme']);
+
 export default function WorkoutDetailScreen() {
-  const { id: idParam } = useLocalSearchParams();
+  const { id: idParam, view_source: viewSourceParam } = useLocalSearchParams<{
+    id?: string;
+    view_source?: string;
+  }>();
+  const posthog = usePostHog();
   const workoutId = asStringId(idParam);
   const workout = useMemo(() => {
     if (!workoutId) return undefined;
@@ -25,6 +33,23 @@ export default function WorkoutDetailScreen() {
 
   const { isPro } = useSubscription();
   const [favorites, setFavorites] = useState<string[]>([]);
+
+  const viewSource =
+    typeof viewSourceParam === 'string' && VIEW_SOURCES.has(viewSourceParam)
+      ? viewSourceParam
+      : 'browse';
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!workoutId) {
+        return;
+      }
+      posthog.capture(posthogEventsNames.workout.view, {
+        workout_id: workoutId,
+        source: viewSource,
+      });
+    }, [workoutId, viewSource, posthog])
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -39,6 +64,10 @@ export default function WorkoutDetailScreen() {
 
   const handleToggleFavorite = async (id: string) => {
     const newStatus = await toggleFavoriteWorkout(id);
+    posthog.capture(posthogEventsNames.workout.favourite, {
+      workout_id: id,
+      action: newStatus ? 'add' : 'remove',
+    });
     if (newStatus) {
       setFavorites((prev) => [...prev, id]);
     } else {

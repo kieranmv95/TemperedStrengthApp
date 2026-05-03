@@ -8,6 +8,8 @@ import {
   resetFormForSchema,
   type FormState,
 } from '@/src/utils/standaloneWorkoutLogForm';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
+import type { StandaloneLogPayload } from '@/src/types/standaloneWorkoutLogs';
 import { formatStandaloneLogCardTimestamp } from '@/src/utils/standaloneWorkoutLogFormat';
 import {
   deleteStandaloneWorkoutLogEntry,
@@ -23,6 +25,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { usePostHog } from 'posthog-react-native';
 import { increment } from '../services/metricService';
 import { BestLine } from './standaloneWorkoutLog/BestLine';
 import { LogFormModal } from './standaloneWorkoutLog/LogFormModal';
@@ -32,6 +35,20 @@ function newStandaloneLogId(): string {
   return `swl_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 12)}`;
 }
 
+function exerciseCountForWorkout(workout: SingleWorkout): number {
+  return workout.blocks.reduce((n, b) => n + b.movements.length, 0);
+}
+
+function durationMinsForLog(
+  workout: SingleWorkout,
+  payload: StandaloneLogPayload
+): number {
+  if (payload.kind === 'duration') {
+    return Math.max(0, Math.round(payload.durationSeconds / 60));
+  }
+  return workout.estimatedTime;
+}
+
 type StandaloneWorkoutLogPanelProps = {
   workout: SingleWorkout;
 };
@@ -39,6 +56,7 @@ type StandaloneWorkoutLogPanelProps = {
 export function StandaloneWorkoutLogPanel({
   workout,
 }: StandaloneWorkoutLogPanelProps) {
+  const posthog = usePostHog();
   const [logs, setLogs] = useState<StandaloneWorkoutLogEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
@@ -129,6 +147,11 @@ export function StandaloneWorkoutLogPanel({
     try {
       await increment('workouts_logged');
       await upsertStandaloneWorkoutLogEntry(entry);
+      posthog.capture(posthogEventsNames.workout.logged, {
+        workout_id: workout.id,
+        exercise_count: exerciseCountForWorkout(workout),
+        duration_mins: durationMinsForLog(workout, built.payload),
+      });
       await refreshLogs();
       closeModal();
     } catch (e) {
