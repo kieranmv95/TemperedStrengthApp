@@ -1401,6 +1401,17 @@ export const getCompletedSession = async (
   }
 };
 
+export const getCompletedSessionsStore =
+  async (): Promise<CompletedSessions> => {
+    try {
+      const data = await AsyncStorage.getItem(COMPLETED_SESSIONS_KEY);
+      return data ? (JSON.parse(data) as CompletedSessions) : {};
+    } catch (error) {
+      console.error('Error getting completed sessions store:', error);
+      return {};
+    }
+  };
+
 /**
  * Clear a completed session for a specific day (used by redo workout flow)
  */
