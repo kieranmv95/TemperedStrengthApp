@@ -14,10 +14,20 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.1.0',
+    dateLabel: '05 May 2026',
+    notes: [
+      'Added moving sessions support to the programs',
+      'Imporved sliding calendar UI',
+      'Moved start session button away from being a sticky header'
+    ],
+  },
+  {
     version: '2.0.2',
     dateLabel: '05 May 2026',
     notes: [
       'Analytics tracking implemented',
+      'Program starting in X screen improved',
     ],
   },
   {
