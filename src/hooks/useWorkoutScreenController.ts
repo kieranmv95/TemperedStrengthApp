@@ -1021,6 +1021,12 @@ export function useWorkoutScreenController() {
     sessionShifts,
   ]);
 
+  const resetMoveSessionModalState = useCallback(() => {
+    setMoveSessionModalVisible(false);
+    setMoveSessionFromDayIndex(null);
+    setMoveSessionSelectedToDayIndex(null);
+  }, []);
+
   const openMoveSessionModal = useCallback(() => {
     const from = selectedDayIndex;
     const p = programRef.current;
@@ -1039,16 +1045,33 @@ export function useWorkoutScreenController() {
     if (!workout) {
       return;
     }
+
+    const wk = analyticsWeekDayFromDayIndex(from);
+    posthog.capture(posthogEventsNames.program.moveSessionOpened, {
+      program_id: p.id ?? '',
+      from_week: wk.week,
+      from_day: wk.day,
+      from_day_index: from,
+    });
     setMoveSessionFromDayIndex(from);
     setMoveSessionSelectedToDayIndex(null);
     setMoveSessionModalVisible(true);
-  }, [selectedDayIndex]);
+  }, [selectedDayIndex, posthog]);
 
   const closeMoveSessionModal = useCallback(() => {
-    setMoveSessionModalVisible(false);
-    setMoveSessionFromDayIndex(null);
-    setMoveSessionSelectedToDayIndex(null);
-  }, []);
+    const from = moveSessionFromDayIndex;
+    const p = programRef.current;
+    if (from !== null && p) {
+      const wk = analyticsWeekDayFromDayIndex(from);
+      posthog.capture(posthogEventsNames.program.moveSessionCancelled, {
+        program_id: p.id ?? '',
+        from_week: wk.week,
+        from_day: wk.day,
+        from_day_index: from,
+      });
+    }
+    resetMoveSessionModalState();
+  }, [moveSessionFromDayIndex, posthog, resetMoveSessionModalState]);
 
   const confirmMoveSession = useCallback(async () => {
     const from = moveSessionFromDayIndex;
@@ -1084,6 +1107,19 @@ export function useWorkoutScreenController() {
 
     try {
       setIsMovingSession(true);
+
+      const wkFrom = analyticsWeekDayFromDayIndex(from);
+      const wkTo = analyticsWeekDayFromDayIndex(to);
+      posthog.capture(posthogEventsNames.program.moveSessionConfirmClicked, {
+        program_id: p.id ?? '',
+        from_week: wkFrom.week,
+        from_day: wkFrom.day,
+        from_day_index: from,
+        to_week: wkTo.week,
+        to_day: wkTo.day,
+        to_day_index: to,
+      });
+
       await moveProgramDayData(from, to);
       await appendProgramSessionShift({
         weekIndex: Math.floor(from / 7),
@@ -1103,11 +1139,32 @@ export function useWorkoutScreenController() {
 
       const nextActive = await getActiveSession();
       setActiveSession(nextActive);
+
+      posthog.capture(posthogEventsNames.program.moveSessionSucceeded, {
+        program_id: p.id ?? '',
+        from_week: wkFrom.week,
+        from_day: wkFrom.day,
+        from_day_index: from,
+        to_week: wkTo.week,
+        to_day: wkTo.day,
+        to_day_index: to,
+      });
     } catch (error) {
       console.error('Error moving session:', error);
+      const wkFrom = analyticsWeekDayFromDayIndex(from);
+      const wkTo = analyticsWeekDayFromDayIndex(to);
+      posthog.capture(posthogEventsNames.program.moveSessionFailed, {
+        program_id: p.id ?? '',
+        from_week: wkFrom.week,
+        from_day: wkFrom.day,
+        from_day_index: from,
+        to_week: wkTo.week,
+        to_day: wkTo.day,
+        to_day_index: to,
+      });
       Alert.alert('Error', 'Failed to move session. Please try again.');
     } finally {
-      closeMoveSessionModal();
+      resetMoveSessionModalState();
       setIsMovingSession(false);
     }
   }, [
@@ -1115,7 +1172,8 @@ export function useWorkoutScreenController() {
     moveSessionSelectedToDayIndex,
     loadWorkoutForDay,
     recomputeProgramCompleted,
-    closeMoveSessionModal,
+    resetMoveSessionModalState,
+    posthog,
   ]);
 
   const closeSwapModal = useCallback(() => {
@@ -1124,12 +1182,32 @@ export function useWorkoutScreenController() {
   }, []);
 
   const openCopyWorkoutNotesModal = useCallback(() => {
+    const p = programRef.current;
+    if (selectedDayIndex !== null && p) {
+      const wk = analyticsWeekDayFromDayIndex(selectedDayIndex);
+      posthog.capture(posthogEventsNames.app.notesCopyModalOpened, {
+        program_id: p.id ?? '',
+        week: wk.week,
+        day: wk.day,
+        day_index: selectedDayIndex,
+      });
+    }
     setCopyWorkoutNotesModalVisible(true);
-  }, []);
+  }, [posthog, selectedDayIndex]);
 
   const closeCopyWorkoutNotesModal = useCallback(() => {
+    const p = programRef.current;
+    if (selectedDayIndex !== null && p) {
+      const wk = analyticsWeekDayFromDayIndex(selectedDayIndex);
+      posthog.capture(posthogEventsNames.app.notesCopyModalClosed, {
+        program_id: p.id ?? '',
+        week: wk.week,
+        day: wk.day,
+        day_index: selectedDayIndex,
+      });
+    }
     setCopyWorkoutNotesModalVisible(false);
-  }, []);
+  }, [posthog, selectedDayIndex]);
 
   const onSwapClearData = useCallback(async () => {
     if (selectedDayIndex !== null) {

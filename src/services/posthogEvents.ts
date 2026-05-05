@@ -13,6 +13,11 @@ export const posthogEventsNames = {
     swapClick: 'program_swap_click',
     swapAccept: 'program_swap_accept',
     exported: 'program_exported',
+    moveSessionOpened: 'program_move_session_opened',
+    moveSessionCancelled: 'program_move_session_cancelled',
+    moveSessionConfirmClicked: 'program_move_session_confirm_clicked',
+    moveSessionSucceeded: 'program_move_session_succeeded',
+    moveSessionFailed: 'program_move_session_failed',
   },
   workout: {
     view: 'workout_view',
@@ -39,6 +44,12 @@ export const posthogEventsNames = {
   app: {
     settingChanged: 'setting_changed',
     notesCopied: 'notes_copied',
+    notesCopyModalOpened: 'notes_copy_modal_opened',
+    notesCopyModalClosed: 'notes_copy_modal_closed',
+    notesCopyClicked: 'notes_copy_clicked',
+    notesCopyReplacePromptShown: 'notes_copy_replace_prompt_shown',
+    notesCopyReplaceConfirmed: 'notes_copy_replace_confirmed',
+    notesCopyReplaceCancelled: 'notes_copy_replace_cancelled',
   },
 } as const;
 
