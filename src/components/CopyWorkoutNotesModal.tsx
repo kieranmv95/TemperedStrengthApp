@@ -105,7 +105,8 @@ export function CopyWorkoutNotesModal({
           preview: buildPreview(text),
         });
       }
-      next.sort((a, b) => a.dayIndex - b.dayIndex);
+      // Show the most recent workout days first.
+      next.sort((a, b) => b.dayIndex - a.dayIndex);
       setRows(next);
     } catch (e) {
       console.error('Error loading workout notes for copy modal:', e);

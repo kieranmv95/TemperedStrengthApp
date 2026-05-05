@@ -19,7 +19,8 @@ const PATCH_NOTES: PatchNote[] = [
     notes: [
       'Added moving sessions support to the programs',
       'Imporved sliding calendar UI',
-      'Moved start session button away from being a sticky header'
+      'Moved start session button away from being a sticky header',
+      'Improve notes behaviour and reversed order'
     ],
   },
   {
