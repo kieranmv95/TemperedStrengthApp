@@ -40,6 +40,8 @@ export type HomeProgramSummary = {
   todaySessionLabel: string;
   sessionsRemaining: number;
   programCompleted: boolean;
+  /** True while calendar is before the program start date (label is e.g. "Starts in N days"). */
+  awaitingProgramStart: boolean;
 };
 
 export async function loadHomeProgramSummary(): Promise<HomeProgramSummary | null> {
@@ -113,5 +115,6 @@ export async function loadHomeProgramSummary(): Promise<HomeProgramSummary | nul
     todaySessionLabel,
     sessionsRemaining,
     programCompleted,
+    awaitingProgramStart: todayDayDelta < 0,
   };
 }

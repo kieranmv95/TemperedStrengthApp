@@ -1,11 +1,79 @@
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { StyleSheet } from 'react-native';
 
+/** Warm wash behind the home welcome strip (brand accent, low alpha). */
+const welcomeStripBg = 'rgba(201, 176, 114, 0.12)';
+
 export const homeScreenStyles = StyleSheet.create({
   loadingBox: {
     paddingVertical: Spacing.section,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  welcomeStrip: {
+    borderRadius: BorderRadius.xxl,
+    backgroundColor: welcomeStripBg,
+    borderWidth: 1,
+    borderColor: 'rgba(201, 176, 114, 0.22)',
+    paddingVertical: Spacing.xxxl,
+    paddingHorizontal: Spacing.section,
+    marginBottom: Spacing.section,
+  },
+  welcomeStripTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.md,
+    marginBottom: Spacing.lg,
+  },
+  /** Keeps headline on the left and badge pinned right when titles wrap. */
+  welcomeHeadlineCell: {
+    flex: 1,
+    marginRight: Spacing.sm,
+    minWidth: 0,
+  },
+  planBadgePro: {
+    backgroundColor: Colors.accent,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.pill,
+    minHeight: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  planBadgeFree: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: 'rgba(201, 176, 114, 0.45)',
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.pill,
+    minHeight: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  planBadgeLabelPro: {
+    color: Colors.textOnAccent,
+    fontSize: FontSize.md,
+    fontWeight: '700',
+    letterSpacing: 0.85,
+  },
+  planBadgeLabelFree: {
+    color: Colors.accent,
+    fontSize: FontSize.sm,
+    fontWeight: '800',
+    letterSpacing: 0.85,
+  },
+  welcomeTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayMd,
+    fontWeight: '800',
+    letterSpacing: -0.3,
+  },
+  welcomeBody: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.xl,
+    lineHeight: 22,
+    marginTop: Spacing.sm,
+    fontWeight: '500',
   },
   section: {
     marginBottom: Spacing.xxl,
@@ -13,11 +81,17 @@ export const homeScreenStyles = StyleSheet.create({
   sectionheader: {
     marginBottom: Spacing.lg,
   },
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+    marginBottom: 4,
+  },
   sectionTitle: {
     color: Colors.textPrimary,
     fontSize: FontSize.displaySm,
     fontWeight: '700',
-    marginBottom: 4,
+    flex: 1,
   },
   sectionSubtitle: {
     color: Colors.textMuted,
@@ -26,9 +100,11 @@ export const homeScreenStyles = StyleSheet.create({
   },
   card: {
     backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xl,
+    borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: 'rgba(201, 176, 114, 0.18)',
+    borderLeftWidth: 3,
+    borderLeftColor: Colors.accent,
     padding: Spacing.xxl,
     flexDirection: 'row',
     alignItems: 'center',
@@ -38,10 +114,10 @@ export const homeScreenStyles = StyleSheet.create({
     flex: 1,
     gap: Spacing.sm,
   },
-  cardArrow: {
-    color: Colors.accent,
-    fontSize: FontSize.displayMd,
-    fontWeight: '700',
+  cardChevronWrap: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 28,
   },
   cardTitle: {
     color: Colors.textPrimary,
@@ -96,9 +172,9 @@ export const homeScreenStyles = StyleSheet.create({
   toolButton: {
     flex: 1,
     backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xl,
+    borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: 'rgba(201, 176, 114, 0.14)',
     paddingVertical: Spacing.xl,
     paddingHorizontal: Spacing.xl,
     flexDirection: 'row',

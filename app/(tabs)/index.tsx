@@ -2,6 +2,7 @@ import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyl
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors } from '@/src/constants/theme';
 import { getAllExercises } from '@/src/data/exercises';
+import { useSubscription } from '@/src/hooks/use-subscription';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { workoutScreenStyles } from '@/src/screens/workoutScreenStyles';
 import type { PersonalBestsStore } from '@/src/types/personalBests';
@@ -35,8 +36,27 @@ const exerciseNameById: ReadonlyMap<number, string> = (() => {
   return m;
 })();
 
+function timeOfDayGreeting(): string {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 12) {
+    return 'Good morning';
+  }
+  if (h >= 12 && h < 17) {
+    return 'Good afternoon';
+  }
+  if (h >= 17 && h < 23) {
+    return 'Good evening';
+  }
+  return 'Hey';
+}
+
 export default function HomeTabScreen() {
   const { unit: weightUnit } = useWeightUnit();
+  const {
+    isPro,
+    isLoading: subscriptionLoading,
+    refresh: refreshSubscription,
+  } = useSubscription();
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [programSummary, setProgramSummary] = useState<HomeProgramSummary | null>(
@@ -74,7 +94,8 @@ export default function HomeTabScreen() {
   useFocusEffect(
     useCallback(() => {
       void loadHome();
-    }, [loadHome])
+      void refreshSubscription();
+    }, [loadHome, refreshSubscription])
   );
 
   const recentPbs = useMemo(() => {
@@ -84,7 +105,9 @@ export default function HomeTabScreen() {
     return listRecentPersonalBestRows(pbStore, exerciseNameById, 3);
   }, [pbStore]);
 
-  const greetingTitle = displayName ? `Hi, ${displayName}` : 'Hi';
+  const greet = timeOfDayGreeting();
+  const greetingTitle = displayName ? `${greet}, ${displayName}` : greet;
+  const headerSubtitle = 'Tempered Strength, Your training HQ.';
 
   if (loading) {
     return (
@@ -101,12 +124,69 @@ export default function HomeTabScreen() {
   const hasPersonalBests = recentPbs.length > 0;
 
   return (
-    <StandardLayout title={greetingTitle} subtitle="Welcome to Tempered Strength">
+    <StandardLayout title={greetingTitle} subtitle={headerSubtitle}>
       <StandardLayout.Body>
+        <View style={styles.welcomeStrip}>
+          {!subscriptionLoading ? (
+            isPro ? (
+              <>
+                <View style={styles.welcomeStripTopRow}>
+                  <View style={styles.welcomeHeadlineCell}>
+                    <Text style={styles.welcomeTitle}>Let&apos;s Go.</Text>
+                  </View>
+                  <View
+                    style={styles.planBadgePro}
+                  >
+                    <Text style={styles.planBadgeLabelPro}>PRO</Text>
+                  </View>
+                </View>
+                <Text style={styles.welcomeBody}>
+                  Your program, latest wins, and shortcuts are just below. Let&apos;s get
+                  started.
+                </Text>
+              </>
+            ) : (
+              <>
+                <View style={styles.welcomeStripTopRow}>
+                  <View style={styles.welcomeHeadlineCell}>
+                    <Text style={styles.welcomeTitle}>Upgrade to Pro</Text>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.planBadgeFree}
+                    onPress={() => router.push('/settings')}
+                    accessibilityRole="button"
+                    accessibilityLabel="Free plan"
+                    accessibilityHint="Opens settings where you can upgrade to Tempered Strength Pro"
+                  >
+                    <Text style={styles.planBadgeLabelFree}>FREE TIER</Text>
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.welcomeBody}>
+                  You are on the free plan. Unlock every program and workout, unlimited
+                  exercise swaps, upgrade anytime from Settings.
+                </Text>
+              </>
+            )
+          ) : (
+            <>
+              <Text style={styles.welcomeTitle}>Glad you are here.</Text>
+              <Text style={styles.welcomeBody}>
+                Your program, latest wins, and shortcuts are just below — no rush,
+                start when it feels right.
+              </Text>
+            </>
+          )}
+        </View>
+
         <View style={styles.section}>
           <View style={styles.sectionheader}>
-            <Text style={styles.sectionTitle}>Your Program</Text>
-            <Text style={styles.sectionSubtitle}>Structure your training with a program</Text>
+            <View style={styles.sectionTitleRow}>
+              <Ionicons name="barbell-outline" size={20} color={Colors.accent} />
+              <Text style={styles.sectionTitle}>Your program</Text>
+            </View>
+            <Text style={styles.sectionSubtitle}>
+              What is on deck today and what is left in your block
+            </Text>
           </View>
           {programSummary ? (
             <TouchableOpacity
@@ -118,19 +198,25 @@ export default function HomeTabScreen() {
               <View style={styles.cardBody}>
                 <Text style={styles.cardTitle}>{programSummary.programName}</Text>
                 <Text style={[styles.cardMuted, { marginTop: 4 }]}>
-                  Today&apos;s Session:{' '}
+                  {programSummary.awaitingProgramStart ? null : (
+                    <>
+                      Today:{' '}
+                    </>
+                  )}
                   <Text style={styles.cardAccent}>
                     {programSummary.todaySessionLabel}
                   </Text>
                 </Text>
                 <Text style={styles.cardMuted}>
-                  Sessions Remaining:{' '}
+                  Sessions left:{' '}
                   <Text style={styles.cardAccent}>
                     {programSummary.sessionsRemaining}
                   </Text>
                 </Text>
               </View>
-              <Text style={styles.cardArrow}>→</Text>
+              <View style={styles.cardChevronWrap} pointerEvents="none">
+                <Ionicons name="chevron-forward" size={22} color={Colors.accent} />
+              </View>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
@@ -140,21 +226,27 @@ export default function HomeTabScreen() {
               accessibilityLabel="Select a program"
             >
               <View style={styles.cardBody}>
-                <Text style={styles.cardTitle}>Select a program</Text>
+                <Text style={styles.cardTitle}>Pick a program</Text>
                 <Text style={styles.cardMuted}>
-                  Choose a program on the Program tab to get started.
+                  Head to the Program tab and choose one — we will surface the good
+                  stuff here.
                 </Text>
               </View>
-              <Text style={styles.cardArrow}>→</Text>
+              <View style={styles.cardChevronWrap} pointerEvents="none">
+                <Ionicons name="chevron-forward" size={22} color={Colors.accent} />
+              </View>
             </TouchableOpacity>
           )}
         </View>
 
         <View style={styles.section}>
           <View style={styles.sectionheader}>
-            <Text style={styles.sectionTitle}>Recent PB&apos;s</Text>
+            <View style={styles.sectionTitleRow}>
+              <Ionicons name="trophy-outline" size={20} color={Colors.accent} />
+              <Text style={styles.sectionTitle}>Recent wins</Text>
+            </View>
             <Text style={styles.sectionSubtitle}>
-              Shows the 3 most recent PB&apos;s
+              Your last three PRs, small jumps still count
             </Text>
           </View>
           {hasPersonalBests ? (
@@ -178,7 +270,9 @@ export default function HomeTabScreen() {
                   </View>
                 ))}
               </View>
-              <Text style={styles.cardArrow}>→</Text>
+              <View style={styles.cardChevronWrap} pointerEvents="none">
+                <Ionicons name="chevron-forward" size={22} color={Colors.accent} />
+              </View>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
@@ -188,22 +282,26 @@ export default function HomeTabScreen() {
               accessibilityLabel="Open records to log personal bests"
             >
               <View style={styles.cardBody}>
-                <Text style={styles.emptyTitle}>No Personal Bests Logged</Text>
+                <Text style={styles.emptyTitle}>No PRs yet</Text>
                 <Text style={styles.emptySubtitle}>
-                  Log your first PB to see it here!
+                  Log a PB from a workout and it will show up here. First one is the
+                  best one.
                 </Text>
               </View>
-              <Text style={styles.cardArrow}>→</Text>
+              <View style={styles.cardChevronWrap} pointerEvents="none">
+                <Ionicons name="chevron-forward" size={22} color={Colors.accent} />
+              </View>
             </TouchableOpacity>
           )}
         </View>
 
         <View style={styles.section}>
           <View style={styles.sectionheader}>
-            <Text style={styles.sectionTitle}>Tools</Text>
-            <Text style={styles.sectionSubtitle}>
-              Here&apos;s some bits you might find handy
-            </Text>
+            <View style={styles.sectionTitleRow}>
+              <Ionicons name="sparkles-outline" size={20} color={Colors.accent} />
+              <Text style={styles.sectionTitle}>Quick links</Text>
+            </View>
+            <Text style={styles.sectionSubtitle}>References and extras you will reuse</Text>
           </View>
           <View style={styles.toolsRow}>
             <TouchableOpacity
@@ -212,7 +310,7 @@ export default function HomeTabScreen() {
               accessibilityRole="button"
               accessibilityLabel="Open glossary"
             >
-              <Ionicons name="book-outline" size={22} color={Colors.textMuted} />
+              <Ionicons name="book-outline" size={22} color={Colors.accent} />
               <Text style={styles.toolLabel}>Glossary</Text>
             </TouchableOpacity>
             <View
@@ -220,17 +318,18 @@ export default function HomeTabScreen() {
               accessibilityRole="text"
               accessibilityLabel="More tools coming soon"
             >
-              <Text style={styles.toolLabelMuted}>More Coming Soon…</Text>
+              <Text style={styles.toolLabelMuted}>More soon</Text>
             </View>
           </View>
         </View>
 
         <View style={styles.section}>
           <View style={styles.sectionheader}>
-            <Text style={styles.sectionTitle}>Account</Text>
-            <Text style={styles.sectionSubtitle}>
-              Manage your account and preferences
-            </Text>
+            <View style={styles.sectionTitleRow}>
+              <Ionicons name="person-circle-outline" size={20} color={Colors.accent} />
+              <Text style={styles.sectionTitle}>You</Text>
+            </View>
+            <Text style={styles.sectionSubtitle}>Settings and preferences</Text>
           </View>
           <TouchableOpacity
             style={workoutScreenStyles.startSessionButton}
@@ -242,6 +341,6 @@ export default function HomeTabScreen() {
           </TouchableOpacity>
         </View>
       </StandardLayout.Body>
-    </StandardLayout >
+    </StandardLayout>
   );
 }

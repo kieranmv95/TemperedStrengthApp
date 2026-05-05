@@ -1,10 +1,11 @@
-import { useOnboardingProfile } from '@/src/hooks/useOnboardingProfile';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { useOnboardingProfile } from '@/src/hooks/useOnboardingProfile';
 import { increment } from '@/src/services/metricService';
 import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { homeScreenStyles } from '../components/home/homeScreenStyles';
 import { Pill } from '../components/pill';
 import { StandardLayout } from '../components/StandardLayout';
 import { Colors, FontSize, Spacing } from '../constants/theme';
@@ -477,6 +478,20 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
         </View>
       </StandardLayout.AdvancedFilters>
       <StandardLayout.Body>
+        <View
+          style={[homeScreenStyles.welcomeStrip, { marginBottom: Spacing.xxl }]}
+          accessibilityRole="text"
+          accessibilityLabel="What are programs. Programs are structured blocks that usually last from 1-6 months, you can only be on one program at a time, so choose wisely. you can still do any of our workouts when on a program!"
+        >
+          <View style={homeScreenStyles.welcomeStripTopRow}>
+            <View style={homeScreenStyles.welcomeHeadlineCell}>
+              <Text style={homeScreenStyles.welcomeTitle}>What are programs</Text>
+            </View>
+          </View>
+          <Text style={homeScreenStyles.welcomeBody}>
+            Programs are structured training blocks (1-4 months). You&apos;ll follow one at a time, with full access to all workouts throughout.
+          </Text>
+        </View>
         {filteredPrograms.map(({ program, isRecommended }) => (
           <ProgramLauncherProgramCard
             key={program.id}

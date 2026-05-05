@@ -139,6 +139,23 @@ export default function SettingsScreen() {
   return (
     <StandardLayout title="Account" subtitle="Manage your account">
       <StandardLayout.Body>
+        {!subscriptionLoading && !isPro ? (
+          <TouchableOpacity
+            style={styles.upgradePrompt}
+            onPress={() => router.push('/paywall')}
+            activeOpacity={0.85}
+            accessibilityRole="button"
+            accessibilityLabel="Upgrade to Tempered Strength Pro. Opens subscription plans"
+          >
+            <Text style={styles.upgradePromptTitle}>Upgrade to Pro</Text>
+            <Text style={styles.upgradePromptBody}>
+              You are on the free plan. Unlock every program and workout, unlimited
+              exercise swaps, and the rest of what Pro includes. Start here, or use
+              Upgrade to Pro in the list below.
+            </Text>
+            <Text style={styles.upgradePromptCta}>See plans →</Text>
+          </TouchableOpacity>
+        ) : null}
         <View style={styles.settingsList}>
           {onboardingProfileState?.name && (
             <Text style={styles.settingTitle}>Hi {onboardingProfileState?.name}</Text>
@@ -285,6 +302,6 @@ export default function SettingsScreen() {
           )}
         </View>
       </StandardLayout.Body>
-    </StandardLayout >
+    </StandardLayout>
   );
 }

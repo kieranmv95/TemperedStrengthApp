@@ -2,6 +2,32 @@ import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { StyleSheet } from 'react-native';
 
 export const settingsScreenStyles = StyleSheet.create({
+  upgradePrompt: {
+    backgroundColor: 'rgba(201, 176, 114, 0.1)',
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: 'rgba(201, 176, 114, 0.28)',
+    padding: Spacing.section,
+    marginBottom: Spacing.xl,
+  },
+  upgradePromptTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displaySm,
+    fontWeight: '800',
+    marginBottom: Spacing.sm,
+  },
+  upgradePromptBody: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.lg,
+    lineHeight: 22,
+    fontWeight: '500',
+  },
+  upgradePromptCta: {
+    color: Colors.accent,
+    fontSize: FontSize.xl,
+    fontWeight: '800',
+    marginTop: Spacing.xl,
+  },
   settingsList: {
     gap: Spacing.xl,
   },
