@@ -1,81 +1,60 @@
-import { ProgramLauncher } from '@/src/screens/ProgramLauncher';
-import { WorkoutScreen } from '@/src/screens/WorkoutScreen';
-import { getActiveProgramId, getProgramStartDate } from '@/src/utils/storage';
+import { StandardLayout } from '@/src/components/StandardLayout';
+import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
+import { getOnboardingProfile } from '@/src/utils/storage';
 import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useEffect, useState } from 'react';
+import { router } from 'expo-router';
+import React, { useCallback, useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 
-export default function HomeScreen() {
-  const [hasProgram, setHasProgram] = useState<boolean | null>(null);
-  const [activeProgramId, setActiveProgramId] = useState<string | null>(null);
-  const [programStartDate, setProgramStartDate] = useState<string | null>(null);
+export default function HomeTabScreen() {
+  const [displayName, setDisplayName] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const initializeApp = async () => {
+  const loadProfile = useCallback(async () => {
     try {
-      // Check program status
-      const programId = await getActiveProgramId();
-      const startDate = programId ? await getProgramStartDate() : null;
-      setHasProgram(!!programId);
-      setActiveProgramId(programId);
-      setProgramStartDate(startDate);
+      const profile = await getOnboardingProfile();
+      const trimmed = profile?.name?.trim();
+      setDisplayName(trimmed && trimmed.length > 0 ? trimmed : null);
     } catch (error) {
-      console.error('Error initializing app:', error);
-      setHasProgram(false);
-      setActiveProgramId(null);
-      setProgramStartDate(null);
+      console.error('Error loading onboarding profile for home:', error);
+      setDisplayName(null);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    initializeApp();
   }, []);
 
-  // Re-check program status when tab is focused
   useFocusEffect(
     useCallback(() => {
-      const checkProgram = async () => {
-        try {
-          const programId = await getActiveProgramId();
-          const startDate = programId ? await getProgramStartDate() : null;
-          setHasProgram(!!programId);
-          setActiveProgramId(programId);
-          setProgramStartDate(startDate);
-        } catch (error) {
-          console.error('Error checking program status:', error);
-          setHasProgram(false);
-          setActiveProgramId(null);
-          setProgramStartDate(null);
-        }
-      };
-      checkProgram();
-    }, [])
+      void loadProfile();
+    }, [loadProfile])
   );
 
-  const handleProgramSelected = () => {
-    void (async () => {
-      const programId = await getActiveProgramId();
-      const startDate = programId ? await getProgramStartDate() : null;
-      setHasProgram(!!programId);
-      setActiveProgramId(programId);
-      setProgramStartDate(startDate);
-    })();
-  };
-
-  const handleProgramReset = () => {
-    setHasProgram(false);
-    setActiveProgramId(null);
-    setProgramStartDate(null);
-  };
-
-  if (hasProgram === null) {
-    // Loading state - could show a loading indicator
+  if (loading) {
     return null;
   }
 
-  if (!hasProgram) {
-    return <ProgramLauncher onProgramSelected={handleProgramSelected} />;
-  }
+  const greetingTitle = displayName ? `Hi, ${displayName}` : 'Hi';
 
-  // Key off program + start date so changes made in Settings remount WorkoutScreen.
-  const workoutKey = `${activeProgramId ?? 'none'}-${programStartDate ?? 'no-start'}`;
-  return <WorkoutScreen key={workoutKey} onProgramReset={handleProgramReset} />;
+  return (
+    <StandardLayout title={greetingTitle}>
+      <StandardLayout.Body>
+        <View style={styles.settingsList}>
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={() => router.push('/settings')}
+            accessibilityRole="button"
+            accessibilityLabel="Open account"
+          >
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Account</Text>
+              <Text style={styles.settingDescription}>
+                Subscription, preferences, and program settings.
+              </Text>
+            </View>
+            <Text style={styles.settingArrow}>→</Text>
+          </TouchableOpacity>
+        </View>
+      </StandardLayout.Body>
+    </StandardLayout>
+  );
 }

@@ -238,7 +238,7 @@ function OnboardingFlow() {
   const handleSkipSetup = () => {
     Alert.alert(
       'Skip setup?',
-      'You can run onboarding again any time from Settings.',
+      'You can run onboarding again any time from Account.',
       [
         { text: 'Go back', style: 'cancel' },
         {

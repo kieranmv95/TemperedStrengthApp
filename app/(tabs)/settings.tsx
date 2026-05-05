@@ -120,7 +120,7 @@ export default function SettingsScreen() {
               await AsyncStorage.clear();
               setHasProgram(false);
               setActiveProgram(null);
-              // Navigate back to Program tab (index)
+              // Land on Home after clearing data
               router.replace('/');
               Alert.alert('Success', 'All data has been cleared.');
             } catch (error) {
