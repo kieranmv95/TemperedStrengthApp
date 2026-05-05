@@ -3,8 +3,10 @@ import {
   clampStartDateToPatternAndToday,
   firstSessionWeekdayForPattern,
   getWorkoutForDaySinceStart,
+  getShiftedWorkoutForDaySinceStart,
   jsDayToSplitKey,
   listTrainingDayDeltasForProgram,
+  listShiftedTrainingDayDeltasForProgram,
   nearestDateOnOrAfterAllowingWeekdays,
   sessionsPerWeekFromProgram,
   sortPatternByCalendarOrder,
@@ -149,6 +151,51 @@ describe('programWeekPattern', () => {
       expect(
         getWorkoutForDaySinceStart(program, startISO, pattern, 11)?.label
       ).toBe('Legs W2');
+    });
+  });
+
+  describe('shifted scheduling', () => {
+    const program = threeDayMiniProgram();
+    const startTue = new Date(2024, 0, 2);
+    startTue.setHours(0, 0, 0, 0);
+    const startISO = startTue.toISOString();
+    const pattern = sortPatternByCalendarOrder(['tue', 'thu', 'sat']);
+
+    it('moves a workout into a rest day within the same week', () => {
+      const shifts = {
+        0: [
+          {
+            weekIndex: 0,
+            fromDayIndex: 2, // Thu (Pull)
+            toDayIndex: 1, // Wed (rest)
+            movedAt: 1,
+          },
+        ],
+      };
+
+      expect(
+        getShiftedWorkoutForDaySinceStart(program, startISO, pattern, shifts, 1)
+          ?.label
+      ).toBe('Pull');
+      expect(
+        getShiftedWorkoutForDaySinceStart(program, startISO, pattern, shifts, 2)
+      ).toBeNull();
+    });
+
+    it('listShiftedTrainingDayDeltasForProgram reflects shifted days', () => {
+      const shifts = {
+        0: [
+          {
+            weekIndex: 0,
+            fromDayIndex: 4, // Sat (Legs)
+            toDayIndex: 3, // Fri (rest)
+            movedAt: 1,
+          },
+        ],
+      };
+      expect(
+        listShiftedTrainingDayDeltasForProgram(program, startISO, pattern, shifts)
+      ).toEqual([0, 2, 3, 7, 9, 11]);
     });
   });
 

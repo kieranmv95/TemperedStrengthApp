@@ -34,6 +34,8 @@ type WorkoutScreenBodyProps = {
   onViewAllPrograms: () => void | Promise<void>;
   currentWorkout: Workout | null;
   showIntensity?: boolean;
+  onMoveSession?: () => void;
+  onStartSession?: () => void;
   slots: WorkoutSlot[];
   swapRefreshCounter: number;
   completedSession: CompletedSession | null;
@@ -65,6 +67,8 @@ export function WorkoutScreenBody({
   onViewAllPrograms,
   currentWorkout,
   showIntensity = true,
+  onMoveSession,
+  onStartSession,
   slots,
   swapRefreshCounter,
   completedSession,
@@ -131,6 +135,51 @@ export function WorkoutScreenBody({
                 <Text style={styles.description}>
                   {currentWorkout.description}
                 </Text>
+              )}
+
+              {(onMoveSession || onStartSession) && (
+                <View style={styles.sessionCtaRow}>
+                  {onMoveSession && (
+                    <TouchableOpacity
+                      style={[
+                        styles.startSessionButton,
+                        styles.sessionCtaHalf,
+                      ]}
+                      onPress={onMoveSession}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={styles.startSessionButtonText}
+                        numberOfLines={1}
+                        adjustsFontSizeToFit
+                        minimumFontScale={0.8}
+                      >
+                        Move Session
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+
+                  {onStartSession && (
+                    <TouchableOpacity
+                      style={[styles.startSessionButton, styles.sessionCtaHalf]}
+                      onPress={onStartSession}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={styles.startSessionButtonText}
+                        numberOfLines={1}
+                        adjustsFontSizeToFit
+                        minimumFontScale={0.8}
+                      >
+                        Start Session
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+
+                  {onMoveSession && !onStartSession && (
+                    <View style={styles.sessionCtaHalf} />
+                  )}
+                </View>
               )}
             </View>
           </View>

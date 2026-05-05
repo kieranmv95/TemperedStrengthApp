@@ -37,9 +37,19 @@ export const daySelectorStyles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.lg,
     fontWeight: '600',
-    marginBottom: Spacing.xs,
   },
   dayLabelSelected: {
+    color: Colors.textPrimary,
+  },
+  daySubLabel: {
+    marginTop: 2,
+    marginBottom: Spacing.xs,
+    color: Colors.textMuted,
+    fontSize: FontSize.sm,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  daySubLabelSelected: {
     color: Colors.textPrimary,
   },
   dot: {

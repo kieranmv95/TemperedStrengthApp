@@ -6,6 +6,32 @@ export const workoutScreenStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.backgroundScreen,
   },
+  movingSessionOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: Colors.overlay,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+  },
+  movingSessionOverlayCard: {
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+    paddingVertical: Spacing.xxl,
+    paddingHorizontal: Spacing.section,
+    minWidth: 220,
+    alignItems: 'center',
+  },
+  movingSessionOverlayText: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxl,
+    fontWeight: '700',
+  },
   keyboardAvoidingView: {
     flex: 1,
   },
@@ -26,6 +52,16 @@ export const workoutScreenStyles = StyleSheet.create({
   },
   headerTextContainer: {
     flex: 1,
+  },
+  sessionCtaRow: {
+    marginTop: Spacing.md,
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  sessionCtaHalf: {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: 0,
   },
   headerActions: {
     alignItems: 'flex-end',

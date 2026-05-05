@@ -2,8 +2,8 @@ import {
   ITEM_WIDTH,
   SCROLL_PADDING_H,
 } from '@/src/components/daySelectorConstants';
-import { daySelectorStyles as styles } from '@/src/components/daySelectorStyles';
 import { DaySelectorDayChip } from '@/src/components/DaySelectorDayChip';
+import { daySelectorStyles as styles } from '@/src/components/daySelectorStyles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Dimensions,
@@ -61,28 +61,14 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
     const date = new Date(start);
     date.setDate(date.getDate() + dayIndex);
     const day = date.getDate();
-
-    const monthNames = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    const month = monthNames[date.getMonth()];
+    const weekdayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const weekday = weekdayLabels[date.getDay()] ?? '';
 
     const suffix = ['th', 'st', 'nd', 'rd'][
       day % 10 > 3 || Math.floor((day % 100) / 10) === 1 ? 0 : day % 10
     ];
 
-    return `${month} ${day}${suffix}`;
+    return `${weekday} ${day}${suffix}`;
   };
 
   const isToday = (dayIndex: number): boolean => {
@@ -209,13 +195,15 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
       </ScrollView>
       {showJumpToToday && (
         <View style={styles.timelineActionRow}>
-          <TouchableOpacity
-            style={styles.jumpToTodayButton}
-            onPress={handleJumpToToday}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.jumpToTodayText}>Jump to Today</Text>
-          </TouchableOpacity>
+          {showJumpToToday && (
+            <TouchableOpacity
+              style={styles.jumpToTodayButton}
+              onPress={handleJumpToToday}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.jumpToTodayText}>Jump to Today</Text>
+            </TouchableOpacity>
+          )}
         </View>
       )}
     </View>

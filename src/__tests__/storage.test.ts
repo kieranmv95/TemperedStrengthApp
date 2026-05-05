@@ -5,9 +5,12 @@ import {
   getFavoriteWorkouts,
   getAutoRestTimersEnabled,
   getAutoPbDetectionInProgramsEnabled,
+  getCompletedSession,
   getRestTimer,
   getWorkoutNotes,
   incrementSwapCount,
+  moveProgramDayData,
+  saveCompletedSession,
   saveRestTimer,
   saveWorkoutNotes,
   clearRestTimer,
@@ -164,5 +167,30 @@ describe('storage utilities', () => {
     );
 
     await expect(incrementSwapCount()).resolves.toBe(1);
+  });
+
+  it('moves program day-index keyed data to a new day index', async () => {
+    await saveWorkoutNotes(2, 'Keep shoulders down');
+    await saveCompletedSession({
+      dayIndex: 2,
+      startedAt: 100,
+      completedAt: 200,
+      totalVolume: 1234,
+      setsCompleted: 10,
+    });
+
+    await expect(moveProgramDayData(2, 3)).resolves.toEqual({ moved: true });
+
+    await expect(getWorkoutNotes(2)).resolves.toBe('');
+    await expect(getWorkoutNotes(3)).resolves.toBe('Keep shoulders down');
+
+    await expect(getCompletedSession(2)).resolves.toBeNull();
+    await expect(getCompletedSession(3)).resolves.toMatchObject({
+      dayIndex: 3,
+      startedAt: 100,
+      completedAt: 200,
+      totalVolume: 1234,
+      setsCompleted: 10,
+    });
   });
 });

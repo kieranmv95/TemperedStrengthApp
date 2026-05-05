@@ -6,6 +6,7 @@ type DotKind = 'today' | 'workout' | 'none';
 
 type DaySelectorDayChipProps = {
   label: string;
+  subLabel?: string;
   isSelected: boolean;
   dotKind: DotKind;
   onPress: () => void;
@@ -13,6 +14,7 @@ type DaySelectorDayChipProps = {
 
 export function DaySelectorDayChip({
   label,
+  subLabel,
   isSelected,
   dotKind,
   onPress,
@@ -25,6 +27,16 @@ export function DaySelectorDayChip({
       <Text style={[styles.dayLabel, isSelected && styles.dayLabelSelected]}>
         {label}
       </Text>
+      {!!subLabel && (
+        <Text
+          style={[
+            styles.daySubLabel,
+            isSelected && styles.daySubLabelSelected,
+          ]}
+        >
+          {subLabel}
+        </Text>
+      )}
       <View
         style={[
           styles.dot,
