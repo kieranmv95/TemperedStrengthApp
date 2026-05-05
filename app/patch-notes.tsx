@@ -22,7 +22,9 @@ const PATCH_NOTES: PatchNote[] = [
       'Moved start session button away from being a sticky header',
       'Improve notes behaviour and reversed order',
       'Added a new disciplines section to the workouts screen',
-      'Tidied up workouts filters and tags'
+      'Tidied up workouts filters and tags',
+      'Created home screen welcome strip and improved program launcher',
+      'Added tracking links for new features',
     ],
   },
   {

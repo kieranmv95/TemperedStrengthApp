@@ -41,6 +41,10 @@ export const posthogEventsNames = {
     articleFavourite: 'article_favourite',
     glossaryView: 'glossary_view',
   },
+  home: {
+    /** User tapped a navigation target from the Home tab body. */
+    linkPressed: 'home_link_pressed',
+  },
   app: {
     settingChanged: 'setting_changed',
     notesCopied: 'notes_copied',

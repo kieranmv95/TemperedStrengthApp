@@ -16,10 +16,12 @@ import {
   getOnboardingProfile,
   getPersonalBestsStore,
 } from '@/src/utils/storage';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { formatWeightFromKg } from '@/src/utils/weightUnits';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
+import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -51,6 +53,7 @@ function timeOfDayGreeting(): string {
 }
 
 export default function HomeTabScreen() {
+  const posthog = usePostHog();
   const { unit: weightUnit } = useWeightUnit();
   const {
     isPro,
@@ -96,6 +99,17 @@ export default function HomeTabScreen() {
       void loadHome();
       void refreshSubscription();
     }, [loadHome, refreshSubscription])
+  );
+
+  const trackHomeLink = useCallback(
+    (linkId: string, pathname: string, navigate: () => void) => {
+      posthog.capture(posthogEventsNames.home.linkPressed, {
+        link_id: linkId,
+        target: pathname,
+      });
+      navigate();
+    },
+    [posthog]
   );
 
   const recentPbs = useMemo(() => {
@@ -153,7 +167,13 @@ export default function HomeTabScreen() {
                   </View>
                   <TouchableOpacity
                     style={styles.planBadgeFree}
-                    onPress={() => router.push('/settings')}
+                    onPress={() =>
+                      trackHomeLink(
+                        'welcome_strip_plan_badge_free',
+                        '/settings',
+                        () => router.push('/settings')
+                      )
+                    }
                     accessibilityRole="button"
                     accessibilityLabel="Free plan"
                     accessibilityHint="Opens settings where you can upgrade to Tempered Strength Pro"
@@ -169,10 +189,9 @@ export default function HomeTabScreen() {
             )
           ) : (
             <>
-              <Text style={styles.welcomeTitle}>Glad you are here.</Text>
+              <Text style={styles.welcomeTitle}>Loading.</Text>
               <Text style={styles.welcomeBody}>
-                Your program, latest wins, and shortcuts are just below — no rush,
-                start when it feels right.
+                Loading...
               </Text>
             </>
           )}
@@ -191,7 +210,11 @@ export default function HomeTabScreen() {
           {programSummary ? (
             <TouchableOpacity
               style={styles.card}
-              onPress={() => router.push('/program')}
+              onPress={() =>
+                trackHomeLink('your_program_card', '/program', () =>
+                  router.push('/program')
+                )
+              }
               accessibilityRole="button"
               accessibilityLabel="Open program"
             >
@@ -221,7 +244,11 @@ export default function HomeTabScreen() {
           ) : (
             <TouchableOpacity
               style={styles.card}
-              onPress={() => router.push('/program')}
+              onPress={() =>
+                trackHomeLink('pick_program_card', '/program', () =>
+                  router.push('/program')
+                )
+              }
               accessibilityRole="button"
               accessibilityLabel="Select a program"
             >
@@ -252,7 +279,11 @@ export default function HomeTabScreen() {
           {hasPersonalBests ? (
             <TouchableOpacity
               style={styles.card}
-              onPress={() => router.push('/records')}
+              onPress={() =>
+                trackHomeLink('recent_wins_card', '/records', () =>
+                  router.push('/records')
+                )
+              }
               accessibilityRole="button"
               accessibilityLabel="Open records and personal bests"
             >
@@ -277,7 +308,11 @@ export default function HomeTabScreen() {
           ) : (
             <TouchableOpacity
               style={styles.card}
-              onPress={() => router.push('/records')}
+              onPress={() =>
+                trackHomeLink('recent_wins_empty_card', '/records', () =>
+                  router.push('/records')
+                )
+              }
               accessibilityRole="button"
               accessibilityLabel="Open records to log personal bests"
             >
@@ -306,7 +341,11 @@ export default function HomeTabScreen() {
           <View style={styles.toolsRow}>
             <TouchableOpacity
               style={styles.toolButton}
-              onPress={() => router.push('/glossary')}
+              onPress={() =>
+                trackHomeLink('quick_links_glossary', '/glossary', () =>
+                  router.push('/glossary')
+                )
+              }
               accessibilityRole="button"
               accessibilityLabel="Open glossary"
             >
@@ -333,7 +372,11 @@ export default function HomeTabScreen() {
           </View>
           <TouchableOpacity
             style={workoutScreenStyles.startSessionButton}
-            onPress={() => router.push('/settings')}
+            onPress={() =>
+              trackHomeLink('you_settings', '/settings', () =>
+                router.push('/settings')
+              )
+            }
             accessibilityRole="button"
             accessibilityLabel="Open settings"
           >
