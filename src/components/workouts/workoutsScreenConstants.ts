@@ -24,4 +24,5 @@ export const CATEGORY_FILTERS: CategoryFilter[] = [
   'Hyrox',
   'Conditioning',
   'Mobility',
+  'Pilates',
 ];

@@ -1202,5 +1202,769 @@
         ]
       }
     ]
+  },
+  {
+    "id": "p_37",
+    "title": "Spine Basics",
+    "description": "A gentle introduction to Pilates fundamentals. Breathing, neutral spine, and the imprinted position. If you've never done Pilates, start here.",
+    "category": "Pilates",
+    "difficulty": "Beginner",
+    "estimatedTime": 15,
+    "tags": ["Pilates", "Beginner", "Spine", "Breathwork", "No Equipment"],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Foundation",
+        "instructions": "Move slowly. Find neutral spine before every exercise. Exhale on the effort.",
+        "movements": [
+          "Supine Breathing (10 breaths - ribcage expansion)",
+          "Pelvic Tilts (10 reps)",
+          "Imprint and Release (10 reps)",
+          "Single Knee Folds (5 each side, slow)",
+          "Shoulder Bridge (8 reps - no weight, 2s pause at top)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_38",
+    "title": "Core Awakening",
+    "description": "Targeted deep core activation. Transverse abdominis, pelvic floor, and diaphragm working as a unit. The foundation everything else is built on.",
+    "category": "Pilates",
+    "difficulty": "Beginner",
+    "estimatedTime": 20,
+    "tags": ["Pilates", "Beginner", "Core", "Deep Stabilisers", "No Equipment"],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Activation Sequence",
+        "instructions": "Never hold your breath. Think 30% effort on the deep core - not a brace, a gentle tension.",
+        "movements": [
+          "Supine Breathing into the pelvic floor (10 breaths)",
+          "Dead Bug - arm only (8 each side)",
+          "Dead Bug - leg only (8 each side)",
+          "Dead Bug - opposite arm and leg (6 each side)",
+          "Single Leg Stretch (10 reps)",
+          "Double Leg Stretch (8 reps)",
+          "Rest"
+        ]
+      },
+      {
+        "name": "Finisher",
+        "instructions": "Slow and deliberate. Quality over quantity.",
+        "movements": [
+          "Curl-up Hold (3 x 10s)",
+          "Toe Taps (10 each side)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_39",
+    "title": "Morning Mobility",
+    "description": "Spine mobility and hip opening for the morning. Pairs well with strength training days. No equipment, no sweat required.",
+    "category": "Pilates",
+    "difficulty": "Beginner",
+    "estimatedTime": 20,
+    "tags": ["Pilates", "Beginner", "Mobility", "Morning", "No Equipment"],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Spine Mobility",
+        "instructions": "Move through the full range available to you today. No forcing.",
+        "movements": [
+          "Cat-Cow (10 reps, 3s each direction)",
+          "Thread the Needle (5 each side)",
+          "Child's Pose with Lateral Reach (30s each side)",
+          "Spine Twist Supine (8 each side)"
+        ]
+      },
+      {
+        "name": "Hip Opening",
+        "instructions": "Breathe into restriction. Let the exhale deepen the stretch.",
+        "movements": [
+          "Figure Four Stretch (60s each side)",
+          "Supine Hip Flexor (45s each side)",
+          "Clam Shell (12 each side)",
+          "Glute Bridge with Hip Circle (8 each direction)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_40",
+    "title": "Roll & Release",
+    "description": "Spine articulation and hamstring lengthening. This is the session that makes everything else feel easier.",
+    "category": "Pilates",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": ["Pilates", "Beginner", "Flexibility", "Spine", "No Equipment"],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Articulation",
+        "instructions": "Every vertebra moves. If a segment is stiff, breathe into it and slow down.",
+        "movements": [
+          "Roll Down (Standing, 8 reps)",
+          "Roll Up (6 reps - controlled, no momentum)",
+          "Rolling Like a Ball (10 reps)",
+          "Spine Stretch Forward (8 reps)"
+        ]
+      },
+      {
+        "name": "Lengthening",
+        "instructions": "Reach through the heels. Keep the core switched on.",
+        "movements": [
+          "Saw (8 each side)",
+          "Single Leg Hamstring Stretch (45s each side)",
+          "Mermaid Stretch (30s each side)",
+          "Rest in Supine"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_41",
+    "title": "Posture Reset",
+    "description": "Desk-life antidote. Thoracic extension, scapular stability, and hip flexor release. Do this after every long sitting day.",
+    "category": "Pilates",
+    "difficulty": "Beginner",
+    "estimatedTime": 20,
+    "tags": ["Pilates", "Beginner", "Posture", "Thoracic", "No Equipment"],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Thoracic Mobility",
+        "instructions": "Focus on the upper and mid back - not the lower back. Keep the lumbar still.",
+        "movements": [
+          "Thoracic Extension over Foam Roller (6 segments, 30s each)",
+          "Open Book (8 each side)",
+          "Bow and Arrow (6 each side)"
+        ]
+      },
+      {
+        "name": "Scapular Control",
+        "instructions": "Think about the shoulder blades moving on the ribcage like a drawer.",
+        "movements": [
+          "Scapular Punches (12 reps)",
+          "W Exercise Prone (10 reps)",
+          "Swimming Arms Prone (20s, controlled)"
+        ]
+      },
+      {
+        "name": "Hip Flexor Release",
+        "instructions": "Hold the posterior pelvic tilt throughout. Do not arch the lower back.",
+        "movements": [
+          "Kneeling Hip Flexor Stretch with Reach (45s each side)",
+          "Standing Hip Circles (10 each side)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_42",
+    "title": "The Hundred",
+    "description": "The benchmark Pilates endurance drill. One hundred beats of the arms while holding a curl-up. Simple. Brutal. Effective.",
+    "category": "Pilates",
+    "difficulty": "Beginner",
+    "estimatedTime": 15,
+    "tags": ["Pilates", "Beginner", "Abs", "Endurance", "No Equipment"],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Preparation",
+        "instructions": "Build up the curl-up height over the first few sets. Knees bent is fine.",
+        "movements": [
+          "Supine Breathing (5 breaths)",
+          "Curl-up Practice (3 x 10s holds)",
+          "Single Leg Stretch (10 reps)"
+        ]
+      },
+      {
+        "name": "The Hundred",
+        "instructions": "Inhale for 5 beats, exhale for 5 beats. Arms pump 2-3 inches. Hold the position - do not pulse the spine.",
+        "movements": [
+          "The Hundred (100 beats total - 10 breath cycles)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_43",
+    "title": "Hip Stability Flow",
+    "description": "Glute medius, hip rotators, and lateral hip chain. The stability work that protects your knees and lower back during every compound lift.",
+    "category": "Pilates",
+    "difficulty": "Intermediate",
+    "estimatedTime": 25,
+    "tags": ["Pilates", "Intermediate", "Glutes", "Hip Stability", "No Equipment"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Activation",
+        "instructions": "Feel the target muscle - not the TFL or lower back. Slow and controlled.",
+        "movements": [
+          "Side-Lying Clam Shell (15 each side)",
+          "Side-Lying Hip Abduction (12 each side)",
+          "Side-Lying Hip Circle (8 each direction, each side)"
+        ]
+      },
+      {
+        "name": "Loading",
+        "instructions": "Add a resistance band above the knees on all movements if available.",
+        "movements": [
+          "Lateral Band Walk (20 steps each direction)",
+          "Single Leg Glute Bridge (10 each side, 2s hold at top)",
+          "Donkey Kick into Fire Hydrant (10 each side)"
+        ]
+      },
+      {
+        "name": "Integration",
+        "instructions": "Combine the hip stability with spinal control.",
+        "movements": [
+          "Bird Dog with Hip Hike (8 each side)",
+          "Side Plank Hip Dip (10 each side)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_44",
+    "title": "Athletic Core",
+    "description": "Rotational power and anti-rotation stability. The core work that actually translates to lifting and sport.",
+    "category": "Pilates",
+    "difficulty": "Intermediate",
+    "estimatedTime": 30,
+    "tags": ["Pilates", "Intermediate", "Core", "Rotation", "No Equipment"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Anti-Rotation",
+        "instructions": "Keep the pelvis completely still during all rotation patterns. The movement comes from the thorax.",
+        "movements": [
+          "Dead Bug (10 each side - slow, 3s lower)",
+          "Pallof Press Hold (3 x 20s each side)",
+          "Half-Kneeling Rotation (8 each side)"
+        ]
+      },
+      {
+        "name": "Rotational Power",
+        "instructions": "Control the deceleration. Power through the rotation, resist on the return.",
+        "movements": [
+          "Supine Spine Twist (10 each side)",
+          "Seated Rotation with Reach (12 each side)",
+          "Standing Oblique Crunch (12 each side)",
+          "Kneeling Side Bend (10 each side)"
+        ]
+      },
+      {
+        "name": "Endurance",
+        "instructions": "Hold quality throughout. Do not sacrifice depth for speed.",
+        "movements": [
+          "Side Plank (30s each side)",
+          "Side Plank with Hip Abduction (10 each side)",
+          "Rolling Plank (5 full rotations)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_45",
+    "title": "Spine Articulation Deep Dive",
+    "description": "Full spinal mobility through every plane. Flexion, extension, lateral flexion, and rotation. The session that restores what heavy lifting takes away.",
+    "category": "Pilates",
+    "difficulty": "Intermediate",
+    "estimatedTime": 30,
+    "tags": ["Pilates", "Intermediate", "Spine", "Mobility", "No Equipment"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Flexion and Extension",
+        "instructions": "Segment by segment. Find the stiff spots and breathe into them.",
+        "movements": [
+          "Roll Up (8 reps - no momentum)",
+          "Rolling Like a Ball (10 reps)",
+          "Swan Prep (8 reps - thoracic extension only)",
+          "Full Swan (5 reps - add lumbar extension gradually)"
+        ]
+      },
+      {
+        "name": "Lateral and Rotation",
+        "instructions": "Keep the pelvis level. The movement is in the spine, not the hips.",
+        "movements": [
+          "Mermaid (8 each side)",
+          "Seated Spine Twist (10 each side)",
+          "Saw (8 each side)",
+          "Corkscrew Prep (6 each side)"
+        ]
+      },
+      {
+        "name": "Full Integration",
+        "instructions": "Combine patterns. Move with intention.",
+        "movements": [
+          "Spine Stretch Forward into Swan (6 full reps)",
+          "Rocker Prep (8 reps)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_46",
+    "title": "Powerhouse Session",
+    "description": "Pilates powerhouse = core, glutes, inner thighs, and pelvic floor as a unit. This is where real Pilates strength lives.",
+    "category": "Pilates",
+    "difficulty": "Intermediate",
+    "estimatedTime": 30,
+    "tags": ["Pilates", "Intermediate", "Powerhouse", "Core", "Glutes", "No Equipment"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Pelvic Control",
+        "instructions": "Posterior pelvic tilt is your home base. Return to it between every movement.",
+        "movements": [
+          "Pelvic Clock (10 full rotations)",
+          "Shoulder Bridge (10 reps, 2s hold)",
+          "Shoulder Bridge with Leg Extension (6 each side)"
+        ]
+      },
+      {
+        "name": "Deep Core Series",
+        "instructions": "Exhale drives the contraction. Never grip through the hip flexors.",
+        "movements": [
+          "The Hundred (60 beats)",
+          "Single Leg Stretch (10 each side)",
+          "Double Leg Stretch (10 reps)",
+          "Criss Cross (12 each side)"
+        ]
+      },
+      {
+        "name": "Glute and Adductor Integration",
+        "instructions": "Squeeze the inner thighs to activate the pelvic floor. Everything works together.",
+        "movements": [
+          "Pilates Squat with Squeeze (12 reps)",
+          "Standing Pilates Lunge with Rotation (8 each side)",
+          "Inner Thigh Lift (12 each side)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_47",
+    "title": "Full Mat Flow",
+    "description": "The complete classical Pilates mat sequence. Every major movement pattern covered. This is what the method was designed to feel like.",
+    "category": "Pilates",
+    "difficulty": "Intermediate",
+    "estimatedTime": 30,
+    "tags": ["Pilates", "Intermediate", "Classical", "Full Body", "No Equipment"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Supine Series",
+        "instructions": "Begin every movement from a stable neutral pelvis. Exhale on effort.",
+        "movements": [
+          "The Hundred (100 beats)",
+          "Roll Up (6 reps)",
+          "Single Leg Circle (5 each direction, each side)",
+          "Rolling Like a Ball (8 reps)",
+          "Single Leg Stretch (10 each side)",
+          "Double Leg Stretch (8 reps)",
+          "Spine Stretch Forward (6 reps)"
+        ]
+      },
+      {
+        "name": "Prone and Side-Lying",
+        "instructions": "Keep the core braced in all prone work. The lower abdominals lift the pelvis slightly.",
+        "movements": [
+          "Swan Prep (8 reps)",
+          "Single Leg Kick (8 each side)",
+          "Side-Lying Leg Series (10 each: abduction, circles, kick forward/back)"
+        ]
+      },
+      {
+        "name": "Finishing",
+        "instructions": "Stay connected and intentional to the end.",
+        "movements": [
+          "Seal (6 reps)",
+          "Mermaid Stretch (30s each side)",
+          "Standing Roll Down (5 reps)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_48",
+    "title": "Reformer Fundamentals (Mat Simulation)",
+    "description": "Reformer-principle exercises done on the mat using resistance bands. All the tension, none of the machine.",
+    "category": "Pilates",
+    "difficulty": "Intermediate",
+    "estimatedTime": 25,
+    "tags": ["Pilates", "Intermediate", "Resistance Band", "Reformer-Style", "Full Body"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Footwork",
+        "instructions": "Maintain consistent band tension through the full range. Heels, toes, and turned-out positions.",
+        "movements": [
+          "Band Footwork - Parallel Heels (15 reps)",
+          "Band Footwork - Parallel Toes (15 reps)",
+          "Band Footwork - V Position (12 reps)"
+        ]
+      },
+      {
+        "name": "Upper Body",
+        "instructions": "Scapulae stay depressed throughout. No shrugging.",
+        "movements": [
+          "Supine Band Row (12 reps)",
+          "Chest Expansion (10 reps)",
+          "Overhead Reach with Band (10 reps)"
+        ]
+      },
+      {
+        "name": "Coordination",
+        "instructions": "Breathe into the movement. Curl, extend, lower, return.",
+        "movements": [
+          "Coordination Exercise (8 reps)",
+          "Stomach Massage - Round Back (10 reps)",
+          "Long Stretch Plank Hold (3 x 20s)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_49",
+    "title": "Advanced Control Series",
+    "description": "High-demand Pilates control work. Strength, coordination, and breathwork at their limit. This is the session that separates serious practitioners.",
+    "category": "Pilates",
+    "difficulty": "Advanced",
+    "estimatedTime": 45,
+    "tags": ["Pilates", "Advanced", "Control", "Full Body", "No Equipment"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Spinal Articulation",
+        "instructions": "Every vertebra is accountable. No segment gets a free ride.",
+        "movements": [
+          "Roll Over (6 reps - control the descent)",
+          "Jack Knife (5 reps)",
+          "Corkscrew (5 each side)",
+          "Boomerang (6 reps)"
+        ]
+      },
+      {
+        "name": "Strength Series",
+        "instructions": "Brace the powerhouse before you move anything. The extremities are levers - the core is the anchor.",
+        "movements": [
+          "Teaser I (6 reps)",
+          "Teaser II (5 reps)",
+          "Teaser III (4 reps)",
+          "Neck Pull (8 reps)"
+        ]
+      },
+      {
+        "name": "Prone Power",
+        "instructions": "Pull the navel from the floor throughout. Never relax the abdominals in prone.",
+        "movements": [
+          "Swan Dive (6 reps)",
+          "Rocking (8 reps)",
+          "Double Leg Kick (8 each side)"
+        ]
+      },
+      {
+        "name": "Finishing Sequence",
+        "instructions": "Carry the quality you built through the whole session into these last movements.",
+        "movements": [
+          "Seal (8 reps)",
+          "Crab (5 reps)",
+          "Control Balance (5 each side)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_50",
+    "title": "Teaser Progression",
+    "description": "The Teaser is the definitive Pilates test. This session builds every component - hamstring flexibility, hip flexor strength, and spinal articulation - before demanding the full movement.",
+    "category": "Pilates",
+    "difficulty": "Advanced",
+    "estimatedTime": 45,
+    "tags": ["Pilates", "Advanced", "Teaser", "Abs", "Flexibility", "No Equipment"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Preparation",
+        "instructions": "Build each component separately before combining them.",
+        "movements": [
+          "Roll Up (8 reps - slow descent, 4s)",
+          "Single Leg Stretch into Hold (6 each side)",
+          "Supine Leg Extension Hold (30s each side)",
+          "V-Sit Hold (3 x 15s)",
+          "Spine Stretch Forward (8 reps)"
+        ]
+      },
+      {
+        "name": "Teaser Progressions",
+        "instructions": "Progress only when the previous level is controlled. No hip flexor dominance.",
+        "movements": [
+          "Teaser I - Bent Knees (6 reps)",
+          "Teaser I - One Leg Extended (5 each side)",
+          "Teaser II - Both Legs Extended (5 reps)",
+          "Teaser III - Arms and Legs Lower Together (4 reps)"
+        ]
+      },
+      {
+        "name": "Integration",
+        "instructions": "String the movements. No rest between exercises in this block.",
+        "movements": [
+          "Roll Up into Teaser (5 full cycles)",
+          "Teaser to Rolling Like a Ball (5 transitions)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_51",
+    "title": "Reformer Advanced Flow (Mat Simulation)",
+    "description": "Advanced reformer work translated to mat with bands. Long-spine, elephant, and short-spine mechanics recreated with resistance. Demanding and precise.",
+    "category": "Pilates",
+    "difficulty": "Advanced",
+    "estimatedTime": 50,
+    "tags": ["Pilates", "Advanced", "Reformer-Style", "Resistance Band", "Full Body"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Long-Spine Mechanics",
+        "instructions": "Maintain a flat, neutral spine throughout. No lumbar rounding until explicitly required.",
+        "movements": [
+          "Supine Long Spine Stretch with Band (8 reps)",
+          "Hamstring Press Series - Parallel (10 reps)",
+          "Hamstring Press Series - Turned Out (10 reps)",
+          "Arabesque with Band (8 each side)"
+        ]
+      },
+      {
+        "name": "Short Spine and Round Back",
+        "instructions": "Let the spine round deeply and deliberately. Control the decompression.",
+        "movements": [
+          "Short Spine Simulation (6 reps)",
+          "Stomach Massage Round Back with Band (10 reps)",
+          "Semi-Circle (6 reps)"
+        ]
+      },
+      {
+        "name": "Side-Lying Series",
+        "instructions": "Keep the waist lifted off the floor. No collapsing into the mat.",
+        "movements": [
+          "Side-Lying Kick Forward and Back (10 each side)",
+          "Side-Lying Bicycle (8 each side)",
+          "Side-Lying Banana (8 each side)"
+        ]
+      },
+      {
+        "name": "Standing Pilates",
+        "instructions": "Ground through all four corners of the foot. The floor is your feedback.",
+        "movements": [
+          "Standing Footwork (12 each position)",
+          "Tendon Stretch Simulation (10 reps)",
+          "Elephant Walk (20 steps)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_52",
+    "title": "Full Classical Sequence",
+    "description": "The complete classical Pilates mat order, performed at pace with full expression of every movement. One hour of intentional work from the floor to standing.",
+    "category": "Pilates",
+    "difficulty": "Advanced",
+    "estimatedTime": 60,
+    "tags": ["Pilates", "Advanced", "Classical", "Full Body", "No Equipment"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Supine Foundations",
+        "instructions": "The quality of your Hundred sets the tone for the whole session. Do not rush it.",
+        "movements": [
+          "The Hundred (100 beats)",
+          "Roll Up (6 reps)",
+          "Single Leg Circle (5 each direction, each side)",
+          "Rolling Like a Ball (8 reps)",
+          "Single Leg Stretch (10 each side)",
+          "Double Leg Stretch (8 reps)",
+          "Single Straight Leg Stretch (10 each side)",
+          "Double Straight Leg Lower/Lift (8 reps)",
+          "Criss Cross (10 each side)"
+        ]
+      },
+      {
+        "name": "Extension Spinal Series",
+        "instructions": "Spine Stretch is rest. Use it. Rocker demands full attention.",
+        "movements": [
+          "Spine Stretch Forward (6 reps)",
+          "Open Leg Rocker (8 reps)",
+          "Corkscrew (5 each side)",
+          "Saw (8 each side)"
+        ]
+      },
+      {
+        "name": "Prone Series",
+        "instructions": "Lift the powerhouse from the mat before raising any limb.",
+        "movements": [
+          "Swan Dive (5 reps)",
+          "Single Leg Kick (8 each side)",
+          "Double Leg Kick (5 each side)",
+          "Neck Pull (6 reps)"
+        ]
+      },
+      {
+        "name": "Inversion and Rotation",
+        "instructions": "Keep your breath moving through all inversion work.",
+        "movements": [
+          "Shoulder Bridge (8 reps)",
+          "Spine Twist (8 each side)",
+          "Jack Knife (5 reps)",
+          "Side Kick Series (10 each: forward/back, up/down, circle)"
+        ]
+      },
+      {
+        "name": "Advanced Finishers",
+        "instructions": "You have been building to these. Execute them with everything you have left.",
+        "movements": [
+          "Teaser I (5 reps)",
+          "Teaser II (4 reps)",
+          "Teaser III (3 reps)",
+          "Hip Circles (5 each direction)",
+          "Seal (8 reps)",
+          "Boomerang (5 reps)",
+          "Control Balance (4 each side)"
+        ]
+      },
+      {
+        "name": "Standing Close-Out",
+        "instructions": "Carry every principle from the mat into the vertical.",
+        "movements": [
+          "Standing Roll Down (5 reps)",
+          "Standing Balance (30s each side)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_53",
+    "title": "Strength and Stretch",
+    "description": "60 minutes targeting the strength-flexibility continuum. Loaded stretching, eccentric control, and deep tissue release. The session your body has been asking for.",
+    "category": "Pilates",
+    "difficulty": "Advanced",
+    "estimatedTime": 60,
+    "tags": ["Pilates", "Advanced", "Flexibility", "Strength", "Eccentric", "No Equipment"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Loaded Warm-Up",
+        "instructions": "Each movement should create a mild stretch under tension. That is the point.",
+        "movements": [
+          "Standing Roll Down with Hold (8 reps, 3s hold at bottom)",
+          "World's Greatest Stretch (5 each side)",
+          "Deep Squat with Thoracic Rotation (8 each side)"
+        ]
+      },
+      {
+        "name": "Hamstring and Hip Flexor",
+        "instructions": "Lengthen under load. Never relax the target muscle completely - maintain a gentle eccentric tension.",
+        "movements": [
+          "Prone Hamstring Lengthening (10 each side)",
+          "Supine Hip Flexor Extension (45s each side)",
+          "Standing Single Leg Romanian Hinge (8 each side)",
+          "Pigeon Pose with Arm Reach (60s each side)"
+        ]
+      },
+      {
+        "name": "Spinal Loading",
+        "instructions": "This is controlled weight bearing through the spine. Move slowly and breathe.",
+        "movements": [
+          "Loaded Cat-Cow with Pause (10 reps)",
+          "Sphinx into Cobra (8 reps)",
+          "Child's Pose to Swan (10 full cycles)",
+          "Side-Lying Banana with Reach (10 each side)"
+        ]
+      },
+      {
+        "name": "Shoulder and Thoracic",
+        "instructions": "Open the anterior shoulder capsule. No aggressive forcing - progressive load only.",
+        "movements": [
+          "Doorway Chest Stretch with Reach (45s each side)",
+          "Prone T-Raise (12 reps)",
+          "Prone Y-Raise (12 reps)",
+          "Thoracic Extension over Block (8 segments)"
+        ]
+      },
+      {
+        "name": "Integration Closing",
+        "instructions": "Bring the session to stillness. Hold the last position for as long as it feels productive.",
+        "movements": [
+          "Full Body Stretch Sequence (90s total)",
+          "Savasana (3 mins)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_54",
+    "title": "The Pilates Athlete",
+    "description": "Designed for strength athletes who want to move better. Olympic stability demands, rotational power, and the kind of body awareness that makes every other session more effective.",
+    "category": "Pilates",
+    "difficulty": "Advanced",
+    "estimatedTime": 60,
+    "tags": ["Pilates", "Advanced", "Athletic", "Stability", "Full Body", "No Equipment"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Joint Prep",
+        "instructions": "This is not a warmup. It is precise activation of the stabilisers that protect your shoulders, hips, and spine during loaded work.",
+        "movements": [
+          "Scapular Circles (10 each direction)",
+          "Shoulder CARs (5 each side - controlled articular rotations)",
+          "Hip CARs (5 each side)",
+          "Thoracic CARs (5 each side)",
+          "Ankle CARs (8 each side)"
+        ]
+      },
+      {
+        "name": "Unilateral Stability",
+        "instructions": "Single-leg and single-arm work exposes asymmetries and corrects them. Note which side is weaker. Address it.",
+        "movements": [
+          "Single-Leg Dead Bug (8 each side)",
+          "Single-Leg Bridge with Arm Reach (10 each side)",
+          "Side Plank with Leg Lift (8 each side)",
+          "Single-Leg Romanian Hinge (8 each side)"
+        ]
+      },
+      {
+        "name": "Overhead Stability",
+        "instructions": "The foundation for every snatch and jerk catch. The shoulder must move freely and stabilise powerfully.",
+        "movements": [
+          "Supine Shoulder Flexion with Band (12 reps)",
+          "Kneeling Overhead Reach (10 each side)",
+          "Half-Kneeling Press and Balance (8 each side)",
+          "Bear Crawl Hold (3 x 20s - scapular loading)"
+        ]
+      },
+      {
+        "name": "Rotational Power",
+        "instructions": "Decelerate as hard as you accelerate. The rotation is sport. The control is performance.",
+        "movements": [
+          "Pilates Saw with Resistance (10 each side)",
+          "Standing Thoracic Rotation with Hold (8 each side)",
+          "Kneeling Chop Pattern (10 each side)",
+          "Seated Rotation into Reach (10 each side)"
+        ]
+      },
+      {
+        "name": "Breath and Reset",
+        "instructions": "Box breathing. 4s in, 4s hold, 4s out, 4s hold. This is performance recovery.",
+        "movements": [
+          "Box Breathing (8 full cycles)",
+          "Progressive Muscle Relaxation (3 mins)"
+        ]
+      }
+    ]
   }
 ]

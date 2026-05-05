@@ -3,7 +3,8 @@ export type WorkoutCategory =
   | 'WOD'
   | 'Hyrox'
   | 'Conditioning'
-  | 'Mobility';
+  | 'Mobility'
+  | 'Pilates';
 
 /**
  * What the standalone workouts tab can record for a template.

@@ -218,4 +218,6 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
   p_34: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   p_35: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   p_36: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+
+  // Pilates p_37–p_54: DEFAULT_WORKOUT_LOG_SCHEMA (notes_only), like Mobility.
 };

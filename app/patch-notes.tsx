@@ -25,6 +25,7 @@ const PATCH_NOTES: PatchNote[] = [
       'Tidied up workouts filters and tags',
       'Created home screen welcome strip and improved program launcher',
       'Added tracking links for new features',
+      'Added 18 new pilates workouts',
     ],
   },
   {
