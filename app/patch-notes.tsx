@@ -20,7 +20,9 @@ const PATCH_NOTES: PatchNote[] = [
       'Added moving sessions support to the programs',
       'Imporved sliding calendar UI',
       'Moved start session button away from being a sticky header',
-      'Improve notes behaviour and reversed order'
+      'Improve notes behaviour and reversed order',
+      'Added a new disciplines section to the workouts screen',
+      'Tidied up workouts filters and tags'
     ],
   },
   {
