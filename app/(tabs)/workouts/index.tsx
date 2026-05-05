@@ -438,11 +438,18 @@ export default function WorkoutsScreen() {
                       <TouchableOpacity
                         style={styles.disciplineSection}
                         key={discipline.tag}
-                        onPress={() =>
+                        onPress={() => {
+                          posthog.capture(
+                            posthogEventsNames.workout.filtersApplied,
+                            {
+                              filter_type: 'discipline',
+                              filter_value: discipline.tag,
+                            }
+                          );
                           router.push(
                             `/workouts/tag/${encodeURIComponent(discipline.tag)}`
-                          )
-                        }
+                          );
+                        }}
                       >
                         <ImageBackground
                           source={discipline.image}
