@@ -438,6 +438,11 @@ export default function WorkoutsScreen() {
                       <TouchableOpacity
                         style={styles.disciplineSection}
                         key={discipline.tag}
+                        onPress={() =>
+                          router.push(
+                            `/workouts/tag/${encodeURIComponent(discipline.tag)}`
+                          )
+                        }
                       >
                         <ImageBackground
                           source={discipline.image}

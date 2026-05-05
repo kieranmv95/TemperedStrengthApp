@@ -1,0 +1,116 @@
+import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
+import { workoutDetailStyles as headerStyles } from '@/src/components/workouts/workoutDetailStyles';
+import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
+import { Colors, Spacing } from '@/src/constants/theme';
+import { allStandaloneWorkouts } from '@/src/data/workouts';
+import { useSubscription } from '@/src/hooks/use-subscription';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
+import type { SingleWorkout } from '@/src/types/workouts';
+import {
+  getFavoriteWorkouts,
+  toggleFavoriteWorkout,
+} from '@/src/utils/storage';
+import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { usePostHog } from 'posthog-react-native';
+import React, { useCallback, useMemo, useState } from 'react';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+function workoutHasTag(workout: SingleWorkout, tag: string): boolean {
+  return workout.tags.includes(tag);
+}
+
+export default function WorkoutsByTagScreen() {
+  const { isPro } = useSubscription();
+  const posthog = usePostHog();
+  const params = useLocalSearchParams<{ tag?: string }>();
+  const tag = typeof params.tag === 'string' ? params.tag : '';
+
+  const [favorites, setFavorites] = useState<string[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        const favs = await getFavoriteWorkouts();
+        setFavorites(favs);
+      })();
+    }, [])
+  );
+
+  const filteredWorkouts = useMemo(() => {
+    if (!tag) return [];
+    return allStandaloneWorkouts.filter((w) => workoutHasTag(w, tag));
+  }, [tag]);
+
+  const handleToggleFavorite = async (workoutId: string) => {
+    const newStatus = await toggleFavoriteWorkout(workoutId);
+    posthog.capture(posthogEventsNames.workout.favourite, {
+      workout_id: workoutId,
+      action: newStatus ? 'add' : 'remove',
+    });
+    if (newStatus) {
+      setFavorites([...favorites, workoutId]);
+    } else {
+      setFavorites(favorites.filter((id) => id !== workoutId));
+    }
+  };
+
+  const handleWorkoutPress = (workout: SingleWorkout) => {
+    router.push({
+      pathname: '/workouts/[id]',
+      params: { id: workout.id, view_source: `tag:${tag}` },
+    });
+  };
+
+  const handleLockedPress = () => {
+    router.push('/settings');
+  };
+
+  return (
+    <SafeAreaView style={headerStyles.container} edges={['top', 'left', 'right']}>
+      <View style={headerStyles.detailHeader}>
+        <TouchableOpacity
+          style={headerStyles.backButton}
+          onPress={() => router.back()}
+          accessibilityLabel="Back"
+        >
+          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
+        </TouchableOpacity>
+        <Text style={headerStyles.detailTitle} numberOfLines={1}>
+          {tag || 'Workouts'}
+        </Text>
+        <View style={headerStyles.headerRightSpacer} />
+      </View>
+
+      {filteredWorkouts.length === 0 ? (
+        <View style={headerStyles.emptyState}>
+          <Ionicons name="barbell" size={64} color={Colors.backgroundSubtle} />
+          <Text style={headerStyles.emptyTitle}>No Workouts Found</Text>
+          <Text style={headerStyles.emptyDescription}>
+            {tag ? 'No workouts match this discipline yet.' : 'Missing discipline tag.'}
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredWorkouts}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={[styles.listContent, { padding: Spacing.xxl, paddingTop: Spacing.xxl }]}
+          renderItem={({ item }) => (
+            <WorkoutCard
+              workout={item}
+              isFavorite={favorites.includes(item.id)}
+              isPro={isPro}
+              onToggleFavorite={handleToggleFavorite}
+              onPress={handleWorkoutPress}
+              onLockedPress={handleLockedPress}
+            />
+          )}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+    </SafeAreaView>
+  );
+}
+
