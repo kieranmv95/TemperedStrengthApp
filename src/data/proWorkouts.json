@@ -6,18 +6,12 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": [
-      "Heavy",
-      "Sled",
-      "Elite"
-    ],
+    "tags": ["Heavy", "Sled", "Elite"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "1km Jog, 10 Sled Pushes (Light), 20 Lunges"
-        ]
+        "movements": ["1km Jog, 10 Sled Pushes (Light), 20 Lunges"]
       },
       {
         "name": "5 Rounds",
@@ -37,25 +31,17 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "Snatch",
-      "Barbell",
-      "Speed"
-    ],
+    "tags": ["Snatch", "Barbell", "Speed"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "Burgener Warmup (Snatches with PVC pipe)"
-        ]
+        "movements": ["Burgener Warmup (Snatches with PVC pipe)"]
       },
       {
         "name": "EMOM 15",
         "instructions": "Use 60-70% of 1RM Snatch. Focus on vertical bar path.",
-        "movements": [
-          "1 Power Snatch + 1 Hang Snatch + 1 OHS"
-        ]
+        "movements": ["1 Power Snatch + 1 Hang Snatch + 1 OHS"]
       }
     ]
   },
@@ -66,27 +52,17 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 20,
-    "tags": [
-      "CrossFit",
-      "Row",
-      "Barbell",
-      "Sprint"
-    ],
+    "tags": ["CrossFit", "Row", "Barbell", "Sprint"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "500m Row, 15 Thrusters (Empty Bar)"
-        ]
+        "movements": ["500m Row, 15 Thrusters (Empty Bar)"]
       },
       {
         "name": "21-15-9",
         "instructions": "Go unbroken on the thrusters if possible. Sprint the 9 cal row.",
-        "movements": [
-          "Calories Row",
-          "Thrusters (43/30kg)"
-        ]
+        "movements": ["Calories Row", "Thrusters (43/30kg)"]
       }
     ]
   },
@@ -97,10 +73,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 40,
-    "tags": [
-      "Shoulders",
-      "Overhead"
-    ],
+    "tags": ["Shoulders", "Overhead"],
     "isPremium": true,
     "blocks": [
       {
@@ -112,9 +85,7 @@
       {
         "name": "5x5",
         "instructions": "Rest 3 mins between sets. Weight should be ~85% of 1RM.",
-        "movements": [
-          "Strict Press"
-        ]
+        "movements": ["Strict Press"]
       }
     ]
   },
@@ -125,24 +96,17 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": [
-      "Row",
-      "Endurance"
-    ],
+    "tags": ["Row", "Endurance"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "20 Cal Row (Slow), 10 Bird-Dogs"
-        ]
+        "movements": ["20 Cal Row (Slow), 10 Bird-Dogs"]
       },
       {
         "name": "Steady State",
         "instructions": "Target a pace 10-15 seconds slower than your 2k split pace.",
-        "movements": [
-          "4000m Row"
-        ]
+        "movements": ["4000m Row"]
       }
     ]
   },
@@ -153,25 +117,17 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": [
-      "Legs",
-      "Squat",
-      "Legs & Glutes"
-    ],
+    "tags": ["Legs", "Squat", "Legs & Glutes"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "3 Rounds: 10 Goblet Squats, 10 Glute Bridges"
-        ]
+        "movements": ["3 Rounds: 10 Goblet Squats, 10 Glute Bridges"]
       },
       {
         "name": "10x3",
         "instructions": "Perform 3 reps every 90 seconds. Weight should be 80% of 1RM.",
-        "movements": [
-          "Front Squat"
-        ]
+        "movements": ["Front Squat"]
       }
     ]
   },
@@ -182,19 +138,12 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 60,
-    "tags": [
-      "CrossFit",
-      "Hero WOD",
-      "Long",
-      "No Equipment"
-    ],
+    "tags": ["CrossFit", "Hero WOD", "Long", "No Equipment"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "800m Jog, 20 Air Squats, 10 Pushups"
-        ]
+        "movements": ["800m Jog, 20 Air Squats, 10 Pushups"]
       },
       {
         "name": "For Time (20lb Vest)",
@@ -216,24 +165,17 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 35,
-    "tags": [
-      "Running",
-      "Sandbag"
-    ],
+    "tags": ["Running", "Sandbag"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "5 mins joint prep, 200m light carry"
-        ]
+        "movements": ["5 mins joint prep, 200m light carry"]
       },
       {
         "name": "1600m Carry",
         "instructions": "Cover 1 mile as fast as possible. Switch carrying positions as needed.",
-        "movements": [
-          "1600m Sandbag Carry (20/30kg)"
-        ]
+        "movements": ["1600m Sandbag Carry (20/30kg)"]
       }
     ]
   },
@@ -244,26 +186,17 @@
     "category": "Mobility",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "Legs",
-      "Balance",
-      "No Equipment",
-      "Legs & Glutes"
-    ],
+    "tags": ["Legs", "Balance", "No Equipment", "Legs & Glutes"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "Ankle mobility (2m), 20 Air Squats"
-        ]
+        "movements": ["Ankle mobility (2m), 20 Air Squats"]
       },
       {
         "name": "EMOM 10",
         "instructions": "Perform 3-5 pistols per leg every minute. Rest remainder of minute.",
-        "movements": [
-          "Pistol Squat Progressions"
-        ]
+        "movements": ["Pistol Squat Progressions"]
       }
     ]
   },
@@ -274,24 +207,17 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 20,
-    "tags": [
-      "Skill",
-      "Jump Rope"
-    ],
+    "tags": ["Skill", "Jump Rope"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "Calf stretches, 50 Single Unders"
-        ]
+        "movements": ["Calf stretches, 50 Single Unders"]
       },
       {
         "name": "10 min EMOM",
         "instructions": "Accumulate 30-50 reps per minute. Focus on timing, not speed.",
-        "movements": [
-          "30-50 Double Unders"
-        ]
+        "movements": ["30-50 Double Unders"]
       }
     ]
   },
@@ -302,25 +228,17 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 15,
-    "tags": [
-      "CrossFit",
-      "Barbell",
-      "Power"
-    ],
+    "tags": ["CrossFit", "Barbell", "Power"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "Barbell Warmup: 10 Cleans, 10 Push Press"
-        ]
+        "movements": ["Barbell Warmup: 10 Cleans, 10 Push Press"]
       },
       {
         "name": "30 Reps",
         "instructions": "Weight: 61/43kg. Target is sub 5:00 for elite athletes.",
-        "movements": [
-          "Clean and Jerk"
-        ]
+        "movements": ["Clean and Jerk"]
       }
     ]
   },
@@ -331,27 +249,17 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 40,
-    "tags": [
-      "Row",
-      "Ski",
-      "Bike"
-    ],
+    "tags": ["Row", "Ski", "Bike"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 mins on each erg at low intensity"
-        ]
+        "movements": ["2 mins on each erg at low intensity"]
       },
       {
         "name": "For Time",
         "instructions": "Move quickly between machines. Do not stop moving.",
-        "movements": [
-          "2000m Row",
-          "2000m Ski",
-          "4000m Bike"
-        ]
+        "movements": ["2000m Row", "2000m Ski", "4000m Bike"]
       }
     ]
   },
@@ -362,25 +270,17 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 50,
-    "tags": [
-      "Squat",
-      "Pause",
-      "Legs & Glutes"
-    ],
+    "tags": ["Squat", "Pause", "Legs & Glutes"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "Hip openers, 2 sets of 10 squats (Empty bar)"
-        ]
+        "movements": ["Hip openers, 2 sets of 10 squats (Empty bar)"]
       },
       {
         "name": "6x2",
         "instructions": "Hold for 3 seconds in the bottom. Rest 3 mins between sets.",
-        "movements": [
-          "Back Squat"
-        ]
+        "movements": ["Back Squat"]
       }
     ]
   },
@@ -391,26 +291,17 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": [
-      "CrossFit",
-      "Explosive",
-      "Lungs"
-    ],
+    "tags": ["CrossFit", "Explosive", "Lungs"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "20 Step-ups, 10 Burpees"
-        ]
+        "movements": ["20 Step-ups, 10 Burpees"]
       },
       {
         "name": "50-40-30-20-10",
         "instructions": "Descending rep scheme. Rest only as needed to keep moving.",
-        "movements": [
-          "Burpee Box Jumps",
-          "Wall Balls"
-        ]
+        "movements": ["Burpee Box Jumps", "Wall Balls"]
       }
     ]
   },
@@ -421,25 +312,17 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 35,
-    "tags": [
-      "Snatch",
-      "Technique"
-    ],
+    "tags": ["Snatch", "Technique"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "PVC overhead squats, shoulder pass-throughs"
-        ]
+        "movements": ["PVC overhead squats, shoulder pass-throughs"]
       },
       {
         "name": "5x3",
         "instructions": "Moderate weight. Focus on the 'punch' under the bar.",
-        "movements": [
-          "Snatch Balance",
-          "Overhead Squat"
-        ]
+        "movements": ["Snatch Balance", "Overhead Squat"]
       }
     ]
   },
@@ -450,24 +333,17 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "Gymnastics",
-      "Skill"
-    ],
+    "tags": ["Gymnastics", "Skill"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "3 Rounds: 10 Ring Rows, 10 Ring Dips"
-        ]
+        "movements": ["3 Rounds: 10 Ring Rows, 10 Ring Dips"]
       },
       {
         "name": "EMOM 12",
         "instructions": "Perform 3-5 reps or the hardest progression you can master.",
-        "movements": [
-          "Muscle Ups"
-        ]
+        "movements": ["Muscle Ups"]
       }
     ]
   },
@@ -478,24 +354,17 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 35,
-    "tags": [
-      "Running",
-      "Aerobic"
-    ],
+    "tags": ["Running", "Aerobic"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "1km Jog, 2 x 100m Strides, Leg Swings"
-        ]
+        "movements": ["1km Jog, 2 x 100m Strides, Leg Swings"]
       },
       {
         "name": "Time Trial",
         "instructions": "Run on a flat course or track. Pacing is crucial in the first 2km.",
-        "movements": [
-          "5000m Run"
-        ]
+        "movements": ["5000m Run"]
       }
     ]
   },
@@ -506,25 +375,17 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "Dumbbell",
-      "Lungs"
-    ],
+    "tags": ["Dumbbell", "Lungs"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 Rounds: 10 DB Snatches, 5 Burpees"
-        ]
+        "movements": ["2 Rounds: 10 DB Snatches, 5 Burpees"]
       },
       {
         "name": "For Time",
         "instructions": "Descending ladder of Devil Press (10 to 1) and Box Step Ups (20 to 2).",
-        "movements": [
-          "Devil Press",
-          "Box Step Ups"
-        ]
+        "movements": ["Devil Press", "Box Step Ups"]
       }
     ]
   },
@@ -535,25 +396,17 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 45,
-    "tags": [
-      "Calisthenics",
-      "Heavy"
-    ],
+    "tags": ["Calisthenics", "Heavy"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 sets of bodyweight pullups and dips"
-        ]
+        "movements": ["2 sets of bodyweight pullups and dips"]
       },
       {
         "name": "5x5",
         "instructions": "Superset movements. Rest 2-3 mins between sets.",
-        "movements": [
-          "Weighted Pull-ups",
-          "Weighted Dips"
-        ]
+        "movements": ["Weighted Pull-ups", "Weighted Dips"]
       }
     ]
   },
@@ -564,17 +417,12 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 40,
-    "tags": [
-      "Hybrid",
-      "Finishers"
-    ],
+    "tags": ["Hybrid", "Finishers"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "500m Jog, 10 Burpees"
-        ]
+        "movements": ["500m Jog, 10 Burpees"]
       },
       {
         "name": "For Time",
@@ -596,12 +444,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 60,
-    "tags": [
-      "Chest",
-      "Triceps",
-      "Hypertrophy",
-      "Get Big"
-    ],
+    "tags": ["Chest", "Triceps", "Hypertrophy", "Get Big"],
     "isPremium": true,
     "blocks": [
       {
@@ -693,12 +536,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 60,
-    "tags": [
-      "Back",
-      "Lats",
-      "Hypertrophy",
-      "Get Big"
-    ],
+    "tags": ["Back", "Lats", "Hypertrophy", "Get Big"],
     "isPremium": true,
     "blocks": [
       {
@@ -784,13 +622,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 65,
-    "tags": [
-      "Legs",
-      "Quads",
-      "Hamstrings",
-      "Glutes",
-      "Legs & Glutes"
-    ],
+    "tags": ["Legs", "Quads", "Hamstrings", "Glutes", "Legs & Glutes"],
     "isPremium": true,
     "blocks": [
       {
@@ -881,12 +713,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": [
-      "Shoulders",
-      "Delts",
-      "Hypertrophy",
-      "Get Big"
-    ],
+    "tags": ["Shoulders", "Delts", "Hypertrophy", "Get Big"],
     "isPremium": true,
     "blocks": [
       {
@@ -978,13 +805,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": [
-      "Arms",
-      "Biceps",
-      "Triceps",
-      "Hypertrophy",
-      "Get Big"
-    ],
+    "tags": ["Arms", "Biceps", "Triceps", "Hypertrophy", "Get Big"],
     "isPremium": true,
     "blocks": [
       {
@@ -1114,7 +935,10 @@
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["10 mins progressive warmup", "Build to moderate heavy deadlift + squat clean"]
+        "movements": [
+          "10 mins progressive warmup",
+          "Build to moderate heavy deadlift + squat clean"
+        ]
       },
       {
         "name": "3 Rounds For Time",
@@ -1208,9 +1032,8 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 85,
-    "tags": ["Hyrox", "Simulation", "Run", "Stations"],
+    "tags": ["Hyrox", "Simulation", "Run", "Stations", "Partner"],
     "isPremium": true,
-    "partner": true,
     "blocks": [
       {
         "name": "Warmup",
@@ -1250,9 +1073,8 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 60,
-    "tags": ["Hyrox", "Sled", "Heavy", "Run"],
+    "tags": ["Hyrox", "Sled", "Heavy", "Run", "Partner"],
     "isPremium": true,
-    "partner": true,
     "blocks": [
       {
         "name": "Warmup",
@@ -1279,9 +1101,8 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": ["Hyrox", "Stations", "Intervals", "Elite"],
+    "tags": ["Hyrox", "Stations", "Intervals", "Elite", "Partner"],
     "isPremium": true,
-    "partner": true,
     "blocks": [
       {
         "name": "Warmup",
@@ -1315,11 +1136,7 @@
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "800m run",
-          "10 burpees, 10 air squats",
-          "500m easy row"
-        ]
+        "movements": ["800m run", "10 burpees, 10 air squats", "500m easy row"]
       },
       {
         "name": "For Time",
@@ -1341,15 +1158,48 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": ["Hyrox", "Transitions", "Intervals", "Stations"],
+    "tags": ["Hyrox", "Transitions", "Intervals", "Stations", "Partner"],
     "isPremium": true,
-    "partner": true,
     "blocks": [
-      { "name": "Warmup", "movements": ["10 mins easy jog + drills", "10 wall balls, 10 burpees"] },
+      {
+        "name": "Warmup",
+        "movements": ["10 mins easy jog + drills", "10 wall balls, 10 burpees"]
+      },
       {
         "name": "8 Rounds",
         "instructions": "Partner format: alternate rounds. Partner A completes one full round while Partner B rests, then swap next round. Keep transitions fast and form clean.",
         "movements": ["600m Run", "12 Wall Balls", "8 Burpees", "250m Row"]
+      }
+    ]
+  },
+  {
+    "id": "p_36",
+    "title": "Order 66",
+    "description": "A high-output Hyrox-style workout chipper, designed in homage to the iconic Star Wars films.",
+    "category": "Hyrox",
+    "difficulty": "Advanced",
+    "estimatedTime": 45,
+    "tags": ["Hyrox", "Chipper", "Partner"],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "Warmup",
+        "movements": [
+          "3 mins easy cardio of choice",
+          "10 wall balls, 10 burpees"
+        ]
+      },
+      {
+        "name": "8 Rounds",
+        "instructions": "Partner format: alternate as you please, one rests the other works.",
+        "movements": [
+          "66 cal row",
+          "66 wall balls",
+          "66 cal ski erg",
+          "66 burpees",
+          "66m sled push",
+          "66 box jumps"
+        ]
       }
     ]
   }

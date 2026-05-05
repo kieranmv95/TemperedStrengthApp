@@ -246,4 +246,29 @@ export const workoutsListStyles = StyleSheet.create({
     lineHeight: 20,
     textAlign: 'center',
   },
+  disciplineSection: {
+    height: 160,
+    width: 160,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    borderRadius: BorderRadius.xxl,
+  },
+  disciplineSectionTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayMd,
+    fontWeight: '800',
+    textAlign: 'center',
+  },
+  disciplineImage: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  disciplineGoldOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: Colors.accent,
+    opacity: 0.2,
+  },
+  disciplineImageStyle: {
+    borderRadius: BorderRadius.xxl,
+  },
 });

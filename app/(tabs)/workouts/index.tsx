@@ -26,6 +26,7 @@ import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
+  ImageBackground,
   ScrollView,
   Text,
   TextInput,
@@ -37,7 +38,29 @@ const NO_EQUIPMENT_TAG = 'No Equipment';
 const WOMENS_PICKS_TAG = "Women’s Picks";
 const LEGS_AND_GLUTES_TAG = 'Legs & Glutes';
 const GET_BIG_TAG = 'Get Big';
-const CROSSFIT_TAG = 'CrossFit';
+
+const disciplines = [
+  {
+    tag: 'CrossFit',
+    image: require('@/assets/images/disciplines/crossfit.png'),
+  },
+  {
+    tag: 'Hyrox',
+    image: require('@/assets/images/disciplines/hyrox.png'),
+  },
+  {
+    tag: 'Pilates',
+    image: require('@/assets/images/disciplines/pilates.png'),
+  },
+  {
+    tag: 'Partner',
+    image: require('@/assets/images/disciplines/partner.png'),
+  },
+  {
+    tag: 'No Equipment',
+    image: require('@/assets/images/disciplines/noequipment.png'),
+  },
+];
 
 function workoutHasTag(workout: SingleWorkout, tag: string): boolean {
   return workout.tags.includes(tag);
@@ -113,7 +136,6 @@ export default function WorkoutsScreen() {
   const [activeCategoryFilter, setActiveCategoryFilter] =
     useState<CategoryFilter>('All');
   const [noEquipmentOnly, setNoEquipmentOnly] = useState(false);
-  const [partnerOnly, setPartnerOnly] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [onboardingGender, setOnboardingGender] =
     useState<OnboardingGender | null>(null);
@@ -196,7 +218,6 @@ export default function WorkoutsScreen() {
     if (filter === 'All') {
       setActiveTimeFilter(null);
       setNoEquipmentOnly(false);
-      setPartnerOnly(false);
     }
   };
 
@@ -207,7 +228,6 @@ export default function WorkoutsScreen() {
       activeTimeFilter: TimeFilter;
       activeCategoryFilter: CategoryFilter;
       noEquipmentOnly: boolean;
-      partnerOnly: boolean;
     }>
   ): boolean {
     const effectiveSearchQuery = overrides?.searchQuery ?? searchQuery;
@@ -216,7 +236,6 @@ export default function WorkoutsScreen() {
       overrides?.activeCategoryFilter ?? activeCategoryFilter;
     const effectiveNoEquipmentOnly =
       overrides?.noEquipmentOnly ?? noEquipmentOnly;
-    const effectivePartnerOnly = overrides?.partnerOnly ?? partnerOnly;
 
     if (effectiveSearchQuery.trim()) {
       const query = effectiveSearchQuery.trim().toLowerCase();
@@ -236,8 +255,6 @@ export default function WorkoutsScreen() {
     ) {
       return false;
     }
-
-    if (effectivePartnerOnly && workout.partner !== true) return false;
 
     if (!matchesTimeFilter(workout, effectiveTimeFilter)) return false;
 
@@ -262,14 +279,6 @@ export default function WorkoutsScreen() {
 
   const getBigWorkouts = filteredWorkouts.filter((w) =>
     workoutHasTag(w, GET_BIG_TAG)
-  );
-
-  const crossfitCuratedWorkouts = filteredWorkouts.filter((w) =>
-    workoutHasTag(w, CROSSFIT_TAG)
-  );
-
-  const hyroxCuratedWorkouts = filteredWorkouts.filter(
-    (w) => w.category === 'Hyrox'
   );
 
   const showS1AndS2 = onboardingGender === 'female';
@@ -346,42 +355,6 @@ export default function WorkoutsScreen() {
                 />
               );
             })}
-
-            <Pill
-              onPress={() =>
-                setNoEquipmentOnly((prev) => {
-                  const next = !prev;
-                  captureFilter('no_equipment', next ? 'true' : 'false');
-                  return next;
-                })
-              }
-              isActive={noEquipmentOnly}
-              label="No equipment"
-              icon="home-outline"
-              count={
-                allStandaloneWorkouts.filter((w) =>
-                  matchesWorkout(w, { noEquipmentOnly: true })
-                ).length
-              }
-            />
-
-            <Pill
-              onPress={() =>
-                setPartnerOnly((prev) => {
-                  const next = !prev;
-                  captureFilter('partner', next ? 'true' : 'false');
-                  return next;
-                })
-              }
-              isActive={partnerOnly}
-              label="Partner"
-              icon="people-outline"
-              count={
-                allStandaloneWorkouts.filter((w) =>
-                  matchesWorkout(w, { partnerOnly: true })
-                ).length
-              }
-            />
           </ScrollView>
         </View>
 
@@ -447,57 +420,39 @@ export default function WorkoutsScreen() {
             contentContainerStyle={styles.listContent}
             ListHeaderComponent={
               <>
-                {crossfitCuratedWorkouts.length > 0 && (
-                  <View style={styles.curatedSection}>
-                    <View style={styles.curatedSectionHeader}>
-                      <Text style={styles.curatedSectionTitle}>CrossFit</Text>
-                      <Text style={styles.curatedSectionHelper}>
-                        Classic benchmarks and WODs.
-                      </Text>
-                    </View>
-                    <ScrollView
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      contentContainerStyle={styles.curatedScrollContent}
-                    >
-                      {crossfitCuratedWorkouts.map((workout) => (
-                        <CuratedWorkoutCard
-                          key={workout.id}
-                          workout={workout}
-                          isPro={isPro}
-                          onPress={handleWorkoutPress}
-                          onLockedPress={handleLockedPress}
-                        />
-                      ))}
-                    </ScrollView>
+                <View style={styles.curatedSection}>
+                  <View style={styles.curatedSectionHeader}>
+                    <Text style={styles.curatedSectionTitle}>
+                      Disciplines
+                    </Text>
+                    <Text style={styles.curatedSectionHelper}>
+                      get started with what you already know
+                    </Text>
                   </View>
-                )}
-
-                {hyroxCuratedWorkouts.length > 0 && (
-                  <View style={styles.curatedSection}>
-                    <View style={styles.curatedSectionHeader}>
-                      <Text style={styles.curatedSectionTitle}>Hyrox</Text>
-                      <Text style={styles.curatedSectionHelper}>
-                        Race-style prep sessions and tests.
-                      </Text>
-                    </View>
-                    <ScrollView
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      contentContainerStyle={styles.curatedScrollContent}
-                    >
-                      {hyroxCuratedWorkouts.map((workout) => (
-                        <CuratedWorkoutCard
-                          key={workout.id}
-                          workout={workout}
-                          isPro={isPro}
-                          onPress={handleWorkoutPress}
-                          onLockedPress={handleLockedPress}
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.curatedScrollContent}
+                  >
+                    {disciplines.map((discipline) => (
+                      <TouchableOpacity
+                        style={styles.disciplineSection}
+                        key={discipline.tag}
+                      >
+                        <ImageBackground
+                          source={discipline.image}
+                          style={styles.disciplineImage}
+                          imageStyle={styles.disciplineImageStyle}
                         />
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
+                        <View
+                          pointerEvents="none"
+                          style={styles.disciplineGoldOverlay}
+                        />
+                        <Text style={styles.disciplineSectionTitle}>{discipline.tag}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
 
                 {showS1AndS2 && womensPicksWorkouts.length > 0 && (
                   <View style={styles.curatedSection}>
