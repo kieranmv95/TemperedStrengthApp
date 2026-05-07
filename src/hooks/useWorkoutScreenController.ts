@@ -374,6 +374,18 @@ export function useWorkoutScreenController() {
         return;
       }
 
+      // Ensure refs are hydrated before computing any derived program state.
+      // State updates propagate refs via an effect, which may not run before we
+      // call `loadWorkoutForDay()` during initial app startup.
+      programRef.current = loadedProgram;
+      startDateRef.current = savedStartDate;
+      const effectivePattern =
+        savedWeekPattern && savedWeekPattern.length > 0 ? savedWeekPattern : null;
+      workoutWeekPatternRef.current = effectivePattern;
+      sessionShiftsRef.current = savedSessionShifts;
+      warmupModuleEnabledRef.current = savedWarmupEnabled;
+      cooldownModuleEnabledRef.current = savedCooldownEnabled;
+
       setProgram(loadedProgram);
       setStartDate(savedStartDate);
       setWorkoutWeekPattern(
@@ -388,11 +400,6 @@ export function useWorkoutScreenController() {
       const daysSinceStart = calculateDaysSinceStart(savedStartDate);
       setDayIndex(daysSinceStart);
       setSelectedDayIndex(daysSinceStart);
-
-      const effectivePattern =
-        savedWeekPattern && savedWeekPattern.length > 0
-          ? savedWeekPattern
-          : null;
 
       await loadWorkoutForDay(
         daysSinceStart,
