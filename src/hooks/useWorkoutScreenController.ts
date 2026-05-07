@@ -535,7 +535,7 @@ export function useWorkoutScreenController() {
     }
   }, [selectedDayIndex, program, posthog]);
 
-  const handleFinishSession = useCallback(async () => {
+  const finishSession = useCallback(async () => {
     if (!activeSession) return;
 
     try {
@@ -634,6 +634,21 @@ export function useWorkoutScreenController() {
     program,
     posthog,
   ]);
+
+  const handleFinishSession = useCallback(() => {
+    if (!activeSession) return;
+
+    Alert.alert('Finish workout?', 'Are you sure you want to finish?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Finish',
+        style: 'destructive',
+        onPress: () => {
+          void finishSession();
+        },
+      },
+    ]);
+  }, [activeSession, finishSession]);
 
   const handleRedoWorkout = useCallback(async () => {
     if (selectedDayIndex === null) return;
