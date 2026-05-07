@@ -14,6 +14,16 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.2.0',
+    dateLabel: 'Not yet released',
+    notes: [
+      'Added rainhill trials workouts',
+      'Added support for multi-difficulty workouts',
+      'fixed day switch bug',
+      'added prompt to finish workout'
+    ],
+  },
+  {
     version: '2.1.0',
     dateLabel: '05 May 2026',
     notes: [
@@ -27,6 +37,7 @@ const PATCH_NOTES: PatchNote[] = [
       'Added tracking links for new features',
       'Added 18 new pilates workouts',
     ],
+    articleUrl: 'https://temperedstrength.com/patch-notes/2.1.0',
   },
   {
     version: '2.0.2',
