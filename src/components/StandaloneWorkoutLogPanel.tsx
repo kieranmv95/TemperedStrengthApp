@@ -35,7 +35,35 @@ function newStandaloneLogId(): string {
   return `swl_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 12)}`;
 }
 
+type WorkoutBlock = {
+  movements: string[] | { name: string; value: string; note?: string }[];
+};
+
+type WorkoutScaledBlocks = {
+  scale: string;
+  blocks: WorkoutBlock[];
+};
+
+function isScaledBlocks(
+  blocks: SingleWorkout['blocks']
+): blocks is WorkoutScaledBlocks[] {
+  const first = blocks[0] as unknown;
+  return (
+    typeof first === 'object' &&
+    first !== null &&
+    'scale' in (first as Record<string, unknown>) &&
+    'blocks' in (first as Record<string, unknown>)
+  );
+}
+
 function exerciseCountForWorkout(workout: SingleWorkout): number {
+  if (isScaledBlocks(workout.blocks)) {
+    return workout.blocks.reduce(
+      (n, s) =>
+        n + s.blocks.reduce((inner, b) => inner + b.movements.length, 0),
+      0
+    );
+  }
   return workout.blocks.reduce((n, b) => n + b.movements.length, 0);
 }
 

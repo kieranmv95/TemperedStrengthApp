@@ -2,6 +2,7 @@ import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
 import { workoutDetailStyles as headerStyles } from '@/src/components/workouts/workoutDetailStyles';
 import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
 import { Colors, Spacing } from '@/src/constants/theme';
+import { disciplines } from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -15,7 +16,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Linking, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 function workoutHasTag(workout: SingleWorkout, tag: string): boolean {
@@ -27,6 +28,9 @@ export default function WorkoutsByTagScreen() {
   const posthog = usePostHog();
   const params = useLocalSearchParams<{ tag?: string }>();
   const tag = typeof params.tag === 'string' ? params.tag : '';
+
+  const discipline = disciplines.find((d) => d.tag === tag);
+  const showSponsorCard = Boolean(discipline?.isSponsor && discipline?.link);
 
   const [favorites, setFavorites] = useState<string[]>([]);
 
@@ -68,6 +72,17 @@ export default function WorkoutsByTagScreen() {
     router.push('/settings');
   };
 
+  const handleSponsorPress = useCallback(() => {
+    if (!discipline?.link) return;
+    posthog.capture(posthogEventsNames.home.linkPressed, {
+      link_id: `sponsor_tag:${tag || 'unknown'}`,
+      target: discipline.link,
+    });
+    Linking.openURL(discipline.link).catch((error) => {
+      console.error('Failed to open sponsor URL:', error);
+    });
+  }, [discipline?.link, posthog, tag]);
+
   return (
     <SafeAreaView style={headerStyles.container} edges={['top', 'left', 'right']}>
       <View style={headerStyles.detailHeader}>
@@ -79,7 +94,7 @@ export default function WorkoutsByTagScreen() {
           <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
         </TouchableOpacity>
         <Text style={headerStyles.detailTitle} numberOfLines={1}>
-          {tag || 'Workouts'}
+          {discipline?.title || 'Workouts'}
         </Text>
         <View style={headerStyles.headerRightSpacer} />
       </View>
@@ -97,6 +112,32 @@ export default function WorkoutsByTagScreen() {
           data={filteredWorkouts}
           keyExtractor={(item) => item.id}
           contentContainerStyle={[styles.listContent, { padding: Spacing.xxl, paddingTop: Spacing.xxl }]}
+          ListHeaderComponent={
+            showSponsorCard ? (
+              <TouchableOpacity
+                style={styles.sponsorCard}
+                onPress={handleSponsorPress}
+                activeOpacity={0.85}
+              >
+                {!!discipline?.logo && (
+                  <Image source={discipline.logo.source} style={[styles.sponsorLogo, { width: discipline.logo.width, height: discipline.logo.height }]} />
+                )}
+                {!!discipline?.description && (
+                  <Text style={styles.sponsorDescription}>
+                    {discipline.description}
+                  </Text>
+                )}
+                <View style={styles.sponsorLinkRow}>
+                  <Ionicons
+                    name="globe-outline"
+                    size={16}
+                    color={Colors.accent}
+                  />
+                  <Text style={styles.sponsorLinkText}>View event details</Text>
+                </View>
+              </TouchableOpacity>
+            ) : null
+          }
           renderItem={({ item }) => (
             <WorkoutCard
               workout={item}

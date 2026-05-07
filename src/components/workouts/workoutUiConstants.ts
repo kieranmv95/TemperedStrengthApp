@@ -8,10 +8,12 @@ export const CATEGORY_ICONS: Record<WorkoutCategory, string> = {
   Conditioning: 'heart',
   Mobility: 'body',
   Pilates: 'body-outline',
+  Rainhill: 'rainhill',
 };
 
 export const DIFFICULTY_COLORS: Record<string, string> = {
   Beginner: Colors.accent,
   Intermediate: Colors.accent,
   Advanced: Colors.accent,
+  'Multiple Difficulties': Colors.accent,
 };

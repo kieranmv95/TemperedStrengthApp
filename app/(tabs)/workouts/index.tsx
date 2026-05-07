@@ -9,6 +9,7 @@ import {
   type TimeFilter,
 } from '@/src/components/workouts/workoutsScreenConstants';
 import { Colors, Spacing } from '@/src/constants/theme';
+import { disciplines } from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -31,36 +32,13 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 
 const NO_EQUIPMENT_TAG = 'No Equipment';
 const WOMENS_PICKS_TAG = "Women’s Picks";
 const LEGS_AND_GLUTES_TAG = 'Legs & Glutes';
 const GET_BIG_TAG = 'Get Big';
-
-const disciplines = [
-  {
-    tag: 'CrossFit',
-    image: require('@/assets/images/disciplines/crossfit.png'),
-  },
-  {
-    tag: 'Hyrox',
-    image: require('@/assets/images/disciplines/hyrox.png'),
-  },
-  {
-    tag: 'Pilates',
-    image: require('@/assets/images/disciplines/pilates.png'),
-  },
-  {
-    tag: 'Partner',
-    image: require('@/assets/images/disciplines/partner.png'),
-  },
-  {
-    tag: 'No Equipment',
-    image: require('@/assets/images/disciplines/noequipment.png'),
-  },
-];
 
 function workoutHasTag(workout: SingleWorkout, tag: string): boolean {
   return workout.tags.includes(tag);
@@ -460,7 +438,9 @@ export default function WorkoutsScreen() {
                           pointerEvents="none"
                           style={styles.disciplineGoldOverlay}
                         />
-                        <Text style={styles.disciplineSectionTitle}>{discipline.tag}</Text>
+                        {discipline.showTitle && (
+                          <Text style={styles.disciplineSectionTitle}>{discipline.title}</Text>
+                        )}
                       </TouchableOpacity>
                     ))}
                   </ScrollView>

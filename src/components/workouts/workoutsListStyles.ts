@@ -127,6 +127,36 @@ export const workoutsListStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.borderDefault,
   },
+  sponsorCard: {
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxl,
+    marginBottom: Spacing.xl,
+    borderWidth: 1,
+    borderColor: Colors.accent,
+  },
+  sponsorTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayMd,
+    fontWeight: '800',
+    marginBottom: Spacing.sm,
+  },
+  sponsorDescription: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+    marginBottom: Spacing.lg,
+  },
+  sponsorLinkRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  sponsorLinkText: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+  },
   workoutCardLocked: {
     borderColor: Colors.accent,
     borderWidth: 2,
@@ -270,5 +300,22 @@ export const workoutsListStyles = StyleSheet.create({
   },
   disciplineImageStyle: {
     borderRadius: BorderRadius.xxl,
+  },
+  disciplineDescription: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+    textAlign: 'center',
+    marginBottom: Spacing.xl,
+  },
+  disciplineLink: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+  },
+  sponsorLogo: {
+    width: 18,
+    height: 18,
+    resizeMode: 'contain',
   },
 });

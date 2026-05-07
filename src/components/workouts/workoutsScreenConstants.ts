@@ -25,4 +25,5 @@ export const CATEGORY_FILTERS: CategoryFilter[] = [
   'Conditioning',
   'Mobility',
   'Pilates',
+  'Rainhill',
 ];
