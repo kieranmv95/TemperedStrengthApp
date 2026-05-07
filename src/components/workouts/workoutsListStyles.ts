@@ -318,4 +318,18 @@ export const workoutsListStyles = StyleSheet.create({
     height: 18,
     resizeMode: 'contain',
   },
+  rainhillFooter: {
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxl,
+    marginBottom: Spacing.xl,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+  },
+  rainhillFooterText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+    textAlign: 'center',
+  },
 });

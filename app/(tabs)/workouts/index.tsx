@@ -268,7 +268,7 @@ export default function WorkoutsScreen() {
   return (
     <StandardLayout
       title="Workouts"
-      subtitle="Log your and track your progress"
+      subtitle="Log your workouts and track your progress."
       disableScroll
     >
       <StandardLayout.AdvancedFilters>
