@@ -218,6 +218,18 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
   p_34: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   p_35: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   p_36: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  rh_02: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  rh_03: {
+    kind: 'notes_only',
+    placeholder:
+      'Block 1 time / Block 2 time / Block 3 time. Log "cap" if you hit the timecap on any block.',
+  },
+  rh_04: {
+    kind: 'amrap',
+    timeCapMinutes: 8,
+    roundsLabel: 'Rounds',
+    extraRepsLabel: 'Extra reps',
+  },
 
   // Pilates p_37–p_54: DEFAULT_WORKOUT_LOG_SCHEMA (notes_only), like Mobility.
 };

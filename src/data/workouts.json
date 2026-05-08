@@ -3918,5 +3918,245 @@
         ]
       }
     ]
+  },
+  {
+    "id": "rh_02",
+    "title": "Double Trouble",
+    "description": "A descending chipper built around overhead endurance and rope skills. Opens and closes with double unders. The middle third is where it breaks people.",
+    "category": "Rainhill",
+    "difficulty": "Multiple Difficulties",
+    "estimatedTime": 11,
+    "tags": [
+      "Rainhill",
+      "Chipper",
+      "For Time",
+      "Dumbbells",
+      "Gymnastics",
+      "Jump Rope"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "scale": "ROCKET",
+        "blocks": [
+          {
+            "name": "For Time (11 min cap)",
+            "instructions": "Complete all movements in order. Score = finish time. If you hit the timecap, score = 11:00.",
+            "movements": [
+              "75 Double Unders",
+              "30 Handstand Pushups",
+              "30 Cal Row",
+              "30 Double Dumbbell Thrusters (22.5kg/15kg)",
+              "20 Handstand Pushups",
+              "20 Cal Row",
+              "20 Double Dumbbell Thrusters (22.5kg/15kg)",
+              "10 Handstand Pushups",
+              "10 Cal Row",
+              "10 Double Dumbbell Thrusters (22.5kg/15kg)",
+              "75 Double Unders"
+            ]
+          }
+        ]
+      },
+      {
+        "scale": "KENNEDY",
+        "blocks": [
+          {
+            "name": "For Time (11 min cap)",
+            "instructions": "Complete all movements in order. Score = finish time. If you hit the timecap, score = 11:00.",
+            "movements": [
+              "50 Double Unders",
+              "10 Wall Walks",
+              "30 Cal Row",
+              "20 Double Dumbbell Thrusters (22.5kg/15kg)",
+              "10 Wall Walks",
+              "20 Cal Row",
+              "15 Double Dumbbell Thrusters (22.5kg/15kg)",
+              "10 Handstand Pushups",
+              "10 Cal Row",
+              "10 Double Dumbbell Thrusters (22.5kg/15kg)",
+              "50 Double Unders"
+            ]
+          }
+        ]
+      },
+      {
+        "scale": "WOOD",
+        "blocks": [
+          {
+            "name": "For Time (11 min cap)",
+            "instructions": "Complete all movements in order. Score = finish time. If you hit the timecap, score = 11:00.",
+            "movements": [
+              "30 Double Unders / 60 Single Unders",
+              "5 Wall Walks",
+              "30 Cal Row",
+              "20 Double Dumbbell Thrusters (15kg/10kg)",
+              "5 Wall Walks",
+              "20 Cal Row",
+              "15 Double Dumbbell Thrusters (15kg/10kg)",
+              "5 Wall Walks",
+              "10 Cal Row",
+              "10 Dumbbell Thrusters (15kg/10kg)",
+              "30 Double Unders / 60 Single Unders"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rh_03",
+    "title": "Seeding: The Gauntlet",
+    "description": "Three sequential chippers, each with its own timecap. Descending reps, ascending difficulty. Note your finish time for each block separately.",
+    "category": "Rainhill",
+    "difficulty": "Advanced",
+    "estimatedTime": 15,
+    "tags": [
+      "Rainhill",
+      "Chipper",
+      "For Time",
+      "Gymnastics",
+      "Kettlebell",
+      "Wall Ball"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "name": "Block 1 - 6 Min Cap",
+        "instructions": "Complete all reps in order for time. Score your finish time for this block.",
+        "movements": [
+          "21 Wall Balls (9kg/7kg)",
+          "21 Kettlebell Swings (20kg/12kg)",
+          "18 Wall Balls (9kg/7kg)",
+          "18 Kettlebell Swings (20kg/12kg)",
+          "15 Wall Balls (9kg/7kg)",
+          "15 Kettlebell Swings (20kg/12kg)"
+        ]
+      },
+      {
+        "name": "Block 2 - 5 Min Cap",
+        "instructions": "Complete all reps in order for time. Score your finish time for this block. Note your time at the 9 Box Jumps if you do not finish.",
+        "movements": [
+          "15 Box Jumps (24\"/20\")",
+          "15 Pull Ups",
+          "12 Box Jumps (24\"/20\")",
+          "12 Pull Ups",
+          "9 Box Jumps (24\"/20\") - note time here if needed",
+          "9 Chest to Bar Pull Ups"
+        ]
+      },
+      {
+        "name": "Block 3 - 4 Min Cap",
+        "instructions": "Complete all reps in order for time. Score your finish time for this block. Note your time at the 9 Burpee Box Jump Overs if you do not finish.",
+        "movements": [
+          "12 Burpee Box Jump Overs (30\"/24\")",
+          "12 Chest to Bar Pull Ups",
+          "9 Burpee Box Jump Overs (30\"/24\") - note time here if needed",
+          "9 Bar Muscle Ups",
+          "6 Burpee Box Jump Overs (30\"/24\")",
+          "6 Bar Muscle Ups"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rh_04",
+    "title": "The Ladder Carry",
+    "description": "An ascending AMRAP. Distance and reps climb every round. Kettlebell cycling and grip are the limiters - pace the carries early.",
+    "category": "Rainhill",
+    "difficulty": "Multiple Difficulties",
+    "estimatedTime": 8,
+    "tags": [
+      "Rainhill",
+      "AMRAP",
+      "Kettlebell",
+      "Carry",
+      "Lunges",
+      "Gymnastics"
+    ],
+    "isPremium": false,
+    "blocks": [
+      {
+        "scale": "ROCKET",
+        "blocks": [
+          {
+            "name": "8 Min AMRAP",
+            "instructions": "Complete each round in order. Every round, add 2 reps to the shuttle distance and 2 reps to the Toes to Bar. Kettlebells: 24kg/16kg. Toes to Bar start at 12 reps. Score = rounds + reps.",
+            "movements": [
+              "2x8m Shuttle Runs",
+              "2x8m Double Kettlebell Farmers Carry (24kg/16kg)",
+              "2x8m Double KB Front Rack Alternating Forward Lunges (24kg/16kg)",
+              "12 Toes to Bar",
+              {
+                "type": "divider",
+                "note": "add 2 reps to distance and Toes to Bar each round"
+              },
+              "4x8m Shuttle Runs",
+              "4x8m Double Kettlebell Farmers Carry (24kg/16kg)",
+              "4x8m Double KB Front Rack Alternating Forward Lunges (24kg/16kg)",
+              "14 Toes to Bar",
+              {
+                "type": "divider",
+                "note": "continue adding reps until time is up"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "scale": "KENNEDY",
+        "blocks": [
+          {
+            "name": "8 Min AMRAP",
+            "instructions": "Complete each round in order. Every round, add 2 reps to the shuttle distance and 2 reps to the Toes to Bar. Kettlebells: 20kg/12kg. Toes to Bar start at 8 reps. Score = rounds + reps.",
+            "movements": [
+              "2x8m Shuttle Runs",
+              "2x8m Double Kettlebell Farmers Carry (20kg/12kg)",
+              "2x8m Double KB Front Rack Alternating Forward Lunges (20kg/12kg)",
+              "8 Toes to Bar",
+              {
+                "type": "divider",
+                "note": "add 2 reps to distance and Toes to Bar each round"
+              },
+              "4x8m Shuttle Runs",
+              "4x8m Double Kettlebell Farmers Carry (20kg/12kg)",
+              "4x8m Double KB Front Rack Alternating Forward Lunges (20kg/12kg)",
+              "10 Toes to Bar",
+              {
+                "type": "divider",
+                "note": "continue adding reps until time is up"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "scale": "WOOD",
+        "blocks": [
+          {
+            "name": "8 Min AMRAP",
+            "instructions": "Complete each round in order. Every round, add 2 reps to the shuttle distance and 2 reps to the Hanging Leg Raises. Kettlebells: 16kg/8kg. Hanging Leg Raises start at 8 reps. Score = rounds + reps.",
+            "movements": [
+              "2x8m Shuttle Runs",
+              "2x8m Double Kettlebell Farmers Carry (16kg/8kg)",
+              "2x8m Double KB Front Rack Alternating Forward Lunges (16kg/8kg)",
+              "8 Hanging Leg Raises",
+              {
+                "type": "divider",
+                "note": "Add 2 reps to distance and Hanging Leg Raises each round"
+              },
+              "4x8m Shuttle Runs",
+              "4x8m Double Kettlebell Farmers Carry (16kg/8kg)",
+              "4x8m Double KB Front Rack Alternating Forward Lunges (16kg/8kg)",
+              "10 Hanging Leg Raises",
+              {
+                "type": "divider",
+                "note": "continue adding reps until time is up"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

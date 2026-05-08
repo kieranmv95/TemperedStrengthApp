@@ -230,4 +230,13 @@ export const workoutDetailStyles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: Spacing.xl,
   },
+  divider: {
+    marginVertical: Spacing.md,
+  },
+  dividerText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    fontStyle: 'italic',
+    marginLeft: Spacing.xxl,
+  },
 });

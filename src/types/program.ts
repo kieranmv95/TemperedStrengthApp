@@ -19,6 +19,7 @@ export type Exercise = {
 };
 
 export type WorkoutMovement = {
+  type?: 'divider';
   /**
    * Stable within the workout for UI keys.
    * Prefer simple ids like "a1", "m3", etc.

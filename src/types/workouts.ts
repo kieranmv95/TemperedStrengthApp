@@ -61,14 +61,14 @@ export type SingleWorkout = {
     | {
         name: string;
         instructions?: string;
-        movements: string[] | DetailedMovement[];
+        movements: string[] | DetailedMovement[] | Divider[];
       }[]
     | {
         scale: string;
         blocks: {
           name: string;
           instructions?: string;
-          movements: string[] | DetailedMovement[];
+          movements: string[] | DetailedMovement[] | Divider[];
         }[];
       }[];
 };
@@ -76,5 +76,10 @@ export type SingleWorkout = {
 export type DetailedMovement = {
   name: string;
   value: string;
+  note?: string;
+};
+
+export type Divider = {
+  type: 'divider';
   note?: string;
 };

@@ -1,7 +1,7 @@
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
 import { Colors } from '@/src/constants/theme';
 import type { OnboardingGender } from '@/src/types/onboarding';
-import type { SingleWorkout } from '@/src/types/workouts';
+import type { Divider, DetailedMovement, SingleWorkout } from '@/src/types/workouts';
 import { getOnboardingProfile } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -15,26 +15,39 @@ type WorkoutDetailScrollContentProps = {
   workout: SingleWorkout;
 };
 
-type WorkoutBlock = {
+type WorkoutFlatBlock = {
   name: string;
   instructions?: string;
-  movements: string[] | { name: string; value: string; note?: string }[];
+  movements: string[] | DetailedMovement[] | Divider[];
 };
 
-type WorkoutScaledBlocks = {
+type WorkoutScaledBlockGroup = {
   scale: string;
-  blocks: WorkoutBlock[];
+  blocks: WorkoutFlatBlock[];
 };
 
 function isScaledBlocks(
   blocks: SingleWorkout['blocks']
-): blocks is WorkoutScaledBlocks[] {
+): blocks is WorkoutScaledBlockGroup[] {
+  if (blocks.length === 0) return false;
   const first = blocks[0] as unknown;
+  if (typeof first !== 'object' || first === null) return false;
+  return 'scale' in (first as Record<string, unknown>);
+}
+
+function movementToRowText(movement: string | DetailedMovement): string {
+  if (typeof movement === 'string') return movement;
+  return `${movement.name}: ${movement.value}${
+    movement.note ? ` (${movement.note})` : ''
+  }`;
+}
+
+function isDivider(movement: unknown): movement is Divider {
   return (
-    typeof first === 'object' &&
-    first !== null &&
-    'scale' in (first as Record<string, unknown>) &&
-    'blocks' in (first as Record<string, unknown>)
+    typeof movement === 'object' &&
+    movement !== null &&
+    'type' in movement &&
+    (movement as Divider).type === 'divider'
   );
 }
 
@@ -177,11 +190,17 @@ export function WorkoutDetailScrollContent({
               )}
               <View style={styles.movementsList}>
                 {block.movements.map((movement, movementIndex) => {
-                  const movementText =
-                    typeof movement === 'string'
-                      ? movement
-                      : `${movement.name}: ${movement.value}${movement.note ? ` (${movement.note})` : ''
-                      }`;
+                  if (isDivider(movement)) {
+                    return (
+                      <View key={movementIndex} style={styles.divider}>
+                        <Text style={styles.dividerText}>{movement.note}</Text>
+                      </View>
+                    );
+                  }
+
+                  const movementText = movementToRowText(
+                    movement as string | DetailedMovement
+                  );
                   return (
                     <View key={movementIndex} style={styles.movementItem}>
                       <Text style={styles.movementBullet}>•</Text>
@@ -202,11 +221,17 @@ export function WorkoutDetailScrollContent({
             )}
             <View style={styles.movementsList}>
               {block.movements.map((movement, movementIndex) => {
-                const movementText =
-                  typeof movement === 'string'
-                    ? movement
-                    : `${movement.name}: ${movement.value}${movement.note ? ` (${movement.note})` : ''
-                    }`;
+                if (isDivider(movement)) {
+                  return (
+                    <View key={movementIndex} style={styles.divider}>
+                      <Text style={styles.dividerText}>{movement.note}</Text>
+                    </View>
+                  );
+                }
+
+                const movementText = movementToRowText(
+                  movement as string | DetailedMovement
+                );
                 return (
                   <View key={movementIndex} style={styles.movementItem}>
                     <Text style={styles.movementBullet}>•</Text>
