@@ -14,8 +14,16 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.2.1',
+    dateLabel: '11 May 2026',
+    notes: [
+      'Added a suite of rainhill trials workouts'
+    ],
+    articleUrl: 'https://temperedstrength.com/patch-notes/2.2.1',
+  },
+  {
     version: '2.2.0',
-    dateLabel: 'Not yet released',
+    dateLabel: '07 May 2026',
     notes: [
       'Added rainhill trials workouts',
       'Added support for multi-difficulty workouts',
