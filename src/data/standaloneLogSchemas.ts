@@ -230,6 +230,42 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
     roundsLabel: 'Rounds',
     extraRepsLabel: 'Extra reps',
   },
-
+  rh_05: {
+    kind: 'notes_only',
+    placeholder:
+      'Score 1: 2min row (metres) / Score 2: chipper time or "cap" / Score 3: 1min row (metres)',
+  },
+  rh_06: {
+    kind: 'amrap',
+    timeCapMinutes: 10,
+    roundsLabel: 'Rounds',
+    extraRepsLabel: 'Extra reps',
+  },
+  rh_07: {
+    kind: 'notes_only',
+    placeholder:
+      'Score 1: heaviest complex (kg) / Score 2: Part 2 finish time or "cap"',
+  },
+  rh_08: {
+    kind: 'amrap',
+    timeCapMinutes: 7,
+    roundsLabel: 'Rounds',
+    extraRepsLabel: 'Extra reps',
+  },
+  rh_09: {
+    kind: 'duration',
+    label: 'Finish time',
+    lowerIsBetter: true,
+  },
+  rh_10: {
+    kind: 'notes_only',
+    placeholder:
+      'Score 1: chipper finish time or "cap" / Score 2: metres rowed',
+  },
+  rh_11: {
+    kind: 'notes_only',
+    placeholder:
+      'Score 1: first 2min row (metres) / Score 2: AMRAP rounds + reps / Score 3: second 2min row (metres)',
+  },
   // Pilates p_37–p_54: DEFAULT_WORKOUT_LOG_SCHEMA (notes_only), like Mobility.
 };

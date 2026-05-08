@@ -28,7 +28,7 @@ export const disciplines: Discipline[] = [
     },
     image: require('@/assets/images/disciplines/rainhill.png'),
     description:
-      "Get a feel for what a rainhill event is like by trying some of their past workouts. Don't forget to visit their website and get signed up for future events.",
+      "Get a feel for what a rainhill event is like by trying some of their past workouts. Don't forget to visit their website and get signed up for future events. Note that all workout weights are in kg, not lbs as it is a european event.",
     link: 'https://therainhilltrials.myshopify.com/',
   },
   {
