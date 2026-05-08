@@ -34,6 +34,8 @@ type WorkoutScreenBodyProps = {
   onViewAllPrograms: () => void | Promise<void>;
   currentWorkout: Workout | null;
   showIntensity?: boolean;
+  onMoveSession?: () => void;
+  onStartSession?: () => void;
   slots: WorkoutSlot[];
   swapRefreshCounter: number;
   completedSession: CompletedSession | null;
@@ -65,6 +67,8 @@ export function WorkoutScreenBody({
   onViewAllPrograms,
   currentWorkout,
   showIntensity = true,
+  onMoveSession,
+  onStartSession,
   slots,
   swapRefreshCounter,
   completedSession,
@@ -131,6 +135,51 @@ export function WorkoutScreenBody({
                 <Text style={styles.description}>
                   {currentWorkout.description}
                 </Text>
+              )}
+
+              {(onMoveSession || onStartSession) && (
+                <View style={styles.sessionCtaRow}>
+                  {onMoveSession && (
+                    <TouchableOpacity
+                      style={[
+                        styles.startSessionButton,
+                        styles.sessionCtaHalf,
+                      ]}
+                      onPress={onMoveSession}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={styles.startSessionButtonText}
+                        numberOfLines={1}
+                        adjustsFontSizeToFit
+                        minimumFontScale={0.8}
+                      >
+                        Move Session
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+
+                  {onStartSession && (
+                    <TouchableOpacity
+                      style={[styles.startSessionButton, styles.sessionCtaHalf]}
+                      onPress={onStartSession}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={styles.startSessionButtonText}
+                        numberOfLines={1}
+                        adjustsFontSizeToFit
+                        minimumFontScale={0.8}
+                      >
+                        Start Session
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+
+                  {onMoveSession && !onStartSession && (
+                    <View style={styles.sessionCtaHalf} />
+                  )}
+                </View>
               )}
             </View>
           </View>
@@ -282,47 +331,56 @@ export function WorkoutScreenBody({
             </View>
           </TouchableOpacity>
           {isNotesExpanded && (
-            <TextInput
-              ref={notesInputRef}
-              style={styles.notesInput}
-              value={notes}
-              onChangeText={handleNotesChange}
-              onFocus={handleNotesFocus}
-              onBlur={handleNotesBlur}
-              placeholder="Add notes for this workout..."
-              placeholderTextColor={Colors.textPlaceholder}
-              multiline
-              textAlignVertical="top"
-            />
-          )}
-        </View>
-
-        <View style={styles.notesActionsContainer}>
-          {onOpenCopyWorkoutNotesModal && selectedDayIndex !== null && (
-            <TouchableOpacity
-              style={styles.notesAction}
-              onPress={onOpenCopyWorkoutNotesModal}
-              activeOpacity={0.7}
-              accessibilityRole="button"
-              accessibilityLabel="Copy notes from another workout"
-            >
-              <Text style={styles.notesActionText}>
-                Copy notes from another workout
-              </Text>
-            </TouchableOpacity>
+            <>
+              <TextInput
+                ref={notesInputRef}
+                style={styles.notesInput}
+                value={notes}
+                onChangeText={handleNotesChange}
+                onFocus={handleNotesFocus}
+                onBlur={handleNotesBlur}
+                placeholder="Add notes for this workout..."
+                placeholderTextColor={Colors.textPlaceholder}
+                multiline
+                textAlignVertical="top"
+              />
+            </>
           )}
 
-          {currentWorkout.format !== 'v2' && (
-            <TouchableOpacity
-              style={styles.notesAction}
-              onPress={onExportWorkoutText}
-              activeOpacity={0.7}
-              accessibilityRole="button"
-              accessibilityLabel="Export workout as text"
-            >
-              <Text style={styles.notesActionText}>Export workout as text</Text>
-            </TouchableOpacity>
-          )}
+          {(onOpenCopyWorkoutNotesModal && selectedDayIndex !== null) ||
+          currentWorkout.format !== 'v2' ? (
+            <>
+              <View style={styles.notesActionsContainer}>
+                {onOpenCopyWorkoutNotesModal && selectedDayIndex !== null && (
+                  <TouchableOpacity
+                    style={styles.notesAction}
+                    onPress={onOpenCopyWorkoutNotesModal}
+                    activeOpacity={0.7}
+                    accessibilityRole="button"
+                    accessibilityLabel="Copy notes from another workout"
+                  >
+                    <Text style={styles.notesActionText}>
+                      Copy notes from another workout
+                    </Text>
+                  </TouchableOpacity>
+                )}
+
+                {currentWorkout.format !== 'v2' && (
+                  <TouchableOpacity
+                    style={styles.notesAction}
+                    onPress={onExportWorkoutText}
+                    activeOpacity={0.7}
+                    accessibilityRole="button"
+                    accessibilityLabel="Export workout as text"
+                  >
+                    <Text style={styles.notesActionText}>
+                      Export workout as text
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </>
+          ) : null}
         </View>
 
       </ScrollView>

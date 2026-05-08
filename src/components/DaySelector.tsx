@@ -2,11 +2,12 @@ import {
   ITEM_WIDTH,
   SCROLL_PADDING_H,
 } from '@/src/components/daySelectorConstants';
-import { daySelectorStyles as styles } from '@/src/components/daySelectorStyles';
 import { DaySelectorDayChip } from '@/src/components/DaySelectorDayChip';
+import { daySelectorStyles as styles } from '@/src/components/daySelectorStyles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Dimensions,
+  LayoutChangeEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
   ScrollView,
@@ -31,6 +32,9 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   const scrollViewRef = useRef<ScrollView>(null);
   const lastStartDateRef = useRef<string>(startDate);
   const [isTodayVisible, setIsTodayVisible] = useState(true);
+  const chipLayoutsRef = useRef<Map<number, { x: number; width: number }>>(
+    new Map()
+  );
 
   const start = new Date(startDate);
   start.setHours(0, 0, 0, 0);
@@ -61,28 +65,14 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
     const date = new Date(start);
     date.setDate(date.getDate() + dayIndex);
     const day = date.getDate();
-
-    const monthNames = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    const month = monthNames[date.getMonth()];
+    const weekdayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const weekday = weekdayLabels[date.getDay()] ?? '';
 
     const suffix = ['th', 'st', 'nd', 'rd'][
       day % 10 > 3 || Math.floor((day % 100) / 10) === 1 ? 0 : day % 10
     ];
 
-    return `${month} ${day}${suffix}`;
+    return `${weekday} ${day}${suffix}`;
   };
 
   const isToday = (dayIndex: number): boolean => {
@@ -104,21 +94,48 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   const hasScrolledInitially = useRef(false);
   const screenWidth = Dimensions.get('window').width;
 
+  const chipCenterX = useCallback((dayIndex: number): number | null => {
+    const layout = chipLayoutsRef.current.get(dayIndex);
+    if (!layout) return null;
+    return layout.x + layout.width / 2;
+  }, []);
+
+  const scrollToDayCentered = useCallback(
+    (dayIndex: number, animated: boolean) => {
+      const centerX = chipCenterX(dayIndex);
+      if (centerX === null) return false;
+      const x = Math.max(0, centerX - screenWidth / 2);
+      scrollViewRef.current?.scrollTo({ x, animated });
+      return true;
+    },
+    [chipCenterX, screenWidth]
+  );
+
   const handleScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       if (!isTodayInRange) return;
 
       const scrollX = event.nativeEvent.contentOffset.x;
-      const todayArrayIndex = todayDayIndex - minDayIndex;
-      const todayPosition = todayArrayIndex * ITEM_WIDTH + SCROLL_PADDING_H;
+      const measuredCenterX = chipCenterX(todayDayIndex);
+      const fallbackCenterX =
+        (todayDayIndex - minDayIndex) * ITEM_WIDTH +
+        SCROLL_PADDING_H +
+        ITEM_WIDTH / 2;
+      const todayCenterX = measuredCenterX ?? fallbackCenterX;
 
       const isVisible =
-        todayPosition >= scrollX - ITEM_WIDTH &&
-        todayPosition <= scrollX + screenWidth + ITEM_WIDTH;
+        todayCenterX >= scrollX - ITEM_WIDTH &&
+        todayCenterX <= scrollX + screenWidth + ITEM_WIDTH;
 
       setIsTodayVisible(isVisible);
     },
-    [todayDayIndex, minDayIndex, isTodayInRange, screenWidth]
+    [
+      todayDayIndex,
+      minDayIndex,
+      isTodayInRange,
+      screenWidth,
+      chipCenterX,
+    ]
   );
 
   const handleJumpToToday = useCallback(() => {
@@ -126,20 +143,29 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
 
     onDaySelect(todayDayIndex);
 
-    const todayArrayIndex = todayDayIndex - minDayIndex;
-    const scrollX =
-      todayArrayIndex * ITEM_WIDTH -
-      screenWidth / 2 +
-      ITEM_WIDTH / 2 +
-      SCROLL_PADDING_H;
+    if (!scrollToDayCentered(todayDayIndex, true)) {
+      const todayArrayIndex = todayDayIndex - minDayIndex;
+      const scrollX =
+        todayArrayIndex * ITEM_WIDTH -
+        screenWidth / 2 +
+        ITEM_WIDTH / 2 +
+        SCROLL_PADDING_H;
 
-    scrollViewRef.current?.scrollTo({
-      x: Math.max(0, scrollX),
-      animated: true,
-    });
+      scrollViewRef.current?.scrollTo({
+        x: Math.max(0, scrollX),
+        animated: true,
+      });
+    }
 
     setIsTodayVisible(true);
-  }, [todayDayIndex, minDayIndex, screenWidth, onDaySelect, isTodayInRange]);
+  }, [
+    todayDayIndex,
+    minDayIndex,
+    screenWidth,
+    onDaySelect,
+    isTodayInRange,
+    scrollToDayCentered,
+  ]);
 
   useEffect(() => {
     const startDateChanged = lastStartDateRef.current !== startDate;
@@ -154,21 +180,35 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
       const currentDayArrayIndex = currentDayIndex - minDayIndex;
 
       if (currentDayArrayIndex >= 0 && currentDayArrayIndex < days.length) {
-        const scrollX =
-          currentDayArrayIndex * ITEM_WIDTH -
-          screenWidth / 2 +
-          ITEM_WIDTH / 2 +
-          SCROLL_PADDING_H;
+        const attempt = () => scrollToDayCentered(currentDayIndex, false);
 
         setTimeout(() => {
-          scrollViewRef.current?.scrollTo({
-            x: Math.max(0, scrollX),
-            animated: false,
-          });
+          if (attempt()) return;
+          // One short retry to wait for layout measurements.
+          setTimeout(() => {
+            if (attempt()) return;
+            const scrollX =
+              currentDayArrayIndex * ITEM_WIDTH -
+              screenWidth / 2 +
+              ITEM_WIDTH / 2 +
+              SCROLL_PADDING_H;
+
+            scrollViewRef.current?.scrollTo({
+              x: Math.max(0, scrollX),
+              animated: false,
+            });
+          }, 50);
         }, 0);
       }
     }
-  }, [startDate, currentDayIndex, minDayIndex, days.length, screenWidth]);
+  }, [
+    startDate,
+    currentDayIndex,
+    minDayIndex,
+    days.length,
+    screenWidth,
+    scrollToDayCentered,
+  ]);
 
   const showJumpToToday =
     isTodayInRange && (!isTodayVisible || !isTodaySelected);
@@ -203,19 +243,27 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
               isSelected={isSelected}
               dotKind={dotKind}
               onPress={() => onDaySelect(dayIndex)}
+              onLayout={(e: LayoutChangeEvent) => {
+                chipLayoutsRef.current.set(dayIndex, {
+                  x: e.nativeEvent.layout.x,
+                  width: e.nativeEvent.layout.width,
+                });
+              }}
             />
           );
         })}
       </ScrollView>
       {showJumpToToday && (
         <View style={styles.timelineActionRow}>
-          <TouchableOpacity
-            style={styles.jumpToTodayButton}
-            onPress={handleJumpToToday}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.jumpToTodayText}>Jump to Today</Text>
-          </TouchableOpacity>
+          {showJumpToToday && (
+            <TouchableOpacity
+              style={styles.jumpToTodayButton}
+              onPress={handleJumpToToday}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.jumpToTodayText}>Jump to Today</Text>
+            </TouchableOpacity>
+          )}
         </View>
       )}
     </View>

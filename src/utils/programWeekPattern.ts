@@ -141,6 +141,135 @@ export function getWorkoutForDaySinceStart(
   return weekWorkouts[sessionIdx] ?? null;
 }
 
+export type ProgramSessionShift = {
+  weekIndex: number;
+  fromDayIndex: number;
+  toDayIndex: number;
+  movedAt: number;
+};
+
+export type ProgramSessionShiftsStore = {
+  [weekIndex: number]: ProgramSessionShift[];
+};
+
+function shiftsForWeek(
+  shifts: ProgramSessionShiftsStore | null | undefined,
+  weekIndex: number
+): ProgramSessionShift[] {
+  if (!shifts) return [];
+  return shifts[weekIndex] ?? [];
+}
+
+function buildShiftedWeekMap(args: {
+  program: Program;
+  startISO: string;
+  pattern: ProgramDaySplitKey[];
+  weekIndex: number;
+  shifts: ProgramSessionShift[];
+}): Record<number, Workout> {
+  const { program, startISO, pattern, weekIndex, shifts } = args;
+  const start = normalizeToLocalMidnight(new Date(startISO));
+  const allowedJs = new Set(pattern.map((k) => programSplitKeyToJsDay(k)));
+
+  const inBlock: number[] = [];
+  for (let d = weekIndex * 7; d <= weekIndex * 7 + 6; d++) {
+    const dt = new Date(start);
+    dt.setDate(start.getDate() + d);
+    dt.setHours(0, 0, 0, 0);
+    if (allowedJs.has(dt.getDay())) {
+      inBlock.push(d);
+    }
+  }
+  inBlock.sort((a, b) => a - b);
+
+  const weekWorkouts = workoutsForProgramWeek(program, weekIndex);
+  const map: Record<number, Workout> = {};
+  inBlock.forEach((dayDelta, idx) => {
+    const w = weekWorkouts[idx];
+    if (w) {
+      map[dayDelta] = w;
+    }
+  });
+
+  for (const s of shifts) {
+    if (s.weekIndex !== weekIndex) continue;
+    if (s.fromDayIndex < weekIndex * 7 || s.fromDayIndex > weekIndex * 7 + 6) {
+      continue;
+    }
+    if (s.toDayIndex < weekIndex * 7 || s.toDayIndex > weekIndex * 7 + 6) {
+      continue;
+    }
+
+    const workout = map[s.fromDayIndex];
+    const destHasWorkout = map[s.toDayIndex] !== undefined;
+    if (!workout || destHasWorkout) {
+      // Invalid shift (source is rest day or destination already occupied). Ignore.
+      continue;
+    }
+
+    delete map[s.fromDayIndex];
+    map[s.toDayIndex] = workout;
+  }
+
+  return map;
+}
+
+/**
+ * Shift-aware version of {@link getWorkoutForDaySinceStart}.
+ * Shifts only apply within the same rolling 7-day program week block.
+ */
+export function getShiftedWorkoutForDaySinceStart(
+  program: Program,
+  startISO: string,
+  pattern: ProgramDaySplitKey[] | null,
+  shifts: ProgramSessionShiftsStore | null,
+  dayDelta: number
+): Workout | null {
+  if (dayDelta < 0) return null;
+  if (!pattern || pattern.length === 0) {
+    return getWorkoutForDaySinceStart(program, startISO, pattern, dayDelta);
+  }
+
+  const weekIndex = Math.floor(dayDelta / 7);
+  const weekMap = buildShiftedWeekMap({
+    program,
+    startISO,
+    pattern,
+    weekIndex,
+    shifts: shiftsForWeek(shifts, weekIndex),
+  });
+  return weekMap[dayDelta] ?? null;
+}
+
+/**
+ * Shift-aware version of {@link listTrainingDayDeltasForProgram}.
+ */
+export function listShiftedTrainingDayDeltasForProgram(
+  program: Program,
+  startISO: string,
+  pattern: ProgramDaySplitKey[] | null,
+  shifts: ProgramSessionShiftsStore | null
+): number[] {
+  if (!pattern || pattern.length === 0) {
+    return listTrainingDayDeltasForProgram(program, startISO, pattern);
+  }
+
+  const maxW = maxProgramWeekIndex(program);
+  const out: number[] = [];
+  for (let w = 0; w <= maxW; w++) {
+    const weekMap = buildShiftedWeekMap({
+      program,
+      startISO,
+      pattern,
+      weekIndex: w,
+      shifts: shiftsForWeek(shifts, w),
+    });
+    out.push(...Object.keys(weekMap).map((k) => parseInt(k, 10)));
+  }
+
+  return [...new Set(out)].sort((a, b) => a - b);
+}
+
 /**
  * All `dayDelta` values from program start through the last program week that have a session.
  */

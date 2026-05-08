@@ -1,11 +1,10 @@
-import type { SingleWorkout } from '@/src/types/workouts';
 import {
   DEFAULT_WORKOUT_LOG_SCHEMA,
   STANDALONE_LOG_SCHEMA_BY_ID,
 } from '@/src/data/standaloneLogSchemas';
+import type { SingleWorkout } from '@/src/types/workouts';
 
-import freeWorkoutsData from './freeWorkouts.json';
-import proWorkoutsData from './proWorkouts.json';
+import workoutsData from './workouts.json';
 
 export type {
   DetailedMovement,
@@ -28,18 +27,11 @@ function withLogSchema(workout: WorkoutJson): SingleWorkout {
   };
 }
 
-export const freeStandaloneWorkouts: SingleWorkout[] = (
-  freeWorkoutsData as WorkoutJson[]
+export const standaloneWorkouts: SingleWorkout[] = (
+  workoutsData as WorkoutJson[]
 ).map(withLogSchema);
 
-export const proStandaloneWorkouts: SingleWorkout[] = (
-  proWorkoutsData as WorkoutJson[]
-).map(withLogSchema);
-
-export const allStandaloneWorkouts: SingleWorkout[] = [
-  ...freeStandaloneWorkouts,
-  ...proStandaloneWorkouts,
-];
+export const allStandaloneWorkouts: SingleWorkout[] = [...standaloneWorkouts];
 
 export function getStandaloneWorkoutById(
   id: string

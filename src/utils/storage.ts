@@ -36,6 +36,17 @@ export type ProgramWorkoutWeekdayKey = NonNullable<
   Program['daysSplit']
 >[number];
 
+export type ProgramSessionShift = {
+  weekIndex: number;
+  fromDayIndex: number;
+  toDayIndex: number;
+  movedAt: number;
+};
+
+export type ProgramSessionShiftsStore = {
+  [weekIndex: number]: ProgramSessionShift[];
+};
+
 export type WeightUnit = 'kg' | 'lb';
 
 export type {
@@ -66,6 +77,7 @@ export type {
 const PROGRAM_STORAGE_KEY = 'active_program';
 const PROGRAM_START_DATE_KEY = 'program_start_date';
 const PROGRAM_WORKOUT_WEEKDAYS_KEY = 'program_workout_weekdays';
+const PROGRAM_SESSION_SHIFTS_KEY = 'program_session_shifts';
 const EXERCISE_SWAPS_KEY = 'exercise_swaps';
 const WORKOUT_LOGS_KEY = 'workout_logs';
 const CUSTOM_SET_COUNTS_KEY = 'custom_set_counts';
@@ -386,6 +398,201 @@ export const clearProgramWorkoutWeekdays = async (): Promise<void> => {
     console.error('Error clearing program workout weekdays:', error);
     throw error;
   }
+};
+
+export const getProgramSessionShiftsStore =
+  async (): Promise<ProgramSessionShiftsStore> => {
+    try {
+      const raw = await AsyncStorage.getItem(PROGRAM_SESSION_SHIFTS_KEY);
+      if (!raw) {
+        return {};
+      }
+      const parsed = JSON.parse(raw) as unknown;
+      if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+        return {};
+      }
+      return parsed as ProgramSessionShiftsStore;
+    } catch (error) {
+      console.error('Error getting program session shifts:', error);
+      return {};
+    }
+  };
+
+export const setProgramSessionShiftsStore = async (
+  store: ProgramSessionShiftsStore
+): Promise<void> => {
+  try {
+    await syncSetItem(PROGRAM_SESSION_SHIFTS_KEY, JSON.stringify(store));
+  } catch (error) {
+    console.error('Error setting program session shifts:', error);
+    throw error;
+  }
+};
+
+export const appendProgramSessionShift = async (
+  shift: ProgramSessionShift
+): Promise<void> => {
+  const store = await getProgramSessionShiftsStore();
+  const weekKey = shift.weekIndex;
+  const prev = store[weekKey] ?? [];
+  const next: ProgramSessionShift[] = [...prev, shift];
+  await setProgramSessionShiftsStore({ ...store, [weekKey]: next });
+};
+
+export const clearProgramSessionShifts = async (): Promise<void> => {
+  try {
+    await syncRemoveItem(PROGRAM_SESSION_SHIFTS_KEY);
+  } catch (error) {
+    console.error('Error clearing program session shifts:', error);
+    throw error;
+  }
+};
+
+type MoveProgramDayDataResult = { moved: boolean };
+
+/**
+ * Moves all program day-index keyed data from `fromDayIndex` to `toDayIndex`.
+ * Throws if destination already has data (to protect user data).
+ */
+export const moveProgramDayData = async (
+  fromDayIndex: number,
+  toDayIndex: number
+): Promise<MoveProgramDayDataResult> => {
+  if (!Number.isFinite(fromDayIndex) || !Number.isFinite(toDayIndex)) {
+    throw new Error('Invalid dayIndex');
+  }
+  if (fromDayIndex === toDayIndex) {
+    return { moved: false };
+  }
+
+  const ensureNoDestinationData = async (): Promise<void> => {
+    const [
+      completedDest,
+      logsDest,
+      swapsDest,
+      notesDest,
+      conditioningDest,
+      rawCustomCounts,
+    ] = await Promise.all([
+      getCompletedSession(toDayIndex),
+      getWorkoutLogsForDay(toDayIndex),
+      getExerciseSwapsForDay(toDayIndex),
+      getWorkoutNotes(toDayIndex),
+      getConditioningLogsForDay(toDayIndex),
+      AsyncStorage.getItem(CUSTOM_SET_COUNTS_KEY),
+    ]);
+
+    const customCounts: CustomSetCounts = rawCustomCounts
+      ? (JSON.parse(rawCustomCounts) as CustomSetCounts)
+      : {};
+    const hasCustomCountsDest = customCounts[toDayIndex] !== undefined;
+
+    const hasAny =
+      completedDest !== null ||
+      Object.keys(logsDest).length > 0 ||
+      Object.keys(swapsDest).length > 0 ||
+      notesDest.trim() !== '' ||
+      Object.keys(conditioningDest).length > 0 ||
+      hasCustomCountsDest;
+
+    if (hasAny) {
+      throw new Error('Destination day already has data');
+    }
+  };
+
+  await ensureNoDestinationData();
+
+  // active session
+  const active = await getActiveSession();
+  if (active?.dayIndex === fromDayIndex) {
+    await saveActiveSession({ ...active, dayIndex: toDayIndex });
+  }
+
+  // completed sessions
+  {
+    const data = await AsyncStorage.getItem(COMPLETED_SESSIONS_KEY);
+    if (data) {
+      const sessions: CompletedSessions = JSON.parse(data);
+      const src = sessions[fromDayIndex];
+      if (src) {
+        sessions[toDayIndex] = { ...src, dayIndex: toDayIndex };
+        delete sessions[fromDayIndex];
+        await syncSetItem(COMPLETED_SESSIONS_KEY, JSON.stringify(sessions));
+      }
+    }
+  }
+
+  // workout logs
+  {
+    const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
+    if (data) {
+      const logs: WorkoutLogs = JSON.parse(data);
+      const src = logs[fromDayIndex];
+      if (src) {
+        logs[toDayIndex] = src;
+        delete logs[fromDayIndex];
+        await syncSetItem(WORKOUT_LOGS_KEY, JSON.stringify(logs));
+      }
+    }
+  }
+
+  // exercise swaps
+  {
+    const data = await AsyncStorage.getItem(EXERCISE_SWAPS_KEY);
+    if (data) {
+      const swaps: ExerciseSwaps = JSON.parse(data);
+      const src = swaps[fromDayIndex];
+      if (src) {
+        swaps[toDayIndex] = src;
+        delete swaps[fromDayIndex];
+        await syncSetItem(EXERCISE_SWAPS_KEY, JSON.stringify(swaps));
+      }
+    }
+  }
+
+  // custom set counts
+  {
+    const data = await AsyncStorage.getItem(CUSTOM_SET_COUNTS_KEY);
+    if (data) {
+      const counts: CustomSetCounts = JSON.parse(data);
+      const src = counts[fromDayIndex];
+      if (src) {
+        counts[toDayIndex] = src;
+        delete counts[fromDayIndex];
+        await syncSetItem(CUSTOM_SET_COUNTS_KEY, JSON.stringify(counts));
+      }
+    }
+  }
+
+  // workout notes
+  {
+    const data = await AsyncStorage.getItem(WORKOUT_NOTES_KEY);
+    if (data) {
+      const notes: WorkoutNotes = JSON.parse(data);
+      const src = notes[fromDayIndex];
+      if (typeof src === 'string') {
+        notes[toDayIndex] = src;
+        delete notes[fromDayIndex];
+        await syncSetItem(WORKOUT_NOTES_KEY, JSON.stringify(notes));
+      }
+    }
+  }
+
+  // conditioning logs
+  {
+    const data = await AsyncStorage.getItem(CONDITIONING_WORKOUT_LOGS_KEY);
+    if (data) {
+      const logs: ConditioningWorkoutLogs = JSON.parse(data);
+      const src = logs[fromDayIndex];
+      if (src) {
+        logs[toDayIndex] = src;
+        delete logs[fromDayIndex];
+        await syncSetItem(CONDITIONING_WORKOUT_LOGS_KEY, JSON.stringify(logs));
+      }
+    }
+  }
+
+  return { moved: true };
 };
 
 /**
@@ -929,6 +1136,7 @@ export const clearProgramData = async (): Promise<void> => {
     await syncRemoveItem(PROGRAM_STORAGE_KEY);
     await syncRemoveItem(PROGRAM_START_DATE_KEY);
     await syncRemoveItem(PROGRAM_WORKOUT_WEEKDAYS_KEY);
+    await syncRemoveItem(PROGRAM_SESSION_SHIFTS_KEY);
     await syncRemoveItem(EXERCISE_SWAPS_KEY);
     await syncRemoveItem(WORKOUT_LOGS_KEY);
     await syncRemoveItem(CONDITIONING_WORKOUT_LOGS_KEY);
@@ -1192,6 +1400,17 @@ export const getCompletedSession = async (
     return null;
   }
 };
+
+export const getCompletedSessionsStore =
+  async (): Promise<CompletedSessions> => {
+    try {
+      const data = await AsyncStorage.getItem(COMPLETED_SESSIONS_KEY);
+      return data ? (JSON.parse(data) as CompletedSessions) : {};
+    } catch (error) {
+      console.error('Error getting completed sessions store:', error);
+      return {};
+    }
+  };
 
 /**
  * Clear a completed session for a specific day (used by redo workout flow)

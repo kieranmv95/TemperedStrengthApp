@@ -105,7 +105,8 @@ export function CopyWorkoutNotesModal({
           preview: buildPreview(text),
         });
       }
-      next.sort((a, b) => a.dayIndex - b.dayIndex);
+      // Show the most recent workout days first.
+      next.sort((a, b) => b.dayIndex - a.dayIndex);
       setRows(next);
     } catch (e) {
       console.error('Error loading workout notes for copy modal:', e);
@@ -125,33 +126,67 @@ export function CopyWorkoutNotesModal({
     (text: string) => {
       posthog.capture(posthogEventsNames.app.notesCopied, {
         source: 'programme',
+        to_day_index: selectedDayIndex,
       });
       onApplyNotes(text);
       onClose();
     },
-    [onApplyNotes, onClose, posthog]
+    [onApplyNotes, onClose, posthog, selectedDayIndex]
   );
 
   const handleCopyPress = useCallback(
-    (text: string) => {
+    (row: NoteSourceRow) => {
+      posthog.capture(posthogEventsNames.app.notesCopyClicked, {
+        source: 'programme',
+        from_day_index: row.dayIndex,
+        to_day_index: selectedDayIndex,
+      });
       if (currentNotes.trim().length > 0) {
+        posthog.capture(posthogEventsNames.app.notesCopyReplacePromptShown, {
+          source: 'programme',
+          from_day_index: row.dayIndex,
+          to_day_index: selectedDayIndex,
+        });
         Alert.alert(
           'Replace notes?',
           'Your current notes for this workout will be overwritten.',
           [
-            { text: 'Cancel', style: 'cancel' },
+            {
+              text: 'Cancel',
+              style: 'cancel',
+              onPress: () => {
+                posthog.capture(
+                  posthogEventsNames.app.notesCopyReplaceCancelled,
+                  {
+                    source: 'programme',
+                    from_day_index: row.dayIndex,
+                    to_day_index: selectedDayIndex,
+                  }
+                );
+              },
+            },
             {
               text: 'Replace',
               style: 'destructive',
-              onPress: () => applyText(text),
+              onPress: () => {
+                posthog.capture(
+                  posthogEventsNames.app.notesCopyReplaceConfirmed,
+                  {
+                    source: 'programme',
+                    from_day_index: row.dayIndex,
+                    to_day_index: selectedDayIndex,
+                  }
+                );
+                applyText(row.text);
+              },
             },
           ]
         );
         return;
       }
-      applyText(text);
+      applyText(row.text);
     },
-    [applyText, currentNotes]
+    [applyText, currentNotes, posthog, selectedDayIndex]
   );
 
   const emptyMessage = useMemo(
@@ -198,7 +233,7 @@ export function CopyWorkoutNotesModal({
                   </View>
                   <TouchableOpacity
                     style={styles.copyHit}
-                    onPress={() => handleCopyPress(item.text)}
+                    onPress={() => handleCopyPress(item)}
                     accessibilityRole="button"
                     accessibilityLabel={`Copy notes from ${item.label}`}
                   >

@@ -14,10 +14,37 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.2.0',
+    dateLabel: 'Not yet released',
+    notes: [
+      'Added rainhill trials workouts',
+      'Added support for multi-difficulty workouts',
+      'fixed day switch bug',
+      'added prompt to finish workout'
+    ],
+  },
+  {
+    version: '2.1.0',
+    dateLabel: '05 May 2026',
+    notes: [
+      'Added moving sessions support to the programs',
+      'Imporved sliding calendar UI',
+      'Moved start session button away from being a sticky header',
+      'Improve notes behaviour and reversed order',
+      'Added a new disciplines section to the workouts screen',
+      'Tidied up workouts filters and tags',
+      'Created home screen welcome strip and improved program launcher',
+      'Added tracking links for new features',
+      'Added 18 new pilates workouts',
+    ],
+    articleUrl: 'https://temperedstrength.com/patch-notes/2.1.0',
+  },
+  {
     version: '2.0.2',
     dateLabel: '05 May 2026',
     notes: [
       'Analytics tracking implemented',
+      'Program starting in X screen improved',
     ],
   },
   {

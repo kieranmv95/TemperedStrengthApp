@@ -4,6 +4,7 @@ import { RestTimer } from '@/src/components/RestTimer';
 import { SessionSummaryModal } from '@/src/components/SessionSummaryModal';
 import { SessionTimer } from '@/src/components/SessionTimer';
 import { CopyWorkoutNotesModal } from '@/src/components/CopyWorkoutNotesModal';
+import { MoveSessionModal } from '@/src/components/MoveSessionModal';
 import { SwapModal } from '@/src/components/SwapModal';
 import { WorkoutScreenBody } from '@/src/components/WorkoutScreenBody';
 import { useSubscription } from '@/src/hooks/use-subscription';
@@ -115,7 +116,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      {c.startDate && c.dayIndex !== null && (
+      {c.startDate && c.dayIndex !== null && !c.showProgramCompleted && (
         <DaySelector
           startDate={c.startDate}
           workoutDayIndices={c.workoutDayIndices}
@@ -141,23 +142,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         />
       )}
 
-      {!c.isRestDay &&
-        !c.loading &&
-        !c.activeSession &&
-        !c.completedSession &&
-        c.showStartSessionButton &&
-        c.currentWorkout && (
-          <View style={styles.startSessionButtonContainer}>
-            <TouchableOpacity
-              style={styles.startSessionButton}
-              onPress={c.handleStartSession}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.startSessionButtonText}>Start Session</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
       <WorkoutScreenBody
         selectedDayIndex={c.selectedDayIndex}
         isRestDay={c.isRestDay}
@@ -166,6 +150,21 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         onViewAllPrograms={handleViewAllPrograms}
         currentWorkout={c.currentWorkout}
         showIntensity={!!c.program?.categories.includes('strength')}
+        onMoveSession={
+          !c.isRestDay && !c.loading && c.currentWorkout
+            ? c.openMoveSessionModal
+            : undefined
+        }
+        onStartSession={
+          !c.isRestDay &&
+          !c.loading &&
+          !c.activeSession &&
+          !c.completedSession &&
+          c.showStartSessionButton &&
+          c.currentWorkout
+            ? c.handleStartSession
+            : undefined
+        }
         slots={c.slots}
         swapRefreshCounter={c.swapRefreshCounter}
         completedSession={c.completedSession}
@@ -245,6 +244,25 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         currentNotes={c.notes}
         onApplyNotes={c.handleApplyCopiedWorkoutNotes}
       />
+
+      <MoveSessionModal
+        visible={c.moveSessionModalVisible}
+        bottomInset={insets.bottom}
+        fromDayIndex={c.moveSessionFromDayIndex}
+        options={c.moveSessionOptions}
+        selectedToDayIndex={c.moveSessionSelectedToDayIndex}
+        onSelectToDayIndex={c.setMoveSessionSelectedToDayIndex}
+        onCancel={c.closeMoveSessionModal}
+        onConfirm={() => c.confirmMoveSession()}
+      />
+
+      {c.isMovingSession && (
+        <View style={styles.movingSessionOverlay} pointerEvents="auto">
+          <View style={styles.movingSessionOverlayCard}>
+            <Text style={styles.movingSessionOverlayText}>Moving session…</Text>
+          </View>
+        </View>
+      )}
 
       {c.notesActive && c.keyboardHeight > 0 && (
         <View

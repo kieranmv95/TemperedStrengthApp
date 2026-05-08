@@ -3,7 +3,9 @@ export type WorkoutCategory =
   | 'WOD'
   | 'Hyrox'
   | 'Conditioning'
-  | 'Mobility';
+  | 'Mobility'
+  | 'Pilates'
+  | 'Rainhill';
 
 /**
  * What the standalone workouts tab can record for a template.
@@ -44,19 +46,31 @@ export type SingleWorkout = {
   title: string;
   description: string;
   category: WorkoutCategory;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  difficulty:
+    | 'Beginner'
+    | 'Intermediate'
+    | 'Advanced'
+    | 'Multiple Difficulties';
   estimatedTime: number;
   tags: string[];
   isPremium: boolean;
   logSchema: WorkoutLogSchema;
   /** True when designed to be done with a partner. */
   partner?: boolean;
-
-  blocks: {
-    name: string;
-    instructions?: string;
-    movements: string[] | DetailedMovement[];
-  }[];
+  blocks:
+    | {
+        name: string;
+        instructions?: string;
+        movements: string[] | DetailedMovement[];
+      }[]
+    | {
+        scale: string;
+        blocks: {
+          name: string;
+          instructions?: string;
+          movements: string[] | DetailedMovement[];
+        }[];
+      }[];
 };
 
 export type DetailedMovement = {

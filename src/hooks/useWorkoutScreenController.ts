@@ -19,7 +19,10 @@ import { getProgramById } from '@/src/utils/program';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import {
   getWorkoutForDaySinceStart,
+  getShiftedWorkoutForDaySinceStart,
   listTrainingDayDeltasForProgram,
+  listShiftedTrainingDayDeltasForProgram,
+  type ProgramSessionShiftsStore,
 } from '@/src/utils/programWeekPattern';
 import {
   clearActiveSession,
@@ -32,12 +35,15 @@ import {
   getExerciseSwapsForDay,
   getProgramCooldownModuleEnabled,
   getProgramShowStartSessionButton,
+  appendProgramSessionShift,
+  getProgramSessionShiftsStore,
   getProgramStartDate,
   getProgramWarmupModuleEnabled,
   getProgramWorkoutWeekdays,
   getRestTimer,
   getWorkoutLogsForDay,
   getWorkoutNotes,
+  moveProgramDayData,
   saveActiveSession,
   saveCompletedSession,
   saveRestTimer,
@@ -89,6 +95,8 @@ export function useWorkoutScreenController() {
   const [workoutWeekPattern, setWorkoutWeekPattern] = useState<
     ProgramDaySplitKey[] | null
   >(null);
+  const [sessionShifts, setSessionShifts] =
+    useState<ProgramSessionShiftsStore | null>(null);
   const [program, setProgram] = useState<ReturnType<
     typeof getProgramById
   > | null>(null);
@@ -114,6 +122,14 @@ export function useWorkoutScreenController() {
     setsCompleted: number;
     showStrengthStats: boolean;
   } | null>(null);
+
+  const [moveSessionModalVisible, setMoveSessionModalVisible] = useState(false);
+  const [moveSessionFromDayIndex, setMoveSessionFromDayIndex] = useState<
+    number | null
+  >(null);
+  const [moveSessionSelectedToDayIndex, setMoveSessionSelectedToDayIndex] =
+    useState<number | null>(null);
+  const [isMovingSession, setIsMovingSession] = useState(false);
   const { scheduleTimerNotification, cancelTimerNotification } =
     useTimerNotification();
   const { unit: weightUnit } = useWeightUnit();
@@ -131,6 +147,7 @@ export function useWorkoutScreenController() {
   const programRef = useRef<ReturnType<typeof getProgramById> | null>(null);
   const startDateRef = useRef<string | null>(null);
   const workoutWeekPatternRef = useRef<ProgramDaySplitKey[] | null>(null);
+  const sessionShiftsRef = useRef<ProgramSessionShiftsStore | null>(null);
   const warmupModuleEnabledRef = useRef(false);
   const cooldownModuleEnabledRef = useRef(false);
   const posthog = usePostHog();
@@ -139,12 +156,14 @@ export function useWorkoutScreenController() {
     programRef.current = program;
     startDateRef.current = startDate;
     workoutWeekPatternRef.current = workoutWeekPattern;
+    sessionShiftsRef.current = sessionShifts;
     warmupModuleEnabledRef.current = warmupModuleEnabled;
     cooldownModuleEnabledRef.current = cooldownModuleEnabled;
   }, [
     program,
     startDate,
     workoutWeekPattern,
+    sessionShifts,
     warmupModuleEnabled,
     cooldownModuleEnabled,
   ]);
@@ -164,16 +183,18 @@ export function useWorkoutScreenController() {
         patternOverride !== undefined
           ? patternOverride
           : workoutWeekPatternRef.current;
+      const shifts = sessionShiftsRef.current;
 
       if (!p || !startISO) {
         setShowProgramCompleted(false);
         return;
       }
 
-      const trainingDeltas = listTrainingDayDeltasForProgram(
+      const trainingDeltas = listShiftedTrainingDayDeltasForProgram(
         p,
         startISO,
-        pattern
+        pattern,
+        shifts
       );
       if (trainingDeltas.length === 0) {
         setShowProgramCompleted(false);
@@ -247,14 +268,16 @@ export function useWorkoutScreenController() {
       dayIdx: number
     ): Workout | null => {
       if (!programToUse) return null;
-      return startISO !== null
-        ? getWorkoutForDaySinceStart(
-            programToUse,
-            startISO,
-            effectivePattern,
-            dayIdx
-          )
-        : (programToUse.workouts.find((w) => w.dayIndex === dayIdx) ?? null);
+      if (startISO === null) {
+        return programToUse.workouts.find((w) => w.dayIndex === dayIdx) ?? null;
+      }
+      return getShiftedWorkoutForDaySinceStart(
+        programToUse,
+        startISO,
+        effectivePattern,
+        sessionShiftsRef.current,
+        dayIdx
+      );
     },
     []
   );
@@ -327,12 +350,14 @@ export function useWorkoutScreenController() {
         programId,
         savedStartDate,
         savedWeekPattern,
+        savedSessionShifts,
         savedWarmupEnabled,
         savedCooldownEnabled,
       ] = await Promise.all([
         getActiveProgramId(),
         getProgramStartDate(),
         getProgramWorkoutWeekdays(),
+        getProgramSessionShiftsStore(),
         getProgramWarmupModuleEnabled(),
         getProgramCooldownModuleEnabled(),
       ]);
@@ -349,6 +374,18 @@ export function useWorkoutScreenController() {
         return;
       }
 
+      // Ensure refs are hydrated before computing any derived program state.
+      // State updates propagate refs via an effect, which may not run before we
+      // call `loadWorkoutForDay()` during initial app startup.
+      programRef.current = loadedProgram;
+      startDateRef.current = savedStartDate;
+      const effectivePattern =
+        savedWeekPattern && savedWeekPattern.length > 0 ? savedWeekPattern : null;
+      workoutWeekPatternRef.current = effectivePattern;
+      sessionShiftsRef.current = savedSessionShifts;
+      warmupModuleEnabledRef.current = savedWarmupEnabled;
+      cooldownModuleEnabledRef.current = savedCooldownEnabled;
+
       setProgram(loadedProgram);
       setStartDate(savedStartDate);
       setWorkoutWeekPattern(
@@ -356,17 +393,13 @@ export function useWorkoutScreenController() {
           ? savedWeekPattern
           : null
       );
+      setSessionShifts(savedSessionShifts);
       setWarmupModuleEnabled(savedWarmupEnabled);
       setCooldownModuleEnabled(savedCooldownEnabled);
 
       const daysSinceStart = calculateDaysSinceStart(savedStartDate);
       setDayIndex(daysSinceStart);
       setSelectedDayIndex(daysSinceStart);
-
-      const effectivePattern =
-        savedWeekPattern && savedWeekPattern.length > 0
-          ? savedWeekPattern
-          : null;
 
       await loadWorkoutForDay(
         daysSinceStart,
@@ -502,7 +535,7 @@ export function useWorkoutScreenController() {
     }
   }, [selectedDayIndex, program, posthog]);
 
-  const handleFinishSession = useCallback(async () => {
+  const finishSession = useCallback(async () => {
     if (!activeSession) return;
 
     try {
@@ -601,6 +634,21 @@ export function useWorkoutScreenController() {
     program,
     posthog,
   ]);
+
+  const handleFinishSession = useCallback(() => {
+    if (!activeSession) return;
+
+    Alert.alert('Finish workout?', 'Are you sure you want to finish?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Finish',
+        style: 'destructive',
+        onPress: () => {
+          void finishSession();
+        },
+      },
+    ]);
+  }, [activeSession, finishSession]);
 
   const handleRedoWorkout = useCallback(async () => {
     if (selectedDayIndex === null) return;
@@ -930,12 +978,225 @@ export function useWorkoutScreenController() {
     if (!program || !startDate) {
       return [];
     }
-    return listTrainingDayDeltasForProgram(
+    return listShiftedTrainingDayDeltasForProgram(
       program,
       startDate,
-      workoutWeekPattern
+      workoutWeekPattern,
+      sessionShifts
     );
-  }, [program, startDate, workoutWeekPattern]);
+  }, [program, startDate, workoutWeekPattern, sessionShifts]);
+
+  const moveSessionOptions = useMemo(() => {
+    if (
+      moveSessionFromDayIndex === null ||
+      !program ||
+      !startDate ||
+      !workoutWeekPattern
+    ) {
+      return [];
+    }
+
+    const weekIndex = Math.floor(moveSessionFromDayIndex / 7);
+    const weekStart = weekIndex * 7;
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+
+    const weekdayLabelForDayIndex = (dayIdx: number): string => {
+      const d = new Date(start);
+      d.setDate(d.getDate() + dayIdx);
+      const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+      return labels[d.getDay()] ?? '•';
+    };
+
+    const dateLabelForDayIndex = (dayIdx: number): string => {
+      const d = new Date(start);
+      d.setDate(d.getDate() + dayIdx);
+      const day = d.getDate();
+      const suffix = ['th', 'st', 'nd', 'rd'][
+        day % 10 > 3 || Math.floor((day % 100) / 10) === 1 ? 0 : day % 10
+      ];
+      return `${day}${suffix}`;
+    };
+
+    return Array.from({ length: 7 }, (_, i) => {
+      const dayIdx = weekStart + i;
+      const workout = getShiftedWorkoutForDaySinceStart(
+        program,
+        startDate,
+        workoutWeekPattern,
+        sessionShifts,
+        dayIdx
+      );
+      return {
+        dayIndex: dayIdx,
+        weekdayLabel: weekdayLabelForDayIndex(dayIdx),
+        dateLabel: dateLabelForDayIndex(dayIdx),
+        isFromDay: dayIdx === moveSessionFromDayIndex,
+        isFreeDay: dayIdx >= 0 && workout === null,
+      };
+    });
+  }, [
+    moveSessionFromDayIndex,
+    program,
+    startDate,
+    workoutWeekPattern,
+    sessionShifts,
+  ]);
+
+  const resetMoveSessionModalState = useCallback(() => {
+    setMoveSessionModalVisible(false);
+    setMoveSessionFromDayIndex(null);
+    setMoveSessionSelectedToDayIndex(null);
+  }, []);
+
+  const openMoveSessionModal = useCallback(() => {
+    const from = selectedDayIndex;
+    const p = programRef.current;
+    const startISO = startDateRef.current;
+    const pattern = workoutWeekPatternRef.current;
+    if (from === null || !p || !startISO || !pattern || pattern.length === 0) {
+      return;
+    }
+    const workout = getShiftedWorkoutForDaySinceStart(
+      p,
+      startISO,
+      pattern,
+      sessionShiftsRef.current,
+      from
+    );
+    if (!workout) {
+      return;
+    }
+
+    const wk = analyticsWeekDayFromDayIndex(from);
+    posthog.capture(posthogEventsNames.program.moveSessionOpened, {
+      program_id: p.id ?? '',
+      from_week: wk.week,
+      from_day: wk.day,
+      from_day_index: from,
+    });
+    setMoveSessionFromDayIndex(from);
+    setMoveSessionSelectedToDayIndex(null);
+    setMoveSessionModalVisible(true);
+  }, [selectedDayIndex, posthog]);
+
+  const closeMoveSessionModal = useCallback(() => {
+    const from = moveSessionFromDayIndex;
+    const p = programRef.current;
+    if (from !== null && p) {
+      const wk = analyticsWeekDayFromDayIndex(from);
+      posthog.capture(posthogEventsNames.program.moveSessionCancelled, {
+        program_id: p.id ?? '',
+        from_week: wk.week,
+        from_day: wk.day,
+        from_day_index: from,
+      });
+    }
+    resetMoveSessionModalState();
+  }, [moveSessionFromDayIndex, posthog, resetMoveSessionModalState]);
+
+  const confirmMoveSession = useCallback(async () => {
+    const from = moveSessionFromDayIndex;
+    const to = moveSessionSelectedToDayIndex;
+    const p = programRef.current;
+    const startISO = startDateRef.current;
+    const pattern = workoutWeekPatternRef.current;
+
+    if (from === null || to === null || !p || !startISO || !pattern) {
+      return;
+    }
+    if (Math.floor(from / 7) !== Math.floor(to / 7)) {
+      return;
+    }
+
+    const fromWorkout = getShiftedWorkoutForDaySinceStart(
+      p,
+      startISO,
+      pattern,
+      sessionShiftsRef.current,
+      from
+    );
+    const toWorkout = getShiftedWorkoutForDaySinceStart(
+      p,
+      startISO,
+      pattern,
+      sessionShiftsRef.current,
+      to
+    );
+    if (!fromWorkout || toWorkout) {
+      return;
+    }
+
+    try {
+      setIsMovingSession(true);
+
+      const wkFrom = analyticsWeekDayFromDayIndex(from);
+      const wkTo = analyticsWeekDayFromDayIndex(to);
+      posthog.capture(posthogEventsNames.program.moveSessionConfirmClicked, {
+        program_id: p.id ?? '',
+        from_week: wkFrom.week,
+        from_day: wkFrom.day,
+        from_day_index: from,
+        to_week: wkTo.week,
+        to_day: wkTo.day,
+        to_day_index: to,
+      });
+
+      await moveProgramDayData(from, to);
+      await appendProgramSessionShift({
+        weekIndex: Math.floor(from / 7),
+        fromDayIndex: from,
+        toDayIndex: to,
+        movedAt: Date.now(),
+      });
+
+      const nextShifts = await getProgramSessionShiftsStore();
+      sessionShiftsRef.current = nextShifts;
+      setSessionShifts(nextShifts);
+
+      setSelectedDayIndex(to);
+      setSwapRefreshCounter((prev) => prev + 1);
+      await loadWorkoutForDay(to, p, startISO, pattern);
+      await recomputeProgramCompleted(p, startISO, pattern);
+
+      const nextActive = await getActiveSession();
+      setActiveSession(nextActive);
+
+      posthog.capture(posthogEventsNames.program.moveSessionSucceeded, {
+        program_id: p.id ?? '',
+        from_week: wkFrom.week,
+        from_day: wkFrom.day,
+        from_day_index: from,
+        to_week: wkTo.week,
+        to_day: wkTo.day,
+        to_day_index: to,
+      });
+    } catch (error) {
+      console.error('Error moving session:', error);
+      const wkFrom = analyticsWeekDayFromDayIndex(from);
+      const wkTo = analyticsWeekDayFromDayIndex(to);
+      posthog.capture(posthogEventsNames.program.moveSessionFailed, {
+        program_id: p.id ?? '',
+        from_week: wkFrom.week,
+        from_day: wkFrom.day,
+        from_day_index: from,
+        to_week: wkTo.week,
+        to_day: wkTo.day,
+        to_day_index: to,
+      });
+      Alert.alert('Error', 'Failed to move session. Please try again.');
+    } finally {
+      resetMoveSessionModalState();
+      setIsMovingSession(false);
+    }
+  }, [
+    moveSessionFromDayIndex,
+    moveSessionSelectedToDayIndex,
+    loadWorkoutForDay,
+    recomputeProgramCompleted,
+    resetMoveSessionModalState,
+    posthog,
+  ]);
 
   const closeSwapModal = useCallback(() => {
     setSwapModalVisible(false);
@@ -943,12 +1204,32 @@ export function useWorkoutScreenController() {
   }, []);
 
   const openCopyWorkoutNotesModal = useCallback(() => {
+    const p = programRef.current;
+    if (selectedDayIndex !== null && p) {
+      const wk = analyticsWeekDayFromDayIndex(selectedDayIndex);
+      posthog.capture(posthogEventsNames.app.notesCopyModalOpened, {
+        program_id: p.id ?? '',
+        week: wk.week,
+        day: wk.day,
+        day_index: selectedDayIndex,
+      });
+    }
     setCopyWorkoutNotesModalVisible(true);
-  }, []);
+  }, [posthog, selectedDayIndex]);
 
   const closeCopyWorkoutNotesModal = useCallback(() => {
+    const p = programRef.current;
+    if (selectedDayIndex !== null && p) {
+      const wk = analyticsWeekDayFromDayIndex(selectedDayIndex);
+      posthog.capture(posthogEventsNames.app.notesCopyModalClosed, {
+        program_id: p.id ?? '',
+        week: wk.week,
+        day: wk.day,
+        day_index: selectedDayIndex,
+      });
+    }
     setCopyWorkoutNotesModalVisible(false);
-  }, []);
+  }, [posthog, selectedDayIndex]);
 
   const onSwapClearData = useCallback(async () => {
     if (selectedDayIndex !== null) {
@@ -987,6 +1268,15 @@ export function useWorkoutScreenController() {
     notesInputRef,
     workoutDayIndices,
     workoutWeekPattern,
+    moveSessionModalVisible,
+    moveSessionFromDayIndex,
+    moveSessionOptions,
+    moveSessionSelectedToDayIndex,
+    setMoveSessionSelectedToDayIndex,
+    openMoveSessionModal,
+    closeMoveSessionModal,
+    confirmMoveSession,
+    isMovingSession,
     warmupModuleEnabled,
     cooldownModuleEnabled,
     toggleWarmupModule,

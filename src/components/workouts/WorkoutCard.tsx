@@ -2,7 +2,7 @@ import { Colors } from '@/src/constants/theme';
 import type { SingleWorkout } from '@/src/types/workouts';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { CATEGORY_ICONS, DIFFICULTY_COLORS } from './workoutUiConstants';
 import { workoutsListStyles as styles } from './workoutsListStyles';
 
@@ -42,11 +42,15 @@ export function WorkoutCard({
       <View style={styles.cardHeader}>
         <View style={styles.cardTitleRow}>
           <View style={styles.categoryIcon}>
-            <Ionicons
-              name={CATEGORY_ICONS[workout.category] as any}
-              size={16}
-              color={Colors.accent}
-            />
+            {workout.category === 'Rainhill' ? (
+              <Image source={require('@/assets/images/logos/rainhill_icon.png')} style={styles.sponsorLogo} />
+            ) : (
+              <Ionicons
+                name={CATEGORY_ICONS[workout.category] as any}
+                size={16}
+                color={Colors.accent}
+              />
+            )}
           </View>
           <Text style={styles.cardCategory}>{workout.category}</Text>
           {workout.isPremium && (

@@ -83,6 +83,11 @@ export const workoutDetailStyles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.full,
   },
+  categoryIconImage: {
+    width: 14,
+    height: 14,
+    resizeMode: 'contain',
+  },
   detailCategoryText: {
     color: Colors.accent,
     fontSize: FontSize.md,
@@ -119,6 +124,33 @@ export const workoutDetailStyles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: Spacing.md,
     marginBottom: Spacing.section,
+  },
+  scaleSelectorRow: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+    paddingBottom: Spacing.xl,
+    marginBottom: Spacing.xxl,
+  },
+  scaleButton: {
+    backgroundColor: Colors.backgroundElevated,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.full,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+  },
+  scaleButtonActive: {
+    backgroundColor: Colors.accent,
+    borderColor: Colors.accent,
+  },
+  scaleButtonText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  scaleButtonTextActive: {
+    color: Colors.textOnAccent,
   },
   tag: {
     backgroundColor: Colors.backgroundElevated,
@@ -191,5 +223,11 @@ export const workoutDetailStyles = StyleSheet.create({
     fontSize: FontSize.lg,
     lineHeight: 20,
     textAlign: 'center',
+  },
+  scaleSelectorTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxl,
+    fontWeight: '700',
+    marginBottom: Spacing.xl,
   },
 });

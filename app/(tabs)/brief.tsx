@@ -2,9 +2,9 @@ import { ArticleCard } from '@/src/components/brief/ArticleCard';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
-import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { fetchArticles } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { ArticleCategory, ArticleListItem } from '@/src/types/brief';
 import { getFavoriteArticles, setFavoriteArticles } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
@@ -146,7 +146,7 @@ export default function BriefScreen() {
           <Ionicons name="wifi-outline" size={64} color={Colors.backgroundSubtle} />
           <Text style={styles.emptyTitle}>No Connection</Text>
           <Text style={styles.emptyDescription}>
-            Articles are unavailable offline. Come back when you're connected.
+            Articles are unavailable offline. Come back when you&apos;re connected.
           </Text>
         </View>
       );

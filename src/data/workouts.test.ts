@@ -1,7 +1,6 @@
-import freeWorkoutsData from '@/src/data/freeWorkouts.json';
-import proWorkoutsData from '@/src/data/proWorkouts.json';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import type { WorkoutLogSchema } from '@/src/types/workouts';
+import workoutsData from '@/src/data/workouts.json';
 
 function assertWorkoutLogSchema(schema: WorkoutLogSchema, label: string): void {
   switch (schema.kind) {
@@ -36,7 +35,7 @@ function assertWorkoutLogSchema(schema: WorkoutLogSchema, label: string): void {
 describe('bundled standalone workouts', () => {
   it('merges JSON row count with allStandaloneWorkouts', () => {
     expect(allStandaloneWorkouts.length).toBe(
-      freeWorkoutsData.length + proWorkoutsData.length
+      (workoutsData as unknown[]).length
     );
   });
 
