@@ -148,17 +148,6 @@ export default function WorkoutsByTagScreen() {
               onLockedPress={handleLockedPress}
             />
           )}
-          ListFooterComponent={() => (
-            <>
-              {tag === 'Rainhill' && (
-                <View style={styles.rainhillFooter}>
-                  <Text style={styles.rainhillFooterText}>
-                    More Rainhill workouts coming soon...
-                  </Text>
-                </View>
-              )}
-            </>
-          )}
           showsVerticalScrollIndicator={false}
         />
       )}
