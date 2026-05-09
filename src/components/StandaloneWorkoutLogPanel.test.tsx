@@ -20,6 +20,10 @@ jest.mock('@/src/utils/storage', () => ({
   deleteStandaloneWorkoutLogEntry: jest.fn(),
 }));
 
+jest.mock('posthog-react-native', () => ({
+  usePostHog: () => ({ capture: jest.fn() }),
+}));
+
 const mockGet = getStandaloneWorkoutLogsForWorkout as jest.MockedFunction<
   typeof getStandaloneWorkoutLogsForWorkout
 >;

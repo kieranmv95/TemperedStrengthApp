@@ -1,5 +1,8 @@
 import { Colors } from '@/src/constants/theme';
-import type { StandaloneWorkoutLogEntry } from '@/src/types/standaloneWorkoutLogs';
+import type {
+  StandaloneLogPayload,
+  StandaloneWorkoutLogEntry,
+} from '@/src/types/standaloneWorkoutLogs';
 import type { SingleWorkout } from '@/src/types/workouts';
 import {
   buildPayloadFromForm,
@@ -9,7 +12,6 @@ import {
   type FormState,
 } from '@/src/utils/standaloneWorkoutLogForm';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
-import type { StandaloneLogPayload } from '@/src/types/standaloneWorkoutLogs';
 import { formatStandaloneLogCardTimestamp } from '@/src/utils/standaloneWorkoutLogFormat';
 import {
   deleteStandaloneWorkoutLogEntry,
@@ -35,24 +37,21 @@ function newStandaloneLogId(): string {
   return `swl_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 12)}`;
 }
 
-type WorkoutBlock = {
-  movements: string[] | { name: string; value: string; note?: string }[];
-};
-
-type WorkoutScaledBlocks = {
-  scale: string;
-  blocks: WorkoutBlock[];
-};
+/** Row shape when `SingleWorkout.blocks` is the scaled difficulty branch. */
+type ScaledBlockGroup = Extract<
+  SingleWorkout['blocks'][number],
+  { scale: string }
+>;
 
 function isScaledBlocks(
   blocks: SingleWorkout['blocks']
-): blocks is WorkoutScaledBlocks[] {
-  const first = blocks[0] as unknown;
+): blocks is ScaledBlockGroup[] {
+  const first = blocks[0];
   return (
     typeof first === 'object' &&
     first !== null &&
-    'scale' in (first as Record<string, unknown>) &&
-    'blocks' in (first as Record<string, unknown>)
+    'scale' in first &&
+    'blocks' in first
   );
 }
 
@@ -175,7 +174,7 @@ export function StandaloneWorkoutLogPanel({
     try {
       await increment('workouts_logged');
       await upsertStandaloneWorkoutLogEntry(entry);
-      posthog.capture(posthogEventsNames.workout.logged, {
+      posthog?.capture(posthogEventsNames.workout.logged, {
         workout_id: workout.id,
         exercise_count: exerciseCountForWorkout(workout),
         duration_mins: durationMinsForLog(workout, built.payload),
