@@ -16,7 +16,8 @@
       },
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "usesIcloudStorage": true
     },
     "android": {
       "package": "com.kieranvenison.temperedstrengthapp",
