@@ -9,6 +9,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "build:ios:production": "EXPO_NO_CAPABILITY_SYNC=1 eas build --platform ios --profile production",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "expo lint",
