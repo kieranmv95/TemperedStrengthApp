@@ -14,12 +14,13 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
-    version: '2.2.1',
-    dateLabel: '11 May 2026',
+    version: '2.3.0',
+    dateLabel: '14th May 2026',
     notes: [
-      'Added a suite of rainhill trials workouts'
+      'Added a suite of rainhill trials workouts',
+      'improved the pro banner to reduce flickering',
     ],
-    articleUrl: 'https://temperedstrength.com/patch-notes/2.2.1',
+    articleUrl: 'https://temperedstrength.com/patch-notes/2.3.0',
   },
   {
     version: '2.2.0',

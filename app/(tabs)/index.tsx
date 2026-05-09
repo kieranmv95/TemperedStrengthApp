@@ -5,6 +5,7 @@ import { getAllExercises } from '@/src/data/exercises';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { workoutScreenStyles } from '@/src/screens/workoutScreenStyles';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { PersonalBestsStore } from '@/src/types/personalBests';
 import {
   type HomeProgramSummary,
@@ -16,15 +17,21 @@ import {
   getOnboardingProfile,
   getPersonalBestsStore,
 } from '@/src/utils/storage';
-import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { formatWeightFromKg } from '@/src/utils/weightUnits';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   ActivityIndicator,
+  Animated,
   Text,
   TouchableOpacity,
   View,
@@ -37,6 +44,11 @@ const exerciseNameById: ReadonlyMap<number, string> = (() => {
   }
   return m;
 })();
+
+// Cache the subscription refresh across home tab focuses so the welcome
+// strip does not re-evaluate (and flicker) on every navigation.
+const SUBSCRIPTION_REFRESH_TTL_MS = 30 * 60 * 1000;
+let lastSubscriptionRefreshAt = 0;
 
 function timeOfDayGreeting(): string {
   const h = new Date().getHours();
@@ -97,7 +109,11 @@ export default function HomeTabScreen() {
   useFocusEffect(
     useCallback(() => {
       void loadHome();
-      void refreshSubscription();
+      const now = Date.now();
+      if (now - lastSubscriptionRefreshAt > SUBSCRIPTION_REFRESH_TTL_MS) {
+        lastSubscriptionRefreshAt = now;
+        void refreshSubscription();
+      }
     }, [loadHome, refreshSubscription])
   );
 
@@ -118,6 +134,24 @@ export default function HomeTabScreen() {
     }
     return listRecentPersonalBestRows(pbStore, exerciseNameById, 3);
   }, [pbStore]);
+
+  const showFreeStrip = !subscriptionLoading && !isPro;
+  const freeStripOpacity = useRef(new Animated.Value(0)).current;
+  const freeStripHasRevealed = useRef(false);
+
+  useEffect(() => {
+    if (showFreeStrip && !freeStripHasRevealed.current) {
+      freeStripHasRevealed.current = true;
+      Animated.timing(freeStripOpacity, {
+        toValue: 1,
+        duration: 320,
+        useNativeDriver: true,
+      }).start();
+    } else if (!showFreeStrip && freeStripHasRevealed.current) {
+      freeStripHasRevealed.current = false;
+      freeStripOpacity.setValue(0);
+    }
+  }, [showFreeStrip, freeStripOpacity]);
 
   const greet = timeOfDayGreeting();
   const greetingTitle = displayName ? `${greet}, ${displayName}` : greet;
@@ -140,62 +174,37 @@ export default function HomeTabScreen() {
   return (
     <StandardLayout title={greetingTitle} subtitle={headerSubtitle}>
       <StandardLayout.Body>
-        <View style={styles.welcomeStrip}>
-          {!subscriptionLoading ? (
-            isPro ? (
-              <>
-                <View style={styles.welcomeStripTopRow}>
-                  <View style={styles.welcomeHeadlineCell}>
-                    <Text style={styles.welcomeTitle}>Let&apos;s Go.</Text>
-                  </View>
-                  <View
-                    style={styles.planBadgePro}
-                  >
-                    <Text style={styles.planBadgeLabelPro}>PRO</Text>
-                  </View>
-                </View>
-                <Text style={styles.welcomeBody}>
-                  Your program, latest wins, and shortcuts are just below. Let&apos;s get
-                  started.
-                </Text>
-              </>
-            ) : (
-              <>
-                <View style={styles.welcomeStripTopRow}>
-                  <View style={styles.welcomeHeadlineCell}>
-                    <Text style={styles.welcomeTitle}>Upgrade to Pro</Text>
-                  </View>
-                  <TouchableOpacity
-                    style={styles.planBadgeFree}
-                    onPress={() =>
-                      trackHomeLink(
-                        'welcome_strip_plan_badge_free',
-                        '/settings',
-                        () => router.push('/settings')
-                      )
-                    }
-                    accessibilityRole="button"
-                    accessibilityLabel="Free plan"
-                    accessibilityHint="Opens settings where you can upgrade to Tempered Strength Pro"
-                  >
-                    <Text style={styles.planBadgeLabelFree}>FREE TIER</Text>
-                  </TouchableOpacity>
-                </View>
-                <Text style={styles.welcomeBody}>
-                  You are on the free plan. Unlock every program and workout, unlimited
-                  exercise swaps, upgrade anytime from Settings.
-                </Text>
-              </>
-            )
-          ) : (
-            <>
-              <Text style={styles.welcomeTitle}>Loading.</Text>
-              <Text style={styles.welcomeBody}>
-                Loading...
-              </Text>
-            </>
-          )}
-        </View>
+
+        {showFreeStrip && (
+          <Animated.View
+            style={[styles.welcomeStrip, { opacity: freeStripOpacity }]}
+          >
+            <View style={styles.welcomeStripTopRow}>
+              <View style={styles.welcomeHeadlineCell}>
+                <Text style={styles.welcomeTitle}>Upgrade to Pro</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.planBadgeFree}
+                onPress={() =>
+                  trackHomeLink(
+                    'welcome_strip_plan_badge_free',
+                    '/settings',
+                    () => router.push('/settings')
+                  )
+                }
+                accessibilityRole="button"
+                accessibilityLabel="Free plan"
+                accessibilityHint="Opens settings where you can upgrade to Tempered Strength Pro"
+              >
+                <Text style={styles.planBadgeLabelFree}>FREE TIER</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.welcomeBody}>
+              You are on the free plan. Unlock every program and workout, unlimited
+              exercise swaps, upgrade anytime from Settings.
+            </Text>
+          </Animated.View>
+        )}
 
         <View style={styles.section}>
           <View style={styles.sectionheader}>
