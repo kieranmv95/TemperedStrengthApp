@@ -18,6 +18,7 @@ import {
   getOnboardingProfile,
   getPersonalBestsStore,
 } from '@/src/utils/storage';
+import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
 import { formatWeightFromKg } from '@/src/utils/weightUnits';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
@@ -46,11 +47,6 @@ const exerciseNameById: ReadonlyMap<number, string> = (() => {
   }
   return m;
 })();
-
-// Cache the subscription refresh across home tab focuses so the welcome
-// strip does not re-evaluate (and flicker) on every navigation.
-const SUBSCRIPTION_REFRESH_TTL_MS = 30 * 60 * 1000;
-let lastSubscriptionRefreshAt = 0;
 
 function timeOfDayGreeting(): string {
   const h = new Date().getHours();
@@ -112,9 +108,7 @@ export default function HomeTabScreen() {
   useFocusEffect(
     useCallback(() => {
       void loadHome();
-      const now = Date.now();
-      if (now - lastSubscriptionRefreshAt > SUBSCRIPTION_REFRESH_TTL_MS) {
-        lastSubscriptionRefreshAt = now;
+      if (tryConsumeSubscriptionRefreshCooldown()) {
         void refreshSubscription();
       }
     }, [loadHome, refreshSubscription])
@@ -221,26 +215,54 @@ export default function HomeTabScreen() {
         )}
 
         {remoteNotification && (
-          <View style={styles.notificationBanner}>
+          <View
+            style={[
+              styles.notificationBanner,
+              {
+                backgroundColor: remoteNotification.bgColor,
+                borderColor: remoteNotification.borderColor,
+              },
+            ]}
+          >
             {remoteNotification.title.length > 0 ? (
-              <Text style={styles.notificationBannerTitle}>
+              <Text
+                style={[
+                  styles.notificationBannerTitle,
+                  { color: remoteNotification.titleColor },
+                ]}
+              >
                 {remoteNotification.title}
               </Text>
             ) : null}
             {remoteNotification.body.length > 0 ? (
-              <Text style={styles.notificationBannerBody}>
+              <Text
+                style={[
+                  styles.notificationBannerBody,
+                  { color: remoteNotification.descriptionColor },
+                ]}
+              >
                 {remoteNotification.body}
               </Text>
             ) : null}
             {remoteNotification.ctaText.length > 0 &&
               remoteNotification.ctaUrl.length > 0 ? (
               <TouchableOpacity
-                style={styles.notificationCta}
+                style={[
+                  styles.notificationCta,
+                  { backgroundColor: remoteNotification.ctaColor },
+                ]}
                 onPress={() => openRemoteNotificationCta(remoteNotification.ctaUrl)}
                 accessibilityRole="button"
                 accessibilityLabel={remoteNotification.ctaText}
               >
-                <Text style={styles.notificationCtaText}>{remoteNotification.ctaText}</Text>
+                <Text
+                  style={[
+                    styles.notificationCtaText,
+                    { color: remoteNotification.ctaTextColor },
+                  ]}
+                >
+                  {remoteNotification.ctaText}
+                </Text>
               </TouchableOpacity>
             ) : null}
           </View>

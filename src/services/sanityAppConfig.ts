@@ -13,15 +13,40 @@ const groq = `*[_type == "appConfig"][0]{
     title,
     body,
     internalCtaText,
-    internalCtaUrl
+    internalCtaUrl,
+    borderColor,
+    bgColor,
+    titleColor,
+    descriptionColor,
+    ctaColor,
+    ctaTextColor
   }
 }`;
+
+const HEX_COLOR =
+  /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
+
+/** Matches Sanity `notification` colour field initial values. */
+export const NOTIFICATION_COLOR_DEFAULTS = {
+  borderColor: '#2a3142',
+  bgColor: '#1a1f2b',
+  titleColor: '#ffffff',
+  descriptionColor: '#cbd5e1',
+  ctaColor: '#d4b96a',
+  ctaTextColor: '#1a1f2b',
+} as const;
 
 type SanityNotificationDoc = {
   title?: string | null;
   body?: string | null;
   internalCtaText?: string | null;
   internalCtaUrl?: string | null;
+  borderColor?: string | null;
+  bgColor?: string | null;
+  titleColor?: string | null;
+  descriptionColor?: string | null;
+  ctaColor?: string | null;
+  ctaTextColor?: string | null;
 } | null;
 
 type AppConfigQueryResult = {
@@ -33,7 +58,18 @@ export type HomeRemoteNotificationBanner = {
   body: string;
   ctaText: string;
   ctaUrl: string;
+  borderColor: string;
+  bgColor: string;
+  titleColor: string;
+  descriptionColor: string;
+  ctaColor: string;
+  ctaTextColor: string;
 };
+
+function sanitizeHex(value: string | null | undefined, fallback: string): string {
+  const t = value?.trim() ?? '';
+  return HEX_COLOR.test(t) ? t : fallback;
+}
 
 type CachedPayload = {
   storedAt: number;
@@ -67,12 +103,52 @@ function mapNotification(
   }
   const ctaText = raw.internalCtaText?.trim() ?? '';
   const ctaUrl = raw.internalCtaUrl?.trim() ?? '';
+  const d = NOTIFICATION_COLOR_DEFAULTS;
   return {
     title,
     body,
     ctaText,
     ctaUrl,
+    borderColor: sanitizeHex(raw.borderColor, d.borderColor),
+    bgColor: sanitizeHex(raw.bgColor, d.bgColor),
+    titleColor: sanitizeHex(raw.titleColor, d.titleColor),
+    descriptionColor: sanitizeHex(raw.descriptionColor, d.descriptionColor),
+    ctaColor: sanitizeHex(raw.ctaColor, d.ctaColor),
+    ctaTextColor: sanitizeHex(raw.ctaTextColor, d.ctaTextColor),
   };
+}
+
+function normalizeBannerFromCache(
+  raw: unknown
+): HomeRemoteNotificationBanner | null {
+  if (typeof raw !== 'object' || raw === null) {
+    return null;
+  }
+  const o = raw as Record<string, unknown>;
+  if (typeof o.title !== 'string' || typeof o.body !== 'string') {
+    return null;
+  }
+  const title = o.title.trim();
+  const body = o.body.trim();
+  if (title.length === 0 && body.length === 0) {
+    return null;
+  }
+  const ctaText = typeof o.ctaText === 'string' ? o.ctaText.trim() : '';
+  const ctaUrl = typeof o.ctaUrl === 'string' ? o.ctaUrl.trim() : '';
+  return mapNotification({
+    title,
+    body,
+    internalCtaText: ctaText,
+    internalCtaUrl: ctaUrl,
+    borderColor: typeof o.borderColor === 'string' ? o.borderColor : null,
+    bgColor: typeof o.bgColor === 'string' ? o.bgColor : null,
+    titleColor: typeof o.titleColor === 'string' ? o.titleColor : null,
+    descriptionColor:
+      typeof o.descriptionColor === 'string' ? o.descriptionColor : null,
+    ctaColor: typeof o.ctaColor === 'string' ? o.ctaColor : null,
+    ctaTextColor:
+      typeof o.ctaTextColor === 'string' ? o.ctaTextColor : null,
+  });
 }
 
 async function readCache(): Promise<CachedPayload | null> {
@@ -85,18 +161,17 @@ async function readCache(): Promise<CachedPayload | null> {
     if (
       typeof parsed !== 'object' ||
       parsed === null ||
-      typeof (parsed as CachedPayload).storedAt !== 'number'
+      typeof (parsed as { storedAt?: unknown }).storedAt !== 'number'
     ) {
       return null;
     }
-    const p = parsed as CachedPayload;
-    if (
-      p.banner !== null &&
-      (typeof p.banner.title !== 'string' || typeof p.banner.body !== 'string')
-    ) {
+    const p = parsed as { storedAt: number; banner: unknown };
+    const banner =
+      p.banner === null ? null : normalizeBannerFromCache(p.banner);
+    if (p.banner !== null && banner === null) {
       return null;
     }
-    return p;
+    return { storedAt: p.storedAt, banner };
   } catch {
     return null;
   }

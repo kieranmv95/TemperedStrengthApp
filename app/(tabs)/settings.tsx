@@ -5,6 +5,7 @@ import { invalidateSanityAppConfigCache } from '@/src/services/sanityAppConfig';
 import type { OnboardingProfile } from '@/src/types/onboarding';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
+import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
 import {
   clearOnboarding,
   getActiveProgramId,
@@ -63,7 +64,9 @@ export default function SettingsScreen() {
     React.useCallback(() => {
       checkProgramStatus();
       loadOnboardingState();
-      refresh(); // Refresh subscription status when screen is focused
+      if (tryConsumeSubscriptionRefreshCooldown()) {
+        void refresh();
+      }
     }, [refresh])
   );
 
