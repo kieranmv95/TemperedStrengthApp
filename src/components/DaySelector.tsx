@@ -129,13 +129,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
 
       setIsTodayVisible(isVisible);
     },
-    [
-      todayDayIndex,
-      minDayIndex,
-      isTodayInRange,
-      screenWidth,
-      chipCenterX,
-    ]
+    [todayDayIndex, minDayIndex, isTodayInRange, screenWidth, chipCenterX]
   );
 
   const handleJumpToToday = useCallback(() => {

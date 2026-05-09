@@ -1,10 +1,5 @@
 import { GlossaryItem } from '@/src/components/brief/GlossaryItem';
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '@/src/constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getGlossaryByCategory, searchGlossary } from '@/src/data/brief';
 import { fetchGlossary } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
@@ -93,8 +88,14 @@ export default function GlossaryScreen() {
     if (isOffline) {
       return (
         <View style={styles.centeredState}>
-          <Ionicons name="wifi-outline" size={64} color={Colors.backgroundSubtle} />
-          <Text style={styles.emptyTitle}>Connect to the internet to see this</Text>
+          <Ionicons
+            name="wifi-outline"
+            size={64}
+            color={Colors.backgroundSubtle}
+          />
+          <Text style={styles.emptyTitle}>
+            Connect to the internet to see this
+          </Text>
           <Text style={styles.emptyDescription}>
             The glossary requires a connection to load.
           </Text>
@@ -105,7 +106,11 @@ export default function GlossaryScreen() {
     if (filteredTerms.length === 0) {
       return (
         <View style={styles.emptyState}>
-          <Ionicons name="search-outline" size={64} color={Colors.backgroundSubtle} />
+          <Ionicons
+            name="search-outline"
+            size={64}
+            color={Colors.backgroundSubtle}
+          />
           <Text style={styles.emptyTitle}>No Terms Found</Text>
           <Text style={styles.emptyDescription}>
             Try adjusting your search or filter.
@@ -160,7 +165,11 @@ export default function GlossaryScreen() {
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={20} color={Colors.textPlaceholder} />
+              <Ionicons
+                name="close-circle"
+                size={20}
+                color={Colors.textPlaceholder}
+              />
             </TouchableOpacity>
           )}
         </View>

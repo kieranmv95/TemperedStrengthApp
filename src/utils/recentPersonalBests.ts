@@ -21,8 +21,7 @@ export function listRecentPersonalBestRows(
     if (!Number.isFinite(exerciseId)) {
       continue;
     }
-    const exerciseName =
-      exerciseNameById.get(exerciseId) ?? 'Unknown exercise';
+    const exerciseName = exerciseNameById.get(exerciseId) ?? 'Unknown exercise';
 
     for (const tier of REP_MAX_ORDER) {
       const entries = ledger[tier];

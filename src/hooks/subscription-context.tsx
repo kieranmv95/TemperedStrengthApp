@@ -85,7 +85,9 @@ export function SubscriptionProvider({
 
       // User was on a Pro program but subscription expired.
       // Do NOT clear program/progress; keep it and prompt to renew.
-      console.log('Subscription expired while on Pro program, locking access...');
+      console.log(
+        'Subscription expired while on Pro program, locking access...'
+      );
       Alert.alert(
         'Subscription Expired',
         'Your Pro subscription has expired. Your current program and progress are still saved, but you’ll need to re-enable Pro to continue this program.',

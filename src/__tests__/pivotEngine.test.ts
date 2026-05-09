@@ -104,7 +104,9 @@ describe('findAlternatives', () => {
   });
 
   it('can filter alternatives to bodyweight only', () => {
-    const alternatives = findAlternatives(1, 10, { equipmentMode: 'bodyweight' });
+    const alternatives = findAlternatives(1, 10, {
+      equipmentMode: 'bodyweight',
+    });
     expect(alternatives).toEqual([]);
   });
 });

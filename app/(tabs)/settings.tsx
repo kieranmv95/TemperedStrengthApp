@@ -175,7 +175,9 @@ export default function SettingsScreen() {
         ) : null}
         <View style={styles.settingsList}>
           {onboardingProfileState?.name && (
-            <Text style={styles.settingTitle}>Hi {onboardingProfileState?.name}</Text>
+            <Text style={styles.settingTitle}>
+              Hi {onboardingProfileState?.name}
+            </Text>
           )}
           <TouchableOpacity
             style={[styles.settingItem, isPro && styles.proItem]}
@@ -283,10 +285,17 @@ export default function SettingsScreen() {
             <View style={styles.settingsSection}>
               <Text style={styles.settingsSectionTitle}>Dev settings</Text>
 
-              <TouchableOpacity style={[styles.settingItem, styles.dangerItem]} onPress={handleClearAllData}>
+              <TouchableOpacity
+                style={[styles.settingItem, styles.dangerItem]}
+                onPress={handleClearAllData}
+              >
                 <View style={styles.settingContent}>
-                  <Text style={[styles.settingTitle, styles.dangerText]}>Clear All Data</Text>
-                  <Text style={styles.settingDescription}>Permanently delete all stored data</Text>
+                  <Text style={[styles.settingTitle, styles.dangerText]}>
+                    Clear All Data
+                  </Text>
+                  <Text style={styles.settingDescription}>
+                    Permanently delete all stored data
+                  </Text>
                 </View>
                 <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
               </TouchableOpacity>
@@ -296,9 +305,12 @@ export default function SettingsScreen() {
                 onPress={handleInvalidateSanityAppConfigCache}
               >
                 <View style={styles.settingContent}>
-                  <Text style={styles.settingTitle}>Invalidate app config cache</Text>
+                  <Text style={styles.settingTitle}>
+                    Invalidate app config cache
+                  </Text>
                   <Text style={styles.settingDescription}>
-                    Clear cached Sanity notification; Home tab refetches on next focus.
+                    Clear cached Sanity notification; Home tab refetches on next
+                    focus.
                   </Text>
                 </View>
                 <Text style={styles.settingArrow}>→</Text>
@@ -306,7 +318,9 @@ export default function SettingsScreen() {
 
               <View style={styles.settingItem}>
                 <View style={styles.settingContent}>
-                  <Text style={styles.settingTitle}>Developer · Onboarding</Text>
+                  <Text style={styles.settingTitle}>
+                    Developer · Onboarding
+                  </Text>
                   <Text style={styles.settingDescription}>
                     onboarded: {onboardedState ? 'true' : 'false'}
                   </Text>
@@ -319,9 +333,14 @@ export default function SettingsScreen() {
                 </View>
               </View>
 
-              <TouchableOpacity style={[styles.settingItem, styles.dangerItem]} onPress={handleResetOnboarding}>
+              <TouchableOpacity
+                style={[styles.settingItem, styles.dangerItem]}
+                onPress={handleResetOnboarding}
+              >
                 <View style={styles.settingContent}>
-                  <Text style={[styles.settingTitle, styles.dangerText]}>Reset Onboarding</Text>
+                  <Text style={[styles.settingTitle, styles.dangerText]}>
+                    Reset Onboarding
+                  </Text>
                   <Text style={styles.settingDescription}>
                     Clear onboarded flag and stored profile for testing
                   </Text>

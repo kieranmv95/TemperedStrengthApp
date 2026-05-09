@@ -44,7 +44,9 @@ export function ProgramLauncherWorkoutPreviewRow({
       ) : null}
       <View style={styles.workoutMeta}>
         <Text style={styles.workoutExercises}>
-          {isV2 ? `${workout.blocks.length} blocks` : `${workout.exercises.length} exercises`}
+          {isV2
+            ? `${workout.blocks.length} blocks`
+            : `${workout.exercises.length} exercises`}
         </Text>
         {showIntensity ? (
           <View style={styles.workoutIntensity}>

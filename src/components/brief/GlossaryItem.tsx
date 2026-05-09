@@ -1,12 +1,7 @@
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { GlossaryTerm } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '../../constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '../../constants/theme';
 import React, { useState } from 'react';
 import {
   LayoutAnimation,

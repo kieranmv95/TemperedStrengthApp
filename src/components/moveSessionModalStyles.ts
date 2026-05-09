@@ -117,4 +117,3 @@ export const moveSessionModalStyles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 });
-

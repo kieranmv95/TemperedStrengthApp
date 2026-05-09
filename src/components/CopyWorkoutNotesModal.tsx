@@ -47,7 +47,7 @@ function resolveWorkoutLabel(
   const workout =
     startISO !== null
       ? getWorkoutForDaySinceStart(program, startISO, pattern, dayIndex)
-      : program.workouts.find((w) => w.dayIndex === dayIndex) ?? null;
+      : (program.workouts.find((w) => w.dayIndex === dayIndex) ?? null);
   // Day indices are 0-based internally; keep fallback user-facing.
   return workout?.label ?? `Day ${dayIndex + 1}`;
 }
@@ -205,14 +205,19 @@ export function CopyWorkoutNotesModal({
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Copy notes from another workout</Text>
+            <Text style={styles.modalTitle}>
+              Copy notes from another workout
+            </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>✕</Text>
             </TouchableOpacity>
           </View>
 
           {loading ? (
-            <ActivityIndicator color={Colors.accent} style={{ marginVertical: Spacing.xxl }} />
+            <ActivityIndicator
+              color={Colors.accent}
+              style={{ marginVertical: Spacing.xxl }}
+            />
           ) : rows.length === 0 ? (
             <Text style={styles.emptyText}>{emptyMessage}</Text>
           ) : (

@@ -2,13 +2,7 @@ import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import type { RepMax } from '@/src/types/personalBests';
 import { formatRepMaxLabel } from '@/src/utils/personalBests';
 import React from 'react';
-import {
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export type PBDetectedModalProps = {
   visible: boolean;

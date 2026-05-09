@@ -34,7 +34,8 @@ export default function AccountProgramSettingsScreen() {
   const posthog = usePostHog();
   const [hasProgram, setHasProgram] = useState<boolean>(false);
   const [, setActiveProgram] = useState<Program | null>(null);
-  const [autoTimersEnabled, setAutoTimersEnabledState] = useState<boolean>(true);
+  const [autoTimersEnabled, setAutoTimersEnabledState] =
+    useState<boolean>(true);
   const [autoTimersLoading, setAutoTimersLoading] = useState<boolean>(true);
   const [autoPbEnabled, setAutoPbEnabledState] = useState<boolean>(true);
   const [autoPbLoading, setAutoPbLoading] = useState<boolean>(true);
@@ -173,10 +174,16 @@ export default function AccountProgramSettingsScreen() {
               setHasProgram(false);
               setActiveProgram(null);
               router.replace('/');
-              Alert.alert('Program Ended', 'Your current program has been cleared.');
+              Alert.alert(
+                'Program Ended',
+                'Your current program has been cleared.'
+              );
             } catch (error) {
               console.error('Error ending current program:', error);
-              Alert.alert('Error', 'Failed to end your current program. Please try again.');
+              Alert.alert(
+                'Error',
+                'Failed to end your current program. Please try again.'
+              );
             }
           },
         },
@@ -211,8 +218,8 @@ export default function AccountProgramSettingsScreen() {
             <View style={styles.settingContent}>
               <Text style={styles.settingTitle}>Auto rest timers</Text>
               <Text style={styles.settingDescription}>
-                When enabled, completing a set will automatically start (or restart) the rest
-                timer. The timer closes after the last set.
+                When enabled, completing a set will automatically start (or
+                restart) the rest timer. The timer closes after the last set.
               </Text>
             </View>
             <Switch
@@ -227,10 +234,12 @@ export default function AccountProgramSettingsScreen() {
 
           <View style={styles.settingItem}>
             <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Auto-detect PBs (Programs)</Text>
+              <Text style={styles.settingTitle}>
+                Auto-detect PBs (Programs)
+              </Text>
               <Text style={styles.settingDescription}>
-                When enabled, if we detect a new PB we’ll prompt you to update personal bests after
-                sets during program workouts.
+                When enabled, if we detect a new PB we’ll prompt you to update
+                personal bests after sets during program workouts.
               </Text>
             </View>
             <Switch
@@ -245,9 +254,12 @@ export default function AccountProgramSettingsScreen() {
 
           <View style={styles.settingItem}>
             <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Show “Start Session” button</Text>
+              <Text style={styles.settingTitle}>
+                Show “Start Session” button
+              </Text>
               <Text style={styles.settingDescription}>
-                When disabled, the Start Session button won’t appear on workout days.
+                When disabled, the Start Session button won’t appear on workout
+                days.
               </Text>
             </View>
             <Switch
@@ -321,4 +333,3 @@ const pageStyles = StyleSheet.create({
     fontWeight: '500',
   },
 });
-

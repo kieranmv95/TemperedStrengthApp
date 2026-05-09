@@ -43,7 +43,10 @@ export function WorkoutCard({
         <View style={styles.cardTitleRow}>
           <View style={styles.categoryIcon}>
             {workout.category === 'Rainhill' ? (
-              <Image source={require('@/assets/images/logos/rainhill_icon.png')} style={styles.sponsorLogo} />
+              <Image
+                source={require('@/assets/images/logos/rainhill_icon.png')}
+                style={styles.sponsorLogo}
+              />
             ) : (
               <Ionicons
                 name={CATEGORY_ICONS[workout.category] as any}

@@ -79,7 +79,10 @@ export const RestTimer: React.FC<RestTimerProps> = ({
       </View>
       <View style={workoutTimerBarStyles.iconButtonGroup}>
         <TouchableOpacity
-          style={[workoutTimerBarStyles.iconButton, workoutTimerBarStyles.buttonSize]}
+          style={[
+            workoutTimerBarStyles.iconButton,
+            workoutTimerBarStyles.buttonSize,
+          ]}
           onPress={onRestart}
           activeOpacity={0.7}
           accessibilityRole="button"
@@ -91,7 +94,10 @@ export const RestTimer: React.FC<RestTimerProps> = ({
         {isRunning && (
           <>
             <TouchableOpacity
-              style={[workoutTimerBarStyles.adjustButton, workoutTimerBarStyles.buttonSize]}
+              style={[
+                workoutTimerBarStyles.adjustButton,
+                workoutTimerBarStyles.buttonSize,
+              ]}
               onPress={() => onAdjust(-15)}
               activeOpacity={0.7}
               accessibilityRole="button"
@@ -101,7 +107,10 @@ export const RestTimer: React.FC<RestTimerProps> = ({
               <Text style={workoutTimerBarStyles.adjustButtonText}>-15</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[workoutTimerBarStyles.adjustButton, workoutTimerBarStyles.buttonSize]}
+              style={[
+                workoutTimerBarStyles.adjustButton,
+                workoutTimerBarStyles.buttonSize,
+              ]}
               onPress={() => onAdjust(15)}
               activeOpacity={0.7}
               accessibilityRole="button"
@@ -113,7 +122,10 @@ export const RestTimer: React.FC<RestTimerProps> = ({
           </>
         )}
         <TouchableOpacity
-          style={[workoutTimerBarStyles.iconButton, workoutTimerBarStyles.buttonSize]}
+          style={[
+            workoutTimerBarStyles.iconButton,
+            workoutTimerBarStyles.buttonSize,
+          ]}
           onPress={onDismiss}
           activeOpacity={0.7}
           accessibilityRole="button"

@@ -9,4 +9,3 @@ export function setRuntimeSyncManager(next: SyncManager | null): void {
 export function getRuntimeSyncManager(): SyncManager | null {
   return manager;
 }
-

@@ -28,7 +28,9 @@ export default function BriefScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState<ArticleCategory | 'All'>('All');
+  const [activeCategory, setActiveCategory] = useState<ArticleCategory | 'All'>(
+    'All'
+  );
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   // The UI is the source of truth for favorites once mounted. We keep a ref
@@ -71,27 +73,28 @@ export default function BriefScreen() {
     }, [])
   );
 
-  const handleToggleFavorite = useCallback((slug: string) => {
-    const prev = favoritesRef.current;
-    const isAdd = !prev.includes(slug);
-    const next = isAdd
-      ? [...prev, slug]
-      : prev.filter((s) => s !== slug);
+  const handleToggleFavorite = useCallback(
+    (slug: string) => {
+      const prev = favoritesRef.current;
+      const isAdd = !prev.includes(slug);
+      const next = isAdd ? [...prev, slug] : prev.filter((s) => s !== slug);
 
-    posthog.capture(posthogEventsNames.content.articleFavourite, {
-      article_id: slug,
-      action: isAdd ? 'add' : 'remove',
-    });
-
-    favoritesRef.current = next;
-    setFavorites(next);
-
-    persistChainRef.current = persistChainRef.current
-      .then(() => setFavoriteArticles(next))
-      .catch((error) => {
-        console.error('Failed to persist favorite articles:', error);
+      posthog.capture(posthogEventsNames.content.articleFavourite, {
+        article_id: slug,
+        action: isAdd ? 'add' : 'remove',
       });
-  }, [posthog]);
+
+      favoritesRef.current = next;
+      setFavorites(next);
+
+      persistChainRef.current = persistChainRef.current
+        .then(() => setFavoriteArticles(next))
+        .catch((error) => {
+          console.error('Failed to persist favorite articles:', error);
+        });
+    },
+    [posthog]
+  );
 
   const visibleArticles = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -101,7 +104,10 @@ export default function BriefScreen() {
       // so when showing favorites ignore the lingering activeCategory.
       if (showFavoritesOnly) {
         if (!favorites.includes(article.slug)) return false;
-      } else if (activeCategory !== 'All' && article.category !== activeCategory) {
+      } else if (
+        activeCategory !== 'All' &&
+        article.category !== activeCategory
+      ) {
         return false;
       }
 
@@ -143,10 +149,15 @@ export default function BriefScreen() {
     if (isOffline) {
       return (
         <View style={styles.centeredState}>
-          <Ionicons name="wifi-outline" size={64} color={Colors.backgroundSubtle} />
+          <Ionicons
+            name="wifi-outline"
+            size={64}
+            color={Colors.backgroundSubtle}
+          />
           <Text style={styles.emptyTitle}>No Connection</Text>
           <Text style={styles.emptyDescription}>
-            Articles are unavailable offline. Come back when you&apos;re connected.
+            Articles are unavailable offline. Come back when you&apos;re
+            connected.
           </Text>
         </View>
       );
@@ -236,7 +247,9 @@ export default function BriefScreen() {
               color={Colors.backgroundSubtle}
             />
             <Text style={styles.emptyTitle}>
-              {showFavoritesOnly ? 'No Saved Articles Yet' : 'No Articles Found'}
+              {showFavoritesOnly
+                ? 'No Saved Articles Yet'
+                : 'No Articles Found'}
             </Text>
             <Text style={styles.emptyDescription}>
               {showFavoritesOnly
@@ -322,7 +335,7 @@ export default function BriefScreen() {
                 : isAllChip
                   ? activeCategory === 'All' && !showFavoritesOnly
                   : activeCategory === (item.key as ArticleCategory) &&
-                  !showFavoritesOnly;
+                    !showFavoritesOnly;
 
               const count = isFavoritesChip
                 ? favorites.length

@@ -18,4 +18,3 @@ export async function syncRemoveItem(key: string): Promise<void> {
     console.error('Failed to mirror remove to sync provider:', error);
   }
 }
-

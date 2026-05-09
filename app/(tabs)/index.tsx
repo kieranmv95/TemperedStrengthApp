@@ -73,9 +73,8 @@ export default function HomeTabScreen() {
   } = useSubscription();
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [programSummary, setProgramSummary] = useState<HomeProgramSummary | null>(
-    null
-  );
+  const [programSummary, setProgramSummary] =
+    useState<HomeProgramSummary | null>(null);
   const [pbStore, setPbStore] = useState<PersonalBestsStore | null>(null);
   const hasCompletedInitialLoad = useRef(false);
 
@@ -186,7 +185,6 @@ export default function HomeTabScreen() {
   return (
     <StandardLayout title={greetingTitle} subtitle={headerSubtitle}>
       <StandardLayout.Body>
-
         {showFreeStrip && (
           <Animated.View
             style={[styles.welcomeStrip, { opacity: freeStripOpacity }]}
@@ -245,13 +243,15 @@ export default function HomeTabScreen() {
               </Text>
             ) : null}
             {remoteNotification.ctaText.length > 0 &&
-              remoteNotification.ctaUrl.length > 0 ? (
+            remoteNotification.ctaUrl.length > 0 ? (
               <TouchableOpacity
                 style={[
                   styles.notificationCta,
                   { backgroundColor: remoteNotification.ctaColor },
                 ]}
-                onPress={() => openRemoteNotificationCta(remoteNotification.ctaUrl)}
+                onPress={() =>
+                  openRemoteNotificationCta(remoteNotification.ctaUrl)
+                }
                 accessibilityRole="button"
                 accessibilityLabel={remoteNotification.ctaText}
               >
@@ -271,7 +271,11 @@ export default function HomeTabScreen() {
         <View style={styles.section}>
           <View style={styles.sectionheader}>
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="barbell-outline" size={20} color={Colors.accent} />
+              <Ionicons
+                name="barbell-outline"
+                size={20}
+                color={Colors.accent}
+              />
               <Text style={styles.sectionTitle}>Your program</Text>
             </View>
             <Text style={styles.sectionSubtitle}>
@@ -290,13 +294,11 @@ export default function HomeTabScreen() {
               accessibilityLabel="Open program"
             >
               <View style={styles.cardBody}>
-                <Text style={styles.cardTitle}>{programSummary.programName}</Text>
+                <Text style={styles.cardTitle}>
+                  {programSummary.programName}
+                </Text>
                 <Text style={[styles.cardMuted, { marginTop: 4 }]}>
-                  {programSummary.awaitingProgramStart ? null : (
-                    <>
-                      Today:{' '}
-                    </>
-                  )}
+                  {programSummary.awaitingProgramStart ? null : <>Today: </>}
                   <Text style={styles.cardAccent}>
                     {programSummary.todaySessionLabel}
                   </Text>
@@ -309,7 +311,11 @@ export default function HomeTabScreen() {
                 </Text>
               </View>
               <View style={styles.cardChevronWrap} pointerEvents="none">
-                <Ionicons name="chevron-forward" size={22} color={Colors.accent} />
+                <Ionicons
+                  name="chevron-forward"
+                  size={22}
+                  color={Colors.accent}
+                />
               </View>
             </TouchableOpacity>
           ) : (
@@ -326,12 +332,16 @@ export default function HomeTabScreen() {
               <View style={styles.cardBody}>
                 <Text style={styles.cardTitle}>Pick a program</Text>
                 <Text style={styles.cardMuted}>
-                  Head to the Program tab and choose one — we will surface the good
-                  stuff here.
+                  Head to the Program tab and choose one — we will surface the
+                  good stuff here.
                 </Text>
               </View>
               <View style={styles.cardChevronWrap} pointerEvents="none">
-                <Ionicons name="chevron-forward" size={22} color={Colors.accent} />
+                <Ionicons
+                  name="chevron-forward"
+                  size={22}
+                  color={Colors.accent}
+                />
               </View>
             </TouchableOpacity>
           )}
@@ -373,7 +383,11 @@ export default function HomeTabScreen() {
                 ))}
               </View>
               <View style={styles.cardChevronWrap} pointerEvents="none">
-                <Ionicons name="chevron-forward" size={22} color={Colors.accent} />
+                <Ionicons
+                  name="chevron-forward"
+                  size={22}
+                  color={Colors.accent}
+                />
               </View>
             </TouchableOpacity>
           ) : (
@@ -390,12 +404,16 @@ export default function HomeTabScreen() {
               <View style={styles.cardBody}>
                 <Text style={styles.emptyTitle}>No PRs yet</Text>
                 <Text style={styles.emptySubtitle}>
-                  Log a PB from a workout and it will show up here. First one is the
-                  best one.
+                  Log a PB from a workout and it will show up here. First one is
+                  the best one.
                 </Text>
               </View>
               <View style={styles.cardChevronWrap} pointerEvents="none">
-                <Ionicons name="chevron-forward" size={22} color={Colors.accent} />
+                <Ionicons
+                  name="chevron-forward"
+                  size={22}
+                  color={Colors.accent}
+                />
               </View>
             </TouchableOpacity>
           )}
@@ -404,10 +422,16 @@ export default function HomeTabScreen() {
         <View style={styles.section}>
           <View style={styles.sectionheader}>
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="sparkles-outline" size={20} color={Colors.accent} />
+              <Ionicons
+                name="sparkles-outline"
+                size={20}
+                color={Colors.accent}
+              />
               <Text style={styles.sectionTitle}>Quick links</Text>
             </View>
-            <Text style={styles.sectionSubtitle}>References and extras you will reuse</Text>
+            <Text style={styles.sectionSubtitle}>
+              References and extras you will reuse
+            </Text>
           </View>
           <View style={styles.toolsRow}>
             <TouchableOpacity
@@ -436,7 +460,11 @@ export default function HomeTabScreen() {
         <View style={styles.section}>
           <View style={styles.sectionheader}>
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="person-circle-outline" size={20} color={Colors.accent} />
+              <Ionicons
+                name="person-circle-outline"
+                size={20}
+                color={Colors.accent}
+              />
               <Text style={styles.sectionTitle}>You</Text>
             </View>
             <Text style={styles.sectionSubtitle}>Settings and preferences</Text>
@@ -451,7 +479,9 @@ export default function HomeTabScreen() {
             accessibilityRole="button"
             accessibilityLabel="Open settings"
           >
-            <Text style={workoutScreenStyles.startSessionButtonText}>Settings</Text>
+            <Text style={workoutScreenStyles.startSessionButtonText}>
+              Settings
+            </Text>
           </TouchableOpacity>
         </View>
       </StandardLayout.Body>

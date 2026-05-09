@@ -68,4 +68,3 @@ export class ICloudKvsProvider implements SyncProvider {
     }
   }
 }
-

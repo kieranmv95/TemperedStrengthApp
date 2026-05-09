@@ -23,8 +23,8 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
         </Text>
 
         <Text style={styles.readyText}>
-          Sometimes you’re ready to go, and when you are, check out the
-          workouts if you’re still geared to go.
+          Sometimes you’re ready to go, and when you are, check out the workouts
+          if you’re still geared to go.
         </Text>
 
         <View style={styles.actions}>

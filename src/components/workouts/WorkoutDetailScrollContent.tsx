@@ -1,7 +1,11 @@
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
 import { Colors } from '@/src/constants/theme';
 import type { OnboardingGender } from '@/src/types/onboarding';
-import type { Divider, DetailedMovement, SingleWorkout } from '@/src/types/workouts';
+import type {
+  Divider,
+  DetailedMovement,
+  SingleWorkout,
+} from '@/src/types/workouts';
 import { getOnboardingProfile } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -106,7 +110,10 @@ export function WorkoutDetailScrollContent({
       <View style={styles.detailMetaRow}>
         <View style={styles.detailCategoryBadge}>
           {workout.category === 'Rainhill' ? (
-            <Image source={require('@/assets/images/logos/rainhill_icon.png')} style={styles.categoryIconImage} />
+            <Image
+              source={require('@/assets/images/logos/rainhill_icon.png')}
+              style={styles.categoryIconImage}
+            />
           ) : (
             <Ionicons
               name={CATEGORY_ICONS[workout.category] as any}
@@ -186,7 +193,9 @@ export function WorkoutDetailScrollContent({
             <View key={blockIndex} style={styles.blockContainer}>
               <Text style={styles.blockName}>{block.name}</Text>
               {block.instructions && (
-                <Text style={styles.blockInstructions}>{block.instructions}</Text>
+                <Text style={styles.blockInstructions}>
+                  {block.instructions}
+                </Text>
               )}
               <View style={styles.movementsList}>
                 {block.movements.map((movement, movementIndex) => {

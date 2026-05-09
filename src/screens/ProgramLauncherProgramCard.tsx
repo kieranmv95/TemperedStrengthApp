@@ -23,10 +23,7 @@ export function ProgramLauncherProgramCard({
 
   return (
     <TouchableOpacity
-      style={[
-        styles.programCard,
-        isLocked && styles.programCardLocked,
-      ]}
+      style={[styles.programCard, isLocked && styles.programCardLocked]}
       onPress={() => onSelect(program)}
       disabled={false}
     >

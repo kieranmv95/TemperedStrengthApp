@@ -73,7 +73,10 @@ export function MoveSessionModal({
                   onPress={() => onSelectToDayIndex(o.dayIndex)}
                 >
                   <Text
-                    style={[styles.dayLabel, o.isFromDay ? styles.dayLabelFrom : null]}
+                    style={[
+                      styles.dayLabel,
+                      o.isFromDay ? styles.dayLabelFrom : null,
+                    ]}
                   >
                     {o.weekdayLabel}
                   </Text>
@@ -118,4 +121,3 @@ export function MoveSessionModal({
     </Modal>
   );
 }
-

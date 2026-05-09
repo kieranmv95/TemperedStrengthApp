@@ -33,10 +33,7 @@ export function DaySelectorDayChip({
       </Text>
       {!!subLabel && (
         <Text
-          style={[
-            styles.daySubLabel,
-            isSelected && styles.daySubLabelSelected,
-          ]}
+          style={[styles.daySubLabel, isSelected && styles.daySubLabelSelected]}
         >
           {subLabel}
         </Text>

@@ -61,7 +61,13 @@ export function ExerciseCardSetRow({
                 {isRepsOnly ? 'Added weight' : 'Weight'} ({weightUnit})
               </Text>
             )}
-            <View style={showOptionalWeightReset ? styles.inputWithLeadingButtonRow : undefined}>
+            <View
+              style={
+                showOptionalWeightReset
+                  ? styles.inputWithLeadingButtonRow
+                  : undefined
+              }
+            >
               {showOptionalWeightReset && (
                 <TouchableOpacity
                   onPress={() => {
@@ -76,7 +82,11 @@ export function ExerciseCardSetRow({
                   ]}
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
-                  <Ionicons name="trash-outline" size={18} color={Colors.accent} />
+                  <Ionicons
+                    name="trash-outline"
+                    size={18}
+                    color={Colors.accent}
+                  />
                 </TouchableOpacity>
               )}
               <TextInput
@@ -102,12 +112,14 @@ export function ExerciseCardSetRow({
             <TouchableOpacity
               onPress={() => setShowWeight(true)}
               disabled={loading}
-              style={[styles.input, styles.inputButton, { justifyContent: 'center' }]}
+              style={[
+                styles.input,
+                styles.inputButton,
+                { justifyContent: 'center' },
+              ]}
               accessibilityLabel="Add weight"
             >
-              <Text style={styles.inputButtonText}>
-                Add weight
-              </Text>
+              <Text style={styles.inputButtonText}>Add weight</Text>
             </TouchableOpacity>
           </View>
         )}

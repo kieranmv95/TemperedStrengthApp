@@ -17,7 +17,8 @@ export const fiveMinuteWarmup: Warmup = {
 export const fiveMinuteCooldown: Warmup = {
   type: 'warmup',
   title: 'Cool-Down',
-  additionalDescription: '5 minutes. Breathe, reset, and let your heart rate come down.',
+  additionalDescription:
+    '5 minutes. Breathe, reset, and let your heart rate come down.',
   description: [
     '60s slow breathing (in through nose, long exhale)',
     '60s calf stretch (switch sides halfway)',
@@ -26,4 +27,3 @@ export const fiveMinuteCooldown: Warmup = {
     '60s gentle forward fold (soft knees)',
   ],
 };
-

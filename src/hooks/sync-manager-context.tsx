@@ -1,7 +1,19 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { AppState } from 'react-native';
-import { SYNC_ENABLED_KEY, SyncManager, type SyncDecision, type SyncConflict } from '@/src/sync';
+import {
+  SYNC_ENABLED_KEY,
+  SyncManager,
+  type SyncDecision,
+  type SyncConflict,
+} from '@/src/sync';
 import { ICloudKvsProvider } from '@/src/sync/providers/ICloudKvsProvider';
 import { NoopSyncProvider } from '@/src/sync/providers/NoopSyncProvider';
 import { ICloudSyncConflictModal } from '@/src/components/sync/ICloudSyncConflictModal';
@@ -34,15 +46,22 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
 
   const managerRef = useRef<SyncManager | null>(null);
 
-  const [pendingConflicts, setPendingConflicts] = useState<SyncConflict[] | null>(null);
-  const pendingResolverRef = useRef<((decision: SyncDecision) => void) | null>(null);
+  const [pendingConflicts, setPendingConflicts] = useState<
+    SyncConflict[] | null
+  >(null);
+  const pendingResolverRef = useRef<((decision: SyncDecision) => void) | null>(
+    null
+  );
 
-  const requestConflictDecision = useCallback(async (conflicts: SyncConflict[]) => {
-    return await new Promise<SyncDecision>((resolve) => {
-      pendingResolverRef.current = resolve;
-      setPendingConflicts(conflicts);
-    });
-  }, []);
+  const requestConflictDecision = useCallback(
+    async (conflicts: SyncConflict[]) => {
+      return await new Promise<SyncDecision>((resolve) => {
+        pendingResolverRef.current = resolve;
+        setPendingConflicts(conflicts);
+      });
+    },
+    []
+  );
 
   const buildManager = useCallback(
     async (nextEnabled: boolean) => {
@@ -58,7 +77,10 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
 
       const provider = new ICloudKvsProvider();
       const availability = await provider.getAvailability();
-      managerRef.current = new SyncManager({ provider, requestConflictDecision });
+      managerRef.current = new SyncManager({
+        provider,
+        requestConflictDecision,
+      });
       setRuntimeSyncManager(managerRef.current);
       setIsAvailable(availability.available);
       return availability.available;
@@ -74,7 +96,10 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
   const setEnabled = useCallback(
     async (nextEnabled: boolean) => {
       setEnabledState(nextEnabled);
-      await AsyncStorage.setItem(SYNC_ENABLED_KEY, nextEnabled ? 'true' : 'false');
+      await AsyncStorage.setItem(
+        SYNC_ENABLED_KEY,
+        nextEnabled ? 'true' : 'false'
+      );
       const available = await buildManager(nextEnabled);
 
       if (nextEnabled) {
@@ -144,4 +169,3 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
     </SyncContext.Provider>
   );
 }
-

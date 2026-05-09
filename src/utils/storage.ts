@@ -122,20 +122,25 @@ export const setOnboarded = async (next: boolean): Promise<void> => {
   }
 };
 
-export const getOnboardingProfile = async (): Promise<OnboardingProfile | null> => {
-  try {
-    const raw = await AsyncStorage.getItem(ONBOARDING_PROFILE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as unknown;
-    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+export const getOnboardingProfile =
+  async (): Promise<OnboardingProfile | null> => {
+    try {
+      const raw = await AsyncStorage.getItem(ONBOARDING_PROFILE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as unknown;
+      if (
+        typeof parsed !== 'object' ||
+        parsed === null ||
+        Array.isArray(parsed)
+      ) {
+        return null;
+      }
+      return parsed as OnboardingProfile;
+    } catch (error) {
+      console.error('Error getting onboarding profile:', error);
       return null;
     }
-    return parsed as OnboardingProfile;
-  } catch (error) {
-    console.error('Error getting onboarding profile:', error);
-    return null;
-  }
-};
+  };
 
 export const setOnboardingProfile = async (
   profile: OnboardingProfile
@@ -192,7 +197,9 @@ export const getAutoRestTimersEnabled = async (): Promise<boolean> => {
   }
 };
 
-export const setAutoRestTimersEnabled = async (enabled: boolean): Promise<void> => {
+export const setAutoRestTimersEnabled = async (
+  enabled: boolean
+): Promise<void> => {
   try {
     await syncSetItem(AUTO_REST_TIMERS_ENABLED_KEY, enabled ? 'true' : 'false');
   } catch (error) {
@@ -205,18 +212,22 @@ export const setAutoRestTimersEnabled = async (enabled: boolean): Promise<void> 
  * Controls whether the app should automatically detect potential personal bests
  * during program workouts and show the “New personal best” prompt.
  */
-export const getAutoPbDetectionInProgramsEnabled = async (): Promise<boolean> => {
-  try {
-    const raw = await AsyncStorage.getItem(
-      AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY
-    );
-    if (raw === null) return true;
-    return raw === 'true';
-  } catch (error) {
-    console.error('Error getting auto PB detection in programs enabled:', error);
-    return true;
-  }
-};
+export const getAutoPbDetectionInProgramsEnabled =
+  async (): Promise<boolean> => {
+    try {
+      const raw = await AsyncStorage.getItem(
+        AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY
+      );
+      if (raw === null) return true;
+      return raw === 'true';
+    } catch (error) {
+      console.error(
+        'Error getting auto PB detection in programs enabled:',
+        error
+      );
+      return true;
+    }
+  };
 
 export const setAutoPbDetectionInProgramsEnabled = async (
   enabled: boolean
@@ -227,7 +238,10 @@ export const setAutoPbDetectionInProgramsEnabled = async (
       enabled ? 'true' : 'false'
     );
   } catch (error) {
-    console.error('Error setting auto PB detection in programs enabled:', error);
+    console.error(
+      'Error setting auto PB detection in programs enabled:',
+      error
+    );
     throw error;
   }
 };
@@ -247,7 +261,10 @@ export const setProgramWarmupModuleEnabled = async (
   enabled: boolean
 ): Promise<void> => {
   try {
-    await syncSetItem(PROGRAM_WARMUP_MODULE_ENABLED_KEY, enabled ? 'true' : 'false');
+    await syncSetItem(
+      PROGRAM_WARMUP_MODULE_ENABLED_KEY,
+      enabled ? 'true' : 'false'
+    );
   } catch (error) {
     console.error('Error setting program warmup module enabled:', error);
     throw error;
@@ -281,7 +298,9 @@ export const setProgramCooldownModuleEnabled = async (
 
 export const getProgramShowStartSessionButton = async (): Promise<boolean> => {
   try {
-    const raw = await AsyncStorage.getItem(PROGRAM_SHOW_START_SESSION_BUTTON_KEY);
+    const raw = await AsyncStorage.getItem(
+      PROGRAM_SHOW_START_SESSION_BUTTON_KEY
+    );
     if (raw === null) return true;
     return raw === 'true';
   } catch (error) {
@@ -381,10 +400,7 @@ export const setProgramWorkoutWeekdays = async (
   weekdays: ProgramWorkoutWeekdayKey[]
 ): Promise<void> => {
   try {
-    await syncSetItem(
-      PROGRAM_WORKOUT_WEEKDAYS_KEY,
-      JSON.stringify(weekdays)
-    );
+    await syncSetItem(PROGRAM_WORKOUT_WEEKDAYS_KEY, JSON.stringify(weekdays));
   } catch (error) {
     console.error('Error setting program workout weekdays:', error);
     throw error;
@@ -408,7 +424,11 @@ export const getProgramSessionShiftsStore =
         return {};
       }
       const parsed = JSON.parse(raw) as unknown;
-      if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+      if (
+        typeof parsed !== 'object' ||
+        parsed === null ||
+        Array.isArray(parsed)
+      ) {
         return {};
       }
       return parsed as ProgramSessionShiftsStore;
@@ -956,10 +976,7 @@ export const clearFutureWorkoutData = async (
           filteredLogs[dayIdx] = logs[dayIdx];
         }
       });
-      await syncSetItem(
-        WORKOUT_LOGS_KEY,
-        JSON.stringify(filteredLogs)
-      );
+      await syncSetItem(WORKOUT_LOGS_KEY, JSON.stringify(filteredLogs));
     }
 
     // Clear exercise swaps
@@ -973,10 +990,7 @@ export const clearFutureWorkoutData = async (
           filteredSwaps[dayIdx] = swaps[dayIdx];
         }
       });
-      await syncSetItem(
-        EXERCISE_SWAPS_KEY,
-        JSON.stringify(filteredSwaps)
-      );
+      await syncSetItem(EXERCISE_SWAPS_KEY, JSON.stringify(filteredSwaps));
     }
   } catch (error) {
     console.error('Error clearing future workout data:', error);
@@ -1174,10 +1188,7 @@ export const addFavoriteWorkout = async (workoutId: string): Promise<void> => {
     const favorites = await getFavoriteWorkouts();
     if (!favorites.includes(workoutId)) {
       favorites.push(workoutId);
-      await syncSetItem(
-        FAVORITE_WORKOUTS_KEY,
-        JSON.stringify(favorites)
-      );
+      await syncSetItem(FAVORITE_WORKOUTS_KEY, JSON.stringify(favorites));
     }
   } catch (error) {
     console.error('Error adding favorite workout:', error);
@@ -1269,10 +1280,7 @@ export const addFavoriteArticle = async (articleId: string): Promise<void> => {
     const favorites = await getFavoriteArticles();
     if (!favorites.includes(articleId)) {
       favorites.push(articleId);
-      await syncSetItem(
-        FAVORITE_ARTICLES_KEY,
-        JSON.stringify(favorites)
-      );
+      await syncSetItem(FAVORITE_ARTICLES_KEY, JSON.stringify(favorites));
     }
   } catch (error) {
     console.error('Error adding favorite article:', error);
@@ -1375,10 +1383,7 @@ export const saveCompletedSession = async (
     const data = await AsyncStorage.getItem(COMPLETED_SESSIONS_KEY);
     const sessions: CompletedSessions = data ? JSON.parse(data) : {};
     sessions[session.dayIndex] = session;
-    await syncSetItem(
-      COMPLETED_SESSIONS_KEY,
-      JSON.stringify(sessions)
-    );
+    await syncSetItem(COMPLETED_SESSIONS_KEY, JSON.stringify(sessions));
   } catch (error) {
     console.error('Error saving completed session:', error);
     throw error;
@@ -1425,10 +1430,7 @@ export const clearCompletedSession = async (
     const sessions: CompletedSessions = JSON.parse(data);
     if (sessions[dayIndex] !== undefined) {
       delete sessions[dayIndex];
-      await syncSetItem(
-        COMPLETED_SESSIONS_KEY,
-        JSON.stringify(sessions)
-      );
+      await syncSetItem(COMPLETED_SESSIONS_KEY, JSON.stringify(sessions));
     }
   } catch (error) {
     console.error('Error clearing completed session:', error);
@@ -1457,7 +1459,9 @@ export const getWorkoutLogsForDay = async (
  */
 export const getConditioningLogsForDay = async (
   dayIndex: number
-): Promise<{ [blockId: string]: { completed: boolean; completedAt?: number } }> => {
+): Promise<{
+  [blockId: string]: { completed: boolean; completedAt?: number };
+}> => {
   try {
     const raw = await AsyncStorage.getItem(CONDITIONING_WORKOUT_LOGS_KEY);
     const logs: ConditioningWorkoutLogs = raw ? JSON.parse(raw) : {};
@@ -1557,10 +1561,7 @@ export const readStandaloneWorkoutLogsStore =
 const writeStandaloneWorkoutLogsStore = async (
   store: StandaloneWorkoutLogsStore
 ): Promise<void> => {
-  await syncSetItem(
-    STANDALONE_WORKOUT_LOGS_KEY,
-    JSON.stringify(store)
-  );
+  await syncSetItem(STANDALONE_WORKOUT_LOGS_KEY, JSON.stringify(store));
 };
 
 export const getStandaloneWorkoutLogsForWorkout = async (
@@ -1610,7 +1611,11 @@ async function readPersonalBestsStore(): Promise<PersonalBestsStore> {
       return {};
     }
     const parsed = JSON.parse(raw) as unknown;
-    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    if (
+      typeof parsed !== 'object' ||
+      parsed === null ||
+      Array.isArray(parsed)
+    ) {
       return {};
     }
     return parsed as PersonalBestsStore;
@@ -1626,10 +1631,9 @@ async function writePersonalBestsStore(
   await syncSetItem(PERSONAL_BESTS_KEY, JSON.stringify(store));
 }
 
-export const getPersonalBestsStore =
-  async (): Promise<PersonalBestsStore> => {
-    return readPersonalBestsStore();
-  };
+export const getPersonalBestsStore = async (): Promise<PersonalBestsStore> => {
+  return readPersonalBestsStore();
+};
 
 export const getPersonalBestsForExercise = async (
   exerciseId: number

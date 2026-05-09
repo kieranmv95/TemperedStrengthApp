@@ -2,7 +2,14 @@ import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
-import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type PatchNote = {
@@ -29,7 +36,7 @@ const PATCH_NOTES: PatchNote[] = [
       'Added rainhill trials workouts',
       'Added support for multi-difficulty workouts',
       'fixed day switch bug',
-      'added prompt to finish workout'
+      'added prompt to finish workout',
     ],
   },
   {
@@ -209,7 +216,10 @@ export default function PatchNotesScreen() {
     () => new Set([PATCH_NOTES[0]?.version].filter(Boolean))
   );
 
-  const openVersionsArr = useMemo(() => Array.from(openVersions), [openVersions]);
+  const openVersionsArr = useMemo(
+    () => Array.from(openVersions),
+    [openVersions]
+  );
 
   const toggle = (version: string) => {
     setOpenVersions((prev) => {
@@ -270,8 +280,12 @@ export default function PatchNotesScreen() {
                 {isOpen ? (
                   <View style={styles.cardBody}>
                     {p.articleUrl ? (
-                      <TouchableOpacity onPress={() => Linking.openURL(p.articleUrl as string)}>
-                        <Text style={styles.articleUrlText}>View article on website</Text>
+                      <TouchableOpacity
+                        onPress={() => Linking.openURL(p.articleUrl as string)}
+                      >
+                        <Text style={styles.articleUrlText}>
+                          View article on website
+                        </Text>
                       </TouchableOpacity>
                     ) : null}
                     {p.notes.map((n, idx) => (
@@ -404,4 +418,3 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
-

@@ -10,7 +10,9 @@ import { useCallback, useState } from 'react';
  * `loadHomeRemoteNotificationBanner` for caching behavior.
  */
 export function useHomeRemoteNotification(): HomeRemoteNotificationBanner | null {
-  const [banner, setBanner] = useState<HomeRemoteNotificationBanner | null>(null);
+  const [banner, setBanner] = useState<HomeRemoteNotificationBanner | null>(
+    null
+  );
 
   useFocusEffect(
     useCallback(() => {

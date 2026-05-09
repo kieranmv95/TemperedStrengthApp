@@ -69,4 +69,3 @@ export function formatVolumeFromKg(volumeKg: number, unit: WeightUnit): string {
   }
   return `${volumeKg.toLocaleString()} kg`;
 }
-

@@ -24,9 +24,9 @@ export function ConditioningWorkoutBody({
   dayIndex,
   blocks,
 }: ConditioningWorkoutBodyProps) {
-  const [logs, setLogs] = useState<{ [blockId: string]: { completed: boolean } }>(
-    {}
-  );
+  const [logs, setLogs] = useState<{
+    [blockId: string]: { completed: boolean };
+  }>({});
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
@@ -46,7 +46,10 @@ export function ConditioningWorkoutBody({
 
   const handleToggle = useCallback(
     async (blockId: string) => {
-      const nextCompleted = await toggleConditioningBlockCompleted(dayIndex, blockId);
+      const nextCompleted = await toggleConditioningBlockCompleted(
+        dayIndex,
+        blockId
+      );
       setLogs((prev) => {
         const next = { ...prev };
         if (!nextCompleted) {
@@ -82,10 +85,7 @@ export function ConditioningWorkoutBody({
         return (
           <View
             key={block.id}
-            style={[
-              styles.blockCard,
-              isCompleted && styles.blockCardCompleted,
-            ]}
+            style={[styles.blockCard, isCompleted && styles.blockCardCompleted]}
           >
             <View style={styles.blockHeader}>
               <View style={styles.blockHeaderLeft}>
@@ -368,4 +368,3 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-

@@ -15,7 +15,10 @@ export type OnboardingInterest =
   | 'endurance'
   | 'fat_loss';
 
-export type OnboardingExperienceLevel = 'beginner' | 'intermediate' | 'advanced';
+export type OnboardingExperienceLevel =
+  | 'beginner'
+  | 'intermediate'
+  | 'advanced';
 
 export type OnboardingProfile = {
   name?: string;

@@ -17,4 +17,3 @@ export type ParsedICloudValue =
   | { kind: 'envelope'; envelope: ICloudEnvelope }
   | { kind: 'legacy_string'; value: string }
   | { kind: 'missing' };
-

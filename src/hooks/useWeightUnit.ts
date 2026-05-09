@@ -41,4 +41,3 @@ export function useWeightUnit(): {
 
   return { unit, isLoading, setUnit: setUnitSafe, refresh };
 }
-

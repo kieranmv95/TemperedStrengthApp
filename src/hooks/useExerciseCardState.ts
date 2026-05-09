@@ -394,7 +394,10 @@ export function useExerciseCardState({
       return undefined;
     }
 
-    const weightKg = parseUserWeightInputToKg(weights[setIndex] ?? '', weightUnit);
+    const weightKg = parseUserWeightInputToKg(
+      weights[setIndex] ?? '',
+      weightUnit
+    );
     const repsNum = parseInt(reps[setIndex], 10);
 
     if (weightKg !== null && (!Number.isFinite(weightKg) || weightKg < 0)) {

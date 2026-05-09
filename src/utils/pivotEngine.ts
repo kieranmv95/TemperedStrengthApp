@@ -11,7 +11,10 @@ export type FindAlternativesOptions = {
   equipmentMode?: 'any' | 'bodyweight';
 };
 
-function isAllowedByEquipment(exercise: Exercise, options?: FindAlternativesOptions) {
+function isAllowedByEquipment(
+  exercise: Exercise,
+  options?: FindAlternativesOptions
+) {
   if (options?.equipmentMode === 'bodyweight') {
     return exercise.equipment === 'Bodyweight';
   }
@@ -110,7 +113,9 @@ const orderWithinTier = (
   const differentEquipment = candidates.filter(
     (ex) => ex.equipment !== currentEquipment
   );
-  const sameEquipment = candidates.filter((ex) => ex.equipment === currentEquipment);
+  const sameEquipment = candidates.filter(
+    (ex) => ex.equipment === currentEquipment
+  );
 
   return [...shuffleArray(differentEquipment), ...shuffleArray(sameEquipment)];
 };

@@ -5,7 +5,10 @@ import type {
   RepMax,
 } from '@/src/types/personalBests';
 import type { WeightUnit } from '@/src/utils/storage';
-import { formatWeightFromKg, formatWeightValueFromKg } from '@/src/utils/weightUnits';
+import {
+  formatWeightFromKg,
+  formatWeightValueFromKg,
+} from '@/src/utils/weightUnits';
 
 export const REP_MAX_ORDER: RepMax[] = [1, 2, 3, 5, 10, 15, 20];
 
@@ -240,7 +243,9 @@ export function summarizePersonalBests(
   for (const tier of REP_MAX_ORDER) {
     const best = getCurrentBestForTier(ledger, tier);
     if (best) {
-      parts.push(`${formatRepMaxLabel(tier)}: ${formatWeightFromKg(best.weight, unit)}`);
+      parts.push(
+        `${formatRepMaxLabel(tier)}: ${formatWeightFromKg(best.weight, unit)}`
+      );
     }
   }
   return parts.length > 0 ? parts.join(' | ') : 'No PBs logged';

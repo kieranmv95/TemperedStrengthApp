@@ -97,7 +97,11 @@ export default function ArticleScreen() {
           <View style={styles.headerSpacer} />
         </View>
         <View style={styles.errorContainer}>
-          <Ionicons name="wifi-outline" size={64} color={Colors.backgroundSubtle} />
+          <Ionicons
+            name="wifi-outline"
+            size={64}
+            color={Colors.backgroundSubtle}
+          />
           <Text style={styles.errorText}>
             {isOffline
               ? 'No connection — article unavailable'

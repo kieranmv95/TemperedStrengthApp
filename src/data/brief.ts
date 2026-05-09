@@ -19,4 +19,9 @@ export const getGlossaryByCategory = (
   return terms.filter((term) => term.category === category);
 };
 
-export type { Article, ArticleCategory, ArticleListItem, GlossaryTerm } from '@/src/types/brief';
+export type {
+  Article,
+  ArticleCategory,
+  ArticleListItem,
+  GlossaryTerm,
+} from '@/src/types/brief';

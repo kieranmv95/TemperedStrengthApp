@@ -28,7 +28,11 @@ export default function AccountGeneralSettingsScreen() {
   const posthog = usePostHog();
   const [weightUnit, setWeightUnitState] = useState<WeightUnit>('kg');
   const [weightUnitLoading, setWeightUnitLoading] = useState<boolean>(true);
-  const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
+  const {
+    enabled: iCloudSyncEnabled,
+    isAvailable,
+    setEnabled,
+  } = useSyncManager();
 
   const loadWeightUnit = async () => {
     try {
@@ -104,7 +108,10 @@ export default function AccountGeneralSettingsScreen() {
               </Text>
             </View>
             <View
-              style={[styles.unitToggle, weightUnitLoading && styles.unitToggleDisabled]}
+              style={[
+                styles.unitToggle,
+                weightUnitLoading && styles.unitToggleDisabled,
+              ]}
               accessibilityRole="radiogroup"
               accessibilityLabel="Weight units"
             >
@@ -159,8 +166,8 @@ export default function AccountGeneralSettingsScreen() {
             <View style={styles.settingContent}>
               <Text style={styles.settingTitle}>iCloud Sync</Text>
               <Text style={styles.settingDescription}>
-                Keep a backup of your data in iCloud. AsyncStorage stays primary; iCloud is used
-                for backup and restore.
+                Keep a backup of your data in iCloud. AsyncStorage stays
+                primary; iCloud is used for backup and restore.
               </Text>
               {iCloudSyncEnabled && !isAvailable && (
                 <Text style={styles.settingDescription}>
@@ -201,11 +208,15 @@ export default function AccountGeneralSettingsScreen() {
             />
           </View>
 
-          <TouchableOpacity style={styles.settingItem} onPress={handleUpdatePreferences}>
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={handleUpdatePreferences}
+          >
             <View style={styles.settingContent}>
               <Text style={styles.settingTitle}>Update Preferences</Text>
               <Text style={styles.settingDescription}>
-                Replay onboarding to update your name, gender, interests, and experience level.
+                Replay onboarding to update your name, gender, interests, and
+                experience level.
               </Text>
             </View>
             <Text style={styles.settingArrow}>→</Text>
@@ -255,4 +266,3 @@ const pageStyles = StyleSheet.create({
     fontWeight: '500',
   },
 });
-

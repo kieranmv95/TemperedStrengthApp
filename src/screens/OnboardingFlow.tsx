@@ -86,14 +86,18 @@ const EXPERIENCE_OPTIONS: {
   value: OnboardingExperienceLevel;
   label: string;
 }[] = [
-    { value: 'beginner', label: 'Beginner' },
-    { value: 'intermediate', label: 'Intermediate' },
-    { value: 'advanced', label: 'Advanced' },
-  ];
+  { value: 'beginner', label: 'Beginner' },
+  { value: 'intermediate', label: 'Intermediate' },
+  { value: 'advanced', label: 'Advanced' },
+];
 
 function OnboardingFlow() {
   const posthog = usePostHog();
-  const { enabled: iCloudSyncEnabled, isAvailable, setEnabled } = useSyncManager();
+  const {
+    enabled: iCloudSyncEnabled,
+    isAvailable,
+    setEnabled,
+  } = useSyncManager();
 
   const [stepIndex, setStepIndex] = useState(0);
   const [profile, setProfile] = useState<OnboardingProfile>({});
@@ -336,9 +340,7 @@ function OnboardingFlow() {
       case 1:
         return (
           <View style={styles.stepBody}>
-            <Text style={styles.stepTitle}>
-              What can we call you?
-            </Text>
+            <Text style={styles.stepTitle}>What can we call you?</Text>
             <Text style={styles.stepSubtitle}>
               Add a name so we can make the app feel a bit more yours.
             </Text>
@@ -380,9 +382,7 @@ function OnboardingFlow() {
         return (
           <View style={styles.stepBody}>
             <Text style={styles.stepTitle}>What interests you?</Text>
-            <Text style={styles.stepSubtitle}>
-              Pick as many as you like.
-            </Text>
+            <Text style={styles.stepSubtitle}>Pick as many as you like.</Text>
             <View style={styles.optionListInline}>
               {INTEREST_OPTIONS.map((opt) => (
                 <OnboardingOptionCard
@@ -537,7 +537,11 @@ function OnboardingFlow() {
   const primaryCta = () => {
     switch (stepIndex) {
       case 0:
-        return { label: 'Continue', onPress: goToNameStep, disabled: completing };
+        return {
+          label: 'Continue',
+          onPress: goToNameStep,
+          disabled: completing,
+        };
       case 1:
         return {
           label: 'Continue',
@@ -581,7 +585,7 @@ function OnboardingFlow() {
           disabled: completing,
         };
       default:
-        return { label: 'Continue', onPress: () => { }, disabled: true };
+        return { label: 'Continue', onPress: () => {}, disabled: true };
     }
   };
 
@@ -589,12 +593,19 @@ function OnboardingFlow() {
   const isLastStep = stepIndex === TOTAL_STEPS - 1;
   const canGoBack = stepIndex > 1;
   const showIntro = stepIndex === 0;
-  const progressCurrent = Math.max(1, Math.min(stepIndex, TOTAL_PROGRESS_STEPS));
+  const progressCurrent = Math.max(
+    1,
+    Math.min(stepIndex, TOTAL_PROGRESS_STEPS)
+  );
 
   return (
     <SafeAreaView
       style={styles.container}
-      edges={showIntro ? ['top', 'left', 'right', 'bottom'] : ['top', 'left', 'right']}
+      edges={
+        showIntro
+          ? ['top', 'left', 'right', 'bottom']
+          : ['top', 'left', 'right']
+      }
     >
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
         {showIntro ? (
@@ -613,7 +624,9 @@ function OnboardingFlow() {
               accessibilityLabel="Onboarding intro video"
             />
 
-            <View style={{ flex: 1, padding: 24, justifyContent: 'space-between' }}>
+            <View
+              style={{ flex: 1, padding: 24, justifyContent: 'space-between' }}
+            >
               <View style={{ alignItems: 'flex-end' }}>
                 <TouchableOpacity
                   onPress={skipIntro}
@@ -621,7 +634,9 @@ function OnboardingFlow() {
                   accessibilityLabel="Skip intro"
                   disabled={completing}
                 >
-                  <Text style={{ color: 'white', fontSize: 16, fontWeight: '700' }}>
+                  <Text
+                    style={{ color: 'white', fontSize: 16, fontWeight: '700' }}
+                  >
                     Skip
                   </Text>
                 </TouchableOpacity>
@@ -691,7 +706,9 @@ function OnboardingFlow() {
                       disabled={completing}
                       accessibilityRole="button"
                       accessibilityLabel={
-                        isLastStep ? 'Skip this step and finish' : 'Skip this step'
+                        isLastStep
+                          ? 'Skip this step and finish'
+                          : 'Skip this step'
                       }
                     >
                       <Text style={styles.skipStepText}>Skip</Text>
@@ -704,7 +721,9 @@ function OnboardingFlow() {
                     disabled={completing}
                     accessibilityRole="button"
                     accessibilityLabel={
-                      isLastStep ? 'Skip this step and finish' : 'Skip this step'
+                      isLastStep
+                        ? 'Skip this step and finish'
+                        : 'Skip this step'
                     }
                   >
                     <Text style={styles.skipStepText}>Skip</Text>

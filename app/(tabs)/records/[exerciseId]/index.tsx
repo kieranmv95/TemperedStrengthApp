@@ -207,7 +207,10 @@ export default function ExercisePersonalBestsScreen() {
         </TouchableOpacity>
 
         {loading || pbs === null ? (
-          <ActivityIndicator color={Colors.textMuted} style={localStyles.loader} />
+          <ActivityIndicator
+            color={Colors.textMuted}
+            style={localStyles.loader}
+          />
         ) : (
           <View style={localStyles.tierList}>
             {REP_MAX_ORDER.map((tier) => {
@@ -223,9 +226,7 @@ export default function ExercisePersonalBestsScreen() {
                 <TouchableOpacity
                   key={tier}
                   style={localStyles.tierRow}
-                  onPress={() =>
-                    router.push(`/records/${exerciseId}/${tier}`)
-                  }
+                  onPress={() => router.push(`/records/${exerciseId}/${tier}`)}
                   activeOpacity={0.7}
                 >
                   <View style={localStyles.tierRowLeft}>
@@ -308,67 +309,67 @@ export default function ExercisePersonalBestsScreen() {
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
             >
-            <Text style={localStyles.modalTitle}>Log lift</Text>
-            <Text style={localStyles.modalLabel}>Rep max</Text>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={localStyles.tierPills}
-            >
-              {REP_MAX_ORDER.map((tier) => (
-                <TouchableOpacity
-                  key={tier}
-                  style={[
-                    localStyles.tierPill,
-                    selectedTier === tier && localStyles.tierPillActive,
-                  ]}
-                  onPress={() => setSelectedTier(tier)}
-                >
-                  <Text
+              <Text style={localStyles.modalTitle}>Log lift</Text>
+              <Text style={localStyles.modalLabel}>Rep max</Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={localStyles.tierPills}
+              >
+                {REP_MAX_ORDER.map((tier) => (
+                  <TouchableOpacity
+                    key={tier}
                     style={[
-                      localStyles.tierPillText,
-                      selectedTier === tier && localStyles.tierPillTextActive,
+                      localStyles.tierPill,
+                      selectedTier === tier && localStyles.tierPillActive,
                     ]}
+                    onPress={() => setSelectedTier(tier)}
                   >
-                    {formatRepMaxLabel(tier)}
+                    <Text
+                      style={[
+                        localStyles.tierPillText,
+                        selectedTier === tier && localStyles.tierPillTextActive,
+                      ]}
+                    >
+                      {formatRepMaxLabel(tier)}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+              <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
+              <TextInput
+                style={localStyles.weightInput}
+                value={weightInput}
+                onChangeText={setWeightInput}
+                keyboardType="decimal-pad"
+                inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+                onSubmitEditing={() => Keyboard.dismiss()}
+                placeholder="0"
+                placeholderTextColor={Colors.textPlaceholder}
+              />
+              <PbModalDateTimeField value={logDate} onChange={setLogDate} />
+              <IosKeyboardDoneAccessory />
+              <View style={localStyles.modalActions}>
+                <TouchableOpacity
+                  style={localStyles.modalCancel}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    setLogModalVisible(false);
+                  }}
+                  disabled={saving}
+                >
+                  <Text style={localStyles.modalCancelText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={localStyles.modalSave}
+                  onPress={handleSaveLog}
+                  disabled={saving}
+                >
+                  <Text style={localStyles.modalSaveText}>
+                    {saving ? 'Saving…' : 'Save'}
                   </Text>
                 </TouchableOpacity>
-              ))}
-            </ScrollView>
-            <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
-            <TextInput
-              style={localStyles.weightInput}
-              value={weightInput}
-              onChangeText={setWeightInput}
-              keyboardType="decimal-pad"
-              inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
-              onSubmitEditing={() => Keyboard.dismiss()}
-              placeholder="0"
-              placeholderTextColor={Colors.textPlaceholder}
-            />
-            <PbModalDateTimeField value={logDate} onChange={setLogDate} />
-            <IosKeyboardDoneAccessory />
-            <View style={localStyles.modalActions}>
-              <TouchableOpacity
-                style={localStyles.modalCancel}
-                onPress={() => {
-                  Keyboard.dismiss();
-                  setLogModalVisible(false);
-                }}
-                disabled={saving}
-              >
-                <Text style={localStyles.modalCancelText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={localStyles.modalSave}
-                onPress={handleSaveLog}
-                disabled={saving}
-              >
-                <Text style={localStyles.modalSaveText}>
-                  {saving ? 'Saving…' : 'Save'}
-                </Text>
-              </TouchableOpacity>
-            </View>
+              </View>
             </ScrollView>
           </View>
         </View>

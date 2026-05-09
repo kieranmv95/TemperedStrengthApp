@@ -16,7 +16,14 @@ import { useFocusEffect } from '@react-navigation/native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, Image, Linking, Text, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  Image,
+  Linking,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 function workoutHasTag(workout: SingleWorkout, tag: string): boolean {
@@ -84,7 +91,10 @@ export default function WorkoutsByTagScreen() {
   }, [discipline?.link, posthog, tag]);
 
   return (
-    <SafeAreaView style={headerStyles.container} edges={['top', 'left', 'right']}>
+    <SafeAreaView
+      style={headerStyles.container}
+      edges={['top', 'left', 'right']}
+    >
       <View style={headerStyles.detailHeader}>
         <TouchableOpacity
           style={headerStyles.backButton}
@@ -104,14 +114,19 @@ export default function WorkoutsByTagScreen() {
           <Ionicons name="barbell" size={64} color={Colors.backgroundSubtle} />
           <Text style={headerStyles.emptyTitle}>No Workouts Found</Text>
           <Text style={headerStyles.emptyDescription}>
-            {tag ? 'No workouts match this discipline yet.' : 'Missing discipline tag.'}
+            {tag
+              ? 'No workouts match this discipline yet.'
+              : 'Missing discipline tag.'}
           </Text>
         </View>
       ) : (
         <FlatList
           data={filteredWorkouts}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={[styles.listContent, { padding: Spacing.xxl, paddingTop: Spacing.xxl }]}
+          contentContainerStyle={[
+            styles.listContent,
+            { padding: Spacing.xxl, paddingTop: Spacing.xxl },
+          ]}
           ListHeaderComponent={
             showSponsorCard ? (
               <TouchableOpacity
@@ -120,7 +135,16 @@ export default function WorkoutsByTagScreen() {
                 activeOpacity={0.85}
               >
                 {!!discipline?.logo && (
-                  <Image source={discipline.logo.source} style={[styles.sponsorLogo, { width: discipline.logo.width, height: discipline.logo.height }]} />
+                  <Image
+                    source={discipline.logo.source}
+                    style={[
+                      styles.sponsorLogo,
+                      {
+                        width: discipline.logo.width,
+                        height: discipline.logo.height,
+                      },
+                    ]}
+                  />
                 )}
                 {!!discipline?.description && (
                   <Text style={styles.sponsorDescription}>
@@ -154,4 +178,3 @@ export default function WorkoutsByTagScreen() {
     </SafeAreaView>
   );
 }
-

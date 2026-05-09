@@ -53,10 +53,7 @@ async function writeTrackedMetrics(
   metrics: Partial<TrackedMetrics>
 ): Promise<void> {
   try {
-    await syncSetItem(
-      TRACKED_METRICS_STORAGE_KEY,
-      JSON.stringify(metrics)
-    );
+    await syncSetItem(TRACKED_METRICS_STORAGE_KEY, JSON.stringify(metrics));
   } catch (error) {
     console.error('Error writing tracked metrics:', error);
     throw error;

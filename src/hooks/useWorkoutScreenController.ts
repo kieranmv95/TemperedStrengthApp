@@ -380,7 +380,9 @@ export function useWorkoutScreenController() {
       programRef.current = loadedProgram;
       startDateRef.current = savedStartDate;
       const effectivePattern =
-        savedWeekPattern && savedWeekPattern.length > 0 ? savedWeekPattern : null;
+        savedWeekPattern && savedWeekPattern.length > 0
+          ? savedWeekPattern
+          : null;
       workoutWeekPatternRef.current = effectivePattern;
       sessionShiftsRef.current = savedSessionShifts;
       warmupModuleEnabledRef.current = savedWarmupEnabled;
@@ -744,8 +746,7 @@ export function useWorkoutScreenController() {
     try {
       let timeRemainingSecs = 0;
       if (restTimer?.status === 'running') {
-        const endTime =
-          restTimer.startedAt + restTimer.restTimeSeconds * 1000;
+        const endTime = restTimer.startedAt + restTimer.restTimeSeconds * 1000;
         timeRemainingSecs = Math.max(
           0,
           Math.ceil((endTime - Date.now()) / 1000)

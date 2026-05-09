@@ -129,7 +129,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                 programExercise?.isAmrap && styles.amrapLabel,
               ]}
             >
-              {exercise.logging_type === 'time' ? 'Time:' : 'Reps:'} {repRangeText}
+              {exercise.logging_type === 'time' ? 'Time:' : 'Reps:'}{' '}
+              {repRangeText}
             </Text>
           )}
           {(() => {
@@ -240,8 +241,9 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             <Text style={styles.swapButtonText}>
               {isPro
                 ? 'Swap Exercise'
-                : `Swap Exercise${remainingSwaps !== null ? ` (${remainingSwaps})` : ''
-                }`}
+                : `Swap Exercise${
+                    remainingSwaps !== null ? ` (${remainingSwaps})` : ''
+                  }`}
             </Text>
           </TouchableOpacity>
         </View>

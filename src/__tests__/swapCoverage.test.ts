@@ -30,7 +30,10 @@ const collectSwappableExerciseIds = (): SwappableExerciseRef[] => {
         const id = (item as any).id;
         if (typeof id !== 'number') continue;
 
-        refs.push({ programName: (program as any).name ?? 'Unknown', exerciseId: id });
+        refs.push({
+          programName: (program as any).name ?? 'Unknown',
+          exerciseId: id,
+        });
       }
     }
   }
@@ -66,7 +69,9 @@ describe('exercise swap coverage', () => {
     }
 
     if (missing.length > 0) {
-      const lines = missing.map((m) => `${m.programName}: exerciseId=${m.exerciseId}`);
+      const lines = missing.map(
+        (m) => `${m.programName}: exerciseId=${m.exerciseId}`
+      );
       throw new Error(
         [
           'Some program exercises are marked canSwap:true but have no 100% (pattern + muscle group) alternatives.',
@@ -76,4 +81,3 @@ describe('exercise swap coverage', () => {
     }
   });
 });
-

@@ -10,7 +10,11 @@ export function parseICloudPayload(raw: string | null): ParsedICloudValue {
 
   try {
     const parsed = JSON.parse(raw) as unknown;
-    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    if (
+      typeof parsed !== 'object' ||
+      parsed === null ||
+      Array.isArray(parsed)
+    ) {
       return { kind: 'legacy_string', value: raw };
     }
     const maybe = parsed as Record<string, unknown>;
@@ -40,4 +44,3 @@ export function encodeICloudEnvelope(envelope: ICloudEnvelope): string {
     deleted: envelope.deleted ?? false,
   });
 }
-

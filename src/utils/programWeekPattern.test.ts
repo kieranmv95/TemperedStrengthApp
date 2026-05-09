@@ -112,9 +112,7 @@ describe('programWeekPattern', () => {
       expect(
         getWorkoutForDaySinceStart(program, startISO, null, 0)?.label
       ).toBe('Push');
-      expect(
-        getWorkoutForDaySinceStart(program, startISO, null, 1)
-      ).toBeNull();
+      expect(getWorkoutForDaySinceStart(program, startISO, null, 1)).toBeNull();
       expect(
         getWorkoutForDaySinceStart(program, startISO, null, 2)?.label
       ).toBe('Pull');
@@ -194,7 +192,12 @@ describe('programWeekPattern', () => {
         ],
       };
       expect(
-        listShiftedTrainingDayDeltasForProgram(program, startISO, pattern, shifts)
+        listShiftedTrainingDayDeltasForProgram(
+          program,
+          startISO,
+          pattern,
+          shifts
+        )
       ).toEqual([0, 2, 3, 7, 9, 11]);
     });
   });

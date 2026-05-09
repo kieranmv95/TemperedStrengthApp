@@ -7,10 +7,7 @@ import { workoutDetailStyles as styles } from '@/src/components/workouts/workout
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getExerciseById } from '@/src/data/exercises';
 import type { PersonalBestHistoryEntry } from '@/src/types/personalBests';
-import {
-  formatRepMaxLabel,
-  parseRepMaxParam,
-} from '@/src/utils/personalBests';
+import { formatRepMaxLabel, parseRepMaxParam } from '@/src/utils/personalBests';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { asStringId } from '@/src/utils/routeParams';
 import {
@@ -104,11 +101,14 @@ export default function RepMaxHistoryScreen() {
     );
   }, [ledger, tier]);
 
-  const openEdit = useCallback((e: PersonalBestHistoryEntry) => {
-    setEditEntry(e);
-    setEditWeight(formatWeightValueFromKg(e.weight, weightUnit));
-    setEditDate(new Date(e.achievedAt));
-  }, [weightUnit]);
+  const openEdit = useCallback(
+    (e: PersonalBestHistoryEntry) => {
+      setEditEntry(e);
+      setEditWeight(formatWeightValueFromKg(e.weight, weightUnit));
+      setEditDate(new Date(e.achievedAt));
+    },
+    [weightUnit]
+  );
 
   const closeEdit = useCallback(() => {
     setEditEntry(null);
@@ -232,7 +232,9 @@ export default function RepMaxHistoryScreen() {
           <View style={styles.headerRightSpacer} />
         </View>
         <View style={styles.emptyState}>
-          <Text style={styles.emptyDescription}>Invalid exercise or rep max.</Text>
+          <Text style={styles.emptyDescription}>
+            Invalid exercise or rep max.
+          </Text>
         </View>
       </SafeAreaView>
     );
@@ -317,11 +319,7 @@ export default function RepMaxHistoryScreen() {
                   hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                   accessibilityLabel="Edit entry"
                 >
-                  <Ionicons
-                    name="pencil"
-                    size={22}
-                    color={Colors.accent}
-                  />
+                  <Ionicons name="pencil" size={22} color={Colors.accent} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => confirmDelete(item)}
@@ -355,45 +353,48 @@ export default function RepMaxHistoryScreen() {
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
             >
-            <Text style={localStyles.modalTitle}>New {formatRepMaxLabel(tier)}</Text>
-            <Text style={localStyles.modalHint}>
-              Every save is added to history. If this is a personal best for this
-              rep max, lower rep maxes update too when the weight beats them.
-            </Text>
-            <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
-            <TextInput
-              style={localStyles.weightInput}
-              value={addWeight}
-              onChangeText={setAddWeight}
-              keyboardType="decimal-pad"
-              inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
-              onSubmitEditing={() => Keyboard.dismiss()}
-              placeholder="0"
-              placeholderTextColor={Colors.textPlaceholder}
-            />
-            <PbModalDateTimeField value={addDate} onChange={setAddDate} />
-            <IosKeyboardDoneAccessory />
-            <View style={localStyles.modalActions}>
-              <TouchableOpacity
-                style={localStyles.modalCancel}
-                onPress={() => {
-                  Keyboard.dismiss();
-                  setAddVisible(false);
-                }}
-                disabled={addSaving}
-              >
-                <Text style={localStyles.modalCancelText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={localStyles.modalSave}
-                onPress={saveAdd}
-                disabled={addSaving}
-              >
-                <Text style={localStyles.modalSaveText}>
-                  {addSaving ? 'Saving…' : 'Save'}
-                </Text>
-              </TouchableOpacity>
-            </View>
+              <Text style={localStyles.modalTitle}>
+                New {formatRepMaxLabel(tier)}
+              </Text>
+              <Text style={localStyles.modalHint}>
+                Every save is added to history. If this is a personal best for
+                this rep max, lower rep maxes update too when the weight beats
+                them.
+              </Text>
+              <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
+              <TextInput
+                style={localStyles.weightInput}
+                value={addWeight}
+                onChangeText={setAddWeight}
+                keyboardType="decimal-pad"
+                inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+                onSubmitEditing={() => Keyboard.dismiss()}
+                placeholder="0"
+                placeholderTextColor={Colors.textPlaceholder}
+              />
+              <PbModalDateTimeField value={addDate} onChange={setAddDate} />
+              <IosKeyboardDoneAccessory />
+              <View style={localStyles.modalActions}>
+                <TouchableOpacity
+                  style={localStyles.modalCancel}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    setAddVisible(false);
+                  }}
+                  disabled={addSaving}
+                >
+                  <Text style={localStyles.modalCancelText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={localStyles.modalSave}
+                  onPress={saveAdd}
+                  disabled={addSaving}
+                >
+                  <Text style={localStyles.modalSaveText}>
+                    {addSaving ? 'Saving…' : 'Save'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </ScrollView>
           </View>
         </View>
@@ -414,41 +415,41 @@ export default function RepMaxHistoryScreen() {
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
             >
-            <Text style={localStyles.modalTitle}>Edit entry</Text>
-            <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
-            <TextInput
-              style={localStyles.weightInput}
-              value={editWeight}
-              onChangeText={setEditWeight}
-              keyboardType="decimal-pad"
-              inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
-              onSubmitEditing={() => Keyboard.dismiss()}
-              placeholder="0"
-              placeholderTextColor={Colors.textPlaceholder}
-            />
-            <PbModalDateTimeField value={editDate} onChange={setEditDate} />
-            <IosKeyboardDoneAccessory />
-            <View style={localStyles.modalActions}>
-              <TouchableOpacity
-                style={localStyles.modalCancel}
-                onPress={() => {
-                  Keyboard.dismiss();
-                  closeEdit();
-                }}
-                disabled={editSaving}
-              >
-                <Text style={localStyles.modalCancelText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={localStyles.modalSave}
-                onPress={saveEdit}
-                disabled={editSaving}
-              >
-                <Text style={localStyles.modalSaveText}>
-                  {editSaving ? 'Saving…' : 'Save'}
-                </Text>
-              </TouchableOpacity>
-            </View>
+              <Text style={localStyles.modalTitle}>Edit entry</Text>
+              <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
+              <TextInput
+                style={localStyles.weightInput}
+                value={editWeight}
+                onChangeText={setEditWeight}
+                keyboardType="decimal-pad"
+                inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+                onSubmitEditing={() => Keyboard.dismiss()}
+                placeholder="0"
+                placeholderTextColor={Colors.textPlaceholder}
+              />
+              <PbModalDateTimeField value={editDate} onChange={setEditDate} />
+              <IosKeyboardDoneAccessory />
+              <View style={localStyles.modalActions}>
+                <TouchableOpacity
+                  style={localStyles.modalCancel}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    closeEdit();
+                  }}
+                  disabled={editSaving}
+                >
+                  <Text style={localStyles.modalCancelText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={localStyles.modalSave}
+                  onPress={saveEdit}
+                  disabled={editSaving}
+                >
+                  <Text style={localStyles.modalSaveText}>
+                    {editSaving ? 'Saving…' : 'Save'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </ScrollView>
           </View>
         </View>

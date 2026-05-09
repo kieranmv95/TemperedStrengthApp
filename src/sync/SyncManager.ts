@@ -138,7 +138,8 @@ export class SyncManager {
 
         if (effectiveWinner.kind === 'icloud') {
           const shouldUpgradeICloudTs =
-            cmp.icloud.ts <= 0 && (cmp.icloud.deleted || cmp.icloud.value !== null);
+            cmp.icloud.ts <= 0 &&
+            (cmp.icloud.deleted || cmp.icloud.value !== null);
           const nextTs = shouldUpgradeICloudTs ? Date.now() : cmp.icloud.ts;
 
           if (cmp.icloud.deleted) {
@@ -156,7 +157,11 @@ export class SyncManager {
             if (shouldUpgradeICloudTs) {
               await this.provider.setString(
                 key,
-                encodeICloudEnvelope({ v: cmp.icloud.value, ts: nextTs, deleted: false })
+                encodeICloudEnvelope({
+                  v: cmp.icloud.value,
+                  ts: nextTs,
+                  deleted: false,
+                })
               );
             }
           }
@@ -178,7 +183,11 @@ export class SyncManager {
           await writeLocalTs(key, nextTs);
           await this.provider.setString(
             key,
-            encodeICloudEnvelope({ v: cmp.local.value, ts: nextTs, deleted: false })
+            encodeICloudEnvelope({
+              v: cmp.local.value,
+              ts: nextTs,
+              deleted: false,
+            })
           );
         }
       }
@@ -187,4 +196,3 @@ export class SyncManager {
     }
   }
 }
-

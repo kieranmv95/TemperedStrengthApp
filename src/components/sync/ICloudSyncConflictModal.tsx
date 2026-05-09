@@ -3,7 +3,10 @@ import React, { useMemo } from 'react';
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import type { SyncConflict } from '@/src/sync';
 import { Colors } from '@/src/constants/theme';
-import { formatSyncTimestamp, maxPositiveTimestamp } from './formatSyncTimestamp';
+import {
+  formatSyncTimestamp,
+  maxPositiveTimestamp,
+} from './formatSyncTimestamp';
 import { iCloudSyncConflictModalStyles as styles } from './iCloudSyncConflictModalStyles';
 import { labelForSyncStorageKey } from './syncConflictKeyLabels';
 
@@ -33,13 +36,9 @@ export function ICloudSyncConflictModal({
   }, [conflicts]);
 
   const localNewer =
-    latestLocalTs > 0 &&
-    latestIcloudTs > 0 &&
-    latestLocalTs > latestIcloudTs;
+    latestLocalTs > 0 && latestIcloudTs > 0 && latestLocalTs > latestIcloudTs;
   const icloudNewer =
-    latestLocalTs > 0 &&
-    latestIcloudTs > 0 &&
-    latestIcloudTs > latestLocalTs;
+    latestLocalTs > 0 && latestIcloudTs > 0 && latestIcloudTs > latestLocalTs;
 
   return (
     <Modal visible={visible} transparent animationType="fade">

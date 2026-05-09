@@ -68,7 +68,10 @@ export type HomeRemoteNotificationBanner = {
   ctaTextColor: string;
 };
 
-function sanitizeHex(value: string | null | undefined, fallback: string): string {
+function sanitizeHex(
+  value: string | null | undefined,
+  fallback: string
+): string {
   const t = value?.trim() ?? '';
   return HEX_COLOR.test(t) ? t : fallback;
 }
@@ -148,14 +151,15 @@ function normalizeBannerFromCache(
     descriptionColor:
       typeof o.descriptionColor === 'string' ? o.descriptionColor : null,
     ctaColor: typeof o.ctaColor === 'string' ? o.ctaColor : null,
-    ctaTextColor:
-      typeof o.ctaTextColor === 'string' ? o.ctaTextColor : null,
+    ctaTextColor: typeof o.ctaTextColor === 'string' ? o.ctaTextColor : null,
   });
 }
 
 async function readCache(): Promise<CachedPayload | null> {
   try {
-    const raw = await AsyncStorage.getItem(SANITY_APP_CONFIG_NOTIFICATION_CACHE_KEY);
+    const raw = await AsyncStorage.getItem(
+      SANITY_APP_CONFIG_NOTIFICATION_CACHE_KEY
+    );
     if (!raw) {
       return null;
     }
@@ -179,7 +183,9 @@ async function readCache(): Promise<CachedPayload | null> {
   }
 }
 
-async function writeCache(banner: HomeRemoteNotificationBanner | null): Promise<void> {
+async function writeCache(
+  banner: HomeRemoteNotificationBanner | null
+): Promise<void> {
   const payload: CachedPayload = {
     storedAt: Date.now(),
     banner,

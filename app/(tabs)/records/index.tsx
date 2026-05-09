@@ -29,9 +29,9 @@ type RecordsSection = 'awards' | 'personal_bests';
 export default function RecordsScreen() {
   const { unit: weightUnit } = useWeightUnit();
   const [section, setSection] = useState<RecordsSection>('personal_bests');
-  const [awardRows, setAwardRows] = useState<
-    Awaited<ReturnType<typeof getAll>> | null
-  >(null);
+  const [awardRows, setAwardRows] = useState<Awaited<
+    ReturnType<typeof getAll>
+  > | null>(null);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
   const repsExercises = useMemo(
@@ -250,9 +250,7 @@ export default function RecordsScreen() {
               visibleRows.map((item) => (
                 <Award
                   key={item.award.id}
-                  fontSize={
-                    item.award.badgeTitle.length > 12 ? 16 : undefined
-                  }
+                  fontSize={item.award.badgeTitle.length > 12 ? 16 : undefined}
                   badgeTitle={item.award.badgeTitle}
                   title={item.award.name}
                   description={item.award.description}

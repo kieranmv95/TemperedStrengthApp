@@ -32,11 +32,11 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 
 const NO_EQUIPMENT_TAG = 'No Equipment';
-const WOMENS_PICKS_TAG = "Women’s Picks";
+const WOMENS_PICKS_TAG = 'Women’s Picks';
 const LEGS_AND_GLUTES_TAG = 'Legs & Glutes';
 const GET_BIG_TAG = 'Get Big';
 
@@ -227,10 +227,7 @@ export default function WorkoutsScreen() {
       if (!matchesTitle && !matchesDescription && !matchesTags) return false;
     }
 
-    if (
-      effectiveNoEquipmentOnly &&
-      !workoutHasTag(workout, NO_EQUIPMENT_TAG)
-    ) {
+    if (effectiveNoEquipmentOnly && !workoutHasTag(workout, NO_EQUIPMENT_TAG)) {
       return false;
     }
 
@@ -400,9 +397,7 @@ export default function WorkoutsScreen() {
               <>
                 <View style={styles.curatedSection}>
                   <View style={styles.curatedSectionHeader}>
-                    <Text style={styles.curatedSectionTitle}>
-                      Disciplines
-                    </Text>
+                    <Text style={styles.curatedSectionTitle}>Disciplines</Text>
                     <Text style={styles.curatedSectionHelper}>
                       get started with what you already know
                     </Text>
@@ -439,7 +434,9 @@ export default function WorkoutsScreen() {
                           style={styles.disciplineGoldOverlay}
                         />
                         {discipline.showTitle && (
-                          <Text style={styles.disciplineSectionTitle}>{discipline.title}</Text>
+                          <Text style={styles.disciplineSectionTitle}>
+                            {discipline.title}
+                          </Text>
                         )}
                       </TouchableOpacity>
                     ))}

@@ -7,7 +7,7 @@ import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { asStringId } from '@/src/utils/routeParams';
 import {
   getFavoriteWorkouts,
-  toggleFavoriteWorkout
+  toggleFavoriteWorkout,
 } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';

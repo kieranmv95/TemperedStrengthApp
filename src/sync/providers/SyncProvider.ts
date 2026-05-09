@@ -19,4 +19,3 @@ export type SyncProvider = {
   setString: (key: string, value: string) => Promise<void>;
   remove: (key: string) => Promise<void>;
 };
-

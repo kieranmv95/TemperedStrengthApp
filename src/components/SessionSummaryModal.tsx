@@ -1,11 +1,6 @@
 import React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Spacing,
-} from '../constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
 import type { WeightUnit } from '../utils/storage';
 import { formatVolumeFromKg } from '../utils/weightUnits';
 

@@ -122,11 +122,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const availableDifficulties = useMemo((): ProgramDifficulty[] => {
     const set = new Set<ProgramDifficulty>();
     for (const p of programs) set.add(p.difficulty);
-    const order: ProgramDifficulty[] = [
-      'beginner',
-      'intermediate',
-      'advanced',
-    ];
+    const order: ProgramDifficulty[] = ['beginner', 'intermediate', 'advanced'];
     return order.filter((d) => set.has(d));
   }, []);
 
@@ -157,11 +153,15 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 
   const filteredPrograms = useMemo(() => {
     const filtered = programs.filter((p) => {
-      if (selectedCategory !== 'all' && !p.categories.includes(selectedCategory))
+      if (
+        selectedCategory !== 'all' &&
+        !p.categories.includes(selectedCategory)
+      )
         return false;
       if (selectedDifficulty !== 'all' && p.difficulty !== selectedDifficulty)
         return false;
-      if (selectedGoal !== 'all' && !p.goals.includes(selectedGoal)) return false;
+      if (selectedGoal !== 'all' && !p.goals.includes(selectedGoal))
+        return false;
       return true;
     });
     return sortProgramsByRecommendation(filtered, profile);
@@ -183,7 +183,10 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const difficultyCount = useMemo(() => {
     const map = new Map<ProgramDifficulty, number>();
     for (const p of programs) {
-      if (selectedCategory !== 'all' && !p.categories.includes(selectedCategory))
+      if (
+        selectedCategory !== 'all' &&
+        !p.categories.includes(selectedCategory)
+      )
         continue;
       if (selectedGoal !== 'all' && !p.goals.includes(selectedGoal)) continue;
       map.set(p.difficulty, (map.get(p.difficulty) ?? 0) + 1);
@@ -194,7 +197,10 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const goalCount = useMemo(() => {
     const map = new Map<ProgramGoal, number>();
     for (const p of programs) {
-      if (selectedCategory !== 'all' && !p.categories.includes(selectedCategory))
+      if (
+        selectedCategory !== 'all' &&
+        !p.categories.includes(selectedCategory)
+      )
         continue;
       if (selectedDifficulty !== 'all' && p.difficulty !== selectedDifficulty)
         continue;
@@ -382,8 +388,9 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                 count={
                   selectedDifficulty === 'all'
                     ? programs.length
-                    : programs.filter((p) => p.difficulty === selectedDifficulty)
-                      .length
+                    : programs.filter(
+                        (p) => p.difficulty === selectedDifficulty
+                      ).length
                 }
               />
               {availableCategories.map((category) => {
@@ -416,8 +423,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   selectedCategory === 'all'
                     ? programs.length
                     : programs.filter((p) =>
-                      p.categories.includes(selectedCategory)
-                    ).length
+                        p.categories.includes(selectedCategory)
+                      ).length
                 }
               />
               {availableDifficulties.map((difficulty) => (
@@ -447,18 +454,18 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   selectedCategory === 'all' && selectedDifficulty === 'all'
                     ? programs.length
                     : programs.filter((p) => {
-                      if (
-                        selectedCategory !== 'all' &&
-                        !p.categories.includes(selectedCategory)
-                      )
-                        return false;
-                      if (
-                        selectedDifficulty !== 'all' &&
-                        p.difficulty !== selectedDifficulty
-                      )
-                        return false;
-                      return true;
-                    }).length
+                        if (
+                          selectedCategory !== 'all' &&
+                          !p.categories.includes(selectedCategory)
+                        )
+                          return false;
+                        if (
+                          selectedDifficulty !== 'all' &&
+                          p.difficulty !== selectedDifficulty
+                        )
+                          return false;
+                        return true;
+                      }).length
                 }
               />
               {availableGoals.map((goal) => {
@@ -485,11 +492,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
         >
           <View style={homeScreenStyles.welcomeStripTopRow}>
             <View style={homeScreenStyles.welcomeHeadlineCell}>
-              <Text style={homeScreenStyles.welcomeTitle}>What are programs</Text>
+              <Text style={homeScreenStyles.welcomeTitle}>
+                What are programs
+              </Text>
             </View>
           </View>
           <Text style={homeScreenStyles.welcomeBody}>
-            Programs are structured training blocks (1-4 months). You&apos;ll follow one at a time, with full access to all workouts throughout.
+            Programs are structured training blocks (1-4 months). You&apos;ll
+            follow one at a time, with full access to all workouts throughout.
           </Text>
         </View>
         {filteredPrograms.map(({ program, isRecommended }) => (

@@ -13,4 +13,3 @@ export type {
 } from './providers/SyncProvider';
 export { ICloudKvsProvider } from './providers/ICloudKvsProvider';
 export { NoopSyncProvider } from './providers/NoopSyncProvider';
-

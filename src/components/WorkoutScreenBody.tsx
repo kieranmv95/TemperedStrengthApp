@@ -140,10 +140,7 @@ export function WorkoutScreenBody({
                 <View style={styles.sessionCtaRow}>
                   {onMoveSession && (
                     <TouchableOpacity
-                      style={[
-                        styles.startSessionButton,
-                        styles.sessionCtaHalf,
-                      ]}
+                      style={[styles.startSessionButton, styles.sessionCtaHalf]}
                       onPress={onMoveSession}
                       activeOpacity={0.7}
                     >
@@ -381,7 +378,6 @@ export function WorkoutScreenBody({
             </>
           ) : null}
         </View>
-
       </ScrollView>
     </KeyboardAvoidingView>
   );

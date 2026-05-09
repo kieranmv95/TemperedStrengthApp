@@ -206,7 +206,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         originalExerciseId={
           c.currentSwapSlot !== null
             ? c.getExerciseSlots()[c.currentSwapSlot]?.programExercise?.id ||
-            null
+              null
             : null
         }
         dayIndex={c.selectedDayIndex}
