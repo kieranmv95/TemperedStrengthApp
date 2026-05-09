@@ -3,13 +3,14 @@ import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors } from '@/src/constants/theme';
 import { getAllExercises } from '@/src/data/exercises';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { useHomeRemoteNotification } from '@/src/hooks/useHomeRemoteNotification';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { workoutScreenStyles } from '@/src/screens/workoutScreenStyles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { PersonalBestsStore } from '@/src/types/personalBests';
 import {
-  type HomeProgramSummary,
   loadHomeProgramSummary,
+  type HomeProgramSummary,
 } from '@/src/utils/homeProgramSummary';
 import { formatRepMaxLabel } from '@/src/utils/personalBests';
 import { listRecentPersonalBestRows } from '@/src/utils/recentPersonalBests';
@@ -20,7 +21,8 @@ import {
 import { formatWeightFromKg } from '@/src/utils/weightUnits';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import * as Linking from 'expo-linking';
+import { router, type Href } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, {
   useCallback,
@@ -66,6 +68,7 @@ function timeOfDayGreeting(): string {
 
 export default function HomeTabScreen() {
   const posthog = usePostHog();
+  const remoteNotification = useHomeRemoteNotification();
   const { unit: weightUnit } = useWeightUnit();
   const {
     isPro,
@@ -128,6 +131,21 @@ export default function HomeTabScreen() {
     [posthog]
   );
 
+  const openRemoteNotificationCta = useCallback((url: string) => {
+    const trimmed = url.trim();
+    if (!trimmed) {
+      return;
+    }
+    if (/^https?:\/\//i.test(trimmed)) {
+      Linking.openURL(trimmed).catch((error) => {
+        console.error('Failed to open notification URL:', error);
+      });
+      return;
+    }
+    const path = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+    router.push(path as Href);
+  }, []);
+
   const recentPbs = useMemo(() => {
     if (!pbStore) {
       return [];
@@ -179,31 +197,53 @@ export default function HomeTabScreen() {
           <Animated.View
             style={[styles.welcomeStrip, { opacity: freeStripOpacity }]}
           >
-            <View style={styles.welcomeStripTopRow}>
-              <View style={styles.welcomeHeadlineCell}>
-                <Text style={styles.welcomeTitle}>Upgrade to Pro</Text>
+            <TouchableOpacity
+              activeOpacity={0.85}
+              onPress={() =>
+                trackHomeLink('welcome_strip', '/settings', () =>
+                  router.push('/settings')
+                )
+              }
+              accessibilityRole="button"
+              accessibilityLabel="Upgrade to Pro, free tier"
+              accessibilityHint="Opens settings where you can upgrade to Tempered Strength Pro"
+            >
+              <View style={styles.welcomeStripTopRow}>
+                <View style={styles.welcomeHeadlineCell}>
+                  <Text style={styles.welcomeTitle}>Upgrade to Pro</Text>
+                </View>
+                <View style={styles.planBadgeFree} pointerEvents="none">
+                  <Text style={styles.planBadgeLabelFree}>FREE TIER</Text>
+                </View>
               </View>
-              <TouchableOpacity
-                style={styles.planBadgeFree}
-                onPress={() =>
-                  trackHomeLink(
-                    'welcome_strip_plan_badge_free',
-                    '/settings',
-                    () => router.push('/settings')
-                  )
-                }
-                accessibilityRole="button"
-                accessibilityLabel="Free plan"
-                accessibilityHint="Opens settings where you can upgrade to Tempered Strength Pro"
-              >
-                <Text style={styles.planBadgeLabelFree}>FREE TIER</Text>
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.welcomeBody}>
-              You are on the free plan. Unlock every program and workout, unlimited
-              exercise swaps, upgrade anytime from Settings.
-            </Text>
+            </TouchableOpacity>
           </Animated.View>
+        )}
+
+        {remoteNotification && (
+          <View style={styles.notificationBanner}>
+            {remoteNotification.title.length > 0 ? (
+              <Text style={styles.notificationBannerTitle}>
+                {remoteNotification.title}
+              </Text>
+            ) : null}
+            {remoteNotification.body.length > 0 ? (
+              <Text style={styles.notificationBannerBody}>
+                {remoteNotification.body}
+              </Text>
+            ) : null}
+            {remoteNotification.ctaText.length > 0 &&
+              remoteNotification.ctaUrl.length > 0 ? (
+              <TouchableOpacity
+                style={styles.notificationCta}
+                onPress={() => openRemoteNotificationCta(remoteNotification.ctaUrl)}
+                accessibilityRole="button"
+                accessibilityLabel={remoteNotification.ctaText}
+              >
+                <Text style={styles.notificationCtaText}>{remoteNotification.ctaText}</Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
         )}
 
         <View style={styles.section}>

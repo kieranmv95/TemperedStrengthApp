@@ -1,6 +1,7 @@
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { invalidateSanityAppConfigCache } from '@/src/services/sanityAppConfig';
 import type { OnboardingProfile } from '@/src/types/onboarding';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
@@ -103,6 +104,21 @@ export default function SettingsScreen() {
     );
   };
 
+  const handleInvalidateSanityAppConfigCache = () => {
+    void (async () => {
+      try {
+        await invalidateSanityAppConfigCache();
+        Alert.alert(
+          'App config cache cleared',
+          'Cached Sanity notification config was removed. Open the Home tab to refetch.'
+        );
+      } catch (error) {
+        console.error('Error clearing Sanity app config cache:', error);
+        Alert.alert('Error', 'Could not clear app config cache. Try again.');
+      }
+    })();
+  };
+
   const handleClearAllData = () => {
     Alert.alert(
       'Clear All Data',
@@ -149,9 +165,7 @@ export default function SettingsScreen() {
           >
             <Text style={styles.upgradePromptTitle}>Upgrade to Pro</Text>
             <Text style={styles.upgradePromptBody}>
-              You are on the free plan. Unlock every program and workout, unlimited
-              exercise swaps, and the rest of what Pro includes. Start here, or use
-              Upgrade to Pro in the list below.
+              Go Pro. Every workout and program, unlocked. Upgrade in Settings.
             </Text>
             <Text style={styles.upgradePromptCta}>See plans →</Text>
           </TouchableOpacity>
@@ -272,6 +286,19 @@ export default function SettingsScreen() {
                   <Text style={styles.settingDescription}>Permanently delete all stored data</Text>
                 </View>
                 <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.settingItem}
+                onPress={handleInvalidateSanityAppConfigCache}
+              >
+                <View style={styles.settingContent}>
+                  <Text style={styles.settingTitle}>Invalidate app config cache</Text>
+                  <Text style={styles.settingDescription}>
+                    Clear cached Sanity notification; Home tab refetches on next focus.
+                  </Text>
+                </View>
+                <Text style={styles.settingArrow}>→</Text>
               </TouchableOpacity>
 
               <View style={styles.settingItem}>
