@@ -34,7 +34,6 @@ import {
   FlatList,
   Keyboard,
   Modal,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -367,9 +366,7 @@ export default function RepMaxHistoryScreen() {
               value={addWeight}
               onChangeText={setAddWeight}
               keyboardType="decimal-pad"
-              inputAccessoryViewID={
-                Platform.OS === 'ios' ? IOS_KEYBOARD_DONE_ACCESSORY_ID : undefined
-              }
+              inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
               onSubmitEditing={() => Keyboard.dismiss()}
               placeholder="0"
               placeholderTextColor={Colors.textPlaceholder}
@@ -424,9 +421,7 @@ export default function RepMaxHistoryScreen() {
               value={editWeight}
               onChangeText={setEditWeight}
               keyboardType="decimal-pad"
-              inputAccessoryViewID={
-                Platform.OS === 'ios' ? IOS_KEYBOARD_DONE_ACCESSORY_ID : undefined
-              }
+              inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
               onSubmitEditing={() => Keyboard.dismiss()}
               placeholder="0"
               placeholderTextColor={Colors.textPlaceholder}

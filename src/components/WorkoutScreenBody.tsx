@@ -15,7 +15,6 @@ import { formatVolumeFromKg } from '@/src/utils/weightUnits';
 import React from 'react';
 import {
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -114,9 +113,9 @@ export function WorkoutScreenBody({
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior="padding"
       style={styles.keyboardAvoidingView}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      keyboardVerticalOffset={0}
     >
       <ScrollView
         ref={scrollViewRef}

@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import Purchases, {
   CustomerInfo,
   PurchasesOffering as Offerings,
@@ -9,31 +8,22 @@ import Purchases, {
 
 // RevenueCat API Keys
 // Get your production keys from: https://app.revenuecat.com/project/{your_project_id}/settings/api-keys
-// Test keys start with "test_", Production keys start with "appl_" (iOS) or "goog_" (Android)
-// For production/TestFlight builds, set EXPO_PUBLIC_REVENUECAT_API_KEY_IOS and EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID in EAS secrets
+// Test keys start with "test_", App Store production keys start with "appl_"
+// For production/TestFlight builds, set EXPO_PUBLIC_REVENUECAT_API_KEY_IOS (or EXPO_PUBLIC_REVENUECAT_API_KEY) in EAS secrets
 // WARNING: TestFlight builds are considered release builds and REQUIRE production keys, not test keys
-const REVENUECAT_API_KEY = Platform.select({
-  ios:
-    process.env.EXPO_PUBLIC_REVENUECAT_API_KEY_IOS ||
-    process.env.EXPO_PUBLIC_REVENUECAT_API_KEY ||
-    'test_SnvzLVCMTIHpdvZxNJETTYDrEhL',
-  android:
-    process.env.EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID ||
-    process.env.EXPO_PUBLIC_REVENUECAT_API_KEY ||
-    'test_SnvzLVCMTIHpdvZxNJETTYDrEhL',
-  default: 'test_SnvzLVCMTIHpdvZxNJETTYDrEhL',
-})!;
+const REVENUECAT_API_KEY =
+  process.env.EXPO_PUBLIC_REVENUECAT_API_KEY_IOS ||
+  process.env.EXPO_PUBLIC_REVENUECAT_API_KEY ||
+  'test_SnvzLVCMTIHpdvZxNJETTYDrEhL';
 
 // Validate API key format in development to catch misconfigurations early
 if (__DEV__) {
   const isTestKey = REVENUECAT_API_KEY.startsWith('test_');
-  const isProductionKey =
-    REVENUECAT_API_KEY.startsWith('appl_') ||
-    REVENUECAT_API_KEY.startsWith('goog_');
+  const isProductionKey = REVENUECAT_API_KEY.startsWith('appl_');
 
   if (!isTestKey && !isProductionKey) {
     console.warn(
-      "⚠️ RevenueCat API key format may be invalid. Expected 'test_', 'appl_', or 'goog_' prefix."
+      "⚠️ RevenueCat API key format may be invalid. Expected 'test_' or 'appl_' prefix."
     );
   }
 }

@@ -26,7 +26,6 @@ import {
   Alert,
   Animated,
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
   StyleSheet,
   Switch,
@@ -299,11 +298,6 @@ function OnboardingFlow() {
   };
 
   const handleContinueICloud = async () => {
-    if (Platform.OS !== 'ios') {
-      advanceOrFinish({ ...profile, iCloudSyncEnabled: false });
-      return;
-    }
-
     setICloudSaving(true);
     try {
       if (iCloudStepToggle) {
@@ -456,18 +450,14 @@ function OnboardingFlow() {
                 backup and restore.
               </Text>
               <View style={styles.iCloudRow}>
-                <Text style={styles.iCloudToggleLabel}>
-                  {Platform.OS === 'ios'
-                    ? 'Enable iCloud Sync'
-                    : 'iCloud Sync (iOS only)'}
-                </Text>
+                <Text style={styles.iCloudToggleLabel}>Enable iCloud Sync</Text>
                 <Switch
                   value={iCloudStepToggle}
                   onValueChange={setICloudStepToggle}
-                  disabled={Platform.OS !== 'ios' || iCloudSaving}
+                  disabled={iCloudSaving}
                 />
               </View>
-              {Platform.OS === 'ios' && iCloudStepToggle && !isAvailable ? (
+              {iCloudStepToggle && !isAvailable ? (
                 <Text style={styles.iCloudUnavailable}>
                   iCloud is currently unavailable on this device/account.
                 </Text>
@@ -606,10 +596,7 @@ function OnboardingFlow() {
       style={styles.container}
       edges={showIntro ? ['top', 'left', 'right', 'bottom'] : ['top', 'left', 'right']}
     >
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
         {showIntro ? (
           <View style={{ flex: 1 }}>
             <Video

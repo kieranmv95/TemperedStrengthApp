@@ -1,15 +1,7 @@
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
-import DateTimePicker, {
-  type DateTimePickerEvent,
-} from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useCallback, useState } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type PbModalDateTimeFieldProps = {
   value: Date;
@@ -18,75 +10,37 @@ type PbModalDateTimeFieldProps = {
 };
 
 /**
- * Date + time picker for PB log/edit modals (iOS spinner toggle; Android system picker).
+ * Date + time picker for PB log/edit modals (spinner, inline expand).
  */
 export function PbModalDateTimeField({
   value,
   onChange,
   label = 'Date and time',
 }: PbModalDateTimeFieldProps) {
-  const [iosPickerVisible, setIosPickerVisible] = useState(false);
-  const [androidPickerVisible, setAndroidPickerVisible] = useState(false);
+  const [pickerVisible, setPickerVisible] = useState(false);
 
-  const onAndroidChange = useCallback(
-    (event: DateTimePickerEvent, date?: Date) => {
-      if (Platform.OS === 'android') {
-        setAndroidPickerVisible(false);
-      }
-      if (event.type === 'dismissed') {
-        return;
-      }
-      if (date) {
-        onChange(date);
-      }
-    },
-    [onChange]
-  );
+  const togglePicker = useCallback(() => {
+    setPickerVisible((v) => !v);
+  }, []);
 
   return (
     <View>
       <Text style={styles.modalLabel}>{label}</Text>
-      {Platform.OS === 'ios' ? (
-        <>
-          <TouchableOpacity
-            style={styles.dateButton}
-            onPress={() => setIosPickerVisible((v) => !v)}
-          >
-            <Text style={styles.dateButtonText}>{value.toLocaleString()}</Text>
-            <Text style={styles.modalHint}>
-              Tap to {iosPickerVisible ? 'hide' : 'show'} picker
-            </Text>
-          </TouchableOpacity>
-          {iosPickerVisible ? (
-            <DateTimePicker
-              value={value}
-              mode="datetime"
-              display="spinner"
-              themeVariant="dark"
-              onChange={(_, d) => d && onChange(d)}
-            />
-          ) : null}
-        </>
-      ) : (
-        <>
-          <TouchableOpacity
-            style={styles.dateButton}
-            onPress={() => setAndroidPickerVisible(true)}
-          >
-            <Text style={styles.dateButtonText}>{value.toLocaleString()}</Text>
-            <Text style={styles.modalHint}>Tap to change date and time</Text>
-          </TouchableOpacity>
-          {androidPickerVisible ? (
-            <DateTimePicker
-              value={value}
-              mode="datetime"
-              display="default"
-              themeVariant="dark"
-              onChange={onAndroidChange}
-            />
-          ) : null}
-        </>
-      )}
+      <TouchableOpacity style={styles.dateButton} onPress={togglePicker}>
+        <Text style={styles.dateButtonText}>{value.toLocaleString()}</Text>
+        <Text style={styles.modalHint}>
+          Tap to {pickerVisible ? 'hide' : 'show'} picker
+        </Text>
+      </TouchableOpacity>
+      {pickerVisible ? (
+        <DateTimePicker
+          value={value}
+          mode="datetime"
+          display="spinner"
+          themeVariant="dark"
+          onChange={(_, d) => d && onChange(d)}
+        />
+      ) : null}
     </View>
   );
 }

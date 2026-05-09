@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { encodeICloudEnvelope, parseICloudPayload } from './encoding';
 import { decideWinner } from './decision';
-import { isInternalKey, SYNC_TS_PREFIX } from './constants';
+import { isExcludedFromSync, SYNC_TS_PREFIX } from './constants';
 import type { SyncDecision, SyncConflict } from './types';
 import type { SyncProvider } from './providers/SyncProvider';
 
@@ -41,7 +41,7 @@ export class SyncManager {
   }
 
   async mirrorSet(key: string, value: string): Promise<void> {
-    if (isInternalKey(key)) return;
+    if (isExcludedFromSync(key)) return;
     const availability = await this.provider.getAvailability();
     if (!availability.available) return;
 
@@ -54,7 +54,7 @@ export class SyncManager {
   }
 
   async mirrorRemove(key: string): Promise<void> {
-    if (isInternalKey(key)) return;
+    if (isExcludedFromSync(key)) return;
     const availability = await this.provider.getAvailability();
     if (!availability.available) return;
 
@@ -82,7 +82,7 @@ export class SyncManager {
       for (const k of localKeys) union.add(k);
       for (const k of cloudKeys) union.add(k);
 
-      const keys = [...union].filter((k) => !isInternalKey(k));
+      const keys = [...union].filter((k) => !isExcludedFromSync(k));
       if (keys.length === 0) return;
 
       const comparisons = await Promise.all(

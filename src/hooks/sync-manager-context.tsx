@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AppState, Platform } from 'react-native';
+import { AppState } from 'react-native';
 import { SYNC_ENABLED_KEY, SyncManager, type SyncDecision, type SyncConflict } from '@/src/sync';
 import { ICloudKvsProvider } from '@/src/sync/providers/ICloudKvsProvider';
 import { NoopSyncProvider } from '@/src/sync/providers/NoopSyncProvider';
@@ -46,7 +46,7 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
 
   const buildManager = useCallback(
     async (nextEnabled: boolean) => {
-      if (!nextEnabled || Platform.OS !== 'ios') {
+      if (!nextEnabled) {
         managerRef.current = new SyncManager({
           provider: new NoopSyncProvider(),
           requestConflictDecision,
@@ -130,15 +130,14 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
     [enabled, isAvailable, setEnabled, syncNow]
   );
 
-  // Android: do not render modal and do not prompt.
-  const shouldShowModal = Platform.OS === 'ios' && pendingConflicts !== null;
+  const shouldShowModal = pendingConflicts !== null;
 
   return (
     <SyncContext.Provider value={value}>
       {children}
       <ICloudSyncConflictModal
         visible={shouldShowModal}
-        conflictCount={pendingConflicts?.length ?? 0}
+        conflicts={pendingConflicts}
         onKeepLocal={() => onConflictDecision('keep_local')}
         onKeepICloud={() => onConflictDecision('keep_icloud')}
       />

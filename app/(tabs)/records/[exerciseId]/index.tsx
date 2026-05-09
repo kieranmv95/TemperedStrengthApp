@@ -32,7 +32,6 @@ import {
   Alert,
   Keyboard,
   Modal,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -342,9 +341,7 @@ export default function ExercisePersonalBestsScreen() {
               value={weightInput}
               onChangeText={setWeightInput}
               keyboardType="decimal-pad"
-              inputAccessoryViewID={
-                Platform.OS === 'ios' ? IOS_KEYBOARD_DONE_ACCESSORY_ID : undefined
-              }
+              inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
               onSubmitEditing={() => Keyboard.dismiss()}
               placeholder="0"
               placeholderTextColor={Colors.textPlaceholder}

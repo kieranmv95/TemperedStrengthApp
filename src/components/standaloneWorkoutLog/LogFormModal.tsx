@@ -4,13 +4,11 @@ import type { SingleWorkout } from '@/src/types/workouts';
 import type { FormState } from '@/src/utils/standaloneWorkoutLogForm';
 import { formatStandaloneLogCardTimestamp } from '@/src/utils/standaloneWorkoutLogFormat';
 import { Ionicons } from '@expo/vector-icons';
-import type { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
   Modal,
-  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -41,9 +39,6 @@ export function LogFormModal({
 }: LogFormModalProps) {
   const title = editingEntry ? 'Edit log' : 'Log result';
   const [whenPickerVisible, setWhenPickerVisible] = useState(false);
-  const [androidPickerStep, setAndroidPickerStep] = useState<
-    'date' | 'time' | null
-  >(null);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [notesActive, setNotesActive] = useState(false);
   const notesBlurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -51,16 +46,13 @@ export function LogFormModal({
   useEffect(() => {
     if (!visible) {
       setWhenPickerVisible(false);
-      setAndroidPickerStep(null);
       setNotesActive(false);
     }
   }, [visible]);
 
   useEffect(() => {
-    const showEvent =
-      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
-    const hideEvent =
-      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const showEvent = 'keyboardWillShow';
+    const hideEvent = 'keyboardWillHide';
     const showSub = Keyboard.addListener(showEvent, (e) =>
       setKeyboardHeight(e.endCoordinates.height)
     );
@@ -92,38 +84,7 @@ export function LogFormModal({
 
   const openWhenPicker = () => {
     Keyboard.dismiss();
-    if (Platform.OS === 'android') {
-      setAndroidPickerStep('date');
-    }
     setWhenPickerVisible(true);
-  };
-
-  const onAndroidDateChange = (event: DateTimePickerEvent, date?: Date) => {
-    if (Platform.OS === 'android') {
-      setWhenPickerVisible(false);
-    }
-    if (event.type === 'dismissed' || !date) {
-      setAndroidPickerStep(null);
-      return;
-    }
-    const base = new Date(form.loggedAtMs);
-    base.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
-    onChangeForm({ ...form, loggedAtMs: base.getTime() });
-    requestAnimationFrame(() => {
-      setAndroidPickerStep('time');
-      setWhenPickerVisible(true);
-    });
-  };
-
-  const onAndroidTimeChange = (event: DateTimePickerEvent, date?: Date) => {
-    setWhenPickerVisible(false);
-    setAndroidPickerStep(null);
-    if (event.type === 'dismissed' || !date) {
-      return;
-    }
-    const base = new Date(form.loggedAtMs);
-    base.setHours(date.getHours(), date.getMinutes(), 0, 0);
-    onChangeForm({ ...form, loggedAtMs: base.getTime() });
   };
 
   return (
@@ -136,8 +97,8 @@ export function LogFormModal({
       >
         <KeyboardAvoidingView
           style={styles.modalKeyboardRoot}
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 24 : 0}
+          behavior="padding"
+          keyboardVerticalOffset={24}
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalCard}>
@@ -228,9 +189,6 @@ export function LogFormModal({
               onChangeForm={onChangeForm}
               whenPickerVisible={whenPickerVisible}
               setWhenPickerVisible={setWhenPickerVisible}
-              androidPickerStep={androidPickerStep}
-              onAndroidDateChange={onAndroidDateChange}
-              onAndroidTimeChange={onAndroidTimeChange}
             />
           </View>
         </KeyboardAvoidingView>

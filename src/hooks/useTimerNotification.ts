@@ -1,8 +1,6 @@
 import * as Notifications from 'expo-notifications';
 import { useCallback, useEffect, useRef } from 'react';
-import { Platform } from 'react-native';
 
-const NOTIFICATION_CHANNEL_ID = 'rest-timer';
 const NOTIFICATION_TITLE = '⏰ Timer Finished — get back to work!';
 
 export function useTimerNotification() {
@@ -21,19 +19,6 @@ export function useTimerNotification() {
           shouldShowList: true,
         }),
       });
-
-      // On Android 13+, the OS permission prompt is triggered only after at least
-      // one notification channel exists, so create a channel before requesting
-      // permissions.
-      if (Platform.OS === 'android') {
-        await Notifications.setNotificationChannelAsync(
-          NOTIFICATION_CHANNEL_ID,
-          {
-            name: 'Rest Timer',
-            importance: Notifications.AndroidImportance.MAX,
-          }
-        );
-      }
 
       const status = await Notifications.requestPermissionsAsync();
 
@@ -85,7 +70,6 @@ export function useTimerNotification() {
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.DATE,
           date: triggerDate,
-          channelId: NOTIFICATION_CHANNEL_ID,
         },
       });
 

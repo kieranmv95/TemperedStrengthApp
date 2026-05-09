@@ -1,5 +1,10 @@
 export { SyncManager } from './SyncManager';
-export { SYNC_ENABLED_KEY, SYNC_TS_PREFIX, isInternalKey } from './constants';
+export {
+  SYNC_ENABLED_KEY,
+  SYNC_TS_PREFIX,
+  isExcludedFromSync,
+  isInternalKey,
+} from './constants';
 export { decideWinner } from './decision';
 export type { SyncDecision, SyncConflict } from './types';
 export type {

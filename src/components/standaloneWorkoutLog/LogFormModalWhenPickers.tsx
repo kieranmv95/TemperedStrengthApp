@@ -1,15 +1,7 @@
 import type { FormState } from '@/src/utils/standaloneWorkoutLogForm';
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import React from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { logFormModalStyles as styles } from './logFormModalStyles';
 
@@ -18,9 +10,6 @@ type LogFormModalWhenPickersProps = {
   onChangeForm: (f: FormState) => void;
   whenPickerVisible: boolean;
   setWhenPickerVisible: (v: boolean) => void;
-  androidPickerStep: 'date' | 'time' | null;
-  onAndroidDateChange: (event: DateTimePickerEvent, date?: Date) => void;
-  onAndroidTimeChange: (event: DateTimePickerEvent, date?: Date) => void;
 };
 
 export function LogFormModalWhenPickers({
@@ -28,13 +17,10 @@ export function LogFormModalWhenPickers({
   onChangeForm,
   whenPickerVisible,
   setWhenPickerVisible,
-  androidPickerStep,
-  onAndroidDateChange,
-  onAndroidTimeChange,
 }: LogFormModalWhenPickersProps) {
   return (
     <>
-      {Platform.OS === 'ios' && whenPickerVisible && (
+      {whenPickerVisible && (
         <View style={styles.whenPickerOverlayAbsolute} pointerEvents="box-none">
           <TouchableOpacity
             style={StyleSheet.absoluteFill}
@@ -67,29 +53,6 @@ export function LogFormModalWhenPickers({
           </SafeAreaView>
         </View>
       )}
-
-      {Platform.OS === 'android' &&
-        whenPickerVisible &&
-        androidPickerStep === 'date' && (
-          <DateTimePicker
-            value={new Date(form.loggedAtMs)}
-            mode="date"
-            display="default"
-            onChange={onAndroidDateChange}
-            themeVariant="dark"
-          />
-        )}
-      {Platform.OS === 'android' &&
-        whenPickerVisible &&
-        androidPickerStep === 'time' && (
-          <DateTimePicker
-            value={new Date(form.loggedAtMs)}
-            mode="time"
-            display="default"
-            onChange={onAndroidTimeChange}
-            themeVariant="dark"
-          />
-        )}
     </>
   );
 }

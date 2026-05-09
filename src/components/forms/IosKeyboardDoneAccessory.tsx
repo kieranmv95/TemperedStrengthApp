@@ -3,7 +3,6 @@ import React from 'react';
 import {
   InputAccessoryView,
   Keyboard,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,8 +12,6 @@ import {
 export const IOS_KEYBOARD_DONE_ACCESSORY_ID = 'ios-keyboard-done-accessory';
 
 export function IosKeyboardDoneAccessory() {
-  if (Platform.OS !== 'ios') return null;
-
   return (
     <InputAccessoryView nativeID={IOS_KEYBOARD_DONE_ACCESSORY_ID}>
       <View style={styles.container}>

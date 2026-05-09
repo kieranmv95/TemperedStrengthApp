@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import type { SyncProvider, SyncProviderAvailability } from './SyncProvider';
 
 type ICloudModule = {
@@ -12,13 +11,7 @@ export class ICloudKvsProvider implements SyncProvider {
   private readonly mod: ICloudModule | null;
 
   constructor() {
-    if (Platform.OS !== 'ios') {
-      this.mod = null;
-      return;
-    }
-
     try {
-      // iOS-only native module; avoid static import so Android bundles don't explode.
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const m = require('expo-icloud-storage') as { default: ICloudModule };
       this.mod = m.default;
@@ -29,9 +22,6 @@ export class ICloudKvsProvider implements SyncProvider {
   }
 
   async getAvailability(): Promise<SyncProviderAvailability> {
-    if (Platform.OS !== 'ios') {
-      return { available: false, reason: 'Not running on iOS' };
-    }
     if (!this.mod) {
       return { available: false, reason: 'iCloud module unavailable' };
     }

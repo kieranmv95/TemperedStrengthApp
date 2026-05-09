@@ -5,7 +5,9 @@ const SANITY_PROJECT_ID = 'n1zlvrwu';
 const SANITY_DATASET = 'production';
 const SANITY_API_VERSION = '2024-01-01';
 
-const APP_CONFIG_CACHE_KEY = 'sanity_app_config_notification_v1';
+/** AsyncStorage key for cached Sanity notification banner; local-only (not iCloud-synced). */
+export const SANITY_APP_CONFIG_NOTIFICATION_CACHE_KEY =
+  'sanity_app_config_notification_v1';
 const CACHE_TTL_MS = 60 * 60 * 1000;
 
 const groq = `*[_type == "appConfig"][0]{
@@ -153,7 +155,7 @@ function normalizeBannerFromCache(
 
 async function readCache(): Promise<CachedPayload | null> {
   try {
-    const raw = await AsyncStorage.getItem(APP_CONFIG_CACHE_KEY);
+    const raw = await AsyncStorage.getItem(SANITY_APP_CONFIG_NOTIFICATION_CACHE_KEY);
     if (!raw) {
       return null;
     }
@@ -182,7 +184,10 @@ async function writeCache(banner: HomeRemoteNotificationBanner | null): Promise<
     storedAt: Date.now(),
     banner,
   };
-  await AsyncStorage.setItem(APP_CONFIG_CACHE_KEY, JSON.stringify(payload));
+  await AsyncStorage.setItem(
+    SANITY_APP_CONFIG_NOTIFICATION_CACHE_KEY,
+    JSON.stringify(payload)
+  );
 }
 
 async function fetchFromSanity(): Promise<HomeRemoteNotificationBanner | null> {
@@ -217,5 +222,5 @@ export async function loadHomeRemoteNotificationBanner(): Promise<HomeRemoteNoti
 
 /** Removes persisted Sanity app config / notification payload. Next Home focus refetches. */
 export async function invalidateSanityAppConfigCache(): Promise<void> {
-  await AsyncStorage.removeItem(APP_CONFIG_CACHE_KEY);
+  await AsyncStorage.removeItem(SANITY_APP_CONFIG_NOTIFICATION_CACHE_KEY);
 }

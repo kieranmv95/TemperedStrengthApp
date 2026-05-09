@@ -56,7 +56,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { usePostHog } from 'posthog-react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ScrollView, TextInput } from 'react-native';
-import { Alert, Keyboard, Platform, Share } from 'react-native';
+import { Alert, Keyboard, Share } from 'react-native';
 import {
   analyticsWeekDayFromDayIndex,
   posthogEventsNames,
@@ -931,10 +931,8 @@ export function useWorkoutScreenController() {
   }, []);
 
   useEffect(() => {
-    const showEvent =
-      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
-    const hideEvent =
-      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const showEvent = 'keyboardWillShow';
+    const hideEvent = 'keyboardWillHide';
     const showSub = Keyboard.addListener(showEvent, (e) =>
       setKeyboardHeight(e.endCoordinates.height)
     );

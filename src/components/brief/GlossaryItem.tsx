@@ -10,21 +10,12 @@ import {
 import React, { useState } from 'react';
 import {
   LayoutAnimation,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
-  UIManager,
   View,
 } from 'react-native';
 import { usePostHog } from 'posthog-react-native';
-
-// Enable LayoutAnimation on Android
-if (Platform.OS === 'android') {
-  if (UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-}
 
 type GlossaryItemProps = {
   term: GlossaryTerm;
