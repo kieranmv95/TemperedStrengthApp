@@ -4,7 +4,6 @@ import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
   getWeightUnit,
-  setOnboarded,
   setWeightUnit,
   type WeightUnit,
 } from '@/src/utils/storage';
@@ -67,14 +66,12 @@ export default function AccountGeneralSettingsScreen() {
     }, [])
   );
 
-  const handleUpdatePreferences = async () => {
-    try {
-      await setOnboarded(false);
-      router.push('/onboarding');
-    } catch (error) {
-      console.error('Error starting onboarding replay:', error);
-      Alert.alert('Error', 'Failed to start onboarding. Please try again.');
-    }
+  const handleUpdatePreferences = () => {
+    // Do not flip the `onboarded` flag here. The boot redirect in `app/_layout.tsx`
+    // only fires on cold start; navigating here is enough to replay the flow.
+    // Flipping it to `false` previously meant an aborted replay (or iCloud mirror)
+    // could push already-onboarded users — including other devices — back into onboarding.
+    router.push('/onboarding');
   };
 
   return (
