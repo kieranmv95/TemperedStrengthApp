@@ -24,7 +24,8 @@ const PATCH_NOTES: PatchNote[] = [
     version: '2.3.1',
     dateLabel: 'UNRELEASED',
     notes: [
-      'day selector visual improvements',
+      'Day selector visual improvements',
+      'Improved Olympic Foundations program',
     ],
   },
   {
