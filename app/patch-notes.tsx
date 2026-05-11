@@ -25,7 +25,7 @@ const PATCH_NOTES: PatchNote[] = [
     dateLabel: 'UNRELEASED',
     notes: [
       'Day selector visual improvements',
-      'Improved Olympic Foundations program',
+      'Improved Olympic Foundations & Advanced Olympic Performance programs',
     ],
   },
   {

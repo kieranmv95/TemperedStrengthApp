@@ -413,7 +413,7 @@ export const olympic_foundations: Program = {
 
     return [
       // ─────────────────────────────────────────────
-      // DAY 1 - Snatch Focus (Monday)
+      // DAY 1 - Snatch Focus
       //
       // Order rationale:
       //   1. Overhead Squat is the positional primer for the catch - it must
@@ -472,7 +472,7 @@ export const olympic_foundations: Program = {
       },
 
       // ─────────────────────────────────────────────
-      // DAY 2 - Clean & Jerk Focus (Wednesday)
+      // DAY 2 - Clean & Jerk Focus
       //
       // Day 2 sits at baseIntensity + 1 because the Clean & Jerk is the most
       // demanding session of the week - two consecutive Olympic movements,
@@ -540,7 +540,7 @@ export const olympic_foundations: Program = {
       },
 
       // ─────────────────────────────────────────────
-      // DAY 3 - Full Classic Lifts (Friday)
+      // DAY 3 - Full Classic Lifts
       //
       // Day 3 is the integration session - both classic lifts in their full
       // form, plus the heaviest pull of the week and a posterior chain
