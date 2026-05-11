@@ -33,6 +33,10 @@ export const daySelectorStyles = StyleSheet.create({
     backgroundColor: Colors.backgroundElevated,
     borderRadius: BorderRadius.lg,
   },
+  dayItemToday: {
+    backgroundColor: Colors.accent,
+    borderRadius: BorderRadius.lg,
+  },
   dayLabel: {
     color: Colors.textMuted,
     fontSize: FontSize.lg,
@@ -40,6 +44,9 @@ export const daySelectorStyles = StyleSheet.create({
   },
   dayLabelSelected: {
     color: Colors.textPrimary,
+  },
+  dayLabelOnToday: {
+    color: Colors.textOnAccent,
   },
   daySubLabel: {
     marginTop: 2,
@@ -52,17 +59,23 @@ export const daySelectorStyles = StyleSheet.create({
   daySubLabelSelected: {
     color: Colors.textPrimary,
   },
+  daySubLabelOnToday: {
+    color: Colors.textOnAccent,
+  },
   dot: {
     width: 6,
     height: 6,
     borderRadius: BorderRadius.xs,
     marginTop: 2,
   },
-  dotWorkout: {
-    backgroundColor: Colors.textMuted,
+  dotPlaceholder: {
+    opacity: 0,
   },
-  dotToday: {
-    backgroundColor: Colors.accent,
+  dotWorkoutOnGold: {
+    backgroundColor: Colors.textBlack,
+  },
+  dotWorkoutOnDarkSurface: {
+    backgroundColor: Colors.textMuted,
   },
   jumpToTodayButton: {
     paddingHorizontal: Spacing.xxl,

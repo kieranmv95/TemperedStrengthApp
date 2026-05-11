@@ -1,10 +1,10 @@
+import { CopyWorkoutNotesModal } from '@/src/components/CopyWorkoutNotesModal';
 import { DaySelector } from '@/src/components/DaySelector';
 import { IntensityLevelsModal } from '@/src/components/IntensityLevelsModal';
+import { MoveSessionModal } from '@/src/components/MoveSessionModal';
 import { RestTimer } from '@/src/components/RestTimer';
 import { SessionSummaryModal } from '@/src/components/SessionSummaryModal';
 import { SessionTimer } from '@/src/components/SessionTimer';
-import { CopyWorkoutNotesModal } from '@/src/components/CopyWorkoutNotesModal';
-import { MoveSessionModal } from '@/src/components/MoveSessionModal';
 import { SwapModal } from '@/src/components/SwapModal';
 import { WorkoutScreenBody } from '@/src/components/WorkoutScreenBody';
 import { useSubscription } from '@/src/hooks/use-subscription';
@@ -13,9 +13,9 @@ import { useWorkoutScreenController } from '@/src/hooks/useWorkoutScreenControll
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
 import { clearProgramData } from '@/src/utils/storage';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import React from 'react';
-import * as Notifications from 'expo-notifications';
 import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import {
   SafeAreaView,
@@ -157,11 +157,11 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         }
         onStartSession={
           !c.isRestDay &&
-          !c.loading &&
-          !c.activeSession &&
-          !c.completedSession &&
-          c.showStartSessionButton &&
-          c.currentWorkout
+            !c.loading &&
+            !c.activeSession &&
+            !c.completedSession &&
+            c.showStartSessionButton &&
+            c.currentWorkout
             ? c.handleStartSession
             : undefined
         }
@@ -206,7 +206,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         originalExerciseId={
           c.currentSwapSlot !== null
             ? c.getExerciseSlots()[c.currentSwapSlot]?.programExercise?.id ||
-              null
+            null
             : null
         }
         dayIndex={c.selectedDayIndex}

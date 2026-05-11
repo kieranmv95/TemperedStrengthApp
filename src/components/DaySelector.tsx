@@ -222,19 +222,15 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
           const dayHasWorkout = hasWorkout(dayIndex);
           const dayIsToday = isToday(dayIndex);
           const isSelected = dayIndex === currentDayIndex;
-          const beforeProgramStart = dayIndex < 0;
 
-          const dotKind = dayIsToday
-            ? 'today'
-            : !beforeProgramStart && dayHasWorkout
-              ? 'workout'
-              : 'none';
+          const dotKind = dayHasWorkout ? 'workout' : 'none';
 
           return (
             <DaySelectorDayChip
               key={dayIndex}
               label={getDayLabel(dayIndex)}
               isSelected={isSelected}
+              isToday={dayIsToday}
               dotKind={dotKind}
               onPress={() => onDaySelect(dayIndex)}
               onLayout={(e: LayoutChangeEvent) => {
