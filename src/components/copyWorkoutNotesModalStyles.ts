@@ -8,14 +8,18 @@ export const copyWorkoutNotesModalStyles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: Colors.backgroundCard,
-    borderTopLeftRadius: BorderRadius.pill,
-    borderTopRightRadius: BorderRadius.pill,
+    backgroundColor: '#151517',
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
     padding: Spacing.section,
     maxHeight: '80%',
     borderWidth: 1,
     borderColor: Colors.borderDefault,
     flexDirection: 'column',
+    shadowColor: '#000000',
+    shadowOpacity: 0.36,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: -8 },
   },
   modalHeader: {
     flexDirection: 'row',
@@ -26,14 +30,14 @@ export const copyWorkoutNotesModalStyles = StyleSheet.create({
   modalTitle: {
     color: Colors.textPrimary,
     fontSize: FontSize.displayXl,
-    fontWeight: '700',
+    fontWeight: '900',
     flex: 1,
   },
   closeButton: {
     width: 32,
     height: 32,
-    borderRadius: BorderRadius.full,
-    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.xxl,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -55,6 +59,9 @@ export const copyWorkoutNotesModalStyles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: Colors.borderDefault,
+    backgroundColor: 'rgba(255,255,255,0.025)',
+    borderRadius: BorderRadius.xxl,
+    marginBottom: Spacing.sm,
   },
   rowTextBlock: {
     flex: 1,
@@ -63,7 +70,7 @@ export const copyWorkoutNotesModalStyles = StyleSheet.create({
   rowTitle: {
     color: Colors.textPrimary,
     fontSize: FontSize.xxl,
-    fontWeight: '700',
+    fontWeight: '900',
   },
   rowPreview: {
     color: Colors.textMuted,

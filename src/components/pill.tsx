@@ -47,13 +47,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     borderWidth: 1,
     borderColor: Colors.borderDefault,
+    shadowColor: '#000000',
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
   },
   filterTabActive: {
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentSoft,
     borderColor: Colors.accent,
+    shadowColor: Colors.accent,
+    shadowOpacity: 0.22,
+    shadowRadius: 10,
   },
   filterIcon: {
     marginRight: Spacing.xs,
@@ -61,10 +68,10 @@ const styles = StyleSheet.create({
   filterTabText: {
     color: Colors.textMuted,
     fontSize: FontSize.lg,
-    fontWeight: '600',
+    fontWeight: '800',
   },
   filterTabTextActive: {
-    color: Colors.textOnAccent,
+    color: Colors.textPrimary,
   },
   filterCount: {
     color: Colors.textPlaceholder,
@@ -73,7 +80,6 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.sm,
   },
   filterCountActive: {
-    color: Colors.textOnAccent,
-    opacity: 0.7,
+    color: Colors.accent,
   },
 });

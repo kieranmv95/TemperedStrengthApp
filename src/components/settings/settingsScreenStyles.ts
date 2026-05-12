@@ -3,12 +3,17 @@ import { StyleSheet } from 'react-native';
 
 export const settingsScreenStyles = StyleSheet.create({
   upgradePrompt: {
-    backgroundColor: 'rgba(201, 176, 114, 0.1)',
+    backgroundColor: Colors.accentSoft,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: 'rgba(201, 176, 114, 0.28)',
+    borderColor: 'rgba(201,150,58,0.28)',
     padding: Spacing.section,
     marginBottom: Spacing.xl,
+    shadowColor: Colors.accent,
+    shadowOpacity: 0.14,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4,
   },
   upgradePromptTitle: {
     color: Colors.textPrimary,
@@ -35,20 +40,27 @@ export const settingsScreenStyles = StyleSheet.create({
     gap: Spacing.md,
   },
   settingsSectionTitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
+    color: Colors.accent,
+    fontSize: FontSize.sm,
+    fontWeight: '800',
+    letterSpacing: 0.96,
+    textTransform: 'uppercase',
     paddingHorizontal: Spacing.sm,
   },
   settingItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.backgroundElevated,
+    backgroundColor: '#151517',
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.borderDefault,
+    shadowColor: '#000000',
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3,
   },
   settingItemDisabled: {
     opacity: 0.5,
@@ -98,13 +110,15 @@ export const settingsScreenStyles = StyleSheet.create({
     marginBottom: Spacing.xs,
   },
   proBadge: {
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentSoft,
     paddingHorizontal: Spacing.md,
     paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: 'rgba(201,150,58,0.28)',
   },
   proBadgeText: {
-    color: Colors.textBlack,
+    color: Colors.accent,
     fontSize: FontSize.xxs,
     fontWeight: '700',
     letterSpacing: 0.5,
@@ -127,7 +141,7 @@ export const settingsScreenStyles = StyleSheet.create({
   },
   unitToggle: {
     flexDirection: 'row',
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     borderRadius: BorderRadius.pill,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
@@ -142,7 +156,7 @@ export const settingsScreenStyles = StyleSheet.create({
     paddingVertical: Spacing.md,
   },
   unitToggleOptionActive: {
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentSoft,
   },
   unitToggleText: {
     color: Colors.textMuted,
@@ -150,6 +164,6 @@ export const settingsScreenStyles = StyleSheet.create({
     fontWeight: '700',
   },
   unitToggleTextActive: {
-    color: Colors.textOnAccent,
+    color: Colors.textPrimary,
   },
 });

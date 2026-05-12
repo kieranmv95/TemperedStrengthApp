@@ -219,15 +219,21 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   blockCard: {
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: '#151517',
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xxl,
     gap: Spacing.md,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
+    shadowColor: '#000000',
+    shadowOpacity: 0.22,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 9 },
+    elevation: 3,
   },
   blockCardCompleted: {
     borderColor: Colors.accent,
+    backgroundColor: 'rgba(201,150,58,0.06)',
   },
   blockHeader: {
     gap: Spacing.xs,
@@ -243,22 +249,23 @@ const styles = StyleSheet.create({
   },
   blockTitle: {
     color: Colors.textPrimary,
-    fontWeight: '800',
-    fontSize: FontSize.displaySm,
+    fontWeight: '900',
+    fontSize: FontSize.displayMd,
+    letterSpacing: -0.3,
   },
   blockTypeBadge: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.sm,
+    backgroundColor: Colors.accentSoft,
+    borderRadius: BorderRadius.xxl,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.xs,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: 'rgba(201,150,58,0.24)',
   },
   blockTypeBadgeText: {
-    color: Colors.textMuted,
+    color: Colors.accent,
     fontSize: FontSize.sm,
     fontWeight: '700',
-    letterSpacing: 0.5,
+    letterSpacing: 0.76,
   },
   blockMeta: {
     color: Colors.accent,
@@ -283,10 +290,10 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.pill,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: 'rgba(255,255,255,0.045)',
   },
   completeButtonActive: {
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentSoft,
     borderColor: Colors.accent,
   },
   completeButtonText: {
@@ -295,7 +302,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   completeButtonTextActive: {
-    color: Colors.textOnAccent,
+    color: Colors.accent,
   },
   warmupList: {
     gap: Spacing.md,

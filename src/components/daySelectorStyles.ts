@@ -9,9 +9,9 @@ import { StyleSheet } from 'react-native';
 
 export const daySelectorStyles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: 'rgba(15,15,17,0.96)',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: 'rgba(255,255,255,0.06)',
     paddingTop: Spacing.xl,
     paddingBottom: Spacing.md,
   },
@@ -30,12 +30,16 @@ export const daySelectorStyles = StyleSheet.create({
     minWidth: ITEM_MIN_WIDTH,
   },
   dayItemSelected: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.lg,
+    backgroundColor: 'rgba(255,255,255,0.055)',
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
   },
   dayItemToday: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.lg,
+    backgroundColor: Colors.accentSoft,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.accent,
   },
   dayLabel: {
     color: Colors.textMuted,
@@ -46,7 +50,7 @@ export const daySelectorStyles = StyleSheet.create({
     color: Colors.textPrimary,
   },
   dayLabelOnToday: {
-    color: Colors.textOnAccent,
+    color: Colors.textPrimary,
   },
   daySubLabel: {
     marginTop: 2,
@@ -60,7 +64,7 @@ export const daySelectorStyles = StyleSheet.create({
     color: Colors.textPrimary,
   },
   daySubLabelOnToday: {
-    color: Colors.textOnAccent,
+    color: Colors.accent,
   },
   dot: {
     width: 6,
@@ -80,8 +84,8 @@ export const daySelectorStyles = StyleSheet.create({
   jumpToTodayButton: {
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.sm,
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.full,
+    backgroundColor: Colors.accentSoft,
+    borderRadius: BorderRadius.xxl,
     borderWidth: 1,
     borderColor: Colors.accent,
   },

@@ -18,7 +18,7 @@ export const workoutScreenStyles = StyleSheet.create({
     zIndex: 1000,
   },
   movingSessionOverlayCard: {
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: '#151517',
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
@@ -26,6 +26,11 @@ export const workoutScreenStyles = StyleSheet.create({
     paddingHorizontal: Spacing.section,
     minWidth: 220,
     alignItems: 'center',
+    shadowColor: '#000000',
+    shadowOpacity: 0.32,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 5,
   },
   movingSessionOverlayText: {
     color: Colors.textPrimary,
@@ -107,12 +112,12 @@ export const workoutScreenStyles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     borderWidth: 1,
     borderColor: Colors.borderDefault,
   },
   moduleToggleActive: {
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentSoft,
     borderColor: Colors.accent,
   },
   moduleToggleText: {
@@ -121,7 +126,7 @@ export const workoutScreenStyles = StyleSheet.create({
     fontWeight: '700',
   },
   moduleToggleTextActive: {
-    color: Colors.textOnAccent,
+    color: Colors.textPrimary,
   },
   intensityCard: {
     backgroundColor: '#151517',
@@ -182,16 +187,18 @@ export const workoutScreenStyles = StyleSheet.create({
   },
   setCurrentDayButton: {
     marginTop: Spacing.xxl,
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.lg,
+    backgroundColor: Colors.accentSoft,
+    borderRadius: BorderRadius.xxl,
     padding: Spacing.xl,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(201,150,58,0.34)',
   },
   setCurrentDayButtonInHeaderActions: {
     marginTop: 0,
   },
   setCurrentDayButtonText: {
-    color: Colors.textOnAccent,
+    color: Colors.accent,
     fontSize: FontSize.lg,
     fontWeight: '700',
     letterSpacing: 0.2,
@@ -301,7 +308,7 @@ export const workoutScreenStyles = StyleSheet.create({
   notesCopyTopStrip: {
     borderWidth: 1,
     borderColor: Colors.accent,
-    borderRadius: BorderRadius.lg,
+    borderRadius: BorderRadius.xxl,
     paddingVertical: Spacing.xl,
     alignItems: 'center',
     marginTop: Spacing.md,
@@ -322,10 +329,10 @@ export const workoutScreenStyles = StyleSheet.create({
     gap: Spacing.md,
   },
   notesAction: {
-    backgroundColor: Colors.backgroundSubtle,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     borderWidth: 1,
     borderColor: Colors.borderDefault,
-    borderRadius: BorderRadius.lg,
+    borderRadius: BorderRadius.xxl,
     paddingVertical: Spacing.lg,
     paddingHorizontal: Spacing.xl,
   },
@@ -341,7 +348,7 @@ export const workoutScreenStyles = StyleSheet.create({
     zIndex: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.backgroundElevated,
+    backgroundColor: 'rgba(15,15,17,0.96)',
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: Colors.borderDefault,
     paddingHorizontal: Spacing.xxl,

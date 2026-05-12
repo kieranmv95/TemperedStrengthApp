@@ -10,7 +10,7 @@ export const iCloudSyncConflictModalStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: {
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: '#151517',
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
@@ -18,12 +18,17 @@ export const iCloudSyncConflictModalStyles = StyleSheet.create({
     paddingTop: Spacing.xxl,
     paddingBottom: Spacing.section,
     maxHeight: '88%',
+    shadowColor: '#000000',
+    shadowOpacity: 0.32,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 12 },
+    elevation: 5,
   },
   headerIconWrap: {
     width: 44,
     height: 44,
-    borderRadius: BorderRadius.full,
-    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.xxl,
+    backgroundColor: Colors.accentSoft,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'flex-start',
@@ -49,15 +54,15 @@ export const iCloudSyncConflictModalStyles = StyleSheet.create({
   },
   comparisonHalf: {
     flex: 1,
-    backgroundColor: Colors.backgroundDark,
-    borderRadius: BorderRadius.lg,
+    backgroundColor: 'rgba(255,255,255,0.045)',
+    borderRadius: BorderRadius.xxl,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
     padding: Spacing.xl,
   },
   comparisonHalfAccent: {
     borderColor: Colors.accent,
-    backgroundColor: 'rgba(201, 176, 114, 0.08)',
+    backgroundColor: Colors.accentSoft,
   },
   comparisonLabel: {
     color: Colors.textMuted,
@@ -95,10 +100,10 @@ export const iCloudSyncConflictModalStyles = StyleSheet.create({
   keyRow: {
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.xl,
-    borderRadius: BorderRadius.lg,
-    backgroundColor: Colors.backgroundDark,
+    borderRadius: BorderRadius.xxl,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.borderDefault,
     marginBottom: Spacing.md,
   },
   keyRowTitle: {
@@ -126,21 +131,21 @@ export const iCloudSyncConflictModalStyles = StyleSheet.create({
   button: {
     flex: 1,
     paddingVertical: Spacing.xl,
-    borderRadius: BorderRadius.lg,
+    borderRadius: BorderRadius.xxl,
     alignItems: 'center',
     borderWidth: 1,
   },
   primaryButton: {
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentSoft,
     borderColor: Colors.accent,
   },
   primaryButtonText: {
-    color: Colors.textOnAccent,
+    color: Colors.accent,
     fontSize: FontSize.xxl,
     fontWeight: '700',
   },
   secondaryButton: {
-    backgroundColor: Colors.backgroundElevated,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     borderColor: Colors.borderDefault,
   },
   secondaryButtonText: {

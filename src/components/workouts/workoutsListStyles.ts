@@ -181,12 +181,17 @@ export const workoutsListStyles = StyleSheet.create({
     elevation: 4,
   },
   sponsorCard: {
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: '#151517',
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xxl,
     marginBottom: Spacing.xl,
     borderWidth: 1,
     borderColor: Colors.accent,
+    shadowColor: '#000000',
+    shadowOpacity: 0.22,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 9 },
+    elevation: 3,
   },
   sponsorTitle: {
     color: Colors.textPrimary,

@@ -73,9 +73,9 @@ export const BorderRadius = {
   lg: 8,
   xl: 10,
   xxl: 12,
-  xxxl: 14,
-  full: 16,
-  pill: 20,
+  xxxl: 12,
+  full: 12,
+  pill: 12,
 };
 
 export const FontSize = {

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.md,
-    backgroundColor: Colors.backgroundElevated,
+    backgroundColor: 'rgba(15,15,17,0.96)',
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: Colors.borderDefault,
   },
