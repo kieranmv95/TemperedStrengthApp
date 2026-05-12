@@ -4,7 +4,7 @@ import { useExerciseCardState } from '@/src/hooks/useExerciseCardState';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
 import type { Exercise as ProgramExercise } from '../types/program';
@@ -82,9 +82,15 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
       <View style={styles.card}>
         <View style={styles.slotHeader}>
           <Text style={styles.slotLabel}>Slot {slotNumber}: Empty</Text>
-          <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.swapButton,
+              pressed && styles.swapButtonPressed,
+            ]}
+            onPress={onSwap}
+          >
             <Text style={styles.swapButtonText}>Add Exercise</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     );
@@ -107,31 +113,58 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     }
   }
 
+  const categoryLabel = !isSwapped ? programExercise?.additionalHeader : null;
+  const pbSeparatorIndex = exercisePbSubtitle?.indexOf(':') ?? -1;
+  const pbStatLabel =
+    exercisePbSubtitle && pbSeparatorIndex > 0
+      ? exercisePbSubtitle.slice(0, pbSeparatorIndex)
+      : 'Best';
+  const pbStatValue =
+    exercisePbSubtitle && pbSeparatorIndex > 0
+      ? exercisePbSubtitle.slice(pbSeparatorIndex + 1).trim()
+      : exercisePbSubtitle;
+  const repStatLabel = exercise.logging_type === 'time' ? 'Time' : 'Reps';
+  const repsHeaderLabel = exercise.logging_type === 'time' ? 'Time' : 'Reps';
+  const weightHeaderLabel =
+    exercise.logging_type === 'reps' ? 'Added weight' : `Weight (${weightUnit})`;
+
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Text style={styles.exerciseName}>
-            {exercise.name}
-            {!isSwapped && programExercise?.additionalHeader && (
-              <Text style={styles.additionalHeader}>
-                {' - ' + programExercise.additionalHeader}
-              </Text>
-            )}
-          </Text>
-          {exercisePbSubtitle ? (
-            <Text style={styles.pbSubtitle}>{exercisePbSubtitle}</Text>
-          ) : null}
-          {repRangeText && (
-            <Text
-              style={[
-                styles.repRangeLabel,
-                programExercise?.isAmrap && styles.amrapLabel,
-              ]}
-            >
-              {exercise.logging_type === 'time' ? 'Time:' : 'Reps:'}{' '}
-              {repRangeText}
-            </Text>
+          <View style={styles.exerciseTitleRow}>
+            <Text style={styles.exerciseName}>{exercise.name}</Text>
+            {categoryLabel ? (
+              <View style={styles.additionalHeaderPill}>
+                <Text style={styles.additionalHeader}>{categoryLabel}</Text>
+              </View>
+            ) : null}
+          </View>
+          {(pbStatValue || repRangeText) && (
+            <View style={styles.exerciseStatsRow}>
+              {pbStatValue ? (
+                <View style={styles.exerciseStatItem}>
+                  <Text style={styles.exerciseStatLabel}>{pbStatLabel}</Text>
+                  <Text style={styles.exerciseStatValue}>{pbStatValue}</Text>
+                </View>
+              ) : null}
+              {pbStatValue && repRangeText ? (
+                <View style={styles.exerciseStatDivider} />
+              ) : null}
+              {repRangeText ? (
+                <View style={styles.exerciseStatItem}>
+                  <Text style={styles.exerciseStatLabel}>{repStatLabel}</Text>
+                  <Text
+                    style={[
+                      styles.exerciseStatValue,
+                      programExercise?.isAmrap && styles.amrapLabel,
+                    ]}
+                  >
+                    {repRangeText}
+                  </Text>
+                </View>
+              ) : null}
+            </View>
           )}
           {(() => {
             const description = isSwapped
@@ -157,8 +190,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             disabled={numberOfSets <= 1}
           >
             <Ionicons
-              name="remove-circle-outline"
-              size={24}
+              name="remove"
+              size={18}
               color={numberOfSets <= 1 ? Colors.textOnDark : Colors.accent}
             />
           </TouchableOpacity>
@@ -168,8 +201,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             onPress={incrementSets}
           >
             <Ionicons
-              name="add-circle-outline"
-              size={24}
+              name="add"
+              size={18}
               color={Colors.accent}
             />
           </TouchableOpacity>
@@ -191,53 +224,67 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         </View>
       </View>
 
-      {Array.from({ length: numberOfSets }).map((_, setIndex) => {
-        const setState = setStates.get(setIndex);
-        const canLog = !!reps[setIndex] && !loading;
-        const isFirstSet = setIndex === 0;
+      <View style={styles.setTable}>
+        <View style={styles.setTableHeaderRow}>
+          <Text style={[styles.inputLabel, styles.setNumberHeader]}>Set</Text>
+          <Text style={[styles.inputLabel, styles.inputGroup]}>
+            {weightHeaderLabel}
+          </Text>
+          <Text style={[styles.inputLabel, styles.repsHeaderLabel]}>
+            {repsHeaderLabel}
+          </Text>
+        </View>
+        {Array.from({ length: numberOfSets }).map((_, setIndex) => {
+          const setState = setStates.get(setIndex);
+          const canLog = !!reps[setIndex] && !loading;
 
-        return (
-          <ExerciseCardSetRow
-            key={setIndex}
-            setIndex={setIndex}
-            isFirstSet={isFirstSet}
-            loggingType={exercise.logging_type}
-            weightUnit={weightUnit}
-            weightValue={weights[setIndex] || ''}
-            repsValue={reps[setIndex] || ''}
-            setState={setState}
-            loading={loading}
-            canLog={canLog}
-            onWeightChange={handleWeightChange}
-            onRepsChange={handleRepsChange}
-            onToggleSetState={async (idx) => {
-              const nextState = await handleToggleSetState(idx);
-              if (nextState !== 'completed') return;
-              if (!restTimeSeconds || dayIndex === null) return;
+          return (
+            <ExerciseCardSetRow
+              key={setIndex}
+              setIndex={setIndex}
+              loggingType={exercise.logging_type}
+              weightValue={weights[setIndex] || ''}
+              repsValue={reps[setIndex] || ''}
+              setState={setState}
+              loading={loading}
+              canLog={canLog}
+              onWeightChange={handleWeightChange}
+              onRepsChange={handleRepsChange}
+              onToggleSetState={async (idx) => {
+                const nextState = await handleToggleSetState(idx);
+                if (nextState !== 'completed') return;
+                if (!restTimeSeconds || dayIndex === null) return;
 
-              const autoTimersEnabled = await getAutoRestTimersEnabled();
-              if (!autoTimersEnabled) return;
+                const autoTimersEnabled = await getAutoRestTimersEnabled();
+                if (!autoTimersEnabled) return;
 
-              const isLastSet = idx === numberOfSets - 1;
-              if (isLastSet) {
-                onRestDismiss();
-                return;
-              }
+                const isLastSet = idx === numberOfSets - 1;
+                if (isLastSet) {
+                  onRestDismiss();
+                  return;
+                }
 
-              onRestStart({
-                dayIndex,
-                slotIndex,
-                exerciseId,
-                restTimeSeconds,
-              });
-            }}
-          />
-        );
-      })}
+                onRestStart({
+                  dayIndex,
+                  slotIndex,
+                  exerciseId,
+                  restTimeSeconds,
+                });
+              }}
+            />
+          );
+        })}
+      </View>
 
       {programExercise?.canSwap !== false && (
         <View style={styles.swapButtonContainer}>
-          <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.swapButton,
+              pressed && styles.swapButtonPressed,
+            ]}
+            onPress={onSwap}
+          >
             <Text style={styles.swapButtonText}>
               {isPro
                 ? 'Swap Exercise'
@@ -245,7 +292,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                     remainingSwaps !== null ? ` (${remainingSwaps})` : ''
                   }`}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       )}
 

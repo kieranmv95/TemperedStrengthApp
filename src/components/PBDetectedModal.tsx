@@ -1,4 +1,4 @@
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import type { RepMax } from '@/src/types/personalBests';
 import { formatRepMaxLabel } from '@/src/utils/personalBests';
 import React from 'react';
@@ -73,16 +73,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
   },
   card: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: 12,
+    backgroundColor: '#151517',
+    borderRadius: BorderRadius.xxl,
     padding: Spacing.section,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
+    shadowColor: '#000000',
+    shadowOpacity: 0.32,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 12 },
+    elevation: 5,
   },
   title: {
     color: Colors.textPrimary,
     fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    fontWeight: '900',
     marginBottom: Spacing.md,
   },
   body: {
@@ -104,19 +109,21 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     paddingVertical: Spacing.xxl,
-    borderRadius: 8,
+    borderRadius: BorderRadius.xxl,
     alignItems: 'center',
   },
   buttonPrimary: {
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentSoft,
+    borderWidth: 1,
+    borderColor: 'rgba(201,150,58,0.34)',
   },
   buttonPrimaryText: {
-    color: Colors.textOnAccent,
+    color: Colors.accent,
     fontSize: FontSize.lg,
     fontWeight: '600',
   },
   buttonSecondary: {
-    backgroundColor: Colors.backgroundElevated,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     borderWidth: 1,
     borderColor: Colors.borderDefault,
   },

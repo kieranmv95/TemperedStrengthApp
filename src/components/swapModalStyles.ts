@@ -8,14 +8,18 @@ export const swapModalStyles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: Colors.backgroundCard,
-    borderTopLeftRadius: BorderRadius.pill,
-    borderTopRightRadius: BorderRadius.pill,
+    backgroundColor: '#151517',
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
     padding: Spacing.section,
     maxHeight: '80%',
     borderWidth: 1,
     borderColor: Colors.borderDefault,
     flexDirection: 'column',
+    shadowColor: '#000000',
+    shadowOpacity: 0.36,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: -8 },
   },
   modalHeader: {
     flexDirection: 'row',
@@ -25,15 +29,16 @@ export const swapModalStyles = StyleSheet.create({
   },
   modalTitle: {
     color: Colors.textPrimary,
-    fontSize: FontSize.displayXl,
-    fontWeight: '700',
+    fontSize: FontSize.displayXXl,
+    fontWeight: '900',
+    letterSpacing: -0.5,
     flex: 1,
   },
   closeButton: {
     width: 32,
     height: 32,
-    borderRadius: BorderRadius.full,
-    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.xxl,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -50,7 +55,7 @@ export const swapModalStyles = StyleSheet.create({
   },
   equipmentToggle: {
     alignSelf: 'flex-start',
-    backgroundColor: Colors.backgroundElevated,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     borderRadius: BorderRadius.pill,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
@@ -59,7 +64,7 @@ export const swapModalStyles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   equipmentToggleActive: {
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentSoft,
     borderColor: Colors.accent,
   },
   equipmentToggleText: {
@@ -68,12 +73,12 @@ export const swapModalStyles = StyleSheet.create({
     fontWeight: '700',
   },
   equipmentToggleTextActive: {
-    color: Colors.textOnAccent,
+    color: Colors.textPrimary,
   },
   disclaimer: {
     backgroundColor: Colors.accentOverlay,
     padding: Spacing.xl,
-    borderRadius: BorderRadius.lg,
+    borderRadius: BorderRadius.xxl,
     fontSize: FontSize.md,
     marginBottom: Spacing.xxxl,
     fontWeight: '500',
@@ -87,8 +92,8 @@ export const swapModalStyles = StyleSheet.create({
     fontWeight: '500',
   },
   resetButton: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.lg,
+    backgroundColor: Colors.accentSoft,
+    borderRadius: BorderRadius.xxl,
     padding: Spacing.xl,
     marginBottom: Spacing.xxl,
     borderWidth: 1,
@@ -114,12 +119,12 @@ export const swapModalStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.backgroundElevated,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xxl,
     marginBottom: Spacing.xl,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.borderDefault,
   },
   alternativeContent: {
     flex: 1,
@@ -127,7 +132,7 @@ export const swapModalStyles = StyleSheet.create({
   alternativeName: {
     color: Colors.textPrimary,
     fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    fontWeight: '900',
     marginBottom: Spacing.md,
   },
   alternativeMeta: {
@@ -137,9 +142,9 @@ export const swapModalStyles = StyleSheet.create({
   alternativeEquipment: {
     color: Colors.accent,
     fontSize: FontSize.md,
-    fontWeight: '600',
+    fontWeight: '800',
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 0.96,
   },
   alternativeMuscle: {
     color: Colors.textMuted,

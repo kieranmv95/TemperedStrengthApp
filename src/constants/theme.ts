@@ -1,15 +1,15 @@
 export const Colors = {
   // Backgrounds
-  backgroundScreen: '#121212',
-  backgroundDark: '#151515',
-  backgroundCard: '#1E1E1E',
+  backgroundScreen: '#0B0B0D',
+  backgroundDark: '#101012',
+  backgroundCard: '#171719',
   /** Workout header timer strips (session + rest) */
-  timerBarBackground: '#1A1A1A',
-  backgroundElevated: '#2A2A2A',
-  backgroundTertiary: '#2C2C2E',
-  backgroundSubtle: '#333',
-  backgroundBorder: '#3A3A3A',
-  backgroundDivider: '#3D3D3F',
+  timerBarBackground: '#141416',
+  backgroundElevated: '#202024',
+  backgroundTertiary: '#27272B',
+  backgroundSubtle: '#2F2F34',
+  backgroundBorder: '#35353A',
+  backgroundDivider: '#323238',
 
   // Overlays
   overlay: 'rgba(0, 0, 0, 0.8)',
@@ -17,23 +17,28 @@ export const Colors = {
   overlayLighter: 'rgba(0,0,0,0.45)',
 
   // Borders
-  borderDefault: '#2A2A2A',
-  borderSubtle: '#333',
+  borderDefault: 'rgba(255,255,255,0.06)',
+  borderSubtle: 'rgba(255,255,255,0.1)',
 
   // Text
   textPrimary: '#FFFFFF',
-  textSecondary: '#CCC',
-  textSecondaryAlt: '#CCCCCC',
-  textMuted: '#888',
-  textPlaceholder: '#666',
-  textTertiary: '#999',
-  textOnAccent: '#121212',
+  textSecondary: '#D2D0CB',
+  textSecondaryAlt: '#D2D0CB',
+  textMuted: '#9B9992',
+  textPlaceholder: '#6E6D68',
+  textTertiary: '#A9A69F',
+  textOnAccent: '#11100E',
   textOnDark: '#444',
   textBlack: '#000000',
 
   // Accent / brand
-  accent: '#c9b072',
-  accentOverlay: 'rgba(201, 176, 114, 0.9)',
+  accent: '#C9963A',
+  accentBronze: '#6F431F',
+  accentSoft: 'rgba(201, 150, 58, 0.16)',
+  accentGlow: 'rgba(201, 150, 58, 0.34)',
+  cardWash: 'rgba(255,255,255,0.035)',
+  cardWashWarm: 'rgba(201,150,58,0.08)',
+  accentOverlay: 'rgba(201, 150, 58, 0.9)',
 
   // Recommended (personalization signal — intentionally distinct from accent)
   recommended: '#1abc9c',
@@ -68,9 +73,9 @@ export const BorderRadius = {
   lg: 8,
   xl: 10,
   xxl: 12,
-  xxxl: 14,
-  full: 16,
-  pill: 20,
+  xxxl: 12,
+  full: 12,
+  pill: 12,
 };
 
 export const FontSize = {
@@ -89,5 +94,11 @@ export const FontSize = {
   displayXl: 24,
   displayXXl: 28,
   displayXXXl: 32,
-  hero: 36,
+  hero: 40,
+};
+
+export const Typography = {
+  heading: undefined,
+  body: undefined,
+  data: undefined,
 };

@@ -63,15 +63,20 @@ export function GlossaryItem({ term, variant = 'compact' }: GlossaryItemProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: '#151517',
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xxl,
     marginBottom: Spacing.lg,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
+    shadowColor: '#000000',
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3,
   },
   cardExpanded: {
-    borderColor: Colors.backgroundBorder,
+    borderColor: 'rgba(201,150,58,0.34)',
   },
   header: {
     flexDirection: 'row',
@@ -85,20 +90,22 @@ const styles = StyleSheet.create({
     gap: Spacing.lg,
   },
   term: {
-    color: Colors.accent,
+    color: Colors.textPrimary,
     fontSize: FontSize.xxl,
-    fontWeight: '700',
+    fontWeight: '900',
   },
   categoryBadge: {
-    backgroundColor: Colors.backgroundElevated,
+    backgroundColor: Colors.accentSoft,
     paddingHorizontal: Spacing.md,
     paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: 'rgba(201,150,58,0.24)',
   },
   categoryText: {
-    color: Colors.textPlaceholder,
+    color: Colors.accent,
     fontSize: FontSize.xxs,
-    fontWeight: '600',
+    fontWeight: '800',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },

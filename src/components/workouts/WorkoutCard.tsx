@@ -2,7 +2,7 @@ import { Colors } from '@/src/constants/theme';
 import type { SingleWorkout } from '@/src/types/workouts';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { CATEGORY_ICONS, DIFFICULTY_COLORS } from './workoutUiConstants';
 import { workoutsListStyles as styles } from './workoutsListStyles';
 
@@ -34,10 +34,13 @@ export function WorkoutCard({
   };
 
   return (
-    <TouchableOpacity
-      style={[styles.workoutCard, isLocked && styles.workoutCardLocked]}
+    <Pressable
+      style={({ pressed }) => [
+        styles.workoutCard,
+        pressed && styles.cardPressed,
+        isLocked && styles.workoutCardLocked,
+      ]}
       onPress={handlePress}
-      activeOpacity={isLocked ? 0.5 : 0.7}
     >
       <View style={styles.cardHeader}>
         <View style={styles.cardTitleRow}>
@@ -109,6 +112,6 @@ export function WorkoutCard({
           </View>
         ))}
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 }

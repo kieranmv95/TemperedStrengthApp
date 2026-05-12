@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
 import {
+  Animated,
   ScrollView,
   StyleSheet,
   Text,
@@ -60,6 +61,15 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
 }) => {
   const insets = useSafeAreaInsets();
   const [filtersExpanded, setFiltersExpanded] = React.useState(false);
+  const titleReveal = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    Animated.timing(titleReveal, {
+      toValue: 1,
+      duration: 520,
+      useNativeDriver: true,
+    }).start();
+  }, [titleReveal]);
 
   let filters: React.ReactNode = null;
   let advancedFilters: React.ReactNode = null;
@@ -132,7 +142,32 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
             <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
           </TouchableOpacity>
         ) : null}
-        <Text style={styles.title}>{title}</Text>
+        <Animated.Text
+          style={[
+            styles.title,
+            {
+              opacity: titleReveal,
+              transform: [
+                {
+                  translateY: titleReveal.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [8, 0],
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
+          {title}
+        </Animated.Text>
+        <View style={styles.headerAccentLine}>
+          <Animated.View
+            style={[
+              styles.headerAccentLineFill,
+              { transform: [{ scaleX: titleReveal }] },
+            ]}
+          />
+        </View>
         {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
         {hasFilters ? (
           <View style={styles.filtersContainer}>
@@ -207,21 +242,36 @@ const styles = StyleSheet.create({
   },
   title: {
     color: Colors.textPrimary,
-    fontSize: FontSize.displayXXXl,
-    fontWeight: '800',
-    letterSpacing: -0.5,
+    fontSize: FontSize.hero,
+    fontWeight: '900',
+    letterSpacing: -1.2,
+    lineHeight: 44,
+  },
+  headerAccentLine: {
+    width: 92,
+    height: 1,
+    marginTop: Spacing.md,
+    marginBottom: Spacing.md,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    overflow: 'hidden',
+  },
+  headerAccentLineFill: {
+    flex: 1,
+    backgroundColor: Colors.accent,
   },
   subtitle: {
-    color: Colors.textPlaceholder,
+    color: Colors.textMuted,
     fontSize: FontSize.lg,
     fontWeight: '500',
+    letterSpacing: 0.1,
   },
   headerContainer: {
     paddingHorizontal: Spacing.xxl,
     paddingTop: Spacing.xxl,
     paddingBottom: Spacing.xxl,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: 'rgba(255,255,255,0.05)',
+    backgroundColor: 'rgba(255,255,255,0.015)',
   },
   backButton: {
     alignSelf: 'flex-start',
@@ -244,7 +294,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     paddingHorizontal: Spacing.md,
     borderRadius: 12,
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     borderWidth: 1,
     borderColor: Colors.borderDefault,
   },

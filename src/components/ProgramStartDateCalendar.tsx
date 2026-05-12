@@ -220,13 +220,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: BorderRadius.lg,
+    borderRadius: BorderRadius.xxl,
   },
   dayInnerDisabled: {
     opacity: 0.35,
   },
   dayInnerSelected: {
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentSoft,
+    borderWidth: 1,
+    borderColor: Colors.accent,
   },
   dayText: {
     color: Colors.textPrimary,
@@ -239,6 +241,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   dayTextSelected: {
-    color: Colors.textOnAccent,
+    color: Colors.textPrimary,
   },
 });

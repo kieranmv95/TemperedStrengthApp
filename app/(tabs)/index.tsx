@@ -35,6 +35,7 @@ import React, {
 import {
   ActivityIndicator,
   Animated,
+  Pressable,
   Text,
   TouchableOpacity,
   View,
@@ -222,6 +223,12 @@ export default function HomeTabScreen() {
               },
             ]}
           >
+            <View pointerEvents="none" style={styles.notificationBannerGlowTop} />
+            <View
+              pointerEvents="none"
+              style={styles.notificationBannerBronzeWash}
+            />
+            <View pointerEvents="none" style={styles.notificationBannerNoise} />
             {remoteNotification.title.length > 0 ? (
               <Text
                 style={[
@@ -283,8 +290,11 @@ export default function HomeTabScreen() {
             </Text>
           </View>
           {programSummary ? (
-            <TouchableOpacity
-              style={styles.card}
+            <Pressable
+              style={({ pressed }) => [
+                styles.card,
+                pressed && styles.cardPressed,
+              ]}
               onPress={() =>
                 trackHomeLink('your_program_card', '/program', () =>
                   router.push('/program')
@@ -317,10 +327,13 @@ export default function HomeTabScreen() {
                   color={Colors.accent}
                 />
               </View>
-            </TouchableOpacity>
+            </Pressable>
           ) : (
-            <TouchableOpacity
-              style={styles.card}
+            <Pressable
+              style={({ pressed }) => [
+                styles.card,
+                pressed && styles.cardPressed,
+              ]}
               onPress={() =>
                 trackHomeLink('pick_program_card', '/program', () =>
                   router.push('/program')
@@ -343,7 +356,7 @@ export default function HomeTabScreen() {
                   color={Colors.accent}
                 />
               </View>
-            </TouchableOpacity>
+            </Pressable>
           )}
         </View>
 
@@ -358,8 +371,11 @@ export default function HomeTabScreen() {
             </Text>
           </View>
           {hasPersonalBests ? (
-            <TouchableOpacity
-              style={styles.card}
+            <Pressable
+              style={({ pressed }) => [
+                styles.card,
+                pressed && styles.cardPressed,
+              ]}
               onPress={() =>
                 trackHomeLink('recent_wins_card', '/records', () =>
                   router.push('/records')
@@ -369,18 +385,31 @@ export default function HomeTabScreen() {
               accessibilityLabel="Open records and personal bests"
             >
               <View style={styles.cardBody}>
-                {recentPbs.map((row, index) => (
-                  <View
-                    key={`${row.exerciseId}-${row.tier}-${row.achievedAt}-${index}`}
-                    style={[styles.pbRow, index === 0 && styles.pbRowFirst]}
-                  >
-                    <Text style={styles.pbRowTitle}>{row.exerciseName}</Text>
-                    <Text style={styles.pbRowMeta}>
-                      {formatRepMaxLabel(row.tier)} ·{' '}
-                      {formatWeightFromKg(row.weightKg, weightUnit)}
-                    </Text>
-                  </View>
-                ))}
+                {recentPbs.map((row, index) => {
+                  const weightText = formatWeightFromKg(
+                    row.weightKg,
+                    weightUnit
+                  );
+
+                  return (
+                    <View
+                      key={`${row.exerciseId}-${row.tier}-${row.achievedAt}-${index}`}
+                      style={[styles.pbRow, index === 0 && styles.pbRowFirst]}
+                    >
+                      <View style={styles.pbRowTextCell}>
+                        <Text style={styles.pbRowTitle} numberOfLines={1}>
+                          {row.exerciseName}
+                        </Text>
+                        <Text style={styles.pbRowMeta}>
+                          {formatRepMaxLabel(row.tier)}
+                        </Text>
+                      </View>
+                      <View style={styles.pbValueChip}>
+                        <Text style={styles.pbValueText}>{weightText}</Text>
+                      </View>
+                    </View>
+                  );
+                })}
               </View>
               <View style={styles.cardChevronWrap} pointerEvents="none">
                 <Ionicons
@@ -389,10 +418,13 @@ export default function HomeTabScreen() {
                   color={Colors.accent}
                 />
               </View>
-            </TouchableOpacity>
+            </Pressable>
           ) : (
-            <TouchableOpacity
-              style={styles.card}
+            <Pressable
+              style={({ pressed }) => [
+                styles.card,
+                pressed && styles.cardPressed,
+              ]}
               onPress={() =>
                 trackHomeLink('recent_wins_empty_card', '/records', () =>
                   router.push('/records')
@@ -415,7 +447,7 @@ export default function HomeTabScreen() {
                   color={Colors.accent}
                 />
               </View>
-            </TouchableOpacity>
+            </Pressable>
           )}
         </View>
 

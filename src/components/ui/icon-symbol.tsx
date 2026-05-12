@@ -25,6 +25,7 @@ const MAPPING = {
   'dumbbell.fill': 'fitness-center',
   'gearshape.fill': 'settings',
   'newspaper.fill': 'article',
+  'trophy.fill': 'emoji-events',
 } as IconMapping;
 
 /**

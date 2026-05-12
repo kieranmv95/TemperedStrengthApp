@@ -8,17 +8,21 @@ export const moveSessionModalStyles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: Colors.backgroundCard,
-    borderTopLeftRadius: BorderRadius.pill,
-    borderTopRightRadius: BorderRadius.pill,
+    backgroundColor: '#151517',
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
     padding: Spacing.section,
+    shadowColor: '#000000',
+    shadowOpacity: 0.36,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: -8 },
   },
   title: {
     color: Colors.textPrimary,
     fontSize: FontSize.displayXl,
-    fontWeight: '700',
+    fontWeight: '900',
     marginBottom: Spacing.md,
   },
   subtitle: {
@@ -36,8 +40,8 @@ export const moveSessionModalStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.lg,
+    backgroundColor: 'rgba(255,255,255,0.045)',
+    borderRadius: BorderRadius.xxl,
     paddingVertical: Spacing.lg,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
@@ -47,7 +51,7 @@ export const moveSessionModalStyles = StyleSheet.create({
     opacity: 0.35,
   },
   dayBtnFrom: {
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentSoft,
     borderColor: Colors.accent,
   },
   dayBtnSelected: {
@@ -61,7 +65,7 @@ export const moveSessionModalStyles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   dayLabelFrom: {
-    color: Colors.textOnAccent,
+    color: Colors.textPrimary,
   },
   dayDateLabel: {
     marginTop: 2,
@@ -70,7 +74,7 @@ export const moveSessionModalStyles = StyleSheet.create({
     fontWeight: '600',
   },
   dayDateLabelFrom: {
-    color: Colors.textOnAccent,
+    color: Colors.accent,
   },
   footer: {
     borderTopWidth: 1,
@@ -88,7 +92,7 @@ export const moveSessionModalStyles = StyleSheet.create({
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
-    backgroundColor: Colors.backgroundElevated,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -102,18 +106,19 @@ export const moveSessionModalStyles = StyleSheet.create({
     paddingVertical: Spacing.xxl,
     paddingHorizontal: Spacing.xxl,
     borderRadius: BorderRadius.xxl,
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentSoft,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(201,150,58,0.34)',
   },
   btnPrimaryDisabled: {
     opacity: 0.4,
   },
   btnPrimaryText: {
     fontSize: FontSize.xl,
-    color: Colors.textOnAccent,
+    color: Colors.accent,
     fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 0.2,
   },
 });

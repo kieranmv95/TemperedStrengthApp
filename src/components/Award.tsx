@@ -1,4 +1,4 @@
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AwardIcon, { AwardIconVariant } from './AwardIcon';
@@ -47,6 +47,16 @@ const styles = StyleSheet.create({
     opacity: 1,
     flexDirection: 'row',
     gap: Spacing.md,
+    backgroundColor: '#151517',
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.borderDefault,
+    padding: Spacing.xxl,
+    shadowColor: '#000000',
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 2,
   },
   containerLocked: {
     opacity: 0.5,
@@ -65,7 +75,7 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.textPrimary,
     fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    fontWeight: '900',
     flexShrink: 1,
   },
   description: {

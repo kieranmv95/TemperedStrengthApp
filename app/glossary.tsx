@@ -245,15 +245,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.xl,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: 'rgba(255,255,255,0.018)',
   },
   headerBackButton: {
     padding: Spacing.xs,
   },
   headerTitle: {
     color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    fontSize: FontSize.displayLg,
+    fontWeight: '900',
+    letterSpacing: -0.4,
   },
   headerSpacer: {
     width: 32,
@@ -265,13 +267,17 @@ const styles = StyleSheet.create({
   searchInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     borderRadius: BorderRadius.xxl,
     paddingHorizontal: 14,
     paddingVertical: Spacing.xl,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
     gap: Spacing.lg,
+    shadowColor: '#000000',
+    shadowOpacity: 0.14,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
   },
   searchInput: {
     flex: 1,
@@ -293,22 +299,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: 'rgba(255,255,255,0.045)',
     borderWidth: 1,
     borderColor: Colors.borderDefault,
     gap: Spacing.sm,
   },
   filterTabActive: {
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentSoft,
     borderColor: Colors.accent,
   },
   filterTabText: {
     color: Colors.textMuted,
     fontSize: FontSize.base,
-    fontWeight: '600',
+    fontWeight: '800',
   },
   filterTabTextActive: {
-    color: Colors.textOnAccent,
+    color: Colors.textPrimary,
   },
   filterCount: {
     color: Colors.textPlaceholder,
@@ -316,8 +322,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   filterCountActive: {
-    color: Colors.textOnAccent,
-    opacity: 0.7,
+    color: Colors.accent,
   },
   listContent: {
     padding: Spacing.xxl,

@@ -331,15 +331,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.xl,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: 'rgba(255,255,255,0.018)',
   },
   headerBackButton: {
     padding: Spacing.xs,
   },
   headerTitle: {
     color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    fontSize: FontSize.displayLg,
+    fontWeight: '900',
+    letterSpacing: -0.4,
   },
   headerSpacer: {
     width: 32,
@@ -361,11 +363,16 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   card: {
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: '#151517',
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
     borderColor: Colors.borderDefault,
     overflow: 'hidden',
+    shadowColor: '#000000',
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3,
   },
   cardHeader: {
     paddingHorizontal: Spacing.xxl,
@@ -382,13 +389,15 @@ const styles = StyleSheet.create({
   versionText: {
     color: Colors.textPrimary,
     fontSize: FontSize.xxl,
-    fontWeight: '800',
+    fontWeight: '900',
     letterSpacing: -0.2,
   },
   dateText: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.md,
-    fontWeight: '600',
+    color: Colors.accent,
+    fontSize: FontSize.xs,
+    fontWeight: '800',
+    letterSpacing: 0.76,
+    textTransform: 'uppercase',
   },
   cardBody: {
     paddingHorizontal: Spacing.xxl,
