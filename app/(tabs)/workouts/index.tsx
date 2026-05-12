@@ -27,7 +27,9 @@ import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
+  Image,
   ImageBackground,
+  Pressable,
   ScrollView,
   Text,
   TextInput,
@@ -80,10 +82,13 @@ function CuratedWorkoutCard({
   };
 
   return (
-    <TouchableOpacity
-      style={[styles.curatedCard, isLocked && styles.curatedCardLocked]}
+    <Pressable
+      style={({ pressed }) => [
+        styles.curatedCard,
+        pressed && styles.cardPressed,
+        isLocked && styles.curatedCardLocked,
+      ]}
       onPress={handlePress}
-      activeOpacity={isLocked ? 0.5 : 0.7}
     >
       <View style={styles.curatedCardTopRow}>
         <Text style={styles.curatedCardCategory}>{workout.category}</Text>
@@ -96,13 +101,16 @@ function CuratedWorkoutCard({
       <Text style={styles.curatedCardTitle} numberOfLines={2}>
         {workout.title}
       </Text>
-      <View style={styles.curatedCardMeta}>
-        <Ionicons name="time-outline" size={14} color={Colors.textMuted} />
-        <Text style={styles.curatedCardMetaText}>
-          {workout.estimatedTime} min
-        </Text>
+      <View style={styles.curatedCardStats}>
+        <Text style={styles.curatedStatLabel}>Duration</Text>
+        <View style={styles.curatedDurationBadge}>
+          <Ionicons name="time" size={14} color={Colors.accent} />
+          <Text style={styles.curatedDurationText}>
+            {workout.estimatedTime} min
+          </Text>
+        </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 
@@ -408,8 +416,11 @@ export default function WorkoutsScreen() {
                     contentContainerStyle={styles.curatedScrollContent}
                   >
                     {disciplines.map((discipline) => (
-                      <TouchableOpacity
-                        style={styles.disciplineSection}
+                      <Pressable
+                        style={({ pressed }) => [
+                          styles.disciplineSection,
+                          pressed && styles.cardPressed,
+                        ]}
                         key={discipline.tag}
                         onPress={() => {
                           posthog.capture(
@@ -433,12 +444,32 @@ export default function WorkoutsScreen() {
                           pointerEvents="none"
                           style={styles.disciplineGoldOverlay}
                         />
-                        {discipline.showTitle && (
+                        <View
+                          pointerEvents="none"
+                          style={styles.disciplineBottomShade}
+                        />
+                        <View
+                          pointerEvents="none"
+                          style={styles.disciplineAccentLine}
+                        />
+                        {discipline.logo ? (
+                          <Image
+                            source={discipline.logo.source}
+                            style={[
+                              styles.disciplineLogo,
+                              {
+                                width: discipline.logo.width,
+                                height: discipline.logo.height,
+                              },
+                            ]}
+                          />
+                        ) : null}
+                        {discipline.showTitle || discipline.logo ? (
                           <Text style={styles.disciplineSectionTitle}>
                             {discipline.title}
                           </Text>
-                        )}
-                      </TouchableOpacity>
+                        ) : null}
+                      </Pressable>
                     ))}
                   </ScrollView>
                 </View>
@@ -527,6 +558,10 @@ export default function WorkoutsScreen() {
 
                 <View style={styles.allWorkoutsHeader}>
                   <Text style={styles.allWorkoutsTitle}>All Workouts</Text>
+                  <Text style={styles.allWorkoutsHelper}>
+                    Browse the full library, then save your favourites for fast
+                    access.
+                  </Text>
                 </View>
               </>
             }
