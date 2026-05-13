@@ -119,49 +119,20 @@ export const workoutDetailStyles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: Spacing.xxl,
   },
-  detailTagsContainer: {
+  tagsScrollRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: 'center',
     gap: Spacing.md,
     marginBottom: Spacing.section,
+    paddingRight: Spacing.xxl,
   },
   scaleSelectorRow: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: Spacing.md,
     paddingBottom: Spacing.xl,
     marginBottom: Spacing.xxl,
-  },
-  scaleButton: {
-    backgroundColor: Colors.backgroundElevated,
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.full,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-  },
-  scaleButtonActive: {
-    backgroundColor: Colors.accent,
-    borderColor: Colors.accent,
-  },
-  scaleButtonText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  scaleButtonTextActive: {
-    color: Colors.textOnAccent,
-  },
-  tag: {
-    backgroundColor: Colors.backgroundElevated,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.xxl,
-  },
-  tagText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '500',
+    paddingRight: Spacing.xxl,
   },
   blockContainer: {
     backgroundColor: Colors.backgroundCard,

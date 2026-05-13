@@ -8,13 +8,24 @@ type PillProps = {
   label: string;
   icon?: string;
   count?: number;
+  /** When true, the pill is non-interactive (no press feedback / action). */
+  disabled?: boolean;
 };
 
-export const Pill = ({ onPress, isActive, label, icon, count }: PillProps) => {
+export const Pill = ({
+  onPress,
+  isActive,
+  label,
+  icon,
+  count,
+  disabled = false,
+}: PillProps) => {
   return (
     <TouchableOpacity
       style={[styles.filterTab, isActive && styles.filterTabActive]}
       onPress={onPress}
+      disabled={disabled}
+      activeOpacity={disabled ? 1 : undefined}
     >
       {icon && (
         <Ionicons

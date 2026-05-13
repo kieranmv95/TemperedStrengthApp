@@ -1,3 +1,4 @@
+import { Pill } from '@/src/components/pill';
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
 import { Colors } from '@/src/constants/theme';
 import type { OnboardingGender } from '@/src/types/onboarding';
@@ -9,7 +10,7 @@ import type {
 import { getOnboardingProfile } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, View } from 'react-native';
 import { workoutDetailStyles as styles } from './workoutDetailStyles';
 import { CATEGORY_ICONS, DIFFICULTY_COLORS } from './workoutUiConstants';
 
@@ -146,13 +147,23 @@ export function WorkoutDetailScrollContent({
 
       <Text style={styles.detailDescription}>{workout.description}</Text>
 
-      <View style={styles.detailTagsContainer}>
-        {visibleTags.map((tag, index) => (
-          <View key={index} style={styles.tag}>
-            <Text style={styles.tagText}>{tag}</Text>
-          </View>
-        ))}
-      </View>
+      {visibleTags.length > 0 ? (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.tagsScrollRow}
+        >
+          {visibleTags.map((tag, index) => (
+            <Pill
+              key={`${index}-${tag}`}
+              label={tag}
+              isActive={false}
+              disabled
+              onPress={() => {}}
+            />
+          ))}
+        </ScrollView>
+      ) : null}
 
       {scaledBlocks ? (
         <>
@@ -162,31 +173,14 @@ export function WorkoutDetailScrollContent({
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.scaleSelectorRow}
           >
-            {scaledBlocks.all.map((s, i) => {
-              const isActive = i === scaledBlocks.safeIndex;
-              return (
-                <TouchableOpacity
-                  key={s.scale}
-                  style={[
-                    styles.scaleButton,
-                    isActive && styles.scaleButtonActive,
-                  ]}
-                  onPress={() => setSelectedScaleIndex(i)}
-                  activeOpacity={0.85}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Select scale ${s.scale}`}
-                >
-                  <Text
-                    style={[
-                      styles.scaleButtonText,
-                      isActive && styles.scaleButtonTextActive,
-                    ]}
-                  >
-                    {s.scale}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+            {scaledBlocks.all.map((s, i) => (
+              <Pill
+                key={`${i}-${s.scale}`}
+                label={s.scale}
+                isActive={i === scaledBlocks.safeIndex}
+                onPress={() => setSelectedScaleIndex(i)}
+              />
+            ))}
           </ScrollView>
 
           {scaledBlocks.selected.blocks.map((block, blockIndex) => (
