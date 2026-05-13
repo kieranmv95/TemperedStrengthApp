@@ -29,7 +29,7 @@ export function DaySelectorDayChip({
     <TouchableOpacity
       style={[
         styles.dayItem,
-        isSelected && !isToday && styles.dayItemSelected,
+        isSelected && styles.dayItemSelected,
         isToday && styles.dayItemToday,
       ]}
       onPress={onPress}
@@ -60,7 +60,7 @@ export function DaySelectorDayChip({
           styles.dot,
           dotKind === 'workout'
             ? isToday
-              ? styles.dotWorkoutOnGold
+              ? styles.dotWorkoutToday
               : styles.dotWorkoutOnDarkSurface
             : styles.dotPlaceholder,
         ]}

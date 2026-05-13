@@ -28,14 +28,16 @@ export const daySelectorStyles = StyleSheet.create({
     paddingHorizontal: ITEM_PADDING_H,
     paddingVertical: Spacing.md,
     minWidth: ITEM_MIN_WIDTH,
+    borderWidth: 1,
+    borderColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.lg,
   },
   dayItemSelected: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.lg,
+    backgroundColor: Colors.accentWashFill,
+    borderWidth: 1,
   },
   dayItemToday: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.lg,
+    borderColor: Colors.accentWashBorder,
   },
   dayLabel: {
     color: Colors.textMuted,
@@ -46,7 +48,7 @@ export const daySelectorStyles = StyleSheet.create({
     color: Colors.textPrimary,
   },
   dayLabelOnToday: {
-    color: Colors.textOnAccent,
+    color: Colors.textPrimary,
   },
   daySubLabel: {
     marginTop: 2,
@@ -63,16 +65,16 @@ export const daySelectorStyles = StyleSheet.create({
     color: Colors.textOnAccent,
   },
   dot: {
-    width: 6,
-    height: 6,
+    width: 12,
+    height: 3,
     borderRadius: BorderRadius.xs,
     marginTop: 2,
   },
   dotPlaceholder: {
     opacity: 0,
   },
-  dotWorkoutOnGold: {
-    backgroundColor: Colors.textBlack,
+  dotWorkoutToday: {
+    backgroundColor: Colors.accent,
   },
   dotWorkoutOnDarkSurface: {
     backgroundColor: Colors.textMuted,
