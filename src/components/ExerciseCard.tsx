@@ -123,15 +123,14 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             <Text style={styles.pbSubtitle}>{exercisePbSubtitle}</Text>
           ) : null}
           {repRangeText && (
-            <Text
-              style={[
-                styles.repRangeLabel,
-                programExercise?.isAmrap && styles.amrapLabel,
-              ]}
-            >
-              {exercise.logging_type === 'time' ? 'Time:' : 'Reps:'}{' '}
-              {repRangeText}
-            </Text>
+            <View style={styles.repRangeLabel}>
+              <Text style={styles.repRangeLabelText}>
+                {exercise.logging_type === 'time' ? 'Time:' : 'Reps:'}{' '}
+              </Text>
+              <Text style={styles.repRangeValue}>
+                {repRangeText}
+              </Text>
+            </View>
           )}
           {(() => {
             const description = isSwapped
@@ -157,7 +156,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             disabled={numberOfSets <= 1}
           >
             <Ionicons
-              name="remove-circle-outline"
+              name="remove"
               size={24}
               color={numberOfSets <= 1 ? Colors.textOnDark : Colors.accent}
             />
@@ -168,7 +167,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             onPress={incrementSets}
           >
             <Ionicons
-              name="add-circle-outline"
+              name="add"
               size={24}
               color={Colors.accent}
             />

@@ -42,15 +42,22 @@ export const exerciseCardStyles = StyleSheet.create({
     marginTop: Spacing.xl,
   },
   repRangeLabel: {
+    backgroundColor: Colors.backgroundElevated,
+    borderWidth: 1,
+    borderColor: Colors.backgroundSubtle,
+    borderRadius: BorderRadius.xl,
+    padding: Spacing.xl,
+  },
+  repRangeLabelText: {
     color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    fontSize: FontSize.sm,
+    fontWeight: '700',
     marginBottom: Spacing.xs,
   },
-  amrapLabel: {
-    color: Colors.accent,
+  repRangeValue: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xl,
     fontWeight: '800',
-    opacity: 0.75,
   },
   setsHeader: {
     marginBottom: Spacing.xl,
@@ -66,15 +73,16 @@ export const exerciseCardStyles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   setControls: {
+    backgroundColor: Colors.backgroundElevated,
+    borderWidth: 1,
+    borderColor: Colors.backgroundSubtle,
+    borderRadius: BorderRadius.md,
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.md,
   },
   restTimerButton: {
     padding: Spacing.xs,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.md,
   },
   setControlButton: {
     padding: Spacing.xs,
@@ -127,7 +135,7 @@ export const exerciseCardStyles = StyleSheet.create({
     color: Colors.textPrimary,
     fontSize: FontSize.xxl,
     fontWeight: '600',
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: Colors.backgroundSubtle,
   },
   inputFlex: {
@@ -162,11 +170,11 @@ export const exerciseCardStyles = StyleSheet.create({
   },
   inputCompleted: {
     borderColor: Colors.accent,
-    borderWidth: 2,
+    borderWidth: 1,
   },
   inputFailed: {
     borderColor: Colors.destructive,
-    borderWidth: 2,
+    borderWidth: 1,
   },
   checkmarkButton: {
     paddingBottom: Spacing.md,
