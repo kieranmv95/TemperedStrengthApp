@@ -20,7 +20,7 @@ export const Pill = ({ onPress, isActive, label, icon, count }: PillProps) => {
         <Ionicons
           name={icon as any}
           size={14}
-          color={isActive ? Colors.textOnAccent : Colors.textMuted}
+          color={isActive ? Colors.accent : Colors.textMuted}
           style={styles.filterIcon}
         />
       )}
@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.backgroundElevated,
   },
   filterTabActive: {
-    backgroundColor: Colors.accent,
-    borderColor: Colors.accent,
+    backgroundColor: Colors.accentWashFill,
+    borderColor: Colors.accentWashBorder,
   },
   filterIcon: {
     marginRight: Spacing.xs,
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   filterTabTextActive: {
-    color: Colors.textOnAccent,
+    color: Colors.accent,
   },
   filterCount: {
     color: Colors.textPlaceholder,
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.sm,
   },
   filterCountActive: {
-    color: Colors.textOnAccent,
+    color: Colors.accent,
     opacity: 0.7,
   },
 });

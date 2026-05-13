@@ -389,8 +389,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   selectedDifficulty === 'all'
                     ? programs.length
                     : programs.filter(
-                        (p) => p.difficulty === selectedDifficulty
-                      ).length
+                      (p) => p.difficulty === selectedDifficulty
+                    ).length
                 }
               />
               {availableCategories.map((category) => {
@@ -423,8 +423,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   selectedCategory === 'all'
                     ? programs.length
                     : programs.filter((p) =>
-                        p.categories.includes(selectedCategory)
-                      ).length
+                      p.categories.includes(selectedCategory)
+                    ).length
                 }
               />
               {availableDifficulties.map((difficulty) => (
@@ -454,18 +454,18 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   selectedCategory === 'all' && selectedDifficulty === 'all'
                     ? programs.length
                     : programs.filter((p) => {
-                        if (
-                          selectedCategory !== 'all' &&
-                          !p.categories.includes(selectedCategory)
-                        )
-                          return false;
-                        if (
-                          selectedDifficulty !== 'all' &&
-                          p.difficulty !== selectedDifficulty
-                        )
-                          return false;
-                        return true;
-                      }).length
+                      if (
+                        selectedCategory !== 'all' &&
+                        !p.categories.includes(selectedCategory)
+                      )
+                        return false;
+                      if (
+                        selectedDifficulty !== 'all' &&
+                        p.difficulty !== selectedDifficulty
+                      )
+                        return false;
+                      return true;
+                    }).length
                 }
               />
               {availableGoals.map((goal) => {
@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
   },
   filtersLabel: {
     color: Colors.textMuted,
-    fontSize: FontSize.lg,
+    fontSize: FontSize.md,
     fontWeight: '700',
     letterSpacing: 0.5,
     textTransform: 'uppercase',

@@ -108,7 +108,8 @@ export const onboardingStyles = StyleSheet.create({
     borderColor: Colors.backgroundSubtle,
   },
   optionCardSelected: {
-    borderColor: Colors.accent,
+    borderColor: Colors.accentWashBorder,
+    backgroundColor: Colors.accentWashFill,
   },
   optionCardNotFullWidth: {
     alignSelf: 'flex-start',

@@ -1,3 +1,4 @@
+import { SmallChevron } from '@/src/components/ds/SmallChevron';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors } from '@/src/constants/theme';
@@ -185,306 +186,292 @@ export default function HomeTabScreen() {
   return (
     <StandardLayout title={greetingTitle} subtitle={headerSubtitle}>
       <StandardLayout.Body>
-        {showFreeStrip && (
-          <Animated.View
-            style={[styles.welcomeStrip, { opacity: freeStripOpacity }]}
-          >
+        <View style={styles.spacing}>
+          <View style={styles.notificationSpacing}>
+            {showFreeStrip && (
+              <Animated.View
+                style={[styles.welcomeStrip, { opacity: freeStripOpacity }]}
+              >
+                <TouchableOpacity
+                  activeOpacity={0.85}
+                  onPress={() =>
+                    trackHomeLink('welcome_strip', '/settings', () =>
+                      router.push('/settings')
+                    )
+                  }
+                  accessibilityRole="button"
+                  accessibilityLabel="Upgrade to Pro, free tier"
+                  accessibilityHint="Opens settings where you can upgrade to Tempered Strength Pro"
+                >
+                  <View style={styles.welcomeStripTopRow}>
+                    <View style={styles.welcomeHeadlineCell}>
+                      <Text style={styles.welcomeTitle}>Upgrade to Pro</Text>
+                    </View>
+                    <View style={styles.planBadgeFree} pointerEvents="none">
+                      <Text style={styles.planBadgeLabelFree}>FREE TIER</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </Animated.View>
+            )}
+
+            {remoteNotification && (
+              <View
+                style={[
+                  styles.notificationBanner,
+                  {
+                    backgroundColor: remoteNotification.bgColor,
+                    borderColor: remoteNotification.borderColor,
+                  },
+                ]}
+              >
+                {remoteNotification.title.length > 0 ? (
+                  <Text
+                    style={[
+                      styles.notificationBannerTitle,
+                      { color: remoteNotification.titleColor },
+                    ]}
+                  >
+                    {remoteNotification.title}
+                  </Text>
+                ) : null}
+                {remoteNotification.body.length > 0 ? (
+                  <Text
+                    style={[
+                      styles.notificationBannerBody,
+                      { color: remoteNotification.descriptionColor },
+                    ]}
+                  >
+                    {remoteNotification.body}
+                  </Text>
+                ) : null}
+                {remoteNotification.ctaText.length > 0 &&
+                  remoteNotification.ctaUrl.length > 0 ? (
+                  <TouchableOpacity
+                    style={[
+                      styles.notificationCta,
+                      { backgroundColor: remoteNotification.ctaColor },
+                    ]}
+                    onPress={() =>
+                      openRemoteNotificationCta(remoteNotification.ctaUrl)
+                    }
+                    accessibilityRole="button"
+                    accessibilityLabel={remoteNotification.ctaText}
+                  >
+                    <Text
+                      style={[
+                        styles.notificationCtaText,
+                        { color: remoteNotification.ctaTextColor },
+                      ]}
+                    >
+                      {remoteNotification.ctaText}
+                    </Text>
+                  </TouchableOpacity>
+                ) : null}
+              </View>
+            )}
+          </View>
+
+          <View>
+            <View style={styles.sectionheader}>
+              <View style={styles.sectionTitleRow}>
+                <Ionicons
+                  name="barbell-outline"
+                  size={20}
+                  color={Colors.accent}
+                />
+                <Text style={styles.sectionTitle}>Your program</Text>
+              </View>
+              <Text style={styles.sectionSubtitle}>
+                What is on deck today and what is left in your block
+              </Text>
+            </View>
+            {programSummary ? (
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() =>
+                  trackHomeLink('your_program_card', '/program', () =>
+                    router.push('/program')
+                  )
+                }
+                accessibilityRole="button"
+                accessibilityLabel="Open program"
+              >
+                <View style={styles.cardBody}>
+                  <Text style={styles.cardTitle}>
+                    {programSummary.programName}
+                  </Text>
+                  <Text style={[styles.cardMuted, { marginTop: 4 }]}>
+                    {programSummary.awaitingProgramStart ? null : <>Today: </>}
+                    <Text style={styles.cardAccent}>
+                      {programSummary.todaySessionLabel}
+                    </Text>
+                  </Text>
+                  <Text style={styles.cardMuted}>
+                    Sessions left:{' '}
+                    <Text style={styles.cardAccent}>
+                      {programSummary.sessionsRemaining}
+                    </Text>
+                  </Text>
+                </View>
+                <SmallChevron />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() =>
+                  trackHomeLink('pick_program_card', '/program', () =>
+                    router.push('/program')
+                  )
+                }
+                accessibilityRole="button"
+                accessibilityLabel="Select a program"
+              >
+                <View style={styles.cardBody}>
+                  <Text style={styles.cardTitle}>Pick a program</Text>
+                  <Text style={styles.cardMuted}>
+                    Head to the Program tab and choose one — we will surface the
+                    good stuff here.
+                  </Text>
+                </View>
+                <SmallChevron />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <View>
+            <View style={styles.sectionheader}>
+              <View style={styles.sectionTitleRow}>
+                <Ionicons name="trophy-outline" size={20} color={Colors.accent} />
+                <Text style={styles.sectionTitle}>Recent wins</Text>
+              </View>
+              <Text style={styles.sectionSubtitle}>
+                Your last three PRs, small jumps still count
+              </Text>
+            </View>
+            {hasPersonalBests ? (
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() =>
+                  trackHomeLink('recent_wins_card', '/records', () =>
+                    router.push('/records')
+                  )
+                }
+                accessibilityRole="button"
+                accessibilityLabel="Open records and personal bests"
+              >
+                <View style={[styles.cardBody, styles.pbListContent]}>
+                  {recentPbs.map((row, index) => (
+                    <View
+                      key={`${row.exerciseId}-${row.tier}-${row.achievedAt}-${index}`}
+                      style={[styles.pbRow]}
+                    >
+                      <View>
+                        <Text style={styles.pbRowTitle}>{row.exerciseName}</Text>
+                        <Text style={styles.pbMaxLabel}>
+                          {formatRepMaxLabel(row.tier)}
+                        </Text>
+                      </View>
+                      <View>
+                        <View style={styles.pbValueContainer}>
+                          <Text style={styles.pbValue}>{formatWeightFromKg(row.weightKg, weightUnit)}</Text>
+                        </View>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+                <SmallChevron />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() =>
+                  trackHomeLink('recent_wins_empty_card', '/records', () =>
+                    router.push('/records')
+                  )
+                }
+                accessibilityRole="button"
+                accessibilityLabel="Open records to log personal bests"
+              >
+                <View style={styles.cardBody}>
+                  <Text style={styles.emptyTitle}>No PRs yet</Text>
+                  <Text style={styles.emptySubtitle}>
+                    Log a PB from a workout and it will show up here. First one is
+                    the best one.
+                  </Text>
+                </View>
+                <SmallChevron />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <View>
+            <View style={styles.sectionheader}>
+              <View style={styles.sectionTitleRow}>
+                <Ionicons
+                  name="sparkles-outline"
+                  size={20}
+                  color={Colors.accent}
+                />
+                <Text style={styles.sectionTitle}>Quick links</Text>
+              </View>
+              <Text style={styles.sectionSubtitle}>
+                References and extras you will reuse
+              </Text>
+            </View>
+            <View style={styles.toolsRow}>
+              <TouchableOpacity
+                style={styles.toolButton}
+                onPress={() =>
+                  trackHomeLink('quick_links_glossary', '/glossary', () =>
+                    router.push('/glossary')
+                  )
+                }
+                accessibilityRole="button"
+                accessibilityLabel="Open glossary"
+              >
+                <Ionicons name="book-outline" size={22} color={Colors.accent} />
+                <Text style={styles.toolLabel}>Glossary</Text>
+              </TouchableOpacity>
+              <View
+                style={[styles.toolButton, styles.toolButtonDisabled]}
+                accessibilityRole="text"
+                accessibilityLabel="More tools coming soon"
+              >
+                <Text style={styles.toolLabelMuted}>More soon</Text>
+              </View>
+            </View>
+          </View>
+
+          <View>
+            <View style={styles.sectionheader}>
+              <View style={styles.sectionTitleRow}>
+                <Ionicons
+                  name="person-circle-outline"
+                  size={20}
+                  color={Colors.accent}
+                />
+                <Text style={styles.sectionTitle}>You</Text>
+              </View>
+              <Text style={styles.sectionSubtitle}>Settings and preferences</Text>
+            </View>
             <TouchableOpacity
-              activeOpacity={0.85}
+              style={workoutScreenStyles.startSessionButton}
               onPress={() =>
-                trackHomeLink('welcome_strip', '/settings', () =>
+                trackHomeLink('you_settings', '/settings', () =>
                   router.push('/settings')
                 )
               }
               accessibilityRole="button"
-              accessibilityLabel="Upgrade to Pro, free tier"
-              accessibilityHint="Opens settings where you can upgrade to Tempered Strength Pro"
+              accessibilityLabel="Open settings"
             >
-              <View style={styles.welcomeStripTopRow}>
-                <View style={styles.welcomeHeadlineCell}>
-                  <Text style={styles.welcomeTitle}>Upgrade to Pro</Text>
-                </View>
-                <View style={styles.planBadgeFree} pointerEvents="none">
-                  <Text style={styles.planBadgeLabelFree}>FREE TIER</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </Animated.View>
-        )}
-
-        {remoteNotification && (
-          <View
-            style={[
-              styles.notificationBanner,
-              {
-                backgroundColor: remoteNotification.bgColor,
-                borderColor: remoteNotification.borderColor,
-              },
-            ]}
-          >
-            {remoteNotification.title.length > 0 ? (
-              <Text
-                style={[
-                  styles.notificationBannerTitle,
-                  { color: remoteNotification.titleColor },
-                ]}
-              >
-                {remoteNotification.title}
+              <Text style={workoutScreenStyles.startSessionButtonText}>
+                Settings
               </Text>
-            ) : null}
-            {remoteNotification.body.length > 0 ? (
-              <Text
-                style={[
-                  styles.notificationBannerBody,
-                  { color: remoteNotification.descriptionColor },
-                ]}
-              >
-                {remoteNotification.body}
-              </Text>
-            ) : null}
-            {remoteNotification.ctaText.length > 0 &&
-            remoteNotification.ctaUrl.length > 0 ? (
-              <TouchableOpacity
-                style={[
-                  styles.notificationCta,
-                  { backgroundColor: remoteNotification.ctaColor },
-                ]}
-                onPress={() =>
-                  openRemoteNotificationCta(remoteNotification.ctaUrl)
-                }
-                accessibilityRole="button"
-                accessibilityLabel={remoteNotification.ctaText}
-              >
-                <Text
-                  style={[
-                    styles.notificationCtaText,
-                    { color: remoteNotification.ctaTextColor },
-                  ]}
-                >
-                  {remoteNotification.ctaText}
-                </Text>
-              </TouchableOpacity>
-            ) : null}
-          </View>
-        )}
-
-        <View style={styles.section}>
-          <View style={styles.sectionheader}>
-            <View style={styles.sectionTitleRow}>
-              <Ionicons
-                name="barbell-outline"
-                size={20}
-                color={Colors.accent}
-              />
-              <Text style={styles.sectionTitle}>Your program</Text>
-            </View>
-            <Text style={styles.sectionSubtitle}>
-              What is on deck today and what is left in your block
-            </Text>
-          </View>
-          {programSummary ? (
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() =>
-                trackHomeLink('your_program_card', '/program', () =>
-                  router.push('/program')
-                )
-              }
-              accessibilityRole="button"
-              accessibilityLabel="Open program"
-            >
-              <View style={styles.cardBody}>
-                <Text style={styles.cardTitle}>
-                  {programSummary.programName}
-                </Text>
-                <Text style={[styles.cardMuted, { marginTop: 4 }]}>
-                  {programSummary.awaitingProgramStart ? null : <>Today: </>}
-                  <Text style={styles.cardAccent}>
-                    {programSummary.todaySessionLabel}
-                  </Text>
-                </Text>
-                <Text style={styles.cardMuted}>
-                  Sessions left:{' '}
-                  <Text style={styles.cardAccent}>
-                    {programSummary.sessionsRemaining}
-                  </Text>
-                </Text>
-              </View>
-              <View style={styles.cardChevronWrap} pointerEvents="none">
-                <Ionicons
-                  name="chevron-forward"
-                  size={22}
-                  color={Colors.accent}
-                />
-              </View>
             </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() =>
-                trackHomeLink('pick_program_card', '/program', () =>
-                  router.push('/program')
-                )
-              }
-              accessibilityRole="button"
-              accessibilityLabel="Select a program"
-            >
-              <View style={styles.cardBody}>
-                <Text style={styles.cardTitle}>Pick a program</Text>
-                <Text style={styles.cardMuted}>
-                  Head to the Program tab and choose one — we will surface the
-                  good stuff here.
-                </Text>
-              </View>
-              <View style={styles.cardChevronWrap} pointerEvents="none">
-                <Ionicons
-                  name="chevron-forward"
-                  size={22}
-                  color={Colors.accent}
-                />
-              </View>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.sectionheader}>
-            <View style={styles.sectionTitleRow}>
-              <Ionicons name="trophy-outline" size={20} color={Colors.accent} />
-              <Text style={styles.sectionTitle}>Recent wins</Text>
-            </View>
-            <Text style={styles.sectionSubtitle}>
-              Your last three PRs, small jumps still count
-            </Text>
           </View>
-          {hasPersonalBests ? (
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() =>
-                trackHomeLink('recent_wins_card', '/records', () =>
-                  router.push('/records')
-                )
-              }
-              accessibilityRole="button"
-              accessibilityLabel="Open records and personal bests"
-            >
-              <View style={styles.cardBody}>
-                {recentPbs.map((row, index) => (
-                  <View
-                    key={`${row.exerciseId}-${row.tier}-${row.achievedAt}-${index}`}
-                    style={[styles.pbRow, index === 0 && styles.pbRowFirst]}
-                  >
-                    <Text style={styles.pbRowTitle}>{row.exerciseName}</Text>
-                    <Text style={styles.pbRowMeta}>
-                      {formatRepMaxLabel(row.tier)} ·{' '}
-                      {formatWeightFromKg(row.weightKg, weightUnit)}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-              <View style={styles.cardChevronWrap} pointerEvents="none">
-                <Ionicons
-                  name="chevron-forward"
-                  size={22}
-                  color={Colors.accent}
-                />
-              </View>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() =>
-                trackHomeLink('recent_wins_empty_card', '/records', () =>
-                  router.push('/records')
-                )
-              }
-              accessibilityRole="button"
-              accessibilityLabel="Open records to log personal bests"
-            >
-              <View style={styles.cardBody}>
-                <Text style={styles.emptyTitle}>No PRs yet</Text>
-                <Text style={styles.emptySubtitle}>
-                  Log a PB from a workout and it will show up here. First one is
-                  the best one.
-                </Text>
-              </View>
-              <View style={styles.cardChevronWrap} pointerEvents="none">
-                <Ionicons
-                  name="chevron-forward"
-                  size={22}
-                  color={Colors.accent}
-                />
-              </View>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.sectionheader}>
-            <View style={styles.sectionTitleRow}>
-              <Ionicons
-                name="sparkles-outline"
-                size={20}
-                color={Colors.accent}
-              />
-              <Text style={styles.sectionTitle}>Quick links</Text>
-            </View>
-            <Text style={styles.sectionSubtitle}>
-              References and extras you will reuse
-            </Text>
-          </View>
-          <View style={styles.toolsRow}>
-            <TouchableOpacity
-              style={styles.toolButton}
-              onPress={() =>
-                trackHomeLink('quick_links_glossary', '/glossary', () =>
-                  router.push('/glossary')
-                )
-              }
-              accessibilityRole="button"
-              accessibilityLabel="Open glossary"
-            >
-              <Ionicons name="book-outline" size={22} color={Colors.accent} />
-              <Text style={styles.toolLabel}>Glossary</Text>
-            </TouchableOpacity>
-            <View
-              style={[styles.toolButton, styles.toolButtonDisabled]}
-              accessibilityRole="text"
-              accessibilityLabel="More tools coming soon"
-            >
-              <Text style={styles.toolLabelMuted}>More soon</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.sectionheader}>
-            <View style={styles.sectionTitleRow}>
-              <Ionicons
-                name="person-circle-outline"
-                size={20}
-                color={Colors.accent}
-              />
-              <Text style={styles.sectionTitle}>You</Text>
-            </View>
-            <Text style={styles.sectionSubtitle}>Settings and preferences</Text>
-          </View>
-          <TouchableOpacity
-            style={workoutScreenStyles.startSessionButton}
-            onPress={() =>
-              trackHomeLink('you_settings', '/settings', () =>
-                router.push('/settings')
-              )
-            }
-            accessibilityRole="button"
-            accessibilityLabel="Open settings"
-          >
-            <Text style={workoutScreenStyles.startSessionButtonText}>
-              Settings
-            </Text>
-          </TouchableOpacity>
         </View>
       </StandardLayout.Body>
-    </StandardLayout>
+    </StandardLayout >
   );
 }

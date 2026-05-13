@@ -8,7 +8,7 @@ import {
   type CategoryFilter,
   type TimeFilter,
 } from '@/src/components/workouts/workoutsScreenConstants';
-import { Colors, Spacing } from '@/src/constants/theme';
+import { Colors } from '@/src/constants/theme';
 import { disciplines } from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
@@ -96,11 +96,13 @@ function CuratedWorkoutCard({
       <Text style={styles.curatedCardTitle} numberOfLines={2}>
         {workout.title}
       </Text>
-      <View style={styles.curatedCardMeta}>
-        <Ionicons name="time-outline" size={14} color={Colors.textMuted} />
-        <Text style={styles.curatedCardMetaText}>
-          {workout.estimatedTime} min
-        </Text>
+      <View>
+        <View style={styles.curatedCardMeta}>
+          <Ionicons name="time" size={14} color={Colors.accent} />
+          <Text style={styles.curatedCardMetaText}>
+            {workout.estimatedTime} min
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -333,7 +335,7 @@ export default function WorkoutsScreen() {
           </ScrollView>
         </View>
 
-        <View style={{ marginTop: Spacing.sm }}>
+        <View>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -394,8 +396,8 @@ export default function WorkoutsScreen() {
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.listContent}
             ListHeaderComponent={
-              <>
-                <View style={styles.curatedSection}>
+              <View style={styles.curatedSectionList}>
+                <View>
                   <View style={styles.curatedSectionHeader}>
                     <Text style={styles.curatedSectionTitle}>Disciplines</Text>
                     <Text style={styles.curatedSectionHelper}>
@@ -444,7 +446,7 @@ export default function WorkoutsScreen() {
                 </View>
 
                 {showS1AndS2 && womensPicksWorkouts.length > 0 && (
-                  <View style={styles.curatedSection}>
+                  <View>
                     <View style={styles.curatedSectionHeader}>
                       <Text style={styles.curatedSectionTitle}>
                         Recommended for you
@@ -472,7 +474,7 @@ export default function WorkoutsScreen() {
                 )}
 
                 {showS1AndS2 && legsAndGlutesWorkouts.length > 0 && (
-                  <View style={styles.curatedSection}>
+                  <View>
                     <View style={styles.curatedSectionHeader}>
                       <Text style={styles.curatedSectionTitle}>
                         Legs &amp; Glutes
@@ -500,7 +502,7 @@ export default function WorkoutsScreen() {
                 )}
 
                 {showS3 && getBigWorkouts.length > 0 && (
-                  <View style={styles.curatedSection}>
+                  <View>
                     <View style={styles.curatedSectionHeader}>
                       <Text style={styles.curatedSectionTitle}>Get Big</Text>
                       <Text style={styles.curatedSectionHelper}>
@@ -525,10 +527,13 @@ export default function WorkoutsScreen() {
                   </View>
                 )}
 
-                <View style={styles.allWorkoutsHeader}>
-                  <Text style={styles.allWorkoutsTitle}>All Workouts</Text>
+                <View style={styles.curatedSectionHeader}>
+                  <Text style={styles.curatedSectionTitle}>All Workouts</Text>
+                  <Text style={styles.curatedSectionHelper}>
+                    All our workouts, over {filteredWorkouts.length - 1}+ workouts.
+                  </Text>
                 </View>
-              </>
+              </View>
             }
             renderItem={({ item }) => (
               <WorkoutCard

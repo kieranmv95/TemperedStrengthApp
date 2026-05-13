@@ -1,4 +1,5 @@
 import { GlossaryItem } from '@/src/components/brief/GlossaryItem';
+import { Pill } from '@/src/components/pill';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getGlossaryByCategory, searchGlossary } from '@/src/data/brief';
 import { fetchGlossary } from '@/src/services/briefApiService';
@@ -180,38 +181,24 @@ export default function GlossaryScreen() {
         <FlatList
           horizontal
           data={CATEGORY_FILTERS}
-          keyExtractor={(item) => item || 'All'}
+          keyExtractor={(item) => item ?? 'All'}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.filterList}
           renderItem={({ item }) => {
-            const isActive = activeCategory === item;
+            const normalizedCategory: CategoryFilter = item ?? 'All';
+            const isActive = activeCategory === normalizedCategory;
             const count =
-              item === 'All'
+              normalizedCategory === 'All'
                 ? terms.length
-                : terms.filter((t) => t.category === item).length;
+                : terms.filter((t) => t.category === normalizedCategory).length;
 
             return (
-              <TouchableOpacity
-                style={[styles.filterTab, isActive && styles.filterTabActive]}
-                onPress={() => setActiveCategory(item)}
-              >
-                <Text
-                  style={[
-                    styles.filterTabText,
-                    isActive && styles.filterTabTextActive,
-                  ]}
-                >
-                  {item || 'All'}
-                </Text>
-                <Text
-                  style={[
-                    styles.filterCount,
-                    isActive && styles.filterCountActive,
-                  ]}
-                >
-                  {count}
-                </Text>
-              </TouchableOpacity>
+              <Pill
+                onPress={() => setActiveCategory(normalizedCategory)}
+                isActive={isActive}
+                label={normalizedCategory}
+                count={count}
+              />
             );
           }}
         />
@@ -286,38 +273,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
     paddingBottom: Spacing.xl,
     gap: Spacing.md,
-  },
-  filterTab: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 14,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundCard,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    gap: Spacing.sm,
-  },
-  filterTabActive: {
-    backgroundColor: Colors.accent,
-    borderColor: Colors.accent,
-  },
-  filterTabText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.base,
-    fontWeight: '600',
-  },
-  filterTabTextActive: {
-    color: Colors.textOnAccent,
-  },
-  filterCount: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.sm,
-    fontWeight: '600',
-  },
-  filterCountActive: {
-    color: Colors.textOnAccent,
-    opacity: 0.7,
   },
   listContent: {
     padding: Spacing.xxl,

@@ -96,8 +96,8 @@ export const programLauncherStyles = StyleSheet.create({
   },
   programName: {
     color: Colors.textPrimary,
-    fontSize: FontSize.displayLg,
-    fontWeight: '700',
+    fontSize: FontSize.displayXl,
+    fontWeight: '800',
   },
   programCategoryRow: {
     flexDirection: 'row',
@@ -292,10 +292,12 @@ export const programLauncherStyles = StyleSheet.create({
     marginBottom: Spacing.xs,
   },
   dayItemSelected: {
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentWashFill,
+    borderWidth: 1,
+    borderColor: Colors.accentWashBorder,
   },
   dayLabelSelected: {
-    color: Colors.textBlack,
+    color: Colors.accent,
   },
   closeButtonText: {
     color: Colors.textPrimary,

@@ -2,6 +2,12 @@ import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { StyleSheet } from 'react-native';
 
 export const homeScreenStyles = StyleSheet.create({
+  spacing: {
+    gap: Spacing.section,
+  },
+  notificationSpacing: {
+    gap: Spacing.md,
+  },
   loadingBox: {
     paddingVertical: Spacing.section,
     alignItems: 'center',
@@ -14,7 +20,6 @@ export const homeScreenStyles = StyleSheet.create({
     borderColor: Colors.accentWashBorder,
     paddingVertical: Spacing.xl,
     paddingHorizontal: Spacing.section,
-    marginBottom: Spacing.xl,
   },
   welcomeStripTopRow: {
     flexDirection: 'row',
@@ -78,7 +83,6 @@ export const homeScreenStyles = StyleSheet.create({
     borderWidth: 1,
     paddingVertical: Spacing.xxl,
     paddingHorizontal: Spacing.section,
-    marginBottom: Spacing.xxl,
     gap: Spacing.sm,
   },
   notificationBannerTitle: {
@@ -104,11 +108,11 @@ export const homeScreenStyles = StyleSheet.create({
     fontSize: FontSize.md,
     fontWeight: '700',
   },
-  section: {
-    marginBottom: Spacing.xxl,
-  },
   sectionheader: {
-    marginBottom: Spacing.lg,
+    borderLeftWidth: 1,
+    borderLeftColor: Colors.accent,
+    paddingLeft: Spacing.xl,
+    marginBottom: Spacing.xl,
   },
   sectionTitleRow: {
     flexDirection: 'row',
@@ -117,8 +121,8 @@ export const homeScreenStyles = StyleSheet.create({
     marginBottom: 4,
   },
   sectionTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
+    color: Colors.accent,
+    fontSize: FontSize.xl,
     fontWeight: '700',
     flex: 1,
   },
@@ -131,9 +135,7 @@ export const homeScreenStyles = StyleSheet.create({
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: Colors.accentWashBorder,
-    borderLeftWidth: 3,
-    borderLeftColor: Colors.accent,
+    borderColor: Colors.backgroundBorder,
     padding: Spacing.xxl,
     flexDirection: 'row',
     alignItems: 'center',
@@ -143,14 +145,9 @@ export const homeScreenStyles = StyleSheet.create({
     flex: 1,
     gap: Spacing.sm,
   },
-  cardChevronWrap: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    minWidth: 28,
-  },
   cardTitle: {
     color: Colors.textPrimary,
-    fontSize: FontSize.xl,
+    fontSize: FontSize.displaySm,
     fontWeight: '800',
   },
   cardMuted: {
@@ -173,26 +170,41 @@ export const homeScreenStyles = StyleSheet.create({
     fontWeight: '400',
     marginTop: Spacing.xs,
   },
-  pbRow: {
-    marginTop: Spacing.md,
-    paddingTop: Spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: Colors.backgroundElevated,
+  pbListContent: {
+    gap: Spacing.sm,
   },
-  pbRowFirst: {
-    marginTop: 0,
-    paddingTop: 0,
-    borderTopWidth: 0,
+  pbRow: {
+    borderWidth: 1,
+    borderColor: Colors.backgroundBorder,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.xl,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.sm,
   },
   pbRowTitle: {
     color: Colors.textPrimary,
-    fontSize: FontSize.lg,
+    fontSize: FontSize.xl,
+    fontWeight: '800',
+  },
+  pbMaxLabel: {
+    color: Colors.accent,
+    fontSize: FontSize.sm,
+    marginTop: Spacing.xxs,
     fontWeight: '700',
   },
-  pbRowMeta: {
-    color: Colors.textMuted,
-    fontSize: FontSize.base,
-    marginTop: Spacing.xxs,
+  pbValueContainer: {
+    backgroundColor: Colors.accentWashFill,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.accentWashBorder,
+  },
+  pbValue: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
   },
   toolsRow: {
     flexDirection: 'row',

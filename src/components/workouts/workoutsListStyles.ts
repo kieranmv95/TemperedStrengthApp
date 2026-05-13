@@ -34,15 +34,18 @@ export const workoutsListStyles = StyleSheet.create({
   listContent: {
     paddingTop: Spacing.xxl,
   },
-  curatedSection: {
-    marginBottom: Spacing.xxl,
+  curatedSectionList: {
+    gap: Spacing.section,
   },
   curatedSectionHeader: {
     marginBottom: Spacing.lg,
+    borderLeftWidth: 1,
+    borderLeftColor: Colors.accent,
+    paddingLeft: Spacing.md,
   },
   curatedSectionTitle: {
     color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
+    fontSize: FontSize.displayXl,
     fontWeight: '800',
     marginBottom: 4,
   },
@@ -61,13 +64,11 @@ export const workoutsListStyles = StyleSheet.create({
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xl,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    borderLeftWidth: 2,
-    borderLeftColor: Colors.accent,
+    borderColor: Colors.backgroundSubtle,
   },
   curatedCardLocked: {
     borderColor: Colors.accent,
-    borderWidth: 2,
+    borderWidth: 1,
     opacity: 0.6,
   },
   curatedCardTopRow: {
@@ -77,9 +78,9 @@ export const workoutsListStyles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   curatedCardCategory: {
-    color: Colors.textMuted,
-    fontSize: FontSize.sm,
-    fontWeight: '700',
+    color: Colors.accent,
+    fontSize: FontSize.xs,
+    fontWeight: '800',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -101,14 +102,21 @@ export const workoutsListStyles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   curatedCardMeta: {
+    backgroundColor: Colors.accentWashFill,
+    borderWidth: 1,
+    borderColor: Colors.accentWashBorder,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.full,
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'flex-start',
     gap: Spacing.xs,
   },
   curatedCardMetaText: {
-    color: Colors.textMuted,
+    color: Colors.textPrimary,
     fontSize: FontSize.md,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   allWorkoutsHeader: {
     marginTop: Spacing.xxl,
@@ -125,7 +133,7 @@ export const workoutsListStyles = StyleSheet.create({
     padding: Spacing.xxl,
     marginBottom: Spacing.xl,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    borderColor: Colors.backgroundSubtle,
   },
   sponsorCard: {
     backgroundColor: Colors.backgroundCard,
@@ -182,9 +190,9 @@ export const workoutsListStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardCategory: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '600',
+    color: Colors.accent,
+    fontSize: FontSize.sm,
+    fontWeight: '800',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -286,7 +294,7 @@ export const workoutsListStyles = StyleSheet.create({
   },
   disciplineSectionTitle: {
     color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
+    fontSize: FontSize.displayXl,
     fontWeight: '800',
     textAlign: 'center',
   },
@@ -295,8 +303,8 @@ export const workoutsListStyles = StyleSheet.create({
   },
   disciplineGoldOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: Colors.accent,
-    opacity: 0.2,
+    backgroundColor: Colors.overlay,
+    opacity: 0.1,
   },
   disciplineImageStyle: {
     borderRadius: BorderRadius.xxl,

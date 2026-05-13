@@ -2,6 +2,7 @@ import type { Program } from '@/src/types/program';
 import { sessionsPerWeekFromProgram } from '@/src/utils/programWeekPattern';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { SmallChevron } from '../components/ds/SmallChevron';
 import { programLauncherStyles as styles } from './programLauncherStyles';
 
 type ProgramLauncherProgramCardProps = {
@@ -60,7 +61,9 @@ export function ProgramLauncherProgramCard({
             ` • ${program.averageSessionDuration}`}
         </Text>
       </View>
-      <Text style={styles.selectArrow}>→</Text>
+      <View style={styles.selectArrow}>
+        <SmallChevron />
+      </View>
     </TouchableOpacity>
   );
 }
