@@ -64,7 +64,7 @@ export const homeScreenStyles = StyleSheet.create({
     letterSpacing: 0.85,
   },
   welcomeTitle: {
-    color: Colors.textPrimary,
+    color: Colors.accent,
     fontSize: FontSize.xl,
     fontWeight: '800',
     letterSpacing: -0.3,
