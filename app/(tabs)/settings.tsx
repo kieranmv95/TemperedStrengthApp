@@ -1,22 +1,24 @@
 import { StandardLayout } from '@/src/components/StandardLayout';
+import { SmallChevron } from '@/src/components/ds/SmallChevron';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { invalidateSanityAppConfigCache } from '@/src/services/sanityAppConfig';
 import type { OnboardingProfile } from '@/src/types/onboarding';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
-import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
 import {
   clearOnboarding,
   getActiveProgramId,
   getOnboarded,
   getOnboardingProfile,
 } from '@/src/utils/storage';
+import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Text, TouchableOpacity, View } from 'react-native';
+
 
 export default function SettingsScreen() {
   const [, setHasProgram] = useState<boolean>(false);
@@ -223,9 +225,7 @@ export default function SettingsScreen() {
                 </View>
               )}
             </View>
-            <Text style={[styles.settingArrow, isPro && styles.proArrow]}>
-              →
-            </Text>
+            <SmallChevron />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -238,7 +238,7 @@ export default function SettingsScreen() {
                 Weight units, iCloud sync, onboarding preferences.
               </Text>
             </View>
-            <Text style={styles.settingArrow}>→</Text>
+            <SmallChevron />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -251,7 +251,7 @@ export default function SettingsScreen() {
                 Auto timers, PB detection, end current program.
               </Text>
             </View>
-            <Text style={styles.settingArrow}>→</Text>
+            <SmallChevron />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -264,7 +264,7 @@ export default function SettingsScreen() {
                 See what’s new in the latest versions.
               </Text>
             </View>
-            <Text style={styles.settingArrow}>→</Text>
+            <SmallChevron />
           </TouchableOpacity>
 
           <View style={styles.settingsSection}>
@@ -297,7 +297,7 @@ export default function SettingsScreen() {
                     Permanently delete all stored data
                   </Text>
                 </View>
-                <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
+                <SmallChevron />
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -313,7 +313,7 @@ export default function SettingsScreen() {
                     focus.
                   </Text>
                 </View>
-                <Text style={styles.settingArrow}>→</Text>
+                <SmallChevron />
               </TouchableOpacity>
 
               <View style={styles.settingItem}>
@@ -345,7 +345,7 @@ export default function SettingsScreen() {
                     Clear onboarded flag and stored profile for testing
                   </Text>
                 </View>
-                <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
+                <SmallChevron />
               </TouchableOpacity>
             </View>
           )}

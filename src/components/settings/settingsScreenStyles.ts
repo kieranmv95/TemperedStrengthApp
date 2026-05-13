@@ -70,12 +70,6 @@ export const settingsScreenStyles = StyleSheet.create({
     fontSize: FontSize.lg,
     lineHeight: 20,
   },
-  settingArrow: {
-    color: Colors.accent,
-    fontSize: FontSize.displayXl,
-    fontWeight: '600',
-    marginLeft: Spacing.xl,
-  },
   settingArrowDisabled: {
     color: Colors.textPlaceholder,
   },

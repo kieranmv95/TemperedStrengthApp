@@ -113,12 +113,12 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         <View style={styles.headerLeft}>
           <Text style={styles.exerciseName}>
             {exercise.name}
-            {!isSwapped && programExercise?.additionalHeader && (
-              <Text style={styles.additionalHeader}>
-                {' - ' + programExercise.additionalHeader}
-              </Text>
-            )}
           </Text>
+          {!isSwapped && programExercise?.additionalHeader && (
+            <Text style={styles.additionalHeader}>
+              {programExercise.additionalHeader}
+            </Text>
+          )}
           {exercisePbSubtitle ? (
             <Text style={styles.pbSubtitle}>{exercisePbSubtitle}</Text>
           ) : null}

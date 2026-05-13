@@ -1,7 +1,8 @@
+import { SmallChevron } from '@/src/components/ds/SmallChevron';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
-import type { Program } from '@/src/types/program';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
+import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
 import {
   clearProgramData,
@@ -285,7 +286,7 @@ export default function AccountProgramSettingsScreen() {
                   Clear all program progress and related data
                 </Text>
               </View>
-              <Text style={[styles.settingArrow, styles.dangerText]}>→</Text>
+              <SmallChevron />
             </TouchableOpacity>
           ) : null}
         </View>

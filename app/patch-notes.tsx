@@ -24,7 +24,7 @@ const PATCH_NOTES: PatchNote[] = [
     version: '2.3.2',
     dateLabel: '12th May 2026',
     notes: [
-      'large refactor and performance improvements'
+      'Sweeping UI changes / fixes / enhancements',
     ],
   },
   {

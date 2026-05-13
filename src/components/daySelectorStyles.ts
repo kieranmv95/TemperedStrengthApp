@@ -82,7 +82,6 @@ export const daySelectorStyles = StyleSheet.create({
   jumpToTodayButton: {
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.sm,
-    backgroundColor: Colors.backgroundElevated,
     borderRadius: BorderRadius.full,
     borderWidth: 1,
     borderColor: Colors.accent,

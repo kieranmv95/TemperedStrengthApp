@@ -1,5 +1,6 @@
+import { SmallChevron } from '@/src/components/ds/SmallChevron';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
@@ -216,7 +217,7 @@ export default function AccountGeneralSettingsScreen() {
                 experience level.
               </Text>
             </View>
-            <Text style={styles.settingArrow}>→</Text>
+            <SmallChevron />
           </TouchableOpacity>
         </View>
       </ScrollView>
