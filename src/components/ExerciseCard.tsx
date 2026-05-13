@@ -241,9 +241,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             <Text style={styles.swapButtonText}>
               {isPro
                 ? 'Swap Exercise'
-                : `Swap Exercise${
-                    remainingSwaps !== null ? ` (${remainingSwaps})` : ''
-                  }`}
+                : `Swap Exercise${remainingSwaps !== null ? ` (${remainingSwaps})` : ''
+                }`}
             </Text>
           </TouchableOpacity>
         </View>

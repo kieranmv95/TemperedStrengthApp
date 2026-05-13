@@ -1,7 +1,14 @@
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useSwapModalActions } from '@/src/hooks/useSwapModalActions';
 import React from 'react';
-import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { getAllExercises, getExerciseById } from '../data/exercises';
 import {
   findAlternatives,
@@ -68,6 +75,26 @@ export const SwapModal: React.FC<SwapModalProps> = ({
     currentExerciseId !== null &&
     originalExerciseId !== null &&
     currentExerciseId !== originalExerciseId;
+
+  const confirmSelectExercise = (exerciseId: number) => {
+    const isSwap = currentExerciseId !== null;
+    Alert.alert(
+      'Are you sure?',
+      isSwap
+        ? 'This will lock in your exercise swap for this slot.'
+        : 'This will select this exercise for this slot.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: isSwap ? 'Swap' : 'Select',
+          style: 'default',
+          onPress: () => {
+            void handleSelect(exerciseId);
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <Modal
@@ -155,7 +182,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
                         equipment={a.exercise.equipment}
                         muscle={a.exercise.muscle}
                         matchScore={a.matchScore}
-                        onPress={() => handleSelect(a.exercise.id)}
+                        onPress={() => confirmSelectExercise(a.exercise.id)}
                       />
                     ))}
                   </>
@@ -175,7 +202,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
                         equipment={a.exercise.equipment}
                         muscle={a.exercise.muscle}
                         matchScore={a.matchScore}
-                        onPress={() => handleSelect(a.exercise.id)}
+                        onPress={() => confirmSelectExercise(a.exercise.id)}
                       />
                     ))}
                   </>
@@ -188,7 +215,7 @@ export const SwapModal: React.FC<SwapModalProps> = ({
                   name={exercise.name}
                   equipment={exercise.equipment}
                   muscle={exercise.muscle}
-                  onPress={() => handleSelect(exercise.id)}
+                  onPress={() => confirmSelectExercise(exercise.id)}
                 />
               ))
             )}
