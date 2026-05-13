@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.pill,
     backgroundColor: Colors.backgroundCard,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   filterTabActive: {
     backgroundColor: Colors.accent,

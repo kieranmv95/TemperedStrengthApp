@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { StyleSheet } from 'react-native';
 
 export const iCloudSyncConflictModalStyles = StyleSheet.create({
   overlay: {
@@ -13,7 +13,7 @@ export const iCloudSyncConflictModalStyles = StyleSheet.create({
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     paddingHorizontal: Spacing.xxl,
     paddingTop: Spacing.xxl,
     paddingBottom: Spacing.section,
@@ -49,15 +49,15 @@ export const iCloudSyncConflictModalStyles = StyleSheet.create({
   },
   comparisonHalf: {
     flex: 1,
-    backgroundColor: Colors.backgroundDark,
+    backgroundColor: Colors.backgroundScreen,
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     padding: Spacing.xl,
   },
   comparisonHalfAccent: {
     borderColor: Colors.accent,
-    backgroundColor: 'rgba(201, 176, 114, 0.08)',
+    backgroundColor: Colors.accentWashFill,
   },
   comparisonLabel: {
     color: Colors.textMuted,
@@ -74,7 +74,7 @@ export const iCloudSyncConflictModalStyles = StyleSheet.create({
     lineHeight: 20,
   },
   comparisonHint: {
-    color: Colors.textTertiary,
+    color: Colors.textMuted,
     fontSize: FontSize.base,
     marginTop: Spacing.sm,
     lineHeight: 18,
@@ -96,9 +96,9 @@ export const iCloudSyncConflictModalStyles = StyleSheet.create({
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.xl,
     borderRadius: BorderRadius.lg,
-    backgroundColor: Colors.backgroundDark,
+    backgroundColor: Colors.backgroundScreen,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.backgroundSubtle,
     marginBottom: Spacing.md,
   },
   keyRowTitle: {
@@ -141,7 +141,7 @@ export const iCloudSyncConflictModalStyles = StyleSheet.create({
   },
   secondaryButton: {
     backgroundColor: Colors.backgroundElevated,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   secondaryButtonText: {
     color: Colors.textPrimary,

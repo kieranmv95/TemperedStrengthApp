@@ -77,7 +77,7 @@ export function ArticleCard({
                 <Ionicons
                   name="time-outline"
                   size={12}
-                  color={Colors.textTertiary}
+                  color={Colors.textMuted}
                 />
                 <Text style={styles.horizontalMetaText}>
                   {article.readTime} min

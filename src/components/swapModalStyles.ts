@@ -14,7 +14,7 @@ export const swapModalStyles = StyleSheet.create({
     padding: Spacing.section,
     maxHeight: '80%',
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     flexDirection: 'column',
   },
   modalHeader: {
@@ -55,7 +55,7 @@ export const swapModalStyles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     marginBottom: Spacing.xl,
   },
   equipmentToggleActive: {
@@ -119,7 +119,7 @@ export const swapModalStyles = StyleSheet.create({
     padding: Spacing.xxl,
     marginBottom: Spacing.xl,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.backgroundSubtle,
   },
   alternativeContent: {
     flex: 1,

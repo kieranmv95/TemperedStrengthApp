@@ -1,4 +1,9 @@
 import React, { useId, useMemo } from 'react';
+import {
+  AwardIconPalettes,
+  AwardIconVariantKey,
+  Colors,
+} from '@/src/constants/theme';
 import Svg, {
   Circle,
   ClipPath,
@@ -12,43 +17,7 @@ import Svg, {
   Text as SvgText,
 } from 'react-native-svg';
 
-export type AwardIconVariant = 'bronze' | 'silver' | 'platinum';
-
-type Palette = {
-  shieldBase: string;
-  borderTop: string;
-  borderBottom: string;
-  bannerBase: string;
-  bannerText: string;
-  trophy: string;
-};
-
-const PALETTES: Record<AwardIconVariant, Palette> = {
-  platinum: {
-    shieldBase: '#1B3A5C',
-    borderTop: '#A8C8E8',
-    borderBottom: '#4A7AAE',
-    bannerBase: '#5B92C4',
-    bannerText: 'rgba(0,0,0,0.36)',
-    trophy: '#FFFFFF',
-  },
-  silver: {
-    shieldBase: '#58667A',
-    borderTop: '#D0D8E8',
-    borderBottom: '#7888A0',
-    bannerBase: '#C8D0DA',
-    bannerText: 'rgba(0,0,0,0.42)',
-    trophy: '#FFFFFF',
-  },
-  bronze: {
-    shieldBase: '#A24A27',
-    borderTop: '#DCA870',
-    borderBottom: '#A06030',
-    bannerBase: '#D6862A',
-    bannerText: 'rgba(0,0,0,0.38)',
-    trophy: '#FFFFFF',
-  },
-};
+export type AwardIconVariant = AwardIconVariantKey;
 
 export type AwardIconProps = Omit<
   React.ComponentProps<typeof Svg>,
@@ -85,7 +54,7 @@ export default function AwardIcon({
   fontSize = 18,
   ...svgProps
 }: AwardIconProps) {
-  const palette = PALETTES[variant];
+  const palette = AwardIconPalettes[variant];
   const reactId = useId();
 
   const ids = useMemo(
@@ -119,9 +88,9 @@ export default function AwardIcon({
           y2="245"
           gradientUnits="userSpaceOnUse"
         >
-          <Stop offset="0" stopColor="#FFFFFF" stopOpacity={0.35} />
-          <Stop offset="0.55" stopColor="#FFFFFF" stopOpacity={0} />
-          <Stop offset="1" stopColor="#000000" stopOpacity={0.08} />
+          <Stop offset="0" stopColor={Colors.textPrimary} stopOpacity={0.35} />
+          <Stop offset="0.55" stopColor={Colors.textPrimary} stopOpacity={0} />
+          <Stop offset="1" stopColor={Colors.textBlack} stopOpacity={0.08} />
         </LinearGradient>
 
         <RadialGradient
@@ -132,8 +101,8 @@ export default function AwardIcon({
           ry="130"
           gradientUnits="userSpaceOnUse"
         >
-          <Stop offset="0" stopColor="#FFFFFF" stopOpacity={0.25} />
-          <Stop offset="1" stopColor="#FFFFFF" stopOpacity={0} />
+          <Stop offset="0" stopColor={Colors.textPrimary} stopOpacity={0.25} />
+          <Stop offset="1" stopColor={Colors.textPrimary} stopOpacity={0} />
         </RadialGradient>
 
         <LinearGradient
@@ -156,8 +125,8 @@ export default function AwardIcon({
           y2={BANNER_RECT.y + BANNER_RECT.height}
           gradientUnits="userSpaceOnUse"
         >
-          <Stop offset="0" stopColor="#FFFFFF" stopOpacity={0.3} />
-          <Stop offset="1" stopColor="#FFFFFF" stopOpacity={0} />
+          <Stop offset="0" stopColor={Colors.textPrimary} stopOpacity={0.3} />
+          <Stop offset="1" stopColor={Colors.textPrimary} stopOpacity={0} />
         </LinearGradient>
 
         <RadialGradient
@@ -168,15 +137,15 @@ export default function AwardIcon({
           ry="38"
           gradientUnits="userSpaceOnUse"
         >
-          <Stop offset="0" stopColor="#FFFFFF" stopOpacity={0.6} />
-          <Stop offset="1" stopColor="#FFFFFF" stopOpacity={0} />
+          <Stop offset="0" stopColor={Colors.textPrimary} stopOpacity={0.6} />
+          <Stop offset="1" stopColor={Colors.textPrimary} stopOpacity={0} />
         </RadialGradient>
       </Defs>
 
       {/* Drop shadow */}
       <Path
         d={SHIELD_PATH}
-        fill="rgba(0,0,0,0.22)"
+        fill={Colors.awardShadowRaised}
         transform="translate(0 10)"
       />
 
@@ -185,13 +154,13 @@ export default function AwardIcon({
         <Rect width="280" height="280" fill={palette.shieldBase} />
         <Rect width="280" height="280" fill={`url(#${ids.shieldLinear})`} />
         <Rect width="280" height="280" fill={`url(#${ids.shieldRadial})`} />
-        <Rect width="280" height="280" fill="rgba(0,0,0,0.15)" />
+        <Rect width="280" height="280" fill={Colors.awardShadowSurface} />
         <Rect
           x="0"
           y="0"
           width="140"
           height="280"
-          fill="rgba(255,255,255,0.06)"
+          fill={Colors.awardHighlight06}
         />
       </G>
 
@@ -214,14 +183,14 @@ export default function AwardIcon({
       {/* Trophy shadow + fill */}
       <Path
         d={TROPHY_PATH}
-        fill="rgba(0,0,0,0.10)"
+        fill={Colors.awardShadowSoft}
         transform="translate(0 2)"
       />
       <Path d={TROPHY_PATH} fill={palette.trophy} />
 
       {/* Banner tails (drawn behind banner body) */}
       <Path d={BANNER_TAIL_PATH} fill={palette.bannerBase} />
-      <Path d={BANNER_TAIL_PATH} fill="rgba(0,0,0,0.20)" />
+      <Path d={BANNER_TAIL_PATH} fill={Colors.awardShadowRaised} />
 
       {/* Banner shadow */}
       <Rect
@@ -230,7 +199,7 @@ export default function AwardIcon({
         width={BANNER_RECT.width}
         height={BANNER_RECT.height}
         rx={BANNER_RECT.rx}
-        fill="rgba(0,0,0,0.16)"
+        fill={Colors.awardShadowSurface}
       />
 
       {/* Banner body */}
@@ -260,8 +229,8 @@ export default function AwardIcon({
       />
 
       {/* Banner rivets */}
-      <Circle cx="62.8555" cy="193" r="3" fill="rgba(0,0,0,0.32)" />
-      <Circle cx="216.855" cy="193" r="3" fill="rgba(0,0,0,0.32)" />
+      <Circle cx="62.8555" cy="193" r="3" fill={Colors.awardShadowRivet} />
+      <Circle cx="216.855" cy="193" r="3" fill={Colors.awardShadowRivet} />
 
       {/* Banner text (main) */}
       <SvgText

@@ -11,7 +11,7 @@ export const articleCardStyles = StyleSheet.create({
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.overlayLighter,
+    backgroundColor: Colors.overlayLight,
   },
   heroCard: {
     borderRadius: BorderRadius.full,
@@ -97,7 +97,7 @@ export const articleCardStyles = StyleSheet.create({
     padding: Spacing.xl,
     marginBottom: Spacing.lg,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   compactImage: {
     width: 72,
@@ -150,7 +150,7 @@ export const articleCardStyles = StyleSheet.create({
   },
   horizontalOverlay: {
     flex: 1,
-    backgroundColor: Colors.overlayLighter,
+    backgroundColor: Colors.overlayLight,
     padding: Spacing.xl,
     justifyContent: 'space-between',
   },
@@ -183,7 +183,7 @@ export const articleCardStyles = StyleSheet.create({
     gap: Spacing.xs,
   },
   horizontalMetaText: {
-    color: Colors.textTertiary,
+    color: Colors.textMuted,
     fontSize: FontSize.sm,
     fontWeight: '500',
   },

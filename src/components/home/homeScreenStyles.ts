@@ -1,9 +1,6 @@
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { StyleSheet } from 'react-native';
 
-/** Warm wash behind the home welcome strip (brand accent, low alpha). */
-const welcomeStripBg = 'rgba(201, 176, 114, 0.12)';
-
 export const homeScreenStyles = StyleSheet.create({
   loadingBox: {
     paddingVertical: Spacing.section,
@@ -12,9 +9,9 @@ export const homeScreenStyles = StyleSheet.create({
   },
   welcomeStrip: {
     borderRadius: BorderRadius.xxl,
-    backgroundColor: welcomeStripBg,
+    backgroundColor: Colors.accentWashFill,
     borderWidth: 1,
-    borderColor: 'rgba(201, 176, 114, 0.22)',
+    borderColor: Colors.accentWashBorder,
     paddingVertical: Spacing.xl,
     paddingHorizontal: Spacing.section,
     marginBottom: Spacing.xl,
@@ -42,7 +39,7 @@ export const homeScreenStyles = StyleSheet.create({
   planBadgeFree: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: 'rgba(201, 176, 114, 0.45)',
+    borderColor: Colors.accentWashOutline,
     paddingHorizontal: Spacing.md,
     borderRadius: BorderRadius.pill,
     minHeight: 28,
@@ -134,7 +131,7 @@ export const homeScreenStyles = StyleSheet.create({
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: 'rgba(201, 176, 114, 0.18)',
+    borderColor: Colors.accentWashBorder,
     borderLeftWidth: 3,
     borderLeftColor: Colors.accent,
     padding: Spacing.xxl,
@@ -180,7 +177,7 @@ export const homeScreenStyles = StyleSheet.create({
     marginTop: Spacing.md,
     paddingTop: Spacing.md,
     borderTopWidth: 1,
-    borderTopColor: Colors.borderDefault,
+    borderTopColor: Colors.backgroundElevated,
   },
   pbRowFirst: {
     marginTop: 0,
@@ -206,7 +203,7 @@ export const homeScreenStyles = StyleSheet.create({
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: 'rgba(201, 176, 114, 0.14)',
+    borderColor: Colors.accentWashBorder,
     paddingVertical: Spacing.xl,
     paddingHorizontal: Spacing.xl,
     flexDirection: 'row',

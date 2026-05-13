@@ -11,7 +11,7 @@ export const workoutDetailStyles = StyleSheet.create({
     alignItems: 'center',
     padding: Spacing.xxl,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: Colors.backgroundElevated,
   },
   backButton: {
     padding: Spacing.md,
@@ -137,7 +137,7 @@ export const workoutDetailStyles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.full,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   scaleButtonActive: {
     backgroundColor: Colors.accent,
@@ -169,7 +169,7 @@ export const workoutDetailStyles = StyleSheet.create({
     padding: Spacing.xxl,
     marginBottom: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   blockName: {
     color: Colors.accent,

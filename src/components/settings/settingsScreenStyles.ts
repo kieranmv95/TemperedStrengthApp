@@ -3,10 +3,10 @@ import { StyleSheet } from 'react-native';
 
 export const settingsScreenStyles = StyleSheet.create({
   upgradePrompt: {
-    backgroundColor: 'rgba(201, 176, 114, 0.1)',
+    backgroundColor: Colors.accentWashFill,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: 'rgba(201, 176, 114, 0.28)',
+    borderColor: Colors.accentWashBorder,
     padding: Spacing.section,
     marginBottom: Spacing.xl,
   },
@@ -48,7 +48,7 @@ export const settingsScreenStyles = StyleSheet.create({
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.backgroundSubtle,
   },
   settingItemDisabled: {
     opacity: 0.5,
@@ -80,10 +80,10 @@ export const settingsScreenStyles = StyleSheet.create({
     color: Colors.textPlaceholder,
   },
   dangerItem: {
-    borderColor: Colors.destructiveAlt,
+    borderColor: Colors.destructive,
   },
   dangerText: {
-    color: Colors.destructiveAlt,
+    color: Colors.destructive,
   },
   proItem: {
     borderColor: Colors.accent,
@@ -130,7 +130,7 @@ export const settingsScreenStyles = StyleSheet.create({
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.pill,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     overflow: 'hidden',
     marginLeft: Spacing.xl,
   },

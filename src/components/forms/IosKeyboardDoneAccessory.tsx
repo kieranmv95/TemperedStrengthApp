@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     backgroundColor: Colors.backgroundElevated,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: Colors.borderDefault,
+    borderTopColor: Colors.backgroundElevated,
   },
   spacer: {
     flex: 1,

@@ -1,53 +1,102 @@
 export const Colors = {
   // Backgrounds
   backgroundScreen: '#121212',
-  backgroundDark: '#151515',
   backgroundCard: '#1E1E1E',
   /** Workout header timer strips (session + rest) */
   timerBarBackground: '#1A1A1A',
+  /** Raised surfaces and default borders (same tone) */
   backgroundElevated: '#2A2A2A',
-  backgroundTertiary: '#2C2C2E',
+  /** Muted fills and soft borders (same tone) */
   backgroundSubtle: '#333',
   backgroundBorder: '#3A3A3A',
-  backgroundDivider: '#3D3D3F',
 
   // Overlays
   overlay: 'rgba(0, 0, 0, 0.8)',
-  overlayLight: 'rgba(0,0,0,0.5)',
-  overlayLighter: 'rgba(0,0,0,0.45)',
-
-  // Borders
-  borderDefault: '#2A2A2A',
-  borderSubtle: '#333',
+  overlayLight: 'rgba(0,0,0,0.45)',
 
   // Text
   textPrimary: '#FFFFFF',
-  textSecondary: '#CCC',
-  textSecondaryAlt: '#CCCCCC',
-  textMuted: '#888',
-  textPlaceholder: '#666',
-  textTertiary: '#999',
+  textSecondary: '#CCCCCC',
+  textMuted: '#888888',
+  textPlaceholder: '#666666',
   textOnAccent: '#121212',
-  textOnDark: '#444',
+  textOnDark: '#444444',
   textBlack: '#000000',
 
   // Accent / brand
-  accent: '#c9b072',
+  accent: '#C9B072',
+  /** Same hue as `accent` (#C9B072 → rgb 201, 176, 114) */
   accentOverlay: 'rgba(201, 176, 114, 0.9)',
+  /** Translucent accent fills */
+  accentWashFill: 'rgba(201, 176, 114, 0.12)',
+  /** Translucent accent borders and rings */
+  accentWashBorder: 'rgba(201, 176, 114, 0.25)',
+  /** Strong accent outline (e.g. hollow badges) */
+  accentWashOutline: 'rgba(201, 176, 114, 0.45)',
 
   // Recommended (personalization signal — intentionally distinct from accent)
   recommended: '#1abc9c',
 
   // Semantic
   destructive: '#FF6B6B',
-  destructiveAlt: '#FF4444',
-  warning: '#FFA726',
-  link: '#0A84FF',
 
   // Tab bar
-  tint: '#fff',
   tabIconDefault: '#9BA1A6',
+
+  // Remote notification banner (Sanity schema defaults; CMS may override)
+  remoteNotificationBorder: '#2a3142',
+  remoteNotificationBackground: '#1a1f2b',
+  remoteNotificationDescription: '#cbd5e1',
+  remoteNotificationCta: '#d4b96a',
+  remoteNotificationCtaText: '#1a1f2b',
+
+  // Award icon (react-native-svg)
+  awardShadowRaised: 'rgba(0,0,0,0.22)',
+  awardShadowSurface: 'rgba(0,0,0,0.16)',
+  awardShadowSoft: 'rgba(0,0,0,0.10)',
+  awardShadowRivet: 'rgba(0,0,0,0.32)',
+  awardHighlight06: 'rgba(255,255,255,0.06)',
+  awardBannerText: 'rgba(0,0,0,0.38)',
 };
+
+export type AwardIconVariantKey = 'bronze' | 'silver' | 'platinum';
+
+type AwardTierPalette = {
+  shieldBase: string;
+  borderTop: string;
+  borderBottom: string;
+  bannerBase: string;
+  bannerText: string;
+  trophy: string;
+};
+
+export const AwardIconPalettes: Record<AwardIconVariantKey, AwardTierPalette> =
+  {
+    platinum: {
+      shieldBase: '#1B3A5C',
+      borderTop: '#A8C8E8',
+      borderBottom: '#4A7AAE',
+      bannerBase: '#5B92C4',
+      bannerText: Colors.awardBannerText,
+      trophy: Colors.textPrimary,
+    },
+    silver: {
+      shieldBase: '#58667A',
+      borderTop: '#D0D8E8',
+      borderBottom: '#7888A0',
+      bannerBase: '#C8D0DA',
+      bannerText: Colors.awardBannerText,
+      trophy: Colors.textPrimary,
+    },
+    bronze: {
+      shieldBase: '#A24A27',
+      borderTop: '#DCA870',
+      borderBottom: '#A06030',
+      bannerBase: '#D6862A',
+      bannerText: Colors.awardBannerText,
+      trophy: Colors.textPrimary,
+    },
+  };
 
 export const Spacing = {
   xxs: 3,

@@ -8,7 +8,7 @@ export const exerciseCardStyles = StyleSheet.create({
     padding: Spacing.xxl,
     marginBottom: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   header: {
     marginBottom: Spacing.xxl,
@@ -73,7 +73,7 @@ export const exerciseCardStyles = StyleSheet.create({
   restTimerButton: {
     padding: Spacing.xs,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     borderRadius: BorderRadius.md,
   },
   setControlButton: {
@@ -128,7 +128,7 @@ export const exerciseCardStyles = StyleSheet.create({
     fontSize: FontSize.xxl,
     fontWeight: '600',
     borderWidth: 2,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.backgroundSubtle,
   },
   inputFlex: {
     flex: 1,

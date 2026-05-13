@@ -483,7 +483,7 @@ const localStyles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: Colors.backgroundCard,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xxl,
   },
@@ -516,7 +516,7 @@ const localStyles = StyleSheet.create({
     borderRadius: BorderRadius.xxl,
     padding: Spacing.section,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     maxHeight: '90%',
   },
   modalTitle: {
@@ -539,7 +539,7 @@ const localStyles = StyleSheet.create({
   weightInput: {
     backgroundColor: Colors.backgroundElevated,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     borderRadius: 8,
     padding: Spacing.xxl,
     color: Colors.textPrimary,
@@ -558,7 +558,7 @@ const localStyles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: Colors.backgroundElevated,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   modalCancelText: {
     color: Colors.textPrimary,

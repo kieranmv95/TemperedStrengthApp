@@ -236,7 +236,7 @@ const pageStyles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.xl,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: Colors.backgroundElevated,
   },
   headerBackButton: {
     padding: Spacing.xs,

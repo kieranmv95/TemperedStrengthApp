@@ -14,7 +14,7 @@ export const copyWorkoutNotesModalStyles = StyleSheet.create({
     padding: Spacing.section,
     maxHeight: '80%',
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     flexDirection: 'column',
   },
   modalHeader: {
@@ -54,7 +54,7 @@ export const copyWorkoutNotesModalStyles = StyleSheet.create({
     paddingVertical: Spacing.xl,
     paddingHorizontal: Spacing.md,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: Colors.backgroundElevated,
   },
   rowTextBlock: {
     flex: 1,

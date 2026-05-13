@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     padding: Spacing.xxl,
     marginBottom: Spacing.lg,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   cardExpanded: {
     borderColor: Colors.backgroundBorder,
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xl,
     paddingTop: Spacing.xl,
     borderTopWidth: 1,
-    borderTopColor: Colors.borderDefault,
+    borderTopColor: Colors.backgroundElevated,
   },
   definition: {
     color: Colors.textSecondary,

@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     padding: Spacing.xxl,
     gap: Spacing.md,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   blockCardCompleted: {
     borderColor: Colors.accent,
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.xs,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.backgroundSubtle,
   },
   blockTypeBadgeText: {
     color: Colors.textMuted,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.pill,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     backgroundColor: Colors.backgroundCard,
   },
   completeButtonActive: {
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   warmupText: {
-    color: Colors.textSecondaryAlt,
+    color: Colors.textSecondary,
     flex: 1,
     fontSize: FontSize.lg,
     lineHeight: 20,
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     gap: Spacing.xs,
     paddingTop: Spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: Colors.borderSubtle,
+    borderTopColor: Colors.backgroundSubtle,
   },
   movementTopRow: {
     flexDirection: 'row',

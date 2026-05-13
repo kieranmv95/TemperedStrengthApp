@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.backgroundCard,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     marginTop: Spacing.xl,
     marginBottom: Spacing.xxl,
     paddingHorizontal: Spacing.xl,
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   terminologyCtaContent: {
     flex: 1,

@@ -6,7 +6,7 @@ export const standaloneWorkoutLogPanelStyles = StyleSheet.create({
     marginTop: Spacing.xxl,
     paddingTop: Spacing.xxl,
     borderTopWidth: 1,
-    borderTopColor: Colors.borderDefault,
+    borderTopColor: Colors.backgroundElevated,
   },
   sectionTitle: {
     fontSize: FontSize.displaySm,
@@ -34,7 +34,7 @@ export const standaloneWorkoutLogPanelStyles = StyleSheet.create({
     backgroundColor: Colors.backgroundElevated,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     marginBottom: Spacing.md,
     overflow: 'hidden',
   },

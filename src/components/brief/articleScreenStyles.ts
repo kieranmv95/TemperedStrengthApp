@@ -13,7 +13,7 @@ export const articleScreenStyles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.xl,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: Colors.backgroundElevated,
   },
   headerBackButton: {
     padding: Spacing.xs,
@@ -95,7 +95,7 @@ export const articleScreenStyles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     backgroundColor: Colors.backgroundCard,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   readOnWebText: {
     color: Colors.textPrimary,
@@ -104,7 +104,7 @@ export const articleScreenStyles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: Colors.borderDefault,
+    backgroundColor: Colors.backgroundElevated,
     marginHorizontal: Spacing.xxxl,
     marginVertical: Spacing.section,
   },

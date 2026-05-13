@@ -21,8 +21,15 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.3.2',
+    dateLabel: '12th May 2026',
+    notes: [
+      'large refactor and performance improvements'
+    ],
+  },
+  {
     version: '2.3.1',
-    dateLabel: 'UNRELEASED',
+    dateLabel: '12th May 2026',
     notes: [
       'Day selector visual improvements',
       'Improved Olympic Foundations & Advanced Olympic Performance programs',
@@ -331,7 +338,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.xl,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: Colors.backgroundElevated,
   },
   headerBackButton: {
     padding: Spacing.xs,
@@ -364,7 +371,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     overflow: 'hidden',
   },
   cardHeader: {

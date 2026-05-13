@@ -32,7 +32,7 @@ export const programLauncherStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   headerCloseButtonText: {
     color: Colors.textPrimary,
@@ -61,7 +61,7 @@ export const programLauncherStyles = StyleSheet.create({
     padding: Spacing.xxxl,
     marginBottom: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -162,7 +162,7 @@ export const programLauncherStyles = StyleSheet.create({
     borderTopLeftRadius: BorderRadius.pill,
     borderTopRightRadius: BorderRadius.pill,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     maxHeight: '75%',
   },
   datePickerHeader: {
@@ -171,7 +171,7 @@ export const programLauncherStyles = StyleSheet.create({
     alignItems: 'center',
     padding: Spacing.xxl,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: Colors.backgroundElevated,
   },
   datePickerTitle: {
     color: Colors.textPrimary,
@@ -244,7 +244,7 @@ export const programLauncherStyles = StyleSheet.create({
     padding: Spacing.section,
     maxHeight: '95%',
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -311,7 +311,7 @@ export const programLauncherStyles = StyleSheet.create({
     padding: Spacing.xxl,
     marginBottom: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.backgroundSubtle,
   },
   bodyChangesLinkRow: {
     flexDirection: 'row',
@@ -383,7 +383,7 @@ export const programLauncherStyles = StyleSheet.create({
     padding: Spacing.xxl,
     marginBottom: Spacing.xl,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.backgroundSubtle,
   },
   workoutLabel: {
     color: Colors.textPrimary,
@@ -450,7 +450,7 @@ export const programLauncherStyles = StyleSheet.create({
     marginTop: Spacing.section,
     paddingTop: Spacing.xxl,
     borderTopWidth: 1,
-    borderTopColor: Colors.borderDefault,
+    borderTopColor: Colors.backgroundElevated,
   },
   startProgramButton: {
     backgroundColor: Colors.accent,

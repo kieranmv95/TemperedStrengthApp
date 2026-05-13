@@ -81,7 +81,7 @@ export const onboardingStyles = StyleSheet.create({
     backgroundColor: Colors.backgroundElevated,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.backgroundSubtle,
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.xxl,
     color: Colors.textPrimary,
@@ -105,7 +105,7 @@ export const onboardingStyles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.backgroundSubtle,
   },
   optionCardSelected: {
     borderColor: Colors.accent,
@@ -143,7 +143,7 @@ export const onboardingStyles = StyleSheet.create({
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.backgroundSubtle,
     gap: Spacing.md,
   },
   iCloudTitle: {
@@ -178,7 +178,7 @@ export const onboardingStyles = StyleSheet.create({
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.backgroundSubtle,
     gap: Spacing.lg,
   },
   finalCardTitle: {
@@ -220,7 +220,7 @@ export const onboardingStyles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    borderColor: Colors.backgroundSubtle,
   },
   finalActionSecondaryText: {
     color: Colors.textPrimary,
@@ -238,7 +238,7 @@ export const onboardingStyles = StyleSheet.create({
     paddingTop: Spacing.xl,
     gap: Spacing.md,
     borderTopWidth: 1,
-    borderTopColor: Colors.borderDefault,
+    borderTopColor: Colors.backgroundElevated,
   },
   footerSecondaryRow: {
     flexDirection: 'row',

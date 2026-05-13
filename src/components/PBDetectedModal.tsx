@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: Spacing.section,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   title: {
     color: Colors.textPrimary,
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   buttonSecondary: {
     backgroundColor: Colors.backgroundElevated,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   buttonSecondaryText: {
     color: Colors.textPrimary,

@@ -21,7 +21,7 @@ export const workoutScreenStyles = StyleSheet.create({
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     paddingVertical: Spacing.xxl,
     paddingHorizontal: Spacing.section,
     minWidth: 220,
@@ -108,7 +108,7 @@ export const workoutScreenStyles = StyleSheet.create({
     borderRadius: BorderRadius.pill,
     backgroundColor: Colors.backgroundCard,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   moduleToggleActive: {
     backgroundColor: Colors.accent,
@@ -128,7 +128,7 @@ export const workoutScreenStyles = StyleSheet.create({
     padding: Spacing.xxl,
     marginBottom: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   intensityCardHeader: {
     flexDirection: 'row',
@@ -207,7 +207,7 @@ export const workoutScreenStyles = StyleSheet.create({
     padding: Spacing.xxl,
     marginBottom: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   warmupTitle: {
     color: Colors.accent,
@@ -239,7 +239,7 @@ export const workoutScreenStyles = StyleSheet.create({
     marginTop: 1,
   },
   warmupText: {
-    color: Colors.textSecondaryAlt,
+    color: Colors.textSecondary,
     fontSize: FontSize.lg,
     lineHeight: 20,
     flex: 1,
@@ -249,7 +249,7 @@ export const workoutScreenStyles = StyleSheet.create({
     borderRadius: BorderRadius.xxl,
     marginTop: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     overflow: 'hidden',
   },
   notesHeader: {
@@ -301,7 +301,7 @@ export const workoutScreenStyles = StyleSheet.create({
   },
   notesActionsContainer: {
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: Colors.borderDefault,
+    borderTopColor: Colors.backgroundElevated,
     padding: Spacing.xxl,
     paddingTop: Spacing.xl,
     gap: Spacing.md,
@@ -309,7 +309,7 @@ export const workoutScreenStyles = StyleSheet.create({
   notesAction: {
     backgroundColor: Colors.backgroundSubtle,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     borderRadius: BorderRadius.lg,
     paddingVertical: Spacing.lg,
     paddingHorizontal: Spacing.xl,
@@ -328,7 +328,7 @@ export const workoutScreenStyles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.backgroundElevated,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: Colors.borderDefault,
+    borderTopColor: Colors.backgroundElevated,
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.lg,
   },
@@ -349,7 +349,7 @@ export const workoutScreenStyles = StyleSheet.create({
     fontSize: FontSize.lg,
     lineHeight: 22,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: Colors.borderDefault,
+    borderTopColor: Colors.backgroundElevated,
     padding: Spacing.xxl,
     minHeight: 100,
   },
@@ -377,7 +377,7 @@ export const workoutScreenStyles = StyleSheet.create({
     padding: Spacing.xxl,
     marginBottom: Spacing.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   completedSessionTitle: {
     color: Colors.accent,

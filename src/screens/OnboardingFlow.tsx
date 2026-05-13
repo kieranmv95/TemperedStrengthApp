@@ -635,7 +635,7 @@ function OnboardingFlow() {
                   disabled={completing}
                 >
                   <Text
-                    style={{ color: 'white', fontSize: 16, fontWeight: '700' }}
+                    style={{ color: Colors.textPrimary, fontSize: 16, fontWeight: '700' }}
                   >
                     Skip
                   </Text>

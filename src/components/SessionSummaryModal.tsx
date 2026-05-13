@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     padding: Spacing.xxl,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   statValue: {
     color: Colors.accent,

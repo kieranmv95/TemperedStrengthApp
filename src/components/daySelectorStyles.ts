@@ -11,7 +11,7 @@ export const daySelectorStyles = StyleSheet.create({
   container: {
     backgroundColor: Colors.backgroundCard,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: Colors.backgroundElevated,
     paddingTop: Spacing.xl,
     paddingBottom: Spacing.md,
   },

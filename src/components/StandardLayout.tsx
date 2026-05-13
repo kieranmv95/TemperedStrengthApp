@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.xxl,
     paddingBottom: Spacing.xxl,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: Colors.backgroundElevated,
   },
   backButton: {
     alignSelf: 'flex-start',
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: Colors.backgroundCard,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
   },
   filtersToggleText: {
     color: Colors.textPrimary,

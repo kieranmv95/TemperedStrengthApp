@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient, type SanityClient } from '@sanity/client';
 
+import { Colors } from '@/src/constants/theme';
+
 const SANITY_PROJECT_ID = 'n1zlvrwu';
 const SANITY_DATASET = 'production';
 const SANITY_API_VERSION = '2024-01-01';
@@ -30,12 +32,12 @@ const HEX_COLOR =
 
 /** Matches Sanity `notification` colour field initial values. */
 export const NOTIFICATION_COLOR_DEFAULTS = {
-  borderColor: '#2a3142',
-  bgColor: '#1a1f2b',
-  titleColor: '#ffffff',
-  descriptionColor: '#cbd5e1',
-  ctaColor: '#d4b96a',
-  ctaTextColor: '#1a1f2b',
+  borderColor: Colors.remoteNotificationBorder,
+  bgColor: Colors.remoteNotificationBackground,
+  titleColor: Colors.textPrimary,
+  descriptionColor: Colors.remoteNotificationDescription,
+  ctaColor: Colors.remoteNotificationCta,
+  ctaTextColor: Colors.remoteNotificationCtaText,
 } as const;
 
 type SanityNotificationDoc = {

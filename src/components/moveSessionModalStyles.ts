@@ -12,7 +12,7 @@ export const moveSessionModalStyles = StyleSheet.create({
     borderTopLeftRadius: BorderRadius.pill,
     borderTopRightRadius: BorderRadius.pill,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     padding: Spacing.section,
   },
   title: {
@@ -40,7 +40,7 @@ export const moveSessionModalStyles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     paddingVertical: Spacing.lg,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     minHeight: 56,
   },
   dayBtnDisabled: {
@@ -74,7 +74,7 @@ export const moveSessionModalStyles = StyleSheet.create({
   },
   footer: {
     borderTopWidth: 1,
-    borderTopColor: Colors.borderDefault,
+    borderTopColor: Colors.backgroundElevated,
     paddingTop: Spacing.xxl,
   },
   footerRow: {
@@ -87,7 +87,7 @@ export const moveSessionModalStyles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     backgroundColor: Colors.backgroundElevated,
     alignItems: 'center',
     justifyContent: 'center',

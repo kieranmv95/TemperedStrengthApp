@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.xl,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: Colors.backgroundElevated,
   },
   headerBackButton: {
     padding: Spacing.xs,
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: Spacing.xl,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     gap: Spacing.lg,
   },
   searchInput: {
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
   },
   filterContainer: {
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderDefault,
+    borderBottomColor: Colors.backgroundElevated,
   },
   filterList: {
     paddingHorizontal: Spacing.xxl,
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.pill,
     backgroundColor: Colors.backgroundCard,
     borderWidth: 1,
-    borderColor: Colors.borderDefault,
+    borderColor: Colors.backgroundElevated,
     gap: Spacing.sm,
   },
   filterTabActive: {
