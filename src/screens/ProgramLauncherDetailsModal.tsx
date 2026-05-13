@@ -3,6 +3,7 @@ import type { Program } from '@/src/types/program';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import React from 'react';
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SmallChevron } from '../components/ds/SmallChevron';
 import { ProgramLauncherWeekdayPicker } from './ProgramLauncherWeekdayPicker';
 import { ProgramLauncherWorkoutPreviewRow } from './ProgramLauncherWorkoutPreviewRow';
 import { programLauncherStyles as styles } from './programLauncherStyles';
@@ -37,6 +38,20 @@ export function ProgramLauncherDetailsModal({
   bottomInset,
 }: ProgramLauncherDetailsModalProps) {
   const [bodyChangesExpanded, setBodyChangesExpanded] = React.useState(false);
+  const [step, setStep] = React.useState<'details' | 'selectDays'>('details');
+
+  const programRequiresDaySelection = !!selectedProgram?.daysSplit?.length;
+
+  React.useEffect(() => {
+    if (!visible) {
+      setBodyChangesExpanded(false);
+      setStep('details');
+      return;
+    }
+    // When program changes (or modal reopens), reset to the top-level view.
+    setBodyChangesExpanded(false);
+    setStep('details');
+  }, [visible, selectedProgram?.id]);
 
   return (
     <Modal
@@ -64,11 +79,21 @@ export function ProgramLauncherDetailsModal({
           </View>
 
           <ScrollView style={styles.modalContent}>
+            {step === 'selectDays' && (
+              <TouchableOpacity
+                onPress={() => setStep('details')}
+                accessibilityRole="button"
+                style={styles.stepBackButton}
+              >
+                <Text style={styles.stepBackButtonText}>Back</Text>
+              </TouchableOpacity>
+            )}
+
             <Text style={styles.programDescription}>
               {selectedProgram?.description}
             </Text>
 
-            {selectedProgram?.bodyChangesSummary && (
+            {step === 'details' && selectedProgram?.bodyChangesSummary && (
               <View style={styles.bodyChangesCard}>
                 <TouchableOpacity
                   onPress={() => setBodyChangesExpanded((v) => !v)}
@@ -79,9 +104,9 @@ export function ProgramLauncherDetailsModal({
                   <Text style={styles.bodyChangesLinkText}>
                     How this program can change your body
                   </Text>
-                  <Text style={styles.bodyChangesLinkChevron}>
-                    {bodyChangesExpanded ? 'Hide' : 'Show'}
-                  </Text>
+                  <View style={{ transform: [{ rotate: bodyChangesExpanded ? '-90deg' : '90deg' }] }}>
+                    <SmallChevron />
+                  </View>
                 </TouchableOpacity>
                 {bodyChangesExpanded && (
                   <Text style={styles.bodyChangesText}>
@@ -91,43 +116,47 @@ export function ProgramLauncherDetailsModal({
               </View>
             )}
 
-            <Text style={styles.sectionTitle}>Program Overview</Text>
+            {step === 'details' && (
+              <Text style={styles.sectionTitle}>Program Overview</Text>
+            )}
 
-            <View style={styles.programOverviewContainer}>
-              <View style={styles.statsContainer}>
-                <View style={styles.statItem}>
-                  <Text style={styles.statValue}>
-                    {selectedProgram?.workouts.length}
-                  </Text>
-                  <Text style={styles.statLabel}>Workouts</Text>
-                </View>
-                {selectedProgram &&
-                  (() => {
-                    const maxDayIndex = Math.max(
-                      ...selectedProgram.workouts.map((w) => w.dayIndex)
-                    );
-                    const weekCount = Math.ceil((maxDayIndex + 1) / 7);
-                    return (
-                      <View style={styles.statItem}>
-                        <Text style={styles.statValue}>{weekCount}</Text>
-                        <Text style={styles.statLabel}>
-                          {weekCount === 1 ? 'Week' : 'Weeks'}
-                        </Text>
-                      </View>
-                    );
-                  })()}
-                {selectedProgram?.averageSessionDuration && (
+            {step === 'details' && (
+              <View style={styles.programOverviewContainer}>
+                <View style={styles.statsContainer}>
                   <View style={styles.statItem}>
                     <Text style={styles.statValue}>
-                      {selectedProgram.averageSessionDuration}
+                      {selectedProgram?.workouts.length}
                     </Text>
-                    <Text style={styles.statLabel}>Duration</Text>
+                    <Text style={styles.statLabel}>Workouts</Text>
                   </View>
-                )}
+                  {selectedProgram &&
+                    (() => {
+                      const maxDayIndex = Math.max(
+                        ...selectedProgram.workouts.map((w) => w.dayIndex)
+                      );
+                      const weekCount = Math.ceil((maxDayIndex + 1) / 7);
+                      return (
+                        <View style={styles.statItem}>
+                          <Text style={styles.statValue}>{weekCount}</Text>
+                          <Text style={styles.statLabel}>
+                            {weekCount === 1 ? 'Week' : 'Weeks'}
+                          </Text>
+                        </View>
+                      );
+                    })()}
+                  {selectedProgram?.averageSessionDuration && (
+                    <View style={styles.statItem}>
+                      <Text style={styles.statValue}>
+                        {selectedProgram.averageSessionDuration}
+                      </Text>
+                      <Text style={styles.statLabel}>Duration</Text>
+                    </View>
+                  )}
+                </View>
               </View>
-            </View>
+            )}
 
-            {selectedProgram?.daysSplit && (
+            {programRequiresDaySelection && step === 'selectDays' && (
               <ProgramLauncherWeekdayPicker
                 sessionsRequired={sessionsRequired}
                 selectedWeekdays={selectedWeekdays}
@@ -136,14 +165,18 @@ export function ProgramLauncherDetailsModal({
               />
             )}
 
-            <Text style={styles.sectionTitle}>Workouts</Text>
-            {selectedProgram?.workouts.map((workout, index) => (
-              <ProgramLauncherWorkoutPreviewRow
-                key={index}
-                workout={workout}
-                showIntensity={selectedProgram.categories.includes('strength')}
-              />
-            ))}
+            {step === 'details' && (
+              <>
+                <Text style={styles.sectionTitle}>Workouts</Text>
+                {selectedProgram?.workouts.map((workout, index) => (
+                  <ProgramLauncherWorkoutPreviewRow
+                    key={index}
+                    workout={workout}
+                    showIntensity={selectedProgram.categories.includes('strength')}
+                  />
+                ))}
+              </>
+            )}
           </ScrollView>
 
           <View
@@ -165,12 +198,24 @@ export function ProgramLauncherDetailsModal({
               <TouchableOpacity
                 style={[
                   styles.startProgramButton,
-                  startBlockedByWeekdays && styles.startProgramButtonDisabled,
+                  step === 'selectDays' &&
+                  startBlockedByWeekdays &&
+                  styles.startProgramButtonDisabled,
                 ]}
-                onPress={onStartProgram}
-                disabled={startBlockedByWeekdays}
+                onPress={() => {
+                  if (programRequiresDaySelection && step === 'details') {
+                    setStep('selectDays');
+                    return;
+                  }
+                  onStartProgram();
+                }}
+                disabled={step === 'selectDays' && startBlockedByWeekdays}
               >
-                <Text style={styles.startProgramButtonText}>Start Program</Text>
+                <Text style={styles.startProgramButtonText}>
+                  {programRequiresDaySelection && step === 'details'
+                    ? 'Select Days'
+                    : 'Start Program'}
+                </Text>
               </TouchableOpacity>
             )}
           </View>

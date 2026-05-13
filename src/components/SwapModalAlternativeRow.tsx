@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { SmallChevron } from './ds/SmallChevron';
 import { swapModalStyles as styles } from './swapModalStyles';
 
 type SwapModalAlternativeRowProps = {
@@ -31,7 +32,7 @@ export function SwapModalAlternativeRow({
           )}
         </View>
       </View>
-      <Text style={styles.selectArrow}>→</Text>
+      <SmallChevron />
     </TouchableOpacity>
   );
 }

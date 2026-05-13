@@ -60,9 +60,9 @@ export const SwapModal: React.FC<SwapModalProps> = ({
   const allExercisesForEmptySlot = currentExerciseId
     ? []
     : (noEquipmentOnly
-        ? getAllExercises().filter((e) => e.equipment === 'Bodyweight')
-        : getAllExercises()
-      ).slice(0, 15);
+      ? getAllExercises().filter((e) => e.equipment === 'Bodyweight')
+      : getAllExercises()
+    ).slice(0, 15);
 
   const isSwapped =
     currentExerciseId !== null &&

@@ -307,13 +307,23 @@ export const programLauncherStyles = StyleSheet.create({
   modalContent: {
     maxHeight: 500,
   },
+  stepBackButton: {
+    alignSelf: 'flex-start',
+    paddingVertical: Spacing.md,
+  },
+  stepBackButtonText: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+    textDecorationLine: 'underline',
+  },
   bodyChangesCard: {
-    backgroundColor: Colors.backgroundElevated,
+    backgroundColor: Colors.accentWashFill,
+    borderWidth: 1,
+    borderColor: Colors.accentWashBorder,
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xxl,
     marginBottom: Spacing.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundSubtle,
   },
   bodyChangesLinkRow: {
     flexDirection: 'row',
@@ -322,10 +332,9 @@ export const programLauncherStyles = StyleSheet.create({
     gap: Spacing.lg,
   },
   bodyChangesLinkText: {
-    color: Colors.accent,
+    color: Colors.textPrimary,
     fontSize: FontSize.lg,
     fontWeight: '700',
-    textDecorationLine: 'underline',
     flex: 1,
   },
   bodyChangesLinkChevron: {

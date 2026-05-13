@@ -71,7 +71,9 @@ export const swapModalStyles = StyleSheet.create({
     color: Colors.textOnAccent,
   },
   disclaimer: {
-    backgroundColor: Colors.accentOverlay,
+    backgroundColor: Colors.accentWashFill,
+    borderWidth: 1,
+    borderColor: Colors.accentWashBorder,
     padding: Spacing.xl,
     borderRadius: BorderRadius.lg,
     fontSize: FontSize.md,
@@ -79,6 +81,7 @@ export const swapModalStyles = StyleSheet.create({
     fontWeight: '500',
     fontStyle: 'italic',
     lineHeight: 18,
+    color: Colors.textPrimary,
   },
   deviationTitle: {
     color: Colors.textPrimary,
@@ -163,11 +166,5 @@ export const swapModalStyles = StyleSheet.create({
     fontSize: FontSize.md,
     fontWeight: '500',
     marginBottom: Spacing.xl,
-  },
-  selectArrow: {
-    color: Colors.accent,
-    fontSize: FontSize.displayXl,
-    fontWeight: '600',
-    marginLeft: Spacing.xl,
   },
 });

@@ -27,7 +27,7 @@ export function ProgramLauncherWeekdayPicker({
         <Text style={styles.workoutTitle}>Workout Days (tap to change)</Text>
         <Text style={styles.workoutDaysHint}>
           You need exactly {sessionsRequired} training days before you can
-          start. Tap the days below to fit your scehdule
+          start. Tap the days below to fit your schedule
         </Text>
       </View>
       {!weekdaySelectionReady && (
