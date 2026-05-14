@@ -1,9 +1,15 @@
 import { Colors, Spacing } from '@/src/constants/theme';
 import type { Program } from '@/src/types/program';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
-import { getWorkoutForDaySinceStart } from '@/src/utils/programWeekPattern';
+import {
+  getShiftedWorkoutForDaySinceStart,
+  type ProgramSessionShiftsStore,
+} from '@/src/utils/programWeekPattern';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
-import { getAllWorkoutNotes } from '@/src/utils/storage';
+import {
+  getAllWorkoutNotes,
+  getProgramSessionShiftsStore,
+} from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -42,11 +48,18 @@ function resolveWorkoutLabel(
   program: Program,
   dayIndex: number,
   startISO: string | null,
-  pattern: ProgramDaySplitKey[] | null
+  pattern: ProgramDaySplitKey[] | null,
+  sessionShifts: ProgramSessionShiftsStore | null
 ): string {
   const workout =
     startISO !== null
-      ? getWorkoutForDaySinceStart(program, startISO, pattern, dayIndex)
+      ? getShiftedWorkoutForDaySinceStart(
+          program,
+          startISO,
+          pattern,
+          sessionShifts,
+          dayIndex
+        )
       : (program.workouts.find((w) => w.dayIndex === dayIndex) ?? null);
   // Day indices are 0-based internally; keep fallback user-facing.
   return workout?.label ?? `Day ${dayIndex + 1}`;
@@ -82,7 +95,10 @@ export function CopyWorkoutNotesModal({
     }
     setLoading(true);
     try {
-      const all = await getAllWorkoutNotes();
+      const [all, sessionShifts] = await Promise.all([
+        getAllWorkoutNotes(),
+        getProgramSessionShiftsStore(),
+      ]);
       const next: NoteSourceRow[] = [];
       for (const [key, text] of Object.entries(all)) {
         const dayIndex = parseInt(key, 10);
@@ -99,7 +115,8 @@ export function CopyWorkoutNotesModal({
             program,
             dayIndex,
             startDate,
-            workoutWeekPattern
+            workoutWeekPattern,
+            sessionShifts
           ),
           text,
           preview: buildPreview(text),

@@ -207,4 +207,122 @@ export const homeScreenStyles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
+
+  streakCardInner: {
+    flex: 1,
+    gap: Spacing.xl,
+  },
+  streakHero: {
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  streakIconRing: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 1,
+    borderColor: Colors.accentWashOutline,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  streakNumber: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.hero,
+    fontWeight: '800',
+    letterSpacing: -0.5,
+  },
+  streakLabel: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xl,
+    fontWeight: '700',
+  },
+  streakMessage: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    textAlign: 'center',
+    marginTop: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+  },
+  streakWeekRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingHorizontal: Spacing.xxs,
+  },
+  streakWeekCell: {
+    alignItems: 'center',
+    gap: Spacing.xxs,
+    minWidth: 36,
+  },
+  streakWeekLetter: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.sm,
+    fontWeight: '600',
+  },
+  streakWeekLetterToday: {
+    color: Colors.textPrimary,
+    fontWeight: '800',
+  },
+  streakWeekLetterMuted: {
+    color: Colors.textMuted,
+  },
+  streakWeekDateNum: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.md,
+    fontWeight: '600',
+  },
+  streakWeekDateNumToday: {
+    color: Colors.textPrimary,
+    fontWeight: '800',
+  },
+  streakWeekDateNumMuted: {
+    color: Colors.textMuted,
+  },
+  streakDayDot: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.backgroundBorder,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: Spacing.xxs,
+  },
+  streakDayDotDone: {
+    backgroundColor: Colors.accent,
+    borderColor: Colors.accent,
+  },
+  streakDayDotTodayRing: {
+    borderColor: Colors.accentWashOutline,
+    borderWidth: 2,
+  },
+  streakStatsCard: {
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.xl,
+    paddingVertical: Spacing.xxl,
+    paddingHorizontal: Spacing.section,
+    gap: Spacing.md,
+    alignItems: 'center',
+  },
+  streakStatBlock: {
+    alignItems: 'center',
+    gap: Spacing.xs,
+  },
+  streakStatLabel: {
+    color: Colors.textMuted,
+    fontSize: FontSize.sm,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+    textTransform: 'uppercase',
+  },
+  streakStatValue: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayXXl,
+    fontWeight: '800',
+  },
+  streakBestLine: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.lg,
+    fontWeight: '600',
+  },
 });

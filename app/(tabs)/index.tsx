@@ -1,4 +1,5 @@
 import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
+import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors } from '@/src/constants/theme';
@@ -8,6 +9,13 @@ import { useHomeRemoteNotification } from '@/src/hooks/useHomeRemoteNotification
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { workoutScreenStyles } from '@/src/screens/workoutScreenStyles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
+import {
+  applyDailyStreakCheckIn,
+  buildSnapshot,
+  formatLocalYMD,
+  parseStreakState,
+  type StreakSnapshot,
+} from '@/src/services/streakService';
 import type { PersonalBestsStore } from '@/src/types/personalBests';
 import {
   loadHomeProgramSummary,
@@ -77,6 +85,9 @@ export default function HomeTabScreen() {
   const [programSummary, setProgramSummary] =
     useState<HomeProgramSummary | null>(null);
   const [pbStore, setPbStore] = useState<PersonalBestsStore | null>(null);
+  const [streakSnapshot, setStreakSnapshot] = useState<StreakSnapshot | null>(
+    null
+  );
   const hasCompletedInitialLoad = useRef(false);
 
   const loadHome = useCallback(async () => {
@@ -85,20 +96,25 @@ export default function HomeTabScreen() {
       setLoading(true);
     }
     try {
-      const [profile, summary, store] = await Promise.all([
+      const [profile, summary, store, streak] = await Promise.all([
         getOnboardingProfile(),
         loadHomeProgramSummary(),
         getPersonalBestsStore(),
+        applyDailyStreakCheckIn(),
       ]);
       const trimmed = profile?.name?.trim();
       setDisplayName(trimmed && trimmed.length > 0 ? trimmed : null);
       setProgramSummary(summary);
       setPbStore(store);
+      setStreakSnapshot(streak);
     } catch (error) {
       console.error('Error loading home screen data:', error);
       setDisplayName(null);
       setProgramSummary(null);
       setPbStore({});
+      setStreakSnapshot(
+        buildSnapshot(parseStreakState(null), formatLocalYMD(new Date()))
+      );
     } finally {
       setLoading(false);
       hasCompletedInitialLoad.current = true;
@@ -327,6 +343,22 @@ export default function HomeTabScreen() {
                 <SmallChevron />
               </Card>
             )}
+          </View>
+
+          <View style={styles.section}>
+            <CuratedSection
+              icon="flame-outline"
+              title="Streak"
+              description="Open the app daily to build your training habit"
+              size="small"
+              theme="gold"
+            />
+            {streakSnapshot ? (
+              <HomeStreakCard
+                snapshot={streakSnapshot}
+                displayName={displayName}
+              />
+            ) : null}
           </View>
 
           <View style={styles.section}>

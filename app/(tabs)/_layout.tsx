@@ -1,11 +1,36 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { AppState } from 'react-native';
 
 import { HapticTab } from '@/src/components/haptic-tab';
 import { IconSymbol } from '@/src/components/ui/icon-symbol';
 import { Colors } from '@/src/constants/theme';
+import { useSyncManager } from '@/src/hooks/sync-manager-context';
+import { applyDailyStreakCheckIn } from '@/src/services/streakService';
 
 export default function TabLayout() {
+  const { syncNow } = useSyncManager();
+
+  useEffect(() => {
+    const run = async () => {
+      await syncNow();
+      await applyDailyStreakCheckIn();
+    };
+    void run();
+  }, [syncNow]);
+
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
+        void (async () => {
+          await syncNow();
+          await applyDailyStreakCheckIn();
+        })();
+      }
+    });
+    return () => sub.remove();
+  }, [syncNow]);
+
   return (
     <Tabs
       screenOptions={{
