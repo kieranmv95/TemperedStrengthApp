@@ -34,6 +34,36 @@ function isTodayOnOrAfterLocalDate(target: Date): boolean {
   return today.getTime() >= t.getTime();
 }
 
+/**
+ * 0–1 fill for a bar spanning local calendar days from the first to the last
+ * scheduled session (inclusive). Shift-aware via `trainingDeltas`. Calendar-only
+ * (no session completion).
+ */
+function calendarSessionSpanProgress(args: {
+  trainingDeltas: number[];
+  todayDayDelta: number;
+  programCompleted: boolean;
+}): number {
+  const { trainingDeltas, todayDayDelta, programCompleted } = args;
+  if (programCompleted) {
+    return 1;
+  }
+  const firstDelta = Math.min(...trainingDeltas);
+  const lastDelta = Math.max(...trainingDeltas);
+  const spanDays = lastDelta - firstDelta + 1;
+  if (spanDays <= 0) {
+    return 1;
+  }
+  if (todayDayDelta < 0 || todayDayDelta < firstDelta) {
+    return 0;
+  }
+  if (todayDayDelta > lastDelta) {
+    return 1;
+  }
+  const raw = (todayDayDelta - firstDelta + 1) / spanDays;
+  return Math.min(1, Math.max(0, raw));
+}
+
 export type HomeProgramSummary = {
   programId: string;
   programName: string;
@@ -42,6 +72,8 @@ export type HomeProgramSummary = {
   programCompleted: boolean;
   /** True while calendar is before the program start date (label is e.g. "Starts in N days"). */
   awaitingProgramStart: boolean;
+  /** Calendar progress from first scheduled session day through last (shift-aware), 0–1. */
+  calendarSessionSpanProgress: number;
 };
 
 export async function loadHomeProgramSummary(): Promise<HomeProgramSummary | null> {
@@ -87,6 +119,12 @@ export async function loadHomeProgramSummary(): Promise<HomeProgramSummary | nul
 
   const todayDayDelta = calculateDaysSinceStart(startISO);
 
+  const spanProgress = calendarSessionSpanProgress({
+    trainingDeltas,
+    todayDayDelta,
+    programCompleted,
+  });
+
   /** Training sessions strictly after today’s calendar offset from program start. */
   const sessionsRemaining = trainingDeltas.filter(
     (d) => d > todayDayDelta
@@ -116,5 +154,6 @@ export async function loadHomeProgramSummary(): Promise<HomeProgramSummary | nul
     sessionsRemaining,
     programCompleted,
     awaitingProgramStart: todayDayDelta < 0,
+    calendarSessionSpanProgress: spanProgress,
   };
 }

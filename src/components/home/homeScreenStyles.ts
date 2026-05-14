@@ -120,6 +120,18 @@ export const homeScreenStyles = StyleSheet.create({
     fontSize: FontSize.displaySm,
     fontWeight: '800',
   },
+  programCalendarProgressTrack: {
+    width: '100%',
+    height: 6,
+    marginTop: 4,
+    borderRadius: BorderRadius.pill,
+    backgroundColor: Colors.backgroundSubtle,
+    overflow: 'hidden',
+  },
+  programCalendarProgressFill: {
+    height: '100%',
+    backgroundColor: Colors.accent,
+  },
   cardMuted: {
     color: Colors.textMuted,
     fontSize: FontSize.lg,

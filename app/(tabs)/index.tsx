@@ -262,7 +262,7 @@ export default function HomeTabScreen() {
                   </Text>
                 ) : null}
                 {remoteNotification.ctaText.length > 0 &&
-                  remoteNotification.ctaUrl.length > 0 ? (
+                remoteNotification.ctaUrl.length > 0 ? (
                   <TouchableOpacity
                     style={[
                       styles.notificationCta,
@@ -293,8 +293,8 @@ export default function HomeTabScreen() {
               icon="barbell-outline"
               title="Your program"
               description="What is on deck today and what is left in your block"
-              size='small'
-              theme='gold'
+              size="small"
+              theme="gold"
             />
             {programSummary ? (
               <Card
@@ -309,6 +309,37 @@ export default function HomeTabScreen() {
                   <Text style={styles.cardTitle}>
                     {programSummary.programName}
                   </Text>
+                  <View
+                    style={styles.programCalendarProgressTrack}
+                    accessible
+                    accessibilityRole="progressbar"
+                    accessibilityLabel="Program calendar progress"
+                    accessibilityValue={{
+                      min: 0,
+                      max: 100,
+                      now: Math.round(
+                        programSummary.calendarSessionSpanProgress * 100
+                      ),
+                    }}
+                  >
+                    <View
+                      style={[
+                        styles.programCalendarProgressFill,
+                        {
+                          width: `${Math.min(
+                            100,
+                            Math.max(
+                              0,
+                              Math.round(
+                                programSummary.calendarSessionSpanProgress *
+                                  10000
+                              ) / 100
+                            )
+                          )}%`,
+                        },
+                      ]}
+                    />
+                  </View>
                   <Text style={[styles.cardMuted, { marginTop: 4 }]}>
                     {programSummary.awaitingProgramStart ? null : <>Today: </>}
                     <Text style={styles.cardAccent}>
@@ -367,8 +398,8 @@ export default function HomeTabScreen() {
               title="Recent wins"
               description="Your last three PRs, small jumps still count"
               iconSizeOverride={18}
-              size='small'
-              theme='gold'
+              size="small"
+              theme="gold"
             />
             {hasPersonalBests ? (
               <Card
@@ -386,14 +417,18 @@ export default function HomeTabScreen() {
                       style={[styles.pbRow]}
                     >
                       <View>
-                        <Text style={styles.pbRowTitle}>{row.exerciseName}</Text>
+                        <Text style={styles.pbRowTitle}>
+                          {row.exerciseName}
+                        </Text>
                         <Text style={styles.pbMaxLabel}>
                           {formatRepMaxLabel(row.tier)}
                         </Text>
                       </View>
                       <View>
                         <View style={styles.pbValueContainer}>
-                          <Text style={styles.pbValue}>{formatWeightFromKg(row.weightKg, weightUnit)}</Text>
+                          <Text style={styles.pbValue}>
+                            {formatWeightFromKg(row.weightKg, weightUnit)}
+                          </Text>
                         </View>
                       </View>
                     </View>
@@ -413,8 +448,8 @@ export default function HomeTabScreen() {
                 <View style={styles.cardBody}>
                   <Text style={styles.emptyTitle}>No PRs yet</Text>
                   <Text style={styles.emptySubtitle}>
-                    Log a PB from a workout and it will show up here. First one is
-                    the best one.
+                    Log a PB from a workout and it will show up here. First one
+                    is the best one.
                   </Text>
                 </View>
                 <SmallChevron />
@@ -428,8 +463,8 @@ export default function HomeTabScreen() {
               title="Quick links"
               iconSizeOverride={18}
               description="References and extras you will reuse"
-              size='small'
-              theme='gold'
+              size="small"
+              theme="gold"
             />
             <View style={styles.toolsRow}>
               <TouchableOpacity
@@ -460,8 +495,8 @@ export default function HomeTabScreen() {
               icon="person-circle-outline"
               title="You"
               description="Settings and preferences"
-              size='small'
-              theme='gold'
+              size="small"
+              theme="gold"
             />
             <TouchableOpacity
               style={workoutScreenStyles.startSessionButton}
@@ -480,6 +515,6 @@ export default function HomeTabScreen() {
           </View>
         </View>
       </StandardLayout.Body>
-    </StandardLayout >
+    </StandardLayout>
   );
 }
