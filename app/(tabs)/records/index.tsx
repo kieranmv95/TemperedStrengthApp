@@ -1,13 +1,14 @@
 import Award from '@/src/components/Award';
+import { Card, SmallChevron } from '@/src/components/ds';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getAll } from '@/src/data/awards';
 import { getAllExercises } from '@/src/data/exercises';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import type { Exercise } from '@/src/types/exercise';
-import { summarizePersonalBests } from '@/src/utils/personalBests';
+import { listPersonalBestSummaryLines } from '@/src/utils/personalBests';
 import { getPersonalBestsStore } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
@@ -111,33 +112,38 @@ export default function RecordsScreen() {
 
   const renderPbRow = useCallback(
     ({ item }: { item: Exercise }) => {
-      const summary = pbStore
-        ? summarizePersonalBests(pbStore[item.id] ?? {}, weightUnit)
-        : '…';
+      const pbLines = listPersonalBestSummaryLines(
+        pbStore?.[item.id] ?? {},
+        weightUnit
+      );
       return (
-        <TouchableOpacity
-          style={styles.pbRow}
+        <Card
           onPress={() => router.push(`/records/${item.id}`)}
+          accessibilityLabel="Open exercise"
         >
           <View style={styles.pbRowText}>
             <Text style={styles.pbRowTitle}>{item.name}</Text>
             <Text style={styles.pbRowMeta}>{item.muscle}</Text>
-            <Text
-              style={[
-                styles.pbRowSummary,
-                summary === 'No PBs logged' && styles.pbRowSummaryEmpty,
-              ]}
-              numberOfLines={2}
-            >
-              {summary}
-            </Text>
+            {pbLines.length === 0 ? (
+              <Text style={[styles.pbRowSummary, styles.pbRowSummaryEmpty]}>
+                No PBs logged
+              </Text>
+            ) : (
+              <View style={styles.pbRowPills}>
+                {pbLines.map((line) => (
+                  <Pill
+                    key={`${item.id}-${line.tier}`}
+                    label={line.label}
+                    isActive={true}
+                    onPress={() => { }}
+                    disabled
+                  />
+                ))}
+              </View>
+            )}
           </View>
-          <Ionicons
-            name="chevron-forward"
-            size={20}
-            color={Colors.textPlaceholder}
-          />
-        </TouchableOpacity>
+          <SmallChevron />
+        </Card>
       );
     },
     [pbStore, weightUnit]
@@ -336,16 +342,6 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.section,
     gap: Spacing.xl,
   },
-  pbRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    padding: Spacing.xxl,
-    gap: Spacing.md,
-  },
   pbRowText: {
     flex: 1,
     gap: Spacing.xs,
@@ -358,6 +354,12 @@ const styles = StyleSheet.create({
   pbRowMeta: {
     color: Colors.textMuted,
     fontSize: FontSize.lg,
+  },
+  pbRowPills: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
+    marginTop: Spacing.xs,
   },
   pbRowSummary: {
     color: Colors.textSecondary,

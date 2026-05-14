@@ -235,20 +235,34 @@ export function parseRepMaxParam(raw: string | undefined): RepMax | null {
   return n;
 }
 
+export type PersonalBestSummaryLine = { tier: RepMax; label: string };
+
+/** Ordered PB lines for UI chips (same order and copy as {@link summarizePersonalBests}). */
+export function listPersonalBestSummaryLines(
+  ledger: ExercisePersonalBestsLedger,
+  unit: WeightUnit = 'kg'
+): PersonalBestSummaryLine[] {
+  const lines: PersonalBestSummaryLine[] = [];
+  for (const tier of REP_MAX_ORDER) {
+    const best = getCurrentBestForTier(ledger, tier);
+    if (best) {
+      lines.push({
+        tier,
+        label: `${formatRepMaxLabel(tier)}: ${formatWeightFromKg(best.weight, unit)}`,
+      });
+    }
+  }
+  return lines;
+}
+
 export function summarizePersonalBests(
   ledger: ExercisePersonalBestsLedger,
   unit: WeightUnit = 'kg'
 ): string {
-  const parts: string[] = [];
-  for (const tier of REP_MAX_ORDER) {
-    const best = getCurrentBestForTier(ledger, tier);
-    if (best) {
-      parts.push(
-        `${formatRepMaxLabel(tier)}: ${formatWeightFromKg(best.weight, unit)}`
-      );
-    }
-  }
-  return parts.length > 0 ? parts.join(' | ') : 'No PBs logged';
+  const lines = listPersonalBestSummaryLines(ledger, unit);
+  return lines.length > 0
+    ? lines.map((l) => l.label).join(' | ')
+    : 'No PBs logged';
 }
 
 /** 1RM tier only — used for exercise card Best / Latest line. */

@@ -1,11 +1,13 @@
-import { PbModalDateTimeField } from '@/src/components/PbModalDateTimeField';
-import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
-import { getExerciseById } from '@/src/data/exercises';
+import { Card, SmallChevron } from '@/src/components/ds';
 import {
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
   IosKeyboardDoneAccessory,
 } from '@/src/components/forms/IosKeyboardDoneAccessory';
+import { PbModalDateTimeField } from '@/src/components/PbModalDateTimeField';
+import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { getExerciseById } from '@/src/data/exercises';
+import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import type { RepMax } from '@/src/types/personalBests';
 import {
   formatRepMaxLabel,
@@ -13,12 +15,11 @@ import {
   getLatestEntryForTier,
   REP_MAX_ORDER,
 } from '@/src/utils/personalBests';
-import { useWeightUnit } from '@/src/hooks/useWeightUnit';
+import { asStringId } from '@/src/utils/routeParams';
 import {
   getPersonalBestsForExercise,
   savePersonalBest,
 } from '@/src/utils/storage';
-import { asStringId } from '@/src/utils/routeParams';
 import {
   formatWeightFromKg,
   parseUserWeightInputToKg,
@@ -198,9 +199,9 @@ export default function ExercisePersonalBestsScreen() {
         </Text>
 
         <TouchableOpacity style={localStyles.logButton} onPress={openLog}>
-          <Text style={localStyles.logButtonText}>Log lift</Text>
+          <Text style={localStyles.logButtonText}>Log Lift</Text>
           <Ionicons
-            name="add-circle-outline"
+            name="add"
             size={22}
             color={Colors.textOnAccent}
           />
@@ -223,11 +224,10 @@ export default function ExercisePersonalBestsScreen() {
                 (latest.weight !== best.weight ||
                   latest.achievedAt !== best.achievedAt);
               return (
-                <TouchableOpacity
+                <Card
                   key={tier}
-                  style={localStyles.tierRow}
                   onPress={() => router.push(`/records/${exerciseId}/${tier}`)}
-                  activeOpacity={0.7}
+                  accessibilityLabel="Open rep max history"
                 >
                   <View style={localStyles.tierRowLeft}>
                     <Text style={localStyles.tierLabel}>
@@ -243,51 +243,47 @@ export default function ExercisePersonalBestsScreen() {
                     {best ? (
                       <View>
                         {showLatest && latest ? (
-                          <>
-                            <Text style={localStyles.tierSubLabel}>Best</Text>
-                            <Text style={localStyles.tierWeight}>
-                              {formatWeightFromKg(best.weight, weightUnit)}
-                            </Text>
-                            <Text style={localStyles.tierDate}>
-                              {new Date(best.achievedAt).toLocaleDateString()}
-                            </Text>
-                            <Text
-                              style={[
-                                localStyles.tierSubLabel,
-                                localStyles.tierLatestLabel,
-                              ]}
-                            >
-                              Latest
-                            </Text>
-                            <Text style={localStyles.tierWeight}>
-                              {formatWeightFromKg(latest.weight, weightUnit)}
-                            </Text>
-                            <Text style={localStyles.tierDate}>
-                              {new Date(latest.achievedAt).toLocaleDateString()}
-                            </Text>
-                          </>
+                          <View style={localStyles.doubleTier}>
+                            <View style={localStyles.tierHolder}>
+                              <Text style={localStyles.tierSubLabel}>Best</Text>
+                              <Text style={localStyles.tierWeight}>
+                                {formatWeightFromKg(best.weight, weightUnit)}
+                              </Text>
+                              <Text style={localStyles.tierDate}>
+                                {new Date(best.achievedAt).toLocaleDateString()}
+                              </Text>
+                            </View>
+                            <View style={localStyles.tierHolder}>
+                              <Text style={localStyles.tierSubLabel}>
+                                Latest
+                              </Text>
+                              <Text style={localStyles.tierWeight}>
+                                {formatWeightFromKg(latest.weight, weightUnit)}
+                              </Text>
+                              <Text style={localStyles.tierDate}>
+                                {new Date(latest.achievedAt).toLocaleDateString()}
+                              </Text>
+                            </View>
+                          </View>
                         ) : (
-                          <>
-                            <Text style={localStyles.tierWeight}>
-                              {formatWeightFromKg(best.weight, weightUnit)}
-                            </Text>
-                            <Text style={localStyles.tierDate}>
-                              {new Date(best.achievedAt).toLocaleDateString()}
-                            </Text>
-                          </>
+                          <View style={localStyles.tierHolder}>
+                            <View>
+                              <Text style={localStyles.tierWeight}>
+                                {formatWeightFromKg(best.weight, weightUnit)}
+                              </Text>
+                              <Text style={localStyles.tierDate}>
+                                {new Date(best.achievedAt).toLocaleDateString()}
+                              </Text>
+                            </View>
+                          </View>
                         )}
                       </View>
                     ) : (
                       <Text style={localStyles.tierEmpty}>—</Text>
                     )}
-                    <Ionicons
-                      name="chevron-forward"
-                      size={20}
-                      color={Colors.textPlaceholder}
-                      style={localStyles.tierChevron}
-                    />
+                    <SmallChevron />
                   </View>
-                </TouchableOpacity>
+                </Card>
               );
             })}
           </View>
@@ -309,7 +305,7 @@ export default function ExercisePersonalBestsScreen() {
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
             >
-              <Text style={localStyles.modalTitle}>Log lift</Text>
+              <Text style={localStyles.modalTitle}>Log Lift</Text>
               <Text style={localStyles.modalLabel}>Rep max</Text>
               <ScrollView
                 horizontal
@@ -409,16 +405,6 @@ const localStyles = StyleSheet.create({
   tierList: {
     gap: Spacing.xl,
   },
-  tierRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: Colors.backgroundCard,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
-  },
   tierRowLeft: {
     flex: 1,
     marginRight: Spacing.md,
@@ -427,9 +413,6 @@ const localStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.sm,
-  },
-  tierChevron: {
-    marginLeft: Spacing.xs,
   },
   tierLabel: {
     color: Colors.textPrimary,
@@ -445,22 +428,18 @@ const localStyles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.md,
     fontWeight: '600',
-    textAlign: 'right',
-    marginBottom: Spacing.xs,
-  },
-  tierLatestLabel: {
-    marginTop: Spacing.sm,
+    textAlign: 'center',
   },
   tierWeight: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '600',
-    textAlign: 'right',
+    color: Colors.accent,
+    fontSize: FontSize.xxl,
+    fontWeight: '700',
+    textAlign: 'center',
   },
   tierDate: {
     color: Colors.textMuted,
     fontSize: FontSize.md,
-    textAlign: 'right',
+    textAlign: 'center',
     marginTop: Spacing.xs,
   },
   tierEmpty: {
@@ -555,5 +534,20 @@ const localStyles = StyleSheet.create({
     color: Colors.textOnAccent,
     fontSize: FontSize.lg,
     fontWeight: '600',
+  },
+  doubleTier: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  tierHolder: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.lg,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.xl,
   },
 });

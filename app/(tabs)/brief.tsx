@@ -1,5 +1,5 @@
 import { ArticleCard } from '@/src/components/brief/ArticleCard';
-import { CuratedSection } from '@/src/components/ds';
+import { Card, CuratedSection } from '@/src/components/ds';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
@@ -173,17 +173,16 @@ export default function BriefScreen() {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.section}>
-            <View>
+            <View style={styles.subSection}>
               <CuratedSection
                 title="Terminology"
                 description="Quick definitions for common training terms"
                 size='medium'
               />
 
-              <TouchableOpacity
-                style={styles.terminologyCtaCard}
+              <Card
                 onPress={handleSeeAllGlossary}
-                activeOpacity={0.8}
+                accessibilityLabel="Browse the glossary"
               >
                 <View style={styles.terminologyCtaContent}>
                   <Text style={styles.terminologyCtaTitle}>
@@ -194,7 +193,7 @@ export default function BriefScreen() {
                     recovery.
                   </Text>
                 </View>
-              </TouchableOpacity>
+              </Card>
             </View>
 
             <CuratedSection
@@ -229,7 +228,6 @@ export default function BriefScreen() {
           <ArticleCard
             article={item}
             onPress={handleArticlePress}
-            variant="compact"
             isFavorite={favorites.includes(item.slug)}
             onToggleFavorite={handleToggleFavorite}
           />
@@ -336,6 +334,9 @@ export default function BriefScreen() {
 }
 
 const styles = StyleSheet.create({
+  subSection: {
+    gap: Spacing.md,
+  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -380,15 +381,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   terminologyCtaCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: 16,
-    padding: Spacing.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    marginTop: Spacing.md,
+    marginBottom: Spacing.lg,
   },
   terminologyCtaContent: {
     flex: 1,

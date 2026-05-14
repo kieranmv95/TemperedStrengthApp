@@ -1,4 +1,5 @@
 import { Colors } from '@/src/constants/theme';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type {
   StandaloneLogPayload,
   StandaloneWorkoutLogEntry,
@@ -11,7 +12,6 @@ import {
   resetFormForSchema,
   type FormState,
 } from '@/src/utils/standaloneWorkoutLogForm';
-import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { formatStandaloneLogCardTimestamp } from '@/src/utils/standaloneWorkoutLogFormat';
 import {
   deleteStandaloneWorkoutLogEntry,
@@ -19,6 +19,7 @@ import {
   upsertStandaloneWorkoutLogEntry,
 } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
+import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -27,7 +28,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { usePostHog } from 'posthog-react-native';
 import { increment } from '../services/metricService';
 import { BestLine } from './standaloneWorkoutLog/BestLine';
 import { LogFormModal } from './standaloneWorkoutLog/LogFormModal';
@@ -156,20 +156,20 @@ export function StandaloneWorkoutLogPanel({
 
     const entry: StandaloneWorkoutLogEntry = editingEntry
       ? {
-          ...editingEntry,
-          loggedAt,
-          payload: built.payload,
-          notes: optionalSessionNotes,
-          updatedAt: now,
-        }
+        ...editingEntry,
+        loggedAt,
+        payload: built.payload,
+        notes: optionalSessionNotes,
+        updatedAt: now,
+      }
       : {
-          id: newStandaloneLogId(),
-          workoutId: workout.id,
-          loggedAt,
-          updatedAt: now,
-          payload: built.payload,
-          notes: optionalSessionNotes,
-        };
+        id: newStandaloneLogId(),
+        workoutId: workout.id,
+        loggedAt,
+        updatedAt: now,
+        payload: built.payload,
+        notes: optionalSessionNotes,
+      };
 
     try {
       await increment('workouts_logged');
@@ -217,7 +217,7 @@ export function StandaloneWorkoutLogPanel({
         activeOpacity={0.85}
       >
         <Ionicons
-          name={logs.length === 0 ? 'add-circle-outline' : 'add-circle'}
+          name={'add'}
           size={22}
           color={Colors.textOnAccent}
           style={styles.addButtonIcon}

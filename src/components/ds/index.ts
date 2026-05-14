@@ -1,4 +1,5 @@
+import { Card } from './Card';
 import { CuratedSection } from './CuratedSection';
 import { SmallChevron } from './SmallChevron';
 
-export { CuratedSection, SmallChevron };
+export { Card, CuratedSection, SmallChevron };

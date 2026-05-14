@@ -1,4 +1,5 @@
 import { PbModalDateTimeField } from '@/src/components/PbModalDateTimeField';
+import { Card } from '@/src/components/ds';
 import {
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
   IosKeyboardDoneAccessory,
@@ -6,9 +7,9 @@ import {
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getExerciseById } from '@/src/data/exercises';
+import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import type { PersonalBestHistoryEntry } from '@/src/types/personalBests';
 import { formatRepMaxLabel, parseRepMaxParam } from '@/src/utils/personalBests';
-import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { asStringId } from '@/src/utils/routeParams';
 import {
   appendSingleTierPersonalBest,
@@ -304,7 +305,7 @@ export default function RepMaxHistoryScreen() {
             </Text>
           }
           renderItem={({ item }) => (
-            <View style={localStyles.row}>
+            <Card>
               <View style={localStyles.rowMain}>
                 <Text style={localStyles.rowWeight}>
                   {formatWeightFromKg(item.weight, weightUnit)}
@@ -333,7 +334,7 @@ export default function RepMaxHistoryScreen() {
                   />
                 </TouchableOpacity>
               </View>
-            </View>
+            </Card>
           )}
         />
       )}
@@ -476,16 +477,6 @@ const localStyles = StyleSheet.create({
     fontSize: FontSize.lg,
     textAlign: 'center',
     marginTop: Spacing.section,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: Colors.backgroundCard,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
   },
   rowMain: {
     flex: 1,

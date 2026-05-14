@@ -1,5 +1,4 @@
-import { CuratedSection } from '@/src/components/ds';
-import { SmallChevron } from '@/src/components/ds/SmallChevron';
+import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors } from '@/src/constants/theme';
@@ -282,14 +281,12 @@ export default function HomeTabScreen() {
               theme='gold'
             />
             {programSummary ? (
-              <TouchableOpacity
-                style={styles.card}
+              <Card
                 onPress={() =>
                   trackHomeLink('your_program_card', '/program', () =>
                     router.push('/program')
                   )
                 }
-                accessibilityRole="button"
                 accessibilityLabel="Open program"
               >
                 <View style={styles.cardBody}>
@@ -310,16 +307,14 @@ export default function HomeTabScreen() {
                   </Text>
                 </View>
                 <SmallChevron />
-              </TouchableOpacity>
+              </Card>
             ) : (
-              <TouchableOpacity
-                style={styles.card}
+              <Card
                 onPress={() =>
                   trackHomeLink('pick_program_card', '/program', () =>
                     router.push('/program')
                   )
                 }
-                accessibilityRole="button"
                 accessibilityLabel="Select a program"
               >
                 <View style={styles.cardBody}>
@@ -330,7 +325,7 @@ export default function HomeTabScreen() {
                   </Text>
                 </View>
                 <SmallChevron />
-              </TouchableOpacity>
+              </Card>
             )}
           </View>
 
@@ -344,14 +339,12 @@ export default function HomeTabScreen() {
               theme='gold'
             />
             {hasPersonalBests ? (
-              <TouchableOpacity
-                style={styles.card}
+              <Card
                 onPress={() =>
                   trackHomeLink('recent_wins_card', '/records', () =>
                     router.push('/records')
                   )
                 }
-                accessibilityRole="button"
                 accessibilityLabel="Open records and personal bests"
               >
                 <View style={[styles.cardBody, styles.pbListContent]}>
@@ -375,16 +368,14 @@ export default function HomeTabScreen() {
                   ))}
                 </View>
                 <SmallChevron />
-              </TouchableOpacity>
+              </Card>
             ) : (
-              <TouchableOpacity
-                style={styles.card}
+              <Card
                 onPress={() =>
                   trackHomeLink('recent_wins_empty_card', '/records', () =>
                     router.push('/records')
                   )
                 }
-                accessibilityRole="button"
                 accessibilityLabel="Open records to log personal bests"
               >
                 <View style={styles.cardBody}>
@@ -395,7 +386,7 @@ export default function HomeTabScreen() {
                   </Text>
                 </View>
                 <SmallChevron />
-              </TouchableOpacity>
+              </Card>
             )}
           </View>
 

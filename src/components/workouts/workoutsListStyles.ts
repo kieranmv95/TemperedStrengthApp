@@ -114,12 +114,7 @@ export const workoutsListStyles = StyleSheet.create({
     fontWeight: '800',
   },
   workoutCard: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
-    marginBottom: Spacing.xl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundSubtle,
+    marginBottom: Spacing.md,
   },
   sponsorCard: {
     backgroundColor: Colors.backgroundCard,
@@ -153,7 +148,6 @@ export const workoutsListStyles = StyleSheet.create({
   },
   workoutCardLocked: {
     borderColor: Colors.accent,
-    borderWidth: 2,
     opacity: 0.6,
   },
   cardHeader: {

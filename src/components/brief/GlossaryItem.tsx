@@ -1,16 +1,15 @@
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { GlossaryTerm } from '@/src/types/brief';
-import { Ionicons } from '@expo/vector-icons';
-import { BorderRadius, Colors, FontSize, Spacing } from '../../constants/theme';
+import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
 import {
   LayoutAnimation,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import { usePostHog } from 'posthog-react-native';
+import { BorderRadius, Colors, FontSize, Spacing } from '../../constants/theme';
+import { Card, SmallChevron } from '../ds';
 
 type GlossaryItemProps = {
   term: GlossaryTerm;
@@ -32,10 +31,10 @@ export function GlossaryItem({ term, variant = 'compact' }: GlossaryItemProps) {
   };
 
   return (
-    <TouchableOpacity
+    <Card
       style={[styles.card, isExpanded && styles.cardExpanded]}
       onPress={handleToggle}
-      activeOpacity={0.7}
+      accessibilityLabel="Open glossary term"
     >
       <View style={styles.header}>
         <View style={styles.termContainer}>
@@ -46,29 +45,23 @@ export function GlossaryItem({ term, variant = 'compact' }: GlossaryItemProps) {
             </View>
           )}
         </View>
-        <Ionicons
-          name={isExpanded ? 'chevron-up' : 'chevron-down'}
-          size={20}
-          color={Colors.textPlaceholder}
-        />
+        <View style={[styles.chevronContainer, isExpanded && styles.chevronContainerExpanded]}>
+          <SmallChevron />
+        </View>
       </View>
       {isExpanded && (
         <View style={styles.definitionContainer}>
           <Text style={styles.definition}>{term.definition}</Text>
         </View>
       )}
-    </TouchableOpacity>
+    </Card>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
-    marginBottom: Spacing.lg,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    flexDirection: 'column',
+    marginBottom: Spacing.md,
   },
   cardExpanded: {
     borderColor: Colors.backgroundBorder,
@@ -112,5 +105,11 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
     fontSize: FontSize.lg,
     lineHeight: 22,
+  },
+  chevronContainer: {
+    transform: [{ rotate: '90deg' }],
+  },
+  chevronContainerExpanded: {
+    transform: [{ rotate: '-90deg' }],
   },
 });

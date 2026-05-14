@@ -111,16 +111,6 @@ export const homeScreenStyles = StyleSheet.create({
     fontSize: FontSize.md,
     fontWeight: '700',
   },
-  card: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundBorder,
-    padding: Spacing.xxl,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-  },
   cardBody: {
     flex: 1,
     gap: Spacing.sm,

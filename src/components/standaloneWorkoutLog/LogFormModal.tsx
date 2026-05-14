@@ -14,8 +14,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { logFormModalStyles as styles } from './logFormModalStyles';
 import { LogFormModalFields } from './LogFormModalFields';
+import { logFormModalStyles as styles } from './logFormModalStyles';
 import { LogFormModalWhenPickers } from './LogFormModalWhenPickers';
 
 export type LogFormModalProps = {
@@ -174,7 +174,7 @@ export function LogFormModal({
                   activeOpacity={0.85}
                 >
                   <Ionicons
-                    name="checkmark-circle"
+                    name="checkmark"
                     size={22}
                     color={Colors.textOnAccent}
                     style={styles.btnPrimaryIcon}

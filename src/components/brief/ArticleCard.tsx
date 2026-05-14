@@ -1,20 +1,19 @@
+import { Colors } from '@/src/constants/theme';
 import type { ArticleListItem } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '@/src/constants/theme';
 import React from 'react';
 import {
   Image,
-  ImageBackground,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
+import { Card, SmallChevron } from '../ds';
 import { articleCardStyles as styles } from './articleCardStyles';
 
 type ArticleCardProps = {
   article: ArticleListItem;
   onPress: (article: ArticleListItem) => void;
-  variant?: 'compact' | 'horizontal';
   isFavorite?: boolean;
   onToggleFavorite?: (slug: string) => void;
 };
@@ -22,7 +21,6 @@ type ArticleCardProps = {
 export function ArticleCard({
   article,
   onPress,
-  variant = 'compact',
   isFavorite = false,
   onToggleFavorite,
 }: ArticleCardProps) {
@@ -37,64 +35,11 @@ export function ArticleCard({
     onToggleFavorite?.(article.slug);
   };
 
-  if (variant === 'horizontal') {
-    return (
-      <TouchableOpacity
-        style={styles.horizontalCard}
-        onPress={() => onPress(article)}
-        activeOpacity={0.8}
-      >
-        <ImageBackground
-          source={{ uri: article.image }}
-          style={styles.horizontalImage}
-          imageStyle={styles.horizontalImageStyle}
-        >
-          {canFavorite && (
-            <TouchableOpacity
-              style={styles.favoriteButton}
-              onPress={handleToggleFavorite}
-              onPressIn={stopPropagation}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <Ionicons
-                name={isFavorite ? 'bookmark' : 'bookmark-outline'}
-                size={18}
-                color={isFavorite ? Colors.accent : Colors.textPlaceholder}
-              />
-            </TouchableOpacity>
-          )}
-          <View style={styles.horizontalOverlay}>
-            <View style={styles.horizontalCategoryBadge}>
-              <Text style={styles.horizontalCategoryText}>
-                {article.category}
-              </Text>
-            </View>
-            <View style={styles.horizontalContent}>
-              <Text style={styles.horizontalTitle} numberOfLines={2}>
-                {article.title}
-              </Text>
-              <View style={styles.horizontalMeta}>
-                <Ionicons
-                  name="time-outline"
-                  size={12}
-                  color={Colors.textMuted}
-                />
-                <Text style={styles.horizontalMetaText}>
-                  {article.readTime} min
-                </Text>
-              </View>
-            </View>
-          </View>
-        </ImageBackground>
-      </TouchableOpacity>
-    );
-  }
-
   return (
-    <TouchableOpacity
-      style={styles.compactCard}
+    <Card
       onPress={() => onPress(article)}
-      activeOpacity={0.7}
+      accessibilityLabel="Open article"
+      style={styles.card}
     >
       <Image source={{ uri: article.image }} style={styles.compactImage} />
       <View style={styles.compactContent}>
@@ -127,8 +72,8 @@ export function ArticleCard({
             />
           </TouchableOpacity>
         )}
-        <Ionicons name="chevron-forward" size={20} color={Colors.textOnDark} />
+        <SmallChevron />
       </View>
-    </TouchableOpacity>
+    </Card>
   );
 }
