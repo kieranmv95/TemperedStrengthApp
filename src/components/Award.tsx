@@ -9,6 +9,7 @@ type AwardProps = {
   description: string;
   variant: AwardIconVariant;
   awardPro?: boolean;
+  isUserPro?: boolean;
   fontSize?: number;
   granted: boolean;
 };
@@ -19,23 +20,26 @@ export default function Award({
   description,
   variant,
   awardPro = false,
+  isUserPro = false,
   fontSize,
   granted,
 }: AwardProps) {
+  const isLocked = awardPro || (isUserPro && !awardPro);
+
   return (
     <View style={[styles.container, !granted && styles.containerLocked]}>
       <View style={styles.icon}>
         <AwardIcon
           variant={variant}
-          text={awardPro ? 'Locked' : badgeTitle}
+          text={isLocked ? 'Locked' : badgeTitle}
           size={80}
           fontSize={fontSize}
         />
       </View>
       <View style={styles.content}>
-        <Text style={styles.title}>{awardPro ? 'Locked Award' : title}</Text>
+        <Text style={styles.title}>{isLocked ? 'Locked Award' : title}</Text>
         <Text style={styles.description}>
-          {awardPro ? 'Unlock all awards with a pro subscription' : description}
+          {isLocked ? 'Unlock all awards with a pro subscription' : description}
         </Text>
       </View>
     </View>
