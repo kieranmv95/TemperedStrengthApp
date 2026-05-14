@@ -21,6 +21,13 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.3.3',
+    dateLabel: 'NA',
+    notes: [
+      'Fixed a bug where the pro gate was not being respected on awards',
+    ],
+  },
+  {
     version: '2.3.2',
     dateLabel: '12th May 2026',
     notes: [
