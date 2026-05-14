@@ -403,6 +403,8 @@ export const olympic_foundations: Program = {
   name: 'Olympic Foundations',
   description:
     '4-Week technique-first foundation for the Snatch and Clean & Jerk. Week 1 is empty/light-bar skill work; Week 4 builds to a heavy technical single - NOT a 1RM test. Bar speed and movement quality are the limits, not load. Every exercise lists exact loading guidance per week (in % of 1RM and in plain language).',
+  bodyChangesSummary:
+    'Four weeks is not enough time to overhaul your physique - it is enough time to overhaul your lifts. Expect cleaner positions, better mobility through your hips, ankles, and shoulders, and far more confidence under the bar in the snatch and clean & jerk.',
   categories: ['olympic'],
   goals: ['stronger', 'athletic', 'mobility'],
   difficulty: 'intermediate',

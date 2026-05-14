@@ -102,7 +102,7 @@ export function ProgramLauncherDetailsModal({
                   style={styles.bodyChangesLinkRow}
                 >
                   <Text style={styles.bodyChangesLinkText}>
-                    How this program can change your body
+                    What this program can do for you
                   </Text>
                   <View style={{ transform: [{ rotate: bodyChangesExpanded ? '-90deg' : '90deg' }] }}>
                     <SmallChevron />
@@ -167,7 +167,7 @@ export function ProgramLauncherDetailsModal({
 
             {step === 'details' && (
               <>
-                <Text style={styles.sectionTitle}>Workouts</Text>
+                <Text style={styles.sectionTitle}>Sessions ({selectedProgram?.workouts.length ?? 0})</Text>
                 {selectedProgram?.workouts.map((workout, index) => (
                   <ProgramLauncherWorkoutPreviewRow
                     key={index}

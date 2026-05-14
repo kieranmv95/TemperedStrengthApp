@@ -886,6 +886,8 @@ export const olympic_advanced_8wk: Program = {
   name: 'Advanced Olympic Performance',
   description:
     '8-Week peaking cycle for new Snatch and Clean & Jerk 1RMs. Four phases - Accumulation, Intensification, Peaking, and a Test Week that ends with a 3-attempt competition simulation. Every working set lists the exact percentage of your 1RM.',
+  bodyChangesSummary:
+    'You will move faster under the bar and pull heavier off the floor. Eight weeks of structured peaking should sharpen your snatch and clean & jerk technique, build explosive power through your hips and legs, and leave you ready to test new 1RMs in the final week.',
   categories: ['olympic'],
   goals: ['stronger', 'athletic', 'mobility'],
   difficulty: 'advanced',

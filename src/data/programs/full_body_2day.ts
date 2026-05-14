@@ -20,6 +20,8 @@ export const full_body_2day: Program = {
   name: '2 Day Full Body',
   description:
     '12-Week Full Body Maintenance. Alternates movement variants monthly to prevent plateaus.',
+  bodyChangesSummary:
+    'You will hold onto strength and muscle without living in the gym. Two sessions a week is enough to keep your big lifts moving forward, protect your joints, and add small but steady gains across your back, legs, and chest over the twelve weeks.',
   categories: ['strength'],
   goals: ['maintenance', 'stronger', 'hypertrophy'],
   difficulty: 'beginner',

@@ -21,9 +21,11 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
-    version: '2.3.3',
+    version: '2.4.0',
     dateLabel: 'NA',
     notes: [
+      'Streaks added',
+      'Progress bar added to program',
       'Sweeping UI changes / fixes / enhancements',
       'Fixed a bug where the pro gate was not being respected on awards',
     ],

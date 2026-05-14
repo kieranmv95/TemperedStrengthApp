@@ -19,6 +19,8 @@ export const ppl_01: Program = {
   name: '3 Day Split',
   description:
     '4-Week Hypertrophy block. Rotates intensity and exercise variations to maximise muscle fibre recruitment.',
+  bodyChangesSummary:
+    'You will leave each session with a serious pump and start to look more developed across your push, pull, and leg muscles. Four weeks is the start of real hypertrophy - expect tighter arms, fuller shoulders, and stronger legs as you build the habit of progressive overload.',
   categories: ['bodybuilding'],
   goals: ['hypertrophy', 'bulking', 'leaner'],
   difficulty: 'beginner',

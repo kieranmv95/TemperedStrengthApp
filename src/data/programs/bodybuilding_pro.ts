@@ -94,6 +94,8 @@ export const bodybuilding_pro: Program = {
   name: 'Pro Bodybuilding Split',
   description:
     '16-Week advanced bodybuilding program across 4 phases: Foundation, Hypertrophy, Intensification, and Peaking. 5 days per week with dedicated muscle group focus and systematic progressive overload.',
+  bodyChangesSummary:
+    'Sixteen weeks is enough time to see real, visible change. Expect noticeable size across your chest, back, shoulders, and arms, with stronger lifts on every major movement. By the Peaking phase you will look fuller and more defined, and your work capacity in the gym will be in a different place.',
   categories: ['bodybuilding'],
   goals: ['bulking', 'hypertrophy', 'stronger'],
   difficulty: 'advanced',

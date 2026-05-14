@@ -36,6 +36,8 @@ export const bodybuilding_free: Program = {
   name: 'Traditional Bodybuilding Split',
   description:
     '4-Week classic bodybuilding block. Chest & Triceps, Back & Biceps, Legs & Shoulders. Rep ranges taper weeks 3–4 to drive progressive overload.',
+  bodyChangesSummary:
+    'You will look more developed across your chest, back, and legs. Four weeks is enough to feel pumps come on faster, master form on the main lifts, and add visible tightness if your nutrition lines up - the real size gains come from stacking blocks like this back to back.',
   categories: ['bodybuilding'],
   goals: ['bulking', 'hypertrophy', 'stronger'],
   difficulty: 'beginner',

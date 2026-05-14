@@ -19,6 +19,8 @@ export const strength_5day: Program = {
   name: '5-Day Power & Strength',
   description:
     '6-Week Strength Peak. Intensifies every 2 weeks through progressive overload and rep-range tapering.',
+  bodyChangesSummary:
+    'You will lift heavier and look the part. Six weeks across Volume, Strength, and Peak phases should add real power to your main lifts and visible density through your back, legs, and shoulders - this is a peak, not a base, so expect strength to climb each block.',
   categories: ['strength'],
   goals: ['stronger', 'athletic', 'hypertrophy'],
   difficulty: 'advanced',

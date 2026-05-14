@@ -44,6 +44,8 @@ export const powerlifting_3day: Program = {
   name: 'Traditional Powerlifting (SBD)',
   description:
     '8-Week Peaking Program. Volume drops as intensity climbs to a Week 8 testing session.',
+  bodyChangesSummary:
+    'You will squat, bench, and deadlift heavier than you did walking in. Eight weeks of peaking - dropping volume as intensity climbs - should set you up for new 1RMs in the test week, with a tighter, more powerful frame to show for it.',
   categories: ['powerlifting', 'strength'],
   goals: ['stronger', 'athletic'],
   difficulty: 'intermediate',
