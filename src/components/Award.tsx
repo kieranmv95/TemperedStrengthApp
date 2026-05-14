@@ -2,6 +2,7 @@ import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AwardIcon, { AwardIconVariant } from './AwardIcon';
+import { Card } from './ds';
 
 type AwardProps = {
   badgeTitle: string;
@@ -27,16 +28,18 @@ export default function Award({
   const isProGateLocked = awardPro && !isUserPro;
 
   return (
-    <View style={[styles.container, !granted && styles.containerLocked]}>
+    <Card>
       <View style={styles.icon}>
-        <AwardIcon
-          variant={variant}
-          text={isProGateLocked ? 'Locked' : badgeTitle}
-          size={80}
-          fontSize={fontSize}
-        />
+        <View style={(!granted || isProGateLocked) && styles.locked}>
+          <AwardIcon
+            variant={variant}
+            text={isProGateLocked ? 'Locked' : badgeTitle}
+            size={80}
+            fontSize={fontSize}
+          />
+        </View>
       </View>
-      <View style={styles.content}>
+      <View style={[styles.content, (!granted || isProGateLocked) && styles.locked]}>
         <Text style={styles.title}>
           {isProGateLocked ? 'Locked Award' : title}
         </Text>
@@ -46,18 +49,13 @@ export default function Award({
             : description}
         </Text>
       </View>
-    </View>
+    </Card>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    opacity: 1,
-    flexDirection: 'row',
-    gap: Spacing.md,
-  },
-  containerLocked: {
-    opacity: 0.5,
+  locked: {
+    opacity: 0.4,
   },
   icon: {
     alignItems: 'center',
@@ -77,9 +75,9 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   description: {
-    color: Colors.accentOverlay,
+    color: Colors.accent,
     fontSize: FontSize.md,
-    fontWeight: '400',
+    fontWeight: '500',
     flexShrink: 1,
   },
 });
