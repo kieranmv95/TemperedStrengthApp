@@ -1,3 +1,4 @@
+import { CuratedSection } from '@/src/components/ds';
 import { SmallChevron } from '@/src/components/ds/SmallChevron';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { StandardLayout } from '@/src/components/StandardLayout';
@@ -272,20 +273,14 @@ export default function HomeTabScreen() {
             )}
           </View>
 
-          <View>
-            <View style={styles.sectionheader}>
-              <View style={styles.sectionTitleRow}>
-                <Ionicons
-                  name="barbell-outline"
-                  size={20}
-                  color={Colors.accent}
-                />
-                <Text style={styles.sectionTitle}>Your program</Text>
-              </View>
-              <Text style={styles.sectionSubtitle}>
-                What is on deck today and what is left in your block
-              </Text>
-            </View>
+          <View style={styles.section}>
+            <CuratedSection
+              icon="barbell-outline"
+              title="Your program"
+              description="What is on deck today and what is left in your block"
+              size='small'
+              theme='gold'
+            />
             {programSummary ? (
               <TouchableOpacity
                 style={styles.card}
@@ -339,16 +334,15 @@ export default function HomeTabScreen() {
             )}
           </View>
 
-          <View>
-            <View style={styles.sectionheader}>
-              <View style={styles.sectionTitleRow}>
-                <Ionicons name="trophy-outline" size={20} color={Colors.accent} />
-                <Text style={styles.sectionTitle}>Recent wins</Text>
-              </View>
-              <Text style={styles.sectionSubtitle}>
-                Your last three PRs, small jumps still count
-              </Text>
-            </View>
+          <View style={styles.section}>
+            <CuratedSection
+              icon="trophy-outline"
+              title="Recent wins"
+              description="Your last three PRs, small jumps still count"
+              iconSizeOverride={18}
+              size='small'
+              theme='gold'
+            />
             {hasPersonalBests ? (
               <TouchableOpacity
                 style={styles.card}
@@ -405,20 +399,15 @@ export default function HomeTabScreen() {
             )}
           </View>
 
-          <View>
-            <View style={styles.sectionheader}>
-              <View style={styles.sectionTitleRow}>
-                <Ionicons
-                  name="sparkles-outline"
-                  size={20}
-                  color={Colors.accent}
-                />
-                <Text style={styles.sectionTitle}>Quick links</Text>
-              </View>
-              <Text style={styles.sectionSubtitle}>
-                References and extras you will reuse
-              </Text>
-            </View>
+          <View style={styles.section}>
+            <CuratedSection
+              icon="sparkles-outline"
+              title="Quick links"
+              iconSizeOverride={18}
+              description="References and extras you will reuse"
+              size='small'
+              theme='gold'
+            />
             <View style={styles.toolsRow}>
               <TouchableOpacity
                 style={styles.toolButton}
@@ -443,18 +432,14 @@ export default function HomeTabScreen() {
             </View>
           </View>
 
-          <View>
-            <View style={styles.sectionheader}>
-              <View style={styles.sectionTitleRow}>
-                <Ionicons
-                  name="person-circle-outline"
-                  size={20}
-                  color={Colors.accent}
-                />
-                <Text style={styles.sectionTitle}>You</Text>
-              </View>
-              <Text style={styles.sectionSubtitle}>Settings and preferences</Text>
-            </View>
+          <View style={styles.section}>
+            <CuratedSection
+              icon="person-circle-outline"
+              title="You"
+              description="Settings and preferences"
+              size='small'
+              theme='gold'
+            />
             <TouchableOpacity
               style={workoutScreenStyles.startSessionButton}
               onPress={() =>

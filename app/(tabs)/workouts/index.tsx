@@ -1,3 +1,4 @@
+import { CuratedSection } from '@/src/components/ds';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
@@ -398,12 +399,12 @@ export default function WorkoutsScreen() {
             ListHeaderComponent={
               <View style={styles.curatedSectionList}>
                 <View>
-                  <View style={styles.curatedSectionHeader}>
-                    <Text style={styles.curatedSectionTitle}>Disciplines</Text>
-                    <Text style={styles.curatedSectionHelper}>
-                      get started with what you already know
-                    </Text>
-                  </View>
+                  <CuratedSection
+                    title="Disciplines"
+                    description="get started with what you already know"
+                    size='large'
+                    style={styles.titleSpace}
+                  />
                   <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
@@ -447,14 +448,12 @@ export default function WorkoutsScreen() {
 
                 {showS1AndS2 && womensPicksWorkouts.length > 0 && (
                   <View>
-                    <View style={styles.curatedSectionHeader}>
-                      <Text style={styles.curatedSectionTitle}>
-                        Recommended for you
-                      </Text>
-                      <Text style={styles.curatedSectionHelper}>
-                        A feel-good place to start.
-                      </Text>
-                    </View>
+                    <CuratedSection
+                      title="Recommended for you"
+                      description="A feel-good place to start."
+                      size='large'
+                      style={styles.titleSpace}
+                    />
                     <ScrollView
                       horizontal
                       showsHorizontalScrollIndicator={false}
@@ -475,14 +474,12 @@ export default function WorkoutsScreen() {
 
                 {showS1AndS2 && legsAndGlutesWorkouts.length > 0 && (
                   <View>
-                    <View style={styles.curatedSectionHeader}>
-                      <Text style={styles.curatedSectionTitle}>
-                        Legs &amp; Glutes
-                      </Text>
-                      <Text style={styles.curatedSectionHelper}>
-                        Strong legs, confident you.
-                      </Text>
-                    </View>
+                    <CuratedSection
+                      title="Legs &amp; Glutes"
+                      description="Strong legs, confident you."
+                      size='large'
+                      style={styles.titleSpace}
+                    />
                     <ScrollView
                       horizontal
                       showsHorizontalScrollIndicator={false}
@@ -503,12 +500,12 @@ export default function WorkoutsScreen() {
 
                 {showS3 && getBigWorkouts.length > 0 && (
                   <View>
-                    <View style={styles.curatedSectionHeader}>
-                      <Text style={styles.curatedSectionTitle}>Get Big</Text>
-                      <Text style={styles.curatedSectionHelper}>
-                        Big pump. Feel strong.
-                      </Text>
-                    </View>
+                    <CuratedSection
+                      title="Get Big"
+                      description="Big pump. Feel strong."
+                      size='large'
+                      style={styles.titleSpace}
+                    />
                     <ScrollView
                       horizontal
                       showsHorizontalScrollIndicator={false}
@@ -527,12 +524,12 @@ export default function WorkoutsScreen() {
                   </View>
                 )}
 
-                <View style={styles.curatedSectionHeader}>
-                  <Text style={styles.curatedSectionTitle}>All Workouts</Text>
-                  <Text style={styles.curatedSectionHelper}>
-                    All our workouts, over {filteredWorkouts.length - 1}+ workouts.
-                  </Text>
-                </View>
+                <CuratedSection
+                  title="All Workouts"
+                  description="All our workouts, over {filteredWorkouts.length - 1}+ workouts."
+                  size='large'
+                  style={styles.titleSpace}
+                />
               </View>
             }
             renderItem={({ item }) => (

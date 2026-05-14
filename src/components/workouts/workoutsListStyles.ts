@@ -37,23 +37,6 @@ export const workoutsListStyles = StyleSheet.create({
   curatedSectionList: {
     gap: Spacing.section,
   },
-  curatedSectionHeader: {
-    marginBottom: Spacing.lg,
-    borderLeftWidth: 1,
-    borderLeftColor: Colors.accent,
-    paddingLeft: Spacing.md,
-  },
-  curatedSectionTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXl,
-    fontWeight: '800',
-    marginBottom: 4,
-  },
-  curatedSectionHelper: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-  },
   curatedScrollContent: {
     gap: Spacing.lg,
     paddingRight: Spacing.xl,
@@ -112,6 +95,9 @@ export const workoutsListStyles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-start',
     gap: Spacing.xs,
+  },
+  titleSpace: {
+    marginBottom: Spacing.md,
   },
   curatedCardMetaText: {
     color: Colors.textPrimary,

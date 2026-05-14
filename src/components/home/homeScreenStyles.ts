@@ -2,6 +2,9 @@ import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { StyleSheet } from 'react-native';
 
 export const homeScreenStyles = StyleSheet.create({
+  section: {
+    gap: Spacing.md,
+  },
   spacing: {
     gap: Spacing.section,
   },
@@ -107,29 +110,6 @@ export const homeScreenStyles = StyleSheet.create({
   notificationCtaText: {
     fontSize: FontSize.md,
     fontWeight: '700',
-  },
-  sectionheader: {
-    borderLeftWidth: 1,
-    borderLeftColor: Colors.accent,
-    paddingLeft: Spacing.xl,
-    marginBottom: Spacing.xl,
-  },
-  sectionTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-    marginBottom: 4,
-  },
-  sectionTitle: {
-    color: Colors.accent,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-    flex: 1,
-  },
-  sectionSubtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
   },
   card: {
     backgroundColor: Colors.backgroundCard,

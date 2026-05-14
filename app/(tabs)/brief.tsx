@@ -1,4 +1,5 @@
 import { ArticleCard } from '@/src/components/brief/ArticleCard';
+import { CuratedSection } from '@/src/components/ds';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
@@ -171,32 +172,14 @@ export default function BriefScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
-          <>
-            {/* TERMINOLOGY - Glossary Section */}
-            <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <View style={styles.sectionTitleRow}>
-                  <Ionicons name="book" size={18} color={Colors.accent} />
-                  <View style={styles.sectionTitleStack}>
-                    <Text style={styles.sectionTitle}>TERMINOLOGY</Text>
-                    <Text style={styles.sectionSubtitle}>
-                      Quick definitions for common training terms
-                    </Text>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  style={styles.ctaButton}
-                  onPress={handleSeeAllGlossary}
-                  activeOpacity={0.85}
-                >
-                  <Text style={styles.ctaButtonText}>See all</Text>
-                  <Ionicons
-                    name="chevron-forward"
-                    size={16}
-                    color={Colors.textOnAccent}
-                  />
-                </TouchableOpacity>
-              </View>
+          <View style={styles.section}>
+            <View>
+              <CuratedSection
+                title="Terminology"
+                description="Quick definitions for common training terms"
+                size='medium'
+              />
+
               <TouchableOpacity
                 style={styles.terminologyCtaCard}
                 onPress={handleSeeAllGlossary}
@@ -211,36 +194,18 @@ export default function BriefScreen() {
                     recovery.
                   </Text>
                 </View>
-                <Ionicons
-                  name="chevron-forward"
-                  size={20}
-                  color={Colors.textOnDark}
-                />
               </TouchableOpacity>
             </View>
 
-            {/* FIELD INTEL - Articles Section */}
-            <View>
-              <View style={styles.sectionHeader}>
-                <View style={styles.sectionTitleRow}>
-                  <Ionicons
-                    name="document-text"
-                    size={18}
-                    color={Colors.accent}
-                  />
-                  <View style={styles.sectionTitleStack}>
-                    <Text style={styles.sectionTitle}>ARTICLES</Text>
-                    <Text style={styles.sectionSubtitle}>
-                      Quick definitions for common training terms
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </>
+            <CuratedSection
+              title="Articles"
+              description="Your daily intel for the iron game"
+              size='medium'
+            />
+          </View>
         }
         ListEmptyComponent={
-          <View style={styles.emptyState}>
+          <View style={styles.emptyState} >
             <Ionicons
               name={showFavoritesOnly ? 'bookmark-outline' : 'document-text'}
               size={64}
@@ -269,7 +234,7 @@ export default function BriefScreen() {
             onToggleFavorite={handleToggleFavorite}
           />
         )}
-        ListFooterComponent={<View style={styles.bottomSpacer} />}
+        ListFooterComponent={< View style={styles.bottomSpacer} />}
       />
     );
   };
@@ -335,7 +300,7 @@ export default function BriefScreen() {
                 : isAllChip
                   ? activeCategory === 'All' && !showFavoritesOnly
                   : activeCategory === (item.key as ArticleCategory) &&
-                    !showFavoritesOnly;
+                  !showFavoritesOnly;
 
               const count = isFavoritesChip
                 ? favorites.length
@@ -397,33 +362,8 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   section: {
-    marginBottom: Spacing.section,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: Spacing.xxl,
-  },
-  sectionTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-  },
-  sectionTitleStack: {
-    flex: 1,
-    gap: 2,
-  },
-  sectionTitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '700',
-    letterSpacing: 1.5,
-  },
-  sectionSubtitle: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.base,
-    fontWeight: '500',
+    gap: Spacing.section,
+    marginBottom: Spacing.md,
   },
   ctaButton: {
     flexDirection: 'row',
@@ -448,6 +388,7 @@ const styles = StyleSheet.create({
     padding: Spacing.xxl,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,
+    marginTop: Spacing.md,
   },
   terminologyCtaContent: {
     flex: 1,
