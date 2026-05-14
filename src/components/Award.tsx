@@ -24,22 +24,26 @@ export default function Award({
   fontSize,
   granted,
 }: AwardProps) {
-  const isLocked = awardPro || (isUserPro && !awardPro);
+  const isProGateLocked = awardPro && !isUserPro;
 
   return (
     <View style={[styles.container, !granted && styles.containerLocked]}>
       <View style={styles.icon}>
         <AwardIcon
           variant={variant}
-          text={isLocked ? 'Locked' : badgeTitle}
+          text={isProGateLocked ? 'Locked' : badgeTitle}
           size={80}
           fontSize={fontSize}
         />
       </View>
       <View style={styles.content}>
-        <Text style={styles.title}>{isLocked ? 'Locked Award' : title}</Text>
+        <Text style={styles.title}>
+          {isProGateLocked ? 'Locked Award' : title}
+        </Text>
         <Text style={styles.description}>
-          {isLocked ? 'Unlock all awards with a pro subscription' : description}
+          {isProGateLocked
+            ? 'This award is locked because you do not have Pro.'
+            : description}
         </Text>
       </View>
     </View>
