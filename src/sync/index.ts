@@ -6,7 +6,12 @@ export {
   isInternalKey,
 } from './constants';
 export { decideWinner } from './decision';
-export type { SyncDecision, SyncConflict } from './types';
+export type {
+  SyncDecision,
+  SyncConflict,
+  SyncMerger,
+  SyncMergerRegistry,
+} from './types';
 export type {
   SyncProvider,
   SyncProviderAvailability,

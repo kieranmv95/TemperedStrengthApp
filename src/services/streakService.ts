@@ -165,13 +165,38 @@ async function doApply(now: Date): Promise<StreakSnapshot> {
  * Records today's open (idempotent per calendar day) and persists via syncSetItem.
  * Serialized so concurrent callers (e.g. tab layout + home load) do not corrupt state.
  */
-export function applyDailyStreakCheckIn(now: Date = new Date()): Promise<StreakSnapshot> {
+export function applyDailyStreakCheckIn(
+  now: Date = new Date()
+): Promise<StreakSnapshot> {
   const run = applyMutex.then(() => doApply(now));
   applyMutex = run.then(
     () => undefined,
     () => undefined
   );
   return run;
+}
+
+/**
+ * Merge two streak blobs by union of dates and max of best. Streak entries are
+ * monotonically additive (a check-in is never undone), so the union is always
+ * the correct outcome and there is no real conflict to ask the user about.
+ *
+ * Returns a serialised StreakStateV1. Returns null only if both sides are
+ * missing, in which case there is nothing to merge.
+ */
+export function mergeStreakState(
+  localRaw: string | null,
+  icloudRaw: string | null
+): string | null {
+  if (localRaw === null && icloudRaw === null) return null;
+  const local = parseStreakState(localRaw);
+  const cloud = parseStreakState(icloudRaw);
+  const dates = trimOldestDates(
+    uniqueSortedDates([...local.dates, ...cloud.dates])
+  );
+  const best = Math.max(local.best, cloud.best, longestConsecutiveRun(dates));
+  const merged: StreakStateV1 = { v: 1, dates, best };
+  return JSON.stringify(merged);
 }
 
 export type WeekStripDay = {

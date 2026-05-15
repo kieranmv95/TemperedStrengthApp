@@ -5,6 +5,7 @@ import {
   currentStreakEndingAt,
   formatLocalYMD,
   longestConsecutiveRun,
+  mergeStreakState,
   parseStreakState,
   prevLocalYMD,
   STREAK_STATE_KEY,
@@ -26,10 +27,9 @@ describe('formatLocalYMD / prevLocalYMD', () => {
 
 describe('uniqueSortedDates', () => {
   it('dedupes and sorts', () => {
-    expect(uniqueSortedDates(['2026-05-02', '2026-05-01', '2026-05-01'])).toEqual([
-      '2026-05-01',
-      '2026-05-02',
-    ]);
+    expect(
+      uniqueSortedDates(['2026-05-02', '2026-05-01', '2026-05-01'])
+    ).toEqual(['2026-05-01', '2026-05-02']);
   });
 });
 
@@ -66,7 +66,12 @@ describe('currentStreakEndingAt', () => {
   });
 
   it('stops at first gap', () => {
-    const set = new Set(['2026-05-10', '2026-05-12', '2026-05-13', '2026-05-14']);
+    const set = new Set([
+      '2026-05-10',
+      '2026-05-12',
+      '2026-05-13',
+      '2026-05-14',
+    ]);
     expect(currentStreakEndingAt(set, '2026-05-14')).toBe(3);
   });
 });
@@ -114,6 +119,62 @@ describe('weekDaysStartingMonday', () => {
   });
 });
 
+describe('mergeStreakState', () => {
+  it('returns null when both sides are missing', () => {
+    expect(mergeStreakState(null, null)).toBeNull();
+  });
+
+  it('takes the union of dates and the max best across sides', () => {
+    const local = JSON.stringify({
+      v: 1,
+      dates: ['2026-05-13', '2026-05-14'],
+      best: 2,
+    });
+    const cloud = JSON.stringify({
+      v: 1,
+      dates: ['2026-05-12', '2026-05-13'],
+      best: 5,
+    });
+    const merged = mergeStreakState(local, cloud);
+    expect(merged).not.toBeNull();
+    const parsed = parseStreakState(merged);
+    expect(parsed.dates).toEqual(['2026-05-12', '2026-05-13', '2026-05-14']);
+    expect(parsed.best).toBe(5);
+  });
+
+  it('recomputes best from merged dates when each side underreports', () => {
+    const local = JSON.stringify({
+      v: 1,
+      dates: ['2026-05-12', '2026-05-13'],
+      best: 2,
+    });
+    const cloud = JSON.stringify({
+      v: 1,
+      dates: ['2026-05-14', '2026-05-15'],
+      best: 2,
+    });
+    const merged = parseStreakState(mergeStreakState(local, cloud));
+    expect(merged.dates).toEqual([
+      '2026-05-12',
+      '2026-05-13',
+      '2026-05-14',
+      '2026-05-15',
+    ]);
+    expect(merged.best).toBe(4);
+  });
+
+  it('treats one missing side as adopting the present side', () => {
+    const cloud = JSON.stringify({
+      v: 1,
+      dates: ['2026-05-14'],
+      best: 1,
+    });
+    const merged = parseStreakState(mergeStreakState(null, cloud));
+    expect(merged.dates).toEqual(['2026-05-14']);
+    expect(merged.best).toBe(1);
+  });
+});
+
 describe('applyDailyStreakCheckIn', () => {
   beforeEach(async () => {
     await AsyncStorage.removeItem(STREAK_STATE_KEY);
@@ -139,7 +200,9 @@ describe('applyDailyStreakCheckIn', () => {
   it('resets current streak after a missed day', async () => {
     await applyDailyStreakCheckIn(new Date(2026, 4, 10, 9, 0, 0));
     await applyDailyStreakCheckIn(new Date(2026, 4, 11, 9, 0, 0));
-    const afterGap = await applyDailyStreakCheckIn(new Date(2026, 4, 13, 9, 0, 0));
+    const afterGap = await applyDailyStreakCheckIn(
+      new Date(2026, 4, 13, 9, 0, 0)
+    );
     expect(afterGap.currentStreak).toBe(1);
     expect(afterGap.bestStreak).toBeGreaterThanOrEqual(2);
   });

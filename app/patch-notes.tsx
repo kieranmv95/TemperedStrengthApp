@@ -21,8 +21,15 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.4.1',
+    dateLabel: '15th May 2026',
+    notes: [
+      'Fixed a bug where the sync was intermittently failing with streaks',
+    ],
+  },
+  {
     version: '2.4.0',
-    dateLabel: 'NA',
+    dateLabel: '15th May 2026',
     notes: [
       'Streaks added',
       'Progress bar added to program',

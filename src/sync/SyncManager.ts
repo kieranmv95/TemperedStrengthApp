@@ -2,12 +2,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { encodeICloudEnvelope, parseICloudPayload } from './encoding';
 import { decideWinner } from './decision';
 import { isExcludedFromSync, SYNC_TS_PREFIX } from './constants';
-import type { SyncDecision, SyncConflict } from './types';
+import type { SyncDecision, SyncConflict, SyncMergerRegistry } from './types';
 import type { SyncProvider } from './providers/SyncProvider';
 
 type SyncManagerOptions = {
   provider: SyncProvider;
   requestConflictDecision: (conflicts: SyncConflict[]) => Promise<SyncDecision>;
+  /**
+   * Per-key merge functions. When `decideWinner` returns a conflict for a key
+   * with a registered merger, the manager auto-resolves by writing the merged
+   * value to both sides instead of prompting the user.
+   */
+  mergers?: SyncMergerRegistry;
 };
 
 function tsKey(key: string): string {
@@ -32,12 +38,31 @@ async function writeLocalTs(key: string, ts: number): Promise<void> {
 export class SyncManager {
   private readonly provider: SyncProvider;
   private readonly requestConflictDecision: SyncManagerOptions['requestConflictDecision'];
+  private readonly mergers: SyncMergerRegistry;
 
   private syncing = false;
 
   constructor(options: SyncManagerOptions) {
     this.provider = options.provider;
     this.requestConflictDecision = options.requestConflictDecision;
+    this.mergers = options.mergers ?? {};
+  }
+
+  private tryAutoMerge(cmp: {
+    key: string;
+    local: { value: string | null };
+    icloud: { value: string | null; deleted: boolean };
+  }): string | null {
+    const merger = this.mergers[cmp.key];
+    if (!merger) return null;
+    const cloudValue = cmp.icloud.deleted ? null : cmp.icloud.value;
+    try {
+      const merged = merger(cmp.local.value, cloudValue);
+      return typeof merged === 'string' ? merged : null;
+    } catch (error) {
+      console.error(`Auto-merge failed for ${cmp.key}:`, error);
+      return null;
+    }
   }
 
   async mirrorSet(key: string, value: string): Promise<void> {
@@ -114,10 +139,16 @@ export class SyncManager {
       );
 
       const conflicts: SyncConflict[] = [];
+      const autoMerged = new Map<string, string>();
       const actions = comparisons.map((cmp) => {
         const winner = decideWinner(cmp);
         if (winner.kind === 'conflict') {
-          conflicts.push(winner.conflict);
+          const merged = this.tryAutoMerge(cmp);
+          if (merged !== null) {
+            autoMerged.set(cmp.key, merged);
+          } else {
+            conflicts.push(winner.conflict);
+          }
         }
         return { cmp, winner };
       });
@@ -129,6 +160,19 @@ export class SyncManager {
 
       for (const { cmp, winner } of actions) {
         const key = cmp.key;
+
+        if (winner.kind === 'conflict' && autoMerged.has(key)) {
+          const mergedValue = autoMerged.get(key) as string;
+          const ts = Date.now();
+          await AsyncStorage.setItem(key, mergedValue);
+          await writeLocalTs(key, ts);
+          await this.provider.setString(
+            key,
+            encodeICloudEnvelope({ v: mergedValue, ts, deleted: false })
+          );
+          continue;
+        }
+
         const effectiveWinner =
           winner.kind === 'conflict'
             ? conflictDecision === 'keep_icloud'

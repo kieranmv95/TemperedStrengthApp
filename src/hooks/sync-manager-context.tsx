@@ -13,11 +13,20 @@ import {
   SyncManager,
   type SyncDecision,
   type SyncConflict,
+  type SyncMergerRegistry,
 } from '@/src/sync';
 import { ICloudKvsProvider } from '@/src/sync/providers/ICloudKvsProvider';
 import { NoopSyncProvider } from '@/src/sync/providers/NoopSyncProvider';
 import { ICloudSyncConflictModal } from '@/src/components/sync/ICloudSyncConflictModal';
 import { setRuntimeSyncManager } from '@/src/sync/runtime';
+import {
+  STREAK_STATE_KEY,
+  mergeStreakState,
+} from '@/src/services/streakService';
+
+const SYNC_MERGERS: SyncMergerRegistry = {
+  [STREAK_STATE_KEY]: mergeStreakState,
+};
 
 type SyncContextValue = {
   enabled: boolean;
@@ -69,6 +78,7 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
         managerRef.current = new SyncManager({
           provider: new NoopSyncProvider(),
           requestConflictDecision,
+          mergers: SYNC_MERGERS,
         });
         setRuntimeSyncManager(managerRef.current);
         setIsAvailable(false);
@@ -80,6 +90,7 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
       managerRef.current = new SyncManager({
         provider,
         requestConflictDecision,
+        mergers: SYNC_MERGERS,
       });
       setRuntimeSyncManager(managerRef.current);
       setIsAvailable(availability.available);
