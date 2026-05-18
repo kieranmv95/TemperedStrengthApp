@@ -5,6 +5,7 @@ import {
 } from '@/src/services/sanityAppConfig';
 import {
   invalidateSanitySponsorAdsCache,
+  loadAllSponsorAds,
   loadHomeSponsorAds,
   type HomeSponsorAd,
 } from '@/src/services/sanitySponsorAds';
@@ -12,6 +13,7 @@ import {
 export type SanityHomeContent = {
   notification: HomeRemoteNotificationBanner | null;
   sponsorAds: HomeSponsorAd[];
+  shopAds: HomeSponsorAd[];
 };
 
 /** Clears AsyncStorage caches for notification + sponsor ads. */
@@ -28,9 +30,10 @@ export async function invalidateSanityHomeContentCache(): Promise<void> {
  */
 export async function refreshSanityHomeContent(): Promise<SanityHomeContent> {
   await invalidateSanityHomeContentCache();
-  const [notification, sponsorAds] = await Promise.all([
+  const [notification, sponsorAds, shopAds] = await Promise.all([
     loadHomeRemoteNotificationBanner({ forceRefresh: true }),
     loadHomeSponsorAds({ forceRefresh: true }),
+    loadAllSponsorAds({ forceRefresh: true }),
   ]);
-  return { notification, sponsorAds };
+  return { notification, sponsorAds, shopAds };
 }

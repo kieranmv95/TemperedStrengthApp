@@ -23,7 +23,7 @@ import {
   View,
 } from 'react-native';
 
-export default function BriefScreen() {
+export default function HubScreen() {
   const posthog = usePostHog();
   const [articles, setArticles] = useState<ArticleListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,12 +34,7 @@ export default function BriefScreen() {
   );
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
-  // The UI is the source of truth for favorites once mounted. We keep a ref
-  // mirror so tap handlers always compute the next list from the latest value
-  // without depending on state closure timing.
   const favoritesRef = useRef<string[]>([]);
-  // Serialize persistence so rapid toggles write to storage in order and the
-  // last write always reflects the latest UI state.
   const persistChainRef = useRef<Promise<void>>(Promise.resolve());
 
   useFocusEffect(
@@ -48,23 +43,29 @@ export default function BriefScreen() {
 
       let cancelled = false;
 
-      (async () => {
+      void (async () => {
         setIsLoading(true);
         try {
           const [data, favs] = await Promise.all([
             fetchArticles(),
             getFavoriteArticles(),
           ]);
-          if (cancelled) return;
+          if (cancelled) {
+            return;
+          }
           setArticles(data);
           setIsOffline(false);
           favoritesRef.current = favs;
           setFavorites(favs);
         } catch {
-          if (cancelled) return;
+          if (cancelled) {
+            return;
+          }
           setIsOffline(true);
         } finally {
-          if (!cancelled) setIsLoading(false);
+          if (!cancelled) {
+            setIsLoading(false);
+          }
         }
       })();
 
@@ -101,10 +102,10 @@ export default function BriefScreen() {
     const query = searchQuery.trim().toLowerCase();
 
     return articles.filter((article) => {
-      // Saved is mutually exclusive with category filters in the chip row,
-      // so when showing favorites ignore the lingering activeCategory.
       if (showFavoritesOnly) {
-        if (!favorites.includes(article.slug)) return false;
+        if (!favorites.includes(article.slug)) {
+          return false;
+        }
       } else if (
         activeCategory !== 'All' &&
         article.category !== activeCategory
@@ -112,7 +113,9 @@ export default function BriefScreen() {
         return false;
       }
 
-      if (!query) return true;
+      if (!query) {
+        return true;
+      }
 
       const matchesTitle = article.title.toLowerCase().includes(query);
       const matchesSubtitle = article.subtitle.toLowerCase().includes(query);
@@ -136,6 +139,10 @@ export default function BriefScreen() {
 
   const handleSeeAllGlossary = () => {
     router.push('/glossary');
+  };
+
+  const handleOpenShop = () => {
+    router.push('/shop');
   };
 
   const renderBody = () => {
@@ -175,20 +182,21 @@ export default function BriefScreen() {
           <View style={styles.section}>
             <View style={styles.subSection}>
               <CuratedSection
+                icon="book-outline"
+                iconSizeOverride={18}
                 title="Terminology"
                 description="Quick definitions for common training terms"
-                size='medium'
+                size="medium"
+                theme="gold"
               />
 
               <Card
                 onPress={handleSeeAllGlossary}
                 accessibilityLabel="Browse the glossary"
               >
-                <View style={styles.terminologyCtaContent}>
-                  <Text style={styles.terminologyCtaTitle}>
-                    Browse the glossary
-                  </Text>
-                  <Text style={styles.terminologyCtaDescription}>
+                <View style={styles.hubCtaContent}>
+                  <Text style={styles.hubCtaTitle}>Browse the glossary</Text>
+                  <Text style={styles.hubCtaDescription}>
                     Learn the terms we use across training, nutrition, and
                     recovery.
                   </Text>
@@ -196,15 +204,42 @@ export default function BriefScreen() {
               </Card>
             </View>
 
+            <View style={styles.subSection}>
+              <CuratedSection
+                icon="bag-outline"
+                iconSizeOverride={18}
+                title="Shop"
+                description="Products we at Tempered Strength believe in, at the best prices for you"
+                size="medium"
+                theme="gold"
+              />
+
+              <Card
+                onPress={handleOpenShop}
+                accessibilityLabel="Browse partner products"
+              >
+                <View style={styles.hubCtaContent}>
+                  <Text style={styles.hubCtaTitle}>Browse the shop</Text>
+                  <Text style={styles.hubCtaDescription}>
+                    Affiliate offers from brands we trust, codes and links in
+                    one place.
+                  </Text>
+                </View>
+              </Card>
+            </View>
+
             <CuratedSection
+              icon="newspaper-outline"
+              iconSizeOverride={18}
               title="Articles"
               description="Your daily intel for the iron game"
-              size='medium'
+              size="medium"
+              theme="gold"
             />
           </View>
         }
         ListEmptyComponent={
-          <View style={styles.emptyState} >
+          <View style={styles.emptyState}>
             <Ionicons
               name={showFavoritesOnly ? 'bookmark-outline' : 'document-text'}
               size={64}
@@ -232,14 +267,14 @@ export default function BriefScreen() {
             onToggleFavorite={handleToggleFavorite}
           />
         )}
-        ListFooterComponent={< View style={styles.bottomSpacer} />}
+        ListFooterComponent={<View style={styles.bottomSpacer} />}
       />
     );
   };
 
   return (
     <StandardLayout
-      title="Brief"
+      title="Hub"
       subtitle="Your daily intel for the iron game"
       disableScroll
     >
@@ -261,7 +296,7 @@ export default function BriefScreen() {
             autoCorrect={false}
             autoCapitalize="none"
           />
-          {searchQuery.length > 0 && (
+          {searchQuery.length > 0 ? (
             <TouchableOpacity
               onPress={() => setSearchQuery('')}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
@@ -272,7 +307,7 @@ export default function BriefScreen() {
                 color={Colors.textPlaceholder}
               />
             </TouchableOpacity>
-          )}
+          ) : null}
         </View>
 
         <View>
@@ -366,34 +401,17 @@ const styles = StyleSheet.create({
     gap: Spacing.section,
     marginBottom: Spacing.md,
   },
-  ctaButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.xs,
-    backgroundColor: Colors.accent,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    borderRadius: 999,
-  },
-  ctaButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.base,
-    fontWeight: '700',
-  },
-  terminologyCtaCard: {
-    marginBottom: Spacing.lg,
-  },
-  terminologyCtaContent: {
+  hubCtaContent: {
     flex: 1,
     paddingRight: Spacing.xl,
     gap: Spacing.xs,
   },
-  terminologyCtaTitle: {
+  hubCtaTitle: {
     color: Colors.textPrimary,
     fontSize: FontSize.xl,
     fontWeight: '700',
   },
-  terminologyCtaDescription: {
+  hubCtaDescription: {
     color: Colors.textMuted,
     fontSize: FontSize.lg,
     lineHeight: 20,

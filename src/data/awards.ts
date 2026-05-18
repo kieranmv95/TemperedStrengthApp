@@ -31,7 +31,7 @@ export const awards: Award[] = [
     id: 14,
     name: 'In the Loop',
     badgeTitle: 'In the Loop',
-    description: 'Visit the brief page',
+    description: 'Visit the Hub',
     isPro: false,
     tier: 'silver',
     group: 'brief_visits',

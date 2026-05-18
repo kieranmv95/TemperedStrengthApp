@@ -40,6 +40,7 @@ export const posthogEventsNames = {
     articleView: 'article_view',
     articleFavourite: 'article_favourite',
     glossaryView: 'glossary_view',
+    shopView: 'hub_shop_view',
   },
   home: {
     /** User tapped a navigation target from the Home tab body. */

@@ -117,13 +117,15 @@ export default function SettingsScreen() {
     setIsRefreshingSanityHome(true);
     void (async () => {
       try {
-        const { notification, sponsorAds } = await refreshSanityHomeContent();
+        const { notification, sponsorAds, shopAds } =
+          await refreshSanityHomeContent();
         const sponsorCount = sponsorAds.length;
+        const shopCount = shopAds.length;
         const notificationNote =
           notification !== null ? 'Notification loaded.' : 'No notification.';
         Alert.alert(
           'Sanity home content refreshed',
-          `${notificationNote} ${sponsorCount} sponsor ad${sponsorCount === 1 ? '' : 's'}. Open Home to preview.`
+          `${notificationNote} ${sponsorCount} carousel ad${sponsorCount === 1 ? '' : 's'}, ${shopCount} in shop. Open Home or Hub to preview.`
         );
       } catch (error) {
         console.error('Dev Sanity refresh failed:', error);

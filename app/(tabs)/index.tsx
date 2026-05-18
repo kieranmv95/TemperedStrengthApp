@@ -1,17 +1,17 @@
 import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
+import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
 import { SponsorAdsCarousel } from '@/src/components/home/SponsorAdsCarousel';
-import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors } from '@/src/constants/theme';
 import { getAllExercises } from '@/src/data/exercises';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useHomeRemoteNotification } from '@/src/hooks/useHomeRemoteNotification';
 import { useHomeSponsorAds } from '@/src/hooks/useHomeSponsorAds';
-import type { HomeSponsorAd } from '@/src/services/sanitySponsorAds';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { workoutScreenStyles } from '@/src/screens/workoutScreenStyles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
+import type { HomeSponsorAd } from '@/src/services/sanitySponsorAds';
 import {
   applyDailyStreakCheckIn,
   buildSnapshot,
@@ -273,7 +273,7 @@ export default function HomeTabScreen() {
                   </Text>
                 ) : null}
                 {remoteNotification.ctaText.length > 0 &&
-                remoteNotification.ctaUrl.length > 0 ? (
+                  remoteNotification.ctaUrl.length > 0 ? (
                   <TouchableOpacity
                     style={[
                       styles.notificationCta,
@@ -347,7 +347,7 @@ export default function HomeTabScreen() {
                               0,
                               Math.round(
                                 programSummary.calendarSessionSpanProgress *
-                                  10000
+                                10000
                               ) / 100
                             )
                           )}%`,

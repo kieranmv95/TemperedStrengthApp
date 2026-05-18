@@ -72,11 +72,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="brief"
+        name="hub"
         options={{
-          title: 'Brief',
+          title: 'Hub',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="newspaper.fill" color={color} />
+            <IconSymbol size={28} name="square.grid.2x2.fill" color={color} />
           ),
         }}
       />

@@ -25,6 +25,7 @@ const MAPPING = {
   'dumbbell.fill': 'fitness-center',
   'gearshape.fill': 'settings',
   'newspaper.fill': 'article',
+  'square.grid.2x2.fill': 'apps',
 } as IconMapping;
 
 /**
