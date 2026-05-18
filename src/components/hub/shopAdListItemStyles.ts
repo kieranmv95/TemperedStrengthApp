@@ -6,7 +6,7 @@ export const SHOP_THUMB_SIZE = 72;
 export const shopAdListItemStyles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     gap: Spacing.md,
     borderRadius: BorderRadius.xxl,
     paddingVertical: Spacing.lg,
@@ -40,7 +40,6 @@ export const shopAdListItemStyles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     gap: Spacing.xs,
-    paddingTop: Spacing.xxs,
   },
   title: {
     fontSize: FontSize.displaySm,
@@ -60,6 +59,6 @@ export const shopAdListItemStyles = StyleSheet.create({
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
     opacity: 0.35,
-    marginTop: Spacing.lg,
+    flexShrink: 0,
   },
 });
