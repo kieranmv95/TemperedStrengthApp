@@ -881,7 +881,7 @@ const phaseLabel = (week: number): string =>
   week === 7 ? 'TEST' : phaseFor(week);
 
 export const olympic_advanced_8wk: Program = {
-  isPro: false,
+  isPro: true,
   id: 'oly_adv_01',
   name: 'Advanced Olympic Performance',
   description:
