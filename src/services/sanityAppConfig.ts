@@ -10,7 +10,12 @@ const SANITY_API_VERSION = '2024-01-01';
 /** AsyncStorage key for cached Sanity notification banner; local-only (not iCloud-synced). */
 export const SANITY_APP_CONFIG_NOTIFICATION_CACHE_KEY =
   'sanity_app_config_notification_v1';
-const CACHE_TTL_MS = 60 * 60 * 1000;
+const CACHE_TTL_MS = __DEV__ ? 0 : 60 * 60 * 1000;
+
+export type LoadHomeRemoteNotificationBannerOptions = {
+  /** Bypass TTL and fetch from Sanity (still updates cache). */
+  forceRefresh?: boolean;
+};
 
 const groq = `*[_type == "appConfig"][0]{
   "notification": activeNotification->{
@@ -208,10 +213,18 @@ async function fetchFromSanity(): Promise<HomeRemoteNotificationBanner | null> {
  * storage window before re-fetching. On network failure, returns the last
  * cached banner if one exists (any age).
  */
-export async function loadHomeRemoteNotificationBanner(): Promise<HomeRemoteNotificationBanner | null> {
+export async function loadHomeRemoteNotificationBanner(
+  options?: LoadHomeRemoteNotificationBannerOptions
+): Promise<HomeRemoteNotificationBanner | null> {
+  const forceRefresh = options?.forceRefresh === true;
   const cached = await readCache();
   const now = Date.now();
-  if (cached && now - cached.storedAt < CACHE_TTL_MS) {
+  if (
+    !forceRefresh &&
+    cached &&
+    CACHE_TTL_MS > 0 &&
+    now - cached.storedAt < CACHE_TTL_MS
+  ) {
     return cached.banner;
   }
 

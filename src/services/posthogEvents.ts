@@ -44,6 +44,10 @@ export const posthogEventsNames = {
   home: {
     /** User tapped a navigation target from the Home tab body. */
     linkPressed: 'home_link_pressed',
+    /** Sponsor carousel slide became visible. */
+    sponsorImpression: 'home_sponsor_impression',
+    /** User tapped a sponsor card CTA. */
+    sponsorCtaPressed: 'home_sponsor_cta_pressed',
   },
   app: {
     settingChanged: 'setting_changed',

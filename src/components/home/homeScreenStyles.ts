@@ -1,6 +1,17 @@
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { StyleSheet } from 'react-native';
 
+/** Fixed height for all sponsor carousel slides. */
+export const SPONSOR_CARD_HEIGHT = 176;
+export const SPONSOR_LOGO_MAX_HEIGHT = 44;
+export const SPONSOR_LOGO_MAX_WIDTH = 152;
+/** 1:1 product image side length (fits card inner height). */
+export const SPONSOR_PRODUCT_IMAGE_SIZE = SPONSOR_CARD_HEIGHT - Spacing.lg * 2;
+/** Visible slice: right 75% of the square; left 25% bleeds off the card edge. */
+export const SPONSOR_PRODUCT_RAIL_WIDTH = SPONSOR_PRODUCT_IMAGE_SIZE * 0.75;
+export const SPONSOR_PRODUCT_IMAGE_BLEED = SPONSOR_PRODUCT_IMAGE_SIZE * 0.25;
+export const SPONSOR_AUTO_SCROLL_MS = 6000;
+
 export const homeScreenStyles = StyleSheet.create({
   section: {
     gap: Spacing.md,
@@ -110,6 +121,106 @@ export const homeScreenStyles = StyleSheet.create({
   notificationCtaText: {
     fontSize: FontSize.md,
     fontWeight: '700',
+  },
+  sponsorCarousel: {
+    gap: Spacing.sm,
+  },
+  sponsorCard: {
+    borderRadius: BorderRadius.xxl,
+    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.section,
+    overflow: 'hidden',
+    justifyContent: 'space-between',
+  },
+  sponsorCardStacked: {
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
+  /** Logo/title + description — same title→body gap as product-left column. */
+  sponsorStackedCopy: {
+    alignSelf: 'stretch',
+    gap: Spacing.xs,
+  },
+  sponsorStackedSpacer: {
+    flex: 1,
+    minHeight: 0,
+  },
+  sponsorTitle: {
+    fontSize: FontSize.xxl,
+    fontWeight: '800',
+    letterSpacing: -0.2,
+  },
+  sponsorProductTitle: {
+    fontSize: FontSize.displaySm,
+    fontWeight: '800',
+    letterSpacing: -0.2,
+    marginTop: Spacing.xs,
+  },
+  sponsorDescription: {
+    fontSize: FontSize.base,
+    lineHeight: 19,
+    fontWeight: '500',
+    alignSelf: 'stretch',
+    textAlign: 'left',
+  },
+  sponsorCta: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: Spacing.section,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.pill,
+  },
+  sponsorCtaText: {
+    fontSize: FontSize.md,
+    fontWeight: '700',
+  },
+  sponsorLogoWrap: {
+    alignSelf: 'stretch',
+    alignItems: 'flex-start',
+  },
+  sponsorLogo: {
+    width: SPONSOR_LOGO_MAX_WIDTH,
+    height: SPONSOR_LOGO_MAX_HEIGHT,
+  },
+  sponsorCardProductLeft: {
+    paddingLeft: 0,
+  },
+  sponsorProductRow: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  sponsorProductRail: {
+    width: SPONSOR_PRODUCT_RAIL_WIDTH,
+    height: SPONSOR_PRODUCT_IMAGE_SIZE,
+    overflow: 'hidden',
+    justifyContent: 'center',
+  },
+  sponsorProductImage: {
+    width: SPONSOR_PRODUCT_IMAGE_SIZE,
+    height: SPONSOR_PRODUCT_IMAGE_SIZE,
+    marginLeft: -SPONSOR_PRODUCT_IMAGE_BLEED,
+  },
+  sponsorProductContent: {
+    flex: 1,
+    minWidth: 0,
+    justifyContent: 'space-between',
+  },
+  sponsorDots: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    marginTop: Spacing.xs,
+  },
+  sponsorDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: Colors.backgroundSubtle,
+  },
+  sponsorDotActive: {
+    backgroundColor: Colors.textMuted,
   },
   cardBody: {
     flex: 1,

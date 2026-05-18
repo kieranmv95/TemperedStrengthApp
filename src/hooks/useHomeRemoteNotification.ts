@@ -7,18 +7,40 @@ import { useCallback, useState } from 'react';
 
 /**
  * Loads the Sanity-driven home notification when the screen is focused. See
- * `loadHomeRemoteNotificationBanner` for caching behavior.
+ * `loadHomeRemoteNotificationBanner` for caching behavior (TTL disabled in __DEV__).
  */
-export function useHomeRemoteNotification(): HomeRemoteNotificationBanner | null {
+export function useHomeRemoteNotification(): {
+  banner: HomeRemoteNotificationBanner | null;
+  refetch: () => Promise<HomeRemoteNotificationBanner | null>;
+  isRefetching: boolean;
+} {
   const [banner, setBanner] = useState<HomeRemoteNotificationBanner | null>(
     null
   );
+  const [isRefetching, setIsRefetching] = useState(false);
+
+  const fetchBanner = useCallback(async (forceRefresh: boolean) => {
+    return loadHomeRemoteNotificationBanner(
+      forceRefresh ? { forceRefresh: true } : undefined
+    );
+  }, []);
+
+  const refetch = useCallback(async () => {
+    setIsRefetching(true);
+    try {
+      const next = await fetchBanner(true);
+      setBanner(next);
+      return next;
+    } finally {
+      setIsRefetching(false);
+    }
+  }, [fetchBanner]);
 
   useFocusEffect(
     useCallback(() => {
       let cancelled = false;
       void (async () => {
-        const next = await loadHomeRemoteNotificationBanner();
+        const next = await fetchBanner(false);
         if (!cancelled) {
           setBanner(next);
         }
@@ -26,8 +48,8 @@ export function useHomeRemoteNotification(): HomeRemoteNotificationBanner | null
       return () => {
         cancelled = true;
       };
-    }, [])
+    }, [fetchBanner])
   );
 
-  return banner;
+  return { banner, refetch, isRefetching };
 }

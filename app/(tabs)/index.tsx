@@ -1,11 +1,14 @@
 import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
 import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
+import { SponsorAdsCarousel } from '@/src/components/home/SponsorAdsCarousel';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors } from '@/src/constants/theme';
 import { getAllExercises } from '@/src/data/exercises';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useHomeRemoteNotification } from '@/src/hooks/useHomeRemoteNotification';
+import { useHomeSponsorAds } from '@/src/hooks/useHomeSponsorAds';
+import type { HomeSponsorAd } from '@/src/services/sanitySponsorAds';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { workoutScreenStyles } from '@/src/screens/workoutScreenStyles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -73,7 +76,8 @@ function timeOfDayGreeting(): string {
 
 export default function HomeTabScreen() {
   const posthog = usePostHog();
-  const remoteNotification = useHomeRemoteNotification();
+  const { banner: remoteNotification } = useHomeRemoteNotification();
+  const { ads: sponsorAds } = useHomeSponsorAds();
   const { unit: weightUnit } = useWeightUnit();
   const {
     isPro,
@@ -141,20 +145,27 @@ export default function HomeTabScreen() {
     [posthog]
   );
 
-  const openRemoteNotificationCta = useCallback((url: string) => {
+  const openHomeCtaUrl = useCallback((url: string) => {
     const trimmed = url.trim();
     if (!trimmed) {
       return;
     }
     if (/^https?:\/\//i.test(trimmed)) {
       Linking.openURL(trimmed).catch((error) => {
-        console.error('Failed to open notification URL:', error);
+        console.error('Failed to open URL:', error);
       });
       return;
     }
     const path = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
     router.push(path as Href);
   }, []);
+
+  const openSponsorCta = useCallback(
+    (ad: HomeSponsorAd) => {
+      openHomeCtaUrl(ad.affiliateUrl);
+    },
+    [openHomeCtaUrl]
+  );
 
   const recentPbs = useMemo(() => {
     if (!pbStore) {
@@ -269,7 +280,7 @@ export default function HomeTabScreen() {
                       { backgroundColor: remoteNotification.ctaColor },
                     ]}
                     onPress={() =>
-                      openRemoteNotificationCta(remoteNotification.ctaUrl)
+                      openHomeCtaUrl(remoteNotification.ctaUrl)
                     }
                     accessibilityRole="button"
                     accessibilityLabel={remoteNotification.ctaText}
@@ -286,6 +297,10 @@ export default function HomeTabScreen() {
                 ) : null}
               </View>
             )}
+
+            {sponsorAds.length > 0 ? (
+              <SponsorAdsCarousel ads={sponsorAds} onPressCta={openSponsorCta} />
+            ) : null}
           </View>
 
           <View style={styles.section}>

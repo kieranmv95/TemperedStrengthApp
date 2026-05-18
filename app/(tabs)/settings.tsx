@@ -2,7 +2,7 @@ import { StandardLayout } from '@/src/components/StandardLayout';
 import { SmallChevron } from '@/src/components/ds/SmallChevron';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { useSubscription } from '@/src/hooks/use-subscription';
-import { invalidateSanityAppConfigCache } from '@/src/services/sanityAppConfig';
+import { refreshSanityHomeContent } from '@/src/services/sanityHomeContent';
 import type { OnboardingProfile } from '@/src/types/onboarding';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
@@ -26,6 +26,7 @@ export default function SettingsScreen() {
   const [onboardedState, setOnboardedState] = useState<boolean>(false);
   const [onboardingProfileState, setOnboardingProfileState] =
     useState<OnboardingProfile | null>(null);
+  const [isRefreshingSanityHome, setIsRefreshingSanityHome] = useState(false);
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
 
   const checkProgramStatus = async () => {
@@ -109,17 +110,26 @@ export default function SettingsScreen() {
     );
   };
 
-  const handleInvalidateSanityAppConfigCache = () => {
+  const handleDevRefreshSanityHomeContent = () => {
+    if (isRefreshingSanityHome) {
+      return;
+    }
+    setIsRefreshingSanityHome(true);
     void (async () => {
       try {
-        await invalidateSanityAppConfigCache();
+        const { notification, sponsorAds } = await refreshSanityHomeContent();
+        const sponsorCount = sponsorAds.length;
+        const notificationNote =
+          notification !== null ? 'Notification loaded.' : 'No notification.';
         Alert.alert(
-          'App config cache cleared',
-          'Cached Sanity notification config was removed. Open the Home tab to refetch.'
+          'Sanity home content refreshed',
+          `${notificationNote} ${sponsorCount} sponsor ad${sponsorCount === 1 ? '' : 's'}. Open Home to preview.`
         );
       } catch (error) {
-        console.error('Error clearing Sanity app config cache:', error);
-        Alert.alert('Error', 'Could not clear app config cache. Try again.');
+        console.error('Dev Sanity refresh failed:', error);
+        Alert.alert('Error', 'Could not refresh Sanity home content. Try again.');
+      } finally {
+        setIsRefreshingSanityHome(false);
       }
     })();
   };
@@ -302,15 +312,17 @@ export default function SettingsScreen() {
 
               <TouchableOpacity
                 style={styles.settingItem}
-                onPress={handleInvalidateSanityAppConfigCache}
+                onPress={handleDevRefreshSanityHomeContent}
+                disabled={isRefreshingSanityHome}
               >
                 <View style={styles.settingContent}>
                   <Text style={styles.settingTitle}>
-                    Invalidate app config cache
+                    Clear Sanity cache & refresh
                   </Text>
                   <Text style={styles.settingDescription}>
-                    Clear cached Sanity notification; Home tab refetches on next
-                    focus.
+                    {isRefreshingSanityHome
+                      ? 'Fetching notification and sponsor ads from Sanity…'
+                      : 'Clear cached home content and refetch from Sanity. Open Home to preview what users see.'}
                   </Text>
                 </View>
                 <SmallChevron />
