@@ -1,16 +1,18 @@
 import { ShopAdListItem } from '@/src/components/hub/ShopAdListItem';
+import { Pill } from '@/src/components/pill';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
   loadAllSponsorAds,
   sponsorAdDisplayTitle,
+  sponsorAdShopCategories,
   type HomeSponsorAd,
 } from '@/src/services/sanitySponsorAds';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -29,6 +31,7 @@ export default function ShopScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState<string>('All');
 
   useFocusEffect(
     useCallback(() => {
@@ -63,20 +66,37 @@ export default function ShopScreen() {
     }, [posthog])
   );
 
+  const categories = useMemo(() => sponsorAdShopCategories(ads), [ads]);
+
+  useEffect(() => {
+    if (activeCategory !== 'All' && !categories.includes(activeCategory)) {
+      setActiveCategory('All');
+    }
+  }, [activeCategory, categories]);
+
+  const categoryFilters = useMemo(
+    () => [{ key: 'all', label: 'All' }, ...categories.map((c) => ({ key: c, label: c }))],
+    [categories]
+  );
+
   const filteredAds = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
-    if (!query) {
-      return ads;
-    }
     return ads.filter((ad) => {
+      if (activeCategory !== 'All' && !ad.categories.includes(activeCategory)) {
+        return false;
+      }
+      if (!query) {
+        return true;
+      }
       const title = sponsorAdDisplayTitle(ad).toLowerCase();
       return (
         title.includes(query) ||
         ad.description.toLowerCase().includes(query) ||
-        ad.ctaLabel.toLowerCase().includes(query)
+        ad.ctaLabel.toLowerCase().includes(query) ||
+        ad.categories.some((category) => category.toLowerCase().includes(query))
       );
     });
-  }, [ads, searchQuery]);
+  }, [activeCategory, ads, searchQuery]);
 
   const handlePressAd = useCallback(
     (ad: HomeSponsorAd) => {
@@ -132,8 +152,8 @@ export default function ShopScreen() {
           />
           <Text style={styles.emptyTitle}>No products found</Text>
           <Text style={styles.emptyDescription}>
-            {searchQuery.trim()
-              ? 'Try a different search.'
+            {searchQuery.trim() || activeCategory !== 'All'
+              ? 'Try a different search or category.'
               : 'No partner offers are available right now.'}
           </Text>
         </View>
@@ -206,6 +226,38 @@ export default function ShopScreen() {
         </Text>
       </View>
 
+      {categories.length > 0 ? (
+        <View style={styles.filterContainer}>
+          <FlatList
+            horizontal
+            data={categoryFilters}
+            keyExtractor={(item) => item.key}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.filterList}
+            renderItem={({ item }) => {
+              const isAll = item.key === 'all';
+              const isActive = isAll
+                ? activeCategory === 'All'
+                : activeCategory === item.key;
+              const count = isAll
+                ? ads.length
+                : ads.filter((ad) => ad.categories.includes(item.key)).length;
+
+              return (
+                <Pill
+                  onPress={() =>
+                    setActiveCategory(isAll ? 'All' : item.key)
+                  }
+                  isActive={isActive}
+                  label={item.label}
+                  count={count}
+                />
+              );
+            }}
+          />
+        </View>
+      ) : null}
+
       {renderContent()}
     </SafeAreaView>
   );
@@ -267,6 +319,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     lineHeight: 20,
     paddingHorizontal: Spacing.xs,
+  },
+  filterContainer: {
+    paddingBottom: Spacing.md,
+  },
+  filterList: {
+    paddingHorizontal: Spacing.xxl,
+    gap: Spacing.md,
   },
   listContent: {
     paddingHorizontal: Spacing.xxl,

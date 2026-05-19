@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 /** Fixed height for all sponsor carousel slides. */
 export const SPONSOR_CARD_HEIGHT = 176;
-export const SPONSOR_LOGO_MAX_HEIGHT = 44;
+export const SPONSOR_LOGO_MAX_HEIGHT = 40;
 export const SPONSOR_LOGO_MAX_WIDTH = 152;
 /** 1:1 product image side length (fits card inner height). */
 export const SPONSOR_PRODUCT_IMAGE_SIZE = SPONSOR_CARD_HEIGHT - Spacing.lg * 2;
@@ -127,19 +127,12 @@ export const homeScreenStyles = StyleSheet.create({
   },
   sponsorCard: {
     borderRadius: BorderRadius.xxl,
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.xl,
     paddingHorizontal: Spacing.section,
     overflow: 'hidden',
-    justifyContent: 'space-between',
   },
   sponsorCardStacked: {
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
-  },
-  /** Logo/title + description — same title→body gap as product-left column. */
-  sponsorStackedCopy: {
-    alignSelf: 'stretch',
-    gap: Spacing.xs,
   },
   sponsorStackedSpacer: {
     flex: 1,
@@ -187,7 +180,7 @@ export const homeScreenStyles = StyleSheet.create({
   sponsorProductRow: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'stretch',
     gap: Spacing.md,
   },
   sponsorProductRail: {
@@ -204,7 +197,6 @@ export const homeScreenStyles = StyleSheet.create({
   sponsorProductContent: {
     flex: 1,
     minWidth: 0,
-    justifyContent: 'space-between',
   },
   sponsorDots: {
     flexDirection: 'row',

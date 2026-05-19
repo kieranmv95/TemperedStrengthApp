@@ -16,26 +16,7 @@ export type LoadHomeSponsorAdsOptions = {
   forceRefresh?: boolean;
 };
 
-const homeCarouselGroq = `*[_type == "appConfig"][0]{
-  "ads": activeSponsorAds[]->{
-    _id,
-    title,
-    description,
-    layout,
-    affiliateUrl,
-    ctaLabel,
-    backgroundColor,
-    titleColor,
-    descriptionColor,
-    ctaBackgroundColor,
-    ctaTextColor,
-    enabled,
-    "logoUrl": logo.asset->url,
-    "productUrl": productImage.asset->url
-  }
-}`;
-
-const allSponsorAdsGroq = `*[_type == "sponsorAd" && enabled != false] | order(coalesce(title, "") asc) {
+const sponsorAdFieldsGroq = `
   _id,
   title,
   description,
@@ -49,8 +30,20 @@ const allSponsorAdsGroq = `*[_type == "sponsorAd" && enabled != false] | order(c
   ctaTextColor,
   enabled,
   "logoUrl": logo.asset->url,
-  "productUrl": productImage.asset->url
+  "productUrl": productImage.asset->url,
+  "categories": select(
+    defined(categories[0]._ref) => categories[]->{
+      "label": coalesce(title, name, slug.current)
+    },
+    categories
+  )
+`;
+
+const homeCarouselGroq = `*[_type == "appConfig"][0]{
+  "ads": activeSponsorAds[]->{${sponsorAdFieldsGroq}}
 }`;
+
+const allSponsorAdsGroq = `*[_type == "sponsorAd" && enabled != false] | order(coalesce(title, "") asc) {${sponsorAdFieldsGroq}}`;
 
 const HEX_COLOR =
   /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
@@ -102,6 +95,7 @@ export type HomeSponsorAd = {
   ctaTextColor: string;
   logoUrl: string | null;
   productUrl: string | null;
+  categories: string[];
 };
 
 type SanitySponsorAdDoc = {
@@ -119,6 +113,7 @@ type SanitySponsorAdDoc = {
   enabled?: boolean | null;
   logoUrl?: string | null;
   productUrl?: string | null;
+  categories?: unknown;
 };
 
 type AppConfigSponsorQueryResult = {
@@ -159,6 +154,70 @@ function isLayout(value: string): value is SponsorAdLayout {
 function nonEmptyUrl(value: string | null | undefined): string | null {
   const t = value?.trim() ?? '';
   return t.length > 0 ? t : null;
+}
+
+function sponsorCategoryLabel(value: unknown): string | null {
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : null;
+  }
+  if (typeof value !== 'object' || value === null) {
+    return null;
+  }
+  const record = value as Record<string, unknown>;
+  const label = typeof record.label === 'string' ? record.label.trim() : '';
+  if (label.length > 0) {
+    return label;
+  }
+  const title = typeof record.title === 'string' ? record.title.trim() : '';
+  if (title.length > 0) {
+    return title;
+  }
+  const name = typeof record.name === 'string' ? record.name.trim() : '';
+  if (name.length > 0) {
+    return name;
+  }
+  const slug = record.slug;
+  if (typeof slug === 'string') {
+    const trimmedSlug = slug.trim();
+    return trimmedSlug.length > 0 ? trimmedSlug : null;
+  }
+  if (typeof slug === 'object' && slug !== null) {
+    const current = (slug as { current?: unknown }).current;
+    if (typeof current === 'string') {
+      const trimmedCurrent = current.trim();
+      return trimmedCurrent.length > 0 ? trimmedCurrent : null;
+    }
+  }
+  return null;
+}
+
+function mapSponsorCategories(raw: unknown): string[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+  const categories: string[] = [];
+  const seen = new Set<string>();
+  for (const item of raw) {
+    const label = sponsorCategoryLabel(item);
+    if (!label || seen.has(label)) {
+      continue;
+    }
+    seen.add(label);
+    categories.push(label);
+  }
+  return categories;
+}
+
+/** Unique shop categories across ads, sorted for filter chips. */
+export function sponsorAdShopCategories(ads: HomeSponsorAd[]): string[] {
+  const seen = new Set<string>();
+  for (const ad of ads) {
+    for (const category of ad.categories) {
+      seen.add(category);
+    }
+  }
+  return Array.from(seen).sort((a, b) => a.localeCompare(b));
 }
 
 function passesLayoutValidation(
@@ -222,6 +281,7 @@ function mapSponsorAd(raw: SanitySponsorAdDoc): HomeSponsorAd | null {
     ctaTextColor: sanitizeHex(raw.ctaTextColor, d.ctaTextColor),
     logoUrl,
     productUrl,
+    categories: mapSponsorCategories(raw.categories),
   };
 }
 
@@ -265,6 +325,7 @@ function normalizeAdFromCache(raw: unknown): HomeSponsorAd | null {
     enabled: true,
     logoUrl: typeof o.logoUrl === 'string' ? o.logoUrl : null,
     productUrl: typeof o.productUrl === 'string' ? o.productUrl : null,
+    categories: mapSponsorCategories(o.categories),
   });
 }
 

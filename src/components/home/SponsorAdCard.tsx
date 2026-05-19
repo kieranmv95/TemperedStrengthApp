@@ -62,17 +62,16 @@ export function SponsorAdCard({ ad, width, onPressCta }: SponsorAdCardProps) {
             </View>
           ) : null}
           <View style={styles.sponsorProductContent}>
-            <View style={styles.sponsorStackedCopy}>
-              {ad.title.length > 0 ? (
-                <Text
-                  style={[styles.sponsorProductTitle, { color: ad.titleColor }]}
-                  numberOfLines={1}
-                >
-                  {ad.title}
-                </Text>
-              ) : null}
-              {description}
-            </View>
+            {ad.title.length > 0 ? (
+              <Text
+                style={[styles.sponsorProductTitle, { color: ad.titleColor }]}
+                numberOfLines={1}
+              >
+                {ad.title}
+              </Text>
+            ) : null}
+            <View style={styles.sponsorStackedSpacer} />
+            {description}
             <View style={styles.sponsorStackedSpacer} />
             {ctaButton}
           </View>
@@ -89,31 +88,30 @@ export function SponsorAdCard({ ad, width, onPressCta }: SponsorAdCardProps) {
         { width, height: SPONSOR_CARD_HEIGHT, backgroundColor: ad.bgColor },
       ]}
     >
-      <View style={styles.sponsorStackedCopy}>
-        {ad.layout === 'logoHeader' && ad.logoUrl ? (
-          <View style={styles.sponsorLogoWrap}>
-            <Image
-              source={{ uri: ad.logoUrl }}
-              style={styles.sponsorLogo}
-              contentFit="contain"
-              contentPosition="left center"
-              accessibilityLabel={ad.title.length > 0 ? ad.title : undefined}
-              accessibilityIgnoresInvertColors
-            />
-          </View>
-        ) : null}
-        {ad.title.length > 0 &&
-          (ad.layout === 'textHeader' ||
-            (ad.layout === 'logoHeader' && !ad.logoUrl)) ? (
-          <Text
-            style={[styles.sponsorTitle, { color: ad.titleColor }]}
-            numberOfLines={1}
-          >
-            {ad.title}
-          </Text>
-        ) : null}
-        {description}
-      </View>
+      {ad.layout === 'logoHeader' && ad.logoUrl ? (
+        <View style={styles.sponsorLogoWrap}>
+          <Image
+            source={{ uri: ad.logoUrl }}
+            style={styles.sponsorLogo}
+            contentFit="contain"
+            contentPosition="left center"
+            accessibilityLabel={ad.title.length > 0 ? ad.title : undefined}
+            accessibilityIgnoresInvertColors
+          />
+        </View>
+      ) : null}
+      {ad.title.length > 0 &&
+        (ad.layout === 'textHeader' ||
+          (ad.layout === 'logoHeader' && !ad.logoUrl)) ? (
+        <Text
+          style={[styles.sponsorTitle, { color: ad.titleColor }]}
+          numberOfLines={1}
+        >
+          {ad.title}
+        </Text>
+      ) : null}
+      <View style={styles.sponsorStackedSpacer} />
+      {description}
       <View style={styles.sponsorStackedSpacer} />
       {ctaButton}
     </View>
