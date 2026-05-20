@@ -167,16 +167,16 @@ export default function WorkoutsScreen() {
     setOnboardingGender(profile?.gender ?? null);
   };
 
-  const handleToggleFavorite = async (workoutId: string) => {
-    const newStatus = await toggleFavoriteWorkout(workoutId);
+  const handleToggleFavorite = async (workout: SingleWorkout) => {
+    const newStatus = await toggleFavoriteWorkout(workout.id);
     posthog.capture(posthogEventsNames.workout.favourite, {
-      workout_id: workoutId,
+      workout_name: workout.title,
       action: newStatus ? 'add' : 'remove',
     });
     if (newStatus) {
-      setFavorites([...favorites, workoutId]);
+      setFavorites([...favorites, workout.id]);
     } else {
-      setFavorites(favorites.filter((id) => id !== workoutId));
+      setFavorites(favorites.filter((id) => id !== workout.id));
     }
   };
 

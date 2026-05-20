@@ -41,14 +41,14 @@ export default function WorkoutDetailScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      if (!workoutId) {
+      if (!workoutId || !workout) {
         return;
       }
       posthog.capture(posthogEventsNames.workout.view, {
-        workout_id: workoutId,
+        workout_name: workout.title,
         source: viewSource,
       });
-    }, [workoutId, viewSource, posthog])
+    }, [workoutId, workout, viewSource, posthog])
   );
 
   useFocusEffect(
@@ -62,16 +62,16 @@ export default function WorkoutDetailScreen() {
     setFavorites(favs);
   };
 
-  const handleToggleFavorite = async (id: string) => {
-    const newStatus = await toggleFavoriteWorkout(id);
+  const handleToggleFavorite = async (w: NonNullable<typeof workout>) => {
+    const newStatus = await toggleFavoriteWorkout(w.id);
     posthog.capture(posthogEventsNames.workout.favourite, {
-      workout_id: id,
+      workout_name: w.title,
       action: newStatus ? 'add' : 'remove',
     });
     if (newStatus) {
-      setFavorites((prev) => [...prev, id]);
+      setFavorites((prev) => [...prev, w.id]);
     } else {
-      setFavorites((prev) => prev.filter((x) => x !== id));
+      setFavorites((prev) => prev.filter((x) => x !== w.id));
     }
   };
 
@@ -123,7 +123,7 @@ export default function WorkoutDetailScreen() {
         </Text>
         <TouchableOpacity
           style={styles.detailFavoriteButton}
-          onPress={() => handleToggleFavorite(workout.id)}
+          onPress={() => handleToggleFavorite(workout)}
           disabled={isLocked}
         >
           <Ionicons

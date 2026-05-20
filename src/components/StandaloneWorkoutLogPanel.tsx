@@ -175,7 +175,7 @@ export function StandaloneWorkoutLogPanel({
       await increment('workouts_logged');
       await upsertStandaloneWorkoutLogEntry(entry);
       posthog?.capture(posthogEventsNames.workout.logged, {
-        workout_id: workout.id,
+        workout_name: workout.title,
         exercise_count: exerciseCountForWorkout(workout),
         duration_mins: durationMinsForLog(workout, built.payload),
       });

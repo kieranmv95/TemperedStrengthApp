@@ -612,7 +612,7 @@ export function useWorkoutScreenController() {
       });
 
       posthog.capture(posthogEventsNames.workout.logged, {
-        workout_id: `${programId}_${activeSession.dayIndex}`,
+        workout_name: workoutForSessionDay?.label ?? 'Program workout',
         exercise_count: exerciseCountForAnalytics,
         duration_mins: durationMins,
       });

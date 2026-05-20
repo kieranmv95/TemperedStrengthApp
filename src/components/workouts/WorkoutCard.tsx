@@ -11,7 +11,7 @@ type WorkoutCardProps = {
   workout: SingleWorkout;
   isFavorite: boolean;
   isPro: boolean;
-  onToggleFavorite: (workoutId: string) => void;
+  onToggleFavorite: (workout: SingleWorkout) => void;
   onPress: (workout: SingleWorkout) => void;
   onLockedPress: () => void;
 };
@@ -67,7 +67,7 @@ export function WorkoutCard({
           </View>
           <TouchableOpacity
             style={styles.favoriteButton}
-            onPress={() => onToggleFavorite(workout.id)}
+            onPress={() => onToggleFavorite(workout)}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Ionicons
