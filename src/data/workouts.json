@@ -1,7 +1,7 @@
 [
   {
     "id": "f_01",
-    "title": "The 15-Min Engine",
+    "title": "The Triple Stack",
     "description": "Classic AMRAP. Aim for a consistent pace you can maintain for the full duration. Target 5+ rounds.",
     "category": "WOD",
     "difficulty": "Intermediate",
@@ -23,7 +23,7 @@
   {
     "id": "f_02",
     "title": "Death by 10 Metres",
-    "description": "An EMOM (Every Minute on the Minute) shuttle test. This starts easy but becomes maximal effort quickly.",
+    "description": "An EMOM shuttle test with a twist. Each round you add a sprint, and a movement penalty. Starts easy, becomes a full-body lung burner fast.",
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 25,
@@ -32,18 +32,26 @@
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["3 Rounds: 30s High Knees, 30s Butt Kicks, 5 Inchworms"]
+        "movements": [
+          "3 Rounds: 30s High Knees, 30s Butt Kicks, 5 Inchworms, 5 Broad Jumps"
+        ]
       },
       {
-        "name": "EMOM",
-        "instructions": "Start clock. Min 1: 1 x 10m sprint. Min 2: 2 x 10m sprints. Continue until you cannot complete the required sprints within the minute.",
-        "movements": ["10m Shuttles"]
+        "name": "Death by 10 Metres",
+        "instructions": "Start clock. Each minute, complete the required sprints PLUS the movement penalty for that round. Add one sprint every minute. Continue until you cannot complete the work within the minute.",
+        "movements": [
+          "Min 1: 1 x 10m sprint + 5 Burpees",
+          "Min 2: 2 x 10m sprints + 10 Push-ups",
+          "Min 3: 3 x 10m sprints + 15 Air Squats",
+          "Min 4: 4 x 10m sprints + 5 Burpees",
+          "Min 5+: Continue adding 1 sprint per minute, cycling through the movement penalties"
+        ]
       }
     ]
   },
   {
     "id": "f_03",
-    "title": "Core Tempering",
+    "title": "Hold the Line",
     "description": "Focus on 'bracing' your midsection. Movement should be slow and controlled.",
     "category": "Mobility",
     "difficulty": "Beginner",
@@ -150,22 +158,40 @@
   },
   {
     "id": "f_07",
-    "title": "The 500m Row Test",
-    "description": "Pure anaerobic power. This should be a 'sprint' where you finish completely breathless.",
+    "title": "Row Till You Break",
+    "description": "Pure anaerobic punishment. Three cracks at 500m, each one should leave you breathless. Rest just enough to go again, but not enough to fully recover. Your split time is your score.",
     "category": "Conditioning",
     "difficulty": "Advanced",
-    "estimatedTime": 12,
+    "estimatedTime": 25,
     "tags": ["Benchmark", "Row"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["500m Easy Row, then 3 x 10 stroke power bursts"]
+        "movements": [
+          "500m Easy Row",
+          "3 x 10 stroke power bursts (build each one)",
+          "2 min rest before starting"
+        ]
       },
       {
-        "name": "Max Effort",
-        "instructions": "Secure feet tightly. Start with short, quick strokes to get the flywheel moving.",
-        "movements": ["500m Row Sprint"]
+        "name": "3 x 500m Row - Max Effort",
+        "instructions": "3 attempts at 500m, all-out each time. Rest exactly 3 minutes between efforts. Record your split time for each. Your score is your fastest split.",
+        "movements": [
+          "500m Row Sprint - Attempt 1",
+          "3 min rest",
+          "500m Row Sprint - Attempt 2",
+          "3 min rest",
+          "500m Row Sprint - Attempt 3"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "3 min easy row",
+          "60s seated forward fold",
+          "60s pigeon stretch each side"
+        ]
       }
     ]
   },
@@ -223,54 +249,98 @@
   },
   {
     "id": "f_10",
-    "title": "Kettlebell Swing Ladder",
-    "description": "Building posterior chain power. Maintain a flat back and snap the hips aggressively.",
+    "title": "Hip Snap",
+    "description": "Posterior chain power, built one swing at a time. The reps climb every two minutes so there is no cruising. Flat back, aggressive hip snap, and let the bell float.",
     "category": "Strength",
     "difficulty": "Intermediate",
-    "estimatedTime": 15,
+    "estimatedTime": 20,
     "tags": ["KB", "Power"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["20 Hip Hinges, 10 Yoga Pushups"]
+        "movements": [
+          "20 Hip Hinges",
+          "10 Yoga Pushups",
+          "10 Romanian Deadlifts (light KB)",
+          "10 KB Deadlifts (working weight)"
+        ]
       },
       {
         "name": "EMOM 10",
-        "instructions": "Perform the reps at the start of every minute. Rest for the remainder of that minute.",
-        "movements": ["15-20 KB Swings"]
+        "instructions": "Perform the reps at the start of every minute. Rest for the remainder. Reps climb every 2 minutes so pace yourself on the early rounds. If form breaks, drop the reps not the bell.",
+        "movements": [
+          "Min 1-2: 12 KB Swings",
+          "Min 3-4: 15 KB Swings",
+          "Min 5-6: 18 KB Swings",
+          "Min 7-8: 21 KB Swings",
+          "Min 9-10: 24 KB Swings"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "60s Child's Pose",
+          "60s Glute Bridge Hold",
+          "60s Standing Forward Fold"
+        ]
       }
     ]
   },
   {
     "id": "f_11",
-    "title": "Sprint Intervals",
-    "description": "Developing top-end speed and aerobic recovery. Each 400m should be at 90-95% effort.",
+    "title": "The 400 Club",
+    "description": "Five rounds of 400m at 90-95% effort. The goal is consistency, not just a fast first rep. If your splits are falling apart by round three, you went out too hot. Record every split and chase them next time.",
     "category": "Conditioning",
     "difficulty": "Advanced",
-    "estimatedTime": 30,
-    "tags": ["Running", "Speed", "No Equipment"],
+    "estimatedTime": 35,
+    "tags": ["Running", "Speed", "No Equipment", "Benchmark"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["1km Jog, Leg Swings, 2 x 50m Strides"]
+        "movements": [
+          "1km Easy Jog",
+          "Leg Swings x 10 each direction",
+          "High Knees x 20m",
+          "Butt Kicks x 20m",
+          "2 x 50m Strides (building to 80%)"
+        ]
       },
       {
-        "name": "5 Sets",
-        "instructions": "Rest 90s between sets. Focus on staying relaxed in the face and shoulders while sprinting.",
-        "movements": ["400m Run (All out)"]
+        "name": "5 x 400m",
+        "instructions": "Rest exactly 90 seconds between efforts. Record your split each round. Stay relaxed in the face and shoulders, tension costs you speed. Aim to finish rounds 4 and 5 within 5 seconds of round 1.",
+        "movements": [
+          "400m Run",
+          "90s rest",
+          "400m Run",
+          "90s rest",
+          "400m Run",
+          "90s rest",
+          "400m Run",
+          "90s rest",
+          "400m Run"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "800m Easy Walk or Jog",
+          "60s Hip Flexor Stretch each side",
+          "60s Standing Hamstring Stretch each side",
+          "60s Calf Stretch each side"
+        ]
       }
     ]
   },
   {
     "id": "f_12",
-    "title": "Pushup Pyramid",
-    "description": "Volume-based conditioning for the upper body. Form over speed.",
+    "title": "The Pushup Pyramid",
+    "description": "100 pushups, every rep earned. You climb to 10 and fight your way back down. Rest only as long as the set took. Form over speed, chest to floor every time.",
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 20,
-    "tags": ["Chest", "Bodyweight", "No Equipment", "Women’s Picks"],
+    "tags": ["Chest", "Bodyweight", "No Equipment", "Women's Picks"],
     "isPremium": false,
     "blocks": [
       {
@@ -278,16 +348,36 @@
         "movements": ["2 Rounds: 10 Shoulder Taps, 10 Scapular Pushups"]
       },
       {
-        "name": "1 to 10 to 1",
-        "instructions": "Rest is equal to the time it took to do the reps. (e.g., 5 pushups, rest ~5-10s).",
-        "movements": ["1-2-3-4-5-6-7-8-9-10-9-8-7-6-5-4-3-2-1 Pushups"]
+        "name": "The Pyramid",
+        "instructions": "Work up from 1 rep to 10, then back down to 1. Rest between each set for roughly the same time it took to complete it. No rushing, no sloppy reps.",
+        "movements": [
+          "1 Pushup, rest",
+          "2 Pushups, rest",
+          "3 Pushups, rest",
+          "4 Pushups, rest",
+          "5 Pushups, rest",
+          "6 Pushups, rest",
+          "7 Pushups, rest",
+          "8 Pushups, rest",
+          "9 Pushups, rest",
+          "10 Pushups, rest",
+          "9 Pushups, rest",
+          "8 Pushups, rest",
+          "7 Pushups, rest",
+          "6 Pushups, rest",
+          "5 Pushups, rest",
+          "4 Pushups, rest",
+          "3 Pushups, rest",
+          "2 Pushups, rest",
+          "1 Pushup"
+        ]
       }
     ]
   },
   {
     "id": "f_13",
-    "title": "The 4-Min Tabata",
-    "description": "High intensity, short duration. Maximum intensity is required to see benefits.",
+    "title": "Four Minutes of Fury",
+    "description": "4 minutes. That is all. But if you are not redlining by round 4 you are not working hard enough. Tabata protocol: 20 seconds all-out, 10 seconds to survive. Eight rounds, alternating between two movements. No excuses.",
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 10,
@@ -296,12 +386,26 @@
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["2 mins Jumping Jacks, 10 Air Squats"]
+        "movements": [
+          "60s High Knees",
+          "10 Squat to Stand",
+          "10 Explosive Jump Squats (easy pace)",
+          "10 Burpees (steady pace)"
+        ]
       },
       {
-        "name": "20s Work / 10s Rest",
-        "instructions": "8 Rounds of 20 seconds of work followed by 10 seconds of rest.",
-        "movements": ["Thrusters (or Jump Squats)"]
+        "name": "Tabata: 20s Work / 10s Rest x 8 Rounds",
+        "instructions": "Alternate between Jump Squats and Burpees each round. 20 seconds all-out, 10 seconds rest. Count your reps and try to hold consistent numbers across all 8 rounds.",
+        "movements": [
+          "Round 1: Jump Squats (20s), rest (10s)",
+          "Round 2: Burpees (20s), rest (10s)",
+          "Round 3: Jump Squats (20s), rest (10s)",
+          "Round 4: Burpees (20s), rest (10s)",
+          "Round 5: Jump Squats (20s), rest (10s)",
+          "Round 6: Burpees (20s), rest (10s)",
+          "Round 7: Jump Squats (20s), rest (10s)",
+          "Round 8: Burpees (20s), rest (10s)"
+        ]
       }
     ]
   },
@@ -332,8 +436,8 @@
   },
   {
     "id": "f_15",
-    "title": "Burpee/Squat Ascending",
-    "description": "A ladder format that challenges your pacing and leg endurance.",
+    "title": "The Endless Climb",
+    "description": "A ladder that never stops climbing. Every round adds 2 reps to both movements and the clock does not care. Pace yourself early or blow up before the halfway mark. Your score is the round you reach when time is called.",
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 18,
@@ -342,12 +446,26 @@
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["2 Rounds: 10 Air Squats, 5 Burpees"]
+        "movements": [
+          "2 Rounds: 10 Air Squats, 5 Burpees",
+          "Rest 60s before starting"
+        ]
       },
       {
-        "name": "10 min AMRAP",
-        "instructions": "Round 1: 2 Reps each. Round 2: 4 Reps. Round 3: 6 Reps... continue until time is up.",
-        "movements": ["2 Burpees, 2 Squats (+2 reps every round)"]
+        "name": "10 Min AMRAP Ladder",
+        "instructions": "Start at 2 reps and add 2 each round. No scheduled rest, move at a pace you can sustain. When time is called, record the round you completed as your score.",
+        "movements": [
+          "Round 1: 2 Burpees, 2 Air Squats",
+          "Round 2: 4 Burpees, 4 Air Squats",
+          "Round 3: 6 Burpees, 6 Air Squats",
+          "Round 4: 8 Burpees, 8 Air Squats",
+          "Round 5: 10 Burpees, 10 Air Squats",
+          "Round 6: 12 Burpees, 12 Air Squats",
+          "Round 7: 14 Burpees, 14 Air Squats",
+          "Round 8: 16 Burpees, 16 Air Squats",
+          "Round 9: 18 Burpees, 18 Air Squats",
+          "Round 10: 20 Burpees, 20 Air Squats"
+        ]
       }
     ]
   },
@@ -378,43 +496,70 @@
   },
   {
     "id": "f_17",
-    "title": "Jump Rope Skill",
-    "description": "Cardiovascular health and foot speed. Focus on staying light on the balls of your feet.",
+    "title": "Learn the Rope",
+    "description": "Jump rope is a skill before it is a workout. This session is about building rhythm and foot speed, not fitness. Stay light on the balls of your feet, keep your elbows in, and do not stare at the ground. Trip? Reset and go again, everyone does.",
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": ["Cardio", "Jump Rope", "Women’s Picks"],
+    "tags": ["Cardio", "Jump Rope", "Skill", "Women's Picks"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["Ankle circles, 50 Calf Raises"]
+        "movements": [
+          "30s Ankle Circles each foot",
+          "50 Calf Raises",
+          "30s Bounce in place on balls of feet (no rope)",
+          "30s Wrist circles"
+        ]
       },
       {
-        "name": "5 Rounds",
-        "instructions": "Rest 1 min between rounds. If you trip, just reset and keep going.",
-        "movements": ["2 mins Steady Jump Rope", "1 min Rest"]
+        "name": "Skill Practice: 5 Rounds",
+        "instructions": "Each round has a focus point. Read it before you start and keep it in your head while you jump. Rest 60 seconds between rounds. Tripping is fine, resetting quickly is the skill.",
+        "movements": [
+          "Round 1: 2 mins steady jump rope. Focus: find your rhythm, nothing else.",
+          "Round 2: 2 mins steady jump rope. Focus: keep elbows close to your sides.",
+          "Round 3: 2 mins steady jump rope. Focus: stay light, minimal ground contact.",
+          "Round 4: 2 mins steady jump rope. Focus: eyes forward, not at the floor.",
+          "Round 5: 2 mins steady jump rope. Focus: put it all together."
+        ]
       }
     ]
   },
   {
     "id": "f_18",
-    "title": "The Bear Crawl",
-    "description": "Building core tension and shoulder stability through crawling patterns.",
+    "title": "Ground & Pound",
+    "description": "Core tension, shoulder stability and leg power, all without touching a single piece of kit. Each minute has two movements that fight each other in the best way. Get through both and the rest of the minute is yours.",
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 18,
-    "tags": ["Full Body", "Animal Flow", "No Equipment", "Women’s Picks"],
+    "tags": ["Full Body", "No Equipment", "Women's Picks", "Core"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["Wrist prep, 10 Cat-Cow, 10 Bird-Dog"]
+        "movements": [
+          "30s Wrist Circles each direction",
+          "10 Cat-Cow",
+          "10 Bird-Dog each side",
+          "10 Glute Bridges"
+        ]
       },
       {
         "name": "EMOM 10",
-        "instructions": "Execute both movements within the minute. Rest for the remainder.",
-        "movements": ["20m Bear Crawl", "10 Air Squats"]
+        "instructions": "Complete both movements at the start of each minute. Whatever time is left is your rest. Keep quality high throughout, this is not a race.",
+        "movements": [
+          "Min 1: 10 Push-ups, 10 Jump Squats",
+          "Min 2: 10 Push-ups, 10 Jump Squats",
+          "Min 3: 12 Push-ups, 12 Jump Squats",
+          "Min 4: 12 Push-ups, 12 Jump Squats",
+          "Min 5: 14 Push-ups, 14 Jump Squats",
+          "Min 6: 14 Push-ups, 14 Jump Squats",
+          "Min 7: 16 Push-ups, 16 Jump Squats",
+          "Min 8: 16 Push-ups, 16 Jump Squats",
+          "Min 9: 18 Push-ups, 18 Jump Squats",
+          "Min 10: 18 Push-ups, 18 Jump Squats"
+        ]
       }
     ]
   },
@@ -441,22 +586,45 @@
   },
   {
     "id": "f_20",
-    "title": "The 1km Row Benchmark",
-    "description": "A middle-distance engine test. Aim for a sub 4:00 time (Intermediate).",
+    "title": "The Long Pull",
+    "description": "This is not a sprint. Four rounds of rowing with bodyweight work in between, building fatigue the way a Hyrox race does. Your legs will be burning before you sit back down. Record your 500m split each row and try to hold it across all four rounds.",
     "category": "Hyrox",
     "difficulty": "Intermediate",
-    "estimatedTime": 15,
-    "tags": ["Hyrox", "Row", "Benchmark"],
+    "estimatedTime": 40,
+    "tags": ["Hyrox", "Row", "Benchmark", "Full Body"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["500m Easy Row + 5 High Power strokes"]
+        "movements": [
+          "500m Easy Row",
+          "5 High Power strokes",
+          "10 Squat to Stand",
+          "10 Glute Bridges",
+          "Rest 90s before starting"
+        ]
       },
       {
-        "name": "Max Effort",
-        "instructions": "Try to maintain a consistent '500m split' for the entire distance.",
-        "movements": ["1000m Row"]
+        "name": "4 Rounds",
+        "instructions": "Complete the row then move straight into the floor work, no rest between them. Rest 2 minutes after completing all three movements before starting the next round. Record your 500m row split each round.",
+        "movements": [
+          "Round 1: 500m Row (record split), 15 Burpees, 20 Air Squats",
+          "Rest 2 mins",
+          "Round 2: 500m Row (record split), 15 Burpees, 20 Air Squats",
+          "Rest 2 mins",
+          "Round 3: 500m Row (record split), 15 Burpees, 20 Air Squats",
+          "Rest 2 mins",
+          "Round 4: 500m Row (record split), 15 Burpees, 20 Air Squats"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "3 mins Easy Row",
+          "60s Seated Forward Fold",
+          "60s Pigeon Stretch each side",
+          "60s Hip Flexor Stretch each side"
+        ]
       }
     ]
   },
@@ -1419,8 +1587,8 @@
   },
   {
     "id": "f_53",
-    "title": "Burpee Broad Jump Intervals",
-    "description": "A Hyrox-style station focus. Strong hips, long jumps, and calm breathing.",
+    "title": "Jump The Gap",
+    "description": "Eight rounds of burpee broad jumps, the movement that breaks people in Hyrox. The goal is consistent distance every round, not an all-out sprint that falls apart by round four. Solo or with a partner, the rules are the same: strong hips, full extension, calm breathing.",
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 30,
@@ -1437,15 +1605,37 @@
       {
         "name": "Warmup",
         "movements": [
-          "6 mins easy cardio",
-          "2 x 10 burpees (easy)",
-          "2 x 20m broad jump practice"
+          "3 mins Easy Jog",
+          "3 mins Easy Row or Bike (if available)",
+          "10 Burpees at easy pace",
+          "10 Broad Jumps, focus on full hip extension",
+          "10 Burpees at easy pace",
+          "10 Broad Jumps, push the distance slightly",
+          "Rest 90s before starting"
         ]
       },
       {
-        "name": "E2MOM 16",
-        "instructions": "Partner option: you-go-I-go. Partner A works for the first 60s, Partner B works for the second 60s. The team goal is smooth, consistent distance every round.",
-        "movements": ["Burpee Broad Jumps"]
+        "name": "E2MOM x 8 Rounds",
+        "instructions": "Every 2 minutes, complete as many burpee broad jumps as possible in 60 seconds. Rest the remaining 60 seconds. Solo: track your distance or rep count each round and aim to hold it. Partner: Partner A works the first 60s, Partner B works the second 60s, alternating each round. Team goal is consistent distance across all 8 rounds.",
+        "movements": [
+          "Round 1: 60s Burpee Broad Jumps, 60s rest",
+          "Round 2: 60s Burpee Broad Jumps, 60s rest",
+          "Round 3: 60s Burpee Broad Jumps, 60s rest",
+          "Round 4: 60s Burpee Broad Jumps, 60s rest",
+          "Round 5: 60s Burpee Broad Jumps, 60s rest",
+          "Round 6: 60s Burpee Broad Jumps, 60s rest",
+          "Round 7: 60s Burpee Broad Jumps, 60s rest",
+          "Round 8: 60s Burpee Broad Jumps, 60s rest"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "2 mins Easy Walk",
+          "60s Hip Flexor Stretch each side",
+          "60s Hamstring Stretch each side",
+          "60s Glute Stretch each side"
+        ]
       }
     ]
   },
@@ -1501,31 +1691,49 @@
   },
   {
     "id": "f_56",
-    "title": "Row 2k TT",
-    "description": "A classic engine benchmark used in Hyrox prep. Even splits, then empty the tank.",
+    "title": "Race Day Simulation",
+    "description": "Hyrox does not let you sit on a rower with fresh legs. This session makes sure you never do either. You will earn your 2000m row by getting through a full body burnout first, then rowing on legs that already have nothing left. That is the point.",
     "category": "Hyrox",
     "difficulty": "Advanced",
-    "estimatedTime": 15,
-    "tags": ["Hyrox", "Row", "Benchmark"],
+    "estimatedTime": 35,
+    "tags": ["Hyrox", "Row", "Benchmark", "Full Body"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
         "movements": [
-          "8 mins row build: easy → moderate, then 3 x 10 strokes hard"
+          "5 mins Easy Row, building pace every minute",
+          "3 x 10 hard strokes with 20s rest between",
+          "10 Burpees at easy pace",
+          "10 Squat to Stand",
+          "Rest 90s before starting"
         ]
       },
       {
-        "name": "For Time",
-        "instructions": "2000m row. Record your time.",
-        "movements": ["2000m Row"]
+        "name": "The Burnout",
+        "instructions": "Complete all three movements as fast as possible with no rest between them. This is not for time but it should hurt. Move straight into the row when done.",
+        "movements": ["30 Burpee Broad Jumps", "40 Air Squats", "50 Push-ups"]
+      },
+      {
+        "name": "2000m Row: For Time",
+        "instructions": "Start the rower immediately after finishing the burnout. Record your time. Even splits for the first 1500m then empty the tank for the final 500m. This is your benchmark, chase it every time.",
+        "movements": ["2000m Row (record time)"]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "3 mins Easy Row",
+          "60s Seated Forward Fold",
+          "60s Pigeon Stretch each side",
+          "60s Hip Flexor Stretch each side"
+        ]
       }
     ]
   },
   {
     "id": "f_57",
-    "title": "Ski Sub: Row + Run",
-    "description": "If you don’t have a SkiErg, this mimics the same upper-body breathing demand.",
+    "title": "No Ski, No Problem",
+    "description": "No SkiErg? This is your substitute. The row covers the upper body pulling demand and the run keeps the legs turning over, just like race day transitions. Five rounds of both with no scheduled rest. Smooth is fast.",
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 35,
@@ -1535,21 +1743,40 @@
       {
         "name": "Warmup",
         "movements": [
-          "800m easy run",
-          "500m easy row",
-          "10 push-ups, 10 air squats"
+          "800m Easy Run",
+          "500m Easy Row",
+          "10 Push-ups",
+          "10 Air Squats",
+          "10 Scapular Push-ups",
+          "Rest 90s before starting"
         ]
       },
       {
-        "name": "5 Rounds",
-        "instructions": "Keep the row powerful, keep the run smooth.",
-        "movements": ["600m Run", "300m Row"]
+        "name": "5 Rounds: For Time",
+        "instructions": "No scheduled rest between movements or rounds. Rest only if you genuinely need to. Record your total time at the end. Keep the row powerful and vertical through the stroke, keep the run smooth and steady. The goal is consistent round times, not a fast round one and a dying round five.",
+        "movements": [
+          "Round 1: 600m Run, 300m Row",
+          "Round 2: 600m Run, 300m Row",
+          "Round 3: 600m Run, 300m Row",
+          "Round 4: 600m Run, 300m Row",
+          "Round 5: 600m Run, 300m Row"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "400m Easy Walk",
+          "60s Hip Flexor Stretch each side",
+          "60s Hamstring Stretch each side",
+          "60s Lat Stretch each side",
+          "60s Chest Opener"
+        ]
       }
     ]
   },
   {
     "id": "f_58",
-    "title": "Wall Balls Under Fatigue",
+    "title": "Run to the Wall",
     "description": "Run hard enough to make wall balls feel heavy, then stay composed anyway.",
     "category": "Hyrox",
     "difficulty": "Advanced",
@@ -1574,7 +1801,7 @@
   },
   {
     "id": "f_59",
-    "title": "Stations Only Circuit",
+    "title": "Pit Stop",
     "description": "Hyrox-style stations with minimal running. Great when space is limited.",
     "category": "Hyrox",
     "difficulty": "Intermediate",
@@ -1603,25 +1830,45 @@
   },
   {
     "id": "f_60",
-    "title": "Engine Builder 30",
-    "description": "Steady, aerobic, and repeatable. The goal is to finish feeling better than you started.",
+    "title": "The Quiet Work",
+    "description": "Not every session needs to hurt. Zone 2 work is where your engine actually gets built, and most people skip it because it feels too easy. It is not. Stay conversational the whole time, if you cannot hold a sentence you are going too hard. Pick your machine and settle in.",
     "category": "Hyrox",
     "difficulty": "Beginner",
-    "estimatedTime": 35,
+    "estimatedTime": 40,
     "tags": ["Hyrox", "Aerobic", "Zone 2", "Engine"],
-    "isPremium": false,
+    "isPremium": true,
     "blocks": [
-      { "name": "Warmup", "movements": ["5 mins easy cardio"] },
       {
-        "name": "30 Min Steady",
-        "instructions": "Maintain conversational pace.",
-        "movements": ["Run / Bike / Row (steady)"]
+        "name": "Warmup",
+        "movements": [
+          "5 mins very easy cardio on your chosen machine",
+          "Build pace slightly every 60s until you hit your working pace",
+          "You should be breathing but comfortable before the clock starts"
+        ]
+      },
+      {
+        "name": "30 Min Zone 2",
+        "instructions": "Pick one machine and stay on it. Maintain a conversational pace for the full 30 minutes. If you cannot speak in full sentences you are going too hard. If you feel like you could go forever you are probably right where you need to be. Record your distance at the end.",
+        "movements": [
+          "Option A: 30 mins Steady Run",
+          "Option B: 30 mins Steady Row",
+          "Option C: 30 mins Steady Bike"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "5 mins very easy pace on your chosen machine",
+          "60s Hip Flexor Stretch each side",
+          "60s Hamstring Stretch each side",
+          "60s Calf Stretch each side"
+        ]
       }
     ]
   },
   {
     "id": "f_61",
-    "title": "Sled Push Intervals (Moderate)",
+    "title": "Push Your Luck",
     "description": "Hyrox sled push practice. Record load and quality. Smooth drive, no collapsing.",
     "category": "Hyrox",
     "difficulty": "Advanced",
@@ -1719,13 +1966,13 @@
   },
   {
     "id": "f_65",
-    "title": "PFT Variant A",
+    "title": "The Qualifier",
     "description": "A Hyrox-style benchmark with accessible swaps. Minimal transition time.",
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 35,
     "tags": ["Hyrox", "Benchmark", "Test"],
-    "isPremium": false,
+    "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
@@ -1910,66 +2157,169 @@
   },
   {
     "id": "p_04",
-    "title": "Strict Strength: Press",
-    "description": "Pure overhead pressing power. No help from the legs (no dip).",
+    "title": "Press Day",
+    "description": "A proper overhead pressing session from the ground up. You will build to a heavy single, hit your volume work at 85%, then finish with accessory work that fills the gaps most pressers ignore. No leg drive, no excuses.",
     "category": "Strength",
     "difficulty": "Advanced",
-    "estimatedTime": 40,
-    "tags": ["Shoulders", "Overhead"],
+    "estimatedTime": 60,
+    "tags": ["Shoulders", "Overhead", "Strength", "Upper Body"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
         "movements": [
-          "2 Rounds: 10 Prone Y-Raises, 10 Face Pulls, 10 Empty Bar Presses"
+          "2 Rounds: 10 Prone Y-Raises, 10 Face Pulls, 10 Empty Bar Presses",
+          "10 Band Pull Aparts",
+          "10 Shoulder CARs each side",
+          "Rest 60s before starting"
         ]
       },
       {
-        "name": "5x5",
-        "instructions": "Rest 3 mins between sets. Weight should be ~85% of 1RM.",
-        "movements": ["Strict Press"]
+        "name": "Block 1: Build to a Heavy Single",
+        "instructions": "Five sets building to a heavy but not maximal single. This is 90-95% effort, not a true 1RM. Rest as needed between sets. This number sets your working weight for Block 2.",
+        "movements": [
+          "Set 1: 5 reps at 50% estimated 1RM",
+          "Set 2: 3 reps at 65% estimated 1RM",
+          "Set 3: 2 reps at 75% estimated 1RM",
+          "Set 4: 1 rep at 85% estimated 1RM",
+          "Set 5: 1 rep at 90-95% estimated 1RM (record weight)"
+        ]
+      },
+      {
+        "name": "Block 2: 5x5 Volume",
+        "instructions": "Drop to 85% of your Block 1 heavy single. Five sets of five with 3 minutes rest between each. Bar path straight, glutes and core tight, no layback. If you miss a rep, do not add weight next set.",
+        "movements": [
+          "Set 1: 5 Strict Press at 85%, rest 3 mins",
+          "Set 2: 5 Strict Press at 85%, rest 3 mins",
+          "Set 3: 5 Strict Press at 85%, rest 3 mins",
+          "Set 4: 5 Strict Press at 85%, rest 3 mins",
+          "Set 5: 5 Strict Press at 85% (record weight and any missed reps)"
+        ]
+      },
+      {
+        "name": "Block 3: Accessory Superset",
+        "instructions": "Three rounds of the superset below. Rest 60s between rounds. These movements target the weak links in overhead pressing: triceps, rear delts and rotator cuff stability.",
+        "movements": [
+          "Round 1: 12 Dumbbell Lateral Raises, 12 Tricep Dips, 12 Face Pulls, 10 External Rotation each side",
+          "Round 2: 12 Dumbbell Lateral Raises, 12 Tricep Dips, 12 Face Pulls, 10 External Rotation each side",
+          "Round 3: 12 Dumbbell Lateral Raises, 12 Tricep Dips, 12 Face Pulls, 10 External Rotation each side"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "60s Doorframe Chest Stretch each side",
+          "60s Lat Stretch each side",
+          "60s Shoulder Cross Body Stretch each side",
+          "60s Neck Side Stretch each side"
+        ]
       }
     ]
   },
   {
     "id": "p_05",
-    "title": "The 4km Row Finisher",
-    "description": "Building the 'diesel' engine. Focus on rhythmic breathing and powerful leg drive.",
+    "title": "The Diesel",
+    "description": "Four kilometres at a pace you can actually hold. This is not about suffering, it is about sustaining. Target 10-15 seconds slower than your 2k split and lock into a rhythm you could hold for another 2k if you had to. Legs drive, arms finish, breathe on the recovery.",
     "category": "Conditioning",
     "difficulty": "Advanced",
-    "estimatedTime": 25,
-    "tags": ["Row", "Endurance"],
+    "estimatedTime": 30,
+    "tags": ["Row", "Endurance", "Benchmark"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["20 Cal Row (Slow), 10 Bird-Dogs"]
+        "movements": [
+          "10 Bird-Dogs each side",
+          "500m Easy Row, focus on posture",
+          "4 x 10 hard strokes building to working pace",
+          "Rest 90s before starting"
+        ]
       },
       {
-        "name": "Steady State",
-        "instructions": "Target a pace 10-15 seconds slower than your 2k split pace.",
-        "movements": ["4000m Row"]
+        "name": "4000m Steady State",
+        "instructions": "Target a split 10-15 seconds slower than your 2k pace and do not deviate. Check your split every 500m and adjust if needed. Legs drive first, arms finish the stroke, breathe on every recovery. Record your total time and average split at the end.",
+        "movements": [
+          "0-500m: Settle in, find your split, resist going out hot",
+          "500-1500m: Lock into rhythm, check split every 250m",
+          "1500-2500m: The middle is where most people drift, stay focused",
+          "2500-3500m: Hold what you have, do not chase the finish yet",
+          "3500-4000m: If you have anything left, build the last 500m to the line"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "3 mins Easy Row",
+          "60s Seated Forward Fold",
+          "60s Pigeon Stretch each side",
+          "60s Lat Stretch each side"
+        ]
       }
     ]
   },
   {
     "id": "p_06",
-    "title": "Front Squat Volume",
-    "description": "High density strength work. Short rest periods build capacity under fatigue.",
+    "title": "Squat Heavy, Squat Often",
+    "description": "This is a proper squat session, not just a finisher. You will build to a heavy front squat, hit volume at 80%, then finish with accessory work that makes the next session better. Elbows up, chest tall, and do not bail on depth when it gets heavy.",
     "category": "Strength",
     "difficulty": "Advanced",
-    "estimatedTime": 25,
-    "tags": ["Legs", "Squat", "Legs & Glutes"],
+    "estimatedTime": 50,
+    "tags": ["Legs", "Squat", "Legs & Glutes", "Strength"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["3 Rounds: 10 Goblet Squats, 10 Glute Bridges"]
+        "movements": [
+          "3 Rounds: 10 Goblet Squats, 10 Glute Bridges",
+          "10 Ankle Circles each foot",
+          "10 Hip 90-90 Rotations",
+          "Rest 60s before starting"
+        ]
       },
       {
-        "name": "10x3",
-        "instructions": "Perform 3 reps every 90 seconds. Weight should be 80% of 1RM.",
-        "movements": ["Front Squat"]
+        "name": "Block 1: Build to a Heavy Single",
+        "instructions": "Take 5 sets to build to a heavy but not maximal single. This is not a 1RM attempt, aim for about 90-95% effort. Rest as needed between sets. This sets your working weight for Block 2.",
+        "movements": [
+          "Set 1: 5 reps at 50% estimated 1RM",
+          "Set 2: 3 reps at 65% estimated 1RM",
+          "Set 3: 2 reps at 75% estimated 1RM",
+          "Set 4: 1 rep at 85% estimated 1RM",
+          "Set 5: 1 rep at 90-95% estimated 1RM (record weight)"
+        ]
+      },
+      {
+        "name": "Block 2: Volume at 80%",
+        "instructions": "Drop to 80% of your Block 1 heavy single and perform 3 reps every 90 seconds for 10 rounds. The weight should feel manageable for the first 5 rounds and earn your respect by round 8. Elbows up throughout.",
+        "movements": [
+          "Round 1: 3 Front Squats at 80%, rest 90s",
+          "Round 2: 3 Front Squats at 80%, rest 90s",
+          "Round 3: 3 Front Squats at 80%, rest 90s",
+          "Round 4: 3 Front Squats at 80%, rest 90s",
+          "Round 5: 3 Front Squats at 80%, rest 90s",
+          "Round 6: 3 Front Squats at 80%, rest 90s",
+          "Round 7: 3 Front Squats at 80%, rest 90s",
+          "Round 8: 3 Front Squats at 80%, rest 90s",
+          "Round 9: 3 Front Squats at 80%, rest 90s",
+          "Round 10: 3 Front Squats at 80%, rest 90s"
+        ]
+      },
+      {
+        "name": "Block 3: Accessory Finisher",
+        "instructions": "Three rounds, no barbell. Focus on quality and control. Rest 60s between rounds.",
+        "movements": [
+          "Round 1: 12 Bulgarian Split Squats each leg, 15 Glute Bridges, 12 Nordic Curls",
+          "Round 2: 12 Bulgarian Split Squats each leg, 15 Glute Bridges, 12 Nordic Curls",
+          "Round 3: 12 Bulgarian Split Squats each leg, 15 Glute Bridges, 12 Nordic Curls"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "60s Pigeon Stretch each side",
+          "60s Hip Flexor Stretch each side",
+          "60s Seated Forward Fold",
+          "60s Ankle Stretch each side"
+        ]
       }
     ]
   },
@@ -2002,64 +2352,217 @@
   },
   {
     "id": "p_08",
-    "title": "The Sandbag Mile",
-    "description": "Brutal core and carry endurance. Use a shoulder or 'bear hug' carry.",
+    "title": "The Mile That Earns It",
+    "description": "A full mile of sandbag carry, broken up by movements that make picking it back up feel even heavier. You will cover 1600m in four 400m legs with a penalty block between each one. Switch carry positions as needed but the bag never goes in a locker, it stays with you the whole time.",
     "category": "Conditioning",
     "difficulty": "Advanced",
-    "estimatedTime": 35,
-    "tags": ["Running", "Sandbag"],
+    "estimatedTime": 50,
+    "tags": ["Running", "Sandbag", "Full Body", "Endurance"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["5 mins joint prep, 200m light carry"]
+        "movements": [
+          "5 mins joint prep",
+          "200m light sandbag carry at easy pace",
+          "10 Squats to Stand",
+          "10 Hip Hinges",
+          "Rest 90s before starting"
+        ]
       },
       {
-        "name": "1600m Carry",
-        "instructions": "Cover 1 mile as fast as possible. Switch carrying positions as needed.",
-        "movements": ["1600m Sandbag Carry (20/30kg)"]
+        "name": "Leg 1",
+        "instructions": "Pick up the bag and move. Switch between shoulder carry and bear hug as needed. Do not put the bag down until you hit 400m.",
+        "movements": ["400m Sandbag Carry (20/30kg)"]
+      },
+      {
+        "name": "Penalty Block 1",
+        "instructions": "Complete all three movements before picking the bag back up. No rest between movements.",
+        "movements": ["15 Burpees", "20 Air Squats", "10 Sandbag Cleans"]
+      },
+      {
+        "name": "Leg 2",
+        "instructions": "Pick the bag back up. Legs are already burning, that is the point.",
+        "movements": ["400m Sandbag Carry (20/30kg)"]
+      },
+      {
+        "name": "Penalty Block 2",
+        "instructions": "Complete all three movements before picking the bag back up. No rest between movements.",
+        "movements": ["15 Push-ups", "20 Reverse Lunges", "10 Sandbag Squats"]
+      },
+      {
+        "name": "Leg 3",
+        "instructions": "Halfway done. Find a carry position that works and commit to it.",
+        "movements": ["400m Sandbag Carry (20/30kg)"]
+      },
+      {
+        "name": "Penalty Block 3",
+        "instructions": "Complete all three movements before picking the bag back up. No rest between movements.",
+        "movements": ["15 Burpees", "20 Jump Squats", "10 Sandbag Cleans"]
+      },
+      {
+        "name": "Leg 4: The Finish",
+        "instructions": "Final 400m. The bag does not touch the floor until you cross the line. Record your total time.",
+        "movements": ["400m Sandbag Carry (20/30kg, record total time)"]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "5 mins easy walk",
+          "60s Hip Flexor Stretch each side",
+          "60s Thoracic Rotation each side",
+          "60s Hamstring Stretch each side",
+          "60s Shoulder Cross Body Stretch each side"
+        ]
       }
     ]
   },
   {
     "id": "p_09",
-    "title": "Pistol Squat Skill",
-    "description": "Unilateral strength and balance. Use a counterweight or bench for support if needed.",
+    "title": "One Leg at a Time",
+    "description": "Pistol squats are one of the hardest bodyweight movements to master. This session builds up to them properly, starting with the mobility and strength foundations and earning the full rep by the end. Do not skip the progressions, they are the session.",
     "category": "Mobility",
     "difficulty": "Advanced",
-    "estimatedTime": 30,
-    "tags": ["Legs", "Balance", "No Equipment", "Legs & Glutes"],
+    "estimatedTime": 35,
+    "tags": ["Legs", "Balance", "No Equipment", "Legs & Glutes", "Skill"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["Ankle mobility (2m), 20 Air Squats"]
+        "movements": [
+          "60s Ankle Circles each foot",
+          "60s Deep Squat Hold",
+          "10 Air Squats",
+          "10 Single Leg Glute Bridges each side",
+          "10 Hip 90-90 Rotations",
+          "Rest 60s before starting"
+        ]
       },
       {
-        "name": "EMOM 10",
-        "instructions": "Perform 3-5 pistols per leg every minute. Rest remainder of minute.",
-        "movements": ["Pistol Squat Progressions"]
+        "name": "Block 1: Ankle and Hip Mobility",
+        "instructions": "Move slowly through each exercise. This is not a warmup, it is active prep for the demands of a pistol squat. Spend time where you feel restriction.",
+        "movements": [
+          "3 x 60s Single Leg Calf Raises (slow, controlled)",
+          "3 x 10 Knee Over Toe Squats each side",
+          "3 x 30s Single Leg Balance Hold each side",
+          "3 x 10 Assisted Deep Squat to Stand (hold a pole or rig)"
+        ]
+      },
+      {
+        "name": "Block 2: Pistol Progressions",
+        "instructions": "Work through each progression in order. Spend 2-3 sets on each before moving to the next. Only move forward when the current level feels controlled, not just possible.",
+        "movements": [
+          "Progression 1: Box Pistol Squat (sit back to a box, 3 x 5 each leg)",
+          "Progression 2: Assisted Pistol Squat (hold a rig or counterweight, 3 x 5 each leg)",
+          "Progression 3: Eccentric Pistol Squat (lower slowly for 4 counts, stand with two legs, 3 x 4 each leg)",
+          "Progression 4: Full Pistol Squat (unassisted if ready, 3 x 3 each leg)"
+        ]
+      },
+      {
+        "name": "Block 3: EMOM 8",
+        "instructions": "Choose the progression level that challenged you most in Block 2 and repeat it for 8 minutes. Every minute on the minute, perform 3 reps each leg. Rest the remainder of the minute. Quality over quantity.",
+        "movements": [
+          "Min 1: 3 Pistol Squats each leg (or chosen progression)",
+          "Min 2: 3 Pistol Squats each leg (or chosen progression)",
+          "Min 3: 3 Pistol Squats each leg (or chosen progression)",
+          "Min 4: 3 Pistol Squats each leg (or chosen progression)",
+          "Min 5: 3 Pistol Squats each leg (or chosen progression)",
+          "Min 6: 3 Pistol Squats each leg (or chosen progression)",
+          "Min 7: 3 Pistol Squats each leg (or chosen progression)",
+          "Min 8: 3 Pistol Squats each leg (or chosen progression)"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "60s Pigeon Stretch each side",
+          "60s Hip Flexor Stretch each side",
+          "60s Ankle Stretch each side",
+          "60s Seated Forward Fold"
+        ]
       }
     ]
   },
   {
     "id": "p_10",
-    "title": "Double Under Mastery",
-    "description": "Efficiency test. Double unders require a relaxed grip and high vertical jumps.",
+    "title": "The Double Under Clinic",
+    "description": "This is for athletes who can already string double unders together but want to get faster, more consistent and less rattled when they trip. Four blocks that isolate the specific skills that separate good double unders from great ones. Relaxed grip, high jump, patient wrists.",
     "category": "Conditioning",
     "difficulty": "Advanced",
-    "estimatedTime": 20,
+    "estimatedTime": 35,
     "tags": ["Skill", "Jump Rope"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["Calf stretches, 50 Single Unders"]
+        "movements": [
+          "60s Calf Raises",
+          "60s Ankle Circles each foot",
+          "30s Wrist Circles each direction",
+          "50 Single Unders at easy pace",
+          "20 Single Unders at fast cadence",
+          "10 x 3 Double Under attempts with full reset between each"
+        ]
       },
       {
-        "name": "10 min EMOM",
-        "instructions": "Accumulate 30-50 reps per minute. Focus on timing, not speed.",
-        "movements": ["30-50 Double Unders"]
+        "name": "Block 1: Consistency Work",
+        "instructions": "Five sets with 45 seconds rest between each. The goal is unbroken sets. If you trip, reset immediately and note where in the set it happened. Most athletes trip at the same point every time, find yours.",
+        "movements": [
+          "Set 1: 20 Unbroken Double Unders (rest 45s)",
+          "Set 2: 25 Unbroken Double Unders (rest 45s)",
+          "Set 3: 30 Unbroken Double Unders (rest 45s)",
+          "Set 4: 35 Unbroken Double Unders (rest 45s)",
+          "Set 5: 40 Unbroken Double Unders (rest 45s)"
+        ]
+      },
+      {
+        "name": "Block 2: Speed Work",
+        "instructions": "Six rounds of 20 seconds on, 10 seconds off. This is Tabata timing. The goal is maximum reps in each 20 second window. Count every round and try to hold the same number across all six. Wrists drive the speed here, not the arms.",
+        "movements": [
+          "Round 1: 20s Max Double Unders, 10s rest (record reps)",
+          "Round 2: 20s Max Double Unders, 10s rest (record reps)",
+          "Round 3: 20s Max Double Unders, 10s rest (record reps)",
+          "Round 4: 20s Max Double Unders, 10s rest (record reps)",
+          "Round 5: 20s Max Double Unders, 10s rest (record reps)",
+          "Round 6: 20s Max Double Unders, 10s rest (record reps)"
+        ]
+      },
+      {
+        "name": "Block 3: Trip and Reset Drill",
+        "instructions": "This block is specifically about what happens after you trip. The goal is to get back into unbroken reps as fast as possible after each break. Five sets of 50 reps, every time you trip counts as one penalty burpee at the end. Track your burpee total.",
+        "movements": [
+          "Set 1: 50 Double Unders (note trips, rest 60s)",
+          "Set 2: 50 Double Unders (note trips, rest 60s)",
+          "Set 3: 50 Double Unders (note trips, rest 60s)",
+          "Set 4: 50 Double Unders (note trips, rest 60s)",
+          "Set 5: 50 Double Unders (note trips, rest 60s)",
+          "Penalty: 1 Burpee for every trip across all 5 sets"
+        ]
+      },
+      {
+        "name": "Block 4: EMOM Finisher",
+        "instructions": "Ten minutes, every minute on the minute. Accumulate 40-50 reps per minute and rest whatever is left. This should feel manageable after the previous blocks. Focus on staying relaxed in the shoulders and face.",
+        "movements": [
+          "Min 1: 40-50 Double Unders, rest remainder",
+          "Min 2: 40-50 Double Unders, rest remainder",
+          "Min 3: 40-50 Double Unders, rest remainder",
+          "Min 4: 40-50 Double Unders, rest remainder",
+          "Min 5: 40-50 Double Unders, rest remainder",
+          "Min 6: 40-50 Double Unders, rest remainder",
+          "Min 7: 40-50 Double Unders, rest remainder",
+          "Min 8: 40-50 Double Unders, rest remainder",
+          "Min 9: 40-50 Double Unders, rest remainder",
+          "Min 10: 40-50 Double Unders, rest remainder"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "60s Calf Stretch each side",
+          "60s Wrist Flexor Stretch each side",
+          "60s Shoulder Cross Body Stretch each side",
+          "60s Standing Forward Fold"
+        ]
       }
     ]
   },
@@ -2107,22 +2610,74 @@
   },
   {
     "id": "p_13",
-    "title": "Pause Squat Intensity",
-    "description": "Removing the 'stretch reflex' to build raw strength from the bottom of the squat.",
+    "title": "Dead Stop Squats",
+    "description": "Pause squats expose every weakness in your squat. No bounce, no stretch reflex, just raw strength from the hole. This session builds to a heavy pause single, hits volume with a 3 second hold, then finishes with accessory work that makes the bottom position stronger every time you come back.",
     "category": "Strength",
     "difficulty": "Advanced",
-    "estimatedTime": 50,
-    "tags": ["Squat", "Pause", "Legs & Glutes"],
+    "estimatedTime": 65,
+    "tags": ["Squat", "Pause", "Legs & Glutes", "Strength"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["Hip openers, 2 sets of 10 squats (Empty bar)"]
+        "movements": [
+          "60s Hip 90-90 Rotations",
+          "60s Deep Squat Hold",
+          "60s Ankle Circles each foot",
+          "10 Goblet Squats with 3 second pause at bottom",
+          "2 x 5 Empty Bar Back Squat with 2 second pause",
+          "Rest 90s before starting"
+        ]
       },
       {
-        "name": "6x2",
-        "instructions": "Hold for 3 seconds in the bottom. Rest 3 mins between sets.",
-        "movements": ["Back Squat"]
+        "name": "Block 1: Build to a Heavy Pause Single",
+        "instructions": "Five sets building to a heavy pause single. Every rep in this block has a 3 second hold at the bottom, including warmup sets. This is not a 1RM attempt, aim for 88-92% effort. Rest as needed between sets. This sets your working weight for Block 2.",
+        "movements": [
+          "Set 1: 5 reps at 50% estimated 1RM, 3 second pause each",
+          "Set 2: 3 reps at 63% estimated 1RM, 3 second pause each",
+          "Set 3: 2 reps at 73% estimated 1RM, 3 second pause each",
+          "Set 4: 1 rep at 83% estimated 1RM, 3 second pause",
+          "Set 5: 1 rep at 88-92% estimated 1RM, 3 second pause (record weight)"
+        ]
+      },
+      {
+        "name": "Block 2: 6x2 Pause Volume",
+        "instructions": "Drop to 80% of your Block 1 heavy single. Six sets of two reps, 3 second pause at the bottom of every rep. Rest exactly 3 minutes between sets. Brace hard before you descend, stay braced through the entire pause, drive the floor away on the way up.",
+        "movements": [
+          "Set 1: 2 Pause Back Squats at 80%, rest 3 mins",
+          "Set 2: 2 Pause Back Squats at 80%, rest 3 mins",
+          "Set 3: 2 Pause Back Squats at 80%, rest 3 mins",
+          "Set 4: 2 Pause Back Squats at 80%, rest 3 mins",
+          "Set 5: 2 Pause Back Squats at 80%, rest 3 mins",
+          "Set 6: 2 Pause Back Squats at 80% (record weight and any missed pauses)"
+        ]
+      },
+      {
+        "name": "Block 3: Bottom Position Strength",
+        "instructions": "Three rounds targeting the specific positions and muscles that fail first in a heavy pause squat. Rest 90s between rounds.",
+        "movements": [
+          "Round 1: 60s Weighted Deep Squat Hold, 10 Heel Elevated Goblet Squats, 12 Copenhagen Planks each side",
+          "Round 2: 60s Weighted Deep Squat Hold, 10 Heel Elevated Goblet Squats, 12 Copenhagen Planks each side",
+          "Round 3: 60s Weighted Deep Squat Hold, 10 Heel Elevated Goblet Squats, 12 Copenhagen Planks each side"
+        ]
+      },
+      {
+        "name": "Block 4: Posterior Chain Finisher",
+        "instructions": "Two rounds, no barbell. Keep rest minimal, this is just filling the gaps.",
+        "movements": [
+          "Round 1: 15 Romanian Deadlifts, 15 Glute Bridges, 12 Nordic Curls",
+          "Round 2: 15 Romanian Deadlifts, 15 Glute Bridges, 12 Nordic Curls"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "60s Pigeon Stretch each side",
+          "60s Hip Flexor Stretch each side",
+          "60s Ankle Stretch each side",
+          "60s Seated Forward Fold",
+          "60s Supine Twist each side"
+        ]
       }
     ]
   },
@@ -2149,71 +2704,208 @@
   },
   {
     "id": "p_15",
-    "title": "Snatch Balance: Stability",
-    "description": "A technical drill to build confidence in 'catching' the snatch in a deep overhead squat.",
+    "title": "Catch and Hold",
+    "description": "The snatch balance is the most underused drill in weightlifting. It trains the one thing most athletes fear: committing to the catch. This session builds from the ground up, earning the right to load the bar through positional drills before a single plate goes on.",
     "category": "Strength",
     "difficulty": "Advanced",
-    "estimatedTime": 35,
-    "tags": ["Snatch", "Technique"],
+    "estimatedTime": 55,
+    "tags": ["Snatch", "Technique", "Overhead", "Skill"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["PVC overhead squats, shoulder pass-throughs"]
+        "movements": [
+          "10 Shoulder Pass-Throughs with PVC",
+          "10 PVC Overhead Squats, 3 second hold at bottom",
+          "10 PVC Snatch Balance, focus on punching under",
+          "10 Scapular Push-ups",
+          "10 Band Pull Aparts",
+          "Rest 60s before starting"
+        ]
       },
       {
-        "name": "5x3",
-        "instructions": "Moderate weight. Focus on the 'punch' under the bar.",
-        "movements": ["Snatch Balance", "Overhead Squat"]
+        "name": "Block 1: Position Drills",
+        "instructions": "PVC or empty bar only. No exceptions. These drills isolate the three positions that make or break a snatch balance. Spend 3 sets on each before moving on. Move slowly and deliberately.",
+        "movements": [
+          "Drill 1: 3 x 5 Overhead Squat Hold (3 second hold at bottom, PVC)",
+          "Drill 2: 3 x 5 Drop Snatch (no dip, just punch under, PVC)",
+          "Drill 3: 3 x 5 Pressing Snatch Balance (slow controlled descent, PVC)",
+          "Drill 4: 3 x 5 Heaving Snatch Balance (add the dip and drive, empty bar)"
+        ]
+      },
+      {
+        "name": "Block 2: Snatch Balance Build",
+        "instructions": "Five sets building in weight. Every rep must include a 2 second hold at the bottom of the catch before standing. If the hold feels unstable, do not add weight. The punch under the bar is the skill, the weight is secondary.",
+        "movements": [
+          "Set 1: 3 Snatch Balance at empty bar, 2 second hold each",
+          "Set 2: 3 Snatch Balance at 50% estimated max, 2 second hold each",
+          "Set 3: 3 Snatch Balance at 60% estimated max, 2 second hold each",
+          "Set 4: 2 Snatch Balance at 70% estimated max, 2 second hold each",
+          "Set 5: 2 Snatch Balance at 75-80% estimated max, 2 second hold each (record weight)"
+        ]
+      },
+      {
+        "name": "Block 3: 5x3 Working Sets",
+        "instructions": "Stay at 75-80% from Block 2. Five sets of three, alternating between snatch balance and overhead squat each set. The overhead squat reinforces the catch position under fatigue. Rest 2 minutes between sets.",
+        "movements": [
+          "Set 1: 3 Snatch Balance, rest 90s, 3 Overhead Squat, rest 2 mins",
+          "Set 2: 3 Snatch Balance, rest 90s, 3 Overhead Squat, rest 2 mins",
+          "Set 3: 3 Snatch Balance, rest 90s, 3 Overhead Squat, rest 2 mins",
+          "Set 4: 3 Snatch Balance, rest 90s, 3 Overhead Squat, rest 2 mins",
+          "Set 5: 3 Snatch Balance, rest 90s, 3 Overhead Squat (record any stability issues)"
+        ]
+      },
+      {
+        "name": "Block 4: Stability Accessory",
+        "instructions": "Two rounds targeting the shoulders, lats and core that support the catch position. Rest 60s between rounds.",
+        "movements": [
+          "Round 1: 10 Single Arm Dumbbell Press each side, 10 Tall Kneeling Overhead Hold 30s, 12 Face Pulls, 10 Hollow Body Rocks",
+          "Round 2: 10 Single Arm Dumbbell Press each side, 10 Tall Kneeling Overhead Hold 30s, 12 Face Pulls, 10 Hollow Body Rocks"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "60s Doorframe Chest Stretch each side",
+          "60s Lat Stretch each side",
+          "60s Wrist Flexor Stretch each side",
+          "60s Thoracic Extension over foam roller",
+          "60s Deep Squat Hold"
+        ]
       }
     ]
   },
   {
     "id": "p_16",
-    "title": "Muscle-Up Progressions",
-    "description": "Elite gymnastics skill work. Focus on the 'transition' through the rings/bar.",
+    "title": "The Muscle Up Lab",
+    "description": "The muscle up is not one skill, it is three. A powerful pull, a fast transition, and a strong dip. Most athletes fail in the transition because they never train it in isolation. This session breaks the movement into its components, trains each one separately, then puts it back together.",
     "category": "Strength",
     "difficulty": "Advanced",
-    "estimatedTime": 30,
-    "tags": ["Gymnastics", "Skill"],
+    "estimatedTime": 55,
+    "tags": ["Gymnastics", "Skill", "Upper Body", "Rings"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["3 Rounds: 10 Ring Rows, 10 Ring Dips"]
+        "movements": [
+          "2 Rounds: 10 Ring Rows, 10 Ring Dips",
+          "10 Scapular Pull-ups",
+          "10 Band Pull Aparts",
+          "10 Hollow Body Rocks",
+          "30s Dead Hang from rings or bar",
+          "Rest 60s before starting"
+        ]
       },
       {
-        "name": "EMOM 12",
-        "instructions": "Perform 3-5 reps or the hardest progression you can master.",
-        "movements": ["Muscle Ups"]
+        "name": "Block 1: Pull Strength",
+        "instructions": "Three sets of each movement with 60s rest between. These build the pulling power needed to get above the rings. Focus on pulling the rings to your hips, not your chest.",
+        "movements": [
+          "3 x 5 Weighted Ring Rows (add weight or elevate feet), rest 60s",
+          "3 x 3 High Pull-ups (pull until rings touch chest), rest 60s",
+          "3 x 5 Archer Ring Rows each side (unilateral pulling strength), rest 60s"
+        ]
+      },
+      {
+        "name": "Block 2: Transition Drills",
+        "instructions": "The transition is where muscle ups are won or lost. Three sets of each drill with full rest between. Move slowly and deliberately, speed comes later. A false grip is required for ring muscle ups, get comfortable with it here.",
+        "movements": [
+          "Drill 1: 3 x 5 False Grip Ring Rows (build false grip comfort), rest 60s",
+          "Drill 2: 3 x 3 Jumping Muscle Up Transitions (use legs to assist, focus on the turn over), rest 90s",
+          "Drill 3: 3 x 3 Slow Transition Pull (pull to chest, pause, rotate wrists and push to support), rest 90s",
+          "Drill 4: 3 x 5 Support Hold at top of rings (straight arm, locked out, 3 second hold), rest 60s"
+        ]
+      },
+      {
+        "name": "Block 3: Dip Strength",
+        "instructions": "Two sets of each movement. The dip out of the transition is what kills athletes who have the pull. Rings move, bars do not, train both if possible.",
+        "movements": [
+          "2 x 8 Ring Dips (full depth, pause at bottom), rest 60s",
+          "2 x 5 Slow Eccentric Ring Dips (4 second lower), rest 90s",
+          "2 x 8 Bar Dips (if rings feel too unstable), rest 60s"
+        ]
+      },
+      {
+        "name": "Block 4: EMOM 10 Skill Practice",
+        "instructions": "Ten minutes every minute on the minute. Choose the hardest progression you can execute with control. If you have full muscle ups, aim for 2-3 quality reps per minute. If not, choose the progression from Blocks 1-3 that challenged you most. Quality over quantity, every single rep.",
+        "movements": [
+          "Min 1: 2-3 Muscle Ups or Progression, rest remainder",
+          "Min 2: 2-3 Muscle Ups or Progression, rest remainder",
+          "Min 3: 2-3 Muscle Ups or Progression, rest remainder",
+          "Min 4: 2-3 Muscle Ups or Progression, rest remainder",
+          "Min 5: 2-3 Muscle Ups or Progression, rest remainder",
+          "Min 6: 2-3 Muscle Ups or Progression, rest remainder",
+          "Min 7: 2-3 Muscle Ups or Progression, rest remainder",
+          "Min 8: 2-3 Muscle Ups or Progression, rest remainder",
+          "Min 9: 2-3 Muscle Ups or Progression, rest remainder",
+          "Min 10: 2-3 Muscle Ups or Progression, rest remainder"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "60s Dead Hang from bar or rings",
+          "60s Doorframe Chest Stretch each side",
+          "60s Lat Stretch each side",
+          "60s Wrist Flexor Stretch each side",
+          "60s Shoulder Cross Body Stretch each side"
+        ]
       }
     ]
   },
   {
     "id": "p_17",
-    "title": "The 5km Run Benchmark",
-    "description": "Aerobic capacity test. Aim for a sub 20:00 (Advanced) or sub 18:00 (Elite).",
-    "category": "Conditioning",
+    "title": "Earn Your 5k",
+    "description": "Anyone can run a 5k on fresh legs. This session makes sure you never do. A short burnout before the run taxes the legs just enough to make the first kilometre feel like the third. Hit the burnout, then run your best 5k anyway. Sub 20:00 is the target, sub 18:00 is elite.",
+    "category": "Hyrox",
     "difficulty": "Advanced",
-    "estimatedTime": 35,
-    "tags": ["Running", "Aerobic"],
+    "estimatedTime": 45,
+    "tags": ["Running", "Aerobic", "Benchmark", "Hyrox"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["1km Jog, 2 x 100m Strides, Leg Swings"]
+        "movements": [
+          "1km Easy Jog",
+          "Leg Swings x 10 each direction",
+          "High Knees x 20m",
+          "Butt Kicks x 20m",
+          "2 x 100m Strides building to 85%",
+          "Rest 90s before starting"
+        ]
       },
       {
-        "name": "Time Trial",
-        "instructions": "Run on a flat course or track. Pacing is crucial in the first 2km.",
-        "movements": ["5000m Run"]
+        "name": "Pre-Run Burnout",
+        "instructions": "Complete all movements as fast as possible with no rest between them. Move straight into the 5k the moment you finish. Do not let more than 20 seconds pass between the last rep and the start line.",
+        "movements": ["20 Burpees", "30 Air Squats", "20 Jump Lunges"]
+      },
+      {
+        "name": "5k Time Trial",
+        "instructions": "Run on a flat course or track. Record your total time. Do not go out too hot in the first kilometre, the burnout will catch up with you. Use these splits as a pacing guide.",
+        "movements": [
+          "0-1km: Controlled, find your rhythm, resist the urge to sprint",
+          "1-2km: Settle into race pace, this should feel sustainable",
+          "2-3km: The middle kilometre is where most people drift, hold your pace",
+          "3-4km: Start working, push slightly harder than comfortable",
+          "4-5km: Everything you have left, empty the tank to the line (record total time)"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "800m Easy Walk or Jog",
+          "60s Hip Flexor Stretch each side",
+          "60s Hamstring Stretch each side",
+          "60s Calf Stretch each side",
+          "60s Quad Stretch each side",
+          "60s Glute Stretch each side"
+        ]
       }
     ]
   },
   {
     "id": "p_18",
-    "title": "Devil Press Ladder",
-    "description": "Extremely high metabolic demand. Use the swing of the dumbbells to help the overhead movement.",
+    "title": "Press From Hell",
+    "description": "A descending ladder that gets kinder with every round, but your lungs will not notice. Devil press and box step ups paired together from 10 down to 1. The reps shrink, the suffering does not. Use the swing of the dumbbells to drive the press overhead and do not fight the movement.",
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 30,
@@ -2222,33 +2914,111 @@
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["2 Rounds: 10 DB Snatches, 5 Burpees"]
+        "movements": [
+          "2 Rounds: 10 DB Snatches, 5 Burpees",
+          "5 Devil Press at light weight (practice the swing)",
+          "10 Box Step Ups at easy pace",
+          "Rest 90s before starting"
+        ]
       },
       {
-        "name": "For Time",
-        "instructions": "Descending ladder of Devil Press (10 to 1) and Box Step Ups (20 to 2).",
-        "movements": ["Devil Press", "Box Step Ups"]
+        "name": "For Time: Descending Ladder",
+        "instructions": "Complete all devil press reps then all box step up reps before moving to the next round. No scheduled rest. Record your total time. Swing the dumbbells, do not muscle press them.",
+        "movements": [
+          "Round 1: 10 Devil Press, 20 Box Step Ups",
+          "Round 2: 9 Devil Press, 18 Box Step Ups",
+          "Round 3: 8 Devil Press, 16 Box Step Ups",
+          "Round 4: 7 Devil Press, 14 Box Step Ups",
+          "Round 5: 6 Devil Press, 12 Box Step Ups",
+          "Round 6: 5 Devil Press, 10 Box Step Ups",
+          "Round 7: 4 Devil Press, 8 Box Step Ups",
+          "Round 8: 3 Devil Press, 6 Box Step Ups",
+          "Round 9: 2 Devil Press, 4 Box Step Ups",
+          "Round 10: 1 Devil Press, 2 Box Step Ups (record total time)"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "2 mins Easy Walk",
+          "60s Hip Flexor Stretch each side",
+          "60s Shoulder Cross Body Stretch each side",
+          "60s Thoracic Rotation each side",
+          "60s Standing Forward Fold"
+        ]
       }
     ]
   },
   {
     "id": "p_19",
-    "title": "Weighted Dips / Pullups",
-    "description": "Old school strength for upper body mass and power. Use a dipping belt.",
+    "title": "Iron Classics",
+    "description": "Pull-ups and dips have built more upper body strength than any machine ever invented. This session treats them with the respect they deserve. You will build to a heavy weighted single on both movements, hit volume at 85%, then finish with accessory work that fills every gap the big two leave behind.",
     "category": "Strength",
     "difficulty": "Advanced",
-    "estimatedTime": 45,
-    "tags": ["Calisthenics", "Heavy"],
+    "estimatedTime": 65,
+    "tags": ["Calisthenics", "Heavy", "Upper Body", "Strength"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": ["2 sets of bodyweight pullups and dips"]
+        "movements": [
+          "10 Scapular Pull-ups",
+          "10 Band Pull Aparts",
+          "10 Scapular Push-ups",
+          "2 x 5 Bodyweight Pull-ups, full range",
+          "2 x 5 Bodyweight Dips, full depth",
+          "30s Dead Hang",
+          "Rest 60s before starting"
+        ]
       },
       {
-        "name": "5x5",
-        "instructions": "Superset movements. Rest 2-3 mins between sets.",
-        "movements": ["Weighted Pull-ups", "Weighted Dips"]
+        "name": "Block 1: Build to a Heavy Weighted Single",
+        "instructions": "Alternate between pull-ups and dips each set, resting 90 seconds between movements. Build to the heaviest single you can execute with full range on both. This sets your working weight for Block 2. Full range means chin over bar and chest to bar on pull-ups, full depth lockout on dips.",
+        "movements": [
+          "Set 1: 5 Bodyweight Pull-ups, rest 90s, 5 Bodyweight Dips",
+          "Set 2: 3 Pull-ups at light added weight, rest 90s, 3 Dips at light added weight",
+          "Set 3: 2 Pull-ups at moderate weight, rest 90s, 2 Dips at moderate weight",
+          "Set 4: 1 Pull-up at heavy weight, rest 90s, 1 Dip at heavy weight",
+          "Set 5: 1 Pull-up at max weight, rest 90s, 1 Dip at max weight (record both)"
+        ]
+      },
+      {
+        "name": "Block 2: 5x5 Volume Superset",
+        "instructions": "Drop to 80% of your Block 1 heavy single on both movements. Superset pull-ups and dips each set with 90 seconds rest between movements and 2-3 minutes rest between sets. Full range on every rep, no half reps when it gets heavy.",
+        "movements": [
+          "Set 1: 5 Weighted Pull-ups, rest 90s, 5 Weighted Dips, rest 2-3 mins",
+          "Set 2: 5 Weighted Pull-ups, rest 90s, 5 Weighted Dips, rest 2-3 mins",
+          "Set 3: 5 Weighted Pull-ups, rest 90s, 5 Weighted Dips, rest 2-3 mins",
+          "Set 4: 5 Weighted Pull-ups, rest 90s, 5 Weighted Dips, rest 2-3 mins",
+          "Set 5: 5 Weighted Pull-ups, rest 90s, 5 Weighted Dips (record weight and any missed reps)"
+        ]
+      },
+      {
+        "name": "Block 3: Volume Pump",
+        "instructions": "Drop all weight. Three sets of max reps bodyweight on both movements with 60 seconds rest between. Stop two reps before failure to keep quality high. This builds volume on top of the heavy work.",
+        "movements": [
+          "Set 1: Max Bodyweight Pull-ups, rest 60s, Max Bodyweight Dips, rest 60s",
+          "Set 2: Max Bodyweight Pull-ups, rest 60s, Max Bodyweight Dips, rest 60s",
+          "Set 3: Max Bodyweight Pull-ups, rest 60s, Max Bodyweight Dips (record reps each set)"
+        ]
+      },
+      {
+        "name": "Block 4: Accessory Finisher",
+        "instructions": "Two rounds targeting the supporting muscles that make pull-ups and dips stronger. Rest 60s between rounds.",
+        "movements": [
+          "Round 1: 12 Face Pulls, 12 Tricep Dips between benches, 10 Single Arm Dumbbell Row each side, 12 Lateral Raises",
+          "Round 2: 12 Face Pulls, 12 Tricep Dips between benches, 10 Single Arm Dumbbell Row each side, 12 Lateral Raises"
+        ]
+      },
+      {
+        "name": "Cooldown",
+        "movements": [
+          "30s Dead Hang from bar",
+          "60s Doorframe Chest Stretch each side",
+          "60s Lat Stretch each side",
+          "60s Shoulder Cross Body Stretch each side",
+          "60s Wrist Flexor Stretch each side"
+        ]
       }
     ]
   },

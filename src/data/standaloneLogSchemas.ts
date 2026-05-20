@@ -170,7 +170,12 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
   f_57: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
   f_58: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
   f_59: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
-  f_60: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+  f_60: {
+    kind: 'distance',
+    label: 'Total distance',
+    unit: 'm',
+    higherIsBetter: true,
+  },
   f_61: {
     kind: 'notes_only',
     placeholder: 'Record sled load, rest, and completion notes.',
