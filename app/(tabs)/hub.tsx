@@ -1,8 +1,8 @@
 import { ArticleCard } from '@/src/components/brief/ArticleCard';
-import { Card, CuratedSection } from '@/src/components/ds';
+import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { fetchArticles } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -206,7 +206,7 @@ export default function HubScreen() {
 
             <View style={styles.subSection}>
               <CuratedSection
-                icon="bag-outline"
+                icon="bag"
                 iconSizeOverride={18}
                 title="Shop"
                 description="Products we at Tempered Strength believe in, at the best prices for you"
@@ -217,14 +217,20 @@ export default function HubScreen() {
               <Card
                 onPress={handleOpenShop}
                 accessibilityLabel="Browse partner products"
+                style={styles.shopCard}
               >
-                <View style={styles.hubCtaContent}>
+                <View style={styles.shopVisualTile}>
+                  <Ionicons name="pricetag" size={30} color={Colors.accent} />
+                </View>
+                <View style={styles.shopCtaTextColumn}>
+                  <Text style={styles.shopEyebrow}>Partner picks</Text>
                   <Text style={styles.hubCtaTitle}>Browse the shop</Text>
                   <Text style={styles.hubCtaDescription}>
                     Affiliate offers from brands we trust, codes and links in
                     one place.
                   </Text>
                 </View>
+                <SmallChevron />
               </Card>
             </View>
 
@@ -405,6 +411,32 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingRight: Spacing.xl,
     gap: Spacing.xs,
+  },
+  shopCard: {
+    backgroundColor: Colors.accentWashFill,
+    borderColor: Colors.accentWashBorder,
+  },
+  shopVisualTile: {
+    width: 72,
+    height: 72,
+    borderRadius: BorderRadius.lg,
+    backgroundColor: Colors.backgroundElevated,
+    borderWidth: 1,
+    borderColor: Colors.accentWashOutline,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  shopCtaTextColumn: {
+    flex: 1,
+    marginLeft: Spacing.xl,
+    gap: Spacing.xs,
+  },
+  shopEyebrow: {
+    color: Colors.accent,
+    fontSize: FontSize.sm,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   hubCtaTitle: {
     color: Colors.textPrimary,
