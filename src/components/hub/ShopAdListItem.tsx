@@ -25,7 +25,8 @@ export function ShopAdListItem({ ad, onPress }: ShopAdListItemProps) {
       onPress={() => onPress(ad)}
       activeOpacity={0.85}
       accessibilityRole="button"
-      accessibilityLabel={`${displayTitle}, ${ad.ctaLabel}`}
+      accessibilityLabel={`${displayTitle}, view partner details`}
+      accessibilityHint="Opens offer details"
     >
       {thumbnailUrl ? (
         <View style={[styles.thumbWrap, { backgroundColor: ad.bgColor }]}>
@@ -56,16 +57,12 @@ export function ShopAdListItem({ ad, onPress }: ShopAdListItemProps) {
         <Text style={[styles.title, { color: ad.titleColor }]}>
           {displayTitle}
         </Text>
-        <Text style={[styles.description, { color: ad.descriptionColor }]}>
+        <Text
+          style={[styles.description, { color: ad.descriptionColor }]}
+          numberOfLines={4}
+        >
           {ad.description}
         </Text>
-      </View>
-
-      <View
-        style={[styles.chevronWrap, { borderColor: ad.titleColor }]}
-        pointerEvents="none"
-      >
-        <Ionicons name="chevron-forward" size={20} color={ad.titleColor} />
       </View>
     </TouchableOpacity>
   );

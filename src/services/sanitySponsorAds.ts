@@ -20,6 +20,7 @@ const sponsorAdFieldsGroq = `
   _id,
   title,
   description,
+  review,
   layout,
   affiliateUrl,
   ctaLabel,
@@ -36,6 +37,16 @@ const sponsorAdFieldsGroq = `
       "label": coalesce(title, name, slug.current)
     },
     categories
+  ),
+  "theme": select(
+    defined(theme._ref) => theme->{
+      backgroundColor,
+      titleColor,
+      descriptionColor,
+      ctaBackgroundColor,
+      ctaTextColor
+    },
+    theme
   )
 `;
 
@@ -81,6 +92,11 @@ export function sponsorAdThumbnailUrl(ad: HomeSponsorAd): string | null {
   return null;
 }
 
+/** Logo or product image for shop detail sheet (centered hero). */
+export function sponsorAdDetailLogoUrl(ad: HomeSponsorAd): string | null {
+  return ad.logoUrl ?? ad.productUrl;
+}
+
 export type HomeSponsorAd = {
   id: string;
   title: string;
@@ -96,12 +112,15 @@ export type HomeSponsorAd = {
   logoUrl: string | null;
   productUrl: string | null;
   categories: string[];
+  /** Optional Tempered Strength team endorsement copy for shop detail. */
+  review: string | null;
 };
 
 type SanitySponsorAdDoc = {
   _id?: string | null;
   title?: string | null;
   description?: string | null;
+  review?: string | null;
   layout?: string | null;
   affiliateUrl?: string | null;
   ctaLabel?: string | null;
@@ -114,6 +133,15 @@ type SanitySponsorAdDoc = {
   logoUrl?: string | null;
   productUrl?: string | null;
   categories?: unknown;
+  theme?: unknown;
+};
+
+type SanitySponsorThemeFields = {
+  backgroundColor?: string | null;
+  titleColor?: string | null;
+  descriptionColor?: string | null;
+  ctaBackgroundColor?: string | null;
+  ctaTextColor?: string | null;
 };
 
 type AppConfigSponsorQueryResult = {
@@ -192,6 +220,26 @@ function sponsorCategoryLabel(value: unknown): string | null {
   return null;
 }
 
+function themeColor(
+  theme: SanitySponsorThemeFields | null,
+  themeKey: keyof SanitySponsorThemeFields,
+  adValue: string | null | undefined,
+  fallback: string
+): string {
+  const fromTheme = theme?.[themeKey];
+  if (typeof fromTheme === 'string' && fromTheme.trim().length > 0) {
+    return sanitizeHex(fromTheme, fallback);
+  }
+  return sanitizeHex(adValue, fallback);
+}
+
+function parseSponsorTheme(raw: unknown): SanitySponsorThemeFields | null {
+  if (typeof raw !== 'object' || raw === null) {
+    return null;
+  }
+  return raw as SanitySponsorThemeFields;
+}
+
 function mapSponsorCategories(raw: unknown): string[] {
   if (!Array.isArray(raw)) {
     return [];
@@ -266,6 +314,7 @@ function mapSponsorAd(raw: SanitySponsorAdDoc): HomeSponsorAd | null {
   }
 
   const d = SPONSOR_AD_COLOR_DEFAULTS;
+  const theme = parseSponsorTheme(raw.theme);
   const ctaLabel = raw.ctaLabel?.trim() ?? '';
   return {
     id,
@@ -274,15 +323,36 @@ function mapSponsorAd(raw: SanitySponsorAdDoc): HomeSponsorAd | null {
     layout: layoutRaw,
     affiliateUrl,
     ctaLabel: ctaLabel.length > 0 ? ctaLabel : 'Visit Website',
-    bgColor: sanitizeHex(raw.backgroundColor, d.bgColor),
-    titleColor: sanitizeHex(raw.titleColor, d.titleColor),
-    descriptionColor: sanitizeHex(raw.descriptionColor, d.descriptionColor),
-    ctaColor: sanitizeHex(raw.ctaBackgroundColor, d.ctaColor),
-    ctaTextColor: sanitizeHex(raw.ctaTextColor, d.ctaTextColor),
+    bgColor: themeColor(theme, 'backgroundColor', raw.backgroundColor, d.bgColor),
+    titleColor: themeColor(theme, 'titleColor', raw.titleColor, d.titleColor),
+    descriptionColor: themeColor(
+      theme,
+      'descriptionColor',
+      raw.descriptionColor,
+      d.descriptionColor
+    ),
+    ctaColor: themeColor(
+      theme,
+      'ctaBackgroundColor',
+      raw.ctaBackgroundColor,
+      d.ctaColor
+    ),
+    ctaTextColor: themeColor(
+      theme,
+      'ctaTextColor',
+      raw.ctaTextColor,
+      d.ctaTextColor
+    ),
     logoUrl,
     productUrl,
     categories: mapSponsorCategories(raw.categories),
+    review: mapSponsorReview(raw.review),
   };
+}
+
+function mapSponsorReview(value: string | null | undefined): string | null {
+  const trimmed = value?.trim() ?? '';
+  return trimmed.length > 0 ? trimmed : null;
 }
 
 function mapSponsorAds(
@@ -326,6 +396,9 @@ function normalizeAdFromCache(raw: unknown): HomeSponsorAd | null {
     logoUrl: typeof o.logoUrl === 'string' ? o.logoUrl : null,
     productUrl: typeof o.productUrl === 'string' ? o.productUrl : null,
     categories: mapSponsorCategories(o.categories),
+    review:
+      typeof o.review === 'string' ? mapSponsorReview(o.review) : null,
+    theme: typeof o.theme === 'object' && o.theme !== null ? o.theme : null,
   });
 }
 

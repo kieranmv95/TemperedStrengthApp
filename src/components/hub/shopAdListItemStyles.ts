@@ -51,14 +51,4 @@ export const shopAdListItemStyles = StyleSheet.create({
     lineHeight: 19,
     fontWeight: '500',
   },
-  chevronWrap: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 32,
-    width: 32,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    opacity: 0.35,
-    flexShrink: 0,
-  },
 });

@@ -1,4 +1,5 @@
 import { ShopAdListItem } from '@/src/components/hub/ShopAdListItem';
+import { ShopSponsorAdSheet } from '@/src/components/hub/ShopSponsorAdSheet';
 import { Pill } from '@/src/components/pill';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -32,6 +33,7 @@ export default function ShopScreen() {
   const [isOffline, setIsOffline] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [selectedAd, setSelectedAd] = useState<HomeSponsorAd | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -98,12 +100,20 @@ export default function ShopScreen() {
     });
   }, [activeCategory, ads, searchQuery]);
 
-  const handlePressAd = useCallback(
+  const handlePressAd = useCallback((ad: HomeSponsorAd) => {
+    setSelectedAd(ad);
+  }, []);
+
+  const handleCloseSheet = useCallback(() => {
+    setSelectedAd(null);
+  }, []);
+
+  const handlePressCta = useCallback(
     (ad: HomeSponsorAd) => {
       posthog.capture(posthogEventsNames.home.sponsorCtaPressed, {
         sponsor_ad_id: ad.id,
         sponsor_layout: ad.layout,
-        source: 'hub_shop',
+        source: 'hub_shop_detail',
       });
       const url = ad.affiliateUrl.trim();
       if (url.length === 0) {
@@ -259,6 +269,13 @@ export default function ShopScreen() {
       ) : null}
 
       {renderContent()}
+
+      <ShopSponsorAdSheet
+        ad={selectedAd}
+        visible={selectedAd !== null}
+        onClose={handleCloseSheet}
+        onPressCta={handlePressCta}
+      />
     </SafeAreaView>
   );
 }
