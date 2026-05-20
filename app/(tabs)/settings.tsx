@@ -291,6 +291,17 @@ export default function SettingsScreen() {
                 </Text>
               </View>
             </View>
+            <View style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>Partner offers</Text>
+                <Text style={styles.settingDescription}>
+                  Highlights on Home and in the Shop are partner placements.
+                  When you follow a link and buy (or sign up), Tempered Strength
+                  may earn a commission or referral fee. That does not change what
+                  you pay.
+                </Text>
+              </View>
+            </View>
           </View>
 
           {__DEV__ && (
