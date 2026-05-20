@@ -16,10 +16,9 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -28,7 +27,6 @@ export default function HubScreen() {
   const [articles, setArticles] = useState<ArticleListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<ArticleCategory | 'All'>(
     'All'
   );
@@ -99,8 +97,6 @@ export default function HubScreen() {
   );
 
   const visibleArticles = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-
     return articles.filter((article) => {
       if (showFavoritesOnly) {
         if (!favorites.includes(article.slug)) {
@@ -113,16 +109,9 @@ export default function HubScreen() {
         return false;
       }
 
-      if (!query) {
-        return true;
-      }
-
-      const matchesTitle = article.title.toLowerCase().includes(query);
-      const matchesSubtitle = article.subtitle.toLowerCase().includes(query);
-      const matchesCategory = article.category.toLowerCase().includes(query);
-      return matchesTitle || matchesSubtitle || matchesCategory;
+      return true;
     });
-  }, [activeCategory, favorites, searchQuery, showFavoritesOnly, articles]);
+  }, [activeCategory, favorites, showFavoritesOnly, articles]);
 
   const categories = useMemo(() => {
     const set = new Set<ArticleCategory>();
@@ -234,14 +223,67 @@ export default function HubScreen() {
               </Card>
             </View>
 
-            <CuratedSection
-              icon="newspaper-outline"
-              iconSizeOverride={18}
-              title="Articles"
-              description="Your daily intel for the iron game"
-              size="medium"
-              theme="gold"
-            />
+            <View style={styles.articlesSection}>
+              <CuratedSection
+                icon="newspaper-outline"
+                iconSizeOverride={18}
+                title="Articles"
+                description="Your daily intel for the iron game"
+                size="medium"
+                theme="gold"
+              />
+
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.filterScrollContent}
+              >
+                  {[
+                    {
+                      key: 'favorites',
+                      label: 'Saved',
+                      icon: 'bookmark' as const,
+                    },
+                    { key: 'all', label: 'All' },
+                    ...categories.map((c) => ({ key: c, label: c })),
+                  ].map((item) => {
+                    const isFavoritesChip = item.key === 'favorites';
+                    const isAllChip = item.key === 'all';
+                    const isActive = isFavoritesChip
+                      ? showFavoritesOnly
+                      : isAllChip
+                        ? activeCategory === 'All' && !showFavoritesOnly
+                        : activeCategory === (item.key as ArticleCategory) &&
+                        !showFavoritesOnly;
+
+                    const count = isFavoritesChip
+                      ? favorites.length
+                      : isAllChip
+                        ? articles.length
+                        : articles.filter((a) => a.category === item.key).length;
+
+                    return (
+                      <Pill
+                        key={item.key}
+                        onPress={() => {
+                          if (isFavoritesChip) {
+                            setShowFavoritesOnly((prev) => !prev);
+                            return;
+                          }
+                          setShowFavoritesOnly(false);
+                          setActiveCategory(
+                            isAllChip ? 'All' : (item.key as ArticleCategory)
+                          );
+                        }}
+                        isActive={isActive}
+                        label={item.label}
+                        icon={item.icon}
+                        count={count}
+                      />
+                    );
+                  })}
+              </ScrollView>
+            </View>
           </View>
         }
         ListEmptyComponent={
@@ -259,9 +301,7 @@ export default function HubScreen() {
             <Text style={styles.emptyDescription}>
               {showFavoritesOnly
                 ? 'Tap the bookmark icon on any article to save it here.'
-                : searchQuery.trim()
-                  ? 'No articles match your search.'
-                  : 'Try selecting a different filter.'}
+                : 'Try selecting a different filter.'}
             </Text>
           </View>
         }
@@ -284,91 +324,6 @@ export default function HubScreen() {
       subtitle="Your daily intel for the iron game"
       disableScroll
     >
-      <StandardLayout.AdvancedFilters>
-        <View style={styles.searchContainer}>
-          <Ionicons
-            name="search"
-            size={18}
-            color={Colors.textPlaceholder}
-            style={styles.searchIcon}
-          />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search articles..."
-            placeholderTextColor={Colors.textPlaceholder}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            returnKeyType="search"
-            autoCorrect={false}
-            autoCapitalize="none"
-          />
-          {searchQuery.length > 0 ? (
-            <TouchableOpacity
-              onPress={() => setSearchQuery('')}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <Ionicons
-                name="close-circle"
-                size={18}
-                color={Colors.textPlaceholder}
-              />
-            </TouchableOpacity>
-          ) : null}
-        </View>
-
-        <View>
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={[
-              {
-                key: 'favorites',
-                label: 'Saved',
-                icon: 'bookmark' as const,
-              },
-              { key: 'all', label: 'All' },
-              ...categories.map((c) => ({ key: c, label: c })),
-            ]}
-            keyExtractor={(item) => item.key}
-            contentContainerStyle={styles.filterScrollContent}
-            renderItem={({ item }) => {
-              const isFavoritesChip = item.key === 'favorites';
-              const isAllChip = item.key === 'all';
-              const isActive = isFavoritesChip
-                ? showFavoritesOnly
-                : isAllChip
-                  ? activeCategory === 'All' && !showFavoritesOnly
-                  : activeCategory === (item.key as ArticleCategory) &&
-                  !showFavoritesOnly;
-
-              const count = isFavoritesChip
-                ? favorites.length
-                : isAllChip
-                  ? articles.length
-                  : articles.filter((a) => a.category === item.key).length;
-
-              return (
-                <Pill
-                  onPress={() => {
-                    if (isFavoritesChip) {
-                      setShowFavoritesOnly((prev) => !prev);
-                      return;
-                    }
-                    setShowFavoritesOnly(false);
-                    setActiveCategory(
-                      isAllChip ? 'All' : (item.key as ArticleCategory)
-                    );
-                  }}
-                  isActive={isActive}
-                  label={item.label}
-                  icon={item.icon}
-                  count={count}
-                />
-              );
-            }}
-          />
-        </View>
-      </StandardLayout.AdvancedFilters>
       <StandardLayout.Body>{renderBody()}</StandardLayout.Body>
     </StandardLayout>
   );
@@ -378,29 +333,11 @@ const styles = StyleSheet.create({
   subSection: {
     gap: Spacing.md,
   },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    marginTop: Spacing.xl,
-    marginBottom: Spacing.xxl,
-    paddingHorizontal: Spacing.xl,
-    height: 44,
-  },
-  searchIcon: {
-    marginRight: Spacing.md,
-  },
-  searchInput: {
-    flex: 1,
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    padding: 0,
+  articlesSection: {
+    gap: Spacing.md,
   },
   filterScrollContent: {
-    paddingBottom: Spacing.xl,
+    paddingBottom: Spacing.md,
     gap: Spacing.md,
   },
   section: {
