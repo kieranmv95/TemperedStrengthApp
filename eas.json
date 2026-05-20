@@ -15,13 +15,15 @@
       "distribution": "internal",
       "env": {
         "EXPO_PUBLIC_REVENUECAT_API_KEY_IOS": "${EXPO_PUBLIC_REVENUECAT_API_KEY_IOS}"
-      }
+      },
+      "channel": "preview"
     },
     "production": {
       "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_REVENUECAT_API_KEY_IOS": "${EXPO_PUBLIC_REVENUECAT_API_KEY_IOS}"
-      }
+      },
+      "channel": "production"
     }
   },
   "submit": {
