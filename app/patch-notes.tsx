@@ -21,6 +21,14 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.5.0',
+    dateLabel: '20th May 2026',
+    notes: [
+      'Improved ALL of our workouts',
+      'Added the SHOP!',
+    ]
+  },
+  {
     version: '2.4.1',
     dateLabel: '15th May 2026',
     notes: [
