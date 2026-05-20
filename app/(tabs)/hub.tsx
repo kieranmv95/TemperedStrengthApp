@@ -1,8 +1,10 @@
 import { ArticleCard } from '@/src/components/brief/ArticleCard';
 import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
+import { TogetherWeLiftBanner } from '@/src/components/hub/TogetherWeLiftBanner';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { useTogetherWeLift } from '@/src/hooks/use-together-we-lift';
 import { fetchArticles } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -24,6 +26,7 @@ import {
 
 export default function HubScreen() {
   const posthog = usePostHog();
+  const { open: openTogetherWeLift } = useTogetherWeLift();
   const [articles, setArticles] = useState<ArticleListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
@@ -134,29 +137,47 @@ export default function HubScreen() {
     router.push('/shop');
   };
 
+  const charityBanner = (
+    <View style={styles.charityBannerWrap}>
+      <TogetherWeLiftBanner onPress={() => openTogetherWeLift('hub_banner')} />
+    </View>
+  );
+
   const renderBody = () => {
     if (isLoading) {
       return (
-        <View style={styles.centeredState}>
-          <ActivityIndicator size="large" color={Colors.accent} />
-        </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollStateContent}
+        >
+          {charityBanner}
+          <View style={styles.centeredState}>
+            <ActivityIndicator size="large" color={Colors.accent} />
+          </View>
+        </ScrollView>
       );
     }
 
     if (isOffline) {
       return (
-        <View style={styles.centeredState}>
-          <Ionicons
-            name="wifi-outline"
-            size={64}
-            color={Colors.backgroundSubtle}
-          />
-          <Text style={styles.emptyTitle}>No Connection</Text>
-          <Text style={styles.emptyDescription}>
-            Articles are unavailable offline. Come back when you&apos;re
-            connected.
-          </Text>
-        </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollStateContent}
+        >
+          {charityBanner}
+          <View style={styles.centeredState}>
+            <Ionicons
+              name="wifi-outline"
+              size={64}
+              color={Colors.backgroundSubtle}
+            />
+            <Text style={styles.emptyTitle}>No Connection</Text>
+            <Text style={styles.emptyDescription}>
+              Articles are unavailable offline. Come back when you&apos;re
+              connected.
+            </Text>
+          </View>
+        </ScrollView>
       );
     }
 
@@ -168,7 +189,9 @@ export default function HubScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
-          <View style={styles.section}>
+          <View>
+            {charityBanner}
+            <View style={styles.section}>
             <View style={styles.subSection}>
               <CuratedSection
                 icon="book-outline"
@@ -284,6 +307,7 @@ export default function HubScreen() {
                   })}
               </ScrollView>
             </View>
+            </View>
           </View>
         }
         ListEmptyComponent={
@@ -330,6 +354,13 @@ export default function HubScreen() {
 }
 
 const styles = StyleSheet.create({
+  charityBannerWrap: {
+    marginBottom: Spacing.section,
+  },
+  scrollStateContent: {
+    flexGrow: 1,
+    paddingVertical: Spacing.xxl,
+  },
   subSection: {
     gap: Spacing.md,
   },

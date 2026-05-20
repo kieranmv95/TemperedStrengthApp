@@ -1,5 +1,6 @@
 import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
+import { TogetherWeLiftProvider } from '@/src/hooks/together-we-lift-context';
 import { initializeRevenueCat } from '@/src/services/revenueCatService';
 import { getOnboarded } from '@/src/utils/storage';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
@@ -69,6 +70,7 @@ export default function RootLayout() {
       <ThemeProvider value={DarkTheme}>
         <SyncManagerProvider>
           <SubscriptionProvider>
+            <TogetherWeLiftProvider>
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="glossary" options={{ headerShown: false }} />
@@ -107,6 +109,7 @@ export default function RootLayout() {
               />
             </Stack>
             <StatusBar style="light" />
+            </TogetherWeLiftProvider>
           </SubscriptionProvider>
         </SyncManagerProvider>
       </ThemeProvider>
