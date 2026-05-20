@@ -382,7 +382,7 @@ export default function HomeTabScreen() {
                 <View style={styles.cardBody}>
                   <Text style={styles.cardTitle}>Pick a program</Text>
                   <Text style={styles.cardMuted}>
-                    Head to the Program tab and choose one — we will surface the
+                    Head to the Program tab and choose one then we will surface the
                     good stuff here.
                   </Text>
                 </View>
