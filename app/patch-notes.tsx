@@ -21,6 +21,15 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.5.1',
+    dateLabel: '22nd May 2026',
+    notes: [
+      'Together we lift charity added.',
+      'Android support added',
+      'OTA update support added',
+    ],
+  },
+  {
     version: '2.5.0',
     dateLabel: '20th May 2026',
     notes: [
