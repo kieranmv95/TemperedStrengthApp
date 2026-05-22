@@ -186,8 +186,9 @@ Add to `eas.json` `submit.production.android` (do not commit service account JSO
 2. iCloud gating (sync, onboarding, settings).
 3. `app.json` / `eas.json` / RevenueCat keys / npm scripts.
 4. First EAS Android build + device QA.
-5. Play Console + RevenueCat linkage.
-6. Internal testing → production rollout.
+5. **Release assets** (native build only, not OTA): `assets/onboarding.mp4` must be **H.264** (not HEVC/4K); Android launcher uses `assets/images/android_icon.png`; splash plugin uses `splash-icon.png` (light) and `dark-splash-icon.png` (dark).
+6. Play Console + RevenueCat linkage.
+7. Internal testing → production rollout.
 
 ---
 
@@ -265,7 +266,7 @@ Central gate using `isRunningInExpoGo()` from `expo` + `Platform.OS === 'android
   "package": "com.kieranvenison.temperedstrengthapp",
   "softwareKeyboardLayoutMode": "resize",
   "adaptiveIcon": {
-    "foregroundImage": "./assets/images/icon.png",
+    "foregroundImage": "./assets/images/android_icon.png",
     "backgroundColor": "#121212"
   },
   "permissions": ["android.permission.POST_NOTIFICATIONS"]

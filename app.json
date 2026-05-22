@@ -23,7 +23,7 @@
       "package": "com.kieranvenison.temperedstrengthapp",
       "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
+        "foregroundImage": "./assets/images/android_icon.png",
         "backgroundColor": "#121212"
       },
       "permissions": ["android.permission.POST_NOTIFICATIONS"]
@@ -43,6 +43,7 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
           "dark": {
+            "image": "./assets/images/dark-splash-icon.png",
             "backgroundColor": "#121212"
           }
         }
