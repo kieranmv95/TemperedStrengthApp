@@ -181,7 +181,7 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
       ) : (
         <ScrollView
           style={styles.scrollView}
-          contentContainerStyle={styles.content}
+          contentContainerStyle={styles.scrollContent}
         >
           {body ? <StandardLayoutBody>{body}</StandardLayoutBody> : null}
           {rest.length > 0 ? <View>{rest}</View> : null}
@@ -269,11 +269,19 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.backgroundScreen,
   },
   content: {
-    padding: Spacing.xxl,
+    paddingHorizontal: Spacing.xxl,
+    paddingTop: Spacing.xxl,
+    flexGrow: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: Spacing.xxl,
+    paddingTop: Spacing.xxl,
+    paddingBottom: Spacing.md,
     flexGrow: 1,
   },
   nonScrollContent: {
     paddingTop: 0,
+    paddingHorizontal: Spacing.xxl,
     flex: 1,
   },
 });

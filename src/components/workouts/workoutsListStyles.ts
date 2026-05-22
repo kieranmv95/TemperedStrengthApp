@@ -33,6 +33,7 @@ export const workoutsListStyles = StyleSheet.create({
   },
   listContent: {
     paddingTop: Spacing.xxl,
+    paddingBottom: Spacing.md,
   },
   curatedSectionList: {
     gap: Spacing.section,

@@ -16,7 +16,7 @@ import {
 } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
-import * as Notifications from 'expo-notifications';
+import { cancelAllScheduledNotifications } from '@/src/services/localNotifications';
 import { router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
@@ -165,7 +165,7 @@ export default function AccountProgramSettingsScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
-              await Notifications.cancelAllScheduledNotificationsAsync();
+              await cancelAllScheduledNotifications();
             } catch (error) {
               console.error('Error cancelling scheduled notifications:', error);
             }

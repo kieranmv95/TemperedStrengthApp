@@ -336,10 +336,11 @@ const styles = StyleSheet.create({
   },
   awardsContainer: {
     gap: Spacing.xl,
+    paddingBottom: Spacing.md,
   },
   pbListContent: {
     paddingTop: Spacing.xl,
-    paddingBottom: Spacing.section,
+    paddingBottom: Spacing.md,
     gap: Spacing.xl,
   },
   pbRowText: {

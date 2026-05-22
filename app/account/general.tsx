@@ -2,6 +2,7 @@ import { SmallChevron } from '@/src/components/ds/SmallChevron';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
+import { isIos } from '@/src/utils/platform';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
   getWeightUnit,
@@ -160,51 +161,53 @@ export default function AccountGeneralSettingsScreen() {
             </View>
           </View>
 
-          <View style={styles.settingItem}>
-            <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>iCloud Sync</Text>
-              <Text style={styles.settingDescription}>
-                Keep a backup of your data in iCloud. AsyncStorage stays
-                primary; iCloud is used for backup and restore.
-              </Text>
-              {iCloudSyncEnabled && !isAvailable && (
+          {isIos ? (
+            <View style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>iCloud Sync</Text>
                 <Text style={styles.settingDescription}>
-                  iCloud is currently unavailable on this device/account.
+                  Keep a backup of your data in iCloud. AsyncStorage stays
+                  primary; iCloud is used for backup and restore.
                 </Text>
-              )}
-            </View>
-            <Switch
-              value={iCloudSyncEnabled}
-              onValueChange={async (next) => {
-                if (!next) {
-                  await setEnabled(false);
-                  posthog.capture(posthogEventsNames.app.settingChanged, {
-                    setting_name: 'icloud_sync',
-                    new_value: 'false',
-                  });
-                  return;
-                }
+                {iCloudSyncEnabled && !isAvailable && (
+                  <Text style={styles.settingDescription}>
+                    iCloud is currently unavailable on this device/account.
+                  </Text>
+                )}
+              </View>
+              <Switch
+                value={iCloudSyncEnabled}
+                onValueChange={async (next) => {
+                  if (!next) {
+                    await setEnabled(false);
+                    posthog.capture(posthogEventsNames.app.settingChanged, {
+                      setting_name: 'icloud_sync',
+                      new_value: 'false',
+                    });
+                    return;
+                  }
 
-                const result = await setEnabled(true);
-                if (!result.isAvailable) {
-                  Alert.alert(
-                    'iCloud Unavailable',
-                    "We couldn't access iCloud on this device/account. Your data will remain local only."
-                  );
-                  await setEnabled(false);
-                  posthog.capture(posthogEventsNames.app.settingChanged, {
-                    setting_name: 'icloud_sync',
-                    new_value: 'false',
-                  });
-                } else {
-                  posthog.capture(posthogEventsNames.app.settingChanged, {
-                    setting_name: 'icloud_sync',
-                    new_value: 'true',
-                  });
-                }
-              }}
-            />
-          </View>
+                  const result = await setEnabled(true);
+                  if (!result.isAvailable) {
+                    Alert.alert(
+                      'iCloud Unavailable',
+                      "We couldn't access iCloud on this device/account. Your data will remain local only."
+                    );
+                    await setEnabled(false);
+                    posthog.capture(posthogEventsNames.app.settingChanged, {
+                      setting_name: 'icloud_sync',
+                      new_value: 'false',
+                    });
+                  } else {
+                    posthog.capture(posthogEventsNames.app.settingChanged, {
+                      setting_name: 'icloud_sync',
+                      new_value: 'true',
+                    });
+                  }
+                }}
+              />
+            </View>
+          ) : null}
 
           <TouchableOpacity
             style={styles.settingItem}

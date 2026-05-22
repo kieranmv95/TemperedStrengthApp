@@ -5,6 +5,7 @@ import {
   getProgramAnchorWeekdayKey,
   programAnchorFullWeekdayName,
 } from '@/src/utils/programStartWeekday';
+import { modalSheetBottomPadding } from '@/src/utils/platform';
 import React from 'react';
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { programLauncherStyles as styles } from './programLauncherStyles';
@@ -41,7 +42,7 @@ export function ProgramLauncherDatePickerModal({
         <View
           style={[
             styles.datePickerContainer,
-            { paddingBottom: bottomInset + 40 },
+            { paddingBottom: modalSheetBottomPadding(bottomInset) },
           ]}
         >
           <View style={styles.datePickerHeader}>

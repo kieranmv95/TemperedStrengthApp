@@ -19,6 +19,15 @@
       },
       "usesIcloudStorage": true
     },
+    "android": {
+      "package": "com.kieranvenison.temperedstrengthapp",
+      "softwareKeyboardLayoutMode": "resize",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundColor": "#121212"
+      },
+      "permissions": ["android.permission.POST_NOTIFICATIONS"]
+    },
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"

@@ -241,7 +241,8 @@ export const programLauncherStyles = StyleSheet.create({
     backgroundColor: Colors.backgroundCard,
     borderTopLeftRadius: BorderRadius.pill,
     borderTopRightRadius: BorderRadius.pill,
-    padding: Spacing.section,
+    paddingTop: Spacing.section,
+    paddingHorizontal: Spacing.section,
     maxHeight: '95%',
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,
@@ -462,6 +463,7 @@ export const programLauncherStyles = StyleSheet.create({
     paddingTop: Spacing.xxl,
     borderTopWidth: 1,
     borderTopColor: Colors.backgroundElevated,
+    flexShrink: 0,
   },
   startProgramButton: {
     backgroundColor: Colors.accent,

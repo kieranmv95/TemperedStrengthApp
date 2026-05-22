@@ -8,6 +8,7 @@ import React, {
   useState,
 } from 'react';
 import { AppState } from 'react-native';
+import { isIos } from '@/src/utils/platform';
 import {
   SYNC_ENABLED_KEY,
   SyncManager,
@@ -74,7 +75,7 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
 
   const buildManager = useCallback(
     async (nextEnabled: boolean) => {
-      if (!nextEnabled) {
+      if (!nextEnabled || !isIos) {
         managerRef.current = new SyncManager({
           provider: new NoopSyncProvider(),
           requestConflictDecision,
@@ -106,17 +107,18 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
 
   const setEnabled = useCallback(
     async (nextEnabled: boolean) => {
-      setEnabledState(nextEnabled);
+      const effectiveEnabled = isIos && nextEnabled;
+      setEnabledState(effectiveEnabled);
       await AsyncStorage.setItem(
         SYNC_ENABLED_KEY,
-        nextEnabled ? 'true' : 'false'
+        effectiveEnabled ? 'true' : 'false'
       );
-      const available = await buildManager(nextEnabled);
+      const available = await buildManager(effectiveEnabled);
 
-      if (nextEnabled) {
+      if (effectiveEnabled) {
         await managerRef.current?.reconcileOnce();
       }
-      return { isAvailable: nextEnabled ? available : false };
+      return { isAvailable: effectiveEnabled ? available : false };
     },
     [buildManager]
   );
@@ -126,7 +128,11 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
     (async () => {
       try {
         const raw = await AsyncStorage.getItem(SYNC_ENABLED_KEY);
-        const initialEnabled = raw === 'true';
+        let initialEnabled = raw === 'true';
+        if (!isIos && initialEnabled) {
+          await AsyncStorage.setItem(SYNC_ENABLED_KEY, 'false');
+          initialEnabled = false;
+        }
         if (!mounted) return;
         setEnabledState(initialEnabled);
         await buildManager(initialEnabled);

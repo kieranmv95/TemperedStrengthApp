@@ -3,6 +3,7 @@ import { OnboardingProgressBar } from '@/src/components/onboarding/OnboardingPro
 import { onboardingStyles as styles } from '@/src/components/onboarding/onboardingStyles';
 import { Colors } from '@/src/constants/theme';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
+import { isIos } from '@/src/utils/platform';
 import type {
   OnboardingExperienceLevel,
   OnboardingGender,
@@ -37,7 +38,31 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TOTAL_STEPS = 8;
-const TOTAL_PROGRESS_STEPS = TOTAL_STEPS - 1;
+const ICLOUD_STEP_INDEX = 6;
+const WELCOME_STEP_INDEX = 7;
+const TOTAL_PROGRESS_STEPS = isIos ? TOTAL_STEPS - 1 : TOTAL_STEPS - 2;
+
+function nextStepIndex(current: number): number {
+  if (!isIos && current === ICLOUD_STEP_INDEX - 1) {
+    return WELCOME_STEP_INDEX;
+  }
+  return current + 1;
+}
+
+function prevStepIndex(current: number): number {
+  if (!isIos && current === WELCOME_STEP_INDEX) {
+    return ICLOUD_STEP_INDEX - 1;
+  }
+  return current - 1;
+}
+
+function progressStepForIndex(stepIndex: number): number {
+  if (stepIndex <= 0) return 1;
+  if (!isIos && stepIndex >= WELCOME_STEP_INDEX) {
+    return TOTAL_PROGRESS_STEPS;
+  }
+  return Math.min(stepIndex, TOTAL_PROGRESS_STEPS);
+}
 
 function onboardingStepName(stepIndex: number): string {
   switch (stepIndex) {
@@ -127,7 +152,9 @@ function OnboardingFlow() {
       const existing = await getOnboardingProfile();
       if (cancelled) return;
       if (!existing) {
-        setICloudStepToggle(iCloudSyncEnabled);
+        if (isIos) {
+          setICloudStepToggle(iCloudSyncEnabled);
+        }
         return;
       }
       setProfile(existing);
@@ -136,11 +163,13 @@ function OnboardingFlow() {
       if (existing.interests) setInterests(existing.interests);
       if (existing.experienceLevel)
         setExperienceLevel(existing.experienceLevel);
-      setICloudStepToggle(
-        typeof existing.iCloudSyncEnabled === 'boolean'
-          ? existing.iCloudSyncEnabled
-          : iCloudSyncEnabled
-      );
+      if (isIos) {
+        setICloudStepToggle(
+          typeof existing.iCloudSyncEnabled === 'boolean'
+            ? existing.iCloudSyncEnabled
+            : iCloudSyncEnabled
+        );
+      }
     })();
     return () => {
       cancelled = true;
@@ -214,7 +243,7 @@ function OnboardingFlow() {
       return;
     }
     setProfile(nextProfile);
-    animateStepChange(() => setStepIndex((i) => i + 1));
+    animateStepChange(() => setStepIndex((i) => nextStepIndex(i)));
   };
 
   const handleSkipStep = () => {
@@ -230,12 +259,12 @@ function OnboardingFlow() {
       completeOnboarding(profile);
       return;
     }
-    animateStepChange(() => setStepIndex((i) => i + 1));
+    animateStepChange(() => setStepIndex((i) => nextStepIndex(i)));
   };
 
   const handleBackStep = () => {
     if (stepIndex <= 1) return;
-    animateStepChange(() => setStepIndex((i) => Math.max(0, i - 1)));
+    animateStepChange(() => setStepIndex((i) => Math.max(1, prevStepIndex(i))));
   };
 
   const handleSkipSetup = () => {
@@ -593,10 +622,9 @@ function OnboardingFlow() {
   const isLastStep = stepIndex === TOTAL_STEPS - 1;
   const canGoBack = stepIndex > 1;
   const showIntro = stepIndex === 0;
-  const progressCurrent = Math.max(
-    1,
-    Math.min(stepIndex, TOTAL_PROGRESS_STEPS)
-  );
+  const progressCurrent = progressStepForIndex(stepIndex);
+
+  const KeyboardWrapper = isIos ? KeyboardAvoidingView : View;
 
   return (
     <SafeAreaView
@@ -607,7 +635,10 @@ function OnboardingFlow() {
           : ['top', 'left', 'right']
       }
     >
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+      <KeyboardWrapper
+        style={{ flex: 1 }}
+        {...(isIos ? { behavior: 'padding' as const } : {})}
+      >
         {showIntro ? (
           <View style={{ flex: 1 }}>
             <Video
@@ -733,7 +764,7 @@ function OnboardingFlow() {
             </SafeAreaView>
           </>
         )}
-      </KeyboardAvoidingView>
+      </KeyboardWrapper>
     </SafeAreaView>
   );
 }

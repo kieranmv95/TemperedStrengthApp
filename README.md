@@ -109,7 +109,12 @@ Tests use Jest, jest-expo, and React Native Testing Library and live under `src/
 
 ## Build and distribution
 
-Production and TestFlight builds use [EAS Build](https://docs.expo.dev/build/introduction/). Configure RevenueCat production API keys as EAS secrets; see [eas.json](eas.json) for build profiles.
+Production and TestFlight builds use [EAS Build](https://docs.expo.dev/build/introduction/). Configure RevenueCat production API keys as EAS secrets (`EXPO_PUBLIC_REVENUECAT_API_KEY_IOS` and `EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID`); see [eas.json](eas.json) for build profiles.
+
+- **iOS:** `npm run build:ios:production`
+- **Android:** `npm run build:android:production`
+
+For Android setup, Play Store checklist, and RevenueCat on Google Play, see [docs/ANDROID_MIGRATION.md](docs/ANDROID_MIGRATION.md). On Android, **timer notifications and in-app purchases** require a development or store build—not Expo Go (SDK 53+).
 
 ## Learn more
 

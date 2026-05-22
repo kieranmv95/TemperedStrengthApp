@@ -11,9 +11,9 @@ import { useSubscription } from '@/src/hooks/use-subscription';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { useWorkoutScreenController } from '@/src/hooks/useWorkoutScreenController';
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
+import { cancelAllScheduledNotifications } from '@/src/services/localNotifications';
 import { clearProgramData } from '@/src/utils/storage';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import React from 'react';
 import { Alert, Text, TouchableOpacity, View } from 'react-native';
@@ -47,7 +47,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           style: 'destructive',
           onPress: async () => {
             try {
-              await Notifications.cancelAllScheduledNotificationsAsync();
+              await cancelAllScheduledNotifications();
             } catch (error) {
               console.error('Error cancelling scheduled notifications:', error);
             }

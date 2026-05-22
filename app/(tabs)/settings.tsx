@@ -1,5 +1,6 @@
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { SmallChevron } from '@/src/components/ds/SmallChevron';
+import { isIos } from '@/src/utils/platform';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { refreshSanityHomeContent } from '@/src/services/sanityHomeContent';
@@ -247,7 +248,9 @@ export default function SettingsScreen() {
             <View style={styles.settingContent}>
               <Text style={styles.settingTitle}>General settings</Text>
               <Text style={styles.settingDescription}>
-                Weight units, iCloud sync, onboarding preferences.
+                {isIos
+                  ? 'Weight units, iCloud sync, onboarding preferences.'
+                  : 'Weight units and onboarding preferences.'}
               </Text>
             </View>
             <SmallChevron />

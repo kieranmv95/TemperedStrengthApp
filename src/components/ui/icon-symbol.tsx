@@ -26,6 +26,7 @@ const MAPPING = {
   'gearshape.fill': 'settings',
   'newspaper.fill': 'article',
   'square.grid.2x2.fill': 'apps',
+  'trophy.fill': 'emoji-events',
 } as IconMapping;
 
 /**

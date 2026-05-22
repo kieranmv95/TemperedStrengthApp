@@ -359,7 +359,8 @@ const styles = StyleSheet.create({
   },
   scrollStateContent: {
     flexGrow: 1,
-    paddingVertical: Spacing.xxl,
+    paddingTop: Spacing.xxl,
+    paddingBottom: Spacing.md,
   },
   subSection: {
     gap: Spacing.md,
@@ -417,7 +418,8 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   listContent: {
-    paddingVertical: Spacing.xxl,
+    paddingTop: Spacing.xxl,
+    paddingBottom: Spacing.md,
   },
   centeredState: {
     flex: 1,

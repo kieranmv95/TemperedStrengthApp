@@ -6,9 +6,17 @@ import { getOnboarded } from '@/src/utils/storage';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { isRunningInExpoGo } from 'expo';
 import { PostHogProvider } from 'posthog-react-native';
 import { useEffect, useState } from 'react';
+import { LogBox, Platform } from 'react-native';
 import 'react-native-reanimated';
+
+// Expo Go on Android cannot use expo-notifications (SDK 53+). We lazy-load the
+// module in localNotifications.ts; suppress the known dev warning if native still logs it.
+if (isRunningInExpoGo() && Platform.OS === 'android') {
+  LogBox.ignoreLogs([/expo-notifications: Android Push notifications/]);
+}
 
 export const unstable_settings = {
   anchor: '(tabs)',

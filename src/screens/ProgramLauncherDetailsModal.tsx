@@ -1,5 +1,5 @@
-import { Spacing } from '@/src/constants/theme';
 import type { Program } from '@/src/types/program';
+import { modalSheetBottomPadding } from '@/src/utils/platform';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import React from 'react';
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
@@ -182,7 +182,7 @@ export function ProgramLauncherDetailsModal({
           <View
             style={[
               styles.modalFooter,
-              { paddingBottom: bottomInset + Spacing.xl },
+              { paddingBottom: modalSheetBottomPadding(bottomInset) },
             ]}
           >
             {selectedProgram?.isPro && !isPro ? (

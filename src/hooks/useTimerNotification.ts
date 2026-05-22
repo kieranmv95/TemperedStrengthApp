@@ -1,7 +1,9 @@
-import * as Notifications from 'expo-notifications';
+import {
+  cancelScheduledNotification,
+  scheduleTimerFinishedNotification,
+  setupTimerNotifications,
+} from '@/src/services/localNotifications';
 import { useCallback, useEffect, useRef } from 'react';
-
-const NOTIFICATION_TITLE = '⏰ Timer Finished — get back to work!';
 
 export function useTimerNotification() {
   const notificationIdRef = useRef<string | null>(null);
@@ -9,27 +11,10 @@ export function useTimerNotification() {
   useEffect(() => {
     let isMounted = true;
 
-    const setupNotifications = async () => {
-      // Ensure foreground notifications display correctly.
-      Notifications.setNotificationHandler({
-        handleNotification: async () => ({
-          shouldPlaySound: true,
-          shouldSetBadge: false,
-          shouldShowBanner: true,
-          shouldShowList: true,
-        }),
-      });
-
-      const status = await Notifications.requestPermissionsAsync();
-
-      if (!isMounted) return;
-      if (status.status !== 'granted') {
-        console.log('Notification permissions not granted');
+    setupTimerNotifications().catch((error) => {
+      if (isMounted) {
+        console.error('Error setting up timer notifications:', error);
       }
-    };
-
-    setupNotifications().catch((error) => {
-      console.error('Error setting up timer notifications:', error);
     });
 
     return () => {
@@ -42,9 +27,8 @@ export function useTimerNotification() {
     if (!notificationId) return;
 
     try {
-      await Notifications.cancelScheduledNotificationAsync(notificationId);
+      await cancelScheduledNotification(notificationId);
     } catch (error) {
-      // Cancellation can legitimately fail if the notification already fired.
       console.warn('Failed to cancel scheduled timer notification:', error);
     } finally {
       notificationIdRef.current = null;
@@ -53,26 +37,9 @@ export function useTimerNotification() {
 
   const scheduleTimerNotification = useCallback(
     async (durationSeconds: number) => {
-      const seconds = Math.max(0, durationSeconds);
-      if (seconds <= 0) return;
-
-      // Avoid duplicate notifications when restarting a timer.
       await cancelTimerNotification();
 
-      const triggerDate = new Date(Date.now() + seconds * 1000);
-
-      const identifier = await Notifications.scheduleNotificationAsync({
-        content: {
-          title: NOTIFICATION_TITLE,
-          body: '',
-          data: { timerFinished: true },
-        },
-        trigger: {
-          type: Notifications.SchedulableTriggerInputTypes.DATE,
-          date: triggerDate,
-        },
-      });
-
+      const identifier = await scheduleTimerFinishedNotification(durationSeconds);
       notificationIdRef.current = identifier;
     },
     [cancelTimerNotification]
