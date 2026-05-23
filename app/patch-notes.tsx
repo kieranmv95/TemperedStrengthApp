@@ -27,6 +27,7 @@ const PATCH_NOTES: PatchNote[] = [
       'Together we lift charity added.',
       'Android support added',
       'OTA update support added',
+      'Switched video player',
     ],
   },
   {
