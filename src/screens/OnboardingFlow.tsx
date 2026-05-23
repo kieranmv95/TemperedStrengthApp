@@ -19,8 +19,9 @@ import {
   setWeightUnit,
   type WeightUnit,
 } from '@/src/utils/storage';
-import { ResizeMode, Video, type AVPlaybackStatus } from 'expo-av';
+import { useEventListener } from 'expo';
 import { router, type Href } from 'expo-router';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -204,6 +205,19 @@ function OnboardingFlow() {
     setIntroDone(true);
     animateStepChange(() => setStepIndex(1));
   }, [animateStepChange, completing, introDone]);
+
+  const introVideoPlayer = useVideoPlayer(
+    require('../../assets/onboarding.mp4'),
+    (player) => {
+      player.loop = false;
+      player.muted = true;
+      player.play();
+    }
+  );
+
+  useEventListener(introVideoPlayer, 'playToEnd', () => {
+    goToNameStep();
+  });
 
   const skipIntro = useCallback(() => {
     posthog.capture(posthogEventsNames.onboarding.skip, {
@@ -641,17 +655,11 @@ function OnboardingFlow() {
       >
         {showIntro ? (
           <View style={{ flex: 1 }}>
-            <Video
-              source={require('../../assets/onboarding.mp4')}
+            <VideoView
+              player={introVideoPlayer}
               style={StyleSheet.absoluteFillObject}
-              resizeMode={ResizeMode.COVER}
-              shouldPlay
-              isLooping={false}
-              isMuted
-              onPlaybackStatusUpdate={(status: AVPlaybackStatus) => {
-                if (!status.isLoaded) return;
-                if (status.didJustFinish) goToNameStep();
-              }}
+              contentFit="cover"
+              nativeControls={false}
               accessibilityLabel="Onboarding intro video"
             />
 
