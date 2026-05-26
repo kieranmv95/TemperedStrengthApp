@@ -323,7 +323,12 @@ function mapSponsorAd(raw: SanitySponsorAdDoc): HomeSponsorAd | null {
     layout: layoutRaw,
     affiliateUrl,
     ctaLabel: ctaLabel.length > 0 ? ctaLabel : 'Visit Website',
-    bgColor: themeColor(theme, 'backgroundColor', raw.backgroundColor, d.bgColor),
+    bgColor: themeColor(
+      theme,
+      'backgroundColor',
+      raw.backgroundColor,
+      d.bgColor
+    ),
     titleColor: themeColor(theme, 'titleColor', raw.titleColor, d.titleColor),
     descriptionColor: themeColor(
       theme,
@@ -396,8 +401,7 @@ function normalizeAdFromCache(raw: unknown): HomeSponsorAd | null {
     logoUrl: typeof o.logoUrl === 'string' ? o.logoUrl : null,
     productUrl: typeof o.productUrl === 'string' ? o.productUrl : null,
     categories: mapSponsorCategories(o.categories),
-    review:
-      typeof o.review === 'string' ? mapSponsorReview(o.review) : null,
+    review: typeof o.review === 'string' ? mapSponsorReview(o.review) : null,
     theme: typeof o.theme === 'object' && o.theme !== null ? o.theme : null,
   });
 }
