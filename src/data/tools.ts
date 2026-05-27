@@ -1,4 +1,4 @@
-export type ToolId = 'one-rep-max';
+export type ToolId = 'one-rep-max' | 'one-rep-max-breakdown';
 
 export type ToolDefinition = {
   id: ToolId;
@@ -18,6 +18,15 @@ export const TOOLS: ToolDefinition[] = [
       'Estimate your one-rep max from a known set and see training percentages.',
     route: '/tools/one-rep-max',
     icon: 'barbell-outline',
+  },
+  {
+    id: 'one-rep-max-breakdown',
+    title: 'One Rep Max Breakdown',
+    pillLabel: '1RM Breakdown',
+    description:
+      'Enter your known one-rep max and see training weights at every percentage.',
+    route: '/tools/one-rep-max-breakdown',
+    icon: 'grid-outline',
   },
 ];
 

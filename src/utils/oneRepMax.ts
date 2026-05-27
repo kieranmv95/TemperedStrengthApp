@@ -20,6 +20,13 @@ export type OneRepMaxPercentageRow = {
   reps: number;
 };
 
+export type OneRepMaxBreakdownRow = {
+  percent: number;
+  weight: number;
+};
+
+export type OneRepMaxBreakdownStep = 5 | 10;
+
 /**
  * Brzycki formula. For 1 rep, returns the entered weight unchanged.
  */
@@ -78,4 +85,20 @@ export function parseLiftWeightToKg(raw: string, unit: WeightUnit): number | nul
 
 export function oneRepMaxKgToDisplay(oneRepMaxKg: number, unit: WeightUnit): number {
   return displayWeightFromKg(oneRepMaxKg, unit);
+}
+
+/** Percentage ladder from 100% down to 0% in fixed steps (includes 0%). */
+export function buildOneRepMaxBreakdownTable(
+  oneRepMaxKg: number,
+  unit: WeightUnit,
+  stepPercent: OneRepMaxBreakdownStep
+): OneRepMaxBreakdownRow[] {
+  const rows: OneRepMaxBreakdownRow[] = [];
+  for (let percent = 100; percent >= 0; percent -= stepPercent) {
+    rows.push({
+      percent,
+      weight: displayWeightFromKg(oneRepMaxKg * (percent / 100), unit),
+    });
+  }
+  return rows;
 }

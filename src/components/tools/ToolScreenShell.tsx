@@ -157,6 +157,19 @@ export const toolFormStyles = StyleSheet.create({
     fontSize: FontSize.displaySm,
     fontWeight: '700',
   },
+  secondaryButton: {
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.pill,
+    paddingVertical: Spacing.xxl,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.backgroundBorder,
+  },
+  secondaryButtonText: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.lg,
+    fontWeight: '600',
+  },
   resultHeading: {
     color: Colors.textPrimary,
     fontSize: FontSize.displayMd,

@@ -26,7 +26,8 @@ const PATCH_NOTES: PatchNote[] = [
     notes: [
       'Improved best single / latest single display on exercise cards',
       'Improved streak card display',
-      'Added a new 1RM estimator tool',
+      'Added a 1RM estimator tool',
+      'Added a 1RM breakdown tool',
     ],
   },
   {

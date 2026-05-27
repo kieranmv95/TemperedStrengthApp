@@ -86,6 +86,10 @@ export default function RootLayout() {
                 name="tools/one-rep-max"
                 options={{ headerShown: false }}
               />
+              <Stack.Screen
+                name="tools/one-rep-max-breakdown"
+                options={{ headerShown: false }}
+              />
               <Stack.Screen name="shop" options={{ headerShown: false }} />
               <Stack.Screen
                 name="article/[id]"
