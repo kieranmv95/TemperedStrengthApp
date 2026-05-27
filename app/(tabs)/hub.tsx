@@ -29,8 +29,8 @@ export default function HubScreen() {
   const posthog = usePostHog();
   const { open: openTogetherWeLift } = useTogetherWeLift();
   const [articles, setArticles] = useState<ArticleListItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isOffline, setIsOffline] = useState(false);
+  const [articlesLoading, setArticlesLoading] = useState(true);
+  const [networkUnavailable, setNetworkUnavailable] = useState(false);
   const [activeCategory, setActiveCategory] = useState<ArticleCategory | 'All'>(
     'All'
   );
@@ -46,27 +46,33 @@ export default function HubScreen() {
       let cancelled = false;
 
       void (async () => {
-        setIsLoading(true);
+        setArticlesLoading(true);
         try {
-          const [data, favs] = await Promise.all([
-            fetchArticles(),
-            getFavoriteArticles(),
-          ]);
+          const favs = await getFavoriteArticles();
+          if (cancelled) {
+            return;
+          }
+          favoritesRef.current = favs;
+          setFavorites(favs);
+        } catch (error) {
+          console.error('Failed to load favorite articles:', error);
+        }
+
+        try {
+          const data = await fetchArticles();
           if (cancelled) {
             return;
           }
           setArticles(data);
-          setIsOffline(false);
-          favoritesRef.current = favs;
-          setFavorites(favs);
+          setNetworkUnavailable(false);
         } catch {
           if (cancelled) {
             return;
           }
-          setIsOffline(true);
+          setNetworkUnavailable(true);
         } finally {
           if (!cancelled) {
-            setIsLoading(false);
+            setArticlesLoading(false);
           }
         }
       })();
@@ -148,202 +154,193 @@ export default function HubScreen() {
     </View>
   );
 
-  const renderBody = () => {
-    if (isLoading) {
-      return (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollStateContent}
-        >
-          {charityBanner}
-          <View style={styles.centeredState}>
-            <ActivityIndicator size="large" color={Colors.accent} />
-          </View>
-        </ScrollView>
-      );
-    }
+  const renderNetworkOfflineMessage = () => (
+    <View style={styles.sectionOffline}>
+      <Ionicons name="wifi-outline" size={40} color={Colors.backgroundSubtle} />
+      <Text style={styles.sectionOfflineTitle}>No connection</Text>
+      <Text style={styles.sectionOfflineDescription}>
+        This section needs the internet. Tools above work offline.
+      </Text>
+    </View>
+  );
 
-    if (isOffline) {
-      return (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollStateContent}
-        >
-          {charityBanner}
-          <View style={styles.centeredState}>
-            <Ionicons
-              name="wifi-outline"
-              size={64}
-              color={Colors.backgroundSubtle}
-            />
-            <Text style={styles.emptyTitle}>No Connection</Text>
-            <Text style={styles.emptyDescription}>
-              Articles are unavailable offline. Come back when you&apos;re
-              connected.
-            </Text>
-          </View>
-        </ScrollView>
-      );
-    }
+  const listHeader = (
+    <View>
+      {charityBanner}
+      <View style={styles.section}>
+        <View style={styles.subSection}>
+          <CuratedSection
+            icon="calculator-outline"
+            iconSizeOverride={18}
+            title="Tools"
+            description="Calculators and training utilities you can open anywhere"
+            size="medium"
+            theme="gold"
+          />
 
-    return (
-      <FlatList
-        data={visibleArticles}
-        keyExtractor={(item) => item.slug}
-        extraData={favorites}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
-        ListHeaderComponent={
-          <View>
-            {charityBanner}
-            <View style={styles.section}>
-            <View style={styles.subSection}>
-              <CuratedSection
-                icon="calculator-outline"
-                iconSizeOverride={18}
-                title="Tools"
-                description="Calculators and training utilities you can open anywhere"
-                size="medium"
-                theme="gold"
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.toolsScrollContent}
+          >
+            {TOOLS.map((tool) => (
+              <Pill
+                key={tool.id}
+                variant="card"
+                onPress={() => handleOpenTool(tool.route)}
+                isActive={false}
+                label={tool.pillLabel}
+                icon={tool.icon}
               />
+            ))}
+          </ScrollView>
+        </View>
 
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.toolsScrollContent}
-              >
-                {TOOLS.map((tool) => (
+        <View style={styles.subSection}>
+          <CuratedSection
+            icon="book-outline"
+            iconSizeOverride={18}
+            title="Terminology"
+            description="Quick definitions for common training terms"
+            size="medium"
+            theme="gold"
+          />
+
+          {networkUnavailable ? (
+            renderNetworkOfflineMessage()
+          ) : (
+            <Card
+              onPress={handleSeeAllGlossary}
+              accessibilityLabel="Browse the glossary"
+            >
+              <View style={styles.hubCtaContent}>
+                <Text style={styles.hubCtaTitle}>Browse the glossary</Text>
+                <Text style={styles.hubCtaDescription}>
+                  Learn the terms we use across training, nutrition, and
+                  recovery.
+                </Text>
+              </View>
+            </Card>
+          )}
+        </View>
+
+        <View style={styles.subSection}>
+          <CuratedSection
+            icon="bag"
+            iconSizeOverride={18}
+            title="Shop"
+            description="Products we at Tempered Strength believe in, at the best prices for you"
+            size="medium"
+            theme="gold"
+          />
+
+          {networkUnavailable ? (
+            renderNetworkOfflineMessage()
+          ) : (
+            <Card
+              onPress={handleOpenShop}
+              accessibilityLabel="Browse partner products"
+              style={styles.shopCard}
+            >
+              <View style={styles.shopVisualTile}>
+                <Ionicons name="pricetag" size={30} color={Colors.accent} />
+              </View>
+              <View style={styles.shopCtaTextColumn}>
+                <Text style={styles.shopEyebrow}>Partner picks</Text>
+                <Text style={styles.hubCtaTitle}>Browse the shop</Text>
+                <Text style={styles.hubCtaDescription}>
+                  Affiliate offers from brands we trust, codes and links in one
+                  place.
+                </Text>
+              </View>
+              <SmallChevron />
+            </Card>
+          )}
+        </View>
+
+        <View style={styles.articlesSection}>
+          <CuratedSection
+            icon="newspaper-outline"
+            iconSizeOverride={18}
+            title="Articles"
+            description="Your daily intel for the iron game"
+            size="medium"
+            theme="gold"
+          />
+
+          {networkUnavailable ? (
+            renderNetworkOfflineMessage()
+          ) : articlesLoading ? (
+            <View style={styles.articlesLoading}>
+              <ActivityIndicator size="large" color={Colors.accent} />
+            </View>
+          ) : (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.filterScrollContent}
+            >
+              {[
+                {
+                  key: 'favorites',
+                  label: 'Saved',
+                  icon: 'bookmark' as const,
+                },
+                { key: 'all', label: 'All' },
+                ...categories.map((c) => ({ key: c, label: c })),
+              ].map((item) => {
+                const isFavoritesChip = item.key === 'favorites';
+                const isAllChip = item.key === 'all';
+                const isActive = isFavoritesChip
+                  ? showFavoritesOnly
+                  : isAllChip
+                    ? activeCategory === 'All' && !showFavoritesOnly
+                    : activeCategory === (item.key as ArticleCategory) &&
+                      !showFavoritesOnly;
+
+                const count = isFavoritesChip
+                  ? favorites.length
+                  : isAllChip
+                    ? articles.length
+                    : articles.filter((a) => a.category === item.key).length;
+
+                return (
                   <Pill
-                    key={tool.id}
-                    variant="card"
-                    onPress={() => handleOpenTool(tool.route)}
-                    isActive={false}
-                    label={tool.pillLabel}
-                    icon={tool.icon}
+                    key={item.key}
+                    onPress={() => {
+                      if (isFavoritesChip) {
+                        setShowFavoritesOnly((prev) => !prev);
+                        return;
+                      }
+                      setShowFavoritesOnly(false);
+                      setActiveCategory(
+                        isAllChip ? 'All' : (item.key as ArticleCategory)
+                      );
+                    }}
+                    isActive={isActive}
+                    label={item.label}
+                    icon={item.icon}
+                    count={count}
                   />
-                ))}
-              </ScrollView>
-            </View>
+                );
+              })}
+            </ScrollView>
+          )}
+        </View>
+      </View>
+    </View>
+  );
 
-            <View style={styles.subSection}>
-              <CuratedSection
-                icon="book-outline"
-                iconSizeOverride={18}
-                title="Terminology"
-                description="Quick definitions for common training terms"
-                size="medium"
-                theme="gold"
-              />
-
-              <Card
-                onPress={handleSeeAllGlossary}
-                accessibilityLabel="Browse the glossary"
-              >
-                <View style={styles.hubCtaContent}>
-                  <Text style={styles.hubCtaTitle}>Browse the glossary</Text>
-                  <Text style={styles.hubCtaDescription}>
-                    Learn the terms we use across training, nutrition, and
-                    recovery.
-                  </Text>
-                </View>
-              </Card>
-            </View>
-
-            <View style={styles.subSection}>
-              <CuratedSection
-                icon="bag"
-                iconSizeOverride={18}
-                title="Shop"
-                description="Products we at Tempered Strength believe in, at the best prices for you"
-                size="medium"
-                theme="gold"
-              />
-
-              <Card
-                onPress={handleOpenShop}
-                accessibilityLabel="Browse partner products"
-                style={styles.shopCard}
-              >
-                <View style={styles.shopVisualTile}>
-                  <Ionicons name="pricetag" size={30} color={Colors.accent} />
-                </View>
-                <View style={styles.shopCtaTextColumn}>
-                  <Text style={styles.shopEyebrow}>Partner picks</Text>
-                  <Text style={styles.hubCtaTitle}>Browse the shop</Text>
-                  <Text style={styles.hubCtaDescription}>
-                    Affiliate offers from brands we trust, codes and links in
-                    one place.
-                  </Text>
-                </View>
-                <SmallChevron />
-              </Card>
-            </View>
-
-            <View style={styles.articlesSection}>
-              <CuratedSection
-                icon="newspaper-outline"
-                iconSizeOverride={18}
-                title="Articles"
-                description="Your daily intel for the iron game"
-                size="medium"
-                theme="gold"
-              />
-
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.filterScrollContent}
-              >
-                  {[
-                    {
-                      key: 'favorites',
-                      label: 'Saved',
-                      icon: 'bookmark' as const,
-                    },
-                    { key: 'all', label: 'All' },
-                    ...categories.map((c) => ({ key: c, label: c })),
-                  ].map((item) => {
-                    const isFavoritesChip = item.key === 'favorites';
-                    const isAllChip = item.key === 'all';
-                    const isActive = isFavoritesChip
-                      ? showFavoritesOnly
-                      : isAllChip
-                        ? activeCategory === 'All' && !showFavoritesOnly
-                        : activeCategory === (item.key as ArticleCategory) &&
-                        !showFavoritesOnly;
-
-                    const count = isFavoritesChip
-                      ? favorites.length
-                      : isAllChip
-                        ? articles.length
-                        : articles.filter((a) => a.category === item.key).length;
-
-                    return (
-                      <Pill
-                        key={item.key}
-                        onPress={() => {
-                          if (isFavoritesChip) {
-                            setShowFavoritesOnly((prev) => !prev);
-                            return;
-                          }
-                          setShowFavoritesOnly(false);
-                          setActiveCategory(
-                            isAllChip ? 'All' : (item.key as ArticleCategory)
-                          );
-                        }}
-                        isActive={isActive}
-                        label={item.label}
-                        icon={item.icon}
-                        count={count}
-                      />
-                    );
-                  })}
-              </ScrollView>
-            </View>
-            </View>
-          </View>
-        }
-        ListEmptyComponent={
+  const renderBody = () => (
+    <FlatList
+      data={networkUnavailable || articlesLoading ? [] : visibleArticles}
+      keyExtractor={(item) => item.slug}
+      extraData={favorites}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.listContent}
+      ListHeaderComponent={listHeader}
+      ListEmptyComponent={
+        networkUnavailable || articlesLoading ? null : (
           <View style={styles.emptyState}>
             <Ionicons
               name={showFavoritesOnly ? 'bookmark-outline' : 'document-text'}
@@ -361,19 +358,19 @@ export default function HubScreen() {
                 : 'Try selecting a different filter.'}
             </Text>
           </View>
-        }
-        renderItem={({ item }) => (
-          <ArticleCard
-            article={item}
-            onPress={handleArticlePress}
-            isFavorite={favorites.includes(item.slug)}
-            onToggleFavorite={handleToggleFavorite}
-          />
-        )}
-        ListFooterComponent={<View style={styles.bottomSpacer} />}
-      />
-    );
-  };
+        )
+      }
+      renderItem={({ item }) => (
+        <ArticleCard
+          article={item}
+          onPress={handleArticlePress}
+          isFavorite={favorites.includes(item.slug)}
+          onToggleFavorite={handleToggleFavorite}
+        />
+      )}
+      ListFooterComponent={<View style={styles.bottomSpacer} />}
+    />
+  );
 
   return (
     <StandardLayout
@@ -390,10 +387,27 @@ const styles = StyleSheet.create({
   charityBannerWrap: {
     marginBottom: Spacing.section,
   },
-  scrollStateContent: {
-    flexGrow: 1,
-    paddingTop: Spacing.xxl,
-    paddingBottom: Spacing.md,
+  sectionOffline: {
+    alignItems: 'center',
+    paddingHorizontal: Spacing.xxl,
+    paddingVertical: Spacing.xxl,
+    gap: Spacing.md,
+  },
+  sectionOfflineTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xl,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  sectionOfflineDescription: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+    textAlign: 'center',
+  },
+  articlesLoading: {
+    alignItems: 'center',
+    paddingVertical: Spacing.xxl,
   },
   subSection: {
     gap: Spacing.md,
@@ -456,13 +470,6 @@ const styles = StyleSheet.create({
   listContent: {
     paddingTop: Spacing.xxl,
     paddingBottom: Spacing.md,
-  },
-  centeredState: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 48,
-    gap: Spacing.xxl,
   },
   emptyState: {
     flex: 1,
