@@ -39,6 +39,7 @@ export const Colors = {
 
   // Semantic
   destructive: '#FF6B6B',
+  destructiveWashFill: 'rgba(255, 107, 107, 0.12)',
 
   // Tab bar
   tabIconDefault: '#9BA1A6',

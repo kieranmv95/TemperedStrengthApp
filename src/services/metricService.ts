@@ -10,6 +10,7 @@ export type TRACKED_METRIC =
   | 'brief_visits'
   | 'articles_read'
   | 'terminology_views'
+  | 'tool_one_rep_max_views'
   | 'workouts_logged'
   | 'exercises_swapped'
   | 'pbs_logged';
@@ -27,6 +28,7 @@ const ALL_TRACKED_METRICS: TRACKED_METRIC[] = [
   'brief_visits',
   'articles_read',
   'terminology_views',
+  'tool_one_rep_max_views',
   'workouts_logged',
   'exercises_swapped',
   'pbs_logged',

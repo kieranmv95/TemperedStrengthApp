@@ -40,6 +40,8 @@ export const posthogEventsNames = {
     articleView: 'article_view',
     articleFavourite: 'article_favourite',
     glossaryView: 'glossary_view',
+    toolView: 'tool_view',
+    toolCalculate: 'tool_calculate',
     shopView: 'hub_shop_view',
     togetherWeLiftSheetOpened: 'together_we_lift_sheet_opened',
     togetherWeLiftLinkPressed: 'together_we_lift_link_pressed',

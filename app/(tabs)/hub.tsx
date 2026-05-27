@@ -4,6 +4,7 @@ import { TogetherWeLiftBanner } from '@/src/components/hub/TogetherWeLiftBanner'
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { TOOLS } from '@/src/data/tools';
 import { useTogetherWeLift } from '@/src/hooks/use-together-we-lift';
 import { fetchArticles } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
@@ -133,6 +134,10 @@ export default function HubScreen() {
     router.push('/glossary');
   };
 
+  const handleOpenTool = (route: (typeof TOOLS)[number]['route']) => {
+    router.push(route);
+  };
+
   const handleOpenShop = () => {
     router.push('/shop');
   };
@@ -192,6 +197,33 @@ export default function HubScreen() {
           <View>
             {charityBanner}
             <View style={styles.section}>
+            <View style={styles.subSection}>
+              <CuratedSection
+                icon="calculator-outline"
+                iconSizeOverride={18}
+                title="Tools"
+                description="Calculators and training utilities you can open anywhere"
+                size="medium"
+                theme="gold"
+              />
+
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.toolsScrollContent}
+              >
+                {TOOLS.map((tool) => (
+                  <Pill
+                    key={tool.id}
+                    onPress={() => handleOpenTool(tool.route)}
+                    isActive={false}
+                    label={tool.pillLabel}
+                    icon={tool.icon}
+                  />
+                ))}
+              </ScrollView>
+            </View>
+
             <View style={styles.subSection}>
               <CuratedSection
                 icon="book-outline"
@@ -370,6 +402,9 @@ const styles = StyleSheet.create({
   },
   filterScrollContent: {
     paddingBottom: Spacing.md,
+    gap: Spacing.md,
+  },
+  toolsScrollContent: {
     gap: Spacing.md,
   },
   section: {
