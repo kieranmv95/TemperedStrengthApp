@@ -29,6 +29,7 @@ const PATCH_NOTES: PatchNote[] = [
       'Added a 1RM estimator tool',
       'Added a 1RM breakdown tool',
       'Added a creatine dose tool',
+      'Added a water intake tool',
     ],
   },
   {

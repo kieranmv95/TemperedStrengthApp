@@ -291,36 +291,9 @@ export const homeScreenStyles = StyleSheet.create({
     fontSize: FontSize.lg,
     fontWeight: '700',
   },
-  toolsRow: {
-    flexDirection: 'row',
+  toolsScrollContent: {
     gap: Spacing.md,
-  },
-  toolButton: {
-    flex: 1,
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.accentWashBorder,
-    paddingVertical: Spacing.xl,
-    paddingHorizontal: Spacing.xl,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: Spacing.sm,
-  },
-  toolButtonDisabled: {
-    opacity: 0.45,
-  },
-  toolLabel: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
-  },
-  toolLabelMuted: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
-    textAlign: 'center',
+    paddingRight: Spacing.xxl,
   },
 
   streakCardInner: {

@@ -1,4 +1,8 @@
-export type ToolId = 'one-rep-max' | 'one-rep-max-breakdown' | 'creatine';
+export type ToolId =
+  | 'one-rep-max'
+  | 'one-rep-max-breakdown'
+  | 'creatine'
+  | 'water-intake';
 
 export type ToolDefinition = {
   id: ToolId;
@@ -36,6 +40,15 @@ export const TOOLS: ToolDefinition[] = [
       'Daily creatine dose for muscle gain based on your bodyweight (kg or lb).',
     route: '/tools/creatine',
     icon: 'flask-outline',
+  },
+  {
+    id: 'water-intake',
+    title: 'Water Intake Calculator',
+    pillLabel: 'Water Intake',
+    description:
+      'Daily hydration target from bodyweight, activity level, and creatine use.',
+    route: '/tools/water-intake',
+    icon: 'water-outline',
   },
 ];
 

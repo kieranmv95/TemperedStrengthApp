@@ -94,6 +94,10 @@ export default function RootLayout() {
                 name="tools/creatine"
                 options={{ headerShown: false }}
               />
+              <Stack.Screen
+                name="tools/water-intake"
+                options={{ headerShown: false }}
+              />
               <Stack.Screen name="shop" options={{ headerShown: false }} />
               <Stack.Screen
                 name="article/[id]"
