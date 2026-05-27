@@ -2,6 +2,8 @@ import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
+type PillVariant = 'filter' | 'card';
+
 type PillProps = {
   onPress: () => void;
   isActive: boolean;
@@ -10,6 +12,8 @@ type PillProps = {
   count?: number;
   /** When true, the pill is non-interactive (no press feedback / action). */
   disabled?: boolean;
+  /** `card` matches home quick-link buttons; `filter` is the compact chip style. */
+  variant?: PillVariant;
 };
 
 export const Pill = ({
@@ -19,10 +23,17 @@ export const Pill = ({
   icon,
   count,
   disabled = false,
+  variant = 'filter',
 }: PillProps) => {
+  const isCard = variant === 'card';
+
   return (
     <TouchableOpacity
-      style={[styles.filterTab, isActive && styles.filterTabActive]}
+      style={[
+        isCard ? styles.cardTab : styles.filterTab,
+        isActive &&
+          (isCard ? styles.cardTabActive : styles.filterTabActive),
+      ]}
       onPress={onPress}
       disabled={disabled}
       activeOpacity={disabled ? 1 : undefined}
@@ -30,13 +41,22 @@ export const Pill = ({
       {icon && (
         <Ionicons
           name={icon as any}
-          size={14}
-          color={isActive ? Colors.accent : Colors.textMuted}
-          style={styles.filterIcon}
+          size={isCard ? 22 : 14}
+          color={
+            isCard
+              ? Colors.accent
+              : isActive
+                ? Colors.accent
+                : Colors.textMuted
+          }
+          style={!isCard ? styles.filterIcon : undefined}
         />
       )}
       <Text
-        style={[styles.filterTabText, isActive && styles.filterTabTextActive]}
+        style={[
+          isCard ? styles.cardTabText : styles.filterTabText,
+          !isCard && isActive && styles.filterTabTextActive,
+        ]}
       >
         {label}
       </Text>
@@ -86,5 +106,25 @@ const styles = StyleSheet.create({
   filterCountActive: {
     color: Colors.accent,
     opacity: 0.7,
+  },
+  cardTab: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.xl,
+    borderRadius: BorderRadius.xxl,
+    backgroundColor: Colors.backgroundCard,
+    borderWidth: 1,
+    borderColor: Colors.accentWashBorder,
+  },
+  cardTabActive: {
+    backgroundColor: Colors.accentWashFill,
+  },
+  cardTabText: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
   },
 });

@@ -215,6 +215,7 @@ export default function HubScreen() {
                 {TOOLS.map((tool) => (
                   <Pill
                     key={tool.id}
+                    variant="card"
                     onPress={() => handleOpenTool(tool.route)}
                     isActive={false}
                     label={tool.pillLabel}
