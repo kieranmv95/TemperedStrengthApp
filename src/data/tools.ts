@@ -1,4 +1,4 @@
-export type ToolId = 'one-rep-max' | 'one-rep-max-breakdown';
+export type ToolId = 'one-rep-max' | 'one-rep-max-breakdown' | 'creatine';
 
 export type ToolDefinition = {
   id: ToolId;
@@ -27,6 +27,15 @@ export const TOOLS: ToolDefinition[] = [
       'Enter your known one-rep max and see training weights at every percentage.',
     route: '/tools/one-rep-max-breakdown',
     icon: 'grid-outline',
+  },
+  {
+    id: 'creatine',
+    title: 'Creatine Calculator',
+    pillLabel: 'Creatine Dose',
+    description:
+      'Daily creatine dose for muscle gain based on your bodyweight (kg or lb).',
+    route: '/tools/creatine',
+    icon: 'flask-outline',
   },
 ];
 

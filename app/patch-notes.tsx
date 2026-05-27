@@ -28,6 +28,7 @@ const PATCH_NOTES: PatchNote[] = [
       'Improved streak card display',
       'Added a 1RM estimator tool',
       'Added a 1RM breakdown tool',
+      'Added a creatine dose tool',
     ],
   },
   {
