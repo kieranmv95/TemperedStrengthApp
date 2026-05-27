@@ -288,7 +288,25 @@ export function formatExercisePbSubtitle(
   const bestText = `${formatWeightValueFromKg(best.weight, unit)}${unitSuffix}`;
   const latestText = `${formatWeightValueFromKg(latest.weight, unit)}${unitSuffix}`;
   if (latest.weight !== best.weight) {
-    return `Best Single: ${bestText} Latest Single: ${latestText}`;
+    return `${bestText} / ${latestText}`;
   }
-  return `Best Single: ${bestText}`;
+  return bestText;
+}
+
+export function formatExercisePbSubtitleHeader(
+  ledger: ExercisePersonalBestsLedger | null | undefined,
+  unit: WeightUnit = 'kg'
+): string | null {
+  if (!ledger) {
+    return null;
+  }
+  const best = getCurrentBestForTier(ledger, EXERCISE_CARD_PB_TIER);
+  const latest = getLatestEntryForTier(ledger, EXERCISE_CARD_PB_TIER);
+  if (!best || !latest) {
+    return null;
+  }
+  if (latest.weight !== best.weight) {
+    return `Best Single / Latest Single:`;
+  }
+  return `Best Single:`;
 }

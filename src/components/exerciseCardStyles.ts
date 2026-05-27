@@ -22,12 +22,6 @@ export const exerciseCardStyles = StyleSheet.create({
     fontSize: FontSize.displayXl,
     fontWeight: '700',
   },
-  pbSubtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '500',
-    marginBottom: Spacing.xs,
-  },
   additionalHeader: {
     alignSelf: 'flex-start',
     backgroundColor: Colors.accentWashFill,
@@ -44,6 +38,10 @@ export const exerciseCardStyles = StyleSheet.create({
     color: Colors.textSecondary,
     fontSize: FontSize.md,
     fontWeight: '600',
+  },
+  repRangeLabels: {
+    flexDirection: 'row',
+    gap: Spacing.md,
   },
   repRangeLabel: {
     alignSelf: 'flex-start',

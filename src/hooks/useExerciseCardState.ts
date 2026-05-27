@@ -2,22 +2,23 @@ import { getExerciseById } from '@/src/data/exercises';
 import { increment } from '@/src/services/metricService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { Exercise as CatalogExercise } from '@/src/types/exercise';
-import type { Exercise as ProgramExercise } from '@/src/types/program';
 import type {
   ExercisePersonalBestsLedger,
   RepMax,
 } from '@/src/types/personalBests';
-import type { WeightUnit } from '@/src/utils/storage';
+import type { Exercise as ProgramExercise } from '@/src/types/program';
 import {
   formatExercisePbSubtitle,
+  formatExercisePbSubtitleHeader,
   previewPersonalBestLog,
   repCountToTier,
 } from '@/src/utils/personalBests';
+import type { WeightUnit } from '@/src/utils/storage';
 import {
   clearLoggedSet,
+  getAutoPbDetectionInProgramsEnabled,
   getCustomSetCount,
   getLoggedSets,
-  getAutoPbDetectionInProgramsEnabled,
   getPersonalBestsForExercise,
   getRemainingSwapCount,
   saveCustomSetCount,
@@ -325,6 +326,11 @@ export function useExerciseCardState({
     [pbLedger, weightUnit]
   );
 
+  const exercisePbSubtitleHeader = useMemo(
+    () => formatExercisePbSubtitleHeader(pbLedger ?? undefined, weightUnit),
+    [pbLedger, weightUnit]
+  );
+
   const autoSaveSet = async (
     setIndex: number,
     weightStr: string,
@@ -527,5 +533,6 @@ export function useExerciseCardState({
     dismissPbPrompt,
     confirmPbPrompt,
     exercisePbSubtitle,
+    exercisePbSubtitleHeader,
   };
 }

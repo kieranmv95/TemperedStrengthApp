@@ -103,7 +103,6 @@ describe('buildSnapshot', () => {
     );
     expect(snap.currentStreak).toBe(1);
     expect(snap.bestStreak).toBe(30);
-    expect(snap.totalDays).toBe(1);
   });
 });
 
@@ -186,7 +185,7 @@ describe('applyDailyStreakCheckIn', () => {
     const b = await applyDailyStreakCheckIn(now);
     expect(a.currentStreak).toBe(1);
     expect(b.currentStreak).toBe(1);
-    expect(b.totalDays).toBe(1);
+    expect(b.dates).toEqual(['2026-05-14']);
   });
 
   it('increments streak across consecutive days', async () => {

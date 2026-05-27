@@ -351,13 +351,6 @@ export const homeScreenStyles = StyleSheet.create({
     fontSize: FontSize.xl,
     fontWeight: '700',
   },
-  streakMessage: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    textAlign: 'center',
-    marginTop: Spacing.xs,
-    paddingHorizontal: Spacing.sm,
-  },
   streakWeekRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -414,26 +407,9 @@ export const homeScreenStyles = StyleSheet.create({
   streakStatsCard: {
     backgroundColor: Colors.backgroundElevated,
     borderRadius: BorderRadius.xl,
-    paddingVertical: Spacing.xxl,
+    paddingVertical: Spacing.lg,
     paddingHorizontal: Spacing.section,
-    gap: Spacing.md,
     alignItems: 'center',
-  },
-  streakStatBlock: {
-    alignItems: 'center',
-    gap: Spacing.xs,
-  },
-  streakStatLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.sm,
-    fontWeight: '600',
-    letterSpacing: 0.3,
-    textTransform: 'uppercase',
-  },
-  streakStatValue: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXXl,
-    fontWeight: '800',
   },
   streakBestLine: {
     color: Colors.textSecondary,

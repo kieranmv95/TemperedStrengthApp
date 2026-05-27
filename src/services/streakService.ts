@@ -15,7 +15,6 @@ export type StreakStateV1 = {
 export type StreakSnapshot = {
   currentStreak: number;
   bestStreak: number;
-  totalDays: number;
   /** Sorted ascending unique YYYY-MM-DD (local), trimmed to cap. */
   dates: string[];
   todayLocal: string;
@@ -126,7 +125,6 @@ export function buildSnapshot(
   return {
     currentStreak,
     bestStreak: historicalBest,
-    totalDays: state.dates.length,
     dates: state.dates,
     todayLocal,
   };

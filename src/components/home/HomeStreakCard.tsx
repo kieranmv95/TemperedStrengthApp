@@ -26,10 +26,6 @@ export function HomeStreakCard({ snapshot, displayName }: HomeStreakCardProps) {
     [snapshot.todayLocal]
   );
 
-  const message = displayName
-    ? `You are doing really great, ${displayName}!`
-    : 'Keep showing up — consistency wins.';
-
   return (
     <Card>
       <View style={styles.streakCardInner}>
@@ -39,7 +35,6 @@ export function HomeStreakCard({ snapshot, displayName }: HomeStreakCardProps) {
           </View>
           <Text style={styles.streakNumber}>{snapshot.currentStreak}</Text>
           <Text style={styles.streakLabel}>Day streak</Text>
-          <Text style={styles.streakMessage}>{message}</Text>
         </View>
 
         <View style={styles.streakWeekRow}>
@@ -83,10 +78,6 @@ export function HomeStreakCard({ snapshot, displayName }: HomeStreakCardProps) {
         </View>
 
         <View style={styles.streakStatsCard}>
-          <View style={styles.streakStatBlock}>
-            <Text style={styles.streakStatLabel}>Total days</Text>
-            <Text style={styles.streakStatValue}>{snapshot.totalDays}</Text>
-          </View>
           <Text style={styles.streakBestLine}>
             Best streak: {snapshot.bestStreak} days
           </Text>

@@ -62,6 +62,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     dismissPbPrompt,
     confirmPbPrompt,
     exercisePbSubtitle,
+    exercisePbSubtitleHeader,
   } = useExerciseCardState({
     isPro,
     exerciseId,
@@ -119,19 +120,28 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
               {programExercise.additionalHeader}
             </Text>
           )}
-          {exercisePbSubtitle ? (
-            <Text style={styles.pbSubtitle}>{exercisePbSubtitle}</Text>
-          ) : null}
-          {repRangeText && (
-            <View style={styles.repRangeLabel}>
-              <Text style={styles.repRangeLabelText}>
-                {exercise.logging_type === 'time' ? 'Time:' : 'Reps:'}{' '}
-              </Text>
-              <Text style={styles.repRangeValue}>
-                {repRangeText}
-              </Text>
-            </View>
-          )}
+          <View style={styles.repRangeLabels}>
+            {exercisePbSubtitle ? (
+              <View style={styles.repRangeLabel}>
+                <Text style={styles.repRangeLabelText}>
+                  {exercisePbSubtitleHeader}
+                </Text>
+                <Text style={styles.repRangeValue}>
+                  {exercisePbSubtitle}
+                </Text>
+              </View>
+            ) : null}
+            {repRangeText && (
+              <View style={styles.repRangeLabel}>
+                <Text style={styles.repRangeLabelText}>
+                  {exercise.logging_type === 'time' ? 'Time:' : 'Reps:'}{' '}
+                </Text>
+                <Text style={styles.repRangeValue}>
+                  {repRangeText}
+                </Text>
+              </View>
+            )}
+          </View>
           {(() => {
             const description = isSwapped
               ? exercise.description

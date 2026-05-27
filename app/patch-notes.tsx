@@ -21,6 +21,14 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.6.0',
+    dateLabel: '1st June 2026',
+    notes: [
+      'Improved best single / latest single display on exercise cards',
+      'Improved streak card display',
+    ],
+  },
+  {
     version: '2.5.1',
     dateLabel: '22nd May 2026',
     notes: [
