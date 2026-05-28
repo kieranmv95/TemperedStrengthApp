@@ -78,7 +78,7 @@ export const lower_hypertrophy_warmup: Warmup = {
 
 export const powerbuilding_4day_pro: Program = {
   id: 'powerbuilding_4day_pro',
-  isPro: true,
+  isPro: false,
   name: 'Pro Powerbuilding',
   description:
     '12-week powerbuilding programme across 3 phases: Accumulation, Intensification, and Realisation. 4 days per week blending heavy compound strength with targeted hypertrophy for both size and strength.',

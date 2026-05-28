@@ -22,6 +22,13 @@ export const swapModalStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: Spacing.xxl,
+    gap: Spacing.md,
+  },
+  modalTitleRow: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
   },
   modalTitle: {
     color: Colors.textPrimary,

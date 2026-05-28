@@ -6,4 +6,5 @@ export type Exercise = {
   muscle: string;
   equipment: string;
   logging_type: 'reps' | 'reps_and_weight' | 'time';
+  youtube_id?: string;
 };

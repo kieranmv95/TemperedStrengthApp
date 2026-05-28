@@ -36,6 +36,10 @@ export const Colors = {
 
   // Recommended (personalization signal — intentionally distinct from accent)
   recommended: '#1abc9c',
+  /** Translucent recommended fills */
+  recommendedWashFill: 'rgba(26, 188, 156, 0.12)',
+  /** Translucent recommended borders */
+  recommendedWashBorder: 'rgba(26, 188, 156, 0.25)',
 
   // Semantic
   destructive: '#FF6B6B',

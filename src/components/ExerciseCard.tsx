@@ -1,3 +1,4 @@
+import { ExerciseVideoPlayButton } from '@/src/components/exercise/ExerciseVideoPlayButton';
 import { PBDetectedModal } from '@/src/components/PBDetectedModal';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useExerciseCardState } from '@/src/hooks/useExerciseCardState';
@@ -7,6 +8,7 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
+import { exerciseHasVideo } from '../utils/youtube';
 import type { Exercise as ProgramExercise } from '../types/program';
 import { getAutoRestTimersEnabled } from '../utils/storage';
 import { formatWeightFromKg } from '../utils/weightUnits';
@@ -112,36 +114,36 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     <View style={styles.card}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Text style={styles.exerciseName}>
-            {exercise.name}
-          </Text>
-          {!isSwapped && programExercise?.additionalHeader && (
-            <Text style={styles.additionalHeader}>
-              {programExercise.additionalHeader}
-            </Text>
-          )}
-          <View style={styles.repRangeLabels}>
-            {exercisePbSubtitle ? (
-              <View style={styles.repRangeLabel}>
-                <Text style={styles.repRangeLabelText}>
-                  {exercisePbSubtitleHeader}
-                </Text>
-                <Text style={styles.repRangeValue}>
-                  {exercisePbSubtitle}
-                </Text>
-              </View>
-            ) : null}
-            {repRangeText && (
-              <View style={styles.repRangeLabel}>
-                <Text style={styles.repRangeLabelText}>
-                  {exercise.logging_type === 'time' ? 'Time:' : 'Reps:'}{' '}
-                </Text>
-                <Text style={styles.repRangeValue}>
-                  {repRangeText}
-                </Text>
-              </View>
-            )}
-          </View>
+          <Text style={styles.exerciseName}>{exercise.name}</Text>
+          {exerciseHasVideo(exercise) ||
+          (!isSwapped && programExercise?.additionalHeader) ||
+          exercisePbSubtitle ||
+          repRangeText ? (
+            <View style={styles.headerMetaRow}>
+              <ExerciseVideoPlayButton exerciseId={exercise.id} />
+              {!isSwapped && programExercise?.additionalHeader ? (
+                <View style={[styles.metaChip, styles.metaChipAccent]}>
+                  <Text style={styles.metaChipAccentText}>
+                    {programExercise.additionalHeader}
+                  </Text>
+                </View>
+              ) : null}
+              {exercisePbSubtitle ? (
+                <View style={styles.metaChip}>
+                  <Text style={styles.metaChipText} numberOfLines={1}>
+                    {exercisePbSubtitleHeader
+                      ? `${exercisePbSubtitleHeader.replace(/:?\s*$/, '')} · ${exercisePbSubtitle}`
+                      : exercisePbSubtitle}
+                  </Text>
+                </View>
+              ) : null}
+              {repRangeText ? (
+                <View style={styles.metaChip}>
+                  <Text style={styles.metaChipText}>{repRangeText}</Text>
+                </View>
+              ) : null}
+            </View>
+          ) : null}
           {(() => {
             const description = isSwapped
               ? exercise.description

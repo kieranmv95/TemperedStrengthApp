@@ -24,7 +24,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders",
     "name": "Arnold Press",
-    "pattern": "Vertical Push"
+    "pattern": "Vertical Push",
+    "youtube_id": "8dEqMr10whw"
   },
   {
     "description": "Stand on the platform, grip the handles and pull yourself up with the machine assisting.",
@@ -249,7 +250,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Biceps",
     "name": "Dumbbell Bicep Curls",
-    "pattern": "Isolation"
+    "pattern": "Isolation",
+    "youtube_id": "dHovSwNWau0"
   },
   {
     "description": "Place one hand and knee on a bench, pull the dumbbell to your hip with the other arm.",
@@ -258,7 +260,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Back",
     "name": "Dumbbell Row",
-    "pattern": "Horizontal Pull"
+    "pattern": "Horizontal Pull",
+    "youtube_id": "IdKDM-uZzTA"
   },
   {
     "description": "Sit or stand with dumbbells at shoulder height and press directly overhead.",
@@ -267,7 +270,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders",
     "name": "Dumbbell Shoulder Press",
-    "pattern": "Vertical Push"
+    "pattern": "Vertical Push",
+    "youtube_id": "tNrBHwfIpoA"
   },
   {
     "description": "Pull a rope attachment towards your face, separating the ends and squeezing your rear delts.",
@@ -330,7 +334,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Biceps/Forearms",
     "name": "Hammer Curls",
-    "pattern": "Isolation"
+    "pattern": "Isolation",
+    "youtube_id": "B-NCBhBJobA"
   },
   {
     "description": "Start with the bar at hip height, explosively extend and catch it at your shoulders.",
@@ -366,7 +371,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Upper Chest",
     "name": "Incline DB Press",
-    "pattern": "Horizontal Push"
+    "pattern": "Horizontal Push",
+    "youtube_id": "L3AfiCwunls"
   },
   {
     "description": "Hinge at the hips and swing the kettlebell to shoulder height using hip drive.",
@@ -384,7 +390,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Back",
     "name": "Lat Pulldown",
-    "pattern": "Vertical Pull"
+    "pattern": "Vertical Pull",
+    "youtube_id": "qSNVVvalr2I"
   },
   {
     "description": "Stand and raise dumbbells out to your sides until your arms are parallel to the floor.",
@@ -393,7 +400,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders",
     "name": "Lateral Raises",
-    "pattern": "Isolation"
+    "pattern": "Isolation",
+    "youtube_id": "gEplflBeSMQ"
   },
   {
     "description": "Lie face down or sit on the machine and curl your heels towards your glutes.",
@@ -483,7 +491,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Chest",
     "name": "Pec Deck Machine",
-    "pattern": "Horizontal Push"
+    "pattern": "Horizontal Push",
+    "youtube_id": "V28Ht_kyumc"
   },
   {
     "description": "Pull the bar explosively from the floor and catch it at your shoulders without squatting below parallel.",
@@ -591,7 +600,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Lats",
     "name": "Single Arm Lat Pulldown",
-    "pattern": "Vertical Pull"
+    "pattern": "Vertical Pull",
+    "youtube_id": "UW-7ejZ98Hs"
   },
   {
     "description": "Lie flat, hold the bar above your chest and lower it towards your forehead, then extend back up.",
@@ -654,7 +664,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Triceps",
     "name": "Tricep Pushdowns",
-    "pattern": "Isolation"
+    "pattern": "Isolation",
+    "youtube_id": "WV5o4m668Po"
   },
   {
     "description": "Step forward into a lunge, alternating legs with each step while holding dumbbells.",

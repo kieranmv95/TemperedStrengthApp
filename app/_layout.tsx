@@ -1,3 +1,4 @@
+import { ExerciseVideoProvider } from '@/src/hooks/exercise-video-context';
 import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
 import { TogetherWeLiftProvider } from '@/src/hooks/together-we-lift-context';
@@ -79,6 +80,7 @@ export default function RootLayout() {
         <SyncManagerProvider>
           <SubscriptionProvider>
             <TogetherWeLiftProvider>
+            <ExerciseVideoProvider>
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="glossary" options={{ headerShown: false }} />
@@ -133,6 +135,7 @@ export default function RootLayout() {
               />
             </Stack>
             <StatusBar style="light" />
+            </ExerciseVideoProvider>
             </TogetherWeLiftProvider>
           </SubscriptionProvider>
         </SyncManagerProvider>

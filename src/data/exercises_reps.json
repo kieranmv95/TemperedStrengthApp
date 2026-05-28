@@ -51,6 +51,7 @@
     "logging_type": "reps",
     "muscle": "Abs",
     "name": "Hanging Leg Raise",
+    "youtube_id": "SrgRygJHR3M",
     "pattern": "Core"
   },
   {
@@ -87,7 +88,8 @@
     "logging_type": "reps",
     "muscle": "Chest",
     "name": "Push-ups",
-    "pattern": "Horizontal Push"
+    "pattern": "Horizontal Push",
+    "youtube_id": "DcX5m1ndDeQ"
   },
   {
     "description": "Lie on your side propped on your forearm, keeping your body in a straight line.",
@@ -105,7 +107,8 @@
     "logging_type": "reps",
     "muscle": "Abs",
     "name": "Sit-ups",
-    "pattern": "Core"
+    "pattern": "Core",
+    "youtube_id": "VWgLb-Zd0Fk"
   },
   {
     "description": "Stand with feet hip-width apart, raise up onto the balls of your feet, then lower slowly.",

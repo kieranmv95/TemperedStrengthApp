@@ -1,3 +1,4 @@
+import { ExerciseVideoPlayButton } from '@/src/components/exercise/ExerciseVideoPlayButton';
 import { PbModalDateTimeField } from '@/src/components/PbModalDateTimeField';
 import { Card } from '@/src/components/ds';
 import {
@@ -296,6 +297,12 @@ export default function RepMaxHistoryScreen() {
           data={entries}
           keyExtractor={(item) => item.id}
           contentContainerStyle={localStyles.listContent}
+          ListHeaderComponent={
+            <ExerciseVideoPlayButton
+              exerciseId={exercise.id}
+              variant="banner"
+            />
+          }
           ItemSeparatorComponent={() => (
             <View style={localStyles.rowSeparator} />
           )}

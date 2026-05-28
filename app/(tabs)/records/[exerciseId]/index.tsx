@@ -1,4 +1,5 @@
 import { Card, SmallChevron } from '@/src/components/ds';
+import { ExerciseVideoPlayButton } from '@/src/components/exercise/ExerciseVideoPlayButton';
 import {
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
   IosKeyboardDoneAccessory,
@@ -166,11 +167,23 @@ export default function ExercisePersonalBestsScreen() {
           </Text>
           <View style={styles.headerRightSpacer} />
         </View>
-        <View style={styles.emptyState}>
-          <Text style={styles.emptyDescription}>
-            Personal bests for rep maxes apply to rep-based exercises only.
+        <ScrollView
+          style={styles.detailContent}
+          contentContainerStyle={localStyles.scrollContent}
+        >
+          <Text style={localStyles.meta}>
+            {exercise.muscle} · {exercise.equipment}
           </Text>
-        </View>
+          <ExerciseVideoPlayButton
+            exerciseId={exercise.id}
+            variant="banner"
+          />
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyDescription}>
+              Personal bests for rep maxes apply to rep-based exercises only.
+            </Text>
+          </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -197,6 +210,11 @@ export default function ExercisePersonalBestsScreen() {
         <Text style={localStyles.meta}>
           {exercise.muscle} · {exercise.equipment}
         </Text>
+
+        <ExerciseVideoPlayButton
+          exerciseId={exercise.id}
+          variant="banner"
+        />
 
         <TouchableOpacity style={localStyles.logButton} onPress={openLog}>
           <Text style={localStyles.logButtonText}>Log Lift</Text>
