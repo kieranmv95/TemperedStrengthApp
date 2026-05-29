@@ -34,7 +34,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Back",
     "name": "Assisted Pull-up Machine",
-    "pattern": "Vertical Pull"
+    "pattern": "Vertical Pull",
+    "youtube_id": "HXEN0d0XcAE"
   },
   {
     "description": "Bar on upper back, squat down until thighs are parallel, then drive back up.",
@@ -43,7 +44,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps",
     "name": "Barbell Back Squat",
-    "pattern": "Knee Dominant"
+    "pattern": "Knee Dominant",
+    "youtube_id": "9wNI2Uo3EJA"
   },
   {
     "description": "Lie flat, grip the bar slightly wider than shoulder-width, lower to chest and press up.",
@@ -52,7 +54,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Chest",
     "name": "Barbell Bench Press",
-    "pattern": "Horizontal Push"
+    "pattern": "Horizontal Push",
+    "youtube_id": "7iAguwwLtGM"
   },
   {
     "description": "Stand over the bar, hinge at the hips, grip and drive through your feet to stand up.",
@@ -61,7 +64,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Posterior Chain",
     "name": "Barbell Deadlift",
-    "pattern": "Hip Hinge"
+    "pattern": "Hip Hinge",
+    "youtube_id": "DymQitbwprA"
   },
   {
     "description": "Unrack the bar at shoulder height and press directly overhead to full lockout.",
@@ -70,7 +74,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders",
     "name": "Barbell Overhead Press",
-    "pattern": "Vertical Push"
+    "pattern": "Vertical Push",
+    "youtube_id": "Io5l_Vb6HQM"
   },
   {
     "description": "Hinge forward, pull the bar to your lower chest, squeezing your shoulder blades together.",
@@ -79,7 +84,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Back",
     "name": "Barbell Row",
-    "pattern": "Horizontal Pull"
+    "pattern": "Horizontal Pull",
+    "youtube_id": "Rz77VgIQCqo"
   },
   {
     "description": "Rear foot elevated on a bench, lower into a lunge, then drive up through the front leg.",
@@ -124,7 +130,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Calves",
     "name": "Calf Raises",
-    "pattern": "Isolation"
+    "pattern": "Isolation",
+    "youtube_id": "xBc2eTNO2o8"
   },
   {
     "description": "Sit in the machine, grip the handles and press forward until your arms are extended.",
@@ -142,7 +149,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Triceps/Chest",
     "name": "Close-Grip Bench Press",
-    "pattern": "Horizontal Push"
+    "pattern": "Horizontal Push",
+    "youtube_id": "CMJCqnx6LMQ"
   },
   {
     "description": "Pull the bar from the floor to your shoulders, then drive it overhead in one sequence.",
@@ -151,7 +159,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Full Body",
     "name": "Clean & Jerk",
-    "pattern": "Olympic (Clean & Jerk)"
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "afVom6APRHA"
   },
   {
     "description": "Pull the bar explosively from the floor to chin height using hip drive and a high elbow pull.",
@@ -160,7 +169,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Back/Traps",
     "name": "Clean High Pull",
-    "pattern": "Olympic (Clean & Jerk)"
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "8tapJVMw0rc"
   },
   {
     "description": "Hold a dumbbell at chest height with both hands and squat to depth with an upright torso.",
@@ -178,7 +188,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps",
     "name": "DB Goblet Squat",
-    "pattern": "Knee Dominant"
+    "pattern": "Knee Dominant",
+    "youtube_id": "qEWMziblznM"
   },
   {
     "description": "Swing a dumbbell from between your legs and pull it overhead in one smooth motion.",
@@ -196,7 +207,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Back",
     "name": "DB Power Clean",
-    "pattern": "Olympic (Clean & Jerk)"
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "2_ZSFhn35oc"
   },
   {
     "description": "Dip slightly at the knees, then drive the dumbbells overhead using leg and shoulder power.",
@@ -205,7 +217,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders/Legs",
     "name": "DB Push Press",
-    "pattern": "Olympic (Clean & Jerk)"
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "Fjhlsj76hPM"
   },
   {
     "description": "Hold dumbbells at your hips, hinge forward with a slight knee bend, then return to standing.",
@@ -214,7 +227,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Hamstrings",
     "name": "DB Romanian Deadlift",
-    "pattern": "Hip Hinge"
+    "pattern": "Hip Hinge",
+    "youtube_id": "W4zk4EGuEsI"
   },
   {
     "description": "Explosively pull a dumbbell from the floor and catch it overhead with a locked arm.",
@@ -223,16 +237,18 @@
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Shoulders",
     "name": "DB Snatch",
-    "pattern": "Olympic (Snatch)"
+    "pattern": "Olympic (Snatch)",
+    "youtube_id": "eJKXqrnZnfU"
   },
   {
-    "description": "Hold dumbbells at your sides and lower into a split stance with a jerk-width foot position.",
+    "description": "Pull a dumbbell from the floor to shoulder height, then drive it overhead in one smooth motion.",
     "equipment": "Dumbbell",
     "id": 76,
     "logging_type": "reps_and_weight",
     "muscle": "Legs/Balance",
-    "name": "DB Split Squat (Jerk Stance)",
-    "pattern": "Olympic (Clean & Jerk)"
+    "name": "DB Jerk",
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "hB7tHx-6L6o"
   },
   {
     "description": "Lie flat with a dumbbell in each hand, lower to chest level, then press up.",
@@ -289,7 +305,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Triceps/Chest",
     "name": "Floor Press",
-    "pattern": "Horizontal Push"
+    "pattern": "Horizontal Push",
+    "youtube_id": "gbrHesGsm3A"
   },
   {
     "description": "Bar resting on the front of your shoulders, squat to depth keeping your torso upright.",
@@ -298,7 +315,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps/Core",
     "name": "Front Squat",
-    "pattern": "Olympic (Clean & Jerk)"
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "kXXERV8zhAc"
   },
   {
     "description": "Pull the bar from the floor and catch it overhead in a full squat position.",
@@ -306,8 +324,9 @@
     "id": 57,
     "logging_type": "reps_and_weight",
     "muscle": "Full Body",
-    "name": "Full Snatch",
-    "pattern": "Olympic (Snatch)"
+    "name": "Snatch",
+    "pattern": "Olympic (Snatch)",
+    "youtube_id": "qR_oOyuDWNI"
   },
   {
     "description": "Bar on your upper back, hinge forward at the hips keeping your legs nearly straight, then return.",
@@ -344,7 +363,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Full Body",
     "name": "Hang Clean",
-    "pattern": "Olympic (Clean & Jerk)"
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "Wv_kEJAWPUk"
   },
   {
     "description": "Start with the bar at hip height, explosively extend and catch it overhead.",
@@ -353,7 +373,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Traps",
     "name": "Hang Snatch",
-    "pattern": "Olympic (Snatch)"
+    "pattern": "Olympic (Snatch)",
+    "youtube_id": "nOlHQKv-hkY"
   },
   {
     "description": "Sit with your upper back against a bench, bar over your hips, and drive upward by squeezing your glutes.",
@@ -381,7 +402,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Glutes",
     "name": "Kettlebell Swing",
-    "pattern": "Hip Hinge"
+    "pattern": "Hip Hinge",
+    "youtube_id": "d_UonIzEcrI"
   },
   {
     "description": "Sit and pull the bar down to your upper chest, squeezing your lats at the bottom.",
@@ -464,7 +486,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Upper Body/Back",
     "name": "Muscle Clean",
-    "pattern": "Olympic (Clean & Jerk)"
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "Ecmjl_WAxT8"
   },
   {
     "description": "Hold the bar overhead with a wide grip and squat to full depth while keeping the bar stable.",
@@ -473,7 +496,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps/Core",
     "name": "Overhead Squat",
-    "pattern": "Olympic (Snatch)"
+    "pattern": "Olympic (Snatch)",
+    "youtube_id": "QAqol3rr4zo"
   },
   {
     "description": "Hold a dumbbell overhead with both hands and lower it behind your head, then extend back up.",
@@ -501,7 +525,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Back",
     "name": "Power Clean",
-    "pattern": "Olympic (Clean & Jerk)"
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "Ee__2J6S0qI"
   },
   {
     "description": "Pull the bar explosively from the floor and catch it overhead without squatting below parallel.",
@@ -510,7 +535,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Shoulders",
     "name": "Power Snatch",
-    "pattern": "Olympic (Snatch)"
+    "pattern": "Olympic (Snatch)",
+    "youtube_id": "3EMIq8zFD2w"
   },
   {
     "description": "Rest your upper arms on the pad, curl the bar up by bending at the elbows.",
@@ -528,7 +554,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders/Legs",
     "name": "Push Jerk",
-    "pattern": "Olympic (Clean & Jerk)"
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "H-LWaqOJ9Bk"
   },
   {
     "description": "Bend forward with dumbbells and raise them out to the sides, squeezing your rear delts.",
@@ -546,7 +573,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Hamstrings",
     "name": "Romanian Deadlift",
-    "pattern": "Hip Hinge"
+    "pattern": "Hip Hinge",
+    "youtube_id": "5bSgRBTfWVI"
   },
   {
     "description": "Sit with knees bent, lean back slightly and rotate a weight from side to side.",
@@ -619,7 +647,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Legs/Shoulders",
     "name": "Snatch Balance",
-    "pattern": "Olympic (Snatch)"
+    "pattern": "Olympic (Snatch)",
+    "youtube_id": "UZ55v9b6L8E"
   },
   {
     "description": "Pull the bar explosively from the floor to chin height with a wide grip and high elbows.",
@@ -628,7 +657,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Back/Traps",
     "name": "Snatch High Pull",
-    "pattern": "Olympic (Snatch)"
+    "pattern": "Olympic (Snatch)",
+    "youtube_id": "UbkMl0DQzkU"
   },
   {
     "description": "Drive the bar overhead from your shoulders and split your feet into a lunge to catch it.",
@@ -674,7 +704,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps/Glutes",
     "name": "Walking Lunges",
-    "pattern": "Knee Dominant"
+    "pattern": "Knee Dominant",
+    "youtube_id": "5mSIRsXAEZM"
   },
   {
     "description": "Stand on one leg, hold a dumbbell, hinge forward until your torso is parallel, then return.",
@@ -701,7 +732,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Core",
     "name": "DB Farmer Carry",
-    "pattern": "Carry"
+    "pattern": "Carry",
+    "youtube_id": "6wsYZT5CaLA"
   },
   {
     "description": "From lying flat with a kettlebell locked overhead, move through a precise series of positions to standing, keeping the bell overhead throughout.",
@@ -710,7 +742,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Core",
     "name": "KB Turkish Get-Up",
-    "pattern": "Core"
+    "pattern": "Core",
+    "youtube_id": "MukkDX0WvJ8"
   },
   {
     "description": "Hinge at the hips, swing the kettlebell between your legs, then pull it to shoulder height using hip drive and a high elbow.",
@@ -719,7 +752,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Full Body/Back",
     "name": "KB Clean",
-    "pattern": "Hip Hinge"
+    "pattern": "Hip Hinge",
+    "youtube_id": "7MtvXb1gCkc"
   },
   {
     "description": "With the kettlebell in the rack position at shoulder height, press it directly overhead to full lockout, then lower with control.",
@@ -728,7 +762,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders/Core",
     "name": "KB Press (Single Arm)",
-    "pattern": "Vertical Push"
+    "pattern": "Vertical Push",
+    "youtube_id": "95zhesdAGDM"
   },
   {
     "description": "Hold a kettlebell by the horns at chest height and squat to depth, keeping your torso upright and elbows inside your knees.",
@@ -737,7 +772,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps",
     "name": "KB Goblet Squat",
-    "pattern": "Knee Dominant"
+    "pattern": "Knee Dominant",
+    "youtube_id": "7bjJo8bvmgc"
   },
   {
     "description": "Hold a kettlebell by the handle with both hands and rotate it in a slow circle around your head, alternating directions each set.",
@@ -746,7 +782,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders/Core",
     "name": "KB Halo",
-    "pattern": "Core"
+    "pattern": "Core",
+    "youtube_id": "AqUzgM2HwG4"
   },
   {
     "description": "Hold a dumbbell in each hand at shoulder height, squat down, then drive through your legs and press the dumbbells overhead in one movement.",
@@ -755,7 +792,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Full Body",
     "name": "DB Thruster",
-    "pattern": "Olympic (Clean & Jerk)"
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "LPCj2VK6-4s"
   },
   {
     "description": "In a push-up position with a dumbbell in each hand, row one dumbbell to your hip while the other arm stays planted, alternating sides.",
@@ -764,6 +802,7 @@
     "logging_type": "reps_and_weight",
     "muscle": "Back/Core",
     "name": "DB Renegade Row",
-    "pattern": "Horizontal Pull"
+    "pattern": "Horizontal Pull",
+    "youtube_id": "-V2YLzGaQMU"
   }
 ]

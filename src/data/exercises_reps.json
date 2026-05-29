@@ -15,7 +15,8 @@
     "logging_type": "reps",
     "muscle": "Quadriceps",
     "name": "Bodyweight Squats",
-    "pattern": "Knee Dominant"
+    "pattern": "Knee Dominant",
+    "youtube_id": "vhLACeWrcTY"
   },
   {
     "description": "Hang with an underhand grip and pull your chin above the bar.",
@@ -24,7 +25,8 @@
     "logging_type": "reps",
     "muscle": "Back",
     "name": "Chin-ups",
-    "pattern": "Vertical Pull"
+    "pattern": "Vertical Pull",
+    "youtube_id": "Cn6wkarOvTY"
   },
   {
     "description": "Grip parallel bars, lower your body until your upper arms are parallel, then press up.",
@@ -33,7 +35,8 @@
     "logging_type": "reps",
     "muscle": "Triceps/Chest",
     "name": "Dips",
-    "pattern": "Horizontal Push"
+    "pattern": "Horizontal Push",
+    "youtube_id": "qO_0xavA9WY"
   },
   {
     "description": "Lie on your back with knees bent and drive your hips up by squeezing your glutes.",
@@ -42,7 +45,8 @@
     "logging_type": "reps",
     "muscle": "Glutes",
     "name": "Glute Bridge",
-    "pattern": "Hip Hinge"
+    "pattern": "Hip Hinge",
+    "youtube_id": "hJQC9nI9vYs"
   },
   {
     "description": "Hang from a bar and raise your legs until they are parallel to the ground or higher.",
@@ -79,7 +83,8 @@
     "logging_type": "reps",
     "muscle": "Back",
     "name": "Pull-ups",
-    "pattern": "Vertical Pull"
+    "pattern": "Vertical Pull",
+    "youtube_id": "NA1RCHj3i8Y"
   },
   {
     "description": "Place your hands shoulder-width apart on the floor, lower your chest down, then push back up.",
@@ -126,7 +131,8 @@
     "logging_type": "reps",
     "muscle": "Quadriceps/Glutes",
     "name": "Squat Jumps",
-    "pattern": "Knee Dominant"
+    "pattern": "Knee Dominant",
+    "youtube_id": "HOllACcFcvk"
   },
   {
     "description": "From standing, drop your hands to the floor, jump your feet back to a plank, perform a push-up, jump your feet in and explosively stand. Keep the movement fluid.",
@@ -135,7 +141,8 @@
     "logging_type": "reps",
     "muscle": "Full Body",
     "name": "Burpees",
-    "pattern": "Core"
+    "pattern": "Core",
+    "youtube_id": "u2m7lnyesys"
   },
   {
     "description": "Perform a burpee but at the jump phase drive forward off both feet, landing as far ahead as possible with soft knees.",
@@ -144,7 +151,8 @@
     "logging_type": "reps",
     "muscle": "Full Body",
     "name": "Burpee Broad Jumps",
-    "pattern": "Core"
+    "pattern": "Core",
+    "youtube_id": "BRbjLYTlHI4"
   },
   {
     "description": "Stand in front of a box, hinge slightly and explode upward, landing softly on top with both feet. Step down and reset.",
@@ -216,6 +224,7 @@
     "logging_type": "reps",
     "muscle": "Full Body",
     "name": "Inchworm",
-    "pattern": "Core"
+    "pattern": "Core",
+    "youtube_id": "2VBkhtq0B9k"
   }
 ]
