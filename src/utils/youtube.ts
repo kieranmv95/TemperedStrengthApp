@@ -8,6 +8,7 @@ export function getYoutubeEmbedUrl(youtubeId: string): string {
     playsinline: '1',
     modestbranding: '1',
     rel: '0',
+    mute: '1',
     origin: YOUTUBE_EMBED_ORIGIN,
   });
   return `https://www.youtube.com/embed/${youtubeId}?${params.toString()}`;

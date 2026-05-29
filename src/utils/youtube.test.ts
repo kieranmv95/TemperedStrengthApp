@@ -7,7 +7,7 @@ import {
 describe('youtube utils', () => {
   it('builds embed URL with origin for WebView referrer', () => {
     expect(getYoutubeEmbedUrl('abc123')).toBe(
-      `https://www.youtube.com/embed/abc123?playsinline=1&modestbranding=1&rel=0&origin=${encodeURIComponent(YOUTUBE_EMBED_ORIGIN)}`
+      `https://www.youtube.com/embed/abc123?playsinline=1&modestbranding=1&rel=0&mute=1&origin=${encodeURIComponent(YOUTUBE_EMBED_ORIGIN)}`
     );
   });
 
