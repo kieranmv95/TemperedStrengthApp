@@ -49,6 +49,9 @@ export const workoutsListStyles = StyleSheet.create({
     paddingTop: Spacing.xxl,
     paddingBottom: Spacing.md,
   },
+  listContentWithActiveFilters: {
+    paddingTop: Spacing.md,
+  },
   curatedSectionList: {
     gap: Spacing.section,
   },

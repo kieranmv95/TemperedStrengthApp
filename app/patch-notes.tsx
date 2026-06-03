@@ -26,6 +26,8 @@ const PATCH_NOTES: PatchNote[] = [
     notes: [
       'Workouts filter by equipment added',
       'Added 24 new workouts to the pro programs',
+      'Sort by option added to workouts screen',
+      'Improved the workouts filters selected UI',
     ],
   },
   {

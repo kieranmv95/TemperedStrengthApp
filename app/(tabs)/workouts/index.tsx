@@ -2,11 +2,19 @@ import { CuratedSection } from '@/src/components/ds';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
+import { WorkoutActiveFiltersBar } from '@/src/components/workouts/WorkoutActiveFiltersBar';
+import {
+  compareWorkouts,
+  WorkoutSortBarButton,
+  WorkoutSortPanel,
+} from '@/src/components/workouts/WorkoutSortControls';
 import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
 import {
   CATEGORY_FILTERS,
   getEquipmentFiltersInUse,
   type CategoryFilter,
+  type WorkoutSortBy,
+  type WorkoutSortDirection,
 } from '@/src/components/workouts/workoutsScreenConstants';
 import { Colors } from '@/src/constants/theme';
 import { disciplines } from '@/src/data/disciplines';
@@ -112,6 +120,10 @@ export default function WorkoutsScreen() {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [onboardingGender, setOnboardingGender] =
     useState<OnboardingGender | null>(null);
+  const [sortExpanded, setSortExpanded] = useState(false);
+  const [sortBy, setSortBy] = useState<WorkoutSortBy>('name');
+  const [sortDirection, setSortDirection] =
+    useState<WorkoutSortDirection>('asc');
 
   const captureFilter = useCallback(
     (filterType: string, filterValue: string) => {
@@ -193,6 +205,18 @@ export default function WorkoutsScreen() {
     }
   };
 
+  const hasActiveFilters =
+    searchQuery.trim().length > 0 ||
+    activeCategoryFilter !== 'All' ||
+    selectedEquipment.length > 0;
+
+  const handleResetAllFilters = () => {
+    captureFilter('reset', 'all');
+    setSearchQuery('');
+    setActiveCategoryFilter('All');
+    setSelectedEquipment([]);
+  };
+
   const equipmentFiltersInUse = useMemo(
     () => getEquipmentFiltersInUse(allStandaloneWorkouts),
     []
@@ -268,19 +292,43 @@ export default function WorkoutsScreen() {
     ).length;
   }
 
-  const filteredWorkouts = allStandaloneWorkouts.filter((workout) =>
-    matchesWorkout(workout)
+  const filteredWorkouts = useMemo(
+    () => allStandaloneWorkouts.filter((workout) => matchesWorkout(workout)),
+    [
+      searchQuery,
+      activeCategoryFilter,
+      selectedEquipment,
+      favorites,
+    ]
   );
 
-  const womensPicksWorkouts = filteredWorkouts.filter((w) =>
+  const sortedWorkouts = useMemo(
+    () =>
+      [...filteredWorkouts].sort((a, b) =>
+        compareWorkouts(a, b, sortBy, sortDirection)
+      ),
+    [filteredWorkouts, sortBy, sortDirection]
+  );
+
+  const handleChangeSortBy = (value: WorkoutSortBy) => {
+    setSortBy(value);
+    captureFilter('sort', `${value}_${sortDirection}`);
+  };
+
+  const handleChangeSortDirection = (value: WorkoutSortDirection) => {
+    setSortDirection(value);
+    captureFilter('sort', `${sortBy}_${value}`);
+  };
+
+  const womensPicksWorkouts = sortedWorkouts.filter((w) =>
     workoutHasTag(w, WOMENS_PICKS_TAG)
   );
 
-  const legsAndGlutesWorkouts = filteredWorkouts.filter((w) =>
+  const legsAndGlutesWorkouts = sortedWorkouts.filter((w) =>
     workoutHasTag(w, LEGS_AND_GLUTES_TAG)
   );
 
-  const getBigWorkouts = filteredWorkouts.filter((w) =>
+  const getBigWorkouts = sortedWorkouts.filter((w) =>
     workoutHasTag(w, GET_BIG_TAG)
   );
 
@@ -295,6 +343,30 @@ export default function WorkoutsScreen() {
       title="Workouts"
       subtitle="Log your workouts and track your progress."
       disableScroll
+      filterBarButtons={
+        <WorkoutSortBarButton
+          expanded={sortExpanded}
+          onPress={() => {
+            setSortExpanded((v) => {
+              const next = !v;
+              if (next) {
+                captureFilter('sort', 'panel_open');
+              }
+              return next;
+            });
+          }}
+        />
+      }
+      filterBarBelowButtons={
+        sortExpanded ? (
+          <WorkoutSortPanel
+            sortBy={sortBy}
+            sortDirection={sortDirection}
+            onChangeSortBy={handleChangeSortBy}
+            onChangeSortDirection={handleChangeSortDirection}
+          />
+        ) : null
+      }
     >
       <StandardLayout.AdvancedFilters>
         <View style={styles.searchContainer}>
@@ -390,7 +462,29 @@ export default function WorkoutsScreen() {
         </View>
       </StandardLayout.AdvancedFilters>
       <StandardLayout.Body>
-        {filteredWorkouts.length === 0 ? (
+        <WorkoutActiveFiltersBar
+          searchQuery={searchQuery}
+          activeCategoryFilter={activeCategoryFilter}
+          selectedEquipment={selectedEquipment}
+          equipmentLabel={equipmentFilterLabel}
+          onResetAll={handleResetAllFilters}
+          onClearSearch={() => {
+            captureFilter('search', 'clear');
+            setSearchQuery('');
+          }}
+          onClearCategory={() => handleSelectCategoryFilter('All')}
+          onRemoveEquipment={(eq) => {
+            setSelectedEquipment((prev) => {
+              const next = prev.filter((item) => item !== eq);
+              captureFilter(
+                'equipment',
+                next.length > 0 ? next.join(',') : 'all'
+              );
+              return next;
+            });
+          }}
+        />
+        {sortedWorkouts.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons
               name={
@@ -416,9 +510,12 @@ export default function WorkoutsScreen() {
           </View>
         ) : (
           <FlatList
-            data={filteredWorkouts}
+            data={sortedWorkouts}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.listContent}
+            contentContainerStyle={[
+              styles.listContent,
+              hasActiveFilters && styles.listContentWithActiveFilters,
+            ]}
             ListHeaderComponent={
               <View style={styles.curatedSectionList}>
                 <View>

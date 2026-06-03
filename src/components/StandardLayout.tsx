@@ -42,6 +42,10 @@ type StandardLayoutProps = {
   subtitle?: string;
   disableScroll?: boolean;
   onBackPress?: () => void;
+  /** Extra pills in the filter bar row (e.g. Sort by on Workouts). */
+  filterBarButtons?: React.ReactNode;
+  /** Content below the filter bar buttons (e.g. expanded sort panel). */
+  filterBarBelowButtons?: React.ReactNode;
   children?: React.ReactNode;
 };
 
@@ -56,6 +60,8 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
   subtitle,
   disableScroll = false,
   onBackPress,
+  filterBarButtons,
+  filterBarBelowButtons,
   children,
 }) => {
   const insets = useSafeAreaInsets();
@@ -161,7 +167,13 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
                   <Text style={styles.filtersToggleText}>Glossary</Text>
                   <Ionicons name="book" size={16} color={Colors.textMuted} />
                 </TouchableOpacity>
+                {filterBarButtons}
               </View>
+              {filterBarBelowButtons ? (
+                <View style={styles.filterBarBelowButtons}>
+                  {filterBarBelowButtons}
+                </View>
+              ) : null}
               {filtersExpanded ? (
                 <View style={styles.advancedFiltersContent}>
                   <StandardLayoutAdvancedFilters>
@@ -262,7 +274,11 @@ const styles = StyleSheet.create({
   advancedFiltersButtons: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
     gap: Spacing.md,
+  },
+  filterBarBelowButtons: {
+    marginTop: 0,
   },
   scrollView: {
     flex: 1,
