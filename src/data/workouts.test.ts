@@ -1,5 +1,6 @@
 import { WORKOUT_EQUIPMENT_OPTIONS } from '@/src/components/workouts/workoutsScreenConstants';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
+import { STANDALONE_LOG_SCHEMA_BY_ID } from '@/src/data/standaloneLogSchemas';
 import type { WorkoutLogSchema } from '@/src/types/workouts';
 import workoutsData from '@/src/data/workouts.json';
 
@@ -63,6 +64,20 @@ describe('bundled standalone workouts', () => {
       if (hasNoEquipmentTag) {
         expect(w.equipment).toEqual([]);
       }
+    }
+  });
+
+  it('includes HIIT Shred pro standalone copies p_55–p_78 (except removed p_75)', () => {
+    expect(allStandaloneWorkouts.length).toBe(157);
+    for (let n = 55; n <= 78; n++) {
+      if (n === 75) continue;
+      const id = `p_${n}`;
+      const w = allStandaloneWorkouts.find((row) => row.id === id);
+      expect(w).toBeDefined();
+      expect(w?.isPremium).toBe(true);
+      expect(w?.tags).toContain('HIIT Shred');
+      expect(w?.blocks).toHaveLength(1);
+      expect(STANDALONE_LOG_SCHEMA_BY_ID[id]).toBeDefined();
     }
   });
 });

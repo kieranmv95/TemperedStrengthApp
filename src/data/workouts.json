@@ -6870,5 +6870,752 @@
     "equipment": [
       "barbell"
     ]
+  },
+  {
+    "id": "p_55",
+    "title": "Ignition",
+    "description": "First session. Full body. The WOD is an AMRAP - as many rounds as possible in 10 minutes. Set a pace you can hold and do not blow up in round two.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 10,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "AMRAP"
+    ],
+    "equipment": [],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - AMRAP 10",
+        "instructions": "As many rounds as possible in 10 minutes. Find a pace in round one and hold it.\n\nAMRAP • 10 min",
+        "movements": [
+          "8 reps Burpees (Steady pace. Do not sprint round one.)",
+          "15 reps Bodyweight Squats (Full range. Move with purpose.)",
+          "10 reps Push-ups (Chest to floor. Scale to knees to keep moving.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_56",
+    "title": "The Ladder",
+    "description": "Lower body focus. The WOD is a descending ladder - reps drop each round so the session gets faster as you go. Start controlled.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Descending Ladder (For Time)",
+        "instructions": "Complete each movement for 21 reps, then 15, then 9 reps. Work through all reps of each exercise before moving on. Time yourself.\n\nFor time",
+        "movements": [
+          "21 / 15 / 9 reps Squat Jumps (Land soft every rep. Full squat depth.)",
+          "21 / 15 / 9 reps each side Reverse Lunge (Tall torso. Light touch of the back knee.)",
+          "21 / 15 / 9 reps Ball Slams (Full extension overhead before every slam. Drive it down.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_57",
+    "title": "Push Storm",
+    "description": "Upper body push focus. The WOD is a Tabata - 8 rounds of 20s work, 10s rest. Four stations. Simple format, uncomfortable execution.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 8,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "Tabata"
+    ],
+    "equipment": [
+      "dumbbell",
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Push Storm Tabata",
+        "instructions": "8 rounds, 20s work / 10s rest. Rotate through all four stations. Go as hard as you can sustain. This should be uncomfortable.\n\n8 rounds • 20s work / 10s rest",
+        "movements": [
+          "20s on / 10s off Push-ups (Maximum reps with good form. Scale to knees when needed.)",
+          "20s on / 10s off DB Push Press (Dip and drive. Keep the weight manageable enough to keep moving.)",
+          "20s on / 10s off Ball Slams (Full extension, slam hard, pick it up fast.)",
+          "20s on / 10s off Pike Push-ups (Hips high. Lower with control. Press with everything.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_58",
+    "title": "Ground & Pound",
+    "description": "Full body to close the week. The WOD is the first chipper of the programme - one pass through a list of movements, for time. Pace from the start.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "dumbbell",
+      "barbell",
+      "bands",
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Ground & Pound Chipper (For Time)",
+        "instructions": "Complete all reps in order. One pass. Time yourself. Do not go out too fast.\n\nFor time",
+        "movements": [
+          "20 reps Burpees (Steady effort. This is not the last movement.)",
+          "20 reps DB Goblet Front Squat (Upright torso. Drive hard out of the hole.)",
+          "10 reps Pull-ups (Band or assist is fine. Every rep counts.)",
+          "20 reps Ball Slams (Full extension overhead. Drive it into the floor.)",
+          "15 reps Squat Jumps (Land soft. Depth every rep.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_59",
+    "title": "Death by Dumbbell",
+    "description": "Upper body and core. The WOD is an EMOM - every minute on the minute for 12 minutes. Work starts the second the clock does.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 12,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "EMOM"
+    ],
+    "equipment": [
+      "dumbbell",
+      "barbell"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - EMOM 12",
+        "instructions": "Every minute on the minute, complete the prescribed reps. Rest is whatever is left of that minute. If you finish with less than 10s rest, your load or pace is too high.\n\nEMOM • 12 min",
+        "movements": [
+          "10 reps (odd minutes) DB Thruster (Squat and press in one movement. Keep dumbbells at shoulders on the descent.)",
+          "8 reps (even minutes) Burpees (Consistent pace. Same speed every round.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_60",
+    "title": "The Grind",
+    "description": "Lower body and posterior chain. The WOD is 5 rounds for time - as fast as possible with form intact. This is where it starts to feel like real conditioning.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "dumbbell",
+      "box"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - 5 Rounds For Time",
+        "instructions": "5 rounds, completed as fast as possible. Rest only when you have to.\n\n5 rounds for time",
+        "movements": [
+          "10 reps Box Jumps/Step-ups (Step down every rep. Land soft, reset, go again.)",
+          "12 reps DB Romanian Deadlift (Hinge clean. Squeeze at the top. Do not round the back.)",
+          "10 reps/side Reverse Lunge (Tall torso. Drive up through the front heel.)",
+          "20 reps Bodyweight Calf Raises (Full range. Pause at the top.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_61",
+    "title": "Station Six",
+    "description": "Six stations, rotating continuously for 15 minutes. The first station-style session of the programme - move through all six then repeat.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 15,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "AMRAP"
+    ],
+    "equipment": [
+      "kettlebell",
+      "rower",
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Station Six AMRAP 15",
+        "instructions": "15 minutes. Move through all six stations in order, then repeat. Scale loads to keep moving - stopping costs more than going lighter.\n\nAMRAP • 15 min",
+        "movements": [
+          "10 reps Wall Balls (Squat to depth every rep. Drive the ball to your target.)",
+          "10 reps Inverted Row (Chest to bar. Squeeze at the top.)",
+          "10 reps Squat Jumps (Land soft every rep. Full depth.)",
+          "10 reps Push-ups (Chest to floor. Scale to knees to keep moving.)",
+          "12 reps Kettlebell Swing (Hip drive. The bell floats.)",
+          "20 reps Bicycle Crunch (Rotate from the ribs. Slow and deliberate.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_62",
+    "title": "Burn Out",
+    "description": "Full body close to week two. The WOD is a descending rep scheme - starts with high reps, drops by 5 each round. Starts heavy, finishes fast.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Burn Out (For Time)",
+        "instructions": "Complete 25, 20, 15, 10, 5 reps of each movement in order. Each round drops by 5 reps. Time yourself.\n\nFor time",
+        "movements": [
+          "25 / 20 / 15 / 10 / 5 reps Burpees (Pace the first round. It gets easier as the reps drop.)",
+          "25 / 20 / 15 / 10 / 5 reps Bodyweight Squats (Full depth. Drive up hard.)",
+          "25 / 20 / 15 / 10 / 5 reps Ball Slams (Full extension overhead every rep.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_63",
+    "title": "The Gauntlet",
+    "description": "Full body. The WOD is an AMRAP 15 - five movements, more volume than anything in weeks 1–2. This is where the programme steps up.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 15,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "AMRAP"
+    ],
+    "equipment": [
+      "dumbbell",
+      "barbell",
+      "bands",
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - The Gauntlet AMRAP 15",
+        "instructions": "Five movements, 15 minutes. Find a sustainable pace in round one and hold it.\n\nAMRAP • 15 min",
+        "movements": [
+          "8 reps Burpee Broad Jumps (Drive forward. Land soft. Reset and go.)",
+          "12 reps Wall Balls (Squat to depth. Drive the ball up.)",
+          "8 reps Pull-ups (Band or assist is fine. Chest to bar.)",
+          "10 reps DB Thruster (Squat and press. Fluid movement.)",
+          "20s Plank (Active recovery within the round. Ribs down, breathe.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_64",
+    "title": "Pressing Matters",
+    "description": "Upper body push and pull. The WOD is an EMOM 16 - longer than week two. Four movements rotating across 16 minutes.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 16,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "EMOM"
+    ],
+    "equipment": [
+      "dumbbell",
+      "medicine ball",
+      "pull-up bar"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - EMOM 16",
+        "instructions": "Every minute on the minute. Rotate through all four movements. Four rounds of each. Go hard on work, use the rest.\n\nEMOM • 16 min",
+        "movements": [
+          "10 reps DB Push Press (Dip and drive. Full lockout overhead.)",
+          "8 reps Chin-ups (Full hang to chin above bar. Control the lower.)",
+          "12 reps Ball Slams (Full extension. Slam hard. Pick it up fast.)",
+          "20 reps Bicycle Crunch (Slow rotation from the ribs. Active recovery within the EMOM.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_65",
+    "title": "Lower Inferno",
+    "description": "Lower body chipper. One pass. More reps than the week one chipper. Pace it from the first movement - this session punishes anyone who goes out too fast.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "dumbbell",
+      "box"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Lower Inferno Chipper (For Time)",
+        "instructions": "Complete all reps in order. One pass. Time yourself. The wall sit at the end will test everything you have left.\n\nFor time",
+        "movements": [
+          "25 reps Box Jumps/Step-ups (Step down every rep. Land soft. Do not rush the reset.)",
+          "20 reps/side Walking Lunges (Keep moving. Light dumbbells if available.)",
+          "25 reps Squat Jumps (Land soft. Full depth. Breathe.)",
+          "20 reps DB Romanian Deadlift (Hinge clean. Squeeze up. Do not round the back.)",
+          "15 reps/side Reverse Lunge (Controlled. Tall torso. Nearly there.)",
+          "60s Wall Sit (Last thing. Breathe through it. Hold position.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_66",
+    "title": "Full Send",
+    "description": "Full body to close week three. The WOD is a 4-round station circuit with rest between rounds. Station work, high heart rate, no hiding.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 20,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "dumbbell",
+      "bands",
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Full Send (4 Rounds For Time)",
+        "instructions": "4 rounds. Complete all reps of each movement before moving on. Rest 60s between rounds.\n\n4 rounds for time",
+        "movements": [
+          "12 reps Burpees (Consistent pace. Same speed every round.)",
+          "15 reps Wall Balls (Squat to depth every rep.)",
+          "8 reps Pull-ups (Band or assist is fine.)",
+          "15 reps Ball Slams (Full extension. Drive it into the floor.)",
+          "30s DB Farmer Carry (Heavy. Posture tall. Walk steady.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_67",
+    "title": "The Hurricane",
+    "description": "Full body power. The WOD is a three-round hurricane - three movements, maximum effort, rest between rounds. Designed to spike and recover, spike and recover.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 15,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "dumbbell",
+      "barbell",
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - The Hurricane (3 Rounds For Time)",
+        "instructions": "3 rounds. Go as hard as you can each round. Rest 90s between rounds. This is designed to hurt and then let you recover. Use the rest.\n\n3 rounds for time",
+        "movements": [
+          "10 reps Burpee Broad Jumps (Max effort. Drive forward every rep.)",
+          "15 reps DB Thruster (Squat and press. No pausing at the bottom.)",
+          "20 reps Ball Slams (Everything you have. Full extension before every slam.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_68",
+    "title": "Pull Everything",
+    "description": "Pull-dominant upper body. The WOD is a Tabata with pull and core stations. Eight rounds, alternating between pulling movements and anti-rotation work.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 8,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "Tabata"
+    ],
+    "equipment": [
+      "dumbbell",
+      "rower",
+      "bands"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Pull Everything Tabata",
+        "instructions": "8 rounds, 20s work / 10s rest. Alternate between pull and core movements. Go hard on work intervals.\n\n8 rounds • 20s work / 10s rest",
+        "movements": [
+          "20s on / 10s off Pull-ups (Max reps. Band or assist is fine.)",
+          "20s on / 10s off Sit-ups (Full range. Controlled on the way down.)",
+          "20s on / 10s off Inverted Row (Chest to bar every rep.)",
+          "20s on / 10s off Russian Twists (Use a light dumbbell. Rotate from the ribs.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_69",
+    "title": "Leg Day Lies",
+    "description": "Lower body. The WOD is an AMRAP 18 - longest lower body WOD of the programme so far. Pace accordingly from the first movement.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 18,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "AMRAP"
+    ],
+    "equipment": [
+      "kettlebell",
+      "box"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - AMRAP 18",
+        "instructions": "18 minutes. Five lower body movements. Find a pace you can sustain and.\n\nAMRAP • 18 min",
+        "movements": [
+          "8 reps Box Jumps/Step-ups (Step down every rep. Land soft.)",
+          "10 reps Squat Jumps (Land soft. Depth every rep.)",
+          "10 reps/side Reverse Lunge (Tall torso. Light touch of the back knee.)",
+          "15 reps Kettlebell Swing (Hip drive. The bell floats.)",
+          "20 reps Glute Bridge March (Active recovery within the AMRAP. Hips level throughout.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_70",
+    "title": "Core Reckoning",
+    "description": "Full body with a core emphasis. The WOD is a chipper with a core movement between every strength station. There is no hiding place in this one.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "dumbbell",
+      "barbell",
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Core Reckoning Chipper (For Time)",
+        "instructions": "Complete in order. One pass. Core movements between every station - do not skip them.\n\nFor time",
+        "movements": [
+          "15 reps Burpees (Start steady. Do not blow up here.)",
+          "15 reps Hanging Leg Raise (Control the lower. No swinging.)",
+          "15 reps DB Thruster (Squat and press. Full range.)",
+          "30 reps Russian Twists (Light dumbbell. Rotate from the ribs.)",
+          "20 reps Ball Slams (Full extension every rep.)",
+          "20 reps Sit-ups (Full range. Nearly there.)",
+          "10 reps Burpee Broad Jumps (Drive forward. Land soft. Finish strong.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_71",
+    "title": "The Accumulator",
+    "description": "Full body. The WOD is an ascending ladder - reps build each round. Starts easy, finishes brutal. Unlike the descending ladder in week one, this one gets harder as it goes.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - The Accumulator (For Time)",
+        "instructions": "Complete rounds of 5, 10, 15, 20 reps of each movement. Reps climb each round. Time yourself. The last round will feel very different to the first.\n\nFor time",
+        "movements": [
+          "5 / 10 / 15 / 20 reps Burpees (The round of 20 is coming. Pace accordingly.)",
+          "5 / 10 / 15 / 20 reps Wall Balls (Squat to depth every rep. Drive the ball.)",
+          "5 / 10 / 15 / 20 reps Squat Jumps (Land soft every rep. Full depth.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_72",
+    "title": "Double Trouble",
+    "description": "Upper body pairs. The WOD is a push and pull AMRAP 20 - five movements alternating push and pull. Longest upper body WOD of the programme.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 20,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "AMRAP"
+    ],
+    "equipment": [
+      "dumbbell",
+      "rower",
+      "medicine ball",
+      "pull-up bar"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Double Trouble AMRAP 20",
+        "instructions": "20 minutes. Push and pull alternating - complete all five movements before repeating.\n\nAMRAP • 20 min",
+        "movements": [
+          "15 reps Push-ups (Chest to floor. Scale to knees to keep moving.)",
+          "8 reps Chin-ups (Full hang. Chin above bar. Control down.)",
+          "12 reps DB Push Press (Dip and drive. Full lockout.)",
+          "12 reps Inverted Row (Chest to bar. Squeeze at the top.)",
+          "15 reps Ball Slams (Full extension overhead. Drive it down.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_73",
+    "title": "Hyrox Lite",
+    "description": "Hyrox-style session. Eight stations, one round each, for time. Functional movements, high volume, designed to replicate the feel of race-day conditioning. This is the longest lower body session of the programme - pace from station one.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "dumbbell",
+      "box",
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Hyrox Lite (For Time)",
+        "instructions": "Eight stations. Complete all reps in order. One pass. Time yourself - this is your benchmark. Every station feeds into the next. Pace from station one.\n\nFor time",
+        "movements": [
+          "50 reps Wall Balls (Break into sets of 10–15. Squat to depth every rep.)",
+          "30 reps Box Jumps/Step-ups (Step down every rep. Do not rush the reset.)",
+          "60s DB Farmer Carry (Heavy as possible. Tall posture. Walk steady.)",
+          "30 reps DB Romanian Deadlift (Moderate weight. Hinge clean, squeeze up.)",
+          "40 reps/side Walking Lunges (Keep moving. Light dumbbells if available.)",
+          "30 reps Ball Slams (Full extension overhead before each slam.)",
+          "25 reps Squat Jumps (Land soft every rep.)",
+          "20 reps Burpees (Last station. Empty the tank.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_74",
+    "title": "Power Hour",
+    "description": "Full body power. The WOD is an EMOM 20 - the longest EMOM of the programme. Five movements rotating across 20 minutes. Tests your ability to sustain effort, not just produce it.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 20,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "EMOM"
+    ],
+    "equipment": [
+      "dumbbell",
+      "barbell",
+      "bands",
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - EMOM 20",
+        "instructions": "Five movements rotating across 20 minutes - four rounds of each. Go hard on work. Use every second of rest.\n\nEMOM • 20 min",
+        "movements": [
+          "8 reps Burpee Broad Jumps (Drive forward. Land soft.)",
+          "10 reps DB Thruster (Squat and press. Full range.)",
+          "8 reps Pull-ups (Band or assist is fine.)",
+          "12 reps Ball Slams (Full extension. Slam hard.)",
+          "30s (minutes 5, 10, 15, 20) DB Farmer Carry (Heavy. Posture tall. Active recovery between the hard stations.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_76",
+    "title": "The Last Pull",
+    "description": "Pull-dominant upper body. The WOD is a chipper - every movement involves pulling, rowing, or anti-rotation work. The longest upper body WOD of the programme.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "dumbbell",
+      "rower",
+      "bands",
+      "pull-up bar"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - The Last Pull Chipper (For Time)",
+        "instructions": "Complete in order. One pass. Pull, hinge, core - no pushing today. Time yourself.\n\nFor time",
+        "movements": [
+          "30 reps Pull-ups (Break as needed. Band or assist is fine. Every rep counts.)",
+          "25 reps Hanging Leg Raise (Control the lower. No swinging.)",
+          "25 reps Inverted Row (Chest to bar every rep.)",
+          "15 reps Sit-ups (Controlled reps. Exhale as you sit up. Keep the chin tucked. Aim to feel the abs initiate the movement rather than yanking with the hip flexors.)",
+          "15 reps Chin-ups (Underhand grip. Full hang to chin above bar.)",
+          "40 reps Russian Twists (Light dumbbell. Rotate from the ribs. Nearly done.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_77",
+    "title": "Six Weeks Done",
+    "description": "Lower body finale. The WOD is the hardest lower body chipper of the programme - more volume than Hyrox Lite, higher intensity. Time yourself.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "dumbbell",
+      "box",
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Six Weeks Done (For Time)",
+        "instructions": "One pass. Everything in order. The final lower body test. Time yourself.\n\nFor time",
+        "movements": [
+          "60 reps Wall Balls (Break in sets of 15. Squat to depth every rep.)",
+          "30 reps Box Jumps/Step-ups (Step down every rep. Do not rush the reset.)",
+          "30 reps DB Romanian Deadlift (Hinge clean. Squeeze at the top.)",
+          "40 reps/side Walking Lunges (Keep moving. This is where week six is earned.)",
+          "30 reps Ball Slams (Full extension overhead before every slam.)",
+          "30 reps Squat Jumps (Land soft. Depth every rep.)",
+          "90s Wall Sit (Last thing. You earned it. Hold.)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p_78",
+    "title": "Peak",
+    "description": "The last session. Full body. Everything. The WOD is the longest chipper of the programme - nine movements, one pass, for time. Every exercise here has appeared before. You know all of them. Now do them all at once.",
+    "category": "Conditioning",
+    "difficulty": "Beginner",
+    "estimatedTime": 25,
+    "tags": [
+      "HIIT",
+      "HIIT Shred",
+      "Conditioning",
+      "For Time"
+    ],
+    "equipment": [
+      "dumbbell",
+      "barbell",
+      "rower",
+      "medicine ball"
+    ],
+    "isPremium": true,
+    "blocks": [
+      {
+        "name": "WOD - Peak (For Time)",
+        "instructions": "Nine movements. One pass. Everything in order. Time yourself. This is the final session of the programme - leave nothing behind.\n\nFor time",
+        "movements": [
+          "40 reps Wall Balls (Set your pace early. Break in sets of 10.)",
+          "20 reps Burpees (Steady. This is the middle, not the end.)",
+          "15 reps Pull-ups (Break as needed. Every rep counts.)",
+          "30 reps Ball Slams (Full extension. Drive it into the floor.)",
+          "15 reps Burpee Broad Jumps (Drive forward. Land soft. Keep moving.)",
+          "25 reps Squat Jumps (Land soft. Depth every rep.)",
+          "15 reps DB Thruster (Squat and press. Full range. Keep going.)",
+          "20 reps Inverted Row (Chest to bar. Squeeze. Nearly done.)",
+          "60s DB Farmer Carry (Last thing. Heavy. Posture tall. Walk to the finish.)"
+        ]
+      }
+    ]
   }
 ]

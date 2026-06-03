@@ -25,6 +25,7 @@ const PATCH_NOTES: PatchNote[] = [
     dateLabel: '03rd June 2026',
     notes: [
       'Workouts filter by equipment added',
+      'Added 24 new workouts to the pro programs',
     ],
   },
   {
