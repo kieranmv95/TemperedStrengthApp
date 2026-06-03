@@ -23,10 +23,24 @@ export const workoutsListStyles = StyleSheet.create({
     fontSize: FontSize.xxl,
     padding: 0,
   },
-  filterScrollContent: {
-    paddingBottom: Spacing.md,
+  filtersWrap: {
+    gap: Spacing.xl,
+  },
+  filtersRow: {
     gap: Spacing.md,
+  },
+  filtersLabel: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+  filterScrollContent: {
     paddingRight: Spacing.xxl,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
   },
   quickFiltersRow: {
     marginTop: Spacing.sm,

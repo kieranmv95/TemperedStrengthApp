@@ -39,6 +39,7 @@ const sampleWorkout: SingleWorkout = {
   difficulty: 'Beginner',
   estimatedTime: 15,
   tags: [],
+  equipment: [],
   isPremium: false,
   logSchema: { kind: 'notes_only', placeholder: 'Notes' },
   blocks: [{ name: 'Main', movements: ['Move'] }],

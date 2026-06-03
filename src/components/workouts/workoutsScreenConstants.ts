@@ -1,19 +1,6 @@
-import type { WorkoutCategory } from '@/src/types/workouts';
+import type { SingleWorkout, WorkoutCategory, WorkoutEquipment } from '@/src/types/workouts';
 
-export type TimeFilter =
-  | '≤15 min'
-  | '16-30 min'
-  | '31-45 min'
-  | '46+ min'
-  | null;
 export type CategoryFilter = 'All' | WorkoutCategory | 'Favorites' | 'Pro';
-
-export const TIME_FILTERS: (
-  | '≤15 min'
-  | '16-30 min'
-  | '31-45 min'
-  | '46+ min'
-)[] = ['≤15 min', '16-30 min', '31-45 min', '46+ min'];
 
 export const CATEGORY_FILTERS: CategoryFilter[] = [
   'All',
@@ -27,3 +14,32 @@ export const CATEGORY_FILTERS: CategoryFilter[] = [
   'Pilates',
   'Rainhill',
 ];
+
+export const WORKOUT_EQUIPMENT_OPTIONS: WorkoutEquipment[] = [
+  'kettlebell',
+  'dumbbell',
+  'barbell',
+  'skipping rope',
+  'static machines',
+  'rower',
+  'bike',
+  'ski erg',
+  'bands',
+  'box',
+  'medicine ball',
+  'pull-up bar',
+  'sled',
+  'ghd',
+];
+
+export function getEquipmentFiltersInUse(
+  workouts: SingleWorkout[]
+): WorkoutEquipment[] {
+  const inUse = new Set<WorkoutEquipment>();
+  for (const workout of workouts) {
+    for (const eq of workout.equipment) {
+      inUse.add(eq);
+    }
+  }
+  return WORKOUT_EQUIPMENT_OPTIONS.filter((eq) => inUse.has(eq));
+}

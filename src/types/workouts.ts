@@ -7,6 +7,22 @@ export type WorkoutCategory =
   | 'Pilates'
   | 'Rainhill';
 
+export type WorkoutEquipment =
+  | 'kettlebell'
+  | 'dumbbell'
+  | 'barbell'
+  | 'skipping rope'
+  | 'static machines'
+  | 'rower'
+  | 'bike'
+  | 'ski erg'
+  | 'bands'
+  | 'box'
+  | 'medicine ball'
+  | 'pull-up bar'
+  | 'sled'
+  | 'ghd';
+
 /**
  * What the standalone workouts tab can record for a template.
  * Templates without a structured benchmark use `notes_only` by default.
@@ -53,6 +69,8 @@ export type SingleWorkout = {
     | 'Multiple Difficulties';
   estimatedTime: number;
   tags: string[];
+  /** Equipment required for this workout; empty when bodyweight / no gear. */
+  equipment: WorkoutEquipment[];
   isPremium: boolean;
   logSchema: WorkoutLogSchema;
   /** True when designed to be done with a partner. */
