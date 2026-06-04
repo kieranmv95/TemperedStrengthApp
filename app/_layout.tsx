@@ -3,7 +3,7 @@ import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
 import { TogetherWeLiftProvider } from '@/src/hooks/together-we-lift-context';
 import { initializeRevenueCat } from '@/src/services/revenueCatService';
-import { getOnboarded } from '@/src/utils/storage';
+import { getOnboarded, runStorageMigrations } from '@/src/utils/storage';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -30,6 +30,13 @@ export default function RootLayout() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      // Run storage migrations before anything reads persisted data and before
+      // the sync manager (mounted only once boot is ready) starts mirroring.
+      try {
+        await runStorageMigrations();
+      } catch (error) {
+        console.error('Failed to run storage migrations:', error);
+      }
       try {
         await initializeRevenueCat();
       } catch (error) {

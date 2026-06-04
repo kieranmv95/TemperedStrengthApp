@@ -10,6 +10,7 @@ import {
   getWorkoutNotes,
   incrementSwapCount,
   moveProgramDayData,
+  runStorageMigrations,
   saveCompletedSession,
   saveRestTimer,
   saveWorkoutNotes,
@@ -56,7 +57,7 @@ describe('storage utilities', () => {
     });
   });
 
-  it('returns all workout notes from legacy object shapes', async () => {
+  it('normalizes legacy object-shaped workout notes via migration', async () => {
     await AsyncStorage.setItem(
       'workout_notes',
       JSON.stringify({
@@ -66,17 +67,21 @@ describe('storage utilities', () => {
       })
     );
 
+    await runStorageMigrations();
+
     await expect(getAllWorkoutNotes()).resolves.toEqual({
       0: 'Legacy A',
       2: 'Legacy B',
     });
   });
 
-  it('returns all workout notes from legacy array shapes', async () => {
+  it('normalizes legacy array-shaped workout notes via migration', async () => {
     await AsyncStorage.setItem(
       'workout_notes',
       JSON.stringify(['Zero', null, { text: 'Two' }])
     );
+
+    await runStorageMigrations();
 
     await expect(getAllWorkoutNotes()).resolves.toEqual({
       0: 'Zero',
@@ -150,8 +155,10 @@ describe('storage utilities', () => {
     const now = new Date('2025-06-15T10:00:00Z');
     jest.useFakeTimers().setSystemTime(now);
 
-    await AsyncStorage.setItem('swap_count', '2');
-    await AsyncStorage.setItem('swap_count_month', now.getMonth().toString());
+    await AsyncStorage.setItem(
+      'swap_count_state',
+      JSON.stringify({ count: 2, month: now.getMonth() })
+    );
 
     await expect(incrementSwapCount()).resolves.toBe(3);
   });
@@ -160,10 +167,12 @@ describe('storage utilities', () => {
     const now = new Date('2025-07-01T10:00:00Z');
     jest.useFakeTimers().setSystemTime(now);
 
-    await AsyncStorage.setItem('swap_count', '9');
     await AsyncStorage.setItem(
-      'swap_count_month',
-      new Date('2025-06-01T10:00:00Z').getMonth().toString()
+      'swap_count_state',
+      JSON.stringify({
+        count: 9,
+        month: new Date('2025-06-01T10:00:00Z').getMonth(),
+      })
     );
 
     await expect(incrementSwapCount()).resolves.toBe(1);

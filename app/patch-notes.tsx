@@ -21,8 +21,16 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.7.2',
+    dateLabel: 'N/A',
+    notes: [
+      'Workotus section UI improvements',
+      'Data integrity improvements',
+    ],
+  },
+  {
     version: '2.7.1',
-    dateLabel: '03rd June 2026',
+    dateLabel: '04th June 2026',
     notes: [
       'Workouts filter by equipment added',
       'Added 24 new workouts to the pro programs',
