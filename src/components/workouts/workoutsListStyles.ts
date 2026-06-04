@@ -59,80 +59,12 @@ export const workoutsListStyles = StyleSheet.create({
     gap: Spacing.lg,
     paddingRight: Spacing.xl,
   },
-  curatedCard: {
-    width: 240,
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundSubtle,
-  },
-  curatedCardLocked: {
-    borderColor: Colors.accent,
-    borderWidth: 1,
-    opacity: 0.6,
-  },
-  curatedCardTopRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: Spacing.md,
-  },
-  curatedCardCategory: {
-    color: Colors.accent,
-    fontSize: FontSize.xs,
-    fontWeight: '800',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  curatedCardProBadge: {
-    backgroundColor: Colors.accent,
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
-  },
-  curatedCardProBadgeText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.xxs,
-    fontWeight: '700',
-  },
-  curatedCardTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    fontWeight: '800',
-    marginBottom: Spacing.md,
-  },
-  curatedCardMeta: {
-    backgroundColor: Colors.accentWashFill,
-    borderWidth: 1,
-    borderColor: Colors.accentWashBorder,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.full,
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    gap: Spacing.xs,
-  },
   titleSpace: {
     marginBottom: Spacing.md,
   },
-  curatedCardMetaText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.md,
-    fontWeight: '700',
-  },
-  allWorkoutsHeader: {
-    marginTop: Spacing.xxl,
-    marginBottom: Spacing.lg,
-  },
-  allWorkoutsTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '800',
-  },
   workoutCard: {
     marginBottom: Spacing.md,
+    padding: Spacing.xl,
   },
   sponsorCard: {
     backgroundColor: Colors.backgroundCard,
@@ -166,13 +98,12 @@ export const workoutsListStyles = StyleSheet.create({
   },
   workoutCardLocked: {
     borderColor: Colors.accent,
-    opacity: 0.6,
   },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.sm,
   },
   cardTitleRow: {
     flexDirection: 'row',
@@ -180,9 +111,9 @@ export const workoutsListStyles = StyleSheet.create({
     gap: Spacing.md,
   },
   categoryIcon: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     backgroundColor: Colors.backgroundElevated,
     alignItems: 'center',
     justifyContent: 'center',
@@ -210,31 +141,31 @@ export const workoutsListStyles = StyleSheet.create({
   },
   cardTitle: {
     color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
+    fontSize: FontSize.displaySm,
     fontWeight: '700',
-    marginBottom: Spacing.xs,
+    marginBottom: Spacing.xxs,
   },
   cardDescription: {
     color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-    marginBottom: Spacing.xl,
+    fontSize: FontSize.md,
+    lineHeight: 17,
+    marginBottom: Spacing.md,
   },
   cardMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xl,
-    marginBottom: Spacing.xl,
+    gap: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   metaItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.xs,
   },
-  metaText: {
-    color: Colors.textMuted,
+  metaTimeText: {
+    color: Colors.accent,
     fontSize: FontSize.md,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   difficultyBadge: {
     paddingHorizontal: Spacing.md,
@@ -253,13 +184,13 @@ export const workoutsListStyles = StyleSheet.create({
   },
   tag: {
     backgroundColor: Colors.backgroundElevated,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 2,
     borderRadius: BorderRadius.xxl,
   },
   tagText: {
     color: Colors.textMuted,
-    fontSize: FontSize.md,
+    fontSize: FontSize.sm,
     fontWeight: '500',
   },
   emptyState: {

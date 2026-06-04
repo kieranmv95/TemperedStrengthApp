@@ -1,20 +1,16 @@
 import { Pill } from '@/src/components/pill';
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
 import { Colors } from '@/src/constants/theme';
-import type { OnboardingGender } from '@/src/types/onboarding';
 import type {
-  Divider,
   DetailedMovement,
+  Divider,
   SingleWorkout,
 } from '@/src/types/workouts';
-import { getOnboardingProfile } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Image, ScrollView, Text, View } from 'react-native';
 import { workoutDetailStyles as styles } from './workoutDetailStyles';
 import { CATEGORY_ICONS, DIFFICULTY_COLORS } from './workoutUiConstants';
-
-const WOMENS_PICKS_TAG = 'Women’s Picks';
 
 type WorkoutDetailScrollContentProps = {
   workout: SingleWorkout;
@@ -42,9 +38,8 @@ function isScaledBlocks(
 
 function movementToRowText(movement: string | DetailedMovement): string {
   if (typeof movement === 'string') return movement;
-  return `${movement.name}: ${movement.value}${
-    movement.note ? ` (${movement.note})` : ''
-  }`;
+  return `${movement.name}: ${movement.value}${movement.note ? ` (${movement.note})` : ''
+    }`;
 }
 
 function isDivider(movement: unknown): movement is Divider {
@@ -59,30 +54,13 @@ function isDivider(movement: unknown): movement is Divider {
 export function WorkoutDetailScrollContent({
   workout,
 }: WorkoutDetailScrollContentProps) {
-  const [onboardingGender, setOnboardingGender] =
-    useState<OnboardingGender | null>(null);
   const [selectedScaleIndex, setSelectedScaleIndex] = useState(0);
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const profile = await getOnboardingProfile();
-      if (cancelled) return;
-      setOnboardingGender(profile?.gender ?? null);
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    setSelectedScaleIndex(0);
-  }, [workout.id]);
+  useEffect(() => setSelectedScaleIndex(0), [workout.id]);
 
   const visibleTags = useMemo(() => {
-    if (onboardingGender === 'female') return workout.tags;
-    return workout.tags.filter((t) => t !== WOMENS_PICKS_TAG);
-  }, [onboardingGender, workout.tags]);
+    return workout.tags;
+  }, [workout.tags]);
 
   const scaledBlocks = useMemo(() => {
     if (!isScaledBlocks(workout.blocks)) return null;
@@ -159,7 +137,7 @@ export function WorkoutDetailScrollContent({
               label={tag}
               isActive={false}
               disabled
-              onPress={() => {}}
+              onPress={() => { }}
             />
           ))}
         </ScrollView>

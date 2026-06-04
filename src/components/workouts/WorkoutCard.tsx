@@ -38,7 +38,7 @@ export function WorkoutCard({
     <Card
       style={[styles.workoutCard, isLocked && styles.workoutCardLocked]}
       onPress={handlePress}
-      activeOpacity={isLocked ? 0.5 : 0.7}
+      activeOpacity={0.7}
       accessibilityLabel="Open workout"
     >
       <View>
@@ -53,7 +53,7 @@ export function WorkoutCard({
               ) : (
                 <Ionicons
                   name={CATEGORY_ICONS[workout.category] as any}
-                  size={16}
+                  size={14}
                   color={Colors.accent}
                 />
               )}
@@ -72,21 +72,21 @@ export function WorkoutCard({
           >
             <Ionicons
               name={isFavorite ? 'heart' : 'heart-outline'}
-              size={24}
+              size={20}
               color={isFavorite ? Colors.destructive : Colors.textPlaceholder}
             />
           </TouchableOpacity>
         </View>
 
         <Text style={styles.cardTitle}>{workout.title}</Text>
-        <Text style={styles.cardDescription} numberOfLines={2}>
+        <Text style={styles.cardDescription} numberOfLines={1}>
           {workout.description}
         </Text>
 
         <View style={styles.cardMeta}>
           <View style={styles.metaItem}>
-            <Ionicons name="time-outline" size={14} color={Colors.textMuted} />
-            <Text style={styles.metaText}>{workout.estimatedTime} min</Text>
+            <Ionicons name="time-outline" size={14} color={Colors.accent} />
+            <Text style={styles.metaTimeText}>{workout.estimatedTime} min</Text>
           </View>
           <View
             style={[

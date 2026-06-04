@@ -1,14 +1,14 @@
 import { CuratedSection } from '@/src/components/ds';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
-import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
 import { WorkoutActiveFiltersBar } from '@/src/components/workouts/WorkoutActiveFiltersBar';
+import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
+import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
 import {
   compareWorkouts,
   WorkoutSortBarButton,
   WorkoutSortPanel,
 } from '@/src/components/workouts/WorkoutSortControls';
-import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
 import {
   CATEGORY_FILTERS,
   getEquipmentFiltersInUse,
@@ -21,13 +21,8 @@ import { disciplines } from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
-import type { OnboardingGender } from '@/src/types/onboarding';
 import type { SingleWorkout, WorkoutEquipment } from '@/src/types/workouts';
-import {
-  getFavoriteWorkouts,
-  getOnboardingProfile,
-  toggleFavoriteWorkout,
-} from '@/src/utils/storage';
+import { getFavoriteWorkouts, toggleFavoriteWorkout } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
@@ -43,69 +38,11 @@ import {
   View,
 } from 'react-native';
 
-const WOMENS_PICKS_TAG = 'Women’s Picks';
-const LEGS_AND_GLUTES_TAG = 'Legs & Glutes';
-const GET_BIG_TAG = 'Get Big';
-
-function workoutHasTag(workout: SingleWorkout, tag: string): boolean {
-  return workout.tags.includes(tag);
-}
-
 function equipmentFilterLabel(eq: WorkoutEquipment): string {
   return eq
     .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
-}
-
-function CuratedWorkoutCard({
-  workout,
-  isPro,
-  onPress,
-  onLockedPress,
-}: {
-  workout: SingleWorkout;
-  isPro: boolean;
-  onPress: (workout: SingleWorkout) => void;
-  onLockedPress: () => void;
-}) {
-  const isLocked = workout.isPremium && !isPro;
-
-  const handlePress = () => {
-    if (isLocked) {
-      onLockedPress();
-      return;
-    }
-    onPress(workout);
-  };
-
-  return (
-    <TouchableOpacity
-      style={[styles.curatedCard, isLocked && styles.curatedCardLocked]}
-      onPress={handlePress}
-      activeOpacity={isLocked ? 0.5 : 0.7}
-    >
-      <View style={styles.curatedCardTopRow}>
-        <Text style={styles.curatedCardCategory}>{workout.category}</Text>
-        {workout.isPremium && (
-          <View style={styles.curatedCardProBadge}>
-            <Text style={styles.curatedCardProBadgeText}>PRO</Text>
-          </View>
-        )}
-      </View>
-      <Text style={styles.curatedCardTitle} numberOfLines={2}>
-        {workout.title}
-      </Text>
-      <View>
-        <View style={styles.curatedCardMeta}>
-          <Ionicons name="time" size={14} color={Colors.accent} />
-          <Text style={styles.curatedCardMetaText}>
-            {workout.estimatedTime} min
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
 }
 
 export default function WorkoutsScreen() {
@@ -118,8 +55,6 @@ export default function WorkoutsScreen() {
     WorkoutEquipment[]
   >([]);
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [onboardingGender, setOnboardingGender] =
-    useState<OnboardingGender | null>(null);
   const [sortExpanded, setSortExpanded] = useState(false);
   const [sortBy, setSortBy] = useState<WorkoutSortBy>('name');
   const [sortDirection, setSortDirection] =
@@ -156,20 +91,12 @@ export default function WorkoutsScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      loadFavorites();
-      loadOnboardingGender();
+      (async () => {
+        const favs = await getFavoriteWorkouts();
+        setFavorites(favs);
+      })();
     }, [])
   );
-
-  const loadFavorites = async () => {
-    const favs = await getFavoriteWorkouts();
-    setFavorites(favs);
-  };
-
-  const loadOnboardingGender = async () => {
-    const profile = await getOnboardingProfile();
-    setOnboardingGender(profile?.gender ?? null);
-  };
 
   const handleToggleFavorite = async (workout: SingleWorkout) => {
     const newStatus = await toggleFavoriteWorkout(workout.id);
@@ -240,14 +167,14 @@ export default function WorkoutsScreen() {
     });
   };
 
-  function matchesWorkout(
+  const matchesWorkout = useCallback((
     workout: SingleWorkout,
     overrides?: Partial<{
       searchQuery: string;
       activeCategoryFilter: CategoryFilter;
       selectedEquipment: WorkoutEquipment[];
     }>
-  ): boolean {
+  ): boolean => {
     const effectiveSearchQuery = overrides?.searchQuery ?? searchQuery;
     const effectiveCategoryFilter =
       overrides?.activeCategoryFilter ?? activeCategoryFilter;
@@ -278,7 +205,7 @@ export default function WorkoutsScreen() {
       return favorites.includes(workout.id);
     if (effectiveCategoryFilter === 'Pro') return workout.isPremium;
     return workout.category === effectiveCategoryFilter;
-  }
+  }, [searchQuery, activeCategoryFilter, selectedEquipment, favorites]);
 
   function equipmentCountForFilter(eq: WorkoutEquipment | null): number {
     const hypothetical =
@@ -294,12 +221,7 @@ export default function WorkoutsScreen() {
 
   const filteredWorkouts = useMemo(
     () => allStandaloneWorkouts.filter((workout) => matchesWorkout(workout)),
-    [
-      searchQuery,
-      activeCategoryFilter,
-      selectedEquipment,
-      favorites,
-    ]
+    [matchesWorkout]
   );
 
   const sortedWorkouts = useMemo(
@@ -319,24 +241,6 @@ export default function WorkoutsScreen() {
     setSortDirection(value);
     captureFilter('sort', `${sortBy}_${value}`);
   };
-
-  const womensPicksWorkouts = sortedWorkouts.filter((w) =>
-    workoutHasTag(w, WOMENS_PICKS_TAG)
-  );
-
-  const legsAndGlutesWorkouts = sortedWorkouts.filter((w) =>
-    workoutHasTag(w, LEGS_AND_GLUTES_TAG)
-  );
-
-  const getBigWorkouts = sortedWorkouts.filter((w) =>
-    workoutHasTag(w, GET_BIG_TAG)
-  );
-
-  const showS1AndS2 = onboardingGender === 'female';
-  const showS3 =
-    onboardingGender === null ||
-    onboardingGender === 'male' ||
-    onboardingGender === 'prefer_not_to_say';
 
   return (
     <StandardLayout
@@ -566,87 +470,9 @@ export default function WorkoutsScreen() {
                   </ScrollView>
                 </View>
 
-                {showS1AndS2 && womensPicksWorkouts.length > 0 && (
-                  <View>
-                    <CuratedSection
-                      title="Recommended for you"
-                      description="A feel-good place to start."
-                      size='large'
-                      style={styles.titleSpace}
-                    />
-                    <ScrollView
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      contentContainerStyle={styles.curatedScrollContent}
-                    >
-                      {womensPicksWorkouts.map((workout) => (
-                        <CuratedWorkoutCard
-                          key={workout.id}
-                          workout={workout}
-                          isPro={isPro}
-                          onPress={handleWorkoutPress}
-                          onLockedPress={handleLockedPress}
-                        />
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
-
-                {showS1AndS2 && legsAndGlutesWorkouts.length > 0 && (
-                  <View>
-                    <CuratedSection
-                      title="Legs &amp; Glutes"
-                      description="Strong legs, confident you."
-                      size='large'
-                      style={styles.titleSpace}
-                    />
-                    <ScrollView
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      contentContainerStyle={styles.curatedScrollContent}
-                    >
-                      {legsAndGlutesWorkouts.map((workout) => (
-                        <CuratedWorkoutCard
-                          key={workout.id}
-                          workout={workout}
-                          isPro={isPro}
-                          onPress={handleWorkoutPress}
-                          onLockedPress={handleLockedPress}
-                        />
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
-
-                {showS3 && getBigWorkouts.length > 0 && (
-                  <View>
-                    <CuratedSection
-                      title="Get Big"
-                      description="Big pump. Feel strong."
-                      size='large'
-                      style={styles.titleSpace}
-                    />
-                    <ScrollView
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      contentContainerStyle={styles.curatedScrollContent}
-                    >
-                      {getBigWorkouts.map((workout) => (
-                        <CuratedWorkoutCard
-                          key={workout.id}
-                          workout={workout}
-                          isPro={isPro}
-                          onPress={handleWorkoutPress}
-                          onLockedPress={handleLockedPress}
-                        />
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
-
                 <CuratedSection
                   title="All Workouts"
-                  description={`All our workouts, over ${allStandaloneWorkouts.length - 1}+ workouts.`}
+                  description={`All our workouts, over ${allStandaloneWorkouts.length}+ workouts.`}
                   size='large'
                   style={styles.titleSpace}
                 />

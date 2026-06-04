@@ -6,28 +6,17 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 25,
-    "tags": [
-      "CrossFit",
-      "AMRAP",
-      "No Equipment",
-      "Women’s Picks"
-    ],
+    "tags": ["CrossFit", "AMRAP", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 Rounds: 200m Jog, 10 Air Squats, 10 Scapular Pushups"
-        ]
+        "movements": ["2 Rounds: 200m Jog, 10 Air Squats, 10 Scapular Pushups"]
       },
       {
         "name": "15 Min AMRAP",
         "instructions": "As many rounds as possible in 15 mins. No scheduled rest; rest only as needed.",
-        "movements": [
-          "10 Burpees",
-          "20 Air Squats",
-          "30 Sit-ups"
-        ]
+        "movements": ["10 Burpees", "20 Air Squats", "30 Sit-ups"]
       }
     ],
     "equipment": []
@@ -39,11 +28,7 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": [
-      "Sprint",
-      "Lungs",
-      "No Equipment"
-    ],
+    "tags": ["Sprint", "Lungs", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -73,27 +58,17 @@
     "category": "Mobility",
     "difficulty": "Beginner",
     "estimatedTime": 15,
-    "tags": [
-      "Core",
-      "Abs",
-      "Women’s Picks"
-    ],
+    "tags": ["Core", "Abs"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 Rounds: 10 Cat-Cow, 10 Bird-Dogs"
-        ]
+        "movements": ["2 Rounds: 10 Cat-Cow, 10 Bird-Dogs"]
       },
       {
         "name": "3 Rounds",
         "instructions": "Rest 60s between rounds. Focus on keeping lower back glued to the floor during Hollow Rocks.",
-        "movements": [
-          "45s Plank",
-          "15 Hollow Rocks",
-          "30s Side Plank (L/R)"
-        ]
+        "movements": ["45s Plank", "15 Hollow Rocks", "30s Side Plank (L/R)"]
       }
     ],
     "equipment": []
@@ -105,13 +80,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 15,
-    "tags": [
-      "CrossFit",
-      "Chipper",
-      "Full Body",
-      "No Equipment",
-      "Women’s Picks"
-    ],
+    "tags": ["CrossFit", "Chipper", "Full Body", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -123,9 +92,7 @@
       {
         "name": "For Time",
         "instructions": "Go at 80% pace for the first 50, then accelerate. Target: Under 8 mins.",
-        "movements": [
-          "100 Burpees for time"
-        ]
+        "movements": ["100 Burpees for time"]
       }
     ],
     "equipment": []
@@ -137,20 +104,12 @@
     "category": "Strength",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "Legs",
-      "Volume",
-      "No Equipment",
-      "Legs & Glutes",
-      "Women’s Picks"
-    ],
+    "tags": ["Legs", "Volume", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "10 World's Greatest Stretches, 20 Glute Bridges"
-        ]
+        "movements": ["10 World's Greatest Stretches, 20 Glute Bridges"]
       },
       {
         "name": "4 Rounds",
@@ -172,20 +131,12 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 25,
-    "tags": [
-      "Upper Body",
-      "Pump",
-      "No Equipment",
-      "Women’s Picks",
-      "Get Big"
-    ],
+    "tags": ["Upper Body", "Pump", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 Rounds: 10 Pushups, 10 Prone Y-Raises, 10 Arm Circles"
-        ]
+        "movements": ["2 Rounds: 10 Pushups, 10 Prone Y-Raises, 10 Arm Circles"]
       },
       {
         "name": "3 Rounds",
@@ -206,10 +157,7 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": [
-      "Benchmark",
-      "Row"
-    ],
+    "tags": ["Benchmark", "Row"],
     "isPremium": false,
     "blocks": [
       {
@@ -240,9 +188,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower"
-    ]
+    "equipment": ["rower"]
   },
   {
     "id": "f_08",
@@ -251,18 +197,12 @@
     "category": "Mobility",
     "difficulty": "Beginner",
     "estimatedTime": 15,
-    "tags": [
-      "Recovery",
-      "Postures",
-      "Women’s Picks"
-    ],
+    "tags": ["Recovery", "Postures"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 mins light walking or jogging to warm the tissues"
-        ]
+        "movements": ["2 mins light walking or jogging to warm the tissues"]
       },
       {
         "name": "Flow",
@@ -283,17 +223,12 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 35,
-    "tags": [
-      "Hyrox",
-      "Test"
-    ],
+    "tags": ["Hyrox", "Test"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "800m Run, 10 Burpees, 10 Air Squats"
-        ]
+        "movements": ["800m Run, 10 Burpees, 10 Air Squats"]
       },
       {
         "name": "For Time",
@@ -307,10 +242,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "medicine ball"
-    ]
+    "equipment": ["rower", "medicine ball"]
   },
   {
     "id": "f_10",
@@ -319,10 +251,7 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 20,
-    "tags": [
-      "KB",
-      "Power"
-    ],
+    "tags": ["KB", "Power"],
     "isPremium": false,
     "blocks": [
       {
@@ -354,9 +283,7 @@
         ]
       }
     ],
-    "equipment": [
-      "kettlebell"
-    ]
+    "equipment": ["kettlebell"]
   },
   {
     "id": "f_11",
@@ -365,12 +292,7 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 35,
-    "tags": [
-      "Running",
-      "Speed",
-      "No Equipment",
-      "Benchmark"
-    ],
+    "tags": ["Running", "Speed", "No Equipment", "Benchmark"],
     "isPremium": false,
     "blocks": [
       {
@@ -417,19 +339,12 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 20,
-    "tags": [
-      "Chest",
-      "Bodyweight",
-      "No Equipment",
-      "Women's Picks"
-    ],
+    "tags": ["Chest", "Bodyweight", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 Rounds: 10 Shoulder Taps, 10 Scapular Pushups"
-        ]
+        "movements": ["2 Rounds: 10 Shoulder Taps, 10 Scapular Pushups"]
       },
       {
         "name": "The Pyramid",
@@ -466,11 +381,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 10,
-    "tags": [
-      "Tabata",
-      "Quick",
-      "No Equipment"
-    ],
+    "tags": ["Tabata", "Quick", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -506,18 +417,12 @@
     "category": "Mobility",
     "difficulty": "Intermediate",
     "estimatedTime": 25,
-    "tags": [
-      "Shoulders",
-      "Skill",
-      "No Equipment"
-    ],
+    "tags": ["Shoulders", "Skill", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "3 Rounds: 10 Wrist Stretches, 10 Wall Slides"
-        ]
+        "movements": ["3 Rounds: 10 Wrist Stretches, 10 Wall Slides"]
       },
       {
         "name": "3 Rounds",
@@ -538,12 +443,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 18,
-    "tags": [
-      "Legs",
-      "Lungs",
-      "No Equipment",
-      "Legs & Glutes"
-    ],
+    "tags": ["Legs", "Lungs", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -579,18 +479,12 @@
     "category": "Mobility",
     "difficulty": "Beginner",
     "estimatedTime": 12,
-    "tags": [
-      "Shoulders",
-      "Prehab",
-      "Women’s Picks"
-    ],
+    "tags": ["Shoulders", "Prehab"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 mins Arm Swings and Thoracic Twists"
-        ]
+        "movements": ["2 mins Arm Swings and Thoracic Twists"]
       },
       {
         "name": "Flow",
@@ -602,9 +496,7 @@
         ]
       }
     ],
-    "equipment": [
-      "bands"
-    ]
+    "equipment": ["bands"]
   },
   {
     "id": "f_17",
@@ -613,12 +505,7 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": [
-      "Cardio",
-      "Jump Rope",
-      "Skill",
-      "Women's Picks"
-    ],
+    "tags": ["Cardio", "Jump Rope", "Skill"],
     "isPremium": false,
     "blocks": [
       {
@@ -642,9 +529,7 @@
         ]
       }
     ],
-    "equipment": [
-      "skipping rope"
-    ]
+    "equipment": ["skipping rope"]
   },
   {
     "id": "f_18",
@@ -653,12 +538,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 18,
-    "tags": [
-      "Full Body",
-      "No Equipment",
-      "Women's Picks",
-      "Core"
-    ],
+    "tags": ["Full Body", "No Equipment", "Core"],
     "isPremium": false,
     "blocks": [
       {
@@ -696,30 +576,20 @@
     "category": "Strength",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": [
-      "Grip",
-      "Arms"
-    ],
+    "tags": ["Grip", "Arms"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "Wrist circles, 20 Hand Clenches"
-        ]
+        "movements": ["Wrist circles, 20 Hand Clenches"]
       },
       {
         "name": "3 Rounds",
         "instructions": "Rest 2 mins between rounds. The goal is to reach near-failure on the hang.",
-        "movements": [
-          "Max Hang from Pull-up Bar",
-          "40m Farmers Walk (Heavy)"
-        ]
+        "movements": ["Max Hang from Pull-up Bar", "40m Farmers Walk (Heavy)"]
       }
     ],
-    "equipment": [
-      "pull-up bar"
-    ]
+    "equipment": ["pull-up bar"]
   },
   {
     "id": "f_20",
@@ -728,12 +598,7 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 40,
-    "tags": [
-      "Hyrox",
-      "Row",
-      "Benchmark",
-      "Full Body"
-    ],
+    "tags": ["Hyrox", "Row", "Benchmark", "Full Body"],
     "isPremium": false,
     "blocks": [
       {
@@ -769,9 +634,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower"
-    ]
+    "equipment": ["rower"]
   },
   {
     "id": "f_21",
@@ -780,13 +643,7 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 50,
-    "tags": [
-      "Chest",
-      "Triceps",
-      "Gym",
-      "Women’s Picks",
-      "Get Big"
-    ],
+    "tags": ["Chest", "Triceps", "Gym"],
     "isPremium": false,
     "blocks": [
       {
@@ -847,12 +704,7 @@
         ]
       }
     ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "static machines",
-      "bands"
-    ]
+    "equipment": ["dumbbell", "barbell", "static machines", "bands"]
   },
   {
     "id": "f_22",
@@ -861,13 +713,7 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 50,
-    "tags": [
-      "Back",
-      "Biceps",
-      "Gym",
-      "Women’s Picks",
-      "Get Big"
-    ],
+    "tags": ["Back", "Biceps", "Gym"],
     "isPremium": false,
     "blocks": [
       {
@@ -917,13 +763,7 @@
         ]
       }
     ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "static machines",
-      "rower",
-      "bands"
-    ]
+    "equipment": ["dumbbell", "barbell", "static machines", "rower", "bands"]
   },
   {
     "id": "f_23",
@@ -932,13 +772,7 @@
     "category": "Strength",
     "difficulty": "Intermediate",
     "estimatedTime": 55,
-    "tags": [
-      "Legs",
-      "Squat",
-      "Gym",
-      "Legs & Glutes",
-      "Women’s Picks"
-    ],
+    "tags": ["Legs", "Squat", "Gym"],
     "isPremium": false,
     "blocks": [
       {
@@ -998,12 +832,7 @@
         ]
       }
     ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "static machines",
-      "bike"
-    ]
+    "equipment": ["dumbbell", "barbell", "static machines", "bike"]
   },
   {
     "id": "f_24",
@@ -1012,13 +841,7 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 45,
-    "tags": [
-      "Benchmark",
-      "EMOM",
-      "Row",
-      "SkiErg",
-      "Assault Bike"
-    ],
+    "tags": ["Benchmark", "EMOM", "Row", "SkiErg", "Assault Bike"],
     "isPremium": true,
     "blocks": [
       {
@@ -1038,11 +861,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "bike",
-      "ski erg"
-    ]
+    "equipment": ["rower", "bike", "ski erg"]
   },
   {
     "id": "f_25",
@@ -1051,12 +870,7 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "Boxing",
-      "Boxing HIIT",
-      "No Equipment",
-      "Women’s Picks"
-    ],
+    "tags": ["Boxing", "Boxing HIIT", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -1096,12 +910,7 @@
     "category": "Conditioning",
     "difficulty": "Intermediate",
     "estimatedTime": 25,
-    "tags": [
-      "Boxing",
-      "Boxing HIIT",
-      "No Equipment",
-      "Women’s Picks"
-    ],
+    "tags": ["Boxing", "Boxing HIIT", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -1141,11 +950,7 @@
     "category": "WOD",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": [
-      "Boxing",
-      "Boxing HIIT",
-      "No Equipment"
-    ],
+    "tags": ["Boxing", "Boxing HIIT", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -1174,12 +979,7 @@
     "category": "Conditioning",
     "difficulty": "Intermediate",
     "estimatedTime": 30,
-    "tags": [
-      "Boxing",
-      "Boxing HIIT",
-      "No Equipment",
-      "Women’s Picks"
-    ],
+    "tags": ["Boxing", "Boxing HIIT", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -1193,17 +993,12 @@
       {
         "name": "E2MOM 16",
         "instructions": "Every 2 mins for 16 mins: 75s work, then rest the remainder. Keep it smooth.",
-        "movements": [
-          "75s shadowboxing (continuous punches, light feet)"
-        ]
+        "movements": ["75s shadowboxing (continuous punches, light feet)"]
       },
       {
         "name": "Core Finish",
         "instructions": "Rest 30s between sets.",
-        "movements": [
-          "3 x 30–45s plank",
-          "3 x 20–30s side plank each side"
-        ]
+        "movements": ["3 x 30–45s plank", "3 x 20–30s side plank each side"]
       }
     ],
     "equipment": []
@@ -1215,20 +1010,12 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 15,
-    "tags": [
-      "Boxing",
-      "Boxing HIIT",
-      "No Equipment",
-      "Women’s Picks"
-    ],
+    "tags": ["Boxing", "Boxing HIIT", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "60s easy shadowboxing",
-          "10 bodyweight squats"
-        ]
+        "movements": ["60s easy shadowboxing", "10 bodyweight squats"]
       },
       {
         "name": "10-Min Sweat",
@@ -1250,12 +1037,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 30,
-    "tags": [
-      "CrossFit",
-      "AMRAP",
-      "Benchmark",
-      "Bodyweight"
-    ],
+    "tags": ["CrossFit", "AMRAP", "Benchmark", "Bodyweight"],
     "isPremium": false,
     "blocks": [
       {
@@ -1268,11 +1050,7 @@
       {
         "name": "20 Min AMRAP",
         "instructions": "As many rounds as possible in 20 mins.",
-        "movements": [
-          "5 Pull-ups",
-          "10 Push-ups",
-          "15 Air Squats"
-        ]
+        "movements": ["5 Pull-ups", "10 Push-ups", "15 Air Squats"]
       }
     ],
     "equipment": []
@@ -1284,13 +1062,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 15,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Thrusters",
-      "Pull-ups"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Thrusters", "Pull-ups"],
     "isPremium": false,
     "blocks": [
       {
@@ -1304,16 +1076,10 @@
       {
         "name": "21-15-9 For Time",
         "instructions": "43/30kg suggested. Scale load to keep the thrusters unbroken or 2 sets max.",
-        "movements": [
-          "Thrusters",
-          "Pull-ups"
-        ]
+        "movements": ["Thrusters", "Pull-ups"]
       }
     ],
-    "equipment": [
-      "barbell",
-      "rower"
-    ]
+    "equipment": ["barbell", "rower"]
   },
   {
     "id": "f_32",
@@ -1322,13 +1088,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Run",
-      "KB"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Run", "KB"],
     "isPremium": false,
     "blocks": [
       {
@@ -1341,16 +1101,10 @@
       {
         "name": "3 Rounds For Time",
         "instructions": "Scale the swing weight so every rep is powerful and unbroken.",
-        "movements": [
-          "400m Run",
-          "21 KB Swings",
-          "12 Pull-ups"
-        ]
+        "movements": ["400m Run", "21 KB Swings", "12 Pull-ups"]
       }
     ],
-    "equipment": [
-      "kettlebell"
-    ]
+    "equipment": ["kettlebell"]
   },
   {
     "id": "f_33",
@@ -1359,13 +1113,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 20,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Core",
-      "Rope"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Core", "Rope"],
     "isPremium": false,
     "blocks": [
       {
@@ -1378,15 +1126,10 @@
       {
         "name": "For Time",
         "instructions": "50-40-30-20-10. Double-unders and sit-ups.",
-        "movements": [
-          "Double-Unders",
-          "Sit-ups"
-        ]
+        "movements": ["Double-Unders", "Sit-ups"]
       }
     ],
-    "equipment": [
-      "skipping rope"
-    ]
+    "equipment": ["skipping rope"]
   },
   {
     "id": "f_34",
@@ -1395,13 +1138,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 15,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Clean and Jerk",
-      "Barbell"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Clean and Jerk", "Barbell"],
     "isPremium": false,
     "blocks": [
       {
@@ -1414,15 +1151,10 @@
       {
         "name": "For Time",
         "instructions": "30 clean & jerks (60/40kg suggested). Scale so you can cycle fast singles or small sets.",
-        "movements": [
-          "30 Clean & Jerks"
-        ]
+        "movements": ["30 Clean & Jerks"]
       }
     ],
-    "equipment": [
-      "barbell",
-      "rower"
-    ]
+    "equipment": ["barbell", "rower"]
   },
   {
     "id": "f_35",
@@ -1431,32 +1163,20 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Wall Balls"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Wall Balls"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "800m Easy Jog",
-          "3 x 10 Wall balls (light, easy)"
-        ]
+        "movements": ["800m Easy Jog", "3 x 10 Wall balls (light, easy)"]
       },
       {
         "name": "For Time",
         "instructions": "150 wall balls. Target: consistent set size and short rests.",
-        "movements": [
-          "150 Wall Balls"
-        ]
+        "movements": ["150 Wall Balls"]
       }
     ],
-    "equipment": [
-      "medicine ball"
-    ]
+    "equipment": ["medicine ball"]
   },
   {
     "id": "f_36",
@@ -1465,13 +1185,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 20,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Row",
-      "Thrusters"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Row", "Thrusters"],
     "isPremium": false,
     "blocks": [
       {
@@ -1485,17 +1199,10 @@
       {
         "name": "For Time",
         "instructions": "1000m row, then 50 thrusters (20/15kg), then 30 pull-ups.",
-        "movements": [
-          "1000m Row",
-          "50 Thrusters",
-          "30 Pull-ups"
-        ]
+        "movements": ["1000m Row", "50 Thrusters", "30 Pull-ups"]
       }
     ],
-    "equipment": [
-      "barbell",
-      "rower"
-    ]
+    "equipment": ["barbell", "rower"]
   },
   {
     "id": "f_37",
@@ -1504,34 +1211,20 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Run",
-      "Overhead Squat"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Run", "Overhead Squat"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "800m easy run",
-          "2 x 8 overhead squats (PVC/empty bar)"
-        ]
+        "movements": ["800m easy run", "2 x 8 overhead squats (PVC/empty bar)"]
       },
       {
         "name": "5 Rounds For Time",
         "instructions": "15 OHS at 43/30kg suggested. Scale to stay unbroken or 2 sets.",
-        "movements": [
-          "400m Run",
-          "15 Overhead Squats"
-        ]
+        "movements": ["400m Run", "15 Overhead Squats"]
       }
     ],
-    "equipment": [
-      "barbell"
-    ]
+    "equipment": ["barbell"]
   },
   {
     "id": "f_38",
@@ -1540,13 +1233,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 20,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Deadlift",
-      "HSPU"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Deadlift", "HSPU"],
     "isPremium": false,
     "blocks": [
       {
@@ -1558,10 +1245,7 @@
       {
         "name": "21-15-9 For Time",
         "instructions": "Deadlift 102/70kg suggested. Scale both movements to keep form.",
-        "movements": [
-          "Deadlifts",
-          "Handstand Push-ups"
-        ]
+        "movements": ["Deadlifts", "Handstand Push-ups"]
       }
     ],
     "equipment": []
@@ -1573,13 +1257,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 15,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Snatch",
-      "Barbell"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Snatch", "Barbell"],
     "isPremium": false,
     "blocks": [
       {
@@ -1592,14 +1270,10 @@
       {
         "name": "For Time",
         "instructions": "30 snatches (61/43kg suggested). Scale to fast singles.",
-        "movements": [
-          "30 Snatches"
-        ]
+        "movements": ["30 Snatches"]
       }
     ],
-    "equipment": [
-      "barbell"
-    ]
+    "equipment": ["barbell"]
   },
   {
     "id": "f_40",
@@ -1608,13 +1282,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 20,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Clean",
-      "Ring Dips"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Clean", "Ring Dips"],
     "isPremium": false,
     "blocks": [
       {
@@ -1628,17 +1296,10 @@
       {
         "name": "21-15-9 For Time",
         "instructions": "Cleans at 61/43kg suggested. Scale dips to maintain quality reps.",
-        "movements": [
-          "Squat Cleans",
-          "Ring Dips"
-        ]
+        "movements": ["Squat Cleans", "Ring Dips"]
       }
     ],
-    "equipment": [
-      "barbell",
-      "rower",
-      "box"
-    ]
+    "equipment": ["barbell", "rower", "box"]
   },
   {
     "id": "f_41",
@@ -1647,13 +1308,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 40,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Chipper",
-      "Bodyweight"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Chipper", "Bodyweight"],
     "isPremium": false,
     "blocks": [
       {
@@ -1683,13 +1338,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 35,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Intervals",
-      "Bodyweight"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Intervals", "Bodyweight"],
     "isPremium": false,
     "blocks": [
       {
@@ -1719,12 +1368,7 @@
     "category": "WOD",
     "difficulty": "Intermediate",
     "estimatedTime": 40,
-    "tags": [
-      "CrossFit",
-      "EMOM",
-      "Benchmark",
-      "Bodyweight"
-    ],
+    "tags": ["CrossFit", "EMOM", "Benchmark", "Bodyweight"],
     "isPremium": false,
     "blocks": [
       {
@@ -1737,11 +1381,7 @@
       {
         "name": "EMOM 30",
         "instructions": "Every minute for 30 mins: 5 pull-ups, 10 push-ups, 15 squats.",
-        "movements": [
-          "5 Pull-ups",
-          "10 Push-ups",
-          "15 Air Squats"
-        ]
+        "movements": ["5 Pull-ups", "10 Push-ups", "15 Air Squats"]
       }
     ],
     "equipment": []
@@ -1753,12 +1393,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "CrossFit",
-      "Benchmark",
-      "Intervals",
-      "For Score"
-    ],
+    "tags": ["CrossFit", "Benchmark", "Intervals", "For Score"],
     "isPremium": false,
     "blocks": [
       {
@@ -1780,11 +1415,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "box",
-      "medicine ball"
-    ]
+    "equipment": ["rower", "box", "medicine ball"]
   },
   {
     "id": "f_45",
@@ -1793,13 +1424,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "CrossFit",
-      "Benchmark",
-      "AMRAP",
-      "Intervals",
-      "Barbell"
-    ],
+    "tags": ["CrossFit", "Benchmark", "AMRAP", "Intervals", "Barbell"],
     "isPremium": false,
     "blocks": [
       {
@@ -1812,17 +1437,10 @@
       {
         "name": "5 Cycles",
         "instructions": "Each cycle: 3 mins AMRAP, then rest 1 min. Score = total rounds across all cycles.",
-        "movements": [
-          "3 Power Cleans",
-          "6 Push-ups",
-          "9 Air Squats"
-        ]
+        "movements": ["3 Power Cleans", "6 Push-ups", "9 Air Squats"]
       }
     ],
-    "equipment": [
-      "barbell",
-      "rower"
-    ]
+    "equipment": ["barbell", "rower"]
   },
   {
     "id": "f_46",
@@ -1831,13 +1449,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Barbell",
-      "Chipper"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Barbell", "Chipper"],
     "isPremium": false,
     "blocks": [
       {
@@ -1850,16 +1462,10 @@
       {
         "name": "5 Rounds For Time",
         "instructions": "12 deadlifts, 9 hang power cleans, 6 push jerks (70/47.5kg suggested).",
-        "movements": [
-          "Deadlifts",
-          "Hang Power Cleans",
-          "Push Jerks"
-        ]
+        "movements": ["Deadlifts", "Hang Power Cleans", "Push Jerks"]
       }
     ],
-    "equipment": [
-      "barbell"
-    ]
+    "equipment": ["barbell"]
   },
   {
     "id": "f_47",
@@ -1868,13 +1474,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 45,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Run",
-      "Wall Balls"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Run", "Wall Balls"],
     "isPremium": false,
     "blocks": [
       {
@@ -1887,17 +1487,10 @@
       {
         "name": "5 Rounds For Time",
         "instructions": "400m run, 30 box jumps, 30 wall balls.",
-        "movements": [
-          "400m Run",
-          "30 Box Jumps",
-          "30 Wall Balls"
-        ]
+        "movements": ["400m Run", "30 Box Jumps", "30 Wall Balls"]
       }
     ],
-    "equipment": [
-      "box",
-      "medicine ball"
-    ]
+    "equipment": ["box", "medicine ball"]
   },
   {
     "id": "f_48",
@@ -1906,13 +1499,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 35,
-    "tags": [
-      "CrossFit",
-      "Benchmark",
-      "For Score",
-      "Bench Press",
-      "Pull-ups"
-    ],
+    "tags": ["CrossFit", "Benchmark", "For Score", "Bench Press", "Pull-ups"],
     "isPremium": false,
     "blocks": [
       {
@@ -1926,16 +1513,10 @@
       {
         "name": "5 Rounds (Not For Time)",
         "instructions": "Bench press bodyweight (or challenging load) max reps, then pull-ups max reps. Rest as needed.",
-        "movements": [
-          "Bench Press (max reps)",
-          "Pull-ups (max reps)"
-        ]
+        "movements": ["Bench Press (max reps)", "Pull-ups (max reps)"]
       }
     ],
-    "equipment": [
-      "barbell",
-      "rower"
-    ]
+    "equipment": ["barbell", "rower"]
   },
   {
     "id": "f_49",
@@ -1944,13 +1525,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "CrossFit",
-      "For Time",
-      "Benchmark",
-      "Thrusters",
-      "Burpees"
-    ],
+    "tags": ["CrossFit", "For Time", "Benchmark", "Thrusters", "Burpees"],
     "isPremium": false,
     "blocks": [
       {
@@ -1964,16 +1539,10 @@
       {
         "name": "For Time",
         "instructions": "100 thrusters. At the start of every minute: 5 burpees. Then continue thrusters with remaining time.",
-        "movements": [
-          "100 Thrusters",
-          "Burpees (5 every minute)"
-        ]
+        "movements": ["100 Thrusters", "Burpees (5 every minute)"]
       }
     ],
-    "equipment": [
-      "barbell",
-      "rower"
-    ]
+    "equipment": ["barbell", "rower"]
   },
   {
     "id": "f_50",
@@ -1982,13 +1551,7 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 35,
-    "tags": [
-      "Hyrox",
-      "Engine",
-      "Run",
-      "Row",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Engine", "Run", "Row", "Partner"],
     "isPremium": false,
     "blocks": [
       {
@@ -2002,15 +1565,10 @@
       {
         "name": "4 Rounds",
         "instructions": "Partner option: alternate full rounds. Partner A completes the full round while Partner B rests. Swap each round. Record each person’s split times if you want.",
-        "movements": [
-          "800m Run",
-          "500m Row"
-        ]
+        "movements": ["800m Run", "500m Row"]
       }
     ],
-    "equipment": [
-      "rower"
-    ]
+    "equipment": ["rower"]
   },
   {
     "id": "f_51",
@@ -2019,11 +1577,7 @@
     "category": "Hyrox",
     "difficulty": "Beginner",
     "estimatedTime": 35,
-    "tags": [
-      "Hyrox",
-      "Sled",
-      "Technique"
-    ],
+    "tags": ["Hyrox", "Sled", "Technique"],
     "isPremium": false,
     "blocks": [
       {
@@ -2044,10 +1598,7 @@
         ]
       }
     ],
-    "equipment": [
-      "medicine ball",
-      "sled"
-    ]
+    "equipment": ["medicine ball", "sled"]
   },
   {
     "id": "f_52",
@@ -2056,12 +1607,7 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 20,
-    "tags": [
-      "Hyrox",
-      "Wall Balls",
-      "Benchmark",
-      "For Score"
-    ],
+    "tags": ["Hyrox", "Wall Balls", "Benchmark", "For Score"],
     "isPremium": false,
     "blocks": [
       {
@@ -2074,14 +1620,10 @@
       {
         "name": "10 Min For Total Reps",
         "instructions": "Score = total wall balls. Keep sets small and steady.",
-        "movements": [
-          "Wall Balls"
-        ]
+        "movements": ["Wall Balls"]
       }
     ],
-    "equipment": [
-      "medicine ball"
-    ]
+    "equipment": ["medicine ball"]
   },
   {
     "id": "f_53",
@@ -2145,13 +1687,7 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 35,
-    "tags": [
-      "Hyrox",
-      "Carry",
-      "Grip",
-      "Run",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Carry", "Grip", "Run", "Partner"],
     "isPremium": false,
     "blocks": [
       {
@@ -2165,10 +1701,7 @@
       {
         "name": "5 Rounds",
         "instructions": "Partner option: split the carry. Run together, then alternate 25m/25m on the carry. Switch quickly - no standing around with the implement.",
-        "movements": [
-          "600m Run",
-          "100m Farmers Carry"
-        ]
+        "movements": ["600m Run", "100m Farmers Carry"]
       }
     ],
     "equipment": []
@@ -2180,13 +1713,7 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 40,
-    "tags": [
-      "Hyrox",
-      "Lunges",
-      "Sandbag",
-      "Run",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Lunges", "Sandbag", "Run", "Partner"],
     "isPremium": false,
     "blocks": [
       {
@@ -2200,10 +1727,7 @@
       {
         "name": "4 Sets",
         "instructions": "Partner option: split the lunges. Run together, then alternate 25m/25m lunges (or 10 steps/10 steps). Record load and keep switchovers fast.",
-        "movements": [
-          "800m Run",
-          "200m Sandbag Lunges"
-        ]
+        "movements": ["800m Run", "200m Sandbag Lunges"]
       }
     ],
     "equipment": []
@@ -2215,12 +1739,7 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 35,
-    "tags": [
-      "Hyrox",
-      "Row",
-      "Benchmark",
-      "Full Body"
-    ],
+    "tags": ["Hyrox", "Row", "Benchmark", "Full Body"],
     "isPremium": false,
     "blocks": [
       {
@@ -2236,18 +1755,12 @@
       {
         "name": "The Burnout",
         "instructions": "Complete all three movements as fast as possible with no rest between them. This is not for time but it should hurt. Move straight into the row when done.",
-        "movements": [
-          "30 Burpee Broad Jumps",
-          "40 Air Squats",
-          "50 Push-ups"
-        ]
+        "movements": ["30 Burpee Broad Jumps", "40 Air Squats", "50 Push-ups"]
       },
       {
         "name": "2000m Row: For Time",
         "instructions": "Start the rower immediately after finishing the burnout. Record your time. Even splits for the first 1500m then empty the tank for the final 500m. This is your benchmark, chase it every time.",
-        "movements": [
-          "2000m Row (record time)"
-        ]
+        "movements": ["2000m Row (record time)"]
       },
       {
         "name": "Cooldown",
@@ -2259,9 +1772,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower"
-    ]
+    "equipment": ["rower"]
   },
   {
     "id": "f_57",
@@ -2270,12 +1781,7 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 35,
-    "tags": [
-      "Hyrox",
-      "Engine",
-      "Row",
-      "Run"
-    ],
+    "tags": ["Hyrox", "Engine", "Row", "Run"],
     "isPremium": false,
     "blocks": [
       {
@@ -2311,10 +1817,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "ski erg"
-    ]
+    "equipment": ["rower", "ski erg"]
   },
   {
     "id": "f_58",
@@ -2323,13 +1826,7 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 35,
-    "tags": [
-      "Hyrox",
-      "Wall Balls",
-      "Run",
-      "Intervals",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Wall Balls", "Run", "Intervals", "Partner"],
     "isPremium": false,
     "blocks": [
       {
@@ -2343,15 +1840,10 @@
       {
         "name": "6 Rounds",
         "instructions": "Partner option: alternate wall balls. Run together, then Partner A does 10 wall balls while Partner B rests, then switch for the next 10. Keep the run pace honest.",
-        "movements": [
-          "500m Run",
-          "20 Wall Balls"
-        ]
+        "movements": ["500m Run", "20 Wall Balls"]
       }
     ],
-    "equipment": [
-      "medicine ball"
-    ]
+    "equipment": ["medicine ball"]
   },
   {
     "id": "f_59",
@@ -2360,12 +1852,7 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 30,
-    "tags": [
-      "Hyrox",
-      "Stations",
-      "Circuit",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Stations", "Circuit", "Partner"],
     "isPremium": false,
     "blocks": [
       {
@@ -2386,10 +1873,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "medicine ball"
-    ]
+    "equipment": ["rower", "medicine ball"]
   },
   {
     "id": "f_60",
@@ -2398,12 +1882,7 @@
     "category": "Hyrox",
     "difficulty": "Beginner",
     "estimatedTime": 40,
-    "tags": [
-      "Hyrox",
-      "Aerobic",
-      "Zone 2",
-      "Engine"
-    ],
+    "tags": ["Hyrox", "Aerobic", "Zone 2", "Engine"],
     "isPremium": true,
     "blocks": [
       {
@@ -2433,11 +1912,7 @@
         ]
       }
     ],
-    "equipment": [
-      "static machines",
-      "rower",
-      "bike"
-    ]
+    "equipment": ["static machines", "rower", "bike"]
   },
   {
     "id": "f_61",
@@ -2446,11 +1921,7 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 35,
-    "tags": [
-      "Hyrox",
-      "Sled",
-      "Intervals"
-    ],
+    "tags": ["Hyrox", "Sled", "Intervals"],
     "isPremium": false,
     "blocks": [
       {
@@ -2470,10 +1941,7 @@
         ]
       }
     ],
-    "equipment": [
-      "medicine ball",
-      "sled"
-    ]
+    "equipment": ["medicine ball", "sled"]
   },
   {
     "id": "f_62",
@@ -2482,11 +1950,7 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 35,
-    "tags": [
-      "Hyrox",
-      "Sled",
-      "Intervals"
-    ],
+    "tags": ["Hyrox", "Sled", "Intervals"],
     "isPremium": false,
     "blocks": [
       {
@@ -2500,15 +1964,10 @@
       {
         "name": "Work",
         "instructions": "Rest 90s between efforts. Record loads.",
-        "movements": [
-          "8 x 20m Sled Pull (moderate)",
-          "4 x 200m Run (steady)"
-        ]
+        "movements": ["8 x 20m Sled Pull (moderate)", "4 x 200m Run (steady)"]
       }
     ],
-    "equipment": [
-      "sled"
-    ]
+    "equipment": ["sled"]
   },
   {
     "id": "f_63",
@@ -2517,35 +1976,20 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 30,
-    "tags": [
-      "Hyrox",
-      "Transitions",
-      "Run",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Transitions", "Run", "Partner"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "800m easy jog",
-          "10 burpees",
-          "10 wall balls"
-        ]
+        "movements": ["800m easy jog", "10 burpees", "10 wall balls"]
       },
       {
         "name": "6 Rounds",
         "instructions": "Partner option: you-go-I-go on stations. Run together. At the station, Partner A completes burpees while Partner B rests, then switch for wall balls (or alternate round-by-round).",
-        "movements": [
-          "600m Run",
-          "10 Burpees",
-          "15 Wall Balls"
-        ]
+        "movements": ["600m Run", "10 Burpees", "15 Wall Balls"]
       }
     ],
-    "equipment": [
-      "medicine ball"
-    ]
+    "equipment": ["medicine ball"]
   },
   {
     "id": "f_64",
@@ -2554,13 +1998,7 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 20,
-    "tags": [
-      "Hyrox",
-      "AMRAP",
-      "For Score",
-      "Engine",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "AMRAP", "For Score", "Engine", "Partner"],
     "isPremium": false,
     "blocks": [
       {
@@ -2573,18 +2011,10 @@
       {
         "name": "12 Min AMRAP",
         "instructions": "Partner option: alternate full rounds. Partner A completes one full round while Partner B rests. Swap each round. Score = total rounds + reps as a team.",
-        "movements": [
-          "400m Run",
-          "250m Row",
-          "15 Wall Balls",
-          "10 Burpees"
-        ]
+        "movements": ["400m Run", "250m Row", "15 Wall Balls", "10 Burpees"]
       }
     ],
-    "equipment": [
-      "rower",
-      "medicine ball"
-    ]
+    "equipment": ["rower", "medicine ball"]
   },
   {
     "id": "f_65",
@@ -2593,20 +2023,12 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 35,
-    "tags": [
-      "Hyrox",
-      "Benchmark",
-      "Test"
-    ],
+    "tags": ["Hyrox", "Benchmark", "Test"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "800m run",
-          "10 burpees",
-          "10 air squats"
-        ]
+        "movements": ["800m run", "10 burpees", "10 air squats"]
       },
       {
         "name": "For Time",
@@ -2619,10 +2041,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "medicine ball"
-    ]
+    "equipment": ["rower", "medicine ball"]
   },
   {
     "id": "f_66",
@@ -2631,29 +2050,17 @@
     "category": "Hyrox",
     "difficulty": "Intermediate",
     "estimatedTime": 35,
-    "tags": [
-      "Hyrox",
-      "Run",
-      "Pacing",
-      "Engine"
-    ],
+    "tags": ["Hyrox", "Run", "Pacing", "Engine"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "10 mins easy jog + drills"
-        ]
+        "movements": ["10 mins easy jog + drills"]
       },
       {
         "name": "Ladder",
         "instructions": "Rest 2 mins between reps. Aim for negative splits.",
-        "movements": [
-          "1000m Run",
-          "800m Run",
-          "600m Run",
-          "400m Run"
-        ]
+        "movements": ["1000m Run", "800m Run", "600m Run", "400m Run"]
       }
     ],
     "equipment": []
@@ -2665,13 +2072,7 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "Hyrox",
-      "Carry",
-      "Grip",
-      "Benchmark",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Carry", "Grip", "Benchmark", "Partner"],
     "isPremium": false,
     "blocks": [
       {
@@ -2701,32 +2102,20 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": [
-      "Hyrox",
-      "Wall Balls",
-      "Benchmark",
-      "For Time"
-    ],
+    "tags": ["Hyrox", "Wall Balls", "Benchmark", "For Time"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "800m easy jog",
-          "3 x 10 wall balls (easy)"
-        ]
+        "movements": ["800m easy jog", "3 x 10 wall balls (easy)"]
       },
       {
         "name": "For Time",
         "instructions": "150 wall balls. Record finish time.",
-        "movements": [
-          "150 Wall Balls"
-        ]
+        "movements": ["150 Wall Balls"]
       }
     ],
-    "equipment": [
-      "medicine ball"
-    ]
+    "equipment": ["medicine ball"]
   },
   {
     "id": "f_69",
@@ -2735,21 +2124,12 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 45,
-    "tags": [
-      "Hyrox",
-      "Simulation",
-      "Run",
-      "Stations",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Simulation", "Run", "Stations", "Partner"],
     "isPremium": false,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "10 mins easy jog + drills",
-          "10 wall balls, 10 burpees"
-        ]
+        "movements": ["10 mins easy jog + drills", "10 wall balls, 10 burpees"]
       },
       {
         "name": "For Time",
@@ -2766,10 +2146,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "medicine ball"
-    ]
+    "equipment": ["rower", "medicine ball"]
   },
   {
     "id": "p_01",
@@ -2778,18 +2155,12 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": [
-      "Heavy",
-      "Sled",
-      "Elite"
-    ],
+    "tags": ["Heavy", "Sled", "Elite"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "1km Jog, 10 Sled Pushes (Light), 20 Lunges"
-        ]
+        "movements": ["1km Jog, 10 Sled Pushes (Light), 20 Lunges"]
       },
       {
         "name": "5 Rounds",
@@ -2801,9 +2172,7 @@
         ]
       }
     ],
-    "equipment": [
-      "sled"
-    ]
+    "equipment": ["sled"]
   },
   {
     "id": "p_02",
@@ -2812,30 +2181,20 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "Snatch",
-      "Barbell",
-      "Speed"
-    ],
+    "tags": ["Snatch", "Barbell", "Speed"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "Burgener Warmup (Snatches with PVC pipe)"
-        ]
+        "movements": ["Burgener Warmup (Snatches with PVC pipe)"]
       },
       {
         "name": "EMOM 15",
         "instructions": "Use 60-70% of 1RM Snatch. Focus on vertical bar path.",
-        "movements": [
-          "1 Power Snatch + 1 Hang Snatch + 1 OHS"
-        ]
+        "movements": ["1 Power Snatch + 1 Hang Snatch + 1 OHS"]
       }
     ],
-    "equipment": [
-      "barbell"
-    ]
+    "equipment": ["barbell"]
   },
   {
     "id": "p_03",
@@ -2844,33 +2203,20 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 20,
-    "tags": [
-      "CrossFit",
-      "Row",
-      "Barbell",
-      "Sprint"
-    ],
+    "tags": ["CrossFit", "Row", "Barbell", "Sprint"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "500m Row, 15 Thrusters (Empty Bar)"
-        ]
+        "movements": ["500m Row, 15 Thrusters (Empty Bar)"]
       },
       {
         "name": "21-15-9",
         "instructions": "Go unbroken on the thrusters if possible. Sprint the 9 cal row.",
-        "movements": [
-          "Calories Row",
-          "Thrusters (43/30kg)"
-        ]
+        "movements": ["Calories Row", "Thrusters (43/30kg)"]
       }
     ],
-    "equipment": [
-      "barbell",
-      "rower"
-    ]
+    "equipment": ["barbell", "rower"]
   },
   {
     "id": "p_04",
@@ -2879,12 +2225,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 60,
-    "tags": [
-      "Shoulders",
-      "Overhead",
-      "Strength",
-      "Upper Body"
-    ],
+    "tags": ["Shoulders", "Overhead", "Strength", "Upper Body"],
     "isPremium": true,
     "blocks": [
       {
@@ -2937,10 +2278,7 @@
         ]
       }
     ],
-    "equipment": [
-      "dumbbell",
-      "bands"
-    ]
+    "equipment": ["dumbbell", "bands"]
   },
   {
     "id": "p_05",
@@ -2949,11 +2287,7 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "Row",
-      "Endurance",
-      "Benchmark"
-    ],
+    "tags": ["Row", "Endurance", "Benchmark"],
     "isPremium": true,
     "blocks": [
       {
@@ -2986,9 +2320,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower"
-    ]
+    "equipment": ["rower"]
   },
   {
     "id": "p_06",
@@ -2997,12 +2329,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 50,
-    "tags": [
-      "Legs",
-      "Squat",
-      "Legs & Glutes",
-      "Strength"
-    ],
+    "tags": ["Legs", "Squat", "Strength"],
     "isPremium": true,
     "blocks": [
       {
@@ -3060,9 +2387,7 @@
         ]
       }
     ],
-    "equipment": [
-      "barbell"
-    ]
+    "equipment": ["barbell"]
   },
   {
     "id": "p_07",
@@ -3071,19 +2396,12 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 60,
-    "tags": [
-      "CrossFit",
-      "Hero WOD",
-      "Long",
-      "No Equipment"
-    ],
+    "tags": ["CrossFit", "Hero WOD", "Long", "No Equipment"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "800m Jog, 20 Air Squats, 10 Pushups"
-        ]
+        "movements": ["800m Jog, 20 Air Squats, 10 Pushups"]
       },
       {
         "name": "For Time (20lb Vest)",
@@ -3106,12 +2424,7 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 50,
-    "tags": [
-      "Running",
-      "Sandbag",
-      "Full Body",
-      "Endurance"
-    ],
+    "tags": ["Running", "Sandbag", "Full Body", "Endurance"],
     "isPremium": true,
     "blocks": [
       {
@@ -3127,57 +2440,37 @@
       {
         "name": "Leg 1",
         "instructions": "Pick up the bag and move. Switch between shoulder carry and bear hug as needed. Do not put the bag down until you hit 400m.",
-        "movements": [
-          "400m Sandbag Carry (20/30kg)"
-        ]
+        "movements": ["400m Sandbag Carry (20/30kg)"]
       },
       {
         "name": "Penalty Block 1",
         "instructions": "Complete all three movements before picking the bag back up. No rest between movements.",
-        "movements": [
-          "15 Burpees",
-          "20 Air Squats",
-          "10 Sandbag Cleans"
-        ]
+        "movements": ["15 Burpees", "20 Air Squats", "10 Sandbag Cleans"]
       },
       {
         "name": "Leg 2",
         "instructions": "Pick the bag back up. Legs are already burning, that is the point.",
-        "movements": [
-          "400m Sandbag Carry (20/30kg)"
-        ]
+        "movements": ["400m Sandbag Carry (20/30kg)"]
       },
       {
         "name": "Penalty Block 2",
         "instructions": "Complete all three movements before picking the bag back up. No rest between movements.",
-        "movements": [
-          "15 Push-ups",
-          "20 Reverse Lunges",
-          "10 Sandbag Squats"
-        ]
+        "movements": ["15 Push-ups", "20 Reverse Lunges", "10 Sandbag Squats"]
       },
       {
         "name": "Leg 3",
         "instructions": "Halfway done. Find a carry position that works and commit to it.",
-        "movements": [
-          "400m Sandbag Carry (20/30kg)"
-        ]
+        "movements": ["400m Sandbag Carry (20/30kg)"]
       },
       {
         "name": "Penalty Block 3",
         "instructions": "Complete all three movements before picking the bag back up. No rest between movements.",
-        "movements": [
-          "15 Burpees",
-          "20 Jump Squats",
-          "10 Sandbag Cleans"
-        ]
+        "movements": ["15 Burpees", "20 Jump Squats", "10 Sandbag Cleans"]
       },
       {
         "name": "Leg 4: The Finish",
         "instructions": "Final 400m. The bag does not touch the floor until you cross the line. Record your total time.",
-        "movements": [
-          "400m Sandbag Carry (20/30kg, record total time)"
-        ]
+        "movements": ["400m Sandbag Carry (20/30kg, record total time)"]
       },
       {
         "name": "Cooldown",
@@ -3199,13 +2492,7 @@
     "category": "Mobility",
     "difficulty": "Advanced",
     "estimatedTime": 35,
-    "tags": [
-      "Legs",
-      "Balance",
-      "No Equipment",
-      "Legs & Glutes",
-      "Skill"
-    ],
+    "tags": ["Legs", "Balance", "No Equipment", "Skill"],
     "isPremium": true,
     "blocks": [
       {
@@ -3272,10 +2559,7 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 35,
-    "tags": [
-      "Skill",
-      "Jump Rope"
-    ],
+    "tags": ["Skill", "Jump Rope"],
     "isPremium": true,
     "blocks": [
       {
@@ -3350,9 +2634,7 @@
         ]
       }
     ],
-    "equipment": [
-      "skipping rope"
-    ]
+    "equipment": ["skipping rope"]
   },
   {
     "id": "p_11",
@@ -3361,30 +2643,20 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 15,
-    "tags": [
-      "CrossFit",
-      "Barbell",
-      "Power"
-    ],
+    "tags": ["CrossFit", "Barbell", "Power"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "Barbell Warmup: 10 Cleans, 10 Push Press"
-        ]
+        "movements": ["Barbell Warmup: 10 Cleans, 10 Push Press"]
       },
       {
         "name": "30 Reps",
         "instructions": "Weight: 61/43kg. Target is sub 5:00 for elite athletes.",
-        "movements": [
-          "Clean and Jerk"
-        ]
+        "movements": ["Clean and Jerk"]
       }
     ],
-    "equipment": [
-      "barbell"
-    ]
+    "equipment": ["barbell"]
   },
   {
     "id": "p_12",
@@ -3393,33 +2665,20 @@
     "category": "Conditioning",
     "difficulty": "Advanced",
     "estimatedTime": 40,
-    "tags": [
-      "Row",
-      "Ski",
-      "Bike"
-    ],
+    "tags": ["Row", "Ski", "Bike"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "2 mins on each erg at low intensity"
-        ]
+        "movements": ["2 mins on each erg at low intensity"]
       },
       {
         "name": "For Time",
         "instructions": "Move quickly between machines. Do not stop moving.",
-        "movements": [
-          "2000m Row",
-          "2000m Ski",
-          "4000m Bike"
-        ]
+        "movements": ["2000m Row", "2000m Ski", "4000m Bike"]
       }
     ],
-    "equipment": [
-      "rower",
-      "bike"
-    ]
+    "equipment": ["rower", "bike"]
   },
   {
     "id": "p_13",
@@ -3428,12 +2687,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 65,
-    "tags": [
-      "Squat",
-      "Pause",
-      "Legs & Glutes",
-      "Strength"
-    ],
+    "tags": ["Squat", "Pause", "Strength"],
     "isPremium": true,
     "blocks": [
       {
@@ -3498,9 +2752,7 @@
         ]
       }
     ],
-    "equipment": [
-      "barbell"
-    ]
+    "equipment": ["barbell"]
   },
   {
     "id": "p_14",
@@ -3509,32 +2761,20 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": [
-      "CrossFit",
-      "Explosive",
-      "Lungs"
-    ],
+    "tags": ["CrossFit", "Explosive", "Lungs"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "20 Step-ups, 10 Burpees"
-        ]
+        "movements": ["20 Step-ups, 10 Burpees"]
       },
       {
         "name": "50-40-30-20-10",
         "instructions": "Descending rep scheme. Rest only as needed to keep moving.",
-        "movements": [
-          "Burpee Box Jumps",
-          "Wall Balls"
-        ]
+        "movements": ["Burpee Box Jumps", "Wall Balls"]
       }
     ],
-    "equipment": [
-      "box",
-      "medicine ball"
-    ]
+    "equipment": ["box", "medicine ball"]
   },
   {
     "id": "p_15",
@@ -3543,12 +2783,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": [
-      "Snatch",
-      "Technique",
-      "Overhead",
-      "Skill"
-    ],
+    "tags": ["Snatch", "Technique", "Overhead", "Skill"],
     "isPremium": true,
     "blocks": [
       {
@@ -3613,11 +2848,7 @@
         ]
       }
     ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "bands"
-    ]
+    "equipment": ["dumbbell", "barbell", "bands"]
   },
   {
     "id": "p_16",
@@ -3626,12 +2857,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": [
-      "Gymnastics",
-      "Skill",
-      "Upper Body",
-      "Rings"
-    ],
+    "tags": ["Gymnastics", "Skill", "Upper Body", "Rings"],
     "isPremium": true,
     "blocks": [
       {
@@ -3700,9 +2926,7 @@
         ]
       }
     ],
-    "equipment": [
-      "bands"
-    ]
+    "equipment": ["bands"]
   },
   {
     "id": "p_17",
@@ -3711,12 +2935,7 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 45,
-    "tags": [
-      "Running",
-      "Aerobic",
-      "Benchmark",
-      "Hyrox"
-    ],
+    "tags": ["Running", "Aerobic", "Benchmark", "Hyrox"],
     "isPremium": true,
     "blocks": [
       {
@@ -3733,11 +2952,7 @@
       {
         "name": "Pre-Run Burnout",
         "instructions": "Complete all movements as fast as possible with no rest between them. Move straight into the 5k the moment you finish. Do not let more than 20 seconds pass between the last rep and the start line.",
-        "movements": [
-          "20 Burpees",
-          "30 Air Squats",
-          "20 Jump Lunges"
-        ]
+        "movements": ["20 Burpees", "30 Air Squats", "20 Jump Lunges"]
       },
       {
         "name": "5k Time Trial",
@@ -3771,10 +2986,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "Dumbbell",
-      "Lungs"
-    ],
+    "tags": ["Dumbbell", "Lungs"],
     "isPremium": true,
     "blocks": [
       {
@@ -3813,11 +3025,7 @@
         ]
       }
     ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "box"
-    ]
+    "equipment": ["dumbbell", "barbell", "box"]
   },
   {
     "id": "p_19",
@@ -3826,12 +3034,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 65,
-    "tags": [
-      "Calisthenics",
-      "Heavy",
-      "Upper Body",
-      "Strength"
-    ],
+    "tags": ["Calisthenics", "Heavy", "Upper Body", "Strength"],
     "isPremium": true,
     "blocks": [
       {
@@ -3896,11 +3099,7 @@
         ]
       }
     ],
-    "equipment": [
-      "dumbbell",
-      "rower",
-      "bands"
-    ]
+    "equipment": ["dumbbell", "rower", "bands"]
   },
   {
     "id": "p_20",
@@ -3909,17 +3108,12 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 40,
-    "tags": [
-      "Hybrid",
-      "Finishers"
-    ],
+    "tags": ["Hybrid", "Finishers"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "500m Jog, 10 Burpees"
-        ]
+        "movements": ["500m Jog, 10 Burpees"]
       },
       {
         "name": "For Time",
@@ -3933,10 +3127,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "medicine ball"
-    ]
+    "equipment": ["rower", "medicine ball"]
   },
   {
     "id": "p_21",
@@ -3945,12 +3136,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 60,
-    "tags": [
-      "Chest",
-      "Triceps",
-      "Hypertrophy",
-      "Get Big"
-    ],
+    "tags": ["Chest", "Triceps", "Hypertrophy"],
     "isPremium": true,
     "blocks": [
       {
@@ -4034,13 +3220,7 @@
         ]
       }
     ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "static machines",
-      "ski erg",
-      "bands"
-    ]
+    "equipment": ["dumbbell", "barbell", "static machines", "ski erg", "bands"]
   },
   {
     "id": "p_22",
@@ -4049,12 +3229,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 60,
-    "tags": [
-      "Back",
-      "Lats",
-      "Hypertrophy",
-      "Get Big"
-    ],
+    "tags": ["Back", "Lats", "Hypertrophy"],
     "isPremium": true,
     "blocks": [
       {
@@ -4132,13 +3307,7 @@
         ]
       }
     ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "static machines",
-      "rower",
-      "bands"
-    ]
+    "equipment": ["dumbbell", "barbell", "static machines", "rower", "bands"]
   },
   {
     "id": "p_23",
@@ -4147,13 +3316,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 65,
-    "tags": [
-      "Legs",
-      "Quads",
-      "Hamstrings",
-      "Glutes",
-      "Legs & Glutes"
-    ],
+    "tags": ["Legs", "Quads", "Hamstrings", "Glutes"],
     "isPremium": true,
     "blocks": [
       {
@@ -4236,11 +3399,7 @@
         ]
       }
     ],
-    "equipment": [
-      "barbell",
-      "static machines",
-      "bike"
-    ]
+    "equipment": ["barbell", "static machines", "bike"]
   },
   {
     "id": "p_24",
@@ -4249,12 +3408,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": [
-      "Shoulders",
-      "Delts",
-      "Hypertrophy",
-      "Get Big"
-    ],
+    "tags": ["Shoulders", "Delts", "Hypertrophy"],
     "isPremium": true,
     "blocks": [
       {
@@ -4338,12 +3492,7 @@
         ]
       }
     ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "rower",
-      "bands"
-    ]
+    "equipment": ["dumbbell", "barbell", "rower", "bands"]
   },
   {
     "id": "p_25",
@@ -4352,13 +3501,7 @@
     "category": "Strength",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": [
-      "Arms",
-      "Biceps",
-      "Triceps",
-      "Hypertrophy",
-      "Get Big"
-    ],
+    "tags": ["Arms", "Biceps", "Triceps", "Hypertrophy"],
     "isPremium": true,
     "blocks": [
       {
@@ -4451,10 +3594,7 @@
         ]
       }
     ],
-    "equipment": [
-      "dumbbell",
-      "barbell"
-    ]
+    "equipment": ["dumbbell", "barbell"]
   },
   {
     "id": "p_26",
@@ -4463,13 +3603,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": [
-      "CrossFit",
-      "Benchmark",
-      "For Time",
-      "Run",
-      "KB"
-    ],
+    "tags": ["CrossFit", "Benchmark", "For Time", "Run", "KB"],
     "isPremium": true,
     "blocks": [
       {
@@ -4482,16 +3616,10 @@
       {
         "name": "5 Rounds For Time",
         "instructions": "Keep the run smooth and the swings powerful. Break pull-ups before you fail reps.",
-        "movements": [
-          "800m Run",
-          "30 KB Swings",
-          "30 Pull-ups"
-        ]
+        "movements": ["800m Run", "30 KB Swings", "30 Pull-ups"]
       }
     ],
-    "equipment": [
-      "kettlebell"
-    ]
+    "equipment": ["kettlebell"]
   },
   {
     "id": "p_27",
@@ -4500,12 +3628,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 25,
-    "tags": [
-      "CrossFit",
-      "Benchmark",
-      "For Time",
-      "Heavy"
-    ],
+    "tags": ["CrossFit", "Benchmark", "For Time", "Heavy"],
     "isPremium": true,
     "blocks": [
       {
@@ -4526,9 +3649,7 @@
         ]
       }
     ],
-    "equipment": [
-      "barbell"
-    ]
+    "equipment": ["barbell"]
   },
   {
     "id": "p_28",
@@ -4537,12 +3658,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 30,
-    "tags": [
-      "CrossFit",
-      "Benchmark",
-      "AMRAP",
-      "Gymnastics"
-    ],
+    "tags": ["CrossFit", "Benchmark", "AMRAP", "Gymnastics"],
     "isPremium": true,
     "blocks": [
       {
@@ -4555,16 +3671,10 @@
       {
         "name": "20 Min AMRAP",
         "instructions": "Score = rounds + reps. Stay efficient on transitions.",
-        "movements": [
-          "2 Muscle-ups",
-          "4 Handstand Push-ups",
-          "8 KB Swings"
-        ]
+        "movements": ["2 Muscle-ups", "4 Handstand Push-ups", "8 KB Swings"]
       }
     ],
-    "equipment": [
-      "kettlebell"
-    ]
+    "equipment": ["kettlebell"]
   },
   {
     "id": "p_29",
@@ -4573,13 +3683,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 20,
-    "tags": [
-      "CrossFit",
-      "Benchmark",
-      "For Time",
-      "Snatch",
-      "Barbell"
-    ],
+    "tags": ["CrossFit", "Benchmark", "For Time", "Snatch", "Barbell"],
     "isPremium": true,
     "blocks": [
       {
@@ -4592,14 +3696,10 @@
       {
         "name": "For Time",
         "instructions": "75 power snatches (34/25kg suggested). Scale to safe cycling.",
-        "movements": [
-          "75 Power Snatches"
-        ]
+        "movements": ["75 Power Snatches"]
       }
     ],
-    "equipment": [
-      "barbell"
-    ]
+    "equipment": ["barbell"]
   },
   {
     "id": "p_30",
@@ -4608,12 +3708,7 @@
     "category": "WOD",
     "difficulty": "Advanced",
     "estimatedTime": 20,
-    "tags": [
-      "CrossFit",
-      "Benchmark",
-      "For Time",
-      "Gymnastics"
-    ],
+    "tags": ["CrossFit", "Benchmark", "For Time", "Gymnastics"],
     "isPremium": true,
     "blocks": [
       {
@@ -4627,15 +3722,10 @@
       {
         "name": "9-7-5 For Time",
         "instructions": "Muscle-ups + snatches (heavy). Scale both to keep reps safe.",
-        "movements": [
-          "Muscle-ups",
-          "Snatches"
-        ]
+        "movements": ["Muscle-ups", "Snatches"]
       }
     ],
-    "equipment": [
-      "barbell"
-    ]
+    "equipment": ["barbell"]
   },
   {
     "id": "p_31",
@@ -4644,13 +3734,7 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 85,
-    "tags": [
-      "Hyrox",
-      "Simulation",
-      "Run",
-      "Stations",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Simulation", "Run", "Stations", "Partner"],
     "isPremium": true,
     "blocks": [
       {
@@ -4683,12 +3767,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "ski erg",
-      "medicine ball",
-      "sled"
-    ]
+    "equipment": ["rower", "ski erg", "medicine ball", "sled"]
   },
   {
     "id": "p_32",
@@ -4697,13 +3776,7 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 60,
-    "tags": [
-      "Hyrox",
-      "Sled",
-      "Heavy",
-      "Run",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Sled", "Heavy", "Run", "Partner"],
     "isPremium": true,
     "blocks": [
       {
@@ -4723,9 +3796,7 @@
         ]
       }
     ],
-    "equipment": [
-      "sled"
-    ]
+    "equipment": ["sled"]
   },
   {
     "id": "p_33",
@@ -4734,13 +3805,7 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": [
-      "Hyrox",
-      "Stations",
-      "Intervals",
-      "Elite",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Stations", "Intervals", "Elite", "Partner"],
     "isPremium": true,
     "blocks": [
       {
@@ -4762,10 +3827,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "medicine ball"
-    ]
+    "equipment": ["rower", "medicine ball"]
   },
   {
     "id": "p_34",
@@ -4774,20 +3836,12 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 40,
-    "tags": [
-      "Hyrox",
-      "Benchmark",
-      "Test"
-    ],
+    "tags": ["Hyrox", "Benchmark", "Test"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "800m run",
-          "10 burpees, 10 air squats",
-          "500m easy row"
-        ]
+        "movements": ["800m run", "10 burpees, 10 air squats", "500m easy row"]
       },
       {
         "name": "For Time",
@@ -4801,10 +3855,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "medicine ball"
-    ]
+    "equipment": ["rower", "medicine ball"]
   },
   {
     "id": "p_35",
@@ -4813,37 +3864,20 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 55,
-    "tags": [
-      "Hyrox",
-      "Transitions",
-      "Intervals",
-      "Stations",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Transitions", "Intervals", "Stations", "Partner"],
     "isPremium": true,
     "blocks": [
       {
         "name": "Warmup",
-        "movements": [
-          "10 mins easy jog + drills",
-          "10 wall balls, 10 burpees"
-        ]
+        "movements": ["10 mins easy jog + drills", "10 wall balls, 10 burpees"]
       },
       {
         "name": "8 Rounds",
         "instructions": "Partner format: alternate rounds. Partner A completes one full round while Partner B rests, then swap next round. Keep transitions fast and form clean.",
-        "movements": [
-          "600m Run",
-          "12 Wall Balls",
-          "8 Burpees",
-          "250m Row"
-        ]
+        "movements": ["600m Run", "12 Wall Balls", "8 Burpees", "250m Row"]
       }
     ],
-    "equipment": [
-      "rower",
-      "medicine ball"
-    ]
+    "equipment": ["rower", "medicine ball"]
   },
   {
     "id": "p_36",
@@ -4852,11 +3886,7 @@
     "category": "Hyrox",
     "difficulty": "Advanced",
     "estimatedTime": 45,
-    "tags": [
-      "Hyrox",
-      "Chipper",
-      "Partner"
-    ],
+    "tags": ["Hyrox", "Chipper", "Partner"],
     "isPremium": true,
     "blocks": [
       {
@@ -4879,13 +3909,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "ski erg",
-      "box",
-      "medicine ball",
-      "sled"
-    ]
+    "equipment": ["rower", "ski erg", "box", "medicine ball", "sled"]
   },
   {
     "id": "p_37",
@@ -4894,13 +3918,7 @@
     "category": "Pilates",
     "difficulty": "Beginner",
     "estimatedTime": 15,
-    "tags": [
-      "Pilates",
-      "Beginner",
-      "Spine",
-      "Breathwork",
-      "No Equipment"
-    ],
+    "tags": ["Pilates", "Beginner", "Spine", "Breathwork", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -4924,13 +3942,7 @@
     "category": "Pilates",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": [
-      "Pilates",
-      "Beginner",
-      "Core",
-      "Deep Stabilisers",
-      "No Equipment"
-    ],
+    "tags": ["Pilates", "Beginner", "Core", "Deep Stabilisers", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -4949,10 +3961,7 @@
       {
         "name": "Finisher",
         "instructions": "Slow and deliberate. Quality over quantity.",
-        "movements": [
-          "Curl-up Hold (3 x 10s)",
-          "Toe Taps (10 each side)"
-        ]
+        "movements": ["Curl-up Hold (3 x 10s)", "Toe Taps (10 each side)"]
       }
     ],
     "equipment": []
@@ -4964,13 +3973,7 @@
     "category": "Pilates",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": [
-      "Pilates",
-      "Beginner",
-      "Mobility",
-      "Morning",
-      "No Equipment"
-    ],
+    "tags": ["Pilates", "Beginner", "Mobility", "Morning", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -5003,13 +4006,7 @@
     "category": "Pilates",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "Pilates",
-      "Beginner",
-      "Flexibility",
-      "Spine",
-      "No Equipment"
-    ],
+    "tags": ["Pilates", "Beginner", "Flexibility", "Spine", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -5042,13 +4039,7 @@
     "category": "Pilates",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": [
-      "Pilates",
-      "Beginner",
-      "Posture",
-      "Thoracic",
-      "No Equipment"
-    ],
+    "tags": ["Pilates", "Beginner", "Posture", "Thoracic", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -5087,13 +4078,7 @@
     "category": "Pilates",
     "difficulty": "Beginner",
     "estimatedTime": 15,
-    "tags": [
-      "Pilates",
-      "Beginner",
-      "Abs",
-      "Endurance",
-      "No Equipment"
-    ],
+    "tags": ["Pilates", "Beginner", "Abs", "Endurance", "No Equipment"],
     "isPremium": false,
     "blocks": [
       {
@@ -5108,9 +4093,7 @@
       {
         "name": "The Hundred",
         "instructions": "Inhale for 5 beats, exhale for 5 beats. Arms pump 2-3 inches. Hold the position - do not pulse the spine.",
-        "movements": [
-          "The Hundred (100 beats total - 10 breath cycles)"
-        ]
+        "movements": ["The Hundred (100 beats total - 10 breath cycles)"]
       }
     ],
     "equipment": []
@@ -5167,13 +4150,7 @@
     "category": "Pilates",
     "difficulty": "Intermediate",
     "estimatedTime": 30,
-    "tags": [
-      "Pilates",
-      "Intermediate",
-      "Core",
-      "Rotation",
-      "No Equipment"
-    ],
+    "tags": ["Pilates", "Intermediate", "Core", "Rotation", "No Equipment"],
     "isPremium": true,
     "blocks": [
       {
@@ -5214,13 +4191,7 @@
     "category": "Pilates",
     "difficulty": "Intermediate",
     "estimatedTime": 30,
-    "tags": [
-      "Pilates",
-      "Intermediate",
-      "Spine",
-      "Mobility",
-      "No Equipment"
-    ],
+    "tags": ["Pilates", "Intermediate", "Spine", "Mobility", "No Equipment"],
     "isPremium": true,
     "blocks": [
       {
@@ -5396,10 +4367,7 @@
         ]
       }
     ],
-    "equipment": [
-      "rower",
-      "bands"
-    ]
+    "equipment": ["rower", "bands"]
   },
   {
     "id": "p_49",
@@ -5408,13 +4376,7 @@
     "category": "Pilates",
     "difficulty": "Advanced",
     "estimatedTime": 45,
-    "tags": [
-      "Pilates",
-      "Advanced",
-      "Control",
-      "Full Body",
-      "No Equipment"
-    ],
+    "tags": ["Pilates", "Advanced", "Control", "Full Body", "No Equipment"],
     "isPremium": true,
     "blocks": [
       {
@@ -5561,9 +4523,7 @@
         ]
       }
     ],
-    "equipment": [
-      "bands"
-    ]
+    "equipment": ["bands"]
   },
   {
     "id": "p_52",
@@ -5572,13 +4532,7 @@
     "category": "Pilates",
     "difficulty": "Advanced",
     "estimatedTime": 60,
-    "tags": [
-      "Pilates",
-      "Advanced",
-      "Classical",
-      "Full Body",
-      "No Equipment"
-    ],
+    "tags": ["Pilates", "Advanced", "Classical", "Full Body", "No Equipment"],
     "isPremium": true,
     "blocks": [
       {
@@ -5849,12 +4803,7 @@
         ]
       }
     ],
-    "equipment": [
-      "kettlebell",
-      "skipping rope",
-      "box",
-      "medicine ball"
-    ]
+    "equipment": ["kettlebell", "skipping rope", "box", "medicine ball"]
   },
   {
     "id": "rh_11",
@@ -5863,13 +4812,7 @@
     "category": "Rainhill",
     "difficulty": "Multiple Difficulties",
     "estimatedTime": 11,
-    "tags": [
-      "Rainhill",
-      "AMRAP",
-      "Row",
-      "Gymnastics",
-      "Lunges"
-    ],
+    "tags": ["Rainhill", "AMRAP", "Row", "Gymnastics", "Lunges"],
     "isPremium": false,
     "blocks": [
       {
@@ -5878,38 +4821,27 @@
           {
             "name": "00:00 - 02:00 - Row Test",
             "instructions": "Max metres in 2 minutes. Note your distance as Score 1.",
-            "movements": [
-              "Max Metres Row (2 mins)"
-            ]
+            "movements": ["Max Metres Row (2 mins)"]
           },
           {
             "name": "02:00 - 03:00 - Transition",
             "instructions": "1 minute forced rest.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "03:00 - 08:00 - AMRAP",
             "instructions": "As many rounds as possible in 5 minutes. Score = rounds + reps.",
-            "movements": [
-              "10m Handstand Walk",
-              "15 Toes to Bar"
-            ]
+            "movements": ["10m Handstand Walk", "15 Toes to Bar"]
           },
           {
             "name": "08:00 - 09:00 - Transition",
             "instructions": "1 minute forced rest.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "09:00 - 11:00 - Row Test",
             "instructions": "Max metres in 2 minutes. Note your distance as Score 3.",
-            "movements": [
-              "Max Metres Row (2 mins)"
-            ]
+            "movements": ["Max Metres Row (2 mins)"]
           }
         ]
       },
@@ -5919,16 +4851,12 @@
           {
             "name": "00:00 - 02:00 - Row Test",
             "instructions": "Max metres in 2 minutes. Note your distance as Score 1.",
-            "movements": [
-              "Max Metres Row (2 mins)"
-            ]
+            "movements": ["Max Metres Row (2 mins)"]
           },
           {
             "name": "02:00 - 03:00 - Transition",
             "instructions": "1 minute forced rest.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "03:00 - 08:00 - AMRAP",
@@ -5941,16 +4869,12 @@
           {
             "name": "08:00 - 09:00 - Transition",
             "instructions": "1 minute forced rest.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "09:00 - 11:00 - Row Test",
             "instructions": "Max metres in 2 minutes. Note your distance as Score 3.",
-            "movements": [
-              "Max Metres Row (2 mins)"
-            ]
+            "movements": ["Max Metres Row (2 mins)"]
           }
         ]
       },
@@ -5960,16 +4884,12 @@
           {
             "name": "00:00 - 02:00 - Row Test",
             "instructions": "Max metres in 2 minutes. Note your distance as Score 1.",
-            "movements": [
-              "Max Metres Row (2 mins)"
-            ]
+            "movements": ["Max Metres Row (2 mins)"]
           },
           {
             "name": "02:00 - 03:00 - Transition",
             "instructions": "1 minute forced rest.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "03:00 - 08:00 - AMRAP",
@@ -5982,23 +4902,17 @@
           {
             "name": "08:00 - 09:00 - Transition",
             "instructions": "1 minute forced rest.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "09:00 - 11:00 - Row Test",
             "instructions": "Max metres in 2 minutes. Note your distance as Score 3.",
-            "movements": [
-              "Max Metres Row (2 mins)"
-            ]
+            "movements": ["Max Metres Row (2 mins)"]
           }
         ]
       }
     ],
-    "equipment": [
-      "rower"
-    ]
+    "equipment": ["rower"]
   },
   {
     "id": "rh_10",
@@ -6034,9 +4948,7 @@
           {
             "name": "Max Distance Row",
             "instructions": "Row for max metres in the remaining time. Score 1 = chipper finish time. Score 2 = metres rowed.",
-            "movements": [
-              "Max Distance Row (metres)"
-            ]
+            "movements": ["Max Distance Row (metres)"]
           }
         ]
       },
@@ -6055,9 +4967,7 @@
           {
             "name": "Max Distance Row",
             "instructions": "Row for max metres in the remaining time. Score 1 = chipper finish time. Score 2 = metres rowed.",
-            "movements": [
-              "Max Distance Row (metres)"
-            ]
+            "movements": ["Max Distance Row (metres)"]
           }
         ]
       },
@@ -6076,9 +4986,7 @@
           {
             "name": "Max Distance Row",
             "instructions": "Row for max metres in the remaining time. Score 1 = chipper finish time. Score 2 = metres rowed.",
-            "movements": [
-              "Max Distance Row (metres)"
-            ]
+            "movements": ["Max Distance Row (metres)"]
           }
         ]
       },
@@ -6097,17 +5005,12 @@
           {
             "name": "Max Distance Row",
             "instructions": "Row for max metres in the remaining time. Score 1 = chipper finish time. Score 2 = metres rowed.",
-            "movements": [
-              "Max Distance Row (metres)"
-            ]
+            "movements": ["Max Distance Row (metres)"]
           }
         ]
       }
     ],
-    "equipment": [
-      "barbell",
-      "rower"
-    ]
+    "equipment": ["barbell", "rower"]
   },
   {
     "id": "rh_08",
@@ -6157,11 +5060,7 @@
         ]
       }
     ],
-    "equipment": [
-      "kettlebell",
-      "barbell",
-      "box"
-    ]
+    "equipment": ["kettlebell", "barbell", "box"]
   },
   {
     "id": "rainhill_wod_04",
@@ -6170,12 +5069,7 @@
     "category": "Rainhill",
     "difficulty": "Multiple Difficulties",
     "estimatedTime": 9,
-    "tags": [
-      "Rainhill",
-      "Track",
-      "Timecap",
-      "Running"
-    ],
+    "tags": ["Rainhill", "Track", "Timecap", "Running"],
     "isPremium": false,
     "blocks": [
       {
@@ -6230,10 +5124,7 @@
         ]
       }
     ],
-    "equipment": [
-      "kettlebell",
-      "box"
-    ]
+    "equipment": ["kettlebell", "box"]
   },
   {
     "id": "rh_02",
@@ -6319,12 +5210,7 @@
         ]
       }
     ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "skipping rope",
-      "rower"
-    ]
+    "equipment": ["dumbbell", "barbell", "skipping rope", "rower"]
   },
   {
     "id": "rh_09",
@@ -6401,10 +5287,7 @@
         ]
       }
     ],
-    "equipment": [
-      "barbell",
-      "skipping rope"
-    ]
+    "equipment": ["barbell", "skipping rope"]
   },
   {
     "id": "rh_03",
@@ -6460,11 +5343,7 @@
         ]
       }
     ],
-    "equipment": [
-      "kettlebell",
-      "box",
-      "medicine ball"
-    ]
+    "equipment": ["kettlebell", "box", "medicine ball"]
   },
   {
     "id": "rh_04",
@@ -6565,9 +5444,7 @@
         ]
       }
     ],
-    "equipment": [
-      "kettlebell"
-    ]
+    "equipment": ["kettlebell"]
   },
   {
     "id": "rh_05",
@@ -6576,14 +5453,7 @@
     "category": "Rainhill",
     "difficulty": "Multiple Difficulties",
     "estimatedTime": 12,
-    "tags": [
-      "Rainhill",
-      "Chipper",
-      "For Time",
-      "Kettlebell",
-      "Sandbag",
-      "Row"
-    ],
+    "tags": ["Rainhill", "Chipper", "For Time", "Kettlebell", "Sandbag", "Row"],
     "isPremium": false,
     "blocks": [
       {
@@ -6592,16 +5462,12 @@
           {
             "name": "Part 1 - 2 Min Row Test",
             "instructions": "Max metres in 2 minutes. Note your distance as Score 1.",
-            "movements": [
-              "Max Metres Row (2 mins)"
-            ]
+            "movements": ["Max Metres Row (2 mins)"]
           },
           {
             "name": "Transition",
             "instructions": "1 minute forced rest. Set up for the chipper.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "Part 2 - 7 Min Cap Chipper",
@@ -6629,16 +5495,12 @@
           {
             "name": "Transition",
             "instructions": "1 minute forced rest. Get back on the rower.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "Part 3 - 1 Min Row Test",
             "instructions": "Max metres in 1 minute. Note your distance as Score 3.",
-            "movements": [
-              "Max Metres Row (1 min)"
-            ]
+            "movements": ["Max Metres Row (1 min)"]
           }
         ]
       },
@@ -6648,16 +5510,12 @@
           {
             "name": "Part 1 - 2 Min Row Test",
             "instructions": "Max metres in 2 minutes. Note your distance as Score 1.",
-            "movements": [
-              "Max Metres Row (2 mins)"
-            ]
+            "movements": ["Max Metres Row (2 mins)"]
           },
           {
             "name": "Transition",
             "instructions": "1 minute forced rest. Set up for the chipper.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "Part 2 - 7 Min Cap Chipper",
@@ -6685,16 +5543,12 @@
           {
             "name": "Transition",
             "instructions": "1 minute forced rest. Get back on the rower.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "Part 3 - 1 Min Row Test",
             "instructions": "Max metres in 1 minute. Note your distance as Score 3.",
-            "movements": [
-              "Max Metres Row (1 min)"
-            ]
+            "movements": ["Max Metres Row (1 min)"]
           }
         ]
       },
@@ -6704,16 +5558,12 @@
           {
             "name": "Part 1 - 2 Min Row Test",
             "instructions": "Max metres in 2 minutes. Note your distance as Score 1.",
-            "movements": [
-              "Max Metres Row (2 mins)"
-            ]
+            "movements": ["Max Metres Row (2 mins)"]
           },
           {
             "name": "Transition",
             "instructions": "1 minute forced rest. Set up for the chipper.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "Part 2 - 7 Min Cap Chipper",
@@ -6738,25 +5588,17 @@
           {
             "name": "Transition",
             "instructions": "1 minute forced rest. Get back on the rower.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "Part 3 - 1 Min Row Test",
             "instructions": "Max metres in 1 minute. Note your distance as Score 3.",
-            "movements": [
-              "Max Metres Row (1 min)"
-            ]
+            "movements": ["Max Metres Row (1 min)"]
           }
         ]
       }
     ],
-    "equipment": [
-      "kettlebell",
-      "barbell",
-      "rower"
-    ]
+    "equipment": ["kettlebell", "barbell", "rower"]
   },
   {
     "id": "rh_07",
@@ -6791,9 +5633,7 @@
           {
             "name": "06:00 - 07:00 - Transition",
             "instructions": "1 minute forced rest. Deload/Load your bar for Part 2 at 70kg/50kg.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "07:00 - 12:00 - Capped Chipper",
@@ -6821,9 +5661,7 @@
           {
             "name": "06:00 - 07:00 - Transition",
             "instructions": "1 minute forced rest. Load your bar for Part 2 at 60kg/42.5kg.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "07:00 - 12:00 - Capped Chipper",
@@ -6851,9 +5689,7 @@
           {
             "name": "06:00 - 07:00 - Transition",
             "instructions": "1 minute forced rest. Load your bar for Part 2 at 50kg/35kg.",
-            "movements": [
-              "1 min transition"
-            ]
+            "movements": ["1 min transition"]
           },
           {
             "name": "07:00 - 12:00 - Capped Chipper",
@@ -6867,9 +5703,7 @@
         ]
       }
     ],
-    "equipment": [
-      "barbell"
-    ]
+    "equipment": ["barbell"]
   },
   {
     "id": "p_55",
@@ -6878,12 +5712,7 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 10,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "AMRAP"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "AMRAP"],
     "equipment": [],
     "isPremium": true,
     "blocks": [
@@ -6905,15 +5734,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -6934,16 +5756,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 8,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "Tabata"
-    ],
-    "equipment": [
-      "dumbbell",
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "Tabata"],
+    "equipment": ["dumbbell", "medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -6965,18 +5779,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "bands",
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["dumbbell", "barbell", "bands", "medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -6999,16 +5803,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 12,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "EMOM"
-    ],
-    "equipment": [
-      "dumbbell",
-      "barbell"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "EMOM"],
+    "equipment": ["dumbbell", "barbell"],
     "isPremium": true,
     "blocks": [
       {
@@ -7028,16 +5824,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "dumbbell",
-      "box"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["dumbbell", "box"],
     "isPremium": true,
     "blocks": [
       {
@@ -7059,17 +5847,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 15,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "AMRAP"
-    ],
-    "equipment": [
-      "kettlebell",
-      "rower",
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "AMRAP"],
+    "equipment": ["kettlebell", "rower", "medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -7093,15 +5872,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -7122,18 +5894,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 15,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "AMRAP"
-    ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "bands",
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "AMRAP"],
+    "equipment": ["dumbbell", "barbell", "bands", "medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -7156,17 +5918,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 16,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "EMOM"
-    ],
-    "equipment": [
-      "dumbbell",
-      "medicine ball",
-      "pull-up bar"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "EMOM"],
+    "equipment": ["dumbbell", "medicine ball", "pull-up bar"],
     "isPremium": true,
     "blocks": [
       {
@@ -7188,16 +5941,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "dumbbell",
-      "box"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["dumbbell", "box"],
     "isPremium": true,
     "blocks": [
       {
@@ -7221,17 +5966,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "dumbbell",
-      "bands",
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["dumbbell", "bands", "medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -7254,17 +5990,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 15,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["dumbbell", "barbell", "medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -7285,17 +6012,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 8,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "Tabata"
-    ],
-    "equipment": [
-      "dumbbell",
-      "rower",
-      "bands"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "Tabata"],
+    "equipment": ["dumbbell", "rower", "bands"],
     "isPremium": true,
     "blocks": [
       {
@@ -7317,16 +6035,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 18,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "AMRAP"
-    ],
-    "equipment": [
-      "kettlebell",
-      "box"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "AMRAP"],
+    "equipment": ["kettlebell", "box"],
     "isPremium": true,
     "blocks": [
       {
@@ -7349,17 +6059,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["dumbbell", "barbell", "medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -7384,15 +6085,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -7413,18 +6107,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "AMRAP"
-    ],
-    "equipment": [
-      "dumbbell",
-      "rower",
-      "medicine ball",
-      "pull-up bar"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "AMRAP"],
+    "equipment": ["dumbbell", "rower", "medicine ball", "pull-up bar"],
     "isPremium": true,
     "blocks": [
       {
@@ -7447,17 +6131,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "dumbbell",
-      "box",
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["dumbbell", "box", "medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -7483,18 +6158,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 20,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "EMOM"
-    ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "bands",
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "EMOM"],
+    "equipment": ["dumbbell", "barbell", "bands", "medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -7517,18 +6182,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "dumbbell",
-      "rower",
-      "bands",
-      "pull-up bar"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["dumbbell", "rower", "bands", "pull-up bar"],
     "isPremium": true,
     "blocks": [
       {
@@ -7552,17 +6207,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "dumbbell",
-      "box",
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["dumbbell", "box", "medicine ball"],
     "isPremium": true,
     "blocks": [
       {
@@ -7587,18 +6233,8 @@
     "category": "Conditioning",
     "difficulty": "Beginner",
     "estimatedTime": 25,
-    "tags": [
-      "HIIT",
-      "HIIT Shred",
-      "Conditioning",
-      "For Time"
-    ],
-    "equipment": [
-      "dumbbell",
-      "barbell",
-      "rower",
-      "medicine ball"
-    ],
+    "tags": ["HIIT", "HIIT Shred", "Conditioning", "For Time"],
+    "equipment": ["dumbbell", "barbell", "rower", "medicine ball"],
     "isPremium": true,
     "blocks": [
       {
