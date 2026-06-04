@@ -52,6 +52,7 @@ export const WORKOUT_EQUIPMENT_OPTIONS: WorkoutEquipment[] = [
   'pull-up bar',
   'sled',
   'ghd',
+  'sandbag',
 ];
 
 export function getEquipmentFiltersInUse(

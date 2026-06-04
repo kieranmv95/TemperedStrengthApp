@@ -1,6 +1,18 @@
 import { ImageSourcePropType } from 'react-native';
+import type { SingleWorkout, WorkoutCategory } from '@/src/types/workouts';
 
-type Discipline = {
+/** Discipline carousel route key; not a `WorkoutTag` — filters by empty `equipment`. */
+export const NO_EQUIPMENT_DISCIPLINE_TAG = 'No Equipment';
+
+/** Discipline carousel keys mapped to workout category (tags no longer duplicate this). */
+const DISCIPLINE_CATEGORY: Record<string, WorkoutCategory> = {
+  CrossFit: 'WOD',
+  Hyrox: 'Hyrox',
+  Pilates: 'Pilates',
+  Rainhill: 'Rainhill',
+};
+
+export type Discipline = {
   title: string;
   showTitle?: boolean;
   tag: string;
@@ -57,8 +69,29 @@ export const disciplines: Discipline[] = [
   },
   {
     title: 'No Equipment',
-    tag: 'No Equipment',
+    tag: NO_EQUIPMENT_DISCIPLINE_TAG,
     showTitle: true,
     image: require('@/assets/images/disciplines/noequipment.png'),
   },
 ];
+
+export function isNoEquipmentDiscipline(tag: string): boolean {
+  return tag === NO_EQUIPMENT_DISCIPLINE_TAG;
+}
+
+export function workoutMatchesDiscipline(
+  workout: SingleWorkout,
+  disciplineTag: string
+): boolean {
+  if (isNoEquipmentDiscipline(disciplineTag)) {
+    return workout.equipment.length === 0;
+  }
+  const category = DISCIPLINE_CATEGORY[disciplineTag];
+  if (category) {
+    return workout.category === category;
+  }
+  if (disciplineTag === 'Partner') {
+    return workout.tags.includes('Partner');
+  }
+  return false;
+}

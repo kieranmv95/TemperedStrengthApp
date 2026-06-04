@@ -471,7 +471,7 @@ export default function WorkoutsScreen() {
                 </View>
 
                 <CuratedSection
-                  title="All Workouts"
+                  title={hasActiveFilters ? 'Filtered Workouts' : 'All Workouts'}
                   description={`All our workouts, over ${allStandaloneWorkouts.length}+ workouts.`}
                   size='large'
                   style={styles.titleSpace}

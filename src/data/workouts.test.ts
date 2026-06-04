@@ -1,11 +1,10 @@
 import { WORKOUT_EQUIPMENT_OPTIONS } from '@/src/components/workouts/workoutsScreenConstants';
+import { workoutMatchesDiscipline } from '@/src/data/disciplines';
 import { STANDALONE_LOG_SCHEMA_BY_ID } from '@/src/data/standaloneLogSchemas';
 import { workouts as workoutsData } from '@/src/data/workout_data';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { isWorkoutTag } from '@/src/types/workouts';
-import type { WorkoutLogSchema, WorkoutTag } from '@/src/types/workouts';
-
-const NO_EQUIPMENT_TAG = 'No Equipment' satisfies WorkoutTag;
+import type { WorkoutLogSchema } from '@/src/types/workouts';
 
 function assertWorkoutLogSchema(schema: WorkoutLogSchema, label: string): void {
   switch (schema.kind) {
@@ -69,11 +68,58 @@ describe('bundled standalone workouts', () => {
       for (const eq of w.equipment) {
         expect(allowed.has(eq)).toBe(true);
       }
-      const hasNoEquipmentTag = w.tags.includes(NO_EQUIPMENT_TAG);
-      if (hasNoEquipmentTag) {
-        expect(w.equipment).toEqual([]);
+      if (w.equipment.length === 0) {
+        expect(w.tags).not.toContain('No Equipment');
       }
     }
+  });
+
+  it('does not duplicate difficulty, category, or equipment on tags', () => {
+    const redundant = [
+      'Beginner',
+      'Intermediate',
+      'Advanced',
+      'CrossFit',
+      'Hyrox',
+      'Pilates',
+      'Rainhill',
+      'No Equipment',
+      'Bodyweight',
+      'Kettlebell',
+      'KB',
+      'Barbell',
+      'Sandbag',
+      'Sled',
+      'Row',
+      'Jump Rope',
+      'Assault Bike',
+      'SkiErg',
+      'Gym',
+    ] as const;
+    for (const w of allStandaloneWorkouts) {
+      for (const tag of redundant) {
+        expect(w.tags).not.toContain(tag);
+      }
+      for (const tag of w.tags) {
+        expect(tag).not.toBe(w.category);
+        expect(tag).not.toBe(w.difficulty);
+      }
+    }
+  });
+
+  it('discipline browse matches category and partner tag', () => {
+    const wod = allStandaloneWorkouts.find((w) => w.category === 'WOD');
+    const hyrox = allStandaloneWorkouts.find((w) => w.category === 'Hyrox');
+    const partner = allStandaloneWorkouts.find((w) =>
+      w.tags.includes('Partner')
+    );
+    expect(wod).toBeDefined();
+    expect(hyrox).toBeDefined();
+    expect(partner).toBeDefined();
+    expect(workoutMatchesDiscipline(wod!, 'CrossFit')).toBe(true);
+    expect(workoutMatchesDiscipline(hyrox!, 'Hyrox')).toBe(true);
+    expect(workoutMatchesDiscipline(partner!, 'Partner')).toBe(true);
+    expect(wod!.tags).not.toContain('CrossFit');
   });
 
   it('includes HIIT Shred pro standalone copies p_55–p_78 (except removed p_75)', () => {

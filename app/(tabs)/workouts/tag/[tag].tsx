@@ -2,12 +2,15 @@ import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
 import { workoutDetailStyles as headerStyles } from '@/src/components/workouts/workoutDetailStyles';
 import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
 import { Colors, Spacing } from '@/src/constants/theme';
-import { disciplines } from '@/src/data/disciplines';
+import {
+  disciplines,
+  isNoEquipmentDiscipline,
+  workoutMatchesDiscipline,
+} from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
-import { isWorkoutTag } from '@/src/types/workouts';
-import type { SingleWorkout, WorkoutTag } from '@/src/types/workouts';
+import type { SingleWorkout } from '@/src/types/workouts';
 import {
   getFavoriteWorkouts,
   toggleFavoriteWorkout,
@@ -26,10 +29,6 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-function workoutHasTag(workout: SingleWorkout, tag: WorkoutTag): boolean {
-  return workout.tags.includes(tag);
-}
 
 export default function WorkoutsByTagScreen() {
   const { isPro } = useSubscription();
@@ -52,8 +51,14 @@ export default function WorkoutsByTagScreen() {
   );
 
   const filteredWorkouts = useMemo(() => {
-    if (!tag || !isWorkoutTag(tag)) return [];
-    return allStandaloneWorkouts.filter((w) => workoutHasTag(w, tag));
+    if (!tag) return [];
+    const isDisciplineTag =
+      isNoEquipmentDiscipline(tag) ||
+      disciplines.some((d) => d.tag === tag);
+    if (!isDisciplineTag) return [];
+    return allStandaloneWorkouts.filter((w) =>
+      workoutMatchesDiscipline(w, tag)
+    );
   }, [tag]);
 
   const handleToggleFavorite = async (workout: SingleWorkout) => {
