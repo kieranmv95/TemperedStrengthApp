@@ -5,6 +5,8 @@ import type {
   DetailedMovement,
   Divider,
   SingleWorkout,
+  WorkoutBlockBase,
+  WorkoutMovement,
 } from '@/src/types/workouts';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -16,15 +18,9 @@ type WorkoutDetailScrollContentProps = {
   workout: SingleWorkout;
 };
 
-type WorkoutFlatBlock = {
-  name: string;
-  instructions?: string;
-  movements: string[] | DetailedMovement[] | Divider[];
-};
-
 type WorkoutScaledBlockGroup = {
   scale: string;
-  blocks: WorkoutFlatBlock[];
+  blocks: WorkoutBlockBase[];
 };
 
 function isScaledBlocks(
@@ -48,6 +44,24 @@ function isDivider(movement: unknown): movement is Divider {
     movement !== null &&
     'type' in movement &&
     (movement as Divider).type === 'divider'
+  );
+}
+
+function renderMovementRow(movement: WorkoutMovement, movementIndex: number) {
+  if (isDivider(movement)) {
+    return (
+      <View key={movementIndex} style={styles.divider}>
+        <Text style={styles.dividerText}>{movement.note}</Text>
+      </View>
+    );
+  }
+
+  const movementText = movementToRowText(movement);
+  return (
+    <View key={movementIndex} style={styles.movementItem}>
+      <Text style={styles.movementBullet}>•</Text>
+      <Text style={styles.movementText}>{movementText}</Text>
+    </View>
   );
 }
 
@@ -76,7 +90,7 @@ export function WorkoutDetailScrollContent({
     };
   }, [selectedScaleIndex, workout.blocks]);
 
-  const flatBlocks = useMemo(() => {
+  const flatBlocks = useMemo((): WorkoutBlockBase[] | null => {
     if (isScaledBlocks(workout.blocks)) return null;
     return workout.blocks;
   }, [workout.blocks]);
@@ -170,25 +184,9 @@ export function WorkoutDetailScrollContent({
                 </Text>
               )}
               <View style={styles.movementsList}>
-                {block.movements.map((movement, movementIndex) => {
-                  if (isDivider(movement)) {
-                    return (
-                      <View key={movementIndex} style={styles.divider}>
-                        <Text style={styles.dividerText}>{movement.note}</Text>
-                      </View>
-                    );
-                  }
-
-                  const movementText = movementToRowText(
-                    movement as string | DetailedMovement
-                  );
-                  return (
-                    <View key={movementIndex} style={styles.movementItem}>
-                      <Text style={styles.movementBullet}>•</Text>
-                      <Text style={styles.movementText}>{movementText}</Text>
-                    </View>
-                  );
-                })}
+                {block.movements.map((movement, movementIndex) =>
+                  renderMovementRow(movement, movementIndex)
+                )}
               </View>
             </View>
           ))}
@@ -201,25 +199,9 @@ export function WorkoutDetailScrollContent({
               <Text style={styles.blockInstructions}>{block.instructions}</Text>
             )}
             <View style={styles.movementsList}>
-              {block.movements.map((movement, movementIndex) => {
-                if (isDivider(movement)) {
-                  return (
-                    <View key={movementIndex} style={styles.divider}>
-                      <Text style={styles.dividerText}>{movement.note}</Text>
-                    </View>
-                  );
-                }
-
-                const movementText = movementToRowText(
-                  movement as string | DetailedMovement
-                );
-                return (
-                  <View key={movementIndex} style={styles.movementItem}>
-                    <Text style={styles.movementBullet}>•</Text>
-                    <Text style={styles.movementText}>{movementText}</Text>
-                  </View>
-                );
-              })}
+              {block.movements.map((movement, movementIndex) =>
+                renderMovementRow(movement, movementIndex)
+              )}
             </View>
           </View>
         ))

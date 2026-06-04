@@ -1,10 +1,11 @@
 import { WORKOUT_EQUIPMENT_OPTIONS } from '@/src/components/workouts/workoutsScreenConstants';
-import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { STANDALONE_LOG_SCHEMA_BY_ID } from '@/src/data/standaloneLogSchemas';
-import type { WorkoutLogSchema } from '@/src/types/workouts';
-import workoutsData from '@/src/data/workouts.json';
+import { workouts as workoutsData } from '@/src/data/workout_data';
+import { allStandaloneWorkouts } from '@/src/data/workouts';
+import { isWorkoutTag } from '@/src/types/workouts';
+import type { WorkoutLogSchema, WorkoutTag } from '@/src/types/workouts';
 
-const NO_EQUIPMENT_TAG = 'No Equipment';
+const NO_EQUIPMENT_TAG = 'No Equipment' satisfies WorkoutTag;
 
 function assertWorkoutLogSchema(schema: WorkoutLogSchema, label: string): void {
   switch (schema.kind) {
@@ -50,6 +51,14 @@ describe('bundled standalone workouts', () => {
       assertWorkoutLogSchema(w.logSchema, w.id);
       expect(Array.isArray(w.blocks)).toBe(true);
       expect(w.blocks.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('every workout tag is a known WorkoutTag', () => {
+    for (const w of allStandaloneWorkouts) {
+      for (const tag of w.tags) {
+        expect(isWorkoutTag(tag)).toBe(true);
+      }
     }
   });
 

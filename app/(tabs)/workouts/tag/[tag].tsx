@@ -6,7 +6,8 @@ import { disciplines } from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
-import type { SingleWorkout } from '@/src/types/workouts';
+import { isWorkoutTag } from '@/src/types/workouts';
+import type { SingleWorkout, WorkoutTag } from '@/src/types/workouts';
 import {
   getFavoriteWorkouts,
   toggleFavoriteWorkout,
@@ -26,7 +27,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-function workoutHasTag(workout: SingleWorkout, tag: string): boolean {
+function workoutHasTag(workout: SingleWorkout, tag: WorkoutTag): boolean {
   return workout.tags.includes(tag);
 }
 
@@ -51,7 +52,7 @@ export default function WorkoutsByTagScreen() {
   );
 
   const filteredWorkouts = useMemo(() => {
-    if (!tag) return [];
+    if (!tag || !isWorkoutTag(tag)) return [];
     return allStandaloneWorkouts.filter((w) => workoutHasTag(w, tag));
   }, [tag]);
 

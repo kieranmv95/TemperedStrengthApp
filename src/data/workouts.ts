@@ -2,18 +2,22 @@ import {
   DEFAULT_WORKOUT_LOG_SCHEMA,
   STANDALONE_LOG_SCHEMA_BY_ID,
 } from '@/src/data/standaloneLogSchemas';
-import type { SingleWorkout } from '@/src/types/workouts';
+import type { SingleWorkout, StandaloneWorkoutSource } from '@/src/types/workouts';
 
-import workoutsData from './workouts.json';
+import { workouts as workoutsData } from './workout_data';
 
 export type {
   DetailedMovement,
   SingleWorkout,
+  StandaloneWorkoutSource,
   WorkoutCategory,
   WorkoutLogSchema,
+  WorkoutTag,
 } from '@/src/types/workouts';
 
-type WorkoutJson = Omit<SingleWorkout, 'logSchema'>;
+export { WORKOUT_TAGS, isWorkoutTag } from '@/src/types/workouts';
+
+type WorkoutJson = StandaloneWorkoutSource;
 
 function withLogSchema(workout: WorkoutJson): SingleWorkout {
   let schema =
