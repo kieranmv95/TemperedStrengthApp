@@ -32,7 +32,6 @@ export const CATEGORY_FILTERS: CategoryFilter[] = [
   'WOD',
   'Hyrox',
   'Conditioning',
-  'Mobility',
   'Pilates',
   'Rainhill',
 ];

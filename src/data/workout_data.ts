@@ -54,29 +54,6 @@ export const workouts: StandaloneWorkoutSource[] = [
     equipment: [],
   },
   {
-    id: 'f_03',
-    title: 'Hold the Line',
-    description:
-      "Focus on 'bracing' your midsection. Movement should be slow and controlled.",
-    category: 'Mobility',
-    difficulty: 'Beginner',
-    estimatedTime: 15,
-    tags: ['Core', 'Abs'],
-    isPremium: false,
-    blocks: [
-      {
-        name: 'Warmup',
-        movements: ['2 Rounds: 10 Cat-Cow, 10 Bird-Dogs'],
-      },
-      {
-        name: '3 Rounds',
-        instructions:
-          'Rest 60s between rounds. Focus on keeping lower back glued to the floor during Hollow Rocks.',
-        movements: ['45s Plank', '15 Hollow Rocks', '30s Side Plank (L/R)'],
-      }],
-    equipment: [],
-  },
-  {
     id: 'f_04',
     title: 'The Century',
     description:
@@ -189,32 +166,6 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s pigeon stretch each side'],
       }],
     equipment: ['rower'],
-  },
-  {
-    id: 'f_08',
-    title: 'Desk Job Recovery',
-    description:
-      'The antidote to sitting. Focus on breathing deeply into each stretch.',
-    category: 'Mobility',
-    difficulty: 'Beginner',
-    estimatedTime: 15,
-    tags: ['Recovery', 'Postures'],
-    isPremium: false,
-    blocks: [
-      {
-        name: 'Warmup',
-        movements: ['2 mins light walking or jogging to warm the tissues'],
-      },
-      {
-        name: 'Flow',
-        instructions:
-          "Hold each pose for the specified time. Don't force the range; let gravity do the work.",
-        movements: [
-          'Couch Stretch (2m/side)',
-          'Pigeon Pose (2m/side)',
-          'Thoracic Extensions (15 reps)'],
-      }],
-    equipment: [],
   },
   {
     id: 'f_09',
@@ -406,32 +357,6 @@ export const workouts: StandaloneWorkoutSource[] = [
     equipment: [],
   },
   {
-    id: 'f_14',
-    title: 'Handstand Prep',
-    description:
-      'Shoulder stability and technical positioning. Stop immediately if form breaks down.',
-    category: 'Mobility',
-    difficulty: 'Intermediate',
-    estimatedTime: 25,
-    tags: ['Shoulders', 'Skill'],
-    isPremium: false,
-    blocks: [
-      {
-        name: 'Warmup',
-        movements: ['3 Rounds: 10 Wrist Stretches, 10 Wall Slides'],
-      },
-      {
-        name: '3 Rounds',
-        instructions:
-          'Rest 2 mins between rounds. Quality is the goal here, not fatigue.',
-        movements: [
-          '30s Wall Walk/Hold',
-          '10 Scapular Pushups',
-          '20 Shoulder Taps'],
-      }],
-    equipment: [],
-  },
-  {
     id: 'f_15',
     title: 'The Endless Climb',
     description:
@@ -465,32 +390,6 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Round 10: 20 Burpees, 20 Air Squats'],
       }],
     equipment: [],
-  },
-  {
-    id: 'f_16',
-    title: 'Shoulder Health Flow',
-    description:
-      'Prehab for athletes with stiff shoulders. Use a light resistance band.',
-    category: 'Mobility',
-    difficulty: 'Beginner',
-    estimatedTime: 12,
-    tags: ['Shoulders', 'Prehab'],
-    isPremium: false,
-    blocks: [
-      {
-        name: 'Warmup',
-        movements: ['2 mins Arm Swings and Thoracic Twists'],
-      },
-      {
-        name: 'Flow',
-        instructions:
-          "Move through the reps slowly. Focus on 'feeling' the scapula move on the ribcage.",
-        movements: [
-          'Band Dislocates (20)',
-          'Face Pulls (20)',
-          'Wall Slides (15)'],
-      }],
-    equipment: ['bands'],
   },
   {
     id: 'f_17',

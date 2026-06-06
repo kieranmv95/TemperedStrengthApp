@@ -108,6 +108,7 @@ export default function RootLayout() {
                 options={{ headerShown: false }}
               />
               <Stack.Screen name="shop" options={{ headerShown: false }} />
+              <Stack.Screen name="recovery" options={{ headerShown: false }} />
               <Stack.Screen
                 name="article/[id]"
                 options={{ headerShown: false }}

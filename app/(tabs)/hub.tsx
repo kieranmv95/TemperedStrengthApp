@@ -148,6 +148,10 @@ export default function HubScreen() {
     router.push('/shop');
   };
 
+  const handleOpenRecovery = () => {
+    router.push('/recovery');
+  };
+
   const charityBanner = (
     <View style={styles.charityBannerWrap}>
       <TogetherWeLiftBanner onPress={() => openTogetherWeLift('hub_banner')} />
@@ -168,6 +172,36 @@ export default function HubScreen() {
     <View>
       {charityBanner}
       <View style={styles.section}>
+        <View style={styles.subSection}>
+          <CuratedSection
+            icon="leaf-outline"
+            iconSizeOverride={18}
+            title="Recovery"
+            description="Mobility and stretching flows to help you recover and move better"
+            size="medium"
+            theme="gold"
+          />
+
+          <Card
+            onPress={handleOpenRecovery}
+            accessibilityLabel="Browse recovery flows"
+            style={styles.recoveryCard}
+          >
+            <View style={styles.recoveryVisualTile}>
+              <Ionicons name="body" size={30} color={Colors.accent} />
+            </View>
+            <View style={styles.recoveryCtaTextColumn}>
+              <Text style={styles.shopEyebrow}>Move &amp; restore</Text>
+              <Text style={styles.hubCtaTitle}>Mobility &amp; flows</Text>
+              <Text style={styles.hubCtaDescription}>
+                Low-intensity stretching and mobility sessions for rest days and
+                warm-downs.
+              </Text>
+            </View>
+            <SmallChevron />
+          </Card>
+        </View>
+
         <View style={styles.subSection}>
           <CuratedSection
             icon="calculator-outline"
@@ -434,6 +468,25 @@ const styles = StyleSheet.create({
   shopCard: {
     backgroundColor: Colors.accentWashFill,
     borderColor: Colors.accentWashBorder,
+  },
+  recoveryCard: {
+    backgroundColor: Colors.accentWashFill,
+    borderColor: Colors.accentWashBorder,
+  },
+  recoveryVisualTile: {
+    width: 72,
+    height: 72,
+    borderRadius: BorderRadius.lg,
+    backgroundColor: Colors.backgroundElevated,
+    borderWidth: 1,
+    borderColor: Colors.accentWashOutline,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  recoveryCtaTextColumn: {
+    flex: 1,
+    marginLeft: Spacing.xl,
+    gap: Spacing.xs,
   },
   shopVisualTile: {
     width: 72,

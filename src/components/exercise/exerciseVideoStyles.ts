@@ -37,9 +37,8 @@ export const exerciseVideoStyles = StyleSheet.create({
     paddingRight: Spacing.xxxl,
   },
   videoContainer: {
-    width: '68%',
-    maxWidth: 240,
-    aspectRatio: 9 / 16,
+    alignSelf: 'stretch',
+    aspectRatio: 16 / 9,
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
     backgroundColor: Colors.backgroundElevated,

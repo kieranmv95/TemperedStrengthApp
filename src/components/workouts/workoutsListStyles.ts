@@ -187,11 +187,20 @@ export const workoutsListStyles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: 2,
     borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+  },
+  tagGold: {
+    borderColor: Colors.accent,
+    backgroundColor: Colors.backgroundElevated,
   },
   tagText: {
     color: Colors.textMuted,
     fontSize: FontSize.sm,
     fontWeight: '500',
+  },
+  tagGoldText: {
+    color: Colors.accent,
   },
   emptyState: {
     flex: 1,

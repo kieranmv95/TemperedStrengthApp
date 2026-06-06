@@ -26,6 +26,7 @@ const PATCH_NOTES: PatchNote[] = [
     notes: [
       'Workotus section UI improvements',
       'Data integrity improvements',
+      'Recovery screen added',
     ],
   },
   {

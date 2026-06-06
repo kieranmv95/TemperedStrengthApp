@@ -123,7 +123,7 @@ describe('bundled standalone workouts', () => {
   });
 
   it('includes HIIT Shred pro standalone copies p_55–p_78 (except removed p_75)', () => {
-    expect(allStandaloneWorkouts.length).toBe(157);
+    expect(allStandaloneWorkouts.length).toBe(153);
     for (let n = 55; n <= 78; n++) {
       if (n === 75) continue;
       const id = `p_${n}`;
