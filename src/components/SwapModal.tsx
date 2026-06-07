@@ -1,4 +1,3 @@
-import { ExerciseVideoPlayButton } from '@/src/components/exercise/ExerciseVideoPlayButton';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useSwapModalActions } from '@/src/hooks/useSwapModalActions';
 import React from 'react';
@@ -113,9 +112,6 @@ export const SwapModal: React.FC<SwapModalProps> = ({
                   ? `Swap ${currentExercise.name}`
                   : 'Select Exercise'}
               </Text>
-              {currentExerciseId !== null ? (
-                <ExerciseVideoPlayButton exerciseId={currentExerciseId} />
-              ) : null}
             </View>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>✕</Text>
