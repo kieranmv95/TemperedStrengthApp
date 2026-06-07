@@ -194,8 +194,7 @@ export default function HubScreen() {
               <Text style={styles.shopEyebrow}>Move &amp; restore</Text>
               <Text style={styles.hubCtaTitle}>Mobility &amp; flows</Text>
               <Text style={styles.hubCtaDescription}>
-                Low-intensity stretching and mobility sessions for rest days and
-                warm-downs.
+                Mobility and stretching flows to help you recover and move better.
               </Text>
             </View>
             <SmallChevron />
@@ -330,7 +329,7 @@ export default function HubScreen() {
                   : isAllChip
                     ? activeCategory === 'All' && !showFavoritesOnly
                     : activeCategory === (item.key as ArticleCategory) &&
-                      !showFavoritesOnly;
+                    !showFavoritesOnly;
 
                 const count = isFavoritesChip
                   ? favorites.length
