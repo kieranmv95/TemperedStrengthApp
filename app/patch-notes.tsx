@@ -27,6 +27,7 @@ const PATCH_NOTES: PatchNote[] = [
       'Recovery flows added to the hub',
       'Workotus section UI improvements',
       'Data integrity improvements',
+      'Fixed swap modal video bug',
     ],
   },
   {
