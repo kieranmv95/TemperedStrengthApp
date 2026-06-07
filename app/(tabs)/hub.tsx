@@ -4,6 +4,7 @@ import { TogetherWeLiftBanner } from '@/src/components/hub/TogetherWeLiftBanner'
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { recoveryData } from '@/src/data/recovery_data';
 import { TOOLS } from '@/src/data/tools';
 import { useTogetherWeLift } from '@/src/hooks/use-together-we-lift';
 import { fetchArticles } from '@/src/services/briefApiService';
@@ -177,7 +178,7 @@ export default function HubScreen() {
             icon="leaf-outline"
             iconSizeOverride={18}
             title="Recovery"
-            description="Mobility and stretching flows to help you recover and move better"
+            description={`${recoveryData.length - 1}+ Mobility and stretching flows to help you recover and move better`}
             size="medium"
             theme="gold"
           />
@@ -194,7 +195,7 @@ export default function HubScreen() {
               <Text style={styles.shopEyebrow}>Move &amp; restore</Text>
               <Text style={styles.hubCtaTitle}>Mobility &amp; flows</Text>
               <Text style={styles.hubCtaDescription}>
-                Mobility and stretching flows to help you recover and move better.
+                {recoveryData.length - 1}+ Mobility and stretching flows to help you recover and move better.
               </Text>
             </View>
             <SmallChevron />
