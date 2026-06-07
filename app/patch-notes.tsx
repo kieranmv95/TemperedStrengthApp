@@ -21,12 +21,12 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
-    version: '2.7.2',
+    version: '2.8.0',
     dateLabel: 'N/A',
     notes: [
+      'Recovery flows added to the hub',
       'Workotus section UI improvements',
       'Data integrity improvements',
-      'Recovery screen added',
     ],
   },
   {
