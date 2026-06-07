@@ -56,7 +56,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: [],
   },
-
   {
     id: 'r_02',
     title: 'Desk Job Recovery',
@@ -112,7 +111,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: [],
   },
-
   {
     id: 'r_03',
     title: 'Handstand Prep',
@@ -185,7 +183,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: [],
   },
-
   {
     id: 'r_04',
     title: 'Shoulder Health Flow',
@@ -235,11 +232,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: ['bands'],
   },
-
-  // ─────────────────────────────────────────────
-  // PREMIUM FLOWS
-  // ─────────────────────────────────────────────
-
   {
     id: 'r_05',
     title: 'Full Body Reset',
@@ -301,7 +293,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: [],
   },
-
   {
     id: 'r_06',
     title: 'Hip Flexor Unlock',
@@ -351,7 +342,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: [],
   },
-
   {
     id: 'r_07',
     title: 'Thoracic Spine Restore',
@@ -407,7 +397,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: ['foam roller'],
   },
-
   {
     id: 'r_08',
     title: 'Lower Body Flush',
@@ -469,7 +458,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: ['foam roller'],
   },
-
   {
     id: 'r_09',
     title: 'Morning Mobility Wake-Up',
@@ -531,7 +519,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: [],
   },
-
   {
     id: 'r_10',
     title: 'Wrist & Forearm Health',
@@ -592,7 +579,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: ['bands'],
   },
-
   {
     id: 'r_11',
     title: 'Deep Stretch: Hips and Hamstrings',
@@ -654,7 +640,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: [],
   },
-
   {
     id: 'r_12',
     title: 'Pre-Workout Activation',
@@ -813,11 +798,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: ['percussive device'],
   },
-
-  // ─────────────────────────────────────────────
-  // PREMIUM FLOWS
-  // ─────────────────────────────────────────────
-
   {
     id: 'p_02',
     title: 'Upper Body Reset',
@@ -927,7 +907,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: ['percussive device'],
   },
-
   {
     id: 'p_03',
     title: 'Lower Body Reset',
@@ -1037,7 +1016,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: ['percussive device'],
   },
-
   {
     id: 'p_04',
     title: 'Run Warm-Up',
@@ -1111,7 +1089,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: ['percussive device'],
   },
-
   {
     id: 'p_05',
     title: 'Run Recovery',
@@ -1215,7 +1192,6 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: ['percussive device'],
   },
-
   {
     id: 'p_06',
     title: 'Climbing Recovery',
