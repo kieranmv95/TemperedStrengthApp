@@ -1286,4 +1286,82 @@ export const recoveryData: RecoverySource[] = [
     ],
     equipment: ['percussive device'],
   },
+  {
+    id: 'r_13',
+    title: 'Knee and Hip Health',
+    description:
+      'Prehab for two of the most injury-prone joints in the body. This flow combines targeted strengthening, controlled mobility, and loaded stretching to build resilience rather than just temporary relief. Consistency with this one pays dividends.',
+    difficulty: 'Intermediate',
+    estimatedTime: 22,
+    tags: ['Knees', 'Hips', 'Prehab', 'Mobility'],
+    isPremium: true,
+    blocks: [
+      {
+        name: 'Supine Hip Circles',
+        instructions:
+          'Lie on your back and hug both knees to your chest. Draw large, slow circles with both knees together, rotating through the hip joint. Reverse direction halfway. This lubricates the joint before any loading.',
+        dose: {
+          kind: 'duration',
+          seconds: 30,
+          rounds: 2,
+          roundsLabel: 'each direction',
+        },
+      },
+      {
+        name: 'Clamshells with Band',
+        instructions:
+          'Lie on your side with a light resistance band just above both knees. Bend your hips and knees to roughly 45 degrees, keeping your feet together. Rotate your top knee toward the ceiling as far as you can without your pelvis rolling back. Lower with control. Weak glute medius is one of the primary drivers of knee pain, so take this seriously.',
+        dose: { kind: 'reps_bilateral', countPerSide: 20, unit: 'reps' },
+      },
+      {
+        name: 'Banded Glute Bridge',
+        instructions:
+          'Lie on your back with knees bent, feet flat, and a resistance band just above your knees. Press your knees out against the band throughout. Drive through your heels and squeeze your glutes hard at the top. Hold each rep for 2 seconds. If you feel your hamstrings more than your glutes, bring your feet a few centimetres closer to your hips.',
+        dose: { kind: 'reps', count: 20 },
+      },
+      {
+        name: 'Terminal Knee Extension with Band',
+        instructions:
+          'Anchor a resistance band at knee height and loop it behind one knee. Step back to create tension. Stand with a soft bend in the knee, then fully extend the knee against the band resistance. Slow and deliberate. This directly strengthens the VMO (the teardrop-shaped quad muscle above the inner knee) which is critical for knee tracking.',
+        dose: { kind: 'reps_bilateral', countPerSide: 20, unit: 'reps' },
+      },
+      {
+        name: 'Wall Sit',
+        instructions:
+          'Back flat against a wall, lower yourself until your thighs are parallel to the floor. Knees should track directly over your second toe. Do not let them cave inward. Hold the position without holding your breath. Isometric quad loading reduces knee pain and builds joint tolerance.',
+        dose: { kind: 'duration', seconds: 45 },
+      },
+      {
+        name: 'Hip 90/90',
+        instructions:
+          'Sit on the floor with both legs bent to 90 degrees: one in front, one to the side. Sit tall on both sit bones. You should feel a stretch in the outer hip of the front leg and the inner thigh of the back leg. Hold, then rotate forward onto the other side.',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        name: 'Couch Stretch',
+        instructions:
+          'Kneel with one shin resting vertically against a wall, front foot flat on the floor. Squeeze the glute of the back leg to tilt your pelvis and deepen the hip flexor stretch. Stand tall through your torso. Tight hip flexors pull the pelvis forward and put the knee and hip under constant low-level stress.',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        name: 'Supine Figure Four',
+        instructions:
+          'Lie on your back. Cross one ankle over the opposite knee and flex the foot. Either pull the bottom thigh toward your chest or press the crossed knee gently away from you. This targets the piriformis and deep external rotators, which when tight can refer pain into the hip and alter knee tracking.',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        name: 'Lateral Band Walk',
+        instructions:
+          'Place a resistance band just above your knees. Stand in a slight squat position. Take slow, deliberate steps sideways, keeping your knees pressed outward against the band. Do not let your feet come together between steps. The glute medius and minimus are the target here.',
+        dose: { kind: 'reps_bilateral', countPerSide: 15, unit: 'steps' },
+      },
+      {
+        name: "Child's Pose",
+        instructions:
+          'Sink your hips back to your heels, arms extended. Let your lower back and hips decompress fully. If your knees are uncomfortable in this position, place a rolled towel in the crease behind the knee to reduce compression.',
+        dose: { kind: 'duration', seconds: 90 },
+      },
+    ],
+    equipment: ['bands'],
+  },
 ];

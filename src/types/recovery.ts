@@ -56,6 +56,7 @@ export const RECOVERY_TAGS = [
   'Warm-Up',
   'Post-Run',
   'Climbing',
+  'Knees',
 ] as const;
 
 export type RecoveryTag = (typeof RECOVERY_TAGS)[number];
