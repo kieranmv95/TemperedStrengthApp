@@ -1,3 +1,4 @@
+import { YoutubeEmbed } from '@/src/components/exercise/YoutubeEmbed';
 import type { Program } from '@/src/types/program';
 import { modalSheetBottomPadding } from '@/src/utils/platform';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
@@ -5,7 +6,6 @@ import React from 'react';
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SmallChevron } from '../components/ds/SmallChevron';
 import { ProgramLauncherWeekdayPicker } from './ProgramLauncherWeekdayPicker';
-import { ProgramLauncherWorkoutPreviewRow } from './ProgramLauncherWorkoutPreviewRow';
 import { programLauncherStyles as styles } from './programLauncherStyles';
 
 type ProgramLauncherDetailsModalProps = {
@@ -120,6 +120,15 @@ export function ProgramLauncherDetailsModal({
               <Text style={styles.sectionTitle}>Program Overview</Text>
             )}
 
+            {step === 'details' && selectedProgram?.videoId ? (
+              <View style={styles.programVideoContainer}>
+                <YoutubeEmbed
+                  youtubeId={selectedProgram.videoId}
+                  accessibilityLabel={`Program overview video for ${selectedProgram.name}`}
+                />
+              </View>
+            ) : null}
+
             {step === 'details' && (
               <View style={styles.programOverviewContainer}>
                 <View style={styles.statsContainer}>
@@ -163,19 +172,6 @@ export function ProgramLauncherDetailsModal({
                 weekdaySelectionReady={weekdaySelectionReady}
                 onToggleWeekday={onToggleWeekday}
               />
-            )}
-
-            {step === 'details' && (
-              <>
-                <Text style={styles.sectionTitle}>Sessions ({selectedProgram?.workouts.length ?? 0})</Text>
-                {selectedProgram?.workouts.map((workout, index) => (
-                  <ProgramLauncherWorkoutPreviewRow
-                    key={index}
-                    workout={workout}
-                    showIntensity={selectedProgram.categories.includes('strength')}
-                  />
-                ))}
-              </>
             )}
           </ScrollView>
 

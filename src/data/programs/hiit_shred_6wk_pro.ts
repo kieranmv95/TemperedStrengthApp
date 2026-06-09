@@ -153,7 +153,7 @@ const cooldownFullBodyDeep: WorkoutBlockCooldown = {
 export const hiit_shred_6wk_pro: Program = {
   id: 'hiit_shred_6wk_pro',
   isPro: true,
-  name: 'HIIT Shred (6 Weeks)',
+  name: 'HIIT Shred Full',
   description: `24 unique sessions across 6 weeks. Every day is different. Every session has a named WOD at its centre - the kind that makes your heart rate spike and your legs heavy. A short strength primer earns you the right to get into it. No repeated days. No coasting.`,
   bodyChangesSummary: `Better stamina, more athleticism, and a tighter feel through your legs, glutes, and core. By week five you will be handling formats most people avoid. By week six you will know exactly what you are capable of.`,
   categories: ['conditioning', 'functional'],

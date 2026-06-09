@@ -1,8 +1,131 @@
-Account migration I cloud move - away (documented in plans)
+// -- // FUTURE VERSION 2.8.0 // -- //
+
+- [x] Add video support to programs
+- [x] Add video support to rehab flows
+
+- [ ] Create videos and link in for programs
+- [ ] Create videos and link in for rehab's
+
+Programs
+
+- [ ] Traditional Powerlifting SBD 
+- [ ] Traditional Bodybuilding Split
+- [ ] Pro Bodybuilding Split
+- [ ] Pilates Intro
+- [ ] 3 Day Split
+- [ ] 5-Day Power and Strength
+- [ ] 2 Day Full Body
+- [ ] HIIT Shred Full
+- [ ] HIIT Shred Taster
+- [ ] KB + DB Bootcamp
+- [ ] Olympic Foundations
+- [ ] Advanced Olympic Performance
+- [ ] Pro Powerbuilding
+
+Standard exercises
+
+- [ ] Cat Cow
+- [ ] Arm Swings
+- [ ] Band Pass-Throughs
+- [ ] Band Pull-Aparts (also appears as “Banded Pull-Aparts” — likely same footage)
+- [ ] Banded Glute Bridge
+- [ ] Banded Monster Walks
+- [ ] Banded Pull-Aparts
+- [ ] Bear Crawl Hold
+- [ ] Bird-Dog
+- [ ] Chest Opener
+- [ ] Child's Pose
+- [ ] Clamshells
+- [ ] Clamshells with Band
+- [ ] Cobra Pose
+- [ ] Couch Stretch
+- [ ] Dead Bug
+- [ ] Diaphragmatic Breathing
+- [ ] Doorframe Pec Stretch
+- [ ] Downward Dog
+- [ ] Downward Dog with Pedalling
+- [ ] Extensor Stretch
+- [ ] Finger Extensions with Band
+- [ ] Foam Roller IT Band / Outer Thigh
+- [ ] Foam Roller Quads
+- [ ] Foam Roller T-Spine Extension
+- [ ] Glute Bridges
+- [ ] Happy Baby
+- [ ] Hip 90/90
+- [ ] Hip 90/90 with Forward Fold
+- [ ] Hollow Body Hold
+- [ ] Inchworms
+- [ ] Kick-up Practice
+- [ ] Kneeling Hip Flexor Stretch with Reach
+- [ ] Lateral Band Walk
+- [ ] Legs Up the Wall
+- [ ] Lizard Pose
+- [ ] Low Lunge with Thoracic Rotation
+- [ ] Neck Rolls
+- [ ] Open Book Stretch
+- [ ] Palm-Down Forearm Stretch
+- [ ] Palm-Up Forearm Stretch
+- [ ] Pec Opener
+- [ ] Pigeon Pose
+- [ ] Pike Push-ups
+- [ ] Prayer Stretch (Lat/T-Spine)
+- [ ] Prayer Stretch & Reverse Prayer
+- [ ] Puppy Pose
+- [ ] Reclined Butterfly
+- [ ] Reverse Wrist Circles (Knuckles Down)
+- [ ] Savasana
+- [ ] Scapular Push-ups
+- [ ] Seated Forward Fold
+- [ ] Seated Thoracic Rotation
+- [ ] Side Plank
+- [ ] Standing Hamstring Stretch
+- [ ] Standing Hip Circles
+- [ ] Standing Quad Stretch
+- [ ] Supine Figure Four
+- [ ] Supine Hamstring Stretch
+- [ ] Supine Hip Circles
+- [ ] Supine Twist
+- [ ] Supine Windshield Wipers
+- [ ] Terminal Knee Extension with Band
+- [ ] Thoracic Rotation
+- [ ] Thread the Needle
+- [ ] Wall Sit
+- [ ] Wall Slides
+- [ ] Wall Walk
+- [ ] Wide-Leg Forward Fold
+- [ ] World's Greatest Stretch
+- [ ] Wrist Circles
+- [ ] Wrist Flexor Stretch
+- [ ] Wrist Weight-Shifting (Hands on Floor)
+
+Percussive Exercises
+
+- [ ] Achilles and Lower Leg
+- [ ] Adductors (Inner Thigh)
+- [ ] Biceps
+- [ ] Calves
+- [ ] Forearm Extensors
+- [ ] Forearm Flexors
+- [ ] Forearms
+- [ ] Glutes
+- [ ] Hamstrings
+- [ ] Hip Flexors
+- [ ] IT Band and Outer Quad
+- [ ] IT Band and Outer Thigh (may overlap with #11)
+- [ ] Lats
+- [ ] Pecs
+- [ ] Plantar Fascia (Feet)
+- [ ] Quads
+- [ ] Rear Delts and Teres
+- [ ] Rhomboids and Mid Traps
+- [ ] Thenar and Hypothenar (Hand Muscles)
+- [ ] Triceps
+- [ ] Upper Traps
+- [ ] Upper Traps and Neck Base
+
+// -- // FUTURE VERSION 3.0.0 // -- //
+
+Account migration iCloud move. (documented in plans)
 - [ ] Suapabse integration
 - [ ] Drop iCloud integration
 - [ ] Account sync and storage
-
-Other
-- [ ] Add video support to programs
-- [ ] Add video support to rehab flopws

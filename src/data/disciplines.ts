@@ -1,5 +1,5 @@
-import { ImageSourcePropType } from 'react-native';
 import type { SingleWorkout, WorkoutCategory } from '@/src/types/workouts';
+import { ImageSourcePropType } from 'react-native';
 
 /** Discipline carousel route key; not a `WorkoutTag` — filters by empty `equipment`. */
 export const NO_EQUIPMENT_DISCIPLINE_TAG = 'No Equipment';
@@ -66,12 +66,6 @@ export const disciplines: Discipline[] = [
     tag: 'Partner',
     showTitle: true,
     image: require('@/assets/images/disciplines/partner.png'),
-  },
-  {
-    title: 'No Equipment',
-    tag: NO_EQUIPMENT_DISCIPLINE_TAG,
-    showTitle: true,
-    image: require('@/assets/images/disciplines/noequipment.png'),
   },
 ];
 

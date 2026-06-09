@@ -145,6 +145,7 @@ export type Program = {
   name: string;
   description: string;
   bodyChangesSummary?: string;
+  videoId?: string | null;
   workouts: Workout[];
   isPro: boolean;
   daysSplit?: ('mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')[];

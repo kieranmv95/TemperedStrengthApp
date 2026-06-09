@@ -55,6 +55,9 @@ export const programLauncherStyles = StyleSheet.create({
   programOverviewContainer: {
     marginBottom: Spacing.section,
   },
+  programVideoContainer: {
+    marginBottom: Spacing.xxl,
+  },
   programCard: {
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
@@ -323,7 +326,8 @@ export const programLauncherStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.accentWashBorder,
     borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.xxl,
     marginBottom: Spacing.xxl,
   },
   bodyChangesLinkRow: {

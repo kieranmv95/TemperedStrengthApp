@@ -1,10 +1,7 @@
 import { exerciseVideoStyles as styles } from '@/src/components/exercise/exerciseVideoStyles';
+import { YoutubeEmbed } from '@/src/components/exercise/YoutubeEmbed';
 import { Colors, Spacing } from '@/src/constants/theme';
 import { getExerciseById } from '@/src/data/exercises';
-import {
-  getYoutubeEmbedHtml,
-  YOUTUBE_EMBED_ORIGIN,
-} from '@/src/utils/youtube';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo } from 'react';
 import {
@@ -16,7 +13,6 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { WebView } from 'react-native-webview';
 
 type ExerciseVideoSheetProps = {
   exerciseId: number | null;
@@ -34,11 +30,6 @@ export function ExerciseVideoSheet({
     if (exerciseId === null) return undefined;
     return getExerciseById(exerciseId);
   }, [exerciseId]);
-
-  const embedHtml =
-    exercise?.youtube_id != null
-      ? getYoutubeEmbedHtml(exercise.youtube_id)
-      : null;
 
   return (
     <Modal
@@ -70,7 +61,7 @@ export function ExerciseVideoSheet({
             <Ionicons name="close" size={28} color={Colors.textPrimary} />
           </TouchableOpacity>
 
-          {exercise && embedHtml ? (
+          {exercise?.youtube_id ? (
             <ScrollView
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.sheetContent}
@@ -84,21 +75,10 @@ export function ExerciseVideoSheet({
                 ) : null}
               </View>
 
-              <View style={styles.videoContainer}>
-                <WebView
-                  source={{
-                    html: embedHtml,
-                    baseUrl: YOUTUBE_EMBED_ORIGIN,
-                  }}
-                  style={styles.webView}
-                  allowsFullscreenVideo
-                  allowsInlineMediaPlayback
-                  mediaPlaybackRequiresUserAction={false}
-                  javaScriptEnabled
-                  domStorageEnabled
-                  accessibilityLabel={`Video demonstration for ${exercise.name}`}
-                />
-              </View>
+              <YoutubeEmbed
+                youtubeId={exercise.youtube_id}
+                accessibilityLabel={`Video demonstration for ${exercise.name}`}
+              />
             </ScrollView>
           ) : null}
         </View>

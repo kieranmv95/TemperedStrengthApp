@@ -1,3 +1,4 @@
+import { YoutubeEmbed } from '@/src/components/exercise/YoutubeEmbed';
 import { Pill } from '@/src/components/pill';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import type { Recovery, RecoveryBlock } from '@/src/types/recovery';
@@ -57,6 +58,14 @@ function BlockCard({ block }: { block: RecoveryBlock }) {
       </View>
       {isTimeBasedRecoveryDose(block.dose) ? (
         <RecoveryBlockTimer dose={block.dose} />
+      ) : null}
+      {block.videoId ? (
+        <View style={flowStyles.blockVideo}>
+          <YoutubeEmbed
+            youtubeId={block.videoId}
+            accessibilityLabel={`Demonstration video for ${block.name}`}
+          />
+        </View>
       ) : null}
       {block.instructions ? (
         <Text style={flowStyles.blockInstructions}>{block.instructions}</Text>
@@ -305,6 +314,9 @@ const flowStyles = StyleSheet.create({
   doseStepLabel: {
     color: Colors.textMuted,
     fontWeight: '600',
+  },
+  blockVideo: {
+    marginBottom: Spacing.xxl,
   },
   blockInstructions: {
     color: Colors.textSecondary,

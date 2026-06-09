@@ -13,6 +13,7 @@ export const recoveryData: RecoverySource[] = [
     blocks: [
       {
         name: 'Cat-Cow',
+        videoId: 'LIVJZZyZ2qM',
         instructions:
           'On all fours. Inhale and let your belly drop (Cow), exhale and round your spine toward the ceiling (Cat). Link each movement to your breath.',
         dose: { kind: 'duration', seconds: 90 },

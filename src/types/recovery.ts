@@ -121,6 +121,7 @@ export type RecoveryDose =
 
 export type RecoveryBlock = {
   name: string;
+  videoId?: string | null;
   instructions?: string;
   dose: RecoveryDose;
 };

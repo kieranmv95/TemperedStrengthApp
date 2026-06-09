@@ -114,7 +114,7 @@ const cooldownWeek4: WorkoutBlockCooldown = {
 export const pilates_intro_4wk_free: Program = {
   id: 'pilates_intro_4wk_free',
   isPro: false,
-  name: 'Pilates Intro (4 Weeks)',
+  name: 'Pilates Intro',
   description: `A beginner-friendly 4-week intro focused on core strength, control, and mobility. Every week builds on the last. You will leave sessions feeling taller, steadier, and more switched on.`,
   bodyChangesSummary: `You will feel stronger through your core and more stable in everyday movement. Expect better posture, improved mobility, and a tighter feel around your midsection as you build control and consistency.`,
   categories: ['functional'],
