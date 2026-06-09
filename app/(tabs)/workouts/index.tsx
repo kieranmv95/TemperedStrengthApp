@@ -54,6 +54,7 @@ export default function WorkoutsScreen() {
   const [selectedEquipment, setSelectedEquipment] = useState<
     WorkoutEquipment[]
   >([]);
+  const [noEquipmentOnly, setNoEquipmentOnly] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [sortExpanded, setSortExpanded] = useState(false);
   const [sortBy, setSortBy] = useState<WorkoutSortBy>('name');
@@ -129,19 +130,22 @@ export default function WorkoutsScreen() {
 
     if (filter === 'All') {
       setSelectedEquipment([]);
+      setNoEquipmentOnly(false);
     }
   };
 
   const hasActiveFilters =
     searchQuery.trim().length > 0 ||
     activeCategoryFilter !== 'All' ||
-    selectedEquipment.length > 0;
+    selectedEquipment.length > 0 ||
+    noEquipmentOnly;
 
   const handleResetAllFilters = () => {
     captureFilter('reset', 'all');
     setSearchQuery('');
     setActiveCategoryFilter('All');
     setSelectedEquipment([]);
+    setNoEquipmentOnly(false);
   };
 
   const equipmentFiltersInUse = useMemo(
@@ -152,9 +156,20 @@ export default function WorkoutsScreen() {
   const handleSelectEquipmentAll = () => {
     captureFilter('equipment', 'all');
     setSelectedEquipment([]);
+    setNoEquipmentOnly(false);
+  };
+
+  const handleToggleNoEquipmentFilter = () => {
+    setNoEquipmentOnly((prev) => {
+      const next = !prev;
+      captureFilter('equipment', next ? 'no_equipment' : 'all');
+      return next;
+    });
+    setSelectedEquipment([]);
   };
 
   const handleToggleEquipmentFilter = (eq: WorkoutEquipment) => {
+    setNoEquipmentOnly(false);
     setSelectedEquipment((prev) => {
       const next = prev.includes(eq)
         ? prev.filter((item) => item !== eq)
@@ -173,6 +188,7 @@ export default function WorkoutsScreen() {
       searchQuery: string;
       activeCategoryFilter: CategoryFilter;
       selectedEquipment: WorkoutEquipment[];
+      noEquipmentOnly: boolean;
     }>
   ): boolean => {
     const effectiveSearchQuery = overrides?.searchQuery ?? searchQuery;
@@ -180,6 +196,8 @@ export default function WorkoutsScreen() {
       overrides?.activeCategoryFilter ?? activeCategoryFilter;
     const effectiveSelectedEquipment =
       overrides?.selectedEquipment ?? selectedEquipment;
+    const effectiveNoEquipmentOnly =
+      overrides?.noEquipmentOnly ?? noEquipmentOnly;
 
     if (effectiveSearchQuery.trim()) {
       const query = effectiveSearchQuery.trim().toLowerCase();
@@ -193,7 +211,9 @@ export default function WorkoutsScreen() {
       if (!matchesTitle && !matchesDescription && !matchesTags) return false;
     }
 
-    if (effectiveSelectedEquipment.length > 0) {
+    if (effectiveNoEquipmentOnly) {
+      if (workout.equipment.length > 0) return false;
+    } else if (effectiveSelectedEquipment.length > 0) {
       const hasAll = effectiveSelectedEquipment.every((eq) =>
         workout.equipment.includes(eq)
       );
@@ -205,17 +225,28 @@ export default function WorkoutsScreen() {
       return favorites.includes(workout.id);
     if (effectiveCategoryFilter === 'Pro') return workout.isPremium;
     return workout.category === effectiveCategoryFilter;
-  }, [searchQuery, activeCategoryFilter, selectedEquipment, favorites]);
+  }, [searchQuery, activeCategoryFilter, selectedEquipment, noEquipmentOnly, favorites]);
 
   function equipmentCountForFilter(eq: WorkoutEquipment | null): number {
-    const hypothetical =
-      eq === null
-        ? []
-        : selectedEquipment.includes(eq)
-          ? selectedEquipment
-          : [...selectedEquipment, eq];
+    if (eq === null) {
+      return allStandaloneWorkouts.filter((w) =>
+        matchesWorkout(w, { selectedEquipment: [], noEquipmentOnly: false })
+      ).length;
+    }
+    const hypothetical = selectedEquipment.includes(eq)
+      ? selectedEquipment
+      : [...selectedEquipment, eq];
     return allStandaloneWorkouts.filter((w) =>
-      matchesWorkout(w, { selectedEquipment: hypothetical })
+      matchesWorkout(w, {
+        selectedEquipment: hypothetical,
+        noEquipmentOnly: false,
+      })
+    ).length;
+  }
+
+  function noEquipmentCountForFilter(): number {
+    return allStandaloneWorkouts.filter((w) =>
+      matchesWorkout(w, { selectedEquipment: [], noEquipmentOnly: true })
     ).length;
   }
 
@@ -348,9 +379,17 @@ export default function WorkoutsScreen() {
             >
               <Pill
                 label="All"
-                isActive={selectedEquipment.length === 0}
+                isActive={
+                  selectedEquipment.length === 0 && !noEquipmentOnly
+                }
                 onPress={handleSelectEquipmentAll}
                 count={equipmentCountForFilter(null)}
+              />
+              <Pill
+                label="No equipment"
+                isActive={noEquipmentOnly}
+                onPress={handleToggleNoEquipmentFilter}
+                count={noEquipmentCountForFilter()}
               />
               {equipmentFiltersInUse.map((eq) => (
                 <Pill
@@ -370,6 +409,7 @@ export default function WorkoutsScreen() {
           searchQuery={searchQuery}
           activeCategoryFilter={activeCategoryFilter}
           selectedEquipment={selectedEquipment}
+          noEquipmentOnly={noEquipmentOnly}
           equipmentLabel={equipmentFilterLabel}
           onResetAll={handleResetAllFilters}
           onClearSearch={() => {
@@ -377,6 +417,10 @@ export default function WorkoutsScreen() {
             setSearchQuery('');
           }}
           onClearCategory={() => handleSelectCategoryFilter('All')}
+          onClearNoEquipment={() => {
+            captureFilter('equipment', 'all');
+            setNoEquipmentOnly(false);
+          }}
           onRemoveEquipment={(eq) => {
             setSelectedEquipment((prev) => {
               const next = prev.filter((item) => item !== eq);

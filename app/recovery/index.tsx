@@ -76,6 +76,7 @@ export default function RecoveryScreen() {
   const [selectedEquipment, setSelectedEquipment] = useState<
     RecoveryEquipment[]
   >([]);
+  const [noEquipmentOnly, setNoEquipmentOnly] = useState(false);
   const [sortBy, setSortBy] = useState<RecoverySortBy>('name');
   const [sortDirection, setSortDirection] =
     useState<RecoverySortDirection>('asc');
@@ -100,6 +101,11 @@ export default function RecoveryScreen() {
     return Array.from(equipment).sort();
   }, []);
 
+  const hasNoEquipmentRecoveries = useMemo(
+    () => recoveries.some((recovery) => recovery.equipment.length === 0),
+    []
+  );
+
   const visibleRecoveries = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
     const filtered = recoveries.filter((recovery) => {
@@ -116,7 +122,9 @@ export default function RecoveryScreen() {
       ) {
         return false;
       }
-      if (
+      if (noEquipmentOnly) {
+        if (recovery.equipment.length > 0) return false;
+      } else if (
         selectedEquipment.length > 0 &&
         !selectedEquipment.some((item) => recovery.equipment.includes(item))
       ) {
@@ -128,7 +136,14 @@ export default function RecoveryScreen() {
     return filtered.sort((a, b) =>
       compareRecoveries(a, b, sortBy, sortDirection)
     );
-  }, [searchQuery, selectedTags, selectedEquipment, sortBy, sortDirection]);
+  }, [
+    searchQuery,
+    selectedTags,
+    selectedEquipment,
+    noEquipmentOnly,
+    sortBy,
+    sortDirection,
+  ]);
 
   const toggleTag = (tag: RecoveryTag) => {
     setSelectedTags((prev) =>
@@ -136,7 +151,18 @@ export default function RecoveryScreen() {
     );
   };
 
+  const selectAnyEquipment = () => {
+    setSelectedEquipment([]);
+    setNoEquipmentOnly(false);
+  };
+
+  const toggleNoEquipment = () => {
+    setNoEquipmentOnly((prev) => !prev);
+    setSelectedEquipment([]);
+  };
+
   const toggleEquipment = (equipment: RecoveryEquipment) => {
+    setNoEquipmentOnly(false);
     setSelectedEquipment((prev) =>
       prev.includes(equipment)
         ? prev.filter((item) => item !== equipment)
@@ -296,7 +322,7 @@ export default function RecoveryScreen() {
                   </ScrollView>
                 </View>
 
-                {availableEquipment.length > 0 ? (
+                {availableEquipment.length > 0 || hasNoEquipmentRecoveries ? (
                   <View style={styles.filtersRow}>
                     <Text style={styles.filtersLabel}>Equipment</Text>
                     <ScrollView
@@ -306,9 +332,18 @@ export default function RecoveryScreen() {
                     >
                       <Pill
                         label="Any"
-                        isActive={selectedEquipment.length === 0}
-                        onPress={() => setSelectedEquipment([])}
+                        isActive={
+                          selectedEquipment.length === 0 && !noEquipmentOnly
+                        }
+                        onPress={selectAnyEquipment}
                       />
+                      {hasNoEquipmentRecoveries ? (
+                        <Pill
+                          label="No equipment"
+                          isActive={noEquipmentOnly}
+                          onPress={toggleNoEquipment}
+                        />
+                      ) : null}
                       {availableEquipment.map((item) => (
                         <Pill
                           key={item}

@@ -15,10 +15,12 @@ type WorkoutActiveFiltersBarProps = {
   searchQuery: string;
   activeCategoryFilter: CategoryFilter;
   selectedEquipment: WorkoutEquipment[];
+  noEquipmentOnly: boolean;
   equipmentLabel: (eq: WorkoutEquipment) => string;
   onResetAll: () => void;
   onClearSearch: () => void;
   onClearCategory: () => void;
+  onClearNoEquipment: () => void;
   onRemoveEquipment: (eq: WorkoutEquipment) => void;
 };
 
@@ -26,10 +28,12 @@ export function WorkoutActiveFiltersBar({
   searchQuery,
   activeCategoryFilter,
   selectedEquipment,
+  noEquipmentOnly,
   equipmentLabel,
   onResetAll,
   onClearSearch,
   onClearCategory,
+  onClearNoEquipment,
   onRemoveEquipment,
 }: WorkoutActiveFiltersBarProps) {
   const trimmedSearch = searchQuery.trim();
@@ -38,9 +42,10 @@ export function WorkoutActiveFiltersBar({
     return (
       trimmedSearch.length > 0 ||
       activeCategoryFilter !== 'All' ||
-      selectedEquipment.length > 0
+      selectedEquipment.length > 0 ||
+      noEquipmentOnly
     );
-  }, [trimmedSearch, activeCategoryFilter, selectedEquipment]);
+  }, [trimmedSearch, activeCategoryFilter, selectedEquipment, noEquipmentOnly]);
 
   if (!hasActiveFilters) {
     return null;
@@ -90,6 +95,14 @@ export function WorkoutActiveFiltersBar({
                   ? 'star'
                   : undefined
             }
+          />
+        ) : null}
+
+        {noEquipmentOnly ? (
+          <Pill
+            label="No equipment"
+            isActive
+            onPress={onClearNoEquipment}
           />
         ) : null}
 
