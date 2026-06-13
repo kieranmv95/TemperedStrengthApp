@@ -119,6 +119,18 @@ export type RecoveryDose =
       passes: RecoveryPercussivePass[];
     };
 
+export type RecoveryMovement = {
+  id: string;
+  name: string;
+  instructions: string;
+  videoId?: string | null;
+};
+
+export type RecoveryBlockRef = {
+  movementId: string;
+  dose: RecoveryDose;
+};
+
 export type RecoveryBlock = {
   name: string;
   videoId?: string | null;
@@ -126,8 +138,8 @@ export type RecoveryBlock = {
   dose: RecoveryDose;
 };
 
-/** Bundled recovery row in `recovery_data.ts`. */
-export type RecoverySource = {
+/** Flow row in `recovery_data.ts` — blocks reference the movement catalog. */
+export type RecoveryFlowSource = {
   id: string;
   title: string;
   description: string;
@@ -141,6 +153,11 @@ export type RecoverySource = {
   equipment: RecoveryEquipment[];
   isPremium: boolean;
   partner?: boolean;
+  blocks: RecoveryBlockRef[];
+};
+
+/** Resolved recovery row exposed to the app (blocks include movement details). */
+export type RecoverySource = Omit<RecoveryFlowSource, 'blocks'> & {
   blocks: RecoveryBlock[];
 };
 
