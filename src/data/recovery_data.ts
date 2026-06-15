@@ -14,8 +14,14 @@ export const recoveryData: RecoveryFlowSource[] = [
       { movementId: 'cat_cow', dose: { kind: 'duration', seconds: 90 } },
       { movementId: 'dead_bug', dose: { kind: 'duration', seconds: 45 } },
       { movementId: 'bird_dog', dose: { kind: 'duration', seconds: 45 } },
-      { movementId: 'hollow_body_hold', dose: { kind: 'duration', seconds: 30 } },
-      { movementId: 'side_plank', dose: { kind: 'duration_bilateral', secondsPerSide: 30 } },
+      {
+        movementId: 'hollow_body_hold',
+        dose: { kind: 'duration', seconds: 30 },
+      },
+      {
+        movementId: 'side_plank',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 30 },
+      },
       { movementId: 'cobra_pose', dose: { kind: 'duration', seconds: 60 } },
       { movementId: 'childs_pose', dose: { kind: 'duration', seconds: 90 } },
     ],
@@ -33,9 +39,18 @@ export const recoveryData: RecoveryFlowSource[] = [
     blocks: [
       { movementId: 'neck_rolls', dose: { kind: 'duration', seconds: 60 } },
       { movementId: 'cat_cow', dose: { kind: 'duration', seconds: 60 } },
-      { movementId: 'thread_the_needle', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
-      { movementId: 'couch_stretch', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'pigeon_pose', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
+      {
+        movementId: 'thread_the_needle',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
+      {
+        movementId: 'couch_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'pigeon_pose',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
       { movementId: 'cobra_pose', dose: { kind: 'duration', seconds: 60 } },
       { movementId: 'childs_pose', dose: { kind: 'duration', seconds: 60 } },
     ],
@@ -51,25 +66,37 @@ export const recoveryData: RecoveryFlowSource[] = [
     tags: ['Shoulders', 'Wrists', 'Skill', 'Handstand'],
     isPremium: false,
     blocks: [
-      { movementId: 'wrist_circles', dose: {
+      {
+        movementId: 'wrist_circles',
+        dose: {
           kind: 'duration',
           seconds: 30,
           rounds: 2,
           roundsLabel: 'each direction',
-        } },
-      { movementId: 'wrist_flexor_stretch', dose: {
+        },
+      },
+      {
+        movementId: 'wrist_flexor_stretch',
+        dose: {
           kind: 'duration',
           seconds: 60,
-        } },
-      { movementId: 'extensor_stretch', dose: {
+        },
+      },
+      {
+        movementId: 'extensor_stretch',
+        dose: {
           kind: 'duration',
           seconds: 60,
-        } },
+        },
+      },
       { movementId: 'scapular_push_ups', dose: { kind: 'reps', count: 15 } },
       { movementId: 'wall_slides', dose: { kind: 'reps', count: 15 } },
       { movementId: 'pike_push_ups', dose: { kind: 'reps', count: 10 } },
       { movementId: 'wall_walk', dose: { kind: 'reps', count: 5 } },
-      { movementId: 'kick_up_practice', dose: { kind: 'duration', seconds: 60 } },
+      {
+        movementId: 'kick_up_practice',
+        dose: { kind: 'duration', seconds: 60 },
+      },
     ],
     equipment: [],
   },
@@ -84,8 +111,14 @@ export const recoveryData: RecoveryFlowSource[] = [
     isPremium: false,
     blocks: [
       { movementId: 'arm_swings', dose: { kind: 'duration', seconds: 60 } },
-      { movementId: 'thread_the_needle', dose: { kind: 'duration_bilateral', secondsPerSide: 45 } },
-      { movementId: 'pec_opener', dose: { kind: 'duration_bilateral', secondsPerSide: 30 } },
+      {
+        movementId: 'thread_the_needle',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 45 },
+      },
+      {
+        movementId: 'pec_opener',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 30 },
+      },
       { movementId: 'wall_slides', dose: { kind: 'reps', count: 15 } },
       { movementId: 'banded_pull_aparts', dose: { kind: 'reps', count: 20 } },
       { movementId: 'band_pass_throughs', dose: { kind: 'reps', count: 15 } },
@@ -103,12 +136,27 @@ export const recoveryData: RecoveryFlowSource[] = [
     isPremium: true,
     blocks: [
       { movementId: 'neck_rolls', dose: { kind: 'duration', seconds: 60 } },
-      { movementId: 'thoracic_rotation', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
+      {
+        movementId: 'thoracic_rotation',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
       { movementId: 'cat_cow', dose: { kind: 'duration', seconds: 90 } },
-      { movementId: 'worlds_greatest_stretch', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
-      { movementId: 'hip_90_90', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'pigeon_pose', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'supine_twist', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
+      {
+        movementId: 'worlds_greatest_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
+      {
+        movementId: 'hip_90_90',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'pigeon_pose',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'supine_twist',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
       { movementId: 'childs_pose', dose: { kind: 'duration', seconds: 90 } },
     ],
     equipment: [],
@@ -119,16 +167,34 @@ export const recoveryData: RecoveryFlowSource[] = [
     description:
       'Targeted work for chronically tight hip flexors, common in anyone who sits, squats heavy, or runs. Expect one side to feel noticeably tighter than the other.',
     difficulty: 'Intermediate',
-    estimatedTime: 15,
+    estimatedTime: 13,
     tags: ['Hips', 'Mobility', 'Lower Body'],
     isPremium: true,
     blocks: [
-      { movementId: 'supine_hip_circles', dose: { kind: 'duration', seconds: 60 } },
-      { movementId: 'couch_stretch', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'kneeling_hip_flexor_stretch_with_reach', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'pigeon_pose', dose: { kind: 'duration_bilateral', secondsPerSide: 120 } },
-      { movementId: 'lizard_pose', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'supine_figure_four', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
+      {
+        movementId: 'supine_hip_circles',
+        dose: { kind: 'duration', seconds: 60 },
+      },
+      {
+        movementId: 'couch_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'kneeling_hip_flexor_stretch_with_reach',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'pigeon_pose',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 120 },
+      },
+      {
+        movementId: 'lizard_pose',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'supine_figure_four',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
     ],
     equipment: [],
   },
@@ -136,19 +202,37 @@ export const recoveryData: RecoveryFlowSource[] = [
     id: 'r_07',
     title: 'Thoracic Spine Restore',
     description:
-      'The thoracic spine is the region most people completely neglect. Unlocking it improves posture, overhead range, and even breathing. You may feel some cracking. That\'s normal.',
+      "The thoracic spine is the region most people completely neglect. Unlocking it improves posture, overhead range, and even breathing. You may feel some cracking. That's normal.",
     difficulty: 'Intermediate',
     estimatedTime: 18,
     tags: ['Upper Back', 'Posture', 'Spine', 'Mobility'],
     isPremium: true,
     blocks: [
-      { movementId: 'foam_roller_t_spine_extension', dose: { kind: 'duration', seconds: 180 } },
-      { movementId: 'open_book_stretch', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
-      { movementId: 'seated_thoracic_rotation', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
-      { movementId: 'thread_the_needle', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'prayer_stretch_lat_t_spine', dose: { kind: 'duration', seconds: 90 } },
+      {
+        movementId: 'foam_roller_t_spine_extension',
+        dose: { kind: 'duration', seconds: 180 },
+      },
+      {
+        movementId: 'open_book_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
+      {
+        movementId: 'seated_thoracic_rotation',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
+      {
+        movementId: 'thread_the_needle',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'prayer_stretch_lat_t_spine',
+        dose: { kind: 'duration', seconds: 90 },
+      },
       { movementId: 'puppy_pose', dose: { kind: 'duration', seconds: 90 } },
-      { movementId: 'doorframe_pec_stretch', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
+      {
+        movementId: 'doorframe_pec_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
     ],
     equipment: ['foam roller'],
   },
@@ -162,14 +246,38 @@ export const recoveryData: RecoveryFlowSource[] = [
     tags: ['Lower Body', 'Recovery', 'Legs', 'Post-Workout'],
     isPremium: true,
     blocks: [
-      { movementId: 'standing_quad_stretch', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
-      { movementId: 'downward_dog_with_pedalling', dose: { kind: 'duration', seconds: 90 } },
-      { movementId: 'standing_hamstring_stretch', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
-      { movementId: 'foam_roller_quads', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'foam_roller_it_band_outer_thigh', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'pigeon_pose', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'supine_hamstring_stretch', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
-      { movementId: 'legs_up_the_wall', dose: { kind: 'duration', seconds: 180 } },
+      {
+        movementId: 'standing_quad_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
+      {
+        movementId: 'downward_dog_with_pedalling',
+        dose: { kind: 'duration', seconds: 90 },
+      },
+      {
+        movementId: 'standing_hamstring_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
+      {
+        movementId: 'foam_roller_quads',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'foam_roller_it_band_outer_thigh',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'pigeon_pose',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'supine_hamstring_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
+      {
+        movementId: 'legs_up_the_wall',
+        dose: { kind: 'duration', seconds: 180 },
+      },
     ],
     equipment: ['foam roller'],
   },
@@ -183,13 +291,24 @@ export const recoveryData: RecoveryFlowSource[] = [
     tags: ['Morning', 'Full Body', 'Mobility'],
     isPremium: true,
     blocks: [
-      { movementId: 'diaphragmatic_breathing', dose: { kind: 'duration', seconds: 120 } },
-      { movementId: 'supine_twist', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
+      {
+        movementId: 'supine_twist',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
       { movementId: 'cat_cow', dose: { kind: 'duration', seconds: 90 } },
       { movementId: 'downward_dog', dose: { kind: 'duration', seconds: 90 } },
-      { movementId: 'low_lunge_with_thoracic_rotation', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
-      { movementId: 'hip_90_90', dose: { kind: 'duration_bilateral', secondsPerSide: 60 } },
-      { movementId: 'standing_hip_circles', dose: { kind: 'duration_bilateral', secondsPerSide: 30 } },
+      {
+        movementId: 'low_lunge_with_thoracic_rotation',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
+      {
+        movementId: 'hip_90_90',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 60 },
+      },
+      {
+        movementId: 'standing_hip_circles',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 30 },
+      },
       { movementId: 'chest_opener', dose: { kind: 'duration', seconds: 60 } },
     ],
     equipment: [],
@@ -200,22 +319,36 @@ export const recoveryData: RecoveryFlowSource[] = [
     description:
       'Essential if you do any gymnastics work, barbell pressing, or ring training. Neglecting wrist prep is the fastest route to an overuse injury that sidelines you for weeks.',
     difficulty: 'Intermediate',
-    estimatedTime: 14,
+    estimatedTime: 12,
     tags: ['Wrists', 'Forearms', 'Prehab', 'Skill'],
     isPremium: true,
     blocks: [
       { movementId: 'wrist_circles', dose: { kind: 'duration', seconds: 60 } },
-      { movementId: 'palm_down_forearm_stretch', dose: { kind: 'duration_bilateral', secondsPerSide: 45 } },
-      { movementId: 'palm_up_forearm_stretch', dose: { kind: 'duration_bilateral', secondsPerSide: 45 } },
-      { movementId: 'wrist_weight_shifting_hands_on_floor', dose: { kind: 'duration', seconds: 60 } },
-      { movementId: 'finger_extensions_with_band', dose: { kind: 'reps_bilateral', countPerSide: 20, unit: 'reps' } },
-      { movementId: 'reverse_wrist_circles_knuckles_down', dose: { kind: 'duration', seconds: 60 } },
-      { movementId: 'prayer_stretch_reverse_prayer', dose: {
+      {
+        movementId: 'palm_down_forearm_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 45 },
+      },
+      {
+        movementId: 'palm_up_forearm_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 45 },
+      },
+      {
+        movementId: 'wrist_weight_shifting_hands_on_floor',
+        dose: { kind: 'duration', seconds: 60 },
+      },
+      {
+        movementId: 'reverse_wrist_circles_knuckles_down',
+        dose: { kind: 'duration', seconds: 60 },
+      },
+      {
+        movementId: 'prayer_stretch_reverse_prayer',
+        dose: {
           kind: 'duration',
           seconds: 45,
           rounds: 2,
           roundsLabel: 'each position',
-        } },
+        },
+      },
     ],
     equipment: ['bands'],
   },
@@ -229,13 +362,31 @@ export const recoveryData: RecoveryFlowSource[] = [
     tags: ['Hips', 'Hamstrings', 'Flexibility', 'Deep Stretch'],
     isPremium: true,
     blocks: [
-      { movementId: 'supine_windshield_wipers', dose: { kind: 'duration', seconds: 90 } },
+      {
+        movementId: 'supine_windshield_wipers',
+        dose: { kind: 'duration', seconds: 90 },
+      },
       { movementId: 'happy_baby', dose: { kind: 'duration', seconds: 90 } },
-      { movementId: 'hip_90_90_with_forward_fold', dose: { kind: 'duration_bilateral', secondsPerSide: 120 } },
-      { movementId: 'pigeon_pose', dose: { kind: 'duration_bilateral', secondsPerSide: 120 } },
-      { movementId: 'wide_leg_forward_fold', dose: { kind: 'duration', seconds: 120 } },
-      { movementId: 'seated_forward_fold', dose: { kind: 'duration', seconds: 120 } },
-      { movementId: 'reclined_butterfly', dose: { kind: 'duration', seconds: 120 } },
+      {
+        movementId: 'hip_90_90_with_forward_fold',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 120 },
+      },
+      {
+        movementId: 'pigeon_pose',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 120 },
+      },
+      {
+        movementId: 'wide_leg_forward_fold',
+        dose: { kind: 'duration', seconds: 120 },
+      },
+      {
+        movementId: 'seated_forward_fold',
+        dose: { kind: 'duration', seconds: 120 },
+      },
+      {
+        movementId: 'reclined_butterfly',
+        dose: { kind: 'duration', seconds: 120 },
+      },
       { movementId: 'savasana', dose: { kind: 'duration', seconds: 120 } },
     ],
     equipment: [],
@@ -251,16 +402,28 @@ export const recoveryData: RecoveryFlowSource[] = [
     isPremium: true,
     blocks: [
       { movementId: 'glute_bridges', dose: { kind: 'reps', count: 20 } },
-      { movementId: 'clamshells', dose: { kind: 'reps_bilateral', countPerSide: 20, unit: 'reps' } },
-      { movementId: 'banded_monster_walks', dose: {
+      {
+        movementId: 'clamshells',
+        dose: { kind: 'reps_bilateral', countPerSide: 20, unit: 'reps' },
+      },
+      {
+        movementId: 'banded_monster_walks',
+        dose: {
           kind: 'reps',
           count: 10,
           unit: 'steps',
           rounds: 4,
           roundsLabel: 'each direction',
-        } },
-      { movementId: 'bear_crawl_hold', dose: { kind: 'duration', seconds: 30 } },
-      { movementId: 'worlds_greatest_stretch', dose: { kind: 'duration_bilateral', secondsPerSide: 45 } },
+        },
+      },
+      {
+        movementId: 'bear_crawl_hold',
+        dose: { kind: 'duration', seconds: 30 },
+      },
+      {
+        movementId: 'worlds_greatest_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 45 },
+      },
       { movementId: 'banded_pull_aparts', dose: { kind: 'reps', count: 20 } },
       { movementId: 'inchworms', dose: { kind: 'reps', count: 8 } },
     ],
@@ -276,55 +439,76 @@ export const recoveryData: RecoveryFlowSource[] = [
     tags: ['Full Body', 'Recovery', 'Percussive'],
     isPremium: false,
     blocks: [
-      { movementId: 'upper_traps', dose: {
+      {
+        movementId: 'upper_traps',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 45, intensity: 'Light' },
             { seconds: 45, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'pecs', dose: {
+        },
+      },
+      {
+        movementId: 'pecs',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 45, intensity: 'Light' },
             { seconds: 45, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'lats', dose: {
+        },
+      },
+      {
+        movementId: 'lats',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 45, intensity: 'Medium' },
             { seconds: 45, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'quads', dose: {
+        },
+      },
+      {
+        movementId: 'quads',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'hamstrings', dose: {
+        },
+      },
+      {
+        movementId: 'hamstrings',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'calves', dose: {
+        },
+      },
+      {
+        movementId: 'calves',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 45, intensity: 'Light' },
             { seconds: 45, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'glutes', dose: {
+        },
+      },
+      {
+        movementId: 'glutes',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Medium' },
             { seconds: 60, intensity: 'Firm' },
           ],
-        } },
+        },
+      },
     ],
     equipment: ['percussive device'],
   },
@@ -338,62 +522,86 @@ export const recoveryData: RecoveryFlowSource[] = [
     tags: ['Upper Body', 'Recovery', 'Percussive', 'Shoulders'],
     isPremium: true,
     blocks: [
-      { movementId: 'upper_traps', dose: {
+      {
+        movementId: 'upper_traps',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'rear_delts_and_teres', dose: {
+        },
+      },
+      {
+        movementId: 'rear_delts_and_teres',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 45, intensity: 'Medium' },
             { seconds: 45, intensity: 'Firm' },
           ],
-        } },
-      { movementId: 'pecs', dose: {
+        },
+      },
+      {
+        movementId: 'pecs',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'biceps', dose: {
+        },
+      },
+      {
+        movementId: 'biceps',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 45, intensity: 'Light' },
             { seconds: 45, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'triceps', dose: {
+        },
+      },
+      {
+        movementId: 'triceps',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 45, intensity: 'Medium' },
             { seconds: 45, intensity: 'Firm' },
           ],
-        } },
-      { movementId: 'forearms', dose: {
+        },
+      },
+      {
+        movementId: 'forearms',
+        dose: {
           kind: 'percussive_bilateral',
           passes: [
             { seconds: 45, intensity: 'Light' },
             { seconds: 45, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'rhomboids_and_mid_traps', dose: {
+        },
+      },
+      {
+        movementId: 'rhomboids_and_mid_traps',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Medium' },
             { seconds: 60, intensity: 'Firm' },
           ],
-        } },
-      { movementId: 'lats', dose: {
+        },
+      },
+      {
+        movementId: 'lats',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Medium' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
+        },
+      },
     ],
     equipment: ['percussive device'],
   },
@@ -407,62 +615,86 @@ export const recoveryData: RecoveryFlowSource[] = [
     tags: ['Lower Body', 'Recovery', 'Percussive', 'Legs'],
     isPremium: true,
     blocks: [
-      { movementId: 'hip_flexors', dose: {
+      {
+        movementId: 'hip_flexors',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'glutes', dose: {
+        },
+      },
+      {
+        movementId: 'glutes',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 90, intensity: 'Medium' },
             { seconds: 90, intensity: 'Firm' },
           ],
-        } },
-      { movementId: 'it_band_and_outer_quad', dose: {
+        },
+      },
+      {
+        movementId: 'it_band_and_outer_quad',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Light' },
           ],
-        } },
-      { movementId: 'quads', dose: {
+        },
+      },
+      {
+        movementId: 'quads',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 90, intensity: 'Light' },
             { seconds: 90, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'adductors_inner_thigh', dose: {
+        },
+      },
+      {
+        movementId: 'adductors_inner_thigh',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'hamstrings', dose: {
+        },
+      },
+      {
+        movementId: 'hamstrings',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 90, intensity: 'Light' },
             { seconds: 90, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'calves', dose: {
+        },
+      },
+      {
+        movementId: 'calves',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'plantar_fascia_feet', dose: {
+        },
+      },
+      {
+        movementId: 'plantar_fascia_feet',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 45, intensity: 'Light' },
             { seconds: 45, intensity: 'Medium' },
           ],
-        } },
+        },
+      },
     ],
     equipment: ['percussive device'],
   },
@@ -476,36 +708,54 @@ export const recoveryData: RecoveryFlowSource[] = [
     tags: ['Running', 'Warm-Up', 'Percussive', 'Activation'],
     isPremium: true,
     blocks: [
-      { movementId: 'hip_flexors', dose: {
+      {
+        movementId: 'hip_flexors',
+        dose: {
           kind: 'percussive',
           passes: [{ seconds: 30, intensity: 'Medium' }],
-        } },
-      { movementId: 'glutes', dose: {
+        },
+      },
+      {
+        movementId: 'glutes',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 30, intensity: 'Medium' },
             { seconds: 30, intensity: 'Firm' },
           ],
-        } },
-      { movementId: 'quads', dose: {
+        },
+      },
+      {
+        movementId: 'quads',
+        dose: {
           kind: 'percussive',
           passes: [{ seconds: 30, intensity: 'Medium' }],
-        } },
-      { movementId: 'hamstrings', dose: {
+        },
+      },
+      {
+        movementId: 'hamstrings',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 30, intensity: 'Light' },
             { seconds: 30, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'calves', dose: {
+        },
+      },
+      {
+        movementId: 'calves',
+        dose: {
           kind: 'percussive',
           passes: [{ seconds: 30, intensity: 'Medium' }],
-        } },
-      { movementId: 'plantar_fascia_feet', dose: {
+        },
+      },
+      {
+        movementId: 'plantar_fascia_feet',
+        dose: {
           kind: 'percussive',
           passes: [{ seconds: 20, intensity: 'Light' }],
-        } },
+        },
+      },
     ],
     equipment: ['percussive device'],
   },
@@ -519,56 +769,80 @@ export const recoveryData: RecoveryFlowSource[] = [
     tags: ['Running', 'Recovery', 'Percussive', 'Post-Run'],
     isPremium: true,
     blocks: [
-      { movementId: 'plantar_fascia_feet', dose: {
+      {
+        movementId: 'plantar_fascia_feet',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'calves', dose: {
+        },
+      },
+      {
+        movementId: 'calves',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 90, intensity: 'Light' },
             { seconds: 90, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'achilles_and_lower_leg', dose: {
+        },
+      },
+      {
+        movementId: 'achilles_and_lower_leg',
+        dose: {
           kind: 'percussive',
           passes: [{ seconds: 45, intensity: 'Light' }],
-        } },
-      { movementId: 'hamstrings', dose: {
+        },
+      },
+      {
+        movementId: 'hamstrings',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 90, intensity: 'Light' },
             { seconds: 90, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'quads', dose: {
+        },
+      },
+      {
+        movementId: 'quads',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 90, intensity: 'Light' },
             { seconds: 90, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'it_band_and_outer_thigh', dose: {
+        },
+      },
+      {
+        movementId: 'it_band_and_outer_thigh',
+        dose: {
           kind: 'percussive',
           passes: [{ seconds: 60, intensity: 'Light' }],
-        } },
-      { movementId: 'glutes', dose: {
+        },
+      },
+      {
+        movementId: 'glutes',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 90, intensity: 'Medium' },
             { seconds: 90, intensity: 'Firm' },
           ],
-        } },
-      { movementId: 'hip_flexors', dose: {
+        },
+      },
+      {
+        movementId: 'hip_flexors',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
+        },
+      },
     ],
     equipment: ['percussive device'],
   },
@@ -582,52 +856,73 @@ export const recoveryData: RecoveryFlowSource[] = [
     tags: ['Climbing', 'Recovery', 'Percussive', 'Forearms'],
     isPremium: true,
     blocks: [
-      { movementId: 'forearm_flexors', dose: {
+      {
+        movementId: 'forearm_flexors',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 90, intensity: 'Light' },
             { seconds: 90, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'forearm_extensors', dose: {
+        },
+      },
+      {
+        movementId: 'forearm_extensors',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'thenar_and_hypothenar_hand_muscles', dose: {
+        },
+      },
+      {
+        movementId: 'thenar_and_hypothenar_hand_muscles',
+        dose: {
           kind: 'percussive',
           passes: [{ seconds: 45, intensity: 'Light' }],
-        } },
-      { movementId: 'biceps', dose: {
+        },
+      },
+      {
+        movementId: 'biceps',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
-      { movementId: 'lats', dose: {
+        },
+      },
+      {
+        movementId: 'lats',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Medium' },
             { seconds: 60, intensity: 'Firm' },
           ],
-        } },
-      { movementId: 'rhomboids_and_mid_traps', dose: {
+        },
+      },
+      {
+        movementId: 'rhomboids_and_mid_traps',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Medium' },
             { seconds: 60, intensity: 'Firm' },
           ],
-        } },
-      { movementId: 'upper_traps_and_neck_base', dose: {
+        },
+      },
+      {
+        movementId: 'upper_traps_and_neck_base',
+        dose: {
           kind: 'percussive',
           passes: [
             { seconds: 60, intensity: 'Light' },
             { seconds: 60, intensity: 'Medium' },
           ],
-        } },
+        },
+      },
     ],
     equipment: ['percussive device'],
   },
@@ -641,20 +936,41 @@ export const recoveryData: RecoveryFlowSource[] = [
     tags: ['Knees', 'Hips', 'Prehab', 'Mobility'],
     isPremium: true,
     blocks: [
-      { movementId: 'supine_hip_circles', dose: {
+      {
+        movementId: 'supine_hip_circles',
+        dose: {
           kind: 'duration',
           seconds: 30,
           rounds: 2,
           roundsLabel: 'each direction',
-        } },
-      { movementId: 'clamshells_with_band', dose: { kind: 'reps_bilateral', countPerSide: 20, unit: 'reps' } },
+        },
+      },
+      {
+        movementId: 'clamshells_with_band',
+        dose: { kind: 'reps_bilateral', countPerSide: 20, unit: 'reps' },
+      },
       { movementId: 'banded_glute_bridge', dose: { kind: 'reps', count: 20 } },
-      { movementId: 'terminal_knee_extension_with_band', dose: { kind: 'reps_bilateral', countPerSide: 20, unit: 'reps' } },
+      {
+        movementId: 'terminal_knee_extension_with_band',
+        dose: { kind: 'reps_bilateral', countPerSide: 20, unit: 'reps' },
+      },
       { movementId: 'wall_sit', dose: { kind: 'duration', seconds: 45 } },
-      { movementId: 'hip_90_90', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'couch_stretch', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'supine_figure_four', dose: { kind: 'duration_bilateral', secondsPerSide: 90 } },
-      { movementId: 'lateral_band_walk', dose: { kind: 'reps_bilateral', countPerSide: 15, unit: 'steps' } },
+      {
+        movementId: 'hip_90_90',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'couch_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'supine_figure_four',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 90 },
+      },
+      {
+        movementId: 'lateral_band_walk',
+        dose: { kind: 'reps_bilateral', countPerSide: 15, unit: 'steps' },
+      },
       { movementId: 'childs_pose', dose: { kind: 'duration', seconds: 90 } },
     ],
     equipment: ['bands'],

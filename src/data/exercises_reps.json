@@ -74,7 +74,8 @@
     "logging_type": "reps",
     "muscle": "Shoulders",
     "name": "Pike Push-ups",
-    "pattern": "Vertical Push"
+    "pattern": "Vertical Push",
+    "youtube_id": "adyyYaX1Bn8"
   },
   {
     "description": "Hang with an overhand grip and pull your chin above the bar.",
@@ -103,7 +104,8 @@
     "logging_type": "reps",
     "muscle": "Obliques",
     "name": "Side Plank",
-    "pattern": "Core"
+    "pattern": "Core",
+    "youtube_id": "O8wx4bgj_d0"
   },
   {
     "description": "Lie on your back with knees bent and curl your torso up off the floor.",
@@ -122,7 +124,8 @@
     "logging_type": "reps",
     "muscle": "Calves",
     "name": "Bodyweight Calf Raises",
-    "pattern": "Isolation"
+    "pattern": "Isolation",
+    "youtube_id": "xBc2eTNO2o8"
   },
   {
     "description": "Stand with feet shoulder-width apart, squat to parallel, then explode upward. Land softly with bent knees and go straight into the next rep.",
@@ -161,7 +164,8 @@
     "logging_type": "reps",
     "muscle": "Quadriceps/Glutes",
     "name": "Box Jumps/Step-ups",
-    "pattern": "Knee Dominant"
+    "pattern": "Knee Dominant",
+    "youtube_id": "-A2hZ6ET-54"
   },
   {
     "description": "Hold a wall ball at chest height, squat to depth, then drive up and throw the ball to a target on the wall. Catch and go straight into the next rep.",
@@ -179,7 +183,8 @@
     "logging_type": "reps",
     "muscle": "Full Body/Core",
     "name": "Ball Slams",
-    "pattern": "Core"
+    "pattern": "Core",
+    "youtube_id": "x9OewZLviQw"
   },
   {
     "description": "Perform a bicycle crunch by lying on your back, hands behind your head, and rotating your elbow to the opposite knee in a slow, controlled movement.",
@@ -197,7 +202,8 @@
     "logging_type": "reps",
     "muscle": "Quadriceps/Glutes",
     "name": "Reverse Lunge",
-    "pattern": "Knee Dominant"
+    "pattern": "Knee Dominant",
+    "youtube_id": "lxaKaksuX5w"
   },
   {
     "description": "From a glute bridge position, march alternate feet off the floor keeping hips level and maintaining constant glute tension.",
@@ -215,7 +221,8 @@
     "logging_type": "reps",
     "muscle": "Quadriceps",
     "name": "Wall Sit",
-    "pattern": "Knee Dominant"
+    "pattern": "Knee Dominant",
+    "youtube_id": "irTD0e2zo4Y"
   },
   {
     "description": "Stand tall, hinge at the hips and walk your hands out to a plank position. Pause, then walk your hands back and stand. Keep legs as straight as possible throughout.",

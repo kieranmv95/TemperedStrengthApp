@@ -179,7 +179,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Quadriceps/Core",
     "name": "DB Goblet Front Squat",
-    "pattern": "Olympic (Clean & Jerk)"
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "qEWMziblznM"
   },
   {
     "description": "Hold a dumbbell at chest height with both hands and squat down between your legs.",
@@ -198,7 +199,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Shoulders/Traps",
     "name": "DB Muscle Snatch",
-    "pattern": "Olympic (Snatch)"
+    "pattern": "Olympic (Snatch)",
+    "youtube_id": "vQSrqGxTl4M"
   },
   {
     "description": "Explosively pull a dumbbell from the floor and catch it at shoulder height.",
@@ -506,7 +508,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Triceps",
     "name": "Overhead Tricep Extension",
-    "pattern": "Isolation"
+    "pattern": "Isolation",
+    "youtube_id": "ov_W4PZyQkE"
   },
   {
     "description": "Sit in the machine and bring the pads together in front of your chest, squeezing your pecs.",
@@ -619,7 +622,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Core/Shoulder Stability",
     "name": "Single Arm DB Overhead Squat",
-    "pattern": "Olympic (Snatch)"
+    "pattern": "Olympic (Snatch)",
+    "youtube_id": "Ty_QbRwlioM"
   },
   {
     "description": "Grip the handle with one hand and pull down towards your side, squeezing your lat.",
@@ -648,7 +652,7 @@
     "muscle": "Legs/Shoulders",
     "name": "Snatch Balance",
     "pattern": "Olympic (Snatch)",
-    "youtube_id": "UZ55v9b6L8E"
+    "youtube_id": "gRmS-2DV8fo"
   },
   {
     "description": "Pull the bar explosively from the floor to chin height with a wide grip and high elbows.",
@@ -714,7 +718,8 @@
     "logging_type": "reps_and_weight",
     "muscle": "Glutes/Hamstrings",
     "name": "Single-Leg DB Deadlift",
-    "pattern": "Hip Hinge"
+    "pattern": "Hip Hinge",
+    "youtube_id": "MMsBXz1h1rE"
   },
   {
     "description": "Hold dumbbells at your sides, step onto a box or bench and drive through the front leg to stand.",
