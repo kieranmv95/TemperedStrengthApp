@@ -43,7 +43,6 @@ export const bodybuilding_free: Program = {
   difficulty: 'beginner',
   daysSplit: ['mon', 'wed', 'fri'],
   averageSessionDuration: '60m',
-  videoId: 'FfgherXuAv8',
   workouts: Array.from({ length: 4 }).flatMap((_, week) => {
     // Intensity trends upward across the block
     const intensity = week < 2 ? 7 : 8;
