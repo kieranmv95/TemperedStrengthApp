@@ -8,11 +8,13 @@ import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 type YoutubeEmbedProps = {
+  noRoundCorners?: boolean;
   youtubeId: string;
   accessibilityLabel?: string;
 };
 
 export function YoutubeEmbed({
+  noRoundCorners = false,
   youtubeId,
   accessibilityLabel,
 }: YoutubeEmbedProps) {
@@ -22,7 +24,7 @@ export function YoutubeEmbed({
   );
 
   return (
-    <View style={styles.videoContainer}>
+    <View style={[styles.videoContainer, noRoundCorners && { borderRadius: 0 }]}>
       <WebView
         source={{
           html: embedHtml,

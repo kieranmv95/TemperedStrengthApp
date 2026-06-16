@@ -1,8 +1,7 @@
-import { YoutubeEmbed } from '@/src/components/exercise/YoutubeEmbed';
 import { Pill } from '@/src/components/pill';
+import { RecoveryBlockTimer } from '@/src/components/recovery/RecoveryBlockTimer';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import type { Recovery, RecoveryBlock } from '@/src/types/recovery';
-import { RecoveryBlockTimer } from '@/src/components/recovery/RecoveryBlockTimer';
 import { getRecoveryDoseSteps } from '@/src/utils/recoveryDoseFormat';
 import { isTimeBasedRecoveryDose } from '@/src/utils/recoveryTimer';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,6 +15,7 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { YoutubeEmbed } from '../exercise/YoutubeEmbed';
 import { workoutDetailStyles as styles } from '../workouts/workoutDetailStyles';
 import { DIFFICULTY_COLORS } from '../workouts/workoutUiConstants';
 
@@ -37,40 +37,56 @@ function doseIconName(
   return 'time-outline';
 }
 
-function BlockCard({ block }: { block: RecoveryBlock }) {
+function BlockCard({
+  block,
+  blockIndex,
+  totalBlocks,
+}: {
+  block: RecoveryBlock;
+  blockIndex: number;
+  totalBlocks: number;
+}) {
   const iconName = doseIconName(block.dose);
 
   return (
-    <View style={flowStyles.blockCard}>
-      <Text style={flowStyles.blockTitle}>{block.name}</Text>
-      <View style={flowStyles.doseLines}>
-        {getRecoveryDoseSteps(block.dose).map((step, index) => (
-          <View key={index} style={flowStyles.doseRow}>
-            <Ionicons name={iconName} size={18} color={Colors.accent} />
-            <Text style={flowStyles.doseText}>
-              {step.label ? (
-                <Text style={flowStyles.doseStepLabel}>{step.label} · </Text>
-              ) : null}
-              {step.text}
-            </Text>
-          </View>
-        ))}
-      </View>
-      {isTimeBasedRecoveryDose(block.dose) ? (
-        <RecoveryBlockTimer dose={block.dose} />
-      ) : null}
+    <>
       {block.videoId ? (
         <View style={flowStyles.blockVideo}>
           <YoutubeEmbed
+            noRoundCorners
             youtubeId={block.videoId}
             accessibilityLabel={`Demonstration video for ${block.name}`}
           />
         </View>
       ) : null}
-      {block.instructions ? (
-        <Text style={flowStyles.blockInstructions}>{block.instructions}</Text>
-      ) : null}
-    </View>
+      <Text style={flowStyles.progress}>
+        {blockIndex + 1} / {totalBlocks} blocks
+      </Text>
+      <View style={flowStyles.blockCard}>
+        <View style={flowStyles.blockCardContent}>
+          <Text style={flowStyles.blockTitle}>{block.name}</Text>
+          <View style={flowStyles.doseLines}>
+            {getRecoveryDoseSteps(block.dose).map((step, index) => (
+              <View key={index} style={flowStyles.doseRow}>
+                <Ionicons name={iconName} size={18} color={Colors.accent} />
+                <Text style={flowStyles.doseText}>
+                  {step.label ? (
+                    <Text style={flowStyles.doseStepLabel}>{step.label} · </Text>
+                  ) : null}
+                  {step.text}
+                </Text>
+              </View>
+            ))}
+          </View>
+          {isTimeBasedRecoveryDose(block.dose) ? (
+            <RecoveryBlockTimer dose={block.dose} />
+          ) : null}
+          {block.instructions ? (
+            <Text style={flowStyles.blockInstructions}>{block.instructions}</Text>
+          ) : null}
+        </View>
+      </View>
+    </>
   );
 }
 
@@ -165,7 +181,7 @@ export function RecoveryFlowContent({ recovery }: RecoveryFlowContentProps) {
                     label={tag}
                     isActive={false}
                     disabled
-                    onPress={() => {}}
+                    onPress={() => { }}
                   />
                 ))}
               </View>
@@ -179,12 +195,11 @@ export function RecoveryFlowContent({ recovery }: RecoveryFlowContentProps) {
         ) : null}
 
         {phase === 'block' && currentBlock ? (
-          <>
-            <Text style={flowStyles.progress}>
-              {blockIndex + 1} / {totalBlocks} blocks
-            </Text>
-            <BlockCard block={currentBlock} />
-          </>
+          <BlockCard
+            block={currentBlock}
+            blockIndex={blockIndex}
+            totalBlocks={totalBlocks}
+          />
         ) : null}
 
         {phase === 'complete' ? (
@@ -282,14 +297,18 @@ const flowStyles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
     textTransform: 'uppercase',
+    marginTop: Spacing.sm,
     marginBottom: Spacing.xxl,
   },
   blockCard: {
     backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxxl,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.xxl,
+  },
+  blockCardContent: {
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xxxl,
   },
   blockTitle: {
     color: Colors.accent,
@@ -316,7 +335,10 @@ const flowStyles = StyleSheet.create({
     fontWeight: '600',
   },
   blockVideo: {
-    marginBottom: Spacing.xxl,
+    marginBottom: Spacing.lg,
+    marginLeft: -Spacing.xxxl,
+    marginRight: -Spacing.xxxl,
+    marginTop: -Spacing.xxxl,
   },
   blockInstructions: {
     color: Colors.textSecondary,
