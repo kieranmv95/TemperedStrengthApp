@@ -100,7 +100,12 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
   }
 
   return (
-    <View style={timerStyles.container}>
+    <View
+      style={[
+        timerStyles.container,
+        isRunning ? timerStyles.containerActive : timerStyles.containerIdle,
+      ]}
+    >
       {isRunning && remainingSeconds !== null ? (
         <>
           {currentStep?.label ? (
@@ -156,13 +161,18 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
 
 const timerStyles = StyleSheet.create({
   container: {
-    alignItems: 'center',
     gap: Spacing.md,
     marginBottom: Spacing.xxl,
+  },
+  containerActive: {
+    alignItems: 'center',
     paddingVertical: Spacing.lg,
     paddingHorizontal: Spacing.xl,
     borderRadius: BorderRadius.xxl,
     backgroundColor: Colors.backgroundElevated,
+  },
+  containerIdle: {
+    alignItems: 'flex-start',
   },
   startButton: {
     flexDirection: 'row',

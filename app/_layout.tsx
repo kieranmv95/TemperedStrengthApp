@@ -5,9 +5,9 @@ import { TogetherWeLiftProvider } from '@/src/hooks/together-we-lift-context';
 import { initializeRevenueCat } from '@/src/services/revenueCatService';
 import { getOnboarded, runStorageMigrations } from '@/src/utils/storage';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
+import { isRunningInExpoGo } from 'expo';
 import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { isRunningInExpoGo } from 'expo';
 import { PostHogProvider } from 'posthog-react-native';
 import { useEffect, useState } from 'react';
 import { LogBox, Platform } from 'react-native';
@@ -87,63 +87,63 @@ export default function RootLayout() {
         <SyncManagerProvider>
           <SubscriptionProvider>
             <TogetherWeLiftProvider>
-            <ExerciseVideoProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="glossary" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="tools/one-rep-max"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="tools/one-rep-max-breakdown"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="tools/creatine"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="tools/water-intake"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name="shop" options={{ headerShown: false }} />
-              <Stack.Screen name="recovery" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="article/[id]"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="patch-notes"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="account/general"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="account/program"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="onboarding"
-                options={{
-                  headerShown: false,
-                  gestureEnabled: false,
-                  animation: 'fade',
-                }}
-              />
-              <Stack.Screen
-                name="paywall"
-                options={{ presentation: 'modal', title: 'Upgrade to Pro' }}
-              />
-              <Stack.Screen
-                name="customer-center"
-                options={{ presentation: 'modal', title: 'Subscription' }}
-              />
-            </Stack>
-            <StatusBar style="light" />
-            </ExerciseVideoProvider>
+              <ExerciseVideoProvider>
+                <Stack>
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                  <Stack.Screen name="glossary" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="tools/one-rep-max"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="tools/one-rep-max-breakdown"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="tools/creatine"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="tools/water-intake"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen name="shop" options={{ headerShown: false }} />
+                  <Stack.Screen name="recovery" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="article/[id]"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="patch-notes"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="account/general"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="account/program"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="onboarding"
+                    options={{
+                      headerShown: false,
+                      gestureEnabled: false,
+                      animation: 'fade',
+                    }}
+                  />
+                  <Stack.Screen
+                    name="paywall"
+                    options={{ presentation: 'modal', title: 'Upgrade to Pro' }}
+                  />
+                  <Stack.Screen
+                    name="customer-center"
+                    options={{ presentation: 'modal', title: 'Subscription' }}
+                  />
+                </Stack>
+                <StatusBar style="light" />
+              </ExerciseVideoProvider>
             </TogetherWeLiftProvider>
           </SubscriptionProvider>
         </SyncManagerProvider>

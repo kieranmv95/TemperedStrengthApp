@@ -1,11 +1,11 @@
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { SmallChevron } from '@/src/components/ds/SmallChevron';
-import { isIos } from '@/src/utils/platform';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { refreshSanityHomeContent } from '@/src/services/sanityHomeContent';
 import type { OnboardingProfile } from '@/src/types/onboarding';
 import type { Program } from '@/src/types/program';
+import { isIos } from '@/src/utils/platform';
 import { getProgramById } from '@/src/utils/program';
 import {
   clearOnboarding,
@@ -183,7 +183,7 @@ export default function SettingsScreen() {
           >
             <Text style={styles.upgradePromptTitle}>Upgrade to Pro</Text>
             <Text style={styles.upgradePromptBody}>
-              Go Pro. Every workout and program, unlocked. Upgrade in Settings.
+              Go Pro to unlock. All workouts, programs, recovery flows, awards, unlimited exercise swaps and more.
             </Text>
             <Text style={styles.upgradePromptCta}>See plans →</Text>
           </TouchableOpacity>
@@ -230,7 +230,7 @@ export default function SettingsScreen() {
                     - Unlimited exercise swaps
                   </Text>
                   <Text style={styles.proFeatureItem}>
-                    - Early access to new features
+                    - All recovery flows access
                   </Text>
                   <Text style={styles.proFeatureItem}>
                     - All awards unlocked

@@ -37,9 +37,9 @@ const SORT_DIRECTION_OPTIONS: {
   value: RecoverySortDirection;
   label: string;
 }[] = [
-  { value: 'asc', label: 'Ascending' },
-  { value: 'desc', label: 'Descending' },
-];
+    { value: 'asc', label: 'Ascending' },
+    { value: 'desc', label: 'Descending' },
+  ];
 
 function equipmentLabel(equipment: RecoveryEquipment): string {
   return equipment
@@ -251,7 +251,7 @@ export default function RecoveryScreen() {
                   </View>
                 </View>
                 <View style={recoveryStyles.sortRow}>
-                  <Text style={styles.filtersLabel}>Order</Text>
+                  <Text style={styles.filtersLabel}>Title</Text>
                   <View style={recoveryStyles.sortPills}>
                     {SORT_DIRECTION_OPTIONS.map((option) => (
                       <Pill
