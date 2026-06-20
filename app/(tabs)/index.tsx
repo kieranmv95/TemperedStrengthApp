@@ -2,11 +2,9 @@ import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
 import { SponsorAdsCarousel } from '@/src/components/home/SponsorAdsCarousel';
-import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors } from '@/src/constants/theme';
 import { getAllExercises } from '@/src/data/exercises';
-import { TOOLS } from '@/src/data/tools';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useHomeRemoteNotification } from '@/src/hooks/useHomeRemoteNotification';
 import { useHomeSponsorAds } from '@/src/hooks/useHomeSponsorAds';
@@ -48,7 +46,6 @@ import React, {
 import {
   ActivityIndicator,
   Animated,
-  ScrollView,
   Text,
   TouchableOpacity,
   View
@@ -391,50 +388,6 @@ export default function HomeTabScreen() {
                 <SmallChevron />
               </Card>
             )}
-          </View>
-
-          <View style={styles.section}>
-            <CuratedSection
-              icon="sparkles-outline"
-              title="Quick links"
-              iconSizeOverride={18}
-              description="References and extras you will reuse"
-              size="small"
-              theme="gold"
-            />
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.toolsScrollContent}
-            >
-              <Pill
-                variant="card"
-                onPress={() =>
-                  trackHomeLink('quick_links_glossary', '/glossary', () =>
-                    router.push('/glossary')
-                  )
-                }
-                isActive={false}
-                label="Glossary"
-                icon="book-outline"
-              />
-              {TOOLS.map((tool) => (
-                <Pill
-                  key={tool.id}
-                  variant="card"
-                  onPress={() =>
-                    trackHomeLink(
-                      `quick_links_${tool.id}`,
-                      tool.route,
-                      () => router.push(tool.route)
-                    )
-                  }
-                  isActive={false}
-                  label={tool.pillLabel}
-                  icon={tool.icon}
-                />
-              ))}
-            </ScrollView>
           </View>
 
           <View style={styles.section}>
