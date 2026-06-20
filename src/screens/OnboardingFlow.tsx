@@ -3,14 +3,14 @@ import { OnboardingProgressBar } from '@/src/components/onboarding/OnboardingPro
 import { onboardingStyles as styles } from '@/src/components/onboarding/onboardingStyles';
 import { Colors } from '@/src/constants/theme';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
-import { isIos } from '@/src/utils/platform';
+import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type {
   OnboardingExperienceLevel,
   OnboardingGender,
   OnboardingInterest,
   OnboardingProfile,
 } from '@/src/types/onboarding';
-import { posthogEventsNames } from '@/src/services/posthogEvents';
+import { isIos } from '@/src/utils/platform';
 import {
   getOnboardingProfile,
   getWeightUnit,
@@ -27,6 +27,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Animated,
+  Image,
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
@@ -41,6 +42,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const TOTAL_STEPS = 8;
 const ICLOUD_STEP_INDEX = 6;
 const WELCOME_STEP_INDEX = 7;
+const ONBOARDING_GENDER_IMAGES = {
+  female: require('@/assets/images/onboarding/FEMALE.png'),
+  male: require('@/assets/images/onboarding/MALE.png'),
+} as const;
 const TOTAL_PROGRESS_STEPS = isIos ? TOTAL_STEPS - 1 : TOTAL_STEPS - 2;
 
 function nextStepIndex(current: number): number {
@@ -112,10 +117,10 @@ const EXPERIENCE_OPTIONS: {
   value: OnboardingExperienceLevel;
   label: string;
 }[] = [
-  { value: 'beginner', label: 'Beginner' },
-  { value: 'intermediate', label: 'Intermediate' },
-  { value: 'advanced', label: 'Advanced' },
-];
+    { value: 'beginner', label: 'Beginner' },
+    { value: 'intermediate', label: 'Intermediate' },
+    { value: 'advanced', label: 'Advanced' },
+  ];
 
 function OnboardingFlow() {
   const posthog = usePostHog();
@@ -510,66 +515,23 @@ function OnboardingFlow() {
         );
       case 7:
         return (
-          <View style={styles.stepBody}>
-            <Text style={styles.stepTitle}>You’re in.</Text>
-            <Text style={styles.stepSubtitle}>
+          <View style={styles.welcomeStepBody}>
+            <Text style={styles.welcomeStepTitle}>You’re in.</Text>
+            <Text style={styles.welcomeStepSubtitle}>
               Time to lift, log, and level up.
             </Text>
-            <View style={styles.finalCard}>
-              <Text style={styles.finalCardTitle}>What you can do now</Text>
-              <View style={styles.finalBullets}>
-                <Text style={styles.finalBullet}>
-                  Start a program and follow it week by week
-                </Text>
-                <Text style={styles.finalBullet}>
-                  Hit a standalone workout when you want to move today
-                </Text>
-                <Text style={styles.finalBullet}>
-                  Log sets fast and keep training honest
-                </Text>
-                <Text style={styles.finalBullet}>
-                  Chase PBs and watch your numbers climb
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.finalActions}>
-              <TouchableOpacity
-                style={styles.finalActionPrimary}
-                onPress={() => completeOnboarding(profile, '/')}
-                disabled={completing}
-                accessibilityRole="button"
-                accessibilityLabel="Start a program"
-              >
-                <Text style={styles.finalActionPrimaryText}>
-                  Start a program
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.finalActionSecondary}
-                onPress={() => completeOnboarding(profile, '/workouts')}
-                disabled={completing}
-                accessibilityRole="button"
-                accessibilityLabel="Browse workouts"
-              >
-                <Text style={styles.finalActionSecondaryText}>
-                  Browse workouts
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.finalActionSecondary}
-                onPress={() => completeOnboarding(profile, '/records')}
-                disabled={completing}
-                accessibilityRole="button"
-                accessibilityLabel="Chase personal bests"
-              >
-                <Text style={styles.finalActionSecondaryText}>Chase PBs</Text>
-              </TouchableOpacity>
-            </View>
-
-            <Text style={styles.finalFinePrint}>
-              You can tweak preferences any time in Account.
-            </Text>
+            <Image
+              source={
+                gender === 'female'
+                  ? ONBOARDING_GENDER_IMAGES.female
+                  : ONBOARDING_GENDER_IMAGES.male
+              }
+              style={styles.genderHeroImage}
+              resizeMode="contain"
+              accessibilityLabel={
+                gender === 'female' ? 'Female athlete' : 'Male athlete'
+              }
+            />
           </View>
         );
       default:
@@ -628,7 +590,7 @@ function OnboardingFlow() {
           disabled: completing,
         };
       default:
-        return { label: 'Continue', onPress: () => {}, disabled: true };
+        return { label: 'Continue', onPress: () => { }, disabled: true };
     }
   };
 
@@ -704,15 +666,23 @@ function OnboardingFlow() {
               </View>
             </View>
 
-            <ScrollView
-              style={styles.scroll}
-              contentContainerStyle={styles.scrollContent}
-              keyboardShouldPersistTaps="handled"
-            >
-              <Animated.View style={{ flex: 1, opacity: fade }}>
-                {renderStep()}
-              </Animated.View>
-            </ScrollView>
+            {stepIndex === WELCOME_STEP_INDEX ? (
+              <View style={styles.welcomeStepContainer}>
+                <Animated.View style={{ opacity: fade }}>
+                  {renderStep()}
+                </Animated.View>
+              </View>
+            ) : (
+              <ScrollView
+                style={styles.scroll}
+                contentContainerStyle={styles.scrollContent}
+                keyboardShouldPersistTaps="handled"
+              >
+                <Animated.View style={{ flex: 1, opacity: fade }}>
+                  {renderStep()}
+                </Animated.View>
+              </ScrollView>
+            )}
 
             <SafeAreaView edges={['bottom']}>
               <View style={styles.footer}>

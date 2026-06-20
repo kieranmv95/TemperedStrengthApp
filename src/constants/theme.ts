@@ -25,6 +25,8 @@ export const Colors = {
 
   // Accent / brand
   accent: '#C9B072',
+  /** Gold text on dark surfaces (same as accent in default palette). */
+  accentText: '#C9B072',
   /** Same hue as `accent` (#C9B072 → rgb 201, 176, 114) */
   accentOverlay: 'rgba(201, 176, 114, 0.9)',
   /** Translucent accent fills */
@@ -63,6 +65,8 @@ export const Colors = {
   awardHighlight06: 'rgba(255,255,255,0.06)',
   awardBannerText: 'rgba(0,0,0,0.38)',
 };
+
+export type ThemeColors = typeof Colors;
 
 export type AwardIconVariantKey = 'bronze' | 'silver' | 'platinum';
 
