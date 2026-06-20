@@ -13,14 +13,8 @@ export const SPONSOR_PRODUCT_IMAGE_BLEED = SPONSOR_PRODUCT_IMAGE_SIZE * 0.25;
 export const SPONSOR_AUTO_SCROLL_MS = 6000;
 
 export const homeScreenStyles = StyleSheet.create({
-  section: {
-    gap: Spacing.md,
-  },
   spacing: {
-    gap: Spacing.section,
-  },
-  notificationSpacing: {
-    gap: Spacing.md,
+    gap: Spacing.xxl,
   },
   loadingBox: {
     paddingVertical: Spacing.section,

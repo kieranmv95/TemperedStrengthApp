@@ -1,8 +1,8 @@
 import { SponsorAdCard } from '@/src/components/home/SponsorAdCard';
 import {
-  homeScreenStyles as styles,
   SPONSOR_AUTO_SCROLL_MS,
   SPONSOR_CARD_HEIGHT,
+  homeScreenStyles as styles,
 } from '@/src/components/home/homeScreenStyles';
 import { Spacing } from '@/src/constants/theme';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -178,20 +178,6 @@ export function SponsorAdsCarousel({ ads, onPressCta }: SponsorAdsCarouselProps)
         }}
         style={{ height: SPONSOR_CARD_HEIGHT }}
       />
-      {ads.length > 1 ? (
-        <View style={styles.sponsorDots} accessibilityRole="tablist">
-          {ads.map((ad, index) => (
-            <View
-              key={ad.id}
-              style={[
-                styles.sponsorDot,
-                index === activeIndex && styles.sponsorDotActive,
-              ]}
-              accessibilityLabel={`Sponsor ${index + 1} of ${ads.length}`}
-            />
-          ))}
-        </View>
-      ) : null}
     </View>
   );
 }

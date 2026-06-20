@@ -1,4 +1,4 @@
-import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
+import { Card, SmallChevron } from '@/src/components/ds';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
 import { SponsorAdsCarousel } from '@/src/components/home/SponsorAdsCarousel';
@@ -213,103 +213,90 @@ export default function HomeTabScreen() {
     <StandardLayout title={greetingTitle} subtitle={headerSubtitle}>
       <StandardLayout.Body>
         <View style={styles.spacing}>
-          <View style={styles.notificationSpacing}>
-            {showFreeStrip && (
-              <Animated.View
-                style={[styles.welcomeStrip, { opacity: freeStripOpacity }]}
+          {showFreeStrip && (
+            <Animated.View
+              style={[styles.welcomeStrip, { opacity: freeStripOpacity }]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.85}
+                onPress={() =>
+                  trackHomeLink('welcome_strip', '/settings', () =>
+                    router.push('/settings')
+                  )
+                }
+                accessibilityRole="button"
+                accessibilityLabel="Upgrade to Pro, free tier"
+                accessibilityHint="Opens settings where you can upgrade to Tempered Strength Pro"
               >
+                <View style={styles.welcomeStripTopRow}>
+                  <View style={styles.welcomeHeadlineCell}>
+                    <Text style={styles.welcomeTitle}>Upgrade to Pro</Text>
+                  </View>
+                  <View style={styles.planBadgeFree} pointerEvents="none">
+                    <Text style={styles.planBadgeLabelFree}>FREE TIER</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </Animated.View>
+          )}
+
+          {remoteNotification && (
+            <View
+              style={[
+                styles.notificationBanner,
+                {
+                  backgroundColor: remoteNotification.bgColor,
+                  borderColor: remoteNotification.borderColor,
+                },
+              ]}
+            >
+              {remoteNotification.title.length > 0 ? (
+                <Text
+                  style={[
+                    styles.notificationBannerTitle,
+                    { color: remoteNotification.titleColor },
+                  ]}
+                >
+                  {remoteNotification.title}
+                </Text>
+              ) : null}
+              {remoteNotification.body.length > 0 ? (
+                <Text
+                  style={[
+                    styles.notificationBannerBody,
+                    { color: remoteNotification.descriptionColor },
+                  ]}
+                >
+                  {remoteNotification.body}
+                </Text>
+              ) : null}
+              {remoteNotification.ctaText.length > 0 &&
+                remoteNotification.ctaUrl.length > 0 ? (
                 <TouchableOpacity
-                  activeOpacity={0.85}
+                  style={[
+                    styles.notificationCta,
+                    { backgroundColor: remoteNotification.ctaColor },
+                  ]}
                   onPress={() =>
-                    trackHomeLink('welcome_strip', '/settings', () =>
-                      router.push('/settings')
-                    )
+                    openHomeCtaUrl(remoteNotification.ctaUrl)
                   }
                   accessibilityRole="button"
-                  accessibilityLabel="Upgrade to Pro, free tier"
-                  accessibilityHint="Opens settings where you can upgrade to Tempered Strength Pro"
+                  accessibilityLabel={remoteNotification.ctaText}
                 >
-                  <View style={styles.welcomeStripTopRow}>
-                    <View style={styles.welcomeHeadlineCell}>
-                      <Text style={styles.welcomeTitle}>Upgrade to Pro</Text>
-                    </View>
-                    <View style={styles.planBadgeFree} pointerEvents="none">
-                      <Text style={styles.planBadgeLabelFree}>FREE TIER</Text>
-                    </View>
-                  </View>
+                  <Text
+                    style={[
+                      styles.notificationCtaText,
+                      { color: remoteNotification.ctaTextColor },
+                    ]}
+                  >
+                    {remoteNotification.ctaText}
+                  </Text>
                 </TouchableOpacity>
-              </Animated.View>
-            )}
+              ) : null}
+            </View>
+          )}
 
-            {remoteNotification && (
-              <View
-                style={[
-                  styles.notificationBanner,
-                  {
-                    backgroundColor: remoteNotification.bgColor,
-                    borderColor: remoteNotification.borderColor,
-                  },
-                ]}
-              >
-                {remoteNotification.title.length > 0 ? (
-                  <Text
-                    style={[
-                      styles.notificationBannerTitle,
-                      { color: remoteNotification.titleColor },
-                    ]}
-                  >
-                    {remoteNotification.title}
-                  </Text>
-                ) : null}
-                {remoteNotification.body.length > 0 ? (
-                  <Text
-                    style={[
-                      styles.notificationBannerBody,
-                      { color: remoteNotification.descriptionColor },
-                    ]}
-                  >
-                    {remoteNotification.body}
-                  </Text>
-                ) : null}
-                {remoteNotification.ctaText.length > 0 &&
-                  remoteNotification.ctaUrl.length > 0 ? (
-                  <TouchableOpacity
-                    style={[
-                      styles.notificationCta,
-                      { backgroundColor: remoteNotification.ctaColor },
-                    ]}
-                    onPress={() =>
-                      openHomeCtaUrl(remoteNotification.ctaUrl)
-                    }
-                    accessibilityRole="button"
-                    accessibilityLabel={remoteNotification.ctaText}
-                  >
-                    <Text
-                      style={[
-                        styles.notificationCtaText,
-                        { color: remoteNotification.ctaTextColor },
-                      ]}
-                    >
-                      {remoteNotification.ctaText}
-                    </Text>
-                  </TouchableOpacity>
-                ) : null}
-              </View>
-            )}
-
-            {sponsorAds.length > 0 ? (
-              <SponsorAdsCarousel ads={sponsorAds} onPressCta={openSponsorCta} />
-            ) : null}
-          </View>
-
-          <View style={styles.section}>
-            <CuratedSection
-              icon="barbell-outline"
-              title="Your program"
-              description="What is on deck today and what is left in your block"
-              size="small"
-              theme="gold"
-            />
+          <View>
             {programSummary ? (
               <Card
                 onPress={() =>
@@ -390,31 +377,18 @@ export default function HomeTabScreen() {
             )}
           </View>
 
-          <View style={styles.section}>
-            <CuratedSection
-              icon="flame-outline"
-              title="Streak"
-              description="Open the app daily to build your training habit"
-              size="small"
-              theme="gold"
-            />
-            {streakSnapshot ? (
-              <HomeStreakCard
-                snapshot={streakSnapshot}
-                displayName={displayName}
-              />
-            ) : null}
-          </View>
+          {sponsorAds.length > 0 ? (
+            <SponsorAdsCarousel ads={sponsorAds} onPressCta={openSponsorCta} />
+          ) : null}
 
-          <View style={styles.section}>
-            <CuratedSection
-              icon="trophy-outline"
-              title="Recent wins"
-              description="Your last three PRs, small jumps still count"
-              iconSizeOverride={18}
-              size="small"
-              theme="gold"
+          {streakSnapshot ? (
+            <HomeStreakCard
+              snapshot={streakSnapshot}
+              displayName={displayName}
             />
+          ) : null}
+
+          <View>
             {hasPersonalBests ? (
               <Card
                 onPress={() =>
@@ -471,14 +445,7 @@ export default function HomeTabScreen() {
             )}
           </View>
 
-          <View style={styles.section}>
-            <CuratedSection
-              icon="person-circle-outline"
-              title="You"
-              description="Settings and preferences"
-              size="small"
-              theme="gold"
-            />
+          <View>
             <TouchableOpacity
               style={workoutScreenStyles.startSessionButton}
               onPress={() =>
