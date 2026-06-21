@@ -32,6 +32,7 @@ import {
 } from '@/src/utils/storage';
 import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
 import { formatWeightFromKg } from '@/src/utils/weightUnits';
+import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
 import { router, type Href } from 'expo-router';
@@ -170,7 +171,7 @@ export default function HomeTabScreen() {
     if (!pbStore) {
       return [];
     }
-    return listRecentPersonalBestRows(pbStore, exerciseNameById, 3);
+    return listRecentPersonalBestRows(pbStore, exerciseNameById, 1);
   }, [pbStore]);
 
   const showFreeStrip = !subscriptionLoading && !isPro;
@@ -307,9 +308,16 @@ export default function HomeTabScreen() {
                 accessibilityLabel="Open program"
               >
                 <View style={styles.cardBody}>
-                  <Text style={styles.cardTitle}>
+                  <Text style={styles.programTitle}>
                     {programSummary.programName}
                   </Text>
+                  <Text style={styles.programStatus}>
+                    {programSummary.todaySessionLabel}
+                  </Text>
+                  <Text style={styles.programSessionsRemaining}>
+                    {programSummary.sessionsRemaining} session{programSummary.sessionsRemaining === 1 ? '' : 's'} remaining
+                  </Text>
+
                   <View
                     style={styles.programCalendarProgressTrack}
                     accessible
@@ -341,18 +349,6 @@ export default function HomeTabScreen() {
                       ]}
                     />
                   </View>
-                  <Text style={[styles.cardMuted, { marginTop: 4 }]}>
-                    {programSummary.awaitingProgramStart ? null : <>Today: </>}
-                    <Text style={styles.cardAccent}>
-                      {programSummary.todaySessionLabel}
-                    </Text>
-                  </Text>
-                  <Text style={styles.cardMuted}>
-                    Sessions left:{' '}
-                    <Text style={styles.cardAccent}>
-                      {programSummary.sessionsRemaining}
-                    </Text>
-                  </Text>
                 </View>
                 <SmallChevron />
               </Card>
@@ -399,6 +395,10 @@ export default function HomeTabScreen() {
                 accessibilityLabel="Open records and personal bests"
               >
                 <View style={[styles.cardBody, styles.pbListContent]}>
+                  <View style={styles.pbListTitleRow}>
+                    <Ionicons name="trophy-outline" size={18} color={Colors.accent} />
+                    <Text style={styles.pbListTitle}>Your latest PB</Text>
+                  </View>
                   {recentPbs.map((row, index) => (
                     <View
                       key={`${row.exerciseId}-${row.tier}-${row.achievedAt}-${index}`}
@@ -434,10 +434,9 @@ export default function HomeTabScreen() {
                 accessibilityLabel="Open records to log personal bests"
               >
                 <View style={styles.cardBody}>
-                  <Text style={styles.emptyTitle}>No PRs yet</Text>
+                  <Text style={styles.cardTitle}>No PRs yet</Text>
                   <Text style={styles.emptySubtitle}>
-                    Log a PB from a workout and it will show up here. First one
-                    is the best one.
+                    Your latest PB from your programs or on the you will show up here.
                   </Text>
                 </View>
                 <SmallChevron />

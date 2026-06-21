@@ -264,4 +264,41 @@ export const workoutsListStyles = StyleSheet.create({
     height: 18,
     resizeMode: 'contain',
   },
+  recoveryCard: {
+    backgroundColor: Colors.accentWashFill,
+    borderColor: Colors.accentWashBorder,
+    marginBottom: Spacing.section,
+  },
+  recoveryVisualTile: {
+    width: 72,
+    height: 72,
+    borderRadius: BorderRadius.lg,
+    backgroundColor: Colors.backgroundElevated,
+    borderWidth: 1,
+    borderColor: Colors.accentWashOutline,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  recoveryCtaTextColumn: {
+    flex: 1,
+    marginLeft: Spacing.xl,
+    gap: Spacing.xs,
+  },
+  shopEyebrow: {
+    color: Colors.accent,
+    fontSize: FontSize.sm,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+  hubCtaTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xl,
+    fontWeight: '700',
+  },
+  hubCtaDescription: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+  },
 });

@@ -1,4 +1,4 @@
-import { CuratedSection } from '@/src/components/ds';
+import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { WorkoutActiveFiltersBar } from '@/src/components/workouts/WorkoutActiveFiltersBar';
@@ -110,6 +110,10 @@ export default function WorkoutsScreen() {
     } else {
       setFavorites(favorites.filter((id) => id !== workout.id));
     }
+  };
+
+  const handleOpenRecovery = () => {
+    router.push('/recovery');
   };
 
   const handleWorkoutPress = (workout: SingleWorkout) => {
@@ -467,6 +471,23 @@ export default function WorkoutsScreen() {
             ListHeaderComponent={
               <View style={styles.curatedSectionList}>
                 <View>
+                  <Card
+                    onPress={handleOpenRecovery}
+                    accessibilityLabel="Browse recovery flows"
+                    style={styles.recoveryCard}
+                  >
+                    <View style={styles.recoveryVisualTile}>
+                      <Ionicons name="body" size={30} color={Colors.accent} />
+                    </View>
+                    <View style={styles.recoveryCtaTextColumn}>
+                      <Text style={styles.shopEyebrow}>Move &amp; restore</Text>
+                      <Text style={styles.hubCtaTitle}>Mobility &amp; flows</Text>
+                      <Text style={styles.hubCtaDescription}>
+                        Guided flows to help you recover and move better.
+                      </Text>
+                    </View>
+                    <SmallChevron />
+                  </Card>
                   <CuratedSection
                     title="Disciplines"
                     description="get started with what you already know"

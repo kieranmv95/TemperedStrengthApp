@@ -1,5 +1,5 @@
-import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import { getProgramById } from '@/src/utils/program';
+import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import {
   getShiftedWorkoutForDaySinceStart,
   listShiftedTrainingDayDeltasForProgram,

@@ -19,68 +19,67 @@ function parseYmdToLocalNoon(ymd: string): Date {
   return new Date(y, m, d, 12, 0, 0);
 }
 
-export function HomeStreakCard({ snapshot, displayName }: HomeStreakCardProps) {
+export function HomeStreakCard({ snapshot }: HomeStreakCardProps) {
   const dateSet = useMemo(() => new Set(snapshot.dates), [snapshot.dates]);
   const week = useMemo(
     () => weekDaysStartingMonday(parseYmdToLocalNoon(snapshot.todayLocal)),
     [snapshot.todayLocal]
   );
+  const dayLabel = snapshot.currentStreak === 1 ? 'day' : 'days';
 
   return (
-    <Card>
+    <Card style={styles.streakCard}>
       <View style={styles.streakCardInner}>
-        <View style={styles.streakHero}>
-          <View style={styles.streakIconRing}>
-            <Ionicons name="flame" size={28} color={Colors.accent} />
+        <View style={styles.streakHeader}>
+          <Ionicons name="flame" size={18} color={Colors.accent} />
+          <Text style={styles.streakHeaderTitle}>Streak</Text>
+        </View>
+
+        <View style={styles.streakMainRow}>
+          <View style={styles.streakStatsColumn}>
+            <View style={styles.streakCountRow}>
+              <Text style={styles.streakNumber}>{snapshot.currentStreak}</Text>
+              <Text style={styles.streakCountUnit}>{dayLabel}</Text>
+            </View>
+            <Text style={styles.streakBestLine}>
+              Best: {snapshot.bestStreak} {snapshot.bestStreak === 1 ? 'day' : 'days'}
+            </Text>
           </View>
-          <Text style={styles.streakNumber}>{snapshot.currentStreak}</Text>
-          <Text style={styles.streakLabel}>Day streak</Text>
-        </View>
 
-        <View style={styles.streakWeekRow}>
-          {week.map((day) => {
-            const done = dateSet.has(day.ymd);
-            const isToday = day.ymd === snapshot.todayLocal;
-            return (
-              <View key={day.ymd} style={styles.streakWeekCell}>
-                <Text
-                  style={[
-                    styles.streakWeekLetter,
-                    isToday && styles.streakWeekLetterToday,
-                    !isToday && !done && styles.streakWeekLetterMuted,
-                  ]}
-                >
-                  {day.label}
-                </Text>
-                <Text
-                  style={[
-                    styles.streakWeekDateNum,
-                    isToday && styles.streakWeekDateNumToday,
-                    !isToday && !done && styles.streakWeekDateNumMuted,
-                  ]}
-                >
-                  {day.dayOfMonth}
-                </Text>
-                <View
-                  style={[
-                    styles.streakDayDot,
-                    done && styles.streakDayDotDone,
-                    isToday && !done && styles.streakDayDotTodayRing,
-                  ]}
-                >
-                  {done ? (
-                    <Ionicons name="checkmark" size={12} color={Colors.textOnAccent} />
-                  ) : null}
+          <View style={styles.streakWeekRow}>
+            {week.map((day) => {
+              const done = dateSet.has(day.ymd);
+              const isToday = day.ymd === snapshot.todayLocal;
+              return (
+                <View key={day.ymd} style={styles.streakWeekCell}>
+                  <Text
+                    style={[
+                      styles.streakWeekLetter,
+                      isToday && styles.streakWeekLetterToday,
+                      !isToday && !done && styles.streakWeekLetterMuted,
+                    ]}
+                  >
+                    {day.label}
+                  </Text>
+                  <View
+                    style={[
+                      styles.streakDayDot,
+                      done && styles.streakDayDotDone,
+                      isToday && !done && styles.streakDayDotTodayRing,
+                    ]}
+                  >
+                    {done ? (
+                      <Ionicons
+                        name="checkmark"
+                        size={10}
+                        color={Colors.textOnAccent}
+                      />
+                    ) : null}
+                  </View>
                 </View>
-              </View>
-            );
-          })}
-        </View>
-
-        <View style={styles.streakStatsCard}>
-          <Text style={styles.streakBestLine}>
-            Best streak: {snapshot.bestStreak} days
-          </Text>
+              );
+            })}
+          </View>
         </View>
       </View>
     </Card>

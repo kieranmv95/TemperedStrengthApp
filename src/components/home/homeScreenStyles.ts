@@ -74,7 +74,7 @@ export const homeScreenStyles = StyleSheet.create({
   welcomeTitle: {
     color: Colors.accent,
     fontSize: FontSize.xl,
-    fontWeight: '800',
+    fontWeight: '600',
     letterSpacing: -0.3,
   },
   welcomeBody: {
@@ -212,15 +212,29 @@ export const homeScreenStyles = StyleSheet.create({
     flex: 1,
     gap: Spacing.sm,
   },
+  programTitle: {
+    color: Colors.accent,
+    fontSize: FontSize.xl,
+    fontWeight: '500',
+  },
+  programStatus: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayMd,
+    fontWeight: '700',
+  },
+  programSessionsRemaining: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+  },
   cardTitle: {
     color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '800',
+    fontSize: FontSize.xxxl,
+    fontWeight: '600',
   },
   programCalendarProgressTrack: {
     width: '100%',
-    height: 6,
-    marginTop: 4,
+    height: 4,
+    marginTop: Spacing.xs,
     borderRadius: BorderRadius.pill,
     backgroundColor: Colors.backgroundSubtle,
     overflow: 'hidden',
@@ -252,11 +266,18 @@ export const homeScreenStyles = StyleSheet.create({
   pbListContent: {
     gap: Spacing.sm,
   },
+  pbListTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  pbListTitle: {
+    color: Colors.accent,
+    fontSize: FontSize.xxxl,
+    fontWeight: '600',
+  },
   pbRow: {
-    borderWidth: 1,
-    borderColor: Colors.backgroundBorder,
-    padding: Spacing.md,
-    borderRadius: BorderRadius.xl,
+    marginTop: Spacing.xs,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -264,21 +285,18 @@ export const homeScreenStyles = StyleSheet.create({
   },
   pbRowTitle: {
     color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '800',
-  },
-  pbMaxLabel: {
-    color: Colors.accent,
-    fontSize: FontSize.sm,
-    marginTop: Spacing.xxs,
+    fontSize: FontSize.displayMd,
     fontWeight: '700',
   },
+  pbMaxLabel: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    fontWeight: '500',
+  },
   pbValueContainer: {
-    backgroundColor: Colors.accentWashFill,
-    padding: Spacing.md,
+    backgroundColor: Colors.backgroundSubtle,
+    padding: Spacing.lg,
     borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.accentWashBorder,
   },
   pbValue: {
     color: Colors.textPrimary,
@@ -290,78 +308,84 @@ export const homeScreenStyles = StyleSheet.create({
     paddingRight: Spacing.xxl,
   },
 
-  streakCardInner: {
-    flex: 1,
-    gap: Spacing.xl,
+  streakCard: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
   },
-  streakHero: {
+  streakCardInner: {
+    width: '100%',
+    gap: Spacing.lg,
+  },
+  streakHeader: {
+    flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.sm,
   },
-  streakIconRing: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    borderWidth: 1,
-    borderColor: Colors.accentWashOutline,
+  streakHeaderTitle: {
+    color: Colors.accent,
+    fontSize: FontSize.xxxl,
+    fontWeight: '600',
+    letterSpacing: -0.3,
+  },
+  streakMainRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    width: '100%',
+    gap: Spacing.lg,
+  },
+  streakStatsColumn: {
+    gap: Spacing.xxs,
+    flexShrink: 0,
+    minWidth: 84,
+  },
+  streakCountRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: Spacing.sm,
   },
   streakNumber: {
     color: Colors.textPrimary,
-    fontSize: FontSize.hero,
+    fontSize: FontSize.displayXXl,
     fontWeight: '800',
     letterSpacing: -0.5,
   },
-  streakLabel: {
-    color: Colors.textPrimary,
+  streakCountUnit: {
+    color: Colors.textMuted,
     fontSize: FontSize.xl,
-    fontWeight: '700',
+    fontWeight: '600',
   },
   streakWeekRow: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    paddingHorizontal: Spacing.xxs,
+    alignItems: 'flex-end',
+    minWidth: 0,
   },
   streakWeekCell: {
+    flex: 1,
     alignItems: 'center',
     gap: Spacing.xxs,
-    minWidth: 36,
   },
   streakWeekLetter: {
     color: Colors.textSecondary,
-    fontSize: FontSize.sm,
+    fontSize: FontSize.xxs,
     fontWeight: '600',
   },
   streakWeekLetterToday: {
-    color: Colors.textPrimary,
+    color: Colors.accent,
     fontWeight: '800',
   },
   streakWeekLetterMuted: {
     color: Colors.textMuted,
   },
-  streakWeekDateNum: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-  },
-  streakWeekDateNumToday: {
-    color: Colors.textPrimary,
-    fontWeight: '800',
-  },
-  streakWeekDateNumMuted: {
-    color: Colors.textMuted,
-  },
   streakDayDot: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
     borderWidth: 1,
     borderColor: Colors.backgroundBorder,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: Spacing.xxs,
   },
   streakDayDotDone: {
     backgroundColor: Colors.accent,
@@ -371,16 +395,9 @@ export const homeScreenStyles = StyleSheet.create({
     borderColor: Colors.accentWashOutline,
     borderWidth: 2,
   },
-  streakStatsCard: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.xl,
-    paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.section,
-    alignItems: 'center',
-  },
   streakBestLine: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    color: Colors.textMuted,
+    fontSize: FontSize.sm,
+    fontWeight: '500',
   },
 });

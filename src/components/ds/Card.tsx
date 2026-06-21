@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.backgroundCard,
         borderRadius: BorderRadius.xxl,
         borderWidth: 1,
-        borderColor: Colors.backgroundBorder,
+        borderColor: Colors.backgroundElevated,
         padding: Spacing.xxl,
         flexDirection: 'row',
         alignItems: 'center',

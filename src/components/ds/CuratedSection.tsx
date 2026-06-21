@@ -50,9 +50,7 @@ export const CuratedSection = ({ title, description, size, style, icon, iconSize
 
 const styles = StyleSheet.create({
     header: {
-        borderLeftWidth: 1,
-        borderLeftColor: Colors.accent,
-        paddingLeft: Spacing.md,
+
     },
     titleRow: {
         flexDirection: 'row',
@@ -62,7 +60,6 @@ const styles = StyleSheet.create({
     title: {
         color: Colors.textPrimary,
         fontWeight: '800',
-        marginBottom: 4,
     },
     title_gold: { color: Colors.accent },
     title_large: { fontSize: FontSize.displayXl, },
