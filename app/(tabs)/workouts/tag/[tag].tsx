@@ -82,7 +82,7 @@ export default function WorkoutsByTagScreen() {
   };
 
   const handleLockedPress = () => {
-    router.push('/settings');
+    router.push('/records');
   };
 
   const handleSponsorPress = useCallback(() => {

@@ -288,7 +288,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
             style: 'default',
             onPress: () => {
               setShowProgramDetails(false);
-              router.push('/settings');
+              router.push('/records');
             },
           },
         ]
@@ -518,7 +518,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           onStartProgram={handleStartProgram}
           onUpgradePress={() => {
             setShowProgramDetails(false);
-            router.push('/settings');
+            router.push('/records');
           }}
           bottomInset={insets.bottom}
         />

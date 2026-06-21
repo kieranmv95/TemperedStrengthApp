@@ -94,7 +94,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             current program in your account.
           </Text>
           <TouchableOpacity
-            onPress={() => router.push('/settings')}
+            onPress={() => router.push('/records')}
             activeOpacity={0.7}
             style={styles.startSessionButton}
           >

@@ -20,8 +20,7 @@ import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Text, TouchableOpacity, View } from 'react-native';
 
-
-export default function SettingsScreen() {
+export function YouAccountSettingsScreen() {
   const [, setHasProgram] = useState<boolean>(false);
   const [, setActiveProgram] = useState<Program | null>(null);
   const [onboardedState, setOnboardedState] = useState<boolean>(false);
@@ -76,10 +75,8 @@ export default function SettingsScreen() {
 
   const handleSubscriptionPress = () => {
     if (isPro) {
-      // Open Customer Center for Pro users
       router.push('/customer-center');
     } else {
-      // Open Paywall for non-Pro users
       router.push('/paywall');
     }
   };
@@ -154,7 +151,6 @@ export default function SettingsScreen() {
               await AsyncStorage.clear();
               setHasProgram(false);
               setActiveProgram(null);
-              // Land on Home after clearing data
               router.replace('/');
               Alert.alert('Success', 'All data has been cleared.');
             } catch (error) {
@@ -171,51 +167,29 @@ export default function SettingsScreen() {
   };
 
   return (
-    <StandardLayout title="Account" subtitle="Manage your account">
+    <StandardLayout
+      title="Account & Settings"
+      subtitle="Manage your account"
+      onBackPress={() => router.back()}
+    >
       <StandardLayout.Body>
-        {!subscriptionLoading && !isPro ? (
-          <TouchableOpacity
-            style={styles.upgradePrompt}
-            onPress={() => router.push('/paywall')}
-            activeOpacity={0.85}
-            accessibilityRole="button"
-            accessibilityLabel="Upgrade to Tempered Strength Pro. Opens subscription plans"
-          >
-            <Text style={styles.upgradePromptTitle}>Upgrade to Pro</Text>
-            <Text style={styles.upgradePromptBody}>
-              Go Pro to unlock. All workouts, programs, recovery flows, awards, unlimited exercise swaps and more.
-            </Text>
-            <Text style={styles.upgradePromptCta}>See plans →</Text>
-          </TouchableOpacity>
-        ) : null}
         <View style={styles.settingsList}>
-          {onboardingProfileState?.name && (
-            <Text style={styles.settingTitle}>
-              Hi {onboardingProfileState?.name}
-            </Text>
-          )}
-          <TouchableOpacity
-            style={[styles.settingItem, isPro && styles.proItem]}
-            onPress={handleSubscriptionPress}
-            disabled={subscriptionLoading}
-          >
-            <View style={styles.settingContent}>
-              <View style={styles.settingTitleRow}>
-                <Text style={styles.settingTitle}>
-                  {isPro ? 'Tempered Strength Pro' : 'Upgrade to Pro'}
-                </Text>
-                {isPro && (
+          {isPro ? (
+            <TouchableOpacity
+              style={[styles.settingItem, styles.proItem]}
+              onPress={handleSubscriptionPress}
+              disabled={subscriptionLoading}
+            >
+              <View style={styles.settingContent}>
+                <View style={styles.settingTitleRow}>
+                  <Text style={styles.settingTitle}>Tempered Strength Pro</Text>
                   <View style={styles.proBadge}>
                     <Text style={styles.proBadgeText}>ACTIVE</Text>
                   </View>
-                )}
-              </View>
-              <Text style={styles.settingDescription}>
-                {isPro
-                  ? 'Manage your subscription and access Pro features'
-                  : 'Unlock all premium features with a subscription'}
-              </Text>
-              {isPro && (
+                </View>
+                <Text style={styles.settingDescription}>
+                  Manage your subscription and access Pro features
+                </Text>
                 <View style={styles.proFeaturesList}>
                   <Text style={styles.proTitle}>
                     Your Pro features include:
@@ -236,10 +210,10 @@ export default function SettingsScreen() {
                     - All awards unlocked
                   </Text>
                 </View>
-              )}
-            </View>
-            <SmallChevron />
-          </TouchableOpacity>
+              </View>
+              <SmallChevron />
+            </TouchableOpacity>
+          ) : null}
 
           <TouchableOpacity
             style={styles.settingItem}
@@ -298,9 +272,9 @@ export default function SettingsScreen() {
               <View style={styles.settingContent}>
                 <Text style={styles.settingTitle}>Partner offers</Text>
                 <Text style={styles.settingDescription}>
-                  Highlights on Home and in the Shop are partner placements.
-                  When you follow a link and buy (or sign up), Tempered Strength
-                  may earn a commission or referral fee. That does not change what
+                  Highlights on Home and in the Shop are partner placements. When
+                  you follow a link and buy (or sign up), Tempered Strength may
+                  earn a commission or referral fee. That does not change what
                   you pay.
                 </Text>
               </View>

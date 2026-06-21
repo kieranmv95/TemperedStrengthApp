@@ -9,7 +9,6 @@ import { useSubscription } from '@/src/hooks/use-subscription';
 import { useHomeRemoteNotification } from '@/src/hooks/useHomeRemoteNotification';
 import { useHomeSponsorAds } from '@/src/hooks/useHomeSponsorAds';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
-import { workoutScreenStyles } from '@/src/screens/workoutScreenStyles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { HomeSponsorAd } from '@/src/services/sanitySponsorAds';
 import {
@@ -63,13 +62,13 @@ const exerciseNameById: ReadonlyMap<number, string> = (() => {
 function timeOfDayGreeting(): string {
   const h = new Date().getHours();
   if (h >= 5 && h < 12) {
-    return 'Good morning';
+    return 'Morning';
   }
   if (h >= 12 && h < 17) {
-    return 'Good afternoon';
+    return 'Afternoon';
   }
   if (h >= 17 && h < 23) {
-    return 'Good evening';
+    return 'Evening';
   }
   return 'Hey';
 }
@@ -221,13 +220,13 @@ export default function HomeTabScreen() {
               <TouchableOpacity
                 activeOpacity={0.85}
                 onPress={() =>
-                  trackHomeLink('welcome_strip', '/settings', () =>
-                    router.push('/settings')
+                  trackHomeLink('welcome_strip', '/records', () =>
+                    router.push('/records')
                   )
                 }
                 accessibilityRole="button"
                 accessibilityLabel="Upgrade to Pro, free tier"
-                accessibilityHint="Opens settings where you can upgrade to Tempered Strength Pro"
+                accessibilityHint="Opens the You tab where you can upgrade to Tempered Strength Pro"
               >
                 <View style={styles.welcomeStripTopRow}>
                   <View style={styles.welcomeHeadlineCell}>
@@ -388,11 +387,13 @@ export default function HomeTabScreen() {
             {hasPersonalBests ? (
               <Card
                 onPress={() =>
-                  trackHomeLink('recent_wins_card', '/records', () =>
-                    router.push('/records')
+                  trackHomeLink(
+                    'recent_wins_card',
+                    '/records',
+                    () => router.push('/records')
                   )
                 }
-                accessibilityLabel="Open records and personal bests"
+                accessibilityLabel="Open personal bests"
               >
                 <View style={[styles.cardBody, styles.pbListContent]}>
                   <View style={styles.pbListTitleRow}>
@@ -427,11 +428,13 @@ export default function HomeTabScreen() {
             ) : (
               <Card
                 onPress={() =>
-                  trackHomeLink('recent_wins_empty_card', '/records', () =>
-                    router.push('/records')
+                  trackHomeLink(
+                    'recent_wins_empty_card',
+                    '/records/personal-bests',
+                    () => router.push('/records')
                   )
                 }
-                accessibilityLabel="Open records to log personal bests"
+                accessibilityLabel="Open personal bests to log records"
               >
                 <View style={styles.cardBody}>
                   <Text style={styles.cardTitle}>No PRs yet</Text>
@@ -442,23 +445,6 @@ export default function HomeTabScreen() {
                 <SmallChevron />
               </Card>
             )}
-          </View>
-
-          <View>
-            <TouchableOpacity
-              style={workoutScreenStyles.startSessionButton}
-              onPress={() =>
-                trackHomeLink('you_settings', '/settings', () =>
-                  router.push('/settings')
-                )
-              }
-              accessibilityRole="button"
-              accessibilityLabel="Open settings"
-            >
-              <Text style={workoutScreenStyles.startSessionButtonText}>
-                Settings
-              </Text>
-            </TouchableOpacity>
           </View>
         </View>
       </StandardLayout.Body>

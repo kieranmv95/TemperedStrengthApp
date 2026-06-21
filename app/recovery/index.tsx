@@ -178,7 +178,7 @@ export default function RecoveryScreen() {
   };
 
   const handleLockedPress = () => {
-    router.push('/settings');
+    router.push('/records');
   };
 
   return (

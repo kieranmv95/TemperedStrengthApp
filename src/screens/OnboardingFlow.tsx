@@ -390,7 +390,7 @@ function OnboardingFlow() {
           <View style={styles.stepBody}>
             <Text style={styles.stepTitle}>What can we call you?</Text>
             <Text style={styles.stepSubtitle}>
-              Add a name so we can make the app feel a bit more yours.
+              Add a name or nickname so we can make the app feel a bit more personal.
             </Text>
             <TextInput
               value={name}

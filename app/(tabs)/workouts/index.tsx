@@ -125,7 +125,7 @@ export default function WorkoutsScreen() {
   };
 
   const handleLockedPress = () => {
-    router.push('/settings');
+    router.push('/records');
   };
 
   const handleSelectCategoryFilter = (filter: CategoryFilter) => {

@@ -37,7 +37,7 @@ export default function RecoveryDetailScreen() {
   );
 
   const handleLockedPress = () => {
-    router.push('/settings');
+    router.push('/records');
   };
 
   if (!recoveryId || !recovery) {

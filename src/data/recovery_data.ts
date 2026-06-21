@@ -975,4 +975,52 @@ export const recoveryData: RecoveryFlowSource[] = [
     ],
     equipment: ['bands'],
   },
+  {
+    id: 'r_14',
+    title: 'Olympic Lifting Warm-Up',
+    description:
+      'Eight minutes to prime hips, ankles, shoulders, and wrists before snatches and cleans. Dynamic mobility and light activation - move with intent and build range before you touch the bar.',
+    difficulty: 'Intermediate',
+    estimatedTime: 8,
+    tags: [
+      'Warm-Up',
+      'Pre-Workout',
+      'Activation',
+      'Hips',
+      'Shoulders',
+      'Mobility',
+    ],
+    isPremium: true,
+    blocks: [
+      { movementId: 'arm_swings', dose: { kind: 'duration', seconds: 45 } },
+      {
+        movementId: 'supine_hip_circles',
+        dose: {
+          kind: 'duration',
+          seconds: 30,
+          rounds: 2,
+          roundsLabel: 'each direction',
+        },
+      },
+      { movementId: 'cat_cow', dose: { kind: 'duration', seconds: 45 } },
+      {
+        movementId: 'downward_dog_with_pedalling',
+        dose: { kind: 'duration', seconds: 45 },
+      },
+      {
+        movementId: 'worlds_greatest_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 30 },
+      },
+      { movementId: 'band_pass_throughs', dose: { kind: 'reps', count: 15 } },
+      { movementId: 'wall_slides', dose: { kind: 'reps', count: 12 } },
+      { movementId: 'banded_pull_aparts', dose: { kind: 'reps', count: 15 } },
+      { movementId: 'glute_bridges', dose: { kind: 'reps', count: 15 } },
+      { movementId: 'wrist_circles', dose: { kind: 'duration', seconds: 30 } },
+      {
+        movementId: 'kneeling_hip_flexor_stretch_with_reach',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 25 },
+      },
+    ],
+    equipment: ['bands'],
+  },
 ];

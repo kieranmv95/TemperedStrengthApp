@@ -76,7 +76,7 @@ export default function WorkoutDetailScreen() {
   };
 
   const handleLockedPress = () => {
-    router.push('/settings');
+    router.push('/records');
   };
 
   if (!workoutId || !workout) {

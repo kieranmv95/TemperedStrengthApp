@@ -78,9 +78,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xxl,
   },
   countdownCircle: {
-    width: 168,
-    height: 168,
-    borderRadius: 84,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.backgroundElevated,
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   countdownValue: {
     color: Colors.accent,
     fontSize: 28,
-    fontWeight: '900',
+    fontWeight: '700',
     textAlign: 'center',
     marginBottom: Spacing.xs,
   },
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.accent,
     fontSize: FontSize.displayXXl,
-    fontWeight: '800',
+    fontWeight: '700',
     marginBottom: Spacing.md,
     textAlign: 'center',
   },

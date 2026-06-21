@@ -99,7 +99,7 @@ export function SubscriptionProvider({
           {
             text: 'Manage Subscription',
             onPress: () => {
-              router.push('/settings');
+              router.push('/records');
             },
           },
         ]

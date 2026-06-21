@@ -53,7 +53,7 @@ export function useSwapModalActions({
                   style: 'default',
                   onPress: () => {
                     onClose();
-                    router.push('/settings');
+                    router.push('/records');
                   },
                 },
               ]

@@ -97,8 +97,8 @@ export const createOnboardingStyles = (colors: ThemeColors) =>
     },
     stepTitle: {
       color: colors.textPrimary,
-      fontSize: FontSize.displayXXl,
-      fontWeight: '800',
+      fontSize: FontSize.displayXl,
+      fontWeight: '700',
       letterSpacing: -0.5,
     },
     stepSubtitle: {
@@ -137,7 +137,7 @@ export const createOnboardingStyles = (colors: ThemeColors) =>
       backgroundColor: colors.backgroundElevated,
       borderRadius: BorderRadius.xxl,
       paddingHorizontal: Spacing.xxl,
-      paddingVertical: Spacing.xxl,
+      paddingVertical: Spacing.lg,
       borderWidth: 1,
       borderColor: colors.backgroundSubtle,
     },
@@ -153,8 +153,8 @@ export const createOnboardingStyles = (colors: ThemeColors) =>
     },
     optionLabel: {
       color: colors.textPrimary,
-      fontSize: FontSize.displaySm,
-      fontWeight: '700',
+      fontSize: FontSize.lg,
+      fontWeight: '500',
       flex: 1,
     },
     optionLabelSelected: {
@@ -231,7 +231,7 @@ export const createOnboardingStyles = (colors: ThemeColors) =>
     },
     primaryButtonText: {
       color: colors.textOnAccent,
-      fontSize: FontSize.xxl,
+      fontSize: FontSize.lg,
       fontWeight: '700',
       textTransform: 'uppercase',
       letterSpacing: 0.5,
