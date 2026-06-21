@@ -48,8 +48,12 @@ export default function TabLayout() {
         name="program"
         options={{
           title: 'Program',
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="book" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <IconSymbol
+              size={28}
+              name="book"
+              color={focused ? Colors.accent : color}
+            />
           ),
         }}
       />
@@ -57,8 +61,12 @@ export default function TabLayout() {
         name="workouts"
         options={{
           title: 'Workouts',
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="dumbbell" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <IconSymbol
+              size={28}
+              name="dumbbell"
+              color={focused ? Colors.accent : color}
+            />
           ),
         }}
       />
@@ -66,8 +74,12 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <IconSymbol
+              size={28}
+              name="house"
+              color={focused ? Colors.accent : color}
+            />
           ),
         }}
       />
@@ -75,8 +87,12 @@ export default function TabLayout() {
         name="hub"
         options={{
           title: 'Explore',
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="globe" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <IconSymbol
+              size={28}
+              name="globe"
+              color={focused ? Colors.accent : color}
+            />
           ),
         }}
       />
@@ -84,8 +100,12 @@ export default function TabLayout() {
         name="records"
         options={{
           title: 'You',
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={24} name="person" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <IconSymbol
+              size={24}
+              name="person"
+              color={focused ? Colors.accent : color}
+            />
           ),
         }}
       />
