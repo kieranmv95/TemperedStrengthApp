@@ -22,8 +22,8 @@ export function TogetherWeLiftBanner({ onPress }: TogetherWeLiftBannerProps) {
       accessibilityLabel={`${TOGETHER_WE_LIFT.name}. Learn more`}
       accessibilityHint="Opens details about our charity partner"
     >
-      <View style={styles.bannerRow}>
-        <View style={styles.logoBox}>
+      <View style={styles.bannerContent}>
+        <View style={styles.bannerTitleRow}>
           <Image
             source={twlLogo}
             style={styles.logoImage}
@@ -31,19 +31,15 @@ export function TogetherWeLiftBanner({ onPress }: TogetherWeLiftBannerProps) {
             accessibilityLabel={TOGETHER_WE_LIFT.name}
             accessibilityIgnoresInvertColors
           />
-        </View>
-
-        <View style={styles.bannerContent}>
           <Text style={[styles.bannerTitle, { color: colors.title }]}>
             {TOGETHER_WE_LIFT.name}
           </Text>
-          <Text
-            style={[styles.bannerDescription, { color: colors.description }]}
-            numberOfLines={3}
-          >
-            {TOGETHER_WE_LIFT.sheetAbout}
-          </Text>
         </View>
+        <Text
+          style={[styles.bannerDescription, { color: colors.description }]}
+        >
+          {TOGETHER_WE_LIFT.bannerIntro}
+        </Text>
       </View>
     </TouchableOpacity>
   );

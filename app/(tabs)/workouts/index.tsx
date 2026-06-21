@@ -341,12 +341,12 @@ export default function WorkoutsScreen() {
 
         <View style={styles.filtersWrap}>
           <View style={styles.filtersRow}>
-            <Text style={styles.filtersLabel}>Discipline</Text>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.filterScrollContent}
             >
+              <Text style={styles.filtersLabel}>Discipline</Text>
               {CATEGORY_FILTERS.map((filter) => {
                 const isActive = activeCategoryFilter === filter;
                 const displayLabel = filter === 'WOD' ? 'CrossFit' : filter;
@@ -375,12 +375,12 @@ export default function WorkoutsScreen() {
           </View>
 
           <View style={styles.filtersRow}>
-            <Text style={styles.filtersLabel}>Equipment</Text>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.filterScrollContent}
             >
+              <Text style={styles.filtersLabel}>Equipment</Text>
               <Pill
                 label="All"
                 isActive={
@@ -470,74 +470,84 @@ export default function WorkoutsScreen() {
             ]}
             ListHeaderComponent={
               <View style={styles.curatedSectionList}>
-                <View>
-                  <Card
-                    onPress={handleOpenRecovery}
-                    accessibilityLabel="Browse recovery flows"
-                    style={styles.recoveryCard}
-                  >
-                    <View style={styles.recoveryVisualTile}>
-                      <Ionicons name="body" size={30} color={Colors.accent} />
-                    </View>
-                    <View style={styles.recoveryCtaTextColumn}>
-                      <Text style={styles.shopEyebrow}>Move &amp; restore</Text>
-                      <Text style={styles.hubCtaTitle}>Mobility &amp; flows</Text>
-                      <Text style={styles.hubCtaDescription}>
-                        Guided flows to help you recover and move better.
-                      </Text>
-                    </View>
-                    <SmallChevron />
-                  </Card>
-                  <CuratedSection
-                    title="Disciplines"
-                    description="get started with what you already know"
-                    size='large'
-                    style={styles.titleSpace}
-                  />
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.curatedScrollContent}
-                  >
-                    {disciplines.map((discipline) => (
-                      <TouchableOpacity
-                        style={styles.disciplineSection}
-                        key={discipline.tag}
-                        onPress={() => {
-                          posthog.capture(
-                            posthogEventsNames.workout.filtersApplied,
-                            {
-                              filter_type: 'discipline',
-                              filter_value: discipline.tag,
-                            }
-                          );
-                          router.push(
-                            `/workouts/tag/${encodeURIComponent(discipline.tag)}`
-                          );
-                        }}
-                      >
-                        <ImageBackground
-                          source={discipline.image}
-                          style={styles.disciplineImage}
-                          imageStyle={styles.disciplineImageStyle}
-                        />
-                        <View
-                          pointerEvents="none"
-                          style={styles.disciplineGoldOverlay}
-                        />
-                        {discipline.showTitle && (
-                          <Text style={styles.disciplineSectionTitle}>
-                            {discipline.title}
-                          </Text>
-                        )}
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
+                {hasActiveFilters ? (
+                  <Text style={styles.sectionsHiddenNote}>
+                    Mobility &amp; flows and Disciplines hidden due to filters
+                  </Text>
+                ) : (
+                  <View>
+                    <Card
+                      onPress={handleOpenRecovery}
+                      accessibilityLabel="Browse recovery flows"
+                      style={styles.recoveryCard}
+                    >
+                      <View style={styles.recoveryVisualTile}>
+                        <Ionicons name="body" size={30} color={Colors.accent} />
+                      </View>
+                      <View style={styles.recoveryCtaTextColumn}>
+                        <Text style={styles.shopEyebrow}>Move &amp; restore</Text>
+                        <Text style={styles.hubCtaTitle}>Mobility &amp; flows</Text>
+                        <Text style={styles.hubCtaDescription}>
+                          Guided flows to help you recover and move better.
+                        </Text>
+                      </View>
+                      <SmallChevron />
+                    </Card>
+                    <CuratedSection
+                      title="Disciplines"
+                      description="get started with what you already know"
+                      size='large'
+                      style={styles.titleSpace}
+                    />
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      contentContainerStyle={styles.curatedScrollContent}
+                    >
+                      {disciplines.map((discipline) => (
+                        <TouchableOpacity
+                          style={styles.disciplineSection}
+                          key={discipline.tag}
+                          onPress={() => {
+                            posthog.capture(
+                              posthogEventsNames.workout.filtersApplied,
+                              {
+                                filter_type: 'discipline',
+                                filter_value: discipline.tag,
+                              }
+                            );
+                            router.push(
+                              `/workouts/tag/${encodeURIComponent(discipline.tag)}`
+                            );
+                          }}
+                        >
+                          <ImageBackground
+                            source={discipline.image}
+                            style={styles.disciplineImage}
+                            imageStyle={styles.disciplineImageStyle}
+                          />
+                          <View
+                            pointerEvents="none"
+                            style={styles.disciplineGoldOverlay}
+                          />
+                          {discipline.showTitle && (
+                            <Text style={styles.disciplineSectionTitle}>
+                              {discipline.title}
+                            </Text>
+                          )}
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  </View>
+                )}
 
                 <CuratedSection
                   title={hasActiveFilters ? 'Filtered Workouts' : 'All Workouts'}
-                  description={`All our workouts, over ${allStandaloneWorkouts.length}+ workouts.`}
+                  description={
+                    hasActiveFilters
+                      ? `${sortedWorkouts.length} Results Found`
+                      : `All our workouts, over ${allStandaloneWorkouts.length}+ workouts.`
+                  }
                   size='large'
                   style={styles.titleSpace}
                 />

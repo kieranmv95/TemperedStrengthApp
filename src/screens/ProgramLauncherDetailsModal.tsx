@@ -2,9 +2,11 @@ import { YoutubeEmbed } from '@/src/components/exercise/YoutubeEmbed';
 import type { Program } from '@/src/types/program';
 import { modalSheetBottomPadding } from '@/src/utils/platform';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
+import { sessionsPerWeekFromProgram } from '@/src/utils/programWeekPattern';
 import React from 'react';
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SmallChevron } from '../components/ds/SmallChevron';
+import { Spacing } from '../constants/theme';
 import { ProgramLauncherWeekdayPicker } from './ProgramLauncherWeekdayPicker';
 import { programLauncherStyles as styles } from './programLauncherStyles';
 
@@ -41,6 +43,8 @@ export function ProgramLauncherDetailsModal({
   const [step, setStep] = React.useState<'details' | 'selectDays'>('details');
 
   const programRequiresDaySelection = !!selectedProgram?.daysSplit?.length;
+  const sessionsPerWeek = selectedProgram ? sessionsPerWeekFromProgram(selectedProgram) : 0;
+
 
   React.useEffect(() => {
     if (!visible) {
@@ -89,9 +93,9 @@ export function ProgramLauncherDetailsModal({
               </TouchableOpacity>
             )}
 
-            <Text style={styles.programDescription}>
+            {step === 'details' && (<Text style={styles.programDescription}>
               {selectedProgram?.description}
-            </Text>
+            </Text>)}
 
             {step === 'details' && selectedProgram?.bodyChangesSummary && (
               <View style={styles.bodyChangesCard}>
@@ -162,6 +166,13 @@ export function ProgramLauncherDetailsModal({
                     </View>
                   )}
                 </View>
+                {sessionsPerWeek && (
+                  <View style={{ ...styles.statItem, marginTop: Spacing.lg }}>
+                    <Text style={styles.statValue}>
+                      {sessionsPerWeek} <Text style={styles.statLabel}>sessions per week</Text>
+                    </Text>
+                  </View>
+                )}
               </View>
             )}
 
@@ -210,7 +221,7 @@ export function ProgramLauncherDetailsModal({
                 <Text style={styles.startProgramButtonText}>
                   {programRequiresDaySelection && step === 'details'
                     ? 'Select Days'
-                    : 'Start Program'}
+                    : 'Select Start Date'}
                 </Text>
               </TouchableOpacity>
             )}

@@ -26,8 +26,8 @@ export const homeScreenStyles = StyleSheet.create({
     backgroundColor: Colors.accentWashFill,
     borderWidth: 1,
     borderColor: Colors.accentWashBorder,
-    paddingVertical: Spacing.xl,
-    paddingHorizontal: Spacing.section,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.xxl,
   },
   welcomeStripTopRow: {
     flexDirection: 'row',

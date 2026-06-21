@@ -30,7 +30,7 @@ export const CuratedSection = ({ title, description, size, style, icon, iconSize
         }
     }
     return (
-        <View style={[styles.header, style]}>
+        <View style={style}>
             <View style={styles.titleRow}>
                 {icon && (
                     <Ionicons
@@ -49,9 +49,6 @@ export const CuratedSection = ({ title, description, size, style, icon, iconSize
 };
 
 const styles = StyleSheet.create({
-    header: {
-
-    },
     titleRow: {
         flexDirection: 'row',
         alignItems: 'center',

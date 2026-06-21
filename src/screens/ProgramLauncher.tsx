@@ -375,12 +375,12 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
       <StandardLayout.AdvancedFilters>
         <View style={styles.filtersWrap}>
           <View style={styles.filtersRow}>
-            <Text style={styles.filtersLabel}>Category</Text>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.pillsScrollContent}
             >
+              <Text style={styles.filtersLabel}>Category</Text>
               <Pill
                 label="All"
                 isActive={selectedCategory === 'all'}
@@ -409,12 +409,12 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           </View>
 
           <View style={styles.filtersRow}>
-            <Text style={styles.filtersLabel}>Difficulty</Text>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.pillsScrollContent}
             >
+              <Text style={styles.filtersLabel}>Difficulty</Text>
               <Pill
                 label="All"
                 isActive={selectedDifficulty === 'all'}
@@ -440,12 +440,12 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           </View>
 
           <View style={styles.filtersRow}>
-            <Text style={styles.filtersLabel}>Goals</Text>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.pillsScrollContent}
             >
+              <Text style={styles.filtersLabel}>Goals</Text>
               <Pill
                 label="All"
                 isActive={selectedGoal === 'all'}
@@ -490,13 +490,6 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           accessibilityRole="text"
           accessibilityLabel="What are programs. Programs are structured blocks that usually last from 1-6 months, you can only be on one program at a time, so choose wisely. you can still do any of our workouts when on a program!"
         >
-          <View style={homeScreenStyles.welcomeStripTopRow}>
-            <View style={homeScreenStyles.welcomeHeadlineCell}>
-              <Text style={homeScreenStyles.welcomeTitle}>
-                What are programs
-              </Text>
-            </View>
-          </View>
           <Text style={homeScreenStyles.welcomeBody}>
             Programs are structured training blocks (1-4 months). You&apos;ll
             follow one at a time, with full access to all workouts throughout.

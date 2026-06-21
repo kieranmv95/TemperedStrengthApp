@@ -149,9 +149,7 @@ export default function HubScreen() {
   };
 
   const charityBanner = (
-    <View style={styles.charityBannerWrap}>
-      <TogetherWeLiftBanner onPress={() => openTogetherWeLift('hub_banner')} />
-    </View>
+    <TogetherWeLiftBanner onPress={() => openTogetherWeLift('hub_banner')} />
   );
 
   const renderNetworkOfflineMessage = () => (
@@ -166,16 +164,47 @@ export default function HubScreen() {
 
   const listHeader = (
     <View>
-      {charityBanner}
       <View style={styles.section}>
+        <View style={styles.subSection}>
+          <CuratedSection
+            icon="pricetag"
+            iconSizeOverride={18}
+            title="Shop"
+            description="Products we at Tempered Strength believe in, at excluive prices for you"
+            size="large"
+          />
+
+          {networkUnavailable ? (
+            renderNetworkOfflineMessage()
+          ) : (
+            <Card
+              onPress={handleOpenShop}
+              accessibilityLabel="Browse partner products"
+              style={styles.shopCard}
+            >
+              <View style={styles.shopVisualTile}>
+                <Ionicons name="cart-outline" size={30} color={Colors.accent} />
+              </View>
+              <View style={styles.shopCtaTextColumn}>
+                <Text style={styles.shopEyebrow}>Partner picks</Text>
+                <Text style={styles.hubCtaTitle}>Browse the shop</Text>
+                <Text style={styles.hubCtaDescription}>
+                  Affiliate offers from brands we trust, codes and links in one
+                  place.
+                </Text>
+              </View>
+              <SmallChevron />
+            </Card>
+          )}
+        </View>
+
         <View style={styles.subSection}>
           <CuratedSection
             icon="calculator-outline"
             iconSizeOverride={18}
             title="Tools"
             description="Calculators and training utilities you can open anywhere"
-            size="medium"
-            theme="gold"
+            size="large"
           />
 
           <ScrollView
@@ -194,18 +223,6 @@ export default function HubScreen() {
               />
             ))}
           </ScrollView>
-        </View>
-
-        <View style={styles.subSection}>
-          <CuratedSection
-            icon="book-outline"
-            iconSizeOverride={18}
-            title="Terminology"
-            description="Quick definitions for common training terms"
-            size="medium"
-            theme="gold"
-          />
-
           {networkUnavailable ? (
             renderNetworkOfflineMessage()
           ) : (
@@ -214,7 +231,10 @@ export default function HubScreen() {
               accessibilityLabel="Browse the glossary"
             >
               <View style={styles.hubCtaContent}>
-                <Text style={styles.hubCtaTitle}>Browse the glossary</Text>
+                <View style={styles.hubCtaTitleRow}>
+                  <Ionicons name="book-outline" size={18} color={Colors.accent} />
+                  <Text style={styles.hubCtaTitle}>Browse the glossary</Text>
+                </View>
                 <Text style={styles.hubCtaDescription}>
                   Learn the terms we use across training, nutrition, and
                   recovery.
@@ -222,40 +242,7 @@ export default function HubScreen() {
               </View>
             </Card>
           )}
-        </View>
-
-        <View style={styles.subSection}>
-          <CuratedSection
-            icon="bag"
-            iconSizeOverride={18}
-            title="Shop"
-            description="Products we at Tempered Strength believe in, at the best prices for you"
-            size="medium"
-            theme="gold"
-          />
-
-          {networkUnavailable ? (
-            renderNetworkOfflineMessage()
-          ) : (
-            <Card
-              onPress={handleOpenShop}
-              accessibilityLabel="Browse partner products"
-              style={styles.shopCard}
-            >
-              <View style={styles.shopVisualTile}>
-                <Ionicons name="pricetag" size={30} color={Colors.accent} />
-              </View>
-              <View style={styles.shopCtaTextColumn}>
-                <Text style={styles.shopEyebrow}>Partner picks</Text>
-                <Text style={styles.hubCtaTitle}>Browse the shop</Text>
-                <Text style={styles.hubCtaDescription}>
-                  Affiliate offers from brands we trust, codes and links in one
-                  place.
-                </Text>
-              </View>
-              <SmallChevron />
-            </Card>
-          )}
+          {charityBanner}
         </View>
 
         <View style={styles.articlesSection}>
@@ -264,8 +251,7 @@ export default function HubScreen() {
             iconSizeOverride={18}
             title="Articles"
             description="Your daily intel for the iron game"
-            size="medium"
-            theme="gold"
+            size="large"
           />
 
           {networkUnavailable ? (
@@ -374,8 +360,8 @@ export default function HubScreen() {
 
   return (
     <StandardLayout
-      title="Hub"
-      subtitle="Your daily intel for the iron game"
+      title="Explore"
+      subtitle="Tools, products, and articles to help you train."
       disableScroll
     >
       <StandardLayout.Body>{renderBody()}</StandardLayout.Body>
@@ -384,8 +370,10 @@ export default function HubScreen() {
 }
 
 const styles = StyleSheet.create({
-  charityBannerWrap: {
-    marginBottom: Spacing.section,
+  hubCtaTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
   },
   sectionOffline: {
     alignItems: 'center',

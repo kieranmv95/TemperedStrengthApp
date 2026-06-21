@@ -54,7 +54,7 @@ export function ProgramLauncherProgramCard({
         </View>
         <Text style={styles.programDescription}>{program.description}</Text>
         <Text style={styles.programStats}>
-          {program.workouts.length} workouts • {weekCount}{' '}
+          {weekCount}{' '}
           {weekCount === 1 ? 'week' : 'weeks'}
           {sessionsPerWeek > 0 && ` • ${sessionsPerWeek} sessions/week`}
           {program.averageSessionDuration &&

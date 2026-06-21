@@ -4,6 +4,8 @@ export const TOGETHER_WE_LIFT = {
   name: 'Together We Lift',
   sheetAbout:
     'Together We Lift runs not-for-profit mental health fundraisers that bring the strength community together. Events travel the UK linking local gyms with local mental health charities, with every pound raised going directly to the host area\u2019s charity.',
+  bannerIntro:
+    'Not for profit charity events that bring the strength community together. Click to learn more.',
   sheetTemperedLabel: 'From Tempered Strength',
   sheetTemperedStatement:
     'We met Together We Lift at FitXpo and were moved by their story and cause. That\u2019s why we\u2019re proud to support what they do.',

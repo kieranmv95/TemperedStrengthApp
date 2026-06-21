@@ -62,6 +62,12 @@ export const workoutsListStyles = StyleSheet.create({
   titleSpace: {
     marginBottom: Spacing.md,
   },
+  sectionsHiddenNote: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+  },
   workoutCard: {
     marginBottom: Spacing.md,
     padding: Spacing.xl,

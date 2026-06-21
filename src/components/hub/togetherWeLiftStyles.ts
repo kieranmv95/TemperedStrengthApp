@@ -1,25 +1,13 @@
 import { BorderRadius, FontSize, Spacing } from '@/src/constants/theme';
 import { StyleSheet } from 'react-native';
 
-export const TOGETHER_WE_LIFT_LOGO_SIZE = 75;
+export const TOGETHER_WE_LIFT_LOGO_SIZE = 25;
 
 export const togetherWeLiftStyles = StyleSheet.create({
   bannerCard: {
     alignSelf: 'stretch',
     borderRadius: BorderRadius.xxl,
     padding: Spacing.xxl,
-  },
-  bannerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.xxl,
-  },
-  logoBox: {
-    width: TOGETHER_WE_LIFT_LOGO_SIZE,
-    height: TOGETHER_WE_LIFT_LOGO_SIZE,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
   },
   logoImage: {
     width: TOGETHER_WE_LIFT_LOGO_SIZE,
@@ -30,6 +18,11 @@ export const togetherWeLiftStyles = StyleSheet.create({
     minWidth: 0,
     justifyContent: 'center',
     gap: Spacing.md,
+  },
+  bannerTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
   },
   bannerTitle: {
     fontSize: FontSize.xl,
@@ -51,6 +44,7 @@ export const togetherWeLiftStyles = StyleSheet.create({
     fontSize: FontSize.md,
     fontWeight: '700',
   },
+
   sheetOverlay: {
     flex: 1,
     justifyContent: 'flex-end',

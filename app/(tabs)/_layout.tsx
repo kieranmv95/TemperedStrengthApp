@@ -45,20 +45,11 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="program"
         options={{
           title: 'Program',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="doc.on.clipboard.fill" color={color} />
+            <IconSymbol size={28} name="book" color={color} />
           ),
         }}
       />
@@ -67,25 +58,34 @@ export default function TabLayout() {
         options={{
           title: 'Workouts',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="dumbbell.fill" color={color} />
+            <IconSymbol size={28} name="dumbbell" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="house" color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="hub"
         options={{
-          title: 'Hub',
+          title: 'Explore',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="square.grid.2x2.fill" color={color} />
+            <IconSymbol size={28} name="globe" color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="records"
         options={{
-          title: 'Records',
+          title: 'You',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={24} name="trophy.fill" color={color} />
+            <IconSymbol size={24} name="person" color={color} />
           ),
         }}
       />

@@ -99,8 +99,8 @@ export const programLauncherStyles = StyleSheet.create({
   },
   programName: {
     color: Colors.textPrimary,
-    fontSize: FontSize.displayXl,
-    fontWeight: '800',
+    fontSize: FontSize.displayMd,
+    fontWeight: '700',
   },
   programCategoryRow: {
     flexDirection: 'row',

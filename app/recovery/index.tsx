@@ -300,12 +300,12 @@ export default function RecoveryScreen() {
                 </View>
 
                 <View style={styles.filtersRow}>
-                  <Text style={styles.filtersLabel}>Focus</Text>
                   <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={styles.filterScrollContent}
                   >
+                    <Text style={styles.filtersLabel}>Focus</Text>
                     <Pill
                       label="All"
                       isActive={selectedTags.length === 0}
@@ -324,12 +324,12 @@ export default function RecoveryScreen() {
 
                 {availableEquipment.length > 0 || hasNoEquipmentRecoveries ? (
                   <View style={styles.filtersRow}>
-                    <Text style={styles.filtersLabel}>Equipment</Text>
                     <ScrollView
                       horizontal
                       showsHorizontalScrollIndicator={false}
                       contentContainerStyle={styles.filterScrollContent}
                     >
+                      <Text style={styles.filtersLabel}>Equipment</Text>
                       <Pill
                         label="Any"
                         isActive={
