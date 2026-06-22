@@ -81,7 +81,6 @@ export const homeScreenStyles = StyleSheet.create({
     color: Colors.textSecondary,
     fontSize: FontSize.xl,
     lineHeight: 22,
-    marginTop: Spacing.sm,
     fontWeight: '500',
   },
   /** Remote Sanity notification strip — background/border/colours come from CMS. */
@@ -283,6 +282,10 @@ export const homeScreenStyles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: Spacing.sm,
   },
+  pbRowText: {
+    flex: 1,
+    minWidth: 0,
+  },
   pbRowTitle: {
     color: Colors.textPrimary,
     fontSize: FontSize.displayMd,
@@ -292,6 +295,9 @@ export const homeScreenStyles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.lg,
     fontWeight: '500',
+  },
+  pbValueWrap: {
+    flexShrink: 0,
   },
   pbValueContainer: {
     backgroundColor: Colors.backgroundSubtle,

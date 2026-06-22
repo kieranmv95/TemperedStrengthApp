@@ -405,15 +405,19 @@ export default function HomeTabScreen() {
                       key={`${row.exerciseId}-${row.tier}-${row.achievedAt}-${index}`}
                       style={[styles.pbRow]}
                     >
-                      <View>
-                        <Text style={styles.pbRowTitle}>
+                      <View style={styles.pbRowText}>
+                        <Text
+                          style={styles.pbRowTitle}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
                           {row.exerciseName}
                         </Text>
                         <Text style={styles.pbMaxLabel}>
                           {formatRepMaxLabel(row.tier)}
                         </Text>
                       </View>
-                      <View>
+                      <View style={styles.pbValueWrap}>
                         <View style={styles.pbValueContainer}>
                           <Text style={styles.pbValue}>
                             {formatWeightFromKg(row.weightKg, weightUnit)}
