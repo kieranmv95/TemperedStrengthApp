@@ -126,20 +126,41 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
         },
       ]}
     >
-      <View style={styles.headerContainer}>
+      <View
+        style={[
+          styles.headerContainer,
+          onBackPress ? styles.headerContainerWithBack : null,
+        ]}
+      >
         {onBackPress ? (
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={onBackPress}
-            accessibilityRole="button"
-            accessibilityLabel="Back"
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          <View style={styles.headerRow}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={onBackPress}
+              accessibilityRole="button"
+              accessibilityLabel="Back"
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Ionicons
+                name="arrow-back"
+                size={24}
+                color={Colors.textPrimary}
+              />
+            </TouchableOpacity>
+            <Text style={[styles.title, styles.titleInRow]} numberOfLines={2}>
+              {title}
+            </Text>
+          </View>
+        ) : (
+          <Text style={styles.title}>{title}</Text>
+        )}
+        {subtitle ? (
+          <Text
+            style={[styles.subtitle, onBackPress ? styles.subtitleWithBack : null]}
           >
-            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-          </TouchableOpacity>
+            {subtitle}
+          </Text>
         ) : null}
-        <Text style={styles.title}>{title}</Text>
-        {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
         {hasFilters ? (
           <View style={styles.filtersContainer}>
             <StandardLayoutFilters>{filters}</StandardLayoutFilters>
@@ -235,10 +256,24 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Colors.backgroundElevated,
   },
+  headerContainerWithBack: {
+    paddingTop: Spacing.md,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
   backButton: {
-    alignSelf: 'flex-start',
-    marginBottom: Spacing.md,
-    paddingVertical: Spacing.xs,
+    padding: Spacing.md,
+    marginLeft: -Spacing.md,
+  },
+  titleInRow: {
+    flex: 1,
+    minWidth: 0,
+  },
+  subtitleWithBack: {
+    marginTop: Spacing.xs,
   },
   filtersContainer: {
     marginTop: Spacing.xl,
