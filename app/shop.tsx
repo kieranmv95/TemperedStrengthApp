@@ -37,8 +37,6 @@ export default function ShopScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      posthog.capture(posthogEventsNames.content.shopView);
-
       let cancelled = false;
 
       void (async () => {
@@ -65,7 +63,7 @@ export default function ShopScreen() {
       return () => {
         cancelled = true;
       };
-    }, [posthog])
+    }, [])
   );
 
   const categories = useMemo(() => sponsorAdShopCategories(ads), [ads]);

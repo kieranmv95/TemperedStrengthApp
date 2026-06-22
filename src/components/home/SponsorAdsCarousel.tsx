@@ -39,22 +39,6 @@ export function SponsorAdsCarousel({ ads, onPressCta }: SponsorAdsCarouselProps)
   const activeIndexRef = useRef(0);
   const pausedRef = useRef(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const impressedIdsRef = useRef<Set<string>>(new Set());
-
-  const trackImpression = useCallback(
-    (ad: HomeSponsorAd, index: number) => {
-      if (impressedIdsRef.current.has(ad.id)) {
-        return;
-      }
-      impressedIdsRef.current.add(ad.id);
-      posthog.capture(posthogEventsNames.home.sponsorImpression, {
-        sponsor_ad_id: ad.id,
-        sponsor_index: index,
-        sponsor_layout: ad.layout,
-      });
-    },
-    [posthog]
-  );
 
   const handlePressCta = useCallback(
     (ad: HomeSponsorAd) => {
@@ -75,7 +59,6 @@ export function SponsorAdsCarousel({ ads, onPressCta }: SponsorAdsCarouselProps)
         const index = primary.index;
         activeIndexRef.current = index;
         setActiveIndex(index);
-        trackImpression(primary.item as HomeSponsorAd, index);
       }
     }
   ).current;
@@ -83,13 +66,6 @@ export function SponsorAdsCarousel({ ads, onPressCta }: SponsorAdsCarouselProps)
   const viewabilityConfig = useRef({
     itemVisiblePercentThreshold: 60,
   }).current;
-
-  useEffect(() => {
-    if (ads.length === 0) {
-      return;
-    }
-    trackImpression(ads[0], 0);
-  }, [ads, trackImpression]);
 
   useEffect(() => {
     if (ads.length <= 1) {
@@ -103,13 +79,9 @@ export function SponsorAdsCarousel({ ads, onPressCta }: SponsorAdsCarouselProps)
       listRef.current?.scrollToIndex({ index: nextIndex, animated: true });
       activeIndexRef.current = nextIndex;
       setActiveIndex(nextIndex);
-      const ad = ads[nextIndex];
-      if (ad) {
-        trackImpression(ad, nextIndex);
-      }
     }, SPONSOR_AUTO_SCROLL_MS);
     return () => clearInterval(timer);
-  }, [ads, trackImpression]);
+  }, [ads]);
 
   const onScrollBeginDrag = useCallback(() => {
     pausedRef.current = true;
@@ -123,12 +95,8 @@ export function SponsorAdsCarousel({ ads, onPressCta }: SponsorAdsCarouselProps)
       const clamped = Math.max(0, Math.min(index, ads.length - 1));
       activeIndexRef.current = clamped;
       setActiveIndex(clamped);
-      const ad = ads[clamped];
-      if (ad) {
-        trackImpression(ad, clamped);
-      }
     },
-    [ads, cardWidth, trackImpression]
+    [ads, cardWidth]
   );
 
   const getItemLayout = useCallback(

@@ -42,16 +42,13 @@ export const posthogEventsNames = {
     glossaryView: 'glossary_view',
     toolView: 'tool_view',
     toolCalculate: 'tool_calculate',
-    shopView: 'hub_shop_view',
     togetherWeLiftSheetOpened: 'together_we_lift_sheet_opened',
     togetherWeLiftLinkPressed: 'together_we_lift_link_pressed',
   },
   home: {
     /** User tapped a navigation target from the Home tab body. */
     linkPressed: 'home_link_pressed',
-    /** Sponsor carousel slide became visible. */
-    sponsorImpression: 'home_sponsor_impression',
-    /** User tapped a sponsor card CTA. */
+    /** User tapped a sponsor / affiliate CTA. */
     sponsorCtaPressed: 'home_sponsor_cta_pressed',
   },
   app: {
