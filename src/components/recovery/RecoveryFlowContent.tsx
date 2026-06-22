@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { getEffectiveBottomInset } from '@/src/utils/platform';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { YoutubeEmbed } from '../exercise/YoutubeEmbed';
 import { workoutDetailStyles as styles } from '../workouts/workoutDetailStyles';
@@ -217,7 +218,7 @@ export function RecoveryFlowContent({ recovery }: RecoveryFlowContentProps) {
       <View
         style={[
           flowStyles.footer,
-          { paddingBottom: Math.max(insets.bottom, Spacing.lg) },
+          { paddingBottom: Math.max(getEffectiveBottomInset(insets.bottom), Spacing.lg) },
         ]}
       >
         <View style={flowStyles.footerActions}>

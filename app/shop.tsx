@@ -24,7 +24,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppSafeAreaView, AppFlatList } from '@/src/components/AppSafeAreaView';
 
 export default function ShopScreen() {
   const posthog = usePostHog();
@@ -171,7 +171,7 @@ export default function ShopScreen() {
     }
 
     return (
-      <FlatList
+      <AppFlatList
         data={filteredAds}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -191,7 +191,7 @@ export default function ShopScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <AppSafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.headerBackButton}
@@ -276,7 +276,7 @@ export default function ShopScreen() {
         onClose={handleCloseSheet}
         onPressCta={handlePressCta}
       />
-    </SafeAreaView>
+    </AppSafeAreaView>
   );
 }
 

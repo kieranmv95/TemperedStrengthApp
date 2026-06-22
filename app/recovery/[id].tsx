@@ -11,7 +11,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 
 export default function RecoveryDetailScreen() {
   const { id: idParam } = useLocalSearchParams<{ id?: string }>();
@@ -42,7 +42,7 @@ export default function RecoveryDetailScreen() {
 
   if (!recoveryId || !recovery) {
     return (
-      <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <AppSafeAreaView style={styles.container}>
         <View style={styles.detailHeader}>
           <TouchableOpacity
             style={styles.backButton}
@@ -63,14 +63,14 @@ export default function RecoveryDetailScreen() {
             This recovery flow may have been removed or the link is invalid.
           </Text>
         </View>
-      </SafeAreaView>
+      </AppSafeAreaView>
     );
   }
 
   const isLocked = recovery.isPremium && !isPro;
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+    <AppSafeAreaView style={styles.container}>
       <View style={styles.detailHeader}>
         <TouchableOpacity
           style={styles.backButton}
@@ -106,6 +106,6 @@ export default function RecoveryDetailScreen() {
       ) : (
         <RecoveryFlowContent recovery={recovery} />
       )}
-    </SafeAreaView>
+    </AppSafeAreaView>
   );
 }

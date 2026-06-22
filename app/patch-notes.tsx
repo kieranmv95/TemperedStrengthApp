@@ -1,16 +1,15 @@
+import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import {
   Linking,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 type PatchNote = {
   version: string;
@@ -325,7 +324,7 @@ export default function PatchNotesScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <AppSafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.headerBackButton}
@@ -339,7 +338,7 @@ export default function PatchNotesScreen() {
         <View style={styles.headerSpacer} />
       </View>
 
-      <ScrollView
+      <AppScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
@@ -400,8 +399,8 @@ export default function PatchNotesScreen() {
             Tip: tap a version to expand its notes.
           </Text>
         ) : null}
-      </ScrollView>
-    </SafeAreaView>
+      </AppScrollView>
+    </AppSafeAreaView>
   );
 }
 

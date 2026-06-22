@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { getEffectiveBottomInset } from '@/src/utils/platform';
 import { homeScreenStyles } from '../components/home/homeScreenStyles';
 import { Pill } from '../components/pill';
 import { StandardLayout } from '../components/StandardLayout';
@@ -520,7 +521,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
             setShowProgramDetails(false);
             router.push('/records');
           }}
-          bottomInset={insets.bottom}
+          bottomInset={getEffectiveBottomInset(insets.bottom)}
         />
 
         <ProgramLauncherDatePickerModal
@@ -531,7 +532,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           selectedProgram={selectedProgram}
           startDatePickerAllowedWeekdays={startDatePickerAllowedWeekdays}
           onConfirm={handleConfirmDate}
-          bottomInset={insets.bottom}
+          bottomInset={getEffectiveBottomInset(insets.bottom)}
         />
       </StandardLayout.Body>
     </StandardLayout>

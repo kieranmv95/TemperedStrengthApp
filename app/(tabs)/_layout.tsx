@@ -1,15 +1,19 @@
 import { Tabs } from 'expo-router';
 import React, { useEffect } from 'react';
 import { AppState } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HapticTab } from '@/src/components/haptic-tab';
 import { IconSymbol } from '@/src/components/ui/icon-symbol';
 import { Colors } from '@/src/constants/theme';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { applyDailyStreakCheckIn } from '@/src/services/streakService';
+import { getEffectiveBottomInset } from '@/src/utils/platform';
 
 export default function TabLayout() {
   const { syncNow } = useSyncManager();
+  const insets = useSafeAreaInsets();
+  const bottomInset = getEffectiveBottomInset(insets.bottom);
 
   useEffect(() => {
     const run = async () => {
@@ -33,6 +37,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      safeAreaInsets={{ ...insets, bottom: bottomInset }}
       screenOptions={{
         tabBarActiveTintColor: Colors.textPrimary,
         tabBarInactiveTintColor: Colors.tabIconDefault,

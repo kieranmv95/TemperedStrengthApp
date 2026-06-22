@@ -18,7 +18,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppSafeAreaView, AppFlatList } from '@/src/components/AppSafeAreaView';
 
 type CategoryFilter = 'All' | GlossaryTerm['category'];
 
@@ -121,7 +121,7 @@ export default function GlossaryScreen() {
     }
 
     return (
-      <FlatList
+      <AppFlatList
         data={filteredTerms}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <GlossaryItem term={item} />}
@@ -138,7 +138,7 @@ export default function GlossaryScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <AppSafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
@@ -208,7 +208,7 @@ export default function GlossaryScreen() {
       </View>
 
       {renderContent()}
-    </SafeAreaView>
+    </AppSafeAreaView>
   );
 }
 

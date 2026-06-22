@@ -2,12 +2,15 @@ import { ExerciseVideoProvider } from '@/src/hooks/exercise-video-context';
 import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
 import { TogetherWeLiftProvider } from '@/src/hooks/together-we-lift-context';
+import { Colors } from '@/src/constants/theme';
 import { initializeRevenueCat } from '@/src/services/revenueCatService';
 import { getOnboarded, runStorageMigrations } from '@/src/utils/storage';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { isRunningInExpoGo } from 'expo';
 import { Stack, router } from 'expo-router';
+import * as NavigationBar from 'expo-navigation-bar';
 import { StatusBar } from 'expo-status-bar';
+import * as SystemUI from 'expo-system-ui';
 import { PostHogProvider } from 'posthog-react-native';
 import { useEffect, useState } from 'react';
 import { LogBox, Platform } from 'react-native';
@@ -26,6 +29,14 @@ export const unstable_settings = {
 export default function RootLayout() {
   const [isBootReady, setIsBootReady] = useState(false);
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
+
+  useEffect(() => {
+    if (Platform.OS !== 'android') {
+      return;
+    }
+    NavigationBar.setStyle('dark');
+    void SystemUI.setBackgroundColorAsync(Colors.backgroundScreen);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;

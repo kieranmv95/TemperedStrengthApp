@@ -22,14 +22,13 @@ import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
 import {
   Alert,
-  ScrollView,
   StyleSheet,
   Switch,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
 
 export default function AccountProgramSettingsScreen() {
   const posthog = usePostHog();
@@ -193,7 +192,7 @@ export default function AccountProgramSettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={pageStyles.container}>
+    <AppSafeAreaView style={pageStyles.container}>
       <View style={pageStyles.header}>
         <TouchableOpacity
           style={pageStyles.headerBackButton}
@@ -207,7 +206,7 @@ export default function AccountProgramSettingsScreen() {
         <View style={pageStyles.headerSpacer} />
       </View>
 
-      <ScrollView
+      <AppScrollView
         style={pageStyles.scroll}
         contentContainerStyle={pageStyles.content}
         showsVerticalScrollIndicator={false}
@@ -290,8 +289,8 @@ export default function AccountProgramSettingsScreen() {
             </TouchableOpacity>
           ) : null}
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </AppScrollView>
+    </AppSafeAreaView>
   );
 }
 

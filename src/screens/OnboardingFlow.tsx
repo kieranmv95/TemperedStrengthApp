@@ -37,7 +37,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 
 const TOTAL_STEPS = 8;
 const ICLOUD_STEP_INDEX = 6;
@@ -603,7 +603,7 @@ function OnboardingFlow() {
   const KeyboardWrapper = isIos ? KeyboardAvoidingView : View;
 
   return (
-    <SafeAreaView
+    <AppSafeAreaView
       style={styles.container}
       edges={
         showIntro
@@ -684,7 +684,7 @@ function OnboardingFlow() {
               </ScrollView>
             )}
 
-            <SafeAreaView edges={['bottom']}>
+            <AppSafeAreaView edges={['bottom']}>
               <View style={styles.footer}>
                 <TouchableOpacity
                   style={[
@@ -739,11 +739,11 @@ function OnboardingFlow() {
                   </TouchableOpacity>
                 )}
               </View>
-            </SafeAreaView>
+            </AppSafeAreaView>
           </>
         )}
       </KeyboardWrapper>
-    </SafeAreaView>
+    </AppSafeAreaView>
   );
 }
 

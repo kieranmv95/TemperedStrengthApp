@@ -3,13 +3,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
 import {
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
 
 type ToolScreenShellProps = {
   title: string;
@@ -18,7 +17,7 @@ type ToolScreenShellProps = {
 
 export function ToolScreenShell({ title, children }: ToolScreenShellProps) {
   return (
-    <SafeAreaView style={styles.container}>
+    <AppSafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.headerBackButton}
@@ -30,15 +29,15 @@ export function ToolScreenShell({ title, children }: ToolScreenShellProps) {
         <Text style={styles.headerTitle}>{title}</Text>
         <View style={styles.headerSpacer} />
       </View>
-      <ScrollView
+      <AppScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
         {children}
-      </ScrollView>
-    </SafeAreaView>
+      </AppScrollView>
+    </AppSafeAreaView>
   );
 }
 

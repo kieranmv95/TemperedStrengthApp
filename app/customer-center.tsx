@@ -1,7 +1,7 @@
 import { Colors } from '@/src/constants/theme';
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 import RevenueCatUI from 'react-native-purchases-ui';
 
 export default function CustomerCenterScreen() {
@@ -10,11 +10,11 @@ export default function CustomerCenterScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <AppSafeAreaView style={styles.container}>
       <View style={styles.content}>
         <RevenueCatUI.CustomerCenterView onDismiss={handleDismiss} />
       </View>
-    </SafeAreaView>
+    </AppSafeAreaView>
   );
 }
 

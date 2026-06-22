@@ -2,7 +2,7 @@ import type { FormState } from '@/src/utils/standaloneWorkoutLogForm';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 import { logFormModalStyles as styles } from './logFormModalStyles';
 
 type LogFormModalWhenPickersProps = {
@@ -28,7 +28,7 @@ export function LogFormModalWhenPickers({
             onPress={() => setWhenPickerVisible(false)}
             accessibilityLabel="Dismiss date picker"
           />
-          <SafeAreaView style={styles.whenPickerSheet}>
+          <AppSafeAreaView style={styles.whenPickerSheet} edges={['bottom', 'left', 'right']}>
             <View style={styles.whenPickerToolbar}>
               <TouchableOpacity
                 onPress={() => setWhenPickerVisible(false)}
@@ -50,7 +50,7 @@ export function LogFormModalWhenPickers({
                 }
               }}
             />
-          </SafeAreaView>
+          </AppSafeAreaView>
         </View>
       )}
     </>

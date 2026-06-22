@@ -14,12 +14,11 @@ import {
   ActivityIndicator,
   Image,
   Linking,
-  ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
 
 export default function ArticleScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -67,7 +66,7 @@ export default function ArticleScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <AppSafeAreaView style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity
             style={styles.headerBackButton}
@@ -80,13 +79,13 @@ export default function ArticleScreen() {
         <View style={styles.errorContainer}>
           <ActivityIndicator size="large" color={Colors.accent} />
         </View>
-      </SafeAreaView>
+      </AppSafeAreaView>
     );
   }
 
   if (isOffline || !article) {
     return (
-      <SafeAreaView style={styles.container}>
+      <AppSafeAreaView style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity
             style={styles.headerBackButton}
@@ -114,14 +113,14 @@ export default function ArticleScreen() {
             <Text style={styles.backButtonText}>Go Back</Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </AppSafeAreaView>
     );
   }
 
   const articleUrl = `https://www.temperedstrength.com/articles/${id}`;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <AppSafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.headerBackButton}
@@ -135,7 +134,7 @@ export default function ArticleScreen() {
         <View style={styles.headerSpacer} />
       </View>
 
-      <ScrollView
+      <AppScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
@@ -174,7 +173,7 @@ export default function ArticleScreen() {
         </View>
 
         <View style={styles.bottomSpacer} />
-      </ScrollView>
-    </SafeAreaView>
+      </AppScrollView>
+    </AppSafeAreaView>
   );
 }

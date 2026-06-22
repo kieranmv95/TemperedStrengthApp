@@ -23,7 +23,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 
 type RecoverySortBy = 'name' | 'access';
 type RecoverySortDirection = 'asc' | 'desc';
@@ -182,10 +182,7 @@ export default function RecoveryScreen() {
   };
 
   return (
-    <SafeAreaView
-      style={headerStyles.container}
-      edges={['top', 'left', 'right']}
-    >
+    <AppSafeAreaView style={headerStyles.container}>
       <View style={recoveryStyles.header}>
         <View style={recoveryStyles.headerRow}>
           <TouchableOpacity
@@ -410,7 +407,7 @@ export default function RecoveryScreen() {
           showsVerticalScrollIndicator={false}
         />
       )}
-    </SafeAreaView>
+    </AppSafeAreaView>
   );
 }
 
