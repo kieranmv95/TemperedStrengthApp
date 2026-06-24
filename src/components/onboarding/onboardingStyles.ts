@@ -59,6 +59,9 @@ export const createOnboardingStyles = (colors: ThemeColors) =>
       fontSize: FontSize.base,
       fontWeight: '600',
     },
+    stepScreen: {
+      flex: 1,
+    },
     scroll: {
       flex: 1,
     },
@@ -209,6 +212,7 @@ export const createOnboardingStyles = (colors: ThemeColors) =>
       marginTop: Spacing.sm,
     },
     footer: {
+      flexShrink: 0,
       paddingHorizontal: Spacing.xxl,
       paddingTop: Spacing.xl,
       gap: Spacing.md,

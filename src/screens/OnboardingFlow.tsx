@@ -38,6 +38,7 @@ import {
   View,
 } from 'react-native';
 import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TOTAL_STEPS = 8;
 const ICLOUD_STEP_INDEX = 6;
@@ -123,6 +124,7 @@ const EXPERIENCE_OPTIONS: {
   ];
 
 function OnboardingFlow() {
+  const insets = useSafeAreaInsets();
   const posthog = usePostHog();
   const {
     enabled: iCloudSyncEnabled,
@@ -647,7 +649,7 @@ function OnboardingFlow() {
             </View>
           </View>
         ) : (
-          <>
+          <View style={styles.stepScreen}>
             <View style={styles.header}>
               <View style={styles.headerRow}>
                 <OnboardingProgressBar
@@ -684,46 +686,32 @@ function OnboardingFlow() {
               </ScrollView>
             )}
 
-            <AppSafeAreaView edges={['bottom']}>
-              <View style={styles.footer}>
-                <TouchableOpacity
-                  style={[
-                    styles.primaryButton,
-                    cta.disabled && styles.primaryButtonDisabled,
-                  ]}
-                  onPress={cta.onPress}
-                  disabled={cta.disabled}
-                  accessibilityRole="button"
-                  accessibilityLabel={cta.label}
-                >
-                  <Text style={styles.primaryButtonText}>{cta.label}</Text>
-                </TouchableOpacity>
-                {canGoBack ? (
-                  <View style={styles.footerSecondaryRow}>
-                    <TouchableOpacity
-                      style={styles.backStepButton}
-                      onPress={handleBackStep}
-                      disabled={completing || iCloudSaving || weightUnitSaving}
-                      accessibilityRole="button"
-                      accessibilityLabel="Go back"
-                    >
-                      <Text style={styles.skipStepText}>Back</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.skipStepButton}
-                      onPress={handleSkipStep}
-                      disabled={completing}
-                      accessibilityRole="button"
-                      accessibilityLabel={
-                        isLastStep
-                          ? 'Skip this step and finish'
-                          : 'Skip this step'
-                      }
-                    >
-                      <Text style={styles.skipStepText}>Skip</Text>
-                    </TouchableOpacity>
-                  </View>
-                ) : (
+            <View
+              style={[styles.footer, { paddingBottom: insets.bottom }]}
+            >
+              <TouchableOpacity
+                style={[
+                  styles.primaryButton,
+                  cta.disabled && styles.primaryButtonDisabled,
+                ]}
+                onPress={cta.onPress}
+                disabled={cta.disabled}
+                accessibilityRole="button"
+                accessibilityLabel={cta.label}
+              >
+                <Text style={styles.primaryButtonText}>{cta.label}</Text>
+              </TouchableOpacity>
+              {canGoBack ? (
+                <View style={styles.footerSecondaryRow}>
+                  <TouchableOpacity
+                    style={styles.backStepButton}
+                    onPress={handleBackStep}
+                    disabled={completing || iCloudSaving || weightUnitSaving}
+                    accessibilityRole="button"
+                    accessibilityLabel="Go back"
+                  >
+                    <Text style={styles.skipStepText}>Back</Text>
+                  </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.skipStepButton}
                     onPress={handleSkipStep}
@@ -737,10 +725,24 @@ function OnboardingFlow() {
                   >
                     <Text style={styles.skipStepText}>Skip</Text>
                   </TouchableOpacity>
-                )}
-              </View>
-            </AppSafeAreaView>
-          </>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={styles.skipStepButton}
+                  onPress={handleSkipStep}
+                  disabled={completing}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    isLastStep
+                      ? 'Skip this step and finish'
+                      : 'Skip this step'
+                  }
+                >
+                  <Text style={styles.skipStepText}>Skip</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
         )}
       </KeyboardWrapper>
     </AppSafeAreaView>
