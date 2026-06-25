@@ -1,5 +1,8 @@
+import { Platform } from 'react-native';
+
 import {
   partnerListingHidesLocation,
+  type DayHours,
   type DayKey,
   type OpeningHours,
   type PartnerKind,
@@ -10,9 +13,7 @@ import {
   type PublicVenueAddress,
 } from '@/src/types/partner';
 
-const API_BASE = __DEV__
-  ? 'http://localhost:3000'
-  : 'https://temperedstrength.com';
+const API_BASE = 'https://temperedstrength.com';
 
 const PARTNER_CACHE_TTL_MS = 5 * 60 * 1000;
 
@@ -44,14 +45,30 @@ async function fetchPartnerList<T>(path: string): Promise<T[]> {
   }
 }
 
+function normalizeGymListing(raw: PublicGymListing): PublicGymListing {
+  const videoId =
+    typeof raw.videoId === 'string' && raw.videoId.length > 0
+      ? raw.videoId
+      : null;
+  return {
+    ...raw,
+    focusAreas: Array.isArray(raw.focusAreas) ? raw.focusAreas : [],
+    videoId,
+  };
+}
+
 export async function fetchGyms(): Promise<PublicGymListing[]> {
-  return fetchPartnerList<PublicGymListing>('/api/gyms');
+  const gyms = await fetchPartnerList<PublicGymListing>('/api/gyms');
+  return gyms.map(normalizeGymListing);
 }
 
 function normalizeClubListing(raw: PublicClubListing): PublicClubListing {
+  const hasOpeningHours = raw.hasOpeningHours === true;
   return {
     ...raw,
     hideLocation: raw.hideLocation === true,
+    hasOpeningHours,
+    openingHours: hasOpeningHours ? raw.openingHours : undefined,
   };
 }
 
@@ -60,9 +77,7 @@ export async function fetchClubs(): Promise<PublicClubListing[]> {
   return clubs.map(normalizeClubListing);
 }
 
-function normalizeCoachListing(
-  raw: PublicCoachListing
-): PublicCoachListing {
+function normalizeCoachListing(raw: PublicCoachListing): PublicCoachListing {
   return {
     ...raw,
     specialties: Array.isArray(raw.specialties) ? raw.specialties : [],
@@ -167,6 +182,27 @@ export function getPartnerListingCoords(
   return { latitude, longitude };
 }
 
+export function buildPartnerMapsUrl(listing: PartnerListing): string | null {
+  const coords = getPartnerListingCoords(listing);
+  if (!coords) {
+    return null;
+  }
+
+  const { latitude, longitude } = coords;
+  const coordsParam = `${latitude},${longitude}`;
+  const label = encodeURIComponent(listing.name);
+
+  if (Platform.OS === 'ios') {
+    return `http://maps.apple.com/?ll=${coordsParam}&q=${label}`;
+  }
+
+  if (Platform.OS === 'android') {
+    return `geo:${coordsParam}?q=${coordsParam}(${label})`;
+  }
+
+  return `https://www.google.com/maps/search/?api=1&query=${coordsParam}`;
+}
+
 function haversineDistanceKm(
   from: { latitude: number; longitude: number },
   to: { latitude: number; longitude: number }
@@ -218,8 +254,56 @@ export function sortPartnerListingsByDistance(
   );
 }
 
+export function getPartnerListingDistanceKm(
+  listing: PartnerListing,
+  origin: { latitude: number; longitude: number }
+): number | null {
+  const coords = getPartnerListingCoords(listing);
+  if (!coords) {
+    return null;
+  }
+  return haversineDistanceKm(origin, coords);
+}
+
+export function formatPartnerDistanceKm(distanceKm: number): string {
+  if (distanceKm < 1) {
+    const metres = Math.max(1, Math.round(distanceKm * 1000));
+    return `${metres} m away`;
+  }
+  if (distanceKm < 10) {
+    return `${distanceKm.toFixed(1)} km away`;
+  }
+  return `${Math.round(distanceKm)} km away`;
+}
+
 export function formatServiceRadius(radiusServedKm: number): string {
   return `Serves approximately ${radiusServedKm} km`;
+}
+
+function getDayOpenHours(
+  hours: DayHours
+): { open: string; close: string } | null {
+  if ('closed' in hours || 'off' in hours) {
+    return null;
+  }
+  const open = hours.open.trim().toLowerCase();
+  const close = hours.close.trim().toLowerCase();
+  if (
+    open === 'off' ||
+    open === 'closed' ||
+    close === 'off' ||
+    close === 'closed'
+  ) {
+    return null;
+  }
+  return hours;
+}
+
+function isDayClosed(hours: DayHours | undefined): boolean {
+  if (!hours) {
+    return false;
+  }
+  return getDayOpenHours(hours) === null;
 }
 
 export function isOpenNow(
@@ -240,7 +324,11 @@ export function isOpenNow(
   if (!hours) {
     return null;
   }
-  if ('closed' in hours) {
+  if (isDayClosed(hours)) {
+    return false;
+  }
+  const openHours = getDayOpenHours(hours);
+  if (!openHours) {
     return false;
   }
   const toMinutes = (time: string) => {
@@ -249,7 +337,7 @@ export function isOpenNow(
   };
   const minutes = now.getHours() * 60 + now.getMinutes();
   return (
-    minutes >= toMinutes(hours.open) && minutes < toMinutes(hours.close)
+    minutes >= toMinutes(openHours.open) && minutes < toMinutes(openHours.close)
   );
 }
 
@@ -283,10 +371,11 @@ export function formatOpeningHoursLine(
   day: DayKey,
   hours: OpeningHours[DayKey]
 ): string {
-  if ('closed' in hours) {
+  const openHours = getDayOpenHours(hours);
+  if (!openHours) {
     return 'Closed';
   }
-  return `${hours.open} – ${hours.close}`;
+  return `${openHours.open} – ${openHours.close}`;
 }
 
 export function orderedOpeningHours(

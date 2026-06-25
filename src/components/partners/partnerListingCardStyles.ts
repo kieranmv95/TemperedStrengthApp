@@ -52,6 +52,12 @@ export const partnerListingCardStyles = StyleSheet.create({
     fontSize: FontSize.md,
     flex: 1,
   },
+  distanceText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '500',
+    flexShrink: 0,
+  },
   specialtiesText: {
     color: Colors.textMuted,
     fontSize: FontSize.md,

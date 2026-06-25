@@ -1,6 +1,8 @@
 import { DiscoverPartnersContent } from '@/src/components/partners/DiscoverPartnersContent';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { useDiscoverLocation } from '@/src/hooks/use-discover-location';
 import { usePartnerListings } from '@/src/hooks/use-partner-listings';
+import { sortPartnerListingsByDistance } from '@/src/services/partnerApiService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { PartnerListing } from '@/src/types/partner';
 import { partnerFavoriteKey } from '@/src/types/partner';
@@ -22,9 +24,20 @@ import {
 } from 'react-native';
 import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 
+function sortListingsByDistance<T extends PartnerListing>(
+  listings: T[],
+  userCoords: { latitude: number; longitude: number } | null
+): T[] {
+  if (!userCoords) {
+    return listings;
+  }
+  return sortPartnerListingsByDistance(listings, userCoords) as T[];
+}
+
 export default function DiscoverScreen() {
   const posthog = usePostHog();
   const { gyms, clubs, coaches } = usePartnerListings();
+  const { userCoords } = useDiscoverLocation();
   const [partnerFavorites, setPartnerFavorites] = useState<string[]>([]);
   const [isLoadingFavorites, setIsLoadingFavorites] = useState(true);
   const partnerFavoritesRef = useRef<string[]>([]);
@@ -59,16 +72,28 @@ export default function DiscoverScreen() {
   );
 
   const gymListings = useMemo(
-    () => gyms.map((gym) => ({ ...gym, kind: 'gym' as const })),
-    [gyms]
+    () =>
+      sortListingsByDistance(
+        gyms.map((gym) => ({ ...gym, kind: 'gym' as const })),
+        userCoords
+      ),
+    [gyms, userCoords]
   );
   const clubListings = useMemo(
-    () => clubs.map((club) => ({ ...club, kind: 'club' as const })),
-    [clubs]
+    () =>
+      sortListingsByDistance(
+        clubs.map((club) => ({ ...club, kind: 'club' as const })),
+        userCoords
+      ),
+    [clubs, userCoords]
   );
   const coachListings = useMemo(
-    () => coaches.map((coach) => ({ ...coach, kind: 'coach' as const })),
-    [coaches]
+    () =>
+      sortListingsByDistance(
+        coaches.map((coach) => ({ ...coach, kind: 'coach' as const })),
+        userCoords
+      ),
+    [coaches, userCoords]
   );
   const allPartnerListings = useMemo(
     () => [...gymListings, ...clubListings, ...coachListings],
@@ -76,12 +101,15 @@ export default function DiscoverScreen() {
   );
   const savedPartnerListings = useMemo(
     () =>
-      allPartnerListings.filter((listing) =>
-        partnerFavorites.includes(
-          partnerFavoriteKey(listing.kind, listing.id)
-        )
+      sortListingsByDistance(
+        allPartnerListings.filter((listing) =>
+          partnerFavorites.includes(
+            partnerFavoriteKey(listing.kind, listing.id)
+          )
+        ),
+        userCoords
       ),
-    [allPartnerListings, partnerFavorites]
+    [allPartnerListings, partnerFavorites, userCoords]
   );
 
   const hasListings = allPartnerListings.length > 0;
@@ -157,6 +185,7 @@ export default function DiscoverScreen() {
           coachListings={coachListings}
           savedListings={savedPartnerListings}
           favoriteKeys={partnerFavorites}
+          userCoords={userCoords}
           onPressListing={handlePartnerPress}
           onToggleFavorite={handleTogglePartnerFavorite}
         />

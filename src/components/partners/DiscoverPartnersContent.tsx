@@ -1,5 +1,6 @@
 import { Pill } from '@/src/components/pill';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import type { UserCoords } from '@/src/services/discoverLocationService';
 import type { PartnerListing } from '@/src/types/partner';
 import { partnerFavoriteKey } from '@/src/types/partner';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -14,6 +15,7 @@ type DiscoverPartnersContentProps = {
   coachListings: PartnerListing[];
   savedListings: PartnerListing[];
   favoriteKeys: string[];
+  userCoords?: UserCoords | null;
   onPressListing: (listing: PartnerListing) => void;
   onToggleFavorite: (listing: PartnerListing) => void;
 };
@@ -24,6 +26,7 @@ export function DiscoverPartnersContent({
   coachListings,
   savedListings,
   favoriteKeys,
+  userCoords = null,
   onPressListing,
   onToggleFavorite,
 }: DiscoverPartnersContentProps) {
@@ -102,13 +105,14 @@ export function DiscoverPartnersContent({
     <FlatList
       data={activeListings}
       keyExtractor={(item) => partnerFavoriteKey(item.kind, item.id)}
-      extraData={favoriteKeys}
+      extraData={{ favoriteKeys, userCoords }}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.listContent}
       ListHeaderComponent={listHeader}
       renderItem={({ item }) => (
         <PartnerListingCard
           listing={item}
+          userCoords={userCoords}
           isFavorite={favoriteKeys.includes(
             partnerFavoriteKey(item.kind, item.id)
           )}

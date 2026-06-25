@@ -2,10 +2,14 @@ import { Card, SmallChevron } from '@/src/components/ds';
 import { Colors } from '@/src/constants/theme';
 import {
   formatLocationSubtitle,
+  formatPartnerDistanceKm,
+  getPartnerListingDistanceKm,
   isOpenNow,
 } from '@/src/services/partnerApiService';
+import type { UserCoords } from '@/src/services/discoverLocationService';
 import {
   partnerListingHidesLocation,
+  partnerListingOpeningHours,
   type PartnerKind,
   type PartnerListing,
 } from '@/src/types/partner';
@@ -32,6 +36,7 @@ const KIND_ICONS: Record<
 type PartnerListingCardProps = {
   listing: PartnerListing;
   isFavorite?: boolean;
+  userCoords?: UserCoords | null;
   onPress: (listing: PartnerListing) => void;
   onToggleFavorite?: (listing: PartnerListing) => void;
   variant?: 'default' | 'compact';
@@ -40,22 +45,30 @@ type PartnerListingCardProps = {
 export function PartnerListingCard({
   listing,
   isFavorite = false,
+  userCoords = null,
   onPress,
   onToggleFavorite,
   variant = 'default',
 }: PartnerListingCardProps) {
   const isCompact = variant === 'compact';
   const canFavorite = Boolean(onToggleFavorite);
-  const openStatus =
-    listing.kind === 'coach' ? null : isOpenNow(listing.openingHours);
-  const coachSpecialtiesSubtitle =
+  const openingHours = partnerListingOpeningHours(listing);
+  const openStatus = openingHours ? isOpenNow(openingHours) : null;
+  const tagsSubtitle =
     listing.kind === 'coach' && listing.specialties.length > 0
       ? listing.specialties.slice(0, 2).join(', ')
-      : null;
+      : listing.kind === 'gym' && listing.focusAreas.length > 0
+        ? listing.focusAreas.slice(0, 2).join(', ')
+        : null;
   const showsLocation = !partnerListingHidesLocation(listing);
   const locationSubtitle = showsLocation
     ? formatLocationSubtitle(listing.address)
     : null;
+  const distanceKm = userCoords
+    ? getPartnerListingDistanceKm(listing, userCoords)
+    : null;
+  const distanceLabel =
+    distanceKm != null ? formatPartnerDistanceKm(distanceKm) : null;
 
   const stopPropagation = (event: { stopPropagation: () => void }) => {
     event.stopPropagation();
@@ -88,18 +101,25 @@ export function PartnerListingCard({
         <Text style={styles.title} numberOfLines={isCompact ? 1 : 2}>
           {listing.name}
         </Text>
-        {locationSubtitle || (isCompact && openStatus !== null) ? (
+        {locationSubtitle || distanceLabel || (isCompact && openStatus !== null) ? (
           <View style={styles.locationRow}>
-            {locationSubtitle ? (
+            {locationSubtitle || distanceLabel ? (
               <>
                 <Ionicons
                   name="location-outline"
                   size={12}
                   color={Colors.textPlaceholder}
                 />
-                <Text style={styles.locationText} numberOfLines={1}>
-                  {locationSubtitle}
-                </Text>
+                {locationSubtitle ? (
+                  <Text style={styles.locationText} numberOfLines={1}>
+                    {locationSubtitle}
+                  </Text>
+                ) : null}
+                {distanceLabel ? (
+                  <Text style={styles.distanceText} numberOfLines={1}>
+                    {distanceLabel}
+                  </Text>
+                ) : null}
               </>
             ) : null}
             {isCompact && openStatus !== null ? (
@@ -116,9 +136,9 @@ export function PartnerListingCard({
             ) : null}
           </View>
         ) : null}
-        {coachSpecialtiesSubtitle ? (
+        {tagsSubtitle ? (
           <Text style={styles.specialtiesText} numberOfLines={1}>
-            {coachSpecialtiesSubtitle}
+            {tagsSubtitle}
           </Text>
         ) : null}
         {!isCompact && listing.description ? (

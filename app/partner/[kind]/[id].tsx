@@ -1,20 +1,26 @@
 import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
+import { YoutubeEmbed } from '@/src/components/exercise/YoutubeEmbed';
 import { partnerDetailStyles as styles } from '@/src/components/partners/partnerDetailStyles';
 import { Pill } from '@/src/components/pill';
 import { Colors } from '@/src/constants/theme';
 import {
+  buildPartnerMapsUrl,
   fetchAllPartnerListings,
   formatAddressMultiLine,
   formatServiceRadius,
   getCachedPartnerListing,
+  getPartnerListingCoords,
   isOpenNow,
   orderedOpeningHours,
 } from '@/src/services/partnerApiService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { PartnerKind, PartnerListing } from '@/src/types/partner';
 import {
+  gymHasVideo,
+  gymShowsFocusAreas,
   partnerFavoriteKey,
   partnerListingHidesLocation,
+  partnerListingOpeningHours,
 } from '@/src/types/partner';
 import {
   getFavoritePartners,
@@ -28,6 +34,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Linking,
+  ScrollView,
   Text,
   TouchableOpacity,
   View,
@@ -150,6 +157,17 @@ export default function PartnerDetailScreen() {
     });
   };
 
+  const handleOpenInMaps = () => {
+    if (!listing) {
+      return;
+    }
+    const url = buildPartnerMapsUrl(listing);
+    if (!url) {
+      return;
+    }
+    handleOpenLink(url, 'View on map');
+  };
+
   if (isLoading) {
     return (
       <AppSafeAreaView style={styles.container}>
@@ -199,8 +217,9 @@ export default function PartnerDetailScreen() {
     );
   }
 
-  const openStatus =
-    listing.kind === 'coach' ? null : isOpenNow(listing.openingHours);
+  const openingHours = partnerListingOpeningHours(listing);
+  const openStatus = openingHours ? isOpenNow(openingHours) : null;
+  const mapCoords = getPartnerListingCoords(listing);
 
   return (
     <AppSafeAreaView style={styles.container}>
@@ -237,8 +256,61 @@ export default function PartnerDetailScreen() {
         <Text style={styles.kindBadge}>{KIND_LABELS[listing.kind]}</Text>
         <Text style={styles.title}>{listing.name}</Text>
 
+        {listing.kind === 'gym' && gymShowsFocusAreas(listing) ? (
+          <View style={styles.focusAreasRow}>
+            {listing.focusAreas.map((focusArea) => (
+              <Pill
+                key={focusArea}
+                label={focusArea}
+                isActive={false}
+                disabled
+                onPress={() => { }}
+              />
+            ))}
+          </View>
+        ) : null}
+
+        {listing.links.length > 0 ? (
+          <View style={styles.linksSection}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.linksScrollContent}
+            >
+              {listing.links.map((link) => (
+                <TouchableOpacity
+                  key={`${link.label}-${link.url}`}
+                  style={styles.linkChip}
+                  onPress={() => handleOpenLink(link.url, link.label)}
+                  accessibilityLabel={`Open ${link.label}`}
+                >
+                  <Text style={styles.linkChipLabel} numberOfLines={1}>
+                    {link.label}
+                  </Text>
+                  <Ionicons
+                    name="open-outline"
+                    size={16}
+                    color={Colors.accent}
+                  />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        ) : null}
+
         {listing.description ? (
-          <Text style={styles.description}>{listing.description}</Text>
+          <View style={styles.descriptionBlock}>
+            <Text style={styles.description}>{listing.description}</Text>
+          </View>
+        ) : null}
+
+        {listing.kind === 'gym' && gymHasVideo(listing) ? (
+          <View style={styles.videoSection}>
+            <YoutubeEmbed
+              youtubeId={listing.videoId}
+              accessibilityLabel={`Tour video for ${listing.name}`}
+            />
+          </View>
         ) : null}
 
         {openStatus !== null ? (
@@ -270,6 +342,16 @@ export default function PartnerDetailScreen() {
             <Text style={styles.sectionBody}>
               {formatAddressMultiLine(listing.address)}
             </Text>
+            {mapCoords ? (
+              <TouchableOpacity
+                style={styles.linkChip}
+                onPress={handleOpenInMaps}
+                accessibilityLabel={`View ${listing.name} on map`}
+              >
+                <Text style={styles.linkChipLabel}>View on map</Text>
+                <Ionicons name="map-outline" size={16} color={Colors.accent} />
+              </TouchableOpacity>
+            ) : null}
           </View>
         ) : null}
 
@@ -283,7 +365,7 @@ export default function PartnerDetailScreen() {
                   label={specialty}
                   isActive={false}
                   disabled
-                  onPress={() => {}}
+                  onPress={() => { }}
                 />
               ))}
             </View>
@@ -299,34 +381,14 @@ export default function PartnerDetailScreen() {
           </View>
         ) : null}
 
-        {listing.kind !== 'coach' ? (
+        {openingHours ? (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Opening hours</Text>
-            {orderedOpeningHours(listing.openingHours).map((row) => (
+            {orderedOpeningHours(openingHours).map((row) => (
               <View key={row.day} style={styles.hoursRow}>
                 <Text style={styles.hoursDay}>{row.label}</Text>
                 <Text style={styles.hoursValue}>{row.hours}</Text>
               </View>
-            ))}
-          </View>
-        ) : null}
-
-        {listing.links.length > 0 ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Links</Text>
-            {listing.links.map((link) => (
-              <TouchableOpacity
-                key={`${link.label}-${link.url}`}
-                style={styles.linkRow}
-                onPress={() => handleOpenLink(link.url, link.label)}
-              >
-                <Text style={styles.linkLabel}>{link.label}</Text>
-                <Ionicons
-                  name="open-outline"
-                  size={18}
-                  color={Colors.accent}
-                />
-              </TouchableOpacity>
             ))}
           </View>
         ) : null}
