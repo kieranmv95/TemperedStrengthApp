@@ -1,6 +1,7 @@
 import { ArticleCard } from '@/src/components/brief/ArticleCard';
 import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
 import { TogetherWeLiftBanner } from '@/src/components/hub/TogetherWeLiftBanner';
+import { DiscoverHubEntry } from '@/src/components/partners/DiscoverHubEntry';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
@@ -10,7 +11,10 @@ import { fetchArticles } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { ArticleCategory, ArticleListItem } from '@/src/types/brief';
-import { getFavoriteArticles, setFavoriteArticles } from '@/src/utils/storage';
+import {
+  getFavoriteArticles,
+  setFavoriteArticles,
+} from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
@@ -48,12 +52,12 @@ export default function HubScreen() {
       void (async () => {
         setArticlesLoading(true);
         try {
-          const favs = await getFavoriteArticles();
+          const articleFavs = await getFavoriteArticles();
           if (cancelled) {
             return;
           }
-          favoritesRef.current = favs;
-          setFavorites(favs);
+          favoritesRef.current = articleFavs;
+          setFavorites(articleFavs);
         } catch (error) {
           console.error('Failed to load favorite articles:', error);
         }
@@ -148,6 +152,10 @@ export default function HubScreen() {
     router.push('/shop');
   };
 
+  const handleOpenDiscover = () => {
+    router.push('/discover');
+  };
+
   const charityBanner = (
     <TogetherWeLiftBanner onPress={() => openTogetherWeLift('hub_banner')} />
   );
@@ -197,6 +205,8 @@ export default function HubScreen() {
             </Card>
           )}
         </View>
+
+        <DiscoverHubEntry onPress={handleOpenDiscover} />
 
         <View style={styles.subSection}>
           <CuratedSection

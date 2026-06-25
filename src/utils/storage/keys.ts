@@ -13,6 +13,7 @@ export const SWAP_COUNT_STATE_KEY = 'swap_count_state';
 export const WORKOUT_NOTES_KEY = 'workout_notes';
 export const FAVORITE_WORKOUTS_KEY = 'favorite_workouts';
 export const FAVORITE_ARTICLES_KEY = 'favorite_articles';
+export const FAVORITE_PARTNERS_KEY = 'favorite_partners';
 export const REST_TIMER_KEY = 'rest_timer';
 export const ACTIVE_SESSION_KEY = 'active_session';
 export const COMPLETED_SESSIONS_KEY = 'completed_sessions';

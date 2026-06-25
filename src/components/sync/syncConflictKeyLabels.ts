@@ -12,6 +12,7 @@ const STORAGE_KEY_LABELS: Record<string, string> = {
   workout_notes: 'Workout notes',
   favorite_workouts: 'Favorite workouts',
   favorite_articles: 'Favorite articles',
+  favorite_partners: 'Saved partners',
   rest_timer: 'Rest timer',
   active_session: 'Active session',
   completed_sessions: 'Completed sessions',

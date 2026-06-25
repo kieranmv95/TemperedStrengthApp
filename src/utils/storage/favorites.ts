@@ -1,7 +1,7 @@
 // Favorite workouts and articles.
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { syncSetItem } from '@/src/sync/syncStorage';
-import { FAVORITE_ARTICLES_KEY, FAVORITE_WORKOUTS_KEY } from './keys';
+import { FAVORITE_ARTICLES_KEY, FAVORITE_PARTNERS_KEY, FAVORITE_WORKOUTS_KEY } from './keys';
 import { mutate, parseJsonArray } from './internal';
 
 /**
@@ -167,6 +167,33 @@ export const toggleFavoriteArticle = async (
     }
   } catch (error) {
     console.error('Error toggling favorite article:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get favorite partner keys (`partner:{kind}:{id}`).
+ */
+export const getFavoritePartners = async (): Promise<string[]> => {
+  try {
+    const data = await AsyncStorage.getItem(FAVORITE_PARTNERS_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Error getting favorite partners:', error);
+    return [];
+  }
+};
+
+/**
+ * Replace the full list of favorite partner keys.
+ */
+export const setFavoritePartners = async (
+  partnerKeys: string[]
+): Promise<void> => {
+  try {
+    await syncSetItem(FAVORITE_PARTNERS_KEY, JSON.stringify(partnerKeys));
+  } catch (error) {
+    console.error('Error setting favorite partners:', error);
     throw error;
   }
 };

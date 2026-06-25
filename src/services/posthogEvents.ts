@@ -44,6 +44,9 @@ export const posthogEventsNames = {
     toolCalculate: 'tool_calculate',
     togetherWeLiftSheetOpened: 'together_we_lift_sheet_opened',
     togetherWeLiftLinkPressed: 'together_we_lift_link_pressed',
+    partnerView: 'partner_view',
+    partnerFavourite: 'partner_favourite',
+    partnerLinkPressed: 'partner_link_pressed',
   },
   home: {
     /** User tapped a navigation target from the Home tab body. */
