@@ -46,26 +46,68 @@ export const partnerDetailStyles = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: Spacing.sm,
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: Spacing.md,
+    marginBottom: Spacing.xl,
+  },
   title: {
     color: Colors.textPrimary,
     fontSize: FontSize.displayXXXl,
     fontWeight: '800',
     lineHeight: 34,
-    marginBottom: Spacing.md,
+    flex: 1,
   },
-  focusAreasRow: {
+  openStatusDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    flexShrink: 0,
+    marginTop: 12,
+  },
+  openStatusDotOpen: {
+    backgroundColor: Colors.recommended,
+  },
+  openStatusDotClosed: {
+    backgroundColor: Colors.destructive,
+  },
+  tabRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     gap: Spacing.md,
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.xl,
   },
-  descriptionBlock: {
+  tabRowItem: {
+    flex: 1,
+  },
+  tabPanel: {
+    gap: Spacing.xxl,
+  },
+  contentBlock: {
     backgroundColor: Colors.accentWashFill,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
     borderColor: Colors.accentWashBorder,
     padding: Spacing.xxl,
-    marginBottom: Spacing.xxl,
+    gap: Spacing.lg,
+  },
+  focusAreasRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.md,
+  },
+  focusAreaPill: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.pill,
+    backgroundColor: Colors.accentWashFill,
+    borderWidth: 1,
+    borderColor: Colors.accentWashBorder,
+  },
+  focusAreaPillText: {
+    color: Colors.accent,
+    fontSize: FontSize.md,
+    fontWeight: '700',
   },
   description: {
     color: Colors.textSecondary,
@@ -73,12 +115,22 @@ export const partnerDetailStyles = StyleSheet.create({
     lineHeight: 22,
     fontWeight: '500',
   },
+  textLinkRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.md,
+  },
+  textLink: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '600',
+    flex: 1,
+  },
   videoSection: {
-    marginBottom: Spacing.xxl,
     gap: Spacing.md,
   },
   section: {
-    marginBottom: Spacing.xxl,
     gap: Spacing.md,
   },
   sectionTitle: {
@@ -151,33 +203,15 @@ export const partnerDetailStyles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.lg,
   },
-  linksSection: {
-    marginBottom: Spacing.md,
-    marginHorizontal: -Spacing.xxl,
-  },
-  linksScrollContent: {
-    flexDirection: 'row',
-    gap: Spacing.md,
-    paddingHorizontal: Spacing.xxl,
-  },
-  linkChip: {
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    maxWidth: 220,
-  },
-  linkChipLabel: {
-    color: Colors.textPrimary,
+  visitStatusLine: {
     fontSize: FontSize.lg,
     fontWeight: '600',
-    flexShrink: 1,
+  },
+  visitStatusOpen: {
+    color: Colors.recommended,
+  },
+  visitStatusClosed: {
+    color: Colors.destructive,
   },
   errorContainer: {
     flex: 1,

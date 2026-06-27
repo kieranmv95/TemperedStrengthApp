@@ -1,28 +1,15 @@
 import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
-import { YoutubeEmbed } from '@/src/components/exercise/YoutubeEmbed';
-import { PartnerMapPreview } from '@/src/components/partners/PartnerMapPreview';
+import { PartnerDetailBody } from '@/src/components/partners/PartnerDetailBody';
 import { partnerDetailStyles as styles } from '@/src/components/partners/partnerDetailStyles';
-import { Pill } from '@/src/components/pill';
 import { Colors } from '@/src/constants/theme';
 import {
   buildPartnerMapsUrl,
   fetchAllPartnerListings,
-  formatAddressMultiLine,
-  formatServiceRadius,
   getCachedPartnerListing,
-  getPartnerListingCoords,
-  isOpenNow,
-  orderedOpeningHours,
 } from '@/src/services/partnerApiService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { PartnerKind, PartnerListing } from '@/src/types/partner';
-import {
-  gymHasVideo,
-  gymShowsFocusAreas,
-  partnerFavoriteKey,
-  partnerListingHidesLocation,
-  partnerListingOpeningHours,
-} from '@/src/types/partner';
+import { partnerFavoriteKey } from '@/src/types/partner';
 import {
   getFavoritePartners,
   setFavoritePartners,
@@ -35,7 +22,6 @@ import React, { useCallback, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Linking,
-  ScrollView,
   Text,
   TouchableOpacity,
   View,
@@ -218,10 +204,6 @@ export default function PartnerDetailScreen() {
     );
   }
 
-  const openingHours = partnerListingOpeningHours(listing);
-  const openStatus = openingHours ? isOpenNow(openingHours) : null;
-  const mapCoords = getPartnerListingCoords(listing);
-
   return (
     <AppSafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -254,145 +236,11 @@ export default function PartnerDetailScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.kindBadge}>{KIND_LABELS[listing.kind]}</Text>
-        <Text style={styles.title}>{listing.name}</Text>
-
-        {listing.kind === 'gym' && gymShowsFocusAreas(listing) ? (
-          <View style={styles.focusAreasRow}>
-            {listing.focusAreas.map((focusArea) => (
-              <Pill
-                key={focusArea}
-                label={focusArea}
-                isActive={false}
-                disabled
-                onPress={() => { }}
-              />
-            ))}
-          </View>
-        ) : null}
-
-        {listing.links.length > 0 ? (
-          <View style={styles.linksSection}>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.linksScrollContent}
-            >
-              {listing.links.map((link) => (
-                <TouchableOpacity
-                  key={`${link.label}-${link.url}`}
-                  style={styles.linkChip}
-                  onPress={() => handleOpenLink(link.url, link.label)}
-                  accessibilityLabel={`Open ${link.label}`}
-                >
-                  <Text style={styles.linkChipLabel} numberOfLines={1}>
-                    {link.label}
-                  </Text>
-                  <Ionicons
-                    name="open-outline"
-                    size={16}
-                    color={Colors.accent}
-                  />
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-        ) : null}
-
-        {listing.description ? (
-          <View style={styles.descriptionBlock}>
-            <Text style={styles.description}>{listing.description}</Text>
-          </View>
-        ) : null}
-
-        {listing.kind === 'gym' && gymHasVideo(listing) ? (
-          <View style={styles.videoSection}>
-            <YoutubeEmbed
-              youtubeId={listing.videoId}
-              accessibilityLabel={`Tour video for ${listing.name}`}
-            />
-          </View>
-        ) : null}
-
-        {openStatus !== null ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Status</Text>
-            <View
-              style={[
-                styles.statusBadge,
-                openStatus ? styles.statusBadgeOpen : styles.statusBadgeClosed,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.statusBadgeText,
-                  openStatus
-                    ? styles.statusBadgeTextOpen
-                    : styles.statusBadgeTextClosed,
-                ]}
-              >
-                {openStatus ? 'Open now' : 'Closed'}
-              </Text>
-            </View>
-          </View>
-        ) : null}
-
-        {!partnerListingHidesLocation(listing) ? (
-          <View style={styles.section}>
-            <View style={styles.addressBlock}>
-              <Text style={styles.sectionTitle}>Address</Text>
-              <Text style={styles.addressBody}>
-                {formatAddressMultiLine(listing.address)}
-              </Text>
-              {mapCoords ? (
-                <PartnerMapPreview
-                  latitude={mapCoords.latitude}
-                  longitude={mapCoords.longitude}
-                  onPress={handleOpenInMaps}
-                  accessibilityLabel={`View ${listing.name} on map`}
-                />
-              ) : null}
-            </View>
-          </View>
-        ) : null}
-
-        {listing.kind === 'coach' && listing.specialties.length > 0 ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Specialties</Text>
-            <View style={styles.tagsRow}>
-              {listing.specialties.map((specialty) => (
-                <Pill
-                  key={specialty}
-                  label={specialty}
-                  isActive={false}
-                  disabled
-                  onPress={() => { }}
-                />
-              ))}
-            </View>
-          </View>
-        ) : null}
-
-        {listing.kind === 'coach' && listing.radiusServedKm != null ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Service area</Text>
-            <Text style={styles.sectionBody}>
-              {formatServiceRadius(listing.radiusServedKm)}
-            </Text>
-          </View>
-        ) : null}
-
-        {openingHours ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Opening hours</Text>
-            {orderedOpeningHours(openingHours).map((row) => (
-              <View key={row.day} style={styles.hoursRow}>
-                <Text style={styles.hoursDay}>{row.label}</Text>
-                <Text style={styles.hoursValue}>{row.hours}</Text>
-              </View>
-            ))}
-          </View>
-        ) : null}
+        <PartnerDetailBody
+          listing={listing}
+          onOpenLink={handleOpenLink}
+          onOpenInMaps={handleOpenInMaps}
+        />
       </AppScrollView>
     </AppSafeAreaView>
   );

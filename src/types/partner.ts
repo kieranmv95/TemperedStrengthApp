@@ -109,6 +109,36 @@ export function partnerListingHidesLocation(listing: PartnerListing): boolean {
   return listing.hideLocation;
 }
 
+export function partnerListingHasAboutContent(listing: PartnerListing): boolean {
+  if (listing.links.length > 0) {
+    return true;
+  }
+  if (listing.description) {
+    return true;
+  }
+  if (listing.kind === 'gym' && gymHasVideo(listing)) {
+    return true;
+  }
+  return false;
+}
+
+export function partnerListingHasVisitContent(listing: PartnerListing): boolean {
+  if (!partnerListingHidesLocation(listing)) {
+    return true;
+  }
+  if (partnerListingOpeningHours(listing)) {
+    return true;
+  }
+  if (listing.kind === 'coach') {
+    return true;
+  }
+  return false;
+}
+
+export function partnerVisitTabLabel(kind: PartnerKind): string {
+  return kind === 'coach' ? 'Location' : 'Visit';
+}
+
 export function partnerFavoriteKey(kind: PartnerKind, id: string): string {
   return `partner:${kind}:${id}`;
 }
