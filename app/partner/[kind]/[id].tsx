@@ -1,5 +1,6 @@
 import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
 import { YoutubeEmbed } from '@/src/components/exercise/YoutubeEmbed';
+import { PartnerMapPreview } from '@/src/components/partners/PartnerMapPreview';
 import { partnerDetailStyles as styles } from '@/src/components/partners/partnerDetailStyles';
 import { Pill } from '@/src/components/pill';
 import { Colors } from '@/src/constants/theme';
@@ -338,20 +339,20 @@ export default function PartnerDetailScreen() {
 
         {!partnerListingHidesLocation(listing) ? (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Address</Text>
-            <Text style={styles.sectionBody}>
-              {formatAddressMultiLine(listing.address)}
-            </Text>
-            {mapCoords ? (
-              <TouchableOpacity
-                style={styles.linkChip}
-                onPress={handleOpenInMaps}
-                accessibilityLabel={`View ${listing.name} on map`}
-              >
-                <Text style={styles.linkChipLabel}>View on map</Text>
-                <Ionicons name="map-outline" size={16} color={Colors.accent} />
-              </TouchableOpacity>
-            ) : null}
+            <View style={styles.addressBlock}>
+              <Text style={styles.sectionTitle}>Address</Text>
+              <Text style={styles.addressBody}>
+                {formatAddressMultiLine(listing.address)}
+              </Text>
+              {mapCoords ? (
+                <PartnerMapPreview
+                  latitude={mapCoords.latitude}
+                  longitude={mapCoords.longitude}
+                  onPress={handleOpenInMaps}
+                  accessibilityLabel={`View ${listing.name} on map`}
+                />
+              ) : null}
+            </View>
           </View>
         ) : null}
 

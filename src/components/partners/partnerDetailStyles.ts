@@ -91,6 +91,19 @@ export const partnerDetailStyles = StyleSheet.create({
     fontSize: FontSize.lg,
     lineHeight: 22,
   },
+  addressBlock: {
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    padding: Spacing.xl,
+    gap: Spacing.lg,
+  },
+  addressBody: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+  },
   tagsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
