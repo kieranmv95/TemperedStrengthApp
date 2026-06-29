@@ -21,7 +21,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         instructions:
           'As many rounds as possible in 15 mins. No scheduled rest; rest only as needed.',
         movements: ['10 Burpees', '20 Air Squats', '30 Sit-ups'],
-      }],
+      },
+    ],
     equipment: [],
   },
   {
@@ -38,7 +39,8 @@ export const workouts: StandaloneWorkoutSource[] = [
       {
         name: 'Warmup',
         movements: [
-          '3 Rounds: 30s High Knees, 30s Butt Kicks, 5 Inchworms, 5 Broad Jumps'],
+          '3 Rounds: 30s High Knees, 30s Butt Kicks, 5 Inchworms, 5 Broad Jumps',
+        ],
       },
       {
         name: 'Death by 10 Metres',
@@ -49,8 +51,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Min 2: 2 x 10m sprints + 10 Push-ups',
           'Min 3: 3 x 10m sprints + 15 Air Squats',
           'Min 4: 4 x 10m sprints + 5 Burpees',
-          'Min 5+: Continue adding 1 sprint per minute, cycling through the movement penalties'],
-      }],
+          'Min 5+: Continue adding 1 sprint per minute, cycling through the movement penalties',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -67,14 +71,16 @@ export const workouts: StandaloneWorkoutSource[] = [
       {
         name: 'Warmup',
         movements: [
-          '5 mins joint Prep: Wrist circles, arm swings, 20 Jumping Jacks'],
+          '5 mins joint Prep: Wrist circles, arm swings, 20 Jumping Jacks',
+        ],
       },
       {
         name: 'For Time',
         instructions:
           'Go at 80% pace for the first 50, then accelerate. Target: Under 8 mins.',
         movements: ['100 Burpees for time'],
-      }],
+      },
+    ],
     equipment: [],
   },
   {
@@ -99,8 +105,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '20 Lunges',
           '20 Glute Bridges',
           '20 Sumo Squats',
-          '1 min Wall Sit'],
-      }],
+          '1 min Wall Sit',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -125,8 +133,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Max Pushups',
           '15 Inverted Rows (or Towel Rows)',
-          '12 Dips (on chair/bench)'],
-      }],
+          '12 Dips (on chair/bench)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -145,7 +155,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '500m Easy Row',
           '3 x 10 stroke power bursts (build each one)',
-          '2 min rest before starting'],
+          '2 min rest before starting',
+        ],
       },
       {
         name: '3 x 500m Row - Max Effort',
@@ -156,15 +167,18 @@ export const workouts: StandaloneWorkoutSource[] = [
           '3 min rest',
           '500m Row Sprint - Attempt 2',
           '3 min rest',
-          '500m Row Sprint - Attempt 3'],
+          '500m Row Sprint - Attempt 3',
+        ],
       },
       {
         name: 'Cooldown',
         movements: [
           '3 min easy row',
           '60s seated forward fold',
-          '60s pigeon stretch each side'],
-      }],
+          '60s pigeon stretch each side',
+        ],
+      },
+    ],
     equipment: ['rower'],
   },
   {
@@ -191,8 +205,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '30 Burpee Broad Jumps',
           '200m Sandbag Lunges',
           '1000m Row',
-          '30 Wall Balls'],
-      }],
+          '30 Wall Balls',
+        ],
+      },
+    ],
     equipment: ['sandbag', 'medicine ball', 'rower'],
   },
   {
@@ -212,7 +228,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '20 Hip Hinges',
           '10 Yoga Pushups',
           '10 Romanian Deadlifts (light KB)',
-          '10 KB Deadlifts (working weight)'],
+          '10 KB Deadlifts (working weight)',
+        ],
       },
       {
         name: 'EMOM 10',
@@ -223,15 +240,18 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Min 3-4: 15 KB Swings',
           'Min 5-6: 18 KB Swings',
           'Min 7-8: 21 KB Swings',
-          'Min 9-10: 24 KB Swings'],
+          'Min 9-10: 24 KB Swings',
+        ],
       },
       {
         name: 'Cooldown',
         movements: [
           "60s Child's Pose",
           '60s Glute Bridge Hold',
-          '60s Standing Forward Fold'],
-      }],
+          '60s Standing Forward Fold',
+        ],
+      },
+    ],
     equipment: ['kettlebell'],
   },
   {
@@ -252,7 +272,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Leg Swings x 10 each direction',
           'High Knees x 20m',
           'Butt Kicks x 20m',
-          '2 x 50m Strides (building to 80%)'],
+          '2 x 50m Strides (building to 80%)',
+        ],
       },
       {
         name: '5 x 400m',
@@ -267,7 +288,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '90s rest',
           '400m Run',
           '90s rest',
-          '400m Run'],
+          '400m Run',
+        ],
       },
       {
         name: 'Cooldown',
@@ -275,8 +297,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '800m Easy Walk or Jog',
           '60s Hip Flexor Stretch each side',
           '60s Standing Hamstring Stretch each side',
-          '60s Calf Stretch each side'],
-      }],
+          '60s Calf Stretch each side',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -317,8 +341,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '4 Pushups, rest',
           '3 Pushups, rest',
           '2 Pushups, rest',
-          '1 Pushup'],
-      }],
+          '1 Pushup',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -338,7 +364,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s High Knees',
           '10 Squat to Stand',
           '10 Explosive Jump Squats (easy pace)',
-          '10 Burpees (steady pace)'],
+          '10 Burpees (steady pace)',
+        ],
       },
       {
         name: 'Tabata: 20s Work / 10s Rest x 8 Rounds',
@@ -352,8 +379,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Round 5: Jump Squats (20s), rest (10s)',
           'Round 6: Burpees (20s), rest (10s)',
           'Round 7: Jump Squats (20s), rest (10s)',
-          'Round 8: Burpees (20s), rest (10s)'],
-      }],
+          'Round 8: Burpees (20s), rest (10s)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -371,7 +400,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '2 Rounds: 10 Air Squats, 5 Burpees',
-          'Rest 60s before starting'],
+          'Rest 60s before starting',
+        ],
       },
       {
         name: '10 Min AMRAP Ladder',
@@ -387,8 +417,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Round 7: 14 Burpees, 14 Air Squats',
           'Round 8: 16 Burpees, 16 Air Squats',
           'Round 9: 18 Burpees, 18 Air Squats',
-          'Round 10: 20 Burpees, 20 Air Squats'],
-      }],
+          'Round 10: 20 Burpees, 20 Air Squats',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -408,7 +440,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '30s Ankle Circles each foot',
           '50 Calf Raises',
           '30s Bounce in place on balls of feet (no rope)',
-          '30s Wrist circles'],
+          '30s Wrist circles',
+        ],
       },
       {
         name: 'Skill Practice: 5 Rounds',
@@ -419,8 +452,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Round 2: 2 mins steady jump rope. Focus: keep elbows close to your sides.',
           'Round 3: 2 mins steady jump rope. Focus: stay light, minimal ground contact.',
           'Round 4: 2 mins steady jump rope. Focus: eyes forward, not at the floor.',
-          'Round 5: 2 mins steady jump rope. Focus: put it all together.'],
-      }],
+          'Round 5: 2 mins steady jump rope. Focus: put it all together.',
+        ],
+      },
+    ],
     equipment: ['skipping rope'],
   },
   {
@@ -440,7 +475,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '30s Wrist Circles each direction',
           '10 Cat-Cow',
           '10 Bird-Dog each side',
-          '10 Glute Bridges'],
+          '10 Glute Bridges',
+        ],
       },
       {
         name: 'EMOM 10',
@@ -456,8 +492,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Min 7: 16 Push-ups, 16 Jump Squats',
           'Min 8: 16 Push-ups, 16 Jump Squats',
           'Min 9: 18 Push-ups, 18 Jump Squats',
-          'Min 10: 18 Push-ups, 18 Jump Squats'],
-      }],
+          'Min 10: 18 Push-ups, 18 Jump Squats',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -480,7 +518,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         instructions:
           'Rest 2 mins between rounds. The goal is to reach near-failure on the hang.',
         movements: ['Max Hang from Pull-up Bar', '40m Farmers Walk (Heavy)'],
-      }],
+      },
+    ],
     equipment: ['dumbbell', 'pull-up bar'],
   },
   {
@@ -501,7 +540,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '5 High Power strokes',
           '10 Squat to Stand',
           '10 Glute Bridges',
-          'Rest 90s before starting'],
+          'Rest 90s before starting',
+        ],
       },
       {
         name: '4 Rounds',
@@ -514,7 +554,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Rest 2 mins',
           'Round 3: 500m Row (record split), 15 Burpees, 20 Air Squats',
           'Rest 2 mins',
-          'Round 4: 500m Row (record split), 15 Burpees, 20 Air Squats'],
+          'Round 4: 500m Row (record split), 15 Burpees, 20 Air Squats',
+        ],
       },
       {
         name: 'Cooldown',
@@ -522,8 +563,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '3 mins Easy Row',
           '60s Seated Forward Fold',
           '60s Pigeon Stretch each side',
-          '60s Hip Flexor Stretch each side'],
-      }],
+          '60s Hip Flexor Stretch each side',
+        ],
+      },
+    ],
     equipment: ['rower'],
   },
   {
@@ -543,7 +586,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '3 mins light cardio',
           '10 arm circles forward / 10 arm circles backward',
           '10 scapular push-ups',
-          '1 light set of 15 push-ups focusing on shoulder stability'],
+          '1 light set of 15 push-ups focusing on shoulder stability',
+        ],
       },
       {
         name: 'Main Work',
@@ -564,7 +608,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Dumbbell or Cable Flyes',
             value: '3 x 15',
             note: 'Keep a slight bend in the elbow throughout. Squeeze at the top.',
-          }],
+          },
+        ],
       },
       {
         name: 'Tricep Finisher',
@@ -580,7 +625,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Overhead Tricep Extension (DB or Cable)',
             value: '3 x 12',
             note: 'Full stretch at the bottom - do not rush.',
-          }],
+          },
+        ],
       },
       {
         name: 'Shoulder Health',
@@ -591,8 +637,10 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Reverse Flyes or Band Pull-Aparts',
             value: '3 x 15',
             note: 'Counterbalances the pressing work. Lead with the elbows.',
-          }],
-      }],
+          },
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'bands'],
   },
   {
@@ -612,7 +660,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '3 mins light cardio (rower preferred)',
           '10 band pull-aparts or scapular wall slides',
           '10 dead bugs (controlled, alternating)',
-          '1 light set of 10 dumbbell rows each side'],
+          '1 light set of 10 dumbbell rows each side',
+        ],
       },
       {
         name: 'Main Work',
@@ -633,7 +682,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Seated Cable Row or Inverted Row',
             value: '3 x 12',
             note: 'Squeeze shoulder blades together and hold for a beat at the peak.',
-          }],
+          },
+        ],
       },
       {
         name: 'Bicep Finisher',
@@ -649,8 +699,10 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Hammer Curls',
             value: '3 x 12',
             note: 'Neutral grip targets the brachialis. Keep wrists straight throughout.',
-          }],
-      }],
+          },
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'rower', 'pull-up bar', 'bands', 'static machines'],
   },
   {
@@ -670,7 +722,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '5 mins bike or rower',
           '30s hip flexor stretch each side / 30s pigeon pose each side',
           '10 glute bridges with 2s pause at the top',
-          '10 bodyweight squats with controlled tempo'],
+          '10 bodyweight squats with controlled tempo',
+        ],
       },
       {
         name: 'Main Work',
@@ -691,7 +744,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Walking Lunges or Split Squat',
             value: '3 x 10 each leg',
             note: 'Keep your front shin vertical. Do not let the knee cave inward.',
-          }],
+          },
+        ],
       },
       {
         name: 'Isolation Finisher',
@@ -707,7 +761,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Calf Raises',
             value: '3 x 20',
             note: 'All the way up, all the way down. Slow eccentric.',
-          }],
+          },
+        ],
       },
       {
         name: 'Core Finisher',
@@ -716,9 +771,17 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Hanging Leg Raise or Plank',
             value: '3 x 12 / 3 x 45s',
             note: 'No spinal load after heavy squats. Hip flexion only.',
-          }],
-      }],
-    equipment: ['dumbbell', 'barbell', 'rower', 'pull-up bar', 'static machines'],
+          },
+        ],
+      },
+    ],
+    equipment: [
+      'dumbbell',
+      'barbell',
+      'rower',
+      'pull-up bar',
+      'static machines',
+    ],
   },
   {
     id: 'f_24',
@@ -743,8 +806,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '1 min Row (calories)',
           '1 min SkiErg (calories)',
           '1 min Assault Bike (calories)',
-          '1 min Rest'],
-      }],
+          '1 min Rest',
+        ],
+      },
+    ],
     equipment: ['rower', 'bike', 'ski erg'],
   },
   {
@@ -764,7 +829,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '2 mins easy shadowboxing (light punches, light feet)',
           '10 shoulder circles each way',
           '10 inchworms',
-          '20s plank (knees down is fine)'],
+          '20s plank (knees down is fine)',
+        ],
       },
       {
         name: '10-Min Boxing HIIT',
@@ -775,14 +841,17 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Fast feet + light jabs',
           'Hooks (left/right)',
           'Uppercuts (left/right)',
-          'Jab-cross (pick up pace)'],
+          'Jab-cross (pick up pace)',
+        ],
       },
       {
         name: 'Finisher',
         instructions: 'Rest 30–45s between rounds. Move with control.',
         movements: [
-          '3 Rounds: 10 push-ups (elevated is fine), 20 air squats, 30s shadowboxing'],
-      }],
+          '3 Rounds: 10 push-ups (elevated is fine), 20 air squats, 30s shadowboxing',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -802,7 +871,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '90s easy shadowboxing',
           '10 scapular push-ups',
           '10 glute bridges',
-          '20s side plank each side (knee down is fine)'],
+          '20s side plank each side (knee down is fine)',
+        ],
       },
       {
         name: '12-Min Circuit',
@@ -812,15 +882,18 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Uppercuts (light + fast)',
           'Jab-cross (strong reps)',
           'Hooks (hips drive the punch)',
-          'High knees (or march fast)'],
+          'High knees (or march fast)',
+        ],
       },
       {
         name: 'Cool Down',
         movements: [
           '60s slow breathing',
           '60s chest/shoulder stretch',
-          '60s gentle forward fold (soft knees)'],
-      }],
+          '60s gentle forward fold (soft knees)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -839,7 +912,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '2 mins easy shadowboxing',
           '10 bodyweight squats',
-          '10 inchworms'],
+          '10 inchworms',
+        ],
       },
       {
         name: '3 Rounds',
@@ -847,8 +921,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Each round is 4 mins work + 1 min rest. Keep moving—slow is allowed.',
         movements: [
           '4 mins shadowboxing (mix jab-cross, hooks, uppercuts)',
-          '1 min rest'],
-      }],
+          '1 min rest',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -867,7 +943,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '2 mins easy shadowboxing',
           '10 shoulder circles each way',
-          '10 push-ups (elevated is fine)'],
+          '10 push-ups (elevated is fine)',
+        ],
       },
       {
         name: 'E2MOM 16',
@@ -879,7 +956,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Core Finish',
         instructions: 'Rest 30s between sets.',
         movements: ['3 x 30–45s plank', '3 x 20–30s side plank each side'],
-      }],
+      },
+    ],
     equipment: [],
   },
   {
@@ -904,8 +982,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Jab-cross',
           'Hooks',
           'Uppercuts',
-          'Fast feet (or march fast)'],
-      }],
+          'Fast feet (or march fast)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -923,13 +1003,15 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '6 mins easy cardio',
-          '2 Rounds: 6–8 pull-ups (or ring rows), 8 push-ups, 10 air squats'],
+          '2 Rounds: 6–8 pull-ups (or ring rows), 8 push-ups, 10 air squats',
+        ],
       },
       {
         name: '20 Min AMRAP',
         instructions: 'As many rounds as possible in 20 mins.',
         movements: ['5 Pull-ups', '10 Push-ups', '15 Air Squats'],
-      }],
+      },
+    ],
     equipment: ['pull-up bar'],
   },
   {
@@ -948,14 +1030,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '500m Row',
           '2 x 10 Thrusters (empty bar)',
-          '2 x 6 Pull-ups (or ring rows)'],
+          '2 x 6 Pull-ups (or ring rows)',
+        ],
       },
       {
         name: '21-15-9 For Time',
         instructions:
           '43/30kg suggested. Scale load to keep the thrusters unbroken or 2 sets max.',
         movements: ['Thrusters', 'Pull-ups'],
-      }],
+      },
+    ],
     equipment: ['barbell', 'rower', 'pull-up bar'],
   },
   {
@@ -973,14 +1057,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '800m Easy Run',
-          '2 Rounds: 10 KB swings (light), 5 pull-ups (or ring rows)'],
+          '2 Rounds: 10 KB swings (light), 5 pull-ups (or ring rows)',
+        ],
       },
       {
         name: '3 Rounds For Time',
         instructions:
           'Scale the swing weight so every rep is powerful and unbroken.',
         movements: ['400m Run', '21 KB Swings', '12 Pull-ups'],
-      }],
+      },
+    ],
     equipment: ['kettlebell', 'pull-up bar'],
   },
   {
@@ -998,13 +1084,15 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '3 mins easy skipping',
-          '2 Rounds: 15 sit-ups, 30 single-unders'],
+          '2 Rounds: 15 sit-ups, 30 single-unders',
+        ],
       },
       {
         name: 'For Time',
         instructions: '50-40-30-20-10. Double-unders and sit-ups.',
         movements: ['Double-Unders', 'Sit-ups'],
-      }],
+      },
+    ],
     equipment: [],
   },
   {
@@ -1022,14 +1110,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '3 mins easy row',
-          'Build: 5-3-2 clean & jerks (light → working)'],
+          'Build: 5-3-2 clean & jerks (light → working)',
+        ],
       },
       {
         name: 'For Time',
         instructions:
           '30 clean & jerks (60/40kg suggested). Scale so you can cycle fast singles or small sets.',
         movements: ['30 Clean & Jerks'],
-      }],
+      },
+    ],
     equipment: ['barbell', 'rower'],
   },
   {
@@ -1052,7 +1142,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         instructions:
           '150 wall balls. Target: consistent set size and short rests.',
         movements: ['150 Wall Balls'],
-      }],
+      },
+    ],
     equipment: ['medicine ball'],
   },
   {
@@ -1071,14 +1162,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '500m easy row',
           '2 x 10 thrusters (empty bar)',
-          '2 x 5 pull-ups (or ring rows)'],
+          '2 x 5 pull-ups (or ring rows)',
+        ],
       },
       {
         name: 'For Time',
         instructions:
           '1000m row, then 50 thrusters (20/15kg), then 30 pull-ups.',
         movements: ['1000m Row', '50 Thrusters', '30 Pull-ups'],
-      }],
+      },
+    ],
     equipment: ['barbell', 'rower', 'pull-up bar'],
   },
   {
@@ -1101,7 +1194,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         instructions:
           '15 OHS at 43/30kg suggested. Scale to stay unbroken or 2 sets.',
         movements: ['400m Run', '15 Overhead Squats'],
-      }],
+      },
+    ],
     equipment: ['barbell'],
   },
   {
@@ -1118,14 +1212,16 @@ export const workouts: StandaloneWorkoutSource[] = [
       {
         name: 'Warmup',
         movements: [
-          '2 rounds: 8 deadlifts (light), 8 pike push-ups, 8 hollow rocks'],
+          '2 rounds: 8 deadlifts (light), 8 pike push-ups, 8 hollow rocks',
+        ],
       },
       {
         name: '21-15-9 For Time',
         instructions:
           'Deadlift 102/70kg suggested. Scale both movements to keep form.',
         movements: ['Deadlifts', 'Handstand Push-ups'],
-      }],
+      },
+    ],
     equipment: ['barbell'],
   },
   {
@@ -1143,13 +1239,15 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '3 mins easy cardio',
-          'Build: 3-3-2 snatch (light → working)'],
+          'Build: 3-3-2 snatch (light → working)',
+        ],
       },
       {
         name: 'For Time',
         instructions: '30 snatches (61/43kg suggested). Scale to fast singles.',
         movements: ['30 Snatches'],
-      }],
+      },
+    ],
     equipment: ['barbell'],
   },
   {
@@ -1168,14 +1266,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '500m row',
           '2 x 6 power cleans (light)',
-          '2 x 6 box dips (easy)'],
+          '2 x 6 box dips (easy)',
+        ],
       },
       {
         name: '21-15-9 For Time',
         instructions:
           'Cleans at 61/43kg suggested. Scale dips to maintain quality reps.',
         movements: ['Squat Cleans', 'Ring Dips'],
-      }],
+      },
+    ],
     equipment: ['barbell', 'rower', 'pull-up bar', 'box'],
   },
   {
@@ -1193,7 +1293,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '6 mins easy cardio',
-          '2 rounds: 5 pull-ups, 10 push-ups, 10 sit-ups, 10 squats'],
+          '2 rounds: 5 pull-ups, 10 push-ups, 10 sit-ups, 10 squats',
+        ],
       },
       {
         name: 'For Time',
@@ -1203,8 +1304,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '100 Pull-ups',
           '100 Push-ups',
           '100 Sit-ups',
-          '100 Air Squats'],
-      }],
+          '100 Air Squats',
+        ],
+      },
+    ],
     equipment: ['pull-up bar'],
   },
   {
@@ -1222,7 +1325,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '5 mins easy cardio',
-          '2 rounds: 10 sit-ups, 8 push-ups, 6 pull-ups, 10 squats'],
+          '2 rounds: 10 sit-ups, 8 push-ups, 6 pull-ups, 10 squats',
+        ],
       },
       {
         name: '5 Rounds (Time Each)',
@@ -1232,8 +1336,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '20 Pull-ups',
           '30 Push-ups',
           '40 Sit-ups',
-          '50 Air Squats'],
-      }],
+          '50 Air Squats',
+        ],
+      },
+    ],
     equipment: ['pull-up bar'],
   },
   {
@@ -1251,14 +1357,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '6 mins easy cardio',
-          'Practice: 3 rounds easy (5 pull-ups, 10 push-ups, 15 squats)'],
+          'Practice: 3 rounds easy (5 pull-ups, 10 push-ups, 15 squats)',
+        ],
       },
       {
         name: 'EMOM 30',
         instructions:
           'Every minute for 30 mins: 5 pull-ups, 10 push-ups, 15 squats.',
         movements: ['5 Pull-ups', '10 Push-ups', '15 Air Squats'],
-      }],
+      },
+    ],
     equipment: ['pull-up bar'],
   },
   {
@@ -1276,7 +1384,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '800m easy jog',
-          '1 round easy: 10 wall balls, 8 push press, 10 box step-ups'],
+          '1 round easy: 10 wall balls, 8 push press, 10 box step-ups',
+        ],
       },
       {
         name: '3 Rounds',
@@ -1287,8 +1396,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Sumo Deadlift High Pull',
           'Box Jumps',
           'Push Press',
-          'Calories Row'],
-      }],
+          'Calories Row',
+        ],
+      },
+    ],
     equipment: ['barbell', 'medicine ball', 'box'],
   },
   {
@@ -1306,14 +1417,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '500m row',
-          'Build: light power cleans + push press + front squats'],
+          'Build: light power cleans + push press + front squats',
+        ],
       },
       {
         name: '5 Cycles',
         instructions:
           'Each cycle: 3 mins AMRAP, then rest 1 min. Score = total rounds across all cycles.',
         movements: ['3 Power Cleans', '6 Push-ups', '9 Air Squats'],
-      }],
+      },
+    ],
     equipment: ['barbell', 'rower'],
   },
   {
@@ -1331,14 +1444,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '3 mins easy cardio',
-          '2 rounds: 6 deadlifts (light), 6 hang power cleans (light), 6 push jerks (light)'],
+          '2 rounds: 6 deadlifts (light), 6 hang power cleans (light), 6 push jerks (light)',
+        ],
       },
       {
         name: '5 Rounds For Time',
         instructions:
           '12 deadlifts, 9 hang power cleans, 6 push jerks (70/47.5kg suggested).',
         movements: ['Deadlifts', 'Hang Power Cleans', 'Push Jerks'],
-      }],
+      },
+    ],
     equipment: ['barbell'],
   },
   {
@@ -1356,13 +1471,15 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '800m easy run',
-          '2 rounds: 10 wall balls, 10 box step-ups'],
+          '2 rounds: 10 wall balls, 10 box step-ups',
+        ],
       },
       {
         name: '5 Rounds For Time',
         instructions: '400m run, 30 box jumps, 30 wall balls.',
         movements: ['400m Run', '30 Box Jumps', '30 Wall Balls'],
-      }],
+      },
+    ],
     equipment: ['box', 'medicine ball'],
   },
   {
@@ -1381,14 +1498,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '500m row',
           '2 x 10 light bench press',
-          '2 x 6 easy pull-ups (or ring rows)'],
+          '2 x 6 easy pull-ups (or ring rows)',
+        ],
       },
       {
         name: '5 Rounds (Not For Time)',
         instructions:
           'Bench press bodyweight (or challenging load) max reps, then pull-ups max reps. Rest as needed.',
         movements: ['Bench Press (max reps)', 'Pull-ups (max reps)'],
-      }],
+      },
+    ],
     equipment: ['barbell', 'rower', 'pull-up bar'],
   },
   {
@@ -1411,7 +1530,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         instructions:
           '100 thrusters. At the start of every minute: 5 burpees. Then continue thrusters with remaining time.',
         movements: ['100 Thrusters', 'Burpees (5 every minute)'],
-      }],
+      },
+    ],
     equipment: ['barbell', 'rower'],
   },
   {
@@ -1430,14 +1550,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '800m easy run',
           '500m easy row',
-          '10 air squats, 10 lunges'],
+          '10 air squats, 10 lunges',
+        ],
       },
       {
         name: '4 Rounds',
         instructions:
           'Partner option: alternate full rounds. Partner A completes the full round while Partner B rests. Swap each round. Record each person’s split times if you want.',
         movements: ['800m Run', '500m Row'],
-      }],
+      },
+    ],
     equipment: ['rower'],
   },
   {
@@ -1456,7 +1578,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '6 mins easy cardio',
           '2 x 20m empty sled push (or incline walk)',
-          '2 x 20m light sled pull'],
+          '2 x 20m light sled pull',
+        ],
       },
       {
         name: 'Skill + Work',
@@ -1464,8 +1587,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '6 x 20m Sled Push (light)',
           '6 x 20m Sled Pull (light)',
-          '6 x 10 Wall Balls (easy)'],
-      }],
+          '6 x 10 Wall Balls (easy)',
+        ],
+      },
+    ],
     equipment: ['medicine ball', 'sled'],
   },
   {
@@ -1483,13 +1608,15 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '5 mins easy cardio',
-          '3 x 10 wall balls (light → working)'],
+          '3 x 10 wall balls (light → working)',
+        ],
       },
       {
         name: '10 Min For Total Reps',
         instructions: 'Score = total wall balls. Keep sets small and steady.',
         movements: ['Wall Balls'],
-      }],
+      },
+    ],
     equipment: ['medicine ball'],
   },
   {
@@ -1512,7 +1639,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '10 Broad Jumps, focus on full hip extension',
           '10 Burpees at easy pace',
           '10 Broad Jumps, push the distance slightly',
-          'Rest 90s before starting'],
+          'Rest 90s before starting',
+        ],
       },
       {
         name: 'E2MOM x 8 Rounds',
@@ -1526,7 +1654,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Round 5: 60s Burpee Broad Jumps, 60s rest',
           'Round 6: 60s Burpee Broad Jumps, 60s rest',
           'Round 7: 60s Burpee Broad Jumps, 60s rest',
-          'Round 8: 60s Burpee Broad Jumps, 60s rest'],
+          'Round 8: 60s Burpee Broad Jumps, 60s rest',
+        ],
       },
       {
         name: 'Cooldown',
@@ -1534,8 +1663,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '2 mins Easy Walk',
           '60s Hip Flexor Stretch each side',
           '60s Hamstring Stretch each side',
-          '60s Glute Stretch each side'],
-      }],
+          '60s Glute Stretch each side',
+        ],
+      },
+    ],
     equipment: ['rower'],
   },
   {
@@ -1553,14 +1684,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '800m easy jog',
           '2 x 40m light carry',
-          '10 reverse lunges each side'],
+          '10 reverse lunges each side',
+        ],
       },
       {
         name: '5 Rounds',
         instructions:
           'Partner option: split the carry. Run together, then alternate 25m/25m on the carry. Switch quickly - no standing around with the implement.',
         movements: ['600m Run', '100m Farmers Carry'],
-      }],
+      },
+    ],
     equipment: ['dumbbell'],
   },
   {
@@ -1579,14 +1712,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '6 mins easy cardio',
           '2 x 10 lunges (bodyweight)',
-          '2 x 100m easy carry'],
+          '2 x 100m easy carry',
+        ],
       },
       {
         name: '4 Sets',
         instructions:
           'Partner option: split the lunges. Run together, then alternate 25m/25m lunges (or 10 steps/10 steps). Record load and keep switchovers fast.',
         movements: ['800m Run', '200m Sandbag Lunges'],
-      }],
+      },
+    ],
     equipment: ['sandbag'],
   },
   {
@@ -1607,7 +1742,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '3 x 10 hard strokes with 20s rest between',
           '10 Burpees at easy pace',
           '10 Squat to Stand',
-          'Rest 90s before starting'],
+          'Rest 90s before starting',
+        ],
       },
       {
         name: 'The Burnout',
@@ -1627,8 +1763,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '3 mins Easy Row',
           '60s Seated Forward Fold',
           '60s Pigeon Stretch each side',
-          '60s Hip Flexor Stretch each side'],
-      }],
+          '60s Hip Flexor Stretch each side',
+        ],
+      },
+    ],
     equipment: ['rower'],
   },
   {
@@ -1650,7 +1788,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '10 Push-ups',
           '10 Air Squats',
           '10 Scapular Push-ups',
-          'Rest 90s before starting'],
+          'Rest 90s before starting',
+        ],
       },
       {
         name: '5 Rounds: For Time',
@@ -1661,7 +1800,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Round 2: 600m Run, 300m Row',
           'Round 3: 600m Run, 300m Row',
           'Round 4: 600m Run, 300m Row',
-          'Round 5: 600m Run, 300m Row'],
+          'Round 5: 600m Run, 300m Row',
+        ],
       },
       {
         name: 'Cooldown',
@@ -1670,8 +1810,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Hip Flexor Stretch each side',
           '60s Hamstring Stretch each side',
           '60s Lat Stretch each side',
-          '60s Chest Opener'],
-      }],
+          '60s Chest Opener',
+        ],
+      },
+    ],
     equipment: ['rower'],
   },
   {
@@ -1690,14 +1832,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '800m easy run',
           '2 x 10 wall balls (easy)',
-          '10 burpees (easy)'],
+          '10 burpees (easy)',
+        ],
       },
       {
         name: '6 Rounds',
         instructions:
           'Partner option: alternate wall balls. Run together, then Partner A does 10 wall balls while Partner B rests, then switch for the next 10. Keep the run pace honest.',
         movements: ['500m Run', '20 Wall Balls'],
-      }],
+      },
+    ],
     equipment: ['medicine ball'],
   },
   {
@@ -1715,7 +1859,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '6 mins easy cardio',
-          '10 air squats, 10 lunges, 10 push-ups'],
+          '10 air squats, 10 lunges, 10 push-ups',
+        ],
       },
       {
         name: '4 Rounds For Time',
@@ -1725,8 +1870,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '500m Row',
           '25 Wall Balls',
           '20 Burpee Broad Jumps',
-          '50m Farmers Carry'],
-      }],
+          '50m Farmers Carry',
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'medicine ball', 'rower'],
   },
   {
@@ -1745,7 +1892,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '5 mins very easy cardio on your chosen machine',
           'Build pace slightly every 60s until you hit your working pace',
-          'You should be breathing but comfortable before the clock starts'],
+          'You should be breathing but comfortable before the clock starts',
+        ],
       },
       {
         name: '30 Min Zone 2',
@@ -1754,7 +1902,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Option A: 30 mins Steady Run',
           'Option B: 30 mins Steady Row',
-          'Option C: 30 mins Steady Bike'],
+          'Option C: 30 mins Steady Bike',
+        ],
       },
       {
         name: 'Cooldown',
@@ -1762,8 +1911,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '5 mins very easy pace on your chosen machine',
           '60s Hip Flexor Stretch each side',
           '60s Hamstring Stretch each side',
-          '60s Calf Stretch each side'],
-      }],
+          '60s Calf Stretch each side',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -1782,15 +1933,18 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '6 mins easy cardio',
           '2 x 20m light sled push',
-          '10 wall balls (easy)'],
+          '10 wall balls (easy)',
+        ],
       },
       {
         name: 'Work',
         instructions: 'Rest 90s between efforts. Record loads.',
         movements: [
           '8 x 20m Sled Push (moderate)',
-          '4 x 15 Wall Balls (steady)'],
-      }],
+          '4 x 15 Wall Balls (steady)',
+        ],
+      },
+    ],
     equipment: ['medicine ball', 'sled'],
   },
   {
@@ -1809,13 +1963,15 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '6 mins easy cardio',
           '2 x 20m light sled pull',
-          '10 reverse lunges each side'],
+          '10 reverse lunges each side',
+        ],
       },
       {
         name: 'Work',
         instructions: 'Rest 90s between efforts. Record loads.',
         movements: ['8 x 20m Sled Pull (moderate)', '4 x 200m Run (steady)'],
-      }],
+      },
+    ],
     equipment: ['sled'],
   },
   {
@@ -1838,7 +1994,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         instructions:
           'Partner option: you-go-I-go on stations. Run together. At the station, Partner A completes burpees while Partner B rests, then switch for wall balls (or alternate round-by-round).',
         movements: ['600m Run', '10 Burpees', '15 Wall Balls'],
-      }],
+      },
+    ],
     equipment: ['medicine ball'],
   },
   {
@@ -1856,14 +2013,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '6 mins easy cardio',
-          '10 air squats, 10 push-ups, 250m row'],
+          '10 air squats, 10 push-ups, 250m row',
+        ],
       },
       {
         name: '12 Min AMRAP',
         instructions:
           'Partner option: alternate full rounds. Partner A completes one full round while Partner B rests. Swap each round. Score = total rounds + reps as a team.',
         movements: ['400m Run', '250m Row', '15 Wall Balls', '10 Burpees'],
-      }],
+      },
+    ],
     equipment: ['rower', 'medicine ball'],
   },
   {
@@ -1888,8 +2047,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '1000m Run',
           '50m Farmers Carry',
           '1000m Row',
-          '50 Wall Balls'],
-      }],
+          '50 Wall Balls',
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'medicine ball', 'rower'],
   },
   {
@@ -1911,7 +2072,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Ladder',
         instructions: 'Rest 2 mins between reps. Aim for negative splits.',
         movements: ['1000m Run', '800m Run', '600m Run', '400m Run'],
-      }],
+      },
+    ],
     equipment: [],
   },
   {
@@ -1930,7 +2092,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '6 mins easy cardio',
           '2 x 40m light carry',
-          '10 glute bridges'],
+          '10 glute bridges',
+        ],
       },
       {
         name: 'For Time',
@@ -1939,8 +2102,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '400m Farmers Carry',
           '200m Sandbag Carry',
-          '100m Overhead Plate Carry'],
-      }],
+          '100m Overhead Plate Carry',
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'sandbag'],
   },
   {
@@ -1962,7 +2127,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'For Time',
         instructions: '150 wall balls. Record finish time.',
         movements: ['150 Wall Balls'],
-      }],
+      },
+    ],
     equipment: ['medicine ball'],
   },
   {
@@ -1992,8 +2158,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '1000m Run',
           '30 Burpee Broad Jumps',
           '1000m Run',
-          '50 Wall Balls'],
-      }],
+          '50 Wall Balls',
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'medicine ball', 'rower'],
   },
   {
@@ -2018,8 +2186,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '1km Run',
           '50m Sled Push (Max weight)',
-          '100m Sandbag Carry'],
-      }],
+          '100m Sandbag Carry',
+        ],
+      },
+    ],
     equipment: ['sandbag', 'sled'],
   },
   {
@@ -2041,7 +2211,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'EMOM 15',
         instructions: 'Use 60-70% of 1RM Snatch. Focus on vertical bar path.',
         movements: ['1 Power Snatch + 1 Hang Snatch + 1 OHS'],
-      }],
+      },
+    ],
     equipment: ['barbell'],
   },
   {
@@ -2064,7 +2235,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         instructions:
           'Go unbroken on the thrusters if possible. Sprint the 9 cal row.',
         movements: ['Calories Row', 'Thrusters (43/30kg)'],
-      }],
+      },
+    ],
     equipment: ['barbell', 'rower'],
   },
   {
@@ -2084,7 +2256,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '2 Rounds: 10 Prone Y-Raises, 10 Face Pulls, 10 Empty Bar Presses',
           '10 Band Pull Aparts',
           '10 Shoulder CARs each side',
-          'Rest 60s before starting'],
+          'Rest 60s before starting',
+        ],
       },
       {
         name: 'Block 1: Build to a Heavy Single',
@@ -2095,7 +2268,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Set 2: 3 reps at 65% estimated 1RM',
           'Set 3: 2 reps at 75% estimated 1RM',
           'Set 4: 1 rep at 85% estimated 1RM',
-          'Set 5: 1 rep at 90-95% estimated 1RM (record weight)'],
+          'Set 5: 1 rep at 90-95% estimated 1RM (record weight)',
+        ],
       },
       {
         name: 'Block 2: 5x5 Volume',
@@ -2106,7 +2280,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Set 2: 5 Strict Press at 85%, rest 3 mins',
           'Set 3: 5 Strict Press at 85%, rest 3 mins',
           'Set 4: 5 Strict Press at 85%, rest 3 mins',
-          'Set 5: 5 Strict Press at 85% (record weight and any missed reps)'],
+          'Set 5: 5 Strict Press at 85% (record weight and any missed reps)',
+        ],
       },
       {
         name: 'Block 3: Accessory Superset',
@@ -2115,7 +2290,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Round 1: 12 Dumbbell Lateral Raises, 12 Tricep Dips, 12 Face Pulls, 10 External Rotation each side',
           'Round 2: 12 Dumbbell Lateral Raises, 12 Tricep Dips, 12 Face Pulls, 10 External Rotation each side',
-          'Round 3: 12 Dumbbell Lateral Raises, 12 Tricep Dips, 12 Face Pulls, 10 External Rotation each side'],
+          'Round 3: 12 Dumbbell Lateral Raises, 12 Tricep Dips, 12 Face Pulls, 10 External Rotation each side',
+        ],
       },
       {
         name: 'Cooldown',
@@ -2123,8 +2299,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Doorframe Chest Stretch each side',
           '60s Lat Stretch each side',
           '60s Shoulder Cross Body Stretch each side',
-          '60s Neck Side Stretch each side'],
-      }],
+          '60s Neck Side Stretch each side',
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'bands'],
   },
   {
@@ -2144,7 +2322,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '10 Bird-Dogs each side',
           '500m Easy Row, focus on posture',
           '4 x 10 hard strokes building to working pace',
-          'Rest 90s before starting'],
+          'Rest 90s before starting',
+        ],
       },
       {
         name: '4000m Steady State',
@@ -2155,7 +2334,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '500-1500m: Lock into rhythm, check split every 250m',
           '1500-2500m: The middle is where most people drift, stay focused',
           '2500-3500m: Hold what you have, do not chase the finish yet',
-          '3500-4000m: If you have anything left, build the last 500m to the line'],
+          '3500-4000m: If you have anything left, build the last 500m to the line',
+        ],
       },
       {
         name: 'Cooldown',
@@ -2163,8 +2343,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '3 mins Easy Row',
           '60s Seated Forward Fold',
           '60s Pigeon Stretch each side',
-          '60s Lat Stretch each side'],
-      }],
+          '60s Lat Stretch each side',
+        ],
+      },
+    ],
     equipment: ['rower'],
   },
   {
@@ -2184,7 +2366,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '3 Rounds: 10 Goblet Squats, 10 Glute Bridges',
           '10 Ankle Circles each foot',
           '10 Hip 90-90 Rotations',
-          'Rest 60s before starting'],
+          'Rest 60s before starting',
+        ],
       },
       {
         name: 'Block 1: Build to a Heavy Single',
@@ -2195,7 +2378,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Set 2: 3 reps at 65% estimated 1RM',
           'Set 3: 2 reps at 75% estimated 1RM',
           'Set 4: 1 rep at 85% estimated 1RM',
-          'Set 5: 1 rep at 90-95% estimated 1RM (record weight)'],
+          'Set 5: 1 rep at 90-95% estimated 1RM (record weight)',
+        ],
       },
       {
         name: 'Block 2: Volume at 80%',
@@ -2211,7 +2395,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Round 7: 3 Front Squats at 80%, rest 90s',
           'Round 8: 3 Front Squats at 80%, rest 90s',
           'Round 9: 3 Front Squats at 80%, rest 90s',
-          'Round 10: 3 Front Squats at 80%, rest 90s'],
+          'Round 10: 3 Front Squats at 80%, rest 90s',
+        ],
       },
       {
         name: 'Block 3: Accessory Finisher',
@@ -2220,7 +2405,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Round 1: 12 Bulgarian Split Squats each leg, 15 Glute Bridges, 12 Nordic Curls',
           'Round 2: 12 Bulgarian Split Squats each leg, 15 Glute Bridges, 12 Nordic Curls',
-          'Round 3: 12 Bulgarian Split Squats each leg, 15 Glute Bridges, 12 Nordic Curls'],
+          'Round 3: 12 Bulgarian Split Squats each leg, 15 Glute Bridges, 12 Nordic Curls',
+        ],
       },
       {
         name: 'Cooldown',
@@ -2228,8 +2414,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Pigeon Stretch each side',
           '60s Hip Flexor Stretch each side',
           '60s Seated Forward Fold',
-          '60s Ankle Stretch each side'],
-      }],
+          '60s Ankle Stretch each side',
+        ],
+      },
+    ],
     equipment: ['barbell'],
   },
   {
@@ -2256,8 +2444,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '100 Pullups',
           '200 Pushups',
           '300 Air Squats',
-          '1 Mile Run'],
-      }],
+          '1 Mile Run',
+        ],
+      },
+    ],
     equipment: ['pull-up bar'],
   },
   {
@@ -2278,7 +2468,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '200m light sandbag carry at easy pace',
           '10 Squats to Stand',
           '10 Hip Hinges',
-          'Rest 90s before starting'],
+          'Rest 90s before starting',
+        ],
       },
       {
         name: 'Leg 1',
@@ -2329,8 +2520,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Hip Flexor Stretch each side',
           '60s Thoracic Rotation each side',
           '60s Hamstring Stretch each side',
-          '60s Shoulder Cross Body Stretch each side'],
-      }],
+          '60s Shoulder Cross Body Stretch each side',
+        ],
+      },
+    ],
     equipment: ['sandbag'],
   },
   {
@@ -2352,7 +2545,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '10 Air Squats',
           '10 Single Leg Glute Bridges each side',
           '10 Hip 90-90 Rotations',
-          'Rest 60s before starting'],
+          'Rest 60s before starting',
+        ],
       },
       {
         name: 'Block 1: Ankle and Hip Mobility',
@@ -2362,7 +2556,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '3 x 60s Single Leg Calf Raises (slow, controlled)',
           '3 x 10 Knee Over Toe Squats each side',
           '3 x 30s Single Leg Balance Hold each side',
-          '3 x 10 Assisted Deep Squat to Stand (hold a pole or rig)'],
+          '3 x 10 Assisted Deep Squat to Stand (hold a pole or rig)',
+        ],
       },
       {
         name: 'Block 2: Pistol Progressions',
@@ -2372,7 +2567,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Progression 1: Box Pistol Squat (sit back to a box, 3 x 5 each leg)',
           'Progression 2: Assisted Pistol Squat (hold a rig or counterweight, 3 x 5 each leg)',
           'Progression 3: Eccentric Pistol Squat (lower slowly for 4 counts, stand with two legs, 3 x 4 each leg)',
-          'Progression 4: Full Pistol Squat (unassisted if ready, 3 x 3 each leg)'],
+          'Progression 4: Full Pistol Squat (unassisted if ready, 3 x 3 each leg)',
+        ],
       },
       {
         name: 'Block 3: EMOM 8',
@@ -2386,7 +2582,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Min 5: 3 Pistol Squats each leg (or chosen progression)',
           'Min 6: 3 Pistol Squats each leg (or chosen progression)',
           'Min 7: 3 Pistol Squats each leg (or chosen progression)',
-          'Min 8: 3 Pistol Squats each leg (or chosen progression)'],
+          'Min 8: 3 Pistol Squats each leg (or chosen progression)',
+        ],
       },
       {
         name: 'Cooldown',
@@ -2394,8 +2591,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Pigeon Stretch each side',
           '60s Hip Flexor Stretch each side',
           '60s Ankle Stretch each side',
-          '60s Seated Forward Fold'],
-      }],
+          '60s Seated Forward Fold',
+        ],
+      },
+    ],
     equipment: ['box'],
   },
   {
@@ -2417,7 +2616,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '30s Wrist Circles each direction',
           '50 Single Unders at easy pace',
           '20 Single Unders at fast cadence',
-          '10 x 3 Double Under attempts with full reset between each'],
+          '10 x 3 Double Under attempts with full reset between each',
+        ],
       },
       {
         name: 'Block 1: Consistency Work',
@@ -2428,7 +2628,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Set 2: 25 Unbroken Double Unders (rest 45s)',
           'Set 3: 30 Unbroken Double Unders (rest 45s)',
           'Set 4: 35 Unbroken Double Unders (rest 45s)',
-          'Set 5: 40 Unbroken Double Unders (rest 45s)'],
+          'Set 5: 40 Unbroken Double Unders (rest 45s)',
+        ],
       },
       {
         name: 'Block 2: Speed Work',
@@ -2440,7 +2641,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Round 3: 20s Max Double Unders, 10s rest (record reps)',
           'Round 4: 20s Max Double Unders, 10s rest (record reps)',
           'Round 5: 20s Max Double Unders, 10s rest (record reps)',
-          'Round 6: 20s Max Double Unders, 10s rest (record reps)'],
+          'Round 6: 20s Max Double Unders, 10s rest (record reps)',
+        ],
       },
       {
         name: 'Block 3: Trip and Reset Drill',
@@ -2452,7 +2654,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Set 3: 50 Double Unders (note trips, rest 60s)',
           'Set 4: 50 Double Unders (note trips, rest 60s)',
           'Set 5: 50 Double Unders (note trips, rest 60s)',
-          'Penalty: 1 Burpee for every trip across all 5 sets'],
+          'Penalty: 1 Burpee for every trip across all 5 sets',
+        ],
       },
       {
         name: 'Block 4: EMOM Finisher',
@@ -2468,7 +2671,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Min 7: 40-50 Double Unders, rest remainder',
           'Min 8: 40-50 Double Unders, rest remainder',
           'Min 9: 40-50 Double Unders, rest remainder',
-          'Min 10: 40-50 Double Unders, rest remainder'],
+          'Min 10: 40-50 Double Unders, rest remainder',
+        ],
       },
       {
         name: 'Cooldown',
@@ -2476,8 +2680,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Calf Stretch each side',
           '60s Wrist Flexor Stretch each side',
           '60s Shoulder Cross Body Stretch each side',
-          '60s Standing Forward Fold'],
-      }],
+          '60s Standing Forward Fold',
+        ],
+      },
+    ],
     equipment: ['skipping rope'],
   },
   {
@@ -2499,7 +2705,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: '30 Reps',
         instructions: 'Weight: 61/43kg. Target is sub 5:00 for elite athletes.',
         movements: ['Clean and Jerk'],
-      }],
+      },
+    ],
     equipment: ['barbell'],
   },
   {
@@ -2521,7 +2728,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'For Time',
         instructions: 'Move quickly between machines. Do not stop moving.',
         movements: ['2000m Row', '2000m Ski', '4000m Bike'],
-      }],
+      },
+    ],
     equipment: ['rower'],
   },
   {
@@ -2543,7 +2751,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Ankle Circles each foot',
           '10 Goblet Squats with 3 second pause at bottom',
           '2 x 5 Empty Bar Back Squat with 2 second pause',
-          'Rest 90s before starting'],
+          'Rest 90s before starting',
+        ],
       },
       {
         name: 'Block 1: Build to a Heavy Pause Single',
@@ -2554,7 +2763,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Set 2: 3 reps at 63% estimated 1RM, 3 second pause each',
           'Set 3: 2 reps at 73% estimated 1RM, 3 second pause each',
           'Set 4: 1 rep at 83% estimated 1RM, 3 second pause',
-          'Set 5: 1 rep at 88-92% estimated 1RM, 3 second pause (record weight)'],
+          'Set 5: 1 rep at 88-92% estimated 1RM, 3 second pause (record weight)',
+        ],
       },
       {
         name: 'Block 2: 6x2 Pause Volume',
@@ -2566,7 +2776,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Set 3: 2 Pause Back Squats at 80%, rest 3 mins',
           'Set 4: 2 Pause Back Squats at 80%, rest 3 mins',
           'Set 5: 2 Pause Back Squats at 80%, rest 3 mins',
-          'Set 6: 2 Pause Back Squats at 80% (record weight and any missed pauses)'],
+          'Set 6: 2 Pause Back Squats at 80% (record weight and any missed pauses)',
+        ],
       },
       {
         name: 'Block 3: Bottom Position Strength',
@@ -2575,7 +2786,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Round 1: 60s Weighted Deep Squat Hold, 10 Heel Elevated Goblet Squats, 12 Copenhagen Planks each side',
           'Round 2: 60s Weighted Deep Squat Hold, 10 Heel Elevated Goblet Squats, 12 Copenhagen Planks each side',
-          'Round 3: 60s Weighted Deep Squat Hold, 10 Heel Elevated Goblet Squats, 12 Copenhagen Planks each side'],
+          'Round 3: 60s Weighted Deep Squat Hold, 10 Heel Elevated Goblet Squats, 12 Copenhagen Planks each side',
+        ],
       },
       {
         name: 'Block 4: Posterior Chain Finisher',
@@ -2583,7 +2795,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Two rounds, no barbell. Keep rest minimal, this is just filling the gaps.',
         movements: [
           'Round 1: 15 Romanian Deadlifts, 15 Glute Bridges, 12 Nordic Curls',
-          'Round 2: 15 Romanian Deadlifts, 15 Glute Bridges, 12 Nordic Curls'],
+          'Round 2: 15 Romanian Deadlifts, 15 Glute Bridges, 12 Nordic Curls',
+        ],
       },
       {
         name: 'Cooldown',
@@ -2592,8 +2805,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Hip Flexor Stretch each side',
           '60s Ankle Stretch each side',
           '60s Seated Forward Fold',
-          '60s Supine Twist each side'],
-      }],
+          '60s Supine Twist each side',
+        ],
+      },
+    ],
     equipment: ['barbell'],
   },
   {
@@ -2616,7 +2831,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         instructions:
           'Descending rep scheme. Rest only as needed to keep moving.',
         movements: ['Burpee Box Jumps', 'Wall Balls'],
-      }],
+      },
+    ],
     equipment: ['box', 'medicine ball'],
   },
   {
@@ -2638,7 +2854,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '10 PVC Snatch Balance, focus on punching under',
           '10 Scapular Push-ups',
           '10 Band Pull Aparts',
-          'Rest 60s before starting'],
+          'Rest 60s before starting',
+        ],
       },
       {
         name: 'Block 1: Position Drills',
@@ -2648,7 +2865,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Drill 1: 3 x 5 Overhead Squat Hold (3 second hold at bottom, PVC)',
           'Drill 2: 3 x 5 Drop Snatch (no dip, just punch under, PVC)',
           'Drill 3: 3 x 5 Pressing Snatch Balance (slow controlled descent, PVC)',
-          'Drill 4: 3 x 5 Heaving Snatch Balance (add the dip and drive, empty bar)'],
+          'Drill 4: 3 x 5 Heaving Snatch Balance (add the dip and drive, empty bar)',
+        ],
       },
       {
         name: 'Block 2: Snatch Balance Build',
@@ -2659,7 +2877,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Set 2: 3 Snatch Balance at 50% estimated max, 2 second hold each',
           'Set 3: 3 Snatch Balance at 60% estimated max, 2 second hold each',
           'Set 4: 2 Snatch Balance at 70% estimated max, 2 second hold each',
-          'Set 5: 2 Snatch Balance at 75-80% estimated max, 2 second hold each (record weight)'],
+          'Set 5: 2 Snatch Balance at 75-80% estimated max, 2 second hold each (record weight)',
+        ],
       },
       {
         name: 'Block 3: 5x3 Working Sets',
@@ -2670,7 +2889,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Set 2: 3 Snatch Balance, rest 90s, 3 Overhead Squat, rest 2 mins',
           'Set 3: 3 Snatch Balance, rest 90s, 3 Overhead Squat, rest 2 mins',
           'Set 4: 3 Snatch Balance, rest 90s, 3 Overhead Squat, rest 2 mins',
-          'Set 5: 3 Snatch Balance, rest 90s, 3 Overhead Squat (record any stability issues)'],
+          'Set 5: 3 Snatch Balance, rest 90s, 3 Overhead Squat (record any stability issues)',
+        ],
       },
       {
         name: 'Block 4: Stability Accessory',
@@ -2678,7 +2898,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Two rounds targeting the shoulders, lats and core that support the catch position. Rest 60s between rounds.',
         movements: [
           'Round 1: 10 Single Arm Dumbbell Press each side, 10 Tall Kneeling Overhead Hold 30s, 12 Face Pulls, 10 Hollow Body Rocks',
-          'Round 2: 10 Single Arm Dumbbell Press each side, 10 Tall Kneeling Overhead Hold 30s, 12 Face Pulls, 10 Hollow Body Rocks'],
+          'Round 2: 10 Single Arm Dumbbell Press each side, 10 Tall Kneeling Overhead Hold 30s, 12 Face Pulls, 10 Hollow Body Rocks',
+        ],
       },
       {
         name: 'Cooldown',
@@ -2687,8 +2908,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Lat Stretch each side',
           '60s Wrist Flexor Stretch each side',
           '60s Thoracic Extension over foam roller',
-          '60s Deep Squat Hold'],
-      }],
+          '60s Deep Squat Hold',
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'barbell', 'bands'],
   },
   {
@@ -2710,7 +2933,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '10 Band Pull Aparts',
           '10 Hollow Body Rocks',
           '30s Dead Hang from rings or bar',
-          'Rest 60s before starting'],
+          'Rest 60s before starting',
+        ],
       },
       {
         name: 'Block 1: Pull Strength',
@@ -2719,7 +2943,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '3 x 5 Weighted Ring Rows (add weight or elevate feet), rest 60s',
           '3 x 3 High Pull-ups (pull until rings touch chest), rest 60s',
-          '3 x 5 Archer Ring Rows each side (unilateral pulling strength), rest 60s'],
+          '3 x 5 Archer Ring Rows each side (unilateral pulling strength), rest 60s',
+        ],
       },
       {
         name: 'Block 2: Transition Drills',
@@ -2729,7 +2954,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Drill 1: 3 x 5 False Grip Ring Rows (build false grip comfort), rest 60s',
           'Drill 2: 3 x 3 Jumping Muscle Up Transitions (use legs to assist, focus on the turn over), rest 90s',
           'Drill 3: 3 x 3 Slow Transition Pull (pull to chest, pause, rotate wrists and push to support), rest 90s',
-          'Drill 4: 3 x 5 Support Hold at top of rings (straight arm, locked out, 3 second hold), rest 60s'],
+          'Drill 4: 3 x 5 Support Hold at top of rings (straight arm, locked out, 3 second hold), rest 60s',
+        ],
       },
       {
         name: 'Block 3: Dip Strength',
@@ -2738,7 +2964,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '2 x 8 Ring Dips (full depth, pause at bottom), rest 60s',
           '2 x 5 Slow Eccentric Ring Dips (4 second lower), rest 90s',
-          '2 x 8 Bar Dips (if rings feel too unstable), rest 60s'],
+          '2 x 8 Bar Dips (if rings feel too unstable), rest 60s',
+        ],
       },
       {
         name: 'Block 4: EMOM 10 Skill Practice',
@@ -2754,7 +2981,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Min 7: 2-3 Muscle Ups or Progression, rest remainder',
           'Min 8: 2-3 Muscle Ups or Progression, rest remainder',
           'Min 9: 2-3 Muscle Ups or Progression, rest remainder',
-          'Min 10: 2-3 Muscle Ups or Progression, rest remainder'],
+          'Min 10: 2-3 Muscle Ups or Progression, rest remainder',
+        ],
       },
       {
         name: 'Cooldown',
@@ -2763,8 +2991,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Doorframe Chest Stretch each side',
           '60s Lat Stretch each side',
           '60s Wrist Flexor Stretch each side',
-          '60s Shoulder Cross Body Stretch each side'],
-      }],
+          '60s Shoulder Cross Body Stretch each side',
+        ],
+      },
+    ],
     equipment: ['pull-up bar', 'bands'],
   },
   {
@@ -2786,7 +3016,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'High Knees x 20m',
           'Butt Kicks x 20m',
           '2 x 100m Strides building to 85%',
-          'Rest 90s before starting'],
+          'Rest 90s before starting',
+        ],
       },
       {
         name: 'Pre-Run Burnout',
@@ -2803,7 +3034,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '1-2km: Settle into race pace, this should feel sustainable',
           '2-3km: The middle kilometre is where most people drift, hold your pace',
           '3-4km: Start working, push slightly harder than comfortable',
-          '4-5km: Everything you have left, empty the tank to the line (record total time)'],
+          '4-5km: Everything you have left, empty the tank to the line (record total time)',
+        ],
       },
       {
         name: 'Cooldown',
@@ -2813,8 +3045,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Hamstring Stretch each side',
           '60s Calf Stretch each side',
           '60s Quad Stretch each side',
-          '60s Glute Stretch each side'],
-      }],
+          '60s Glute Stretch each side',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -2834,7 +3068,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '2 Rounds: 10 DB Snatches, 5 Burpees',
           '5 Devil Press at light weight (practice the swing)',
           '10 Box Step Ups at easy pace',
-          'Rest 90s before starting'],
+          'Rest 90s before starting',
+        ],
       },
       {
         name: 'For Time: Descending Ladder',
@@ -2850,7 +3085,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Round 7: 4 Devil Press, 8 Box Step Ups',
           'Round 8: 3 Devil Press, 6 Box Step Ups',
           'Round 9: 2 Devil Press, 4 Box Step Ups',
-          'Round 10: 1 Devil Press, 2 Box Step Ups (record total time)'],
+          'Round 10: 1 Devil Press, 2 Box Step Ups (record total time)',
+        ],
       },
       {
         name: 'Cooldown',
@@ -2859,8 +3095,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Hip Flexor Stretch each side',
           '60s Shoulder Cross Body Stretch each side',
           '60s Thoracic Rotation each side',
-          '60s Standing Forward Fold'],
-      }],
+          '60s Standing Forward Fold',
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'box'],
   },
   {
@@ -2883,7 +3121,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '2 x 5 Bodyweight Pull-ups, full range',
           '2 x 5 Bodyweight Dips, full depth',
           '30s Dead Hang',
-          'Rest 60s before starting'],
+          'Rest 60s before starting',
+        ],
       },
       {
         name: 'Block 1: Build to a Heavy Weighted Single',
@@ -2894,7 +3133,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Set 2: 3 Pull-ups at light added weight, rest 90s, 3 Dips at light added weight',
           'Set 3: 2 Pull-ups at moderate weight, rest 90s, 2 Dips at moderate weight',
           'Set 4: 1 Pull-up at heavy weight, rest 90s, 1 Dip at heavy weight',
-          'Set 5: 1 Pull-up at max weight, rest 90s, 1 Dip at max weight (record both)'],
+          'Set 5: 1 Pull-up at max weight, rest 90s, 1 Dip at max weight (record both)',
+        ],
       },
       {
         name: 'Block 2: 5x5 Volume Superset',
@@ -2905,7 +3145,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Set 2: 5 Weighted Pull-ups, rest 90s, 5 Weighted Dips, rest 2-3 mins',
           'Set 3: 5 Weighted Pull-ups, rest 90s, 5 Weighted Dips, rest 2-3 mins',
           'Set 4: 5 Weighted Pull-ups, rest 90s, 5 Weighted Dips, rest 2-3 mins',
-          'Set 5: 5 Weighted Pull-ups, rest 90s, 5 Weighted Dips (record weight and any missed reps)'],
+          'Set 5: 5 Weighted Pull-ups, rest 90s, 5 Weighted Dips (record weight and any missed reps)',
+        ],
       },
       {
         name: 'Block 3: Volume Pump',
@@ -2914,7 +3155,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Set 1: Max Bodyweight Pull-ups, rest 60s, Max Bodyweight Dips, rest 60s',
           'Set 2: Max Bodyweight Pull-ups, rest 60s, Max Bodyweight Dips, rest 60s',
-          'Set 3: Max Bodyweight Pull-ups, rest 60s, Max Bodyweight Dips (record reps each set)'],
+          'Set 3: Max Bodyweight Pull-ups, rest 60s, Max Bodyweight Dips (record reps each set)',
+        ],
       },
       {
         name: 'Block 4: Accessory Finisher',
@@ -2922,7 +3164,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Two rounds targeting the supporting muscles that make pull-ups and dips stronger. Rest 60s between rounds.',
         movements: [
           'Round 1: 12 Face Pulls, 12 Tricep Dips between benches, 10 Single Arm Dumbbell Row each side, 12 Lateral Raises',
-          'Round 2: 12 Face Pulls, 12 Tricep Dips between benches, 10 Single Arm Dumbbell Row each side, 12 Lateral Raises'],
+          'Round 2: 12 Face Pulls, 12 Tricep Dips between benches, 10 Single Arm Dumbbell Row each side, 12 Lateral Raises',
+        ],
       },
       {
         name: 'Cooldown',
@@ -2931,8 +3174,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '60s Doorframe Chest Stretch each side',
           '60s Lat Stretch each side',
           '60s Shoulder Cross Body Stretch each side',
-          '60s Wrist Flexor Stretch each side'],
-      }],
+          '60s Wrist Flexor Stretch each side',
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'pull-up bar', 'bands'],
   },
   {
@@ -2959,8 +3204,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '50 Wall Balls',
           '500m Ski',
           '50 Burpees',
-          '500m Run'],
-      }],
+          '500m Run',
+        ],
+      },
+    ],
     equipment: ['rower', 'medicine ball'],
   },
   {
@@ -2981,7 +3228,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '30s doorway pec stretch each side',
           '10 scapular push-ups',
           '10 band pull-aparts',
-          '1 x 15 empty-bar or very light bench press - focus on bar path'],
+          '1 x 15 empty-bar or very light bench press - focus on bar path',
+        ],
       },
       {
         name: 'Primary Compound',
@@ -2992,7 +3240,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Barbell Bench Press',
             value: '4 x 6–8',
             note: 'Touch lower chest. Leg drive throughout. No bouncing.',
-          }],
+          },
+        ],
       },
       {
         name: 'Secondary Compound',
@@ -3008,7 +3257,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Dumbbell Floor Press',
             value: '3 x 10',
             note: 'No stretch reflex - pure tricep and inner chest tension from a dead stop.',
-          }],
+          },
+        ],
       },
       {
         name: 'Isolation',
@@ -3024,7 +3274,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Cable Crossover (High to Low)',
             value: '3 x 15',
             note: "Targets the lower chest. Keep a slight forward lean and don't fully extend the elbows.",
-          }],
+          },
+        ],
       },
       {
         name: 'Tricep Finisher',
@@ -3039,7 +3290,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Tricep Pushdowns (Cable)',
             value: '3 x 15',
             note: 'Full extension at the bottom. Squeeze the lateral head hard.',
-          }],
+          },
+        ],
       },
       {
         name: 'Posterior Health',
@@ -3050,9 +3302,18 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Reverse Flyes or Face Pulls',
             value: '3 x 20',
             note: 'Protects the rotator cuff over time. Never skip this.',
-          }],
-      }],
-    equipment: ['dumbbell', 'barbell', 'rower', 'ski erg', 'bands', 'static machines'],
+          },
+        ],
+      },
+    ],
+    equipment: [
+      'dumbbell',
+      'barbell',
+      'rower',
+      'ski erg',
+      'bands',
+      'static machines',
+    ],
   },
   {
     id: 'p_22',
@@ -3072,7 +3333,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '30s lat stretch each side',
           '10 band pull-aparts',
           '10 dead bugs (alternating, controlled)',
-          '1 x 10 light dumbbell rows each side - focus on scapular retraction'],
+          '1 x 10 light dumbbell rows each side - focus on scapular retraction',
+        ],
       },
       {
         name: 'Primary Compound',
@@ -3083,7 +3345,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Barbell Row',
             value: '4 x 6–8',
             note: 'Heavy. Reset each rep. Build the mid-back thickness that defines a serious physique.',
-          }],
+          },
+        ],
       },
       {
         name: 'Vertical Pull',
@@ -3099,7 +3362,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Single Arm Lat Pulldown',
             value: '3 x 12 each side',
             note: 'Allows you to focus on each lat independently. Full stretch at the top.',
-          }],
+          },
+        ],
       },
       {
         name: 'Horizontal Pull',
@@ -3114,7 +3378,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'T-Bar Row',
             value: '3 x 10',
             note: 'Chest on the pad. Neutral grip. Pull elbows past your torso - this is where the mid-back really fires.',
-          }],
+          },
+        ],
       },
       {
         name: 'Lat Isolation',
@@ -3124,7 +3389,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Straight Arm Pulldown',
             value: '3 x 15',
             note: 'Pull the shoulder blades down and feel the lats contract fully at the bottom.',
-          }],
+          },
+        ],
       },
       {
         name: 'Core Finisher',
@@ -3133,9 +3399,18 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Sit-ups',
             value: '3 x 10',
             note: "Controlled reps. Exhale as you sit up, keep your chin tucked, and don't pull on the neck. Aim for consistent tempo rather than speed.",
-          }],
-      }],
-    equipment: ['dumbbell', 'barbell', 'rower', 'pull-up bar', 'bands', 'static machines'],
+          },
+        ],
+      },
+    ],
+    equipment: [
+      'dumbbell',
+      'barbell',
+      'rower',
+      'pull-up bar',
+      'bands',
+      'static machines',
+    ],
   },
   {
     id: 'p_23',
@@ -3155,7 +3430,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '30s hip flexor stretch each side / 30s pigeon pose each side',
           '10 glute bridges with 2s pause at the top',
           '10 bodyweight squats with controlled tempo',
-          '1 x 10 goblet squats focusing on depth'],
+          '1 x 10 goblet squats focusing on depth',
+        ],
       },
       {
         name: 'Primary Compound',
@@ -3166,7 +3442,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Barbell Back Squat',
             value: '5 x 5',
             note: 'Sit back and down. Hip crease below knee. Drive the floor away - do not just stand up.',
-          }],
+          },
+        ],
       },
       {
         name: 'Quad Focus',
@@ -3181,7 +3458,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Leg Extension',
             value: '3 x 15',
             note: 'Pause for 1 full second at the top. Control the eccentric all the way down.',
-          }],
+          },
+        ],
       },
       {
         name: 'Posterior Chain',
@@ -3201,7 +3479,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Lying or Seated Leg Curl',
             value: '3 x 12',
             note: 'Slow eccentric. Do not let the stack slam at the bottom - maintain hamstring tension throughout.',
-          }],
+          },
+        ],
       },
       {
         name: 'Calves',
@@ -3212,7 +3491,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Calf Raises (Machine or Standing)',
             value: '4 x 20',
             note: 'Pause at the top. Calves respond well to high volume and slow eccentrics.',
-          }],
+          },
+        ],
       },
       {
         name: 'Core Finisher',
@@ -3221,8 +3501,10 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Hanging Leg Raise',
             value: '3 x 12',
             note: 'No spinal flexion load after heavy squats. Hip flexion only. Avoid swinging.',
-          }],
-      }],
+          },
+        ],
+      },
+    ],
     equipment: ['barbell', 'pull-up bar', 'static machines'],
   },
   {
@@ -3244,7 +3526,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '10 arm circles forward / 10 arm circles backward',
           '10 band pull-aparts',
           '10 banded face pulls',
-          '1 x 10 empty-bar overhead press - focus on lockout'],
+          '1 x 10 empty-bar overhead press - focus on lockout',
+        ],
       },
       {
         name: 'Primary Press',
@@ -3255,7 +3538,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Barbell Overhead Press',
             value: '4 x 6–8',
             note: 'Squeeze glutes and brace core. Press the bar vertically. Head through the window at the top.',
-          }],
+          },
+        ],
       },
       {
         name: 'Secondary Press',
@@ -3270,7 +3554,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Machine Shoulder Press',
             value: '3 x 12',
             note: 'Eliminates stability demands - focus entirely on deltoid recruitment. Control the eccentric.',
-          }],
+          },
+        ],
       },
       {
         name: 'Lateral Development',
@@ -3286,7 +3571,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Upright Row (Cable or Barbell)',
             value: '3 x 12',
             note: 'Wide grip to reduce shoulder impingement risk. Elbows lead the movement.',
-          }],
+          },
+        ],
       },
       {
         name: 'Rear Delt & Health',
@@ -3302,7 +3588,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Reverse Flyes (Dumbbell or Machine)',
             value: '3 x 15',
             note: 'Focus on feeling the rear delt contract - not the traps.',
-          }],
+          },
+        ],
       },
       {
         name: 'Core Finisher',
@@ -3311,8 +3598,10 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Russian Twists',
             value: '3 x 20',
             note: 'Feet off the floor. Rotate from the obliques. Add a plate in later weeks.',
-          }],
-      }],
+          },
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'barbell', 'bands'],
   },
   {
@@ -3332,7 +3621,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '3 mins light cardio',
           '30s wrist flexor stretch each side / 30s wrist extensor stretch each side',
           '10 arm circles forward / 10 arm circles backward',
-          '1 x 15 cable curls (light) / 1 x 15 tricep pushdowns (light) - pump blood into the elbow joints'],
+          '1 x 15 cable curls (light) / 1 x 15 tricep pushdowns (light) - pump blood into the elbow joints',
+        ],
       },
       {
         name: 'Biceps - Compound',
@@ -3348,7 +3638,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Incline Dumbbell Curl',
             value: '3 x 12',
             note: 'The incline position stretches the long head of the bicep maximally. Slow and deliberate on every rep.',
-          }],
+          },
+        ],
       },
       {
         name: 'Biceps - Isolation',
@@ -3368,7 +3659,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Cable Curl (Single Arm)',
             value: '2 x 15 each side',
             note: 'Constant tension from the cable. Supinate hard at the top of each rep.',
-          }],
+          },
+        ],
       },
       {
         name: 'Triceps - Compound',
@@ -3383,7 +3675,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Overhead Tricep Extension (Cable or Dumbbell)',
             value: '3 x 12',
             note: 'Overhead position places the long head in full stretch. Keep elbows pointing straight up - do not let them flare.',
-          }],
+          },
+        ],
       },
       {
         name: 'Triceps - Isolation',
@@ -3398,7 +3691,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Dips (Upright / Tricep Focus)',
             value: '3 x 12',
             note: 'Stay upright to keep the load on the triceps. Excellent mass-builder to close out the session.',
-          }],
+          },
+        ],
       },
       {
         name: 'Forearm Finisher',
@@ -3409,8 +3703,10 @@ export const workouts: StandaloneWorkoutSource[] = [
             name: 'Hammer Curls (Slow)',
             value: '2 x 20',
             note: 'Focus on the forearm and brachioradialis at the top. Full extension at the bottom.',
-          }],
-      }],
+          },
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'barbell'],
   },
   {
@@ -3428,14 +3724,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '10 mins easy run + drills',
-          '2 rounds: 10 KB swings (light), 6 pull-ups (easy)'],
+          '2 rounds: 10 KB swings (light), 6 pull-ups (easy)',
+        ],
       },
       {
         name: '5 Rounds For Time',
         instructions:
           'Keep the run smooth and the swings powerful. Break pull-ups before you fail reps.',
         movements: ['800m Run', '30 KB Swings', '30 Pull-ups'],
-      }],
+      },
+    ],
     equipment: ['kettlebell', 'pull-up bar'],
   },
   {
@@ -3453,7 +3751,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '10 mins progressive warmup',
-          'Build to moderate heavy deadlift + squat clean'],
+          'Build to moderate heavy deadlift + squat clean',
+        ],
       },
       {
         name: '3 Rounds For Time',
@@ -3462,8 +3761,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '1 Deadlift (heavy)',
           '2 Muscle-ups',
           '3 Squat Cleans (heavy)',
-          '4 Handstand Push-ups'],
-      }],
+          '4 Handstand Push-ups',
+        ],
+      },
+    ],
     equipment: ['barbell', 'pull-up bar'],
   },
   {
@@ -3481,13 +3782,15 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '8 mins easy cardio',
-          'Skill: 5–10 mins muscle-up practice (or strict pull-up + dip)'],
+          'Skill: 5–10 mins muscle-up practice (or strict pull-up + dip)',
+        ],
       },
       {
         name: '20 Min AMRAP',
         instructions: 'Score = rounds + reps. Stay efficient on transitions.',
         movements: ['2 Muscle-ups', '4 Handstand Push-ups', '8 KB Swings'],
-      }],
+      },
+    ],
     equipment: ['kettlebell', 'pull-up bar'],
   },
   {
@@ -3505,14 +3808,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '6 mins easy cardio',
-          'Build: 5-3-2 power snatch (light → working)'],
+          'Build: 5-3-2 power snatch (light → working)',
+        ],
       },
       {
         name: 'For Time',
         instructions:
           '75 power snatches (34/25kg suggested). Scale to safe cycling.',
         movements: ['75 Power Snatches'],
-      }],
+      },
+    ],
     equipment: ['barbell'],
   },
   {
@@ -3531,14 +3836,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '8 mins warmup',
           'Build: 3-2-1 snatch (light → working)',
-          'Skill: muscle-up progressions'],
+          'Skill: muscle-up progressions',
+        ],
       },
       {
         name: '9-7-5 For Time',
         instructions:
           'Muscle-ups + snatches (heavy). Scale both to keep reps safe.',
         movements: ['Muscle-ups', 'Snatches'],
-      }],
+      },
+    ],
     equipment: ['barbell', 'pull-up bar'],
   },
   {
@@ -3556,7 +3863,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '12 mins easy jog + drills',
-          '10 wall balls, 10 burpees, 500m easy row'],
+          '10 wall balls, 10 burpees, 500m easy row',
+        ],
       },
       {
         name: 'For Time',
@@ -3578,9 +3886,18 @@ export const workouts: StandaloneWorkoutSource[] = [
           '1000m Run',
           '100m Sandbag Lunges',
           '1000m Run',
-          '100 Wall Balls'],
-      }],
-    equipment: ['dumbbell', 'sandbag', 'medicine ball', 'rower', 'ski erg', 'sled'],
+          '100 Wall Balls',
+        ],
+      },
+    ],
+    equipment: [
+      'dumbbell',
+      'sandbag',
+      'medicine ball',
+      'rower',
+      'ski erg',
+      'sled',
+    ],
   },
   {
     id: 'p_32',
@@ -3597,7 +3914,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '10 mins easy cardio',
-          '2 x 20m light sled push, 2 x 20m light sled pull'],
+          '2 x 20m light sled push, 2 x 20m light sled pull',
+        ],
       },
       {
         name: 'Work',
@@ -3606,8 +3924,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '6 x 20m Sled Push (heavy)',
           '6 x 20m Sled Pull (heavy)',
-          '4 x 600m Run (steady)'],
-      }],
+          '4 x 600m Run (steady)',
+        ],
+      },
+    ],
     equipment: ['sled'],
   },
   {
@@ -3625,7 +3945,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '10 mins easy cardio',
-          'Practice: 10 wall balls, 250m row, 10 burpees'],
+          'Practice: 10 wall balls, 250m row, 10 burpees',
+        ],
       },
       {
         name: '4 Rounds',
@@ -3636,8 +3957,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '500m Row',
           '30 Wall Balls',
           '20 Burpee Broad Jumps',
-          '100m Farmers Carry'],
-      }],
+          '100m Farmers Carry',
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'medicine ball', 'rower'],
   },
   {
@@ -3663,8 +3986,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '30 Burpee Broad Jumps',
           '200m Sandbag Lunges',
           '1000m Row',
-          '50 Wall Balls'],
-      }],
+          '50 Wall Balls',
+        ],
+      },
+    ],
     equipment: ['sandbag', 'medicine ball', 'rower'],
   },
   {
@@ -3687,7 +4012,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         instructions:
           'Partner format: alternate rounds. Partner A completes one full round while Partner B rests, then swap next round. Keep transitions fast and form clean.',
         movements: ['600m Run', '12 Wall Balls', '8 Burpees', '250m Row'],
-      }],
+      },
+    ],
     equipment: ['rower', 'medicine ball'],
   },
   {
@@ -3705,10 +4031,11 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '3 mins easy cardio of choice',
-          '10 wall balls, 10 burpees'],
+          '10 wall balls, 10 burpees',
+        ],
       },
       {
-        name: '8 Rounds',
+        name: 'Order 66',
         instructions:
           'Partner format: alternate as you please, one rests the other works.',
         movements: [
@@ -3717,8 +4044,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '66 cal ski erg',
           '66 burpees',
           '66m sled push',
-          '66 box jumps'],
-      }],
+          '66 box jumps',
+        ],
+      },
+    ],
     equipment: ['rower', 'ski erg', 'box', 'medicine ball', 'sled'],
   },
   {
@@ -3741,8 +4070,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Pelvic Tilts (10 reps)',
           'Imprint and Release (10 reps)',
           'Single Knee Folds (5 each side, slow)',
-          'Shoulder Bridge (8 reps - no weight, 2s pause at top)'],
-      }],
+          'Shoulder Bridge (8 reps - no weight, 2s pause at top)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -3767,13 +4098,15 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Dead Bug - opposite arm and leg (6 each side)',
           'Single Leg Stretch (10 reps)',
           'Double Leg Stretch (8 reps)',
-          'Rest'],
+          'Rest',
+        ],
       },
       {
         name: 'Finisher',
         instructions: 'Slow and deliberate. Quality over quantity.',
         movements: ['Curl-up Hold (3 x 10s)', 'Toe Taps (10 each side)'],
-      }],
+      },
+    ],
     equipment: [],
   },
   {
@@ -3795,7 +4128,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Cat-Cow (10 reps, 3s each direction)',
           'Thread the Needle (5 each side)',
           "Child's Pose with Lateral Reach (30s each side)",
-          'Spine Twist Supine (8 each side)'],
+          'Spine Twist Supine (8 each side)',
+        ],
       },
       {
         name: 'Hip Opening',
@@ -3805,8 +4139,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Figure Four Stretch (60s each side)',
           'Supine Hip Flexor (45s each side)',
           'Clam Shell (12 each side)',
-          'Glute Bridge with Hip Circle (8 each direction)'],
-      }],
+          'Glute Bridge with Hip Circle (8 each direction)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -3828,7 +4164,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Roll Down (Standing, 8 reps)',
           'Roll Up (6 reps - controlled, no momentum)',
           'Rolling Like a Ball (10 reps)',
-          'Spine Stretch Forward (8 reps)'],
+          'Spine Stretch Forward (8 reps)',
+        ],
       },
       {
         name: 'Lengthening',
@@ -3837,8 +4174,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Saw (8 each side)',
           'Single Leg Hamstring Stretch (45s each side)',
           'Mermaid Stretch (30s each side)',
-          'Rest in Supine'],
-      }],
+          'Rest in Supine',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -3859,7 +4198,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Thoracic Extension over Foam Roller (6 segments, 30s each)',
           'Open Book (8 each side)',
-          'Bow and Arrow (6 each side)'],
+          'Bow and Arrow (6 each side)',
+        ],
       },
       {
         name: 'Scapular Control',
@@ -3868,7 +4208,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Scapular Punches (12 reps)',
           'W Exercise Prone (10 reps)',
-          'Swimming Arms Prone (20s, controlled)'],
+          'Swimming Arms Prone (20s, controlled)',
+        ],
       },
       {
         name: 'Hip Flexor Release',
@@ -3876,8 +4217,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Hold the posterior pelvic tilt throughout. Do not arch the lower back.',
         movements: [
           'Kneeling Hip Flexor Stretch with Reach (45s each side)',
-          'Standing Hip Circles (10 each side)'],
-      }],
+          'Standing Hip Circles (10 each side)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -3898,14 +4241,16 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Supine Breathing (5 breaths)',
           'Curl-up Practice (3 x 10s holds)',
-          'Single Leg Stretch (10 reps)'],
+          'Single Leg Stretch (10 reps)',
+        ],
       },
       {
         name: 'The Hundred',
         instructions:
           'Inhale for 5 beats, exhale for 5 beats. Arms pump 2-3 inches. Hold the position - do not pulse the spine.',
         movements: ['The Hundred (100 beats total - 10 breath cycles)'],
-      }],
+      },
+    ],
     equipment: [],
   },
   {
@@ -3926,7 +4271,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Side-Lying Clam Shell (15 each side)',
           'Side-Lying Hip Abduction (12 each side)',
-          'Side-Lying Hip Circle (8 each direction, each side)'],
+          'Side-Lying Hip Circle (8 each direction, each side)',
+        ],
       },
       {
         name: 'Loading',
@@ -3935,15 +4281,18 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Lateral Band Walk (20 steps each direction)',
           'Single Leg Glute Bridge (10 each side, 2s hold at top)',
-          'Donkey Kick into Fire Hydrant (10 each side)'],
+          'Donkey Kick into Fire Hydrant (10 each side)',
+        ],
       },
       {
         name: 'Integration',
         instructions: 'Combine the hip stability with spinal control.',
         movements: [
           'Bird Dog with Hip Hike (8 each side)',
-          'Side Plank Hip Dip (10 each side)'],
-      }],
+          'Side Plank Hip Dip (10 each side)',
+        ],
+      },
+    ],
     equipment: ['bands'],
   },
   {
@@ -3964,7 +4313,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Dead Bug (10 each side - slow, 3s lower)',
           'Pallof Press Hold (3 x 20s each side)',
-          'Half-Kneeling Rotation (8 each side)'],
+          'Half-Kneeling Rotation (8 each side)',
+        ],
       },
       {
         name: 'Rotational Power',
@@ -3974,7 +4324,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Supine Spine Twist (10 each side)',
           'Seated Rotation with Reach (12 each side)',
           'Standing Oblique Crunch (12 each side)',
-          'Kneeling Side Bend (10 each side)'],
+          'Kneeling Side Bend (10 each side)',
+        ],
       },
       {
         name: 'Endurance',
@@ -3983,8 +4334,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Side Plank (30s each side)',
           'Side Plank with Hip Abduction (10 each side)',
-          'Rolling Plank (5 full rotations)'],
-      }],
+          'Rolling Plank (5 full rotations)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -4006,7 +4359,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Roll Up (8 reps - no momentum)',
           'Rolling Like a Ball (10 reps)',
           'Swan Prep (8 reps - thoracic extension only)',
-          'Full Swan (5 reps - add lumbar extension gradually)'],
+          'Full Swan (5 reps - add lumbar extension gradually)',
+        ],
       },
       {
         name: 'Lateral and Rotation',
@@ -4016,15 +4370,18 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Mermaid (8 each side)',
           'Seated Spine Twist (10 each side)',
           'Saw (8 each side)',
-          'Corkscrew Prep (6 each side)'],
+          'Corkscrew Prep (6 each side)',
+        ],
       },
       {
         name: 'Full Integration',
         instructions: 'Combine patterns. Move with intention.',
         movements: [
           'Spine Stretch Forward into Swan (6 full reps)',
-          'Rocker Prep (8 reps)'],
-      }],
+          'Rocker Prep (8 reps)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -4045,7 +4402,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Pelvic Clock (10 full rotations)',
           'Shoulder Bridge (10 reps, 2s hold)',
-          'Shoulder Bridge with Leg Extension (6 each side)'],
+          'Shoulder Bridge with Leg Extension (6 each side)',
+        ],
       },
       {
         name: 'Deep Core Series',
@@ -4055,7 +4413,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'The Hundred (60 beats)',
           'Single Leg Stretch (10 each side)',
           'Double Leg Stretch (10 reps)',
-          'Criss Cross (12 each side)'],
+          'Criss Cross (12 each side)',
+        ],
       },
       {
         name: 'Glute and Adductor Integration',
@@ -4064,8 +4423,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Pilates Squat with Squeeze (12 reps)',
           'Standing Pilates Lunge with Rotation (8 each side)',
-          'Inner Thigh Lift (12 each side)'],
-      }],
+          'Inner Thigh Lift (12 each side)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -4090,7 +4451,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Rolling Like a Ball (8 reps)',
           'Single Leg Stretch (10 each side)',
           'Double Leg Stretch (8 reps)',
-          'Spine Stretch Forward (6 reps)'],
+          'Spine Stretch Forward (6 reps)',
+        ],
       },
       {
         name: 'Prone and Side-Lying',
@@ -4099,7 +4461,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Swan Prep (8 reps)',
           'Single Leg Kick (8 each side)',
-          'Side-Lying Leg Series (10 each: abduction, circles, kick forward/back)'],
+          'Side-Lying Leg Series (10 each: abduction, circles, kick forward/back)',
+        ],
       },
       {
         name: 'Finishing',
@@ -4107,8 +4470,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Seal (6 reps)',
           'Mermaid Stretch (30s each side)',
-          'Standing Roll Down (5 reps)'],
-      }],
+          'Standing Roll Down (5 reps)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -4129,7 +4494,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Band Footwork - Parallel Heels (15 reps)',
           'Band Footwork - Parallel Toes (15 reps)',
-          'Band Footwork - V Position (12 reps)'],
+          'Band Footwork - V Position (12 reps)',
+        ],
       },
       {
         name: 'Upper Body',
@@ -4137,7 +4503,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Supine Band Row (12 reps)',
           'Chest Expansion (10 reps)',
-          'Overhead Reach with Band (10 reps)'],
+          'Overhead Reach with Band (10 reps)',
+        ],
       },
       {
         name: 'Coordination',
@@ -4145,8 +4512,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Coordination Exercise (8 reps)',
           'Stomach Massage - Round Back (10 reps)',
-          'Long Stretch Plank Hold (3 x 20s)'],
-      }],
+          'Long Stretch Plank Hold (3 x 20s)',
+        ],
+      },
+    ],
     equipment: ['bands'],
   },
   {
@@ -4168,7 +4537,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Roll Over (6 reps - control the descent)',
           'Jack Knife (5 reps)',
           'Corkscrew (5 each side)',
-          'Boomerang (6 reps)'],
+          'Boomerang (6 reps)',
+        ],
       },
       {
         name: 'Strength Series',
@@ -4178,7 +4548,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Teaser I (6 reps)',
           'Teaser II (5 reps)',
           'Teaser III (4 reps)',
-          'Neck Pull (8 reps)'],
+          'Neck Pull (8 reps)',
+        ],
       },
       {
         name: 'Prone Power',
@@ -4187,7 +4558,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Swan Dive (6 reps)',
           'Rocking (8 reps)',
-          'Double Leg Kick (8 each side)'],
+          'Double Leg Kick (8 each side)',
+        ],
       },
       {
         name: 'Finishing Sequence',
@@ -4196,8 +4568,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Seal (8 reps)',
           'Crab (5 reps)',
-          'Control Balance (5 each side)'],
-      }],
+          'Control Balance (5 each side)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -4219,7 +4593,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Single Leg Stretch into Hold (6 each side)',
           'Supine Leg Extension Hold (30s each side)',
           'V-Sit Hold (3 x 15s)',
-          'Spine Stretch Forward (8 reps)'],
+          'Spine Stretch Forward (8 reps)',
+        ],
       },
       {
         name: 'Teaser Progressions',
@@ -4229,7 +4604,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Teaser I - Bent Knees (6 reps)',
           'Teaser I - One Leg Extended (5 each side)',
           'Teaser II - Both Legs Extended (5 reps)',
-          'Teaser III - Arms and Legs Lower Together (4 reps)'],
+          'Teaser III - Arms and Legs Lower Together (4 reps)',
+        ],
       },
       {
         name: 'Integration',
@@ -4237,8 +4613,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'String the movements. No rest between exercises in this block.',
         movements: [
           'Roll Up into Teaser (5 full cycles)',
-          'Teaser to Rolling Like a Ball (5 transitions)'],
-      }],
+          'Teaser to Rolling Like a Ball (5 transitions)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -4260,7 +4638,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Supine Long Spine Stretch with Band (8 reps)',
           'Hamstring Press Series - Parallel (10 reps)',
           'Hamstring Press Series - Turned Out (10 reps)',
-          'Arabesque with Band (8 each side)'],
+          'Arabesque with Band (8 each side)',
+        ],
       },
       {
         name: 'Short Spine and Round Back',
@@ -4269,7 +4648,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Short Spine Simulation (6 reps)',
           'Stomach Massage Round Back with Band (10 reps)',
-          'Semi-Circle (6 reps)'],
+          'Semi-Circle (6 reps)',
+        ],
       },
       {
         name: 'Side-Lying Series',
@@ -4278,7 +4658,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Side-Lying Kick Forward and Back (10 each side)',
           'Side-Lying Bicycle (8 each side)',
-          'Side-Lying Banana (8 each side)'],
+          'Side-Lying Banana (8 each side)',
+        ],
       },
       {
         name: 'Standing Pilates',
@@ -4287,8 +4668,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Standing Footwork (12 each position)',
           'Tendon Stretch Simulation (10 reps)',
-          'Elephant Walk (20 steps)'],
-      }],
+          'Elephant Walk (20 steps)',
+        ],
+      },
+    ],
     equipment: ['bands'],
   },
   {
@@ -4315,7 +4698,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Double Leg Stretch (8 reps)',
           'Single Straight Leg Stretch (10 each side)',
           'Double Straight Leg Lower/Lift (8 reps)',
-          'Criss Cross (10 each side)'],
+          'Criss Cross (10 each side)',
+        ],
       },
       {
         name: 'Extension Spinal Series',
@@ -4325,7 +4709,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Spine Stretch Forward (6 reps)',
           'Open Leg Rocker (8 reps)',
           'Corkscrew (5 each side)',
-          'Saw (8 each side)'],
+          'Saw (8 each side)',
+        ],
       },
       {
         name: 'Prone Series',
@@ -4335,7 +4720,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Swan Dive (5 reps)',
           'Single Leg Kick (8 each side)',
           'Double Leg Kick (5 each side)',
-          'Neck Pull (6 reps)'],
+          'Neck Pull (6 reps)',
+        ],
       },
       {
         name: 'Inversion and Rotation',
@@ -4344,7 +4730,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Shoulder Bridge (8 reps)',
           'Spine Twist (8 each side)',
           'Jack Knife (5 reps)',
-          'Side Kick Series (10 each: forward/back, up/down, circle)'],
+          'Side Kick Series (10 each: forward/back, up/down, circle)',
+        ],
       },
       {
         name: 'Advanced Finishers',
@@ -4357,15 +4744,18 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Hip Circles (5 each direction)',
           'Seal (8 reps)',
           'Boomerang (5 reps)',
-          'Control Balance (4 each side)'],
+          'Control Balance (4 each side)',
+        ],
       },
       {
         name: 'Standing Close-Out',
         instructions: 'Carry every principle from the mat into the vertical.',
         movements: [
           'Standing Roll Down (5 reps)',
-          'Standing Balance (30s each side)'],
-      }],
+          'Standing Balance (30s each side)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -4386,7 +4776,8 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           'Standing Roll Down with Hold (8 reps, 3s hold at bottom)',
           "World's Greatest Stretch (5 each side)",
-          'Deep Squat with Thoracic Rotation (8 each side)'],
+          'Deep Squat with Thoracic Rotation (8 each side)',
+        ],
       },
       {
         name: 'Hamstring and Hip Flexor',
@@ -4396,7 +4787,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Prone Hamstring Lengthening (10 each side)',
           'Supine Hip Flexor Extension (45s each side)',
           'Standing Single Leg Romanian Hinge (8 each side)',
-          'Pigeon Pose with Arm Reach (60s each side)'],
+          'Pigeon Pose with Arm Reach (60s each side)',
+        ],
       },
       {
         name: 'Spinal Loading',
@@ -4406,7 +4798,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Loaded Cat-Cow with Pause (10 reps)',
           'Sphinx into Cobra (8 reps)',
           "Child's Pose to Swan (10 full cycles)",
-          'Side-Lying Banana with Reach (10 each side)'],
+          'Side-Lying Banana with Reach (10 each side)',
+        ],
       },
       {
         name: 'Shoulder and Thoracic',
@@ -4416,7 +4809,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Doorway Chest Stretch with Reach (45s each side)',
           'Prone T-Raise (12 reps)',
           'Prone Y-Raise (12 reps)',
-          'Thoracic Extension over Block (8 segments)'],
+          'Thoracic Extension over Block (8 segments)',
+        ],
       },
       {
         name: 'Integration Closing',
@@ -4424,8 +4818,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Bring the session to stillness. Hold the last position for as long as it feels productive.',
         movements: [
           'Full Body Stretch Sequence (90s total)',
-          'Savasana (3 mins)'],
-      }],
+          'Savasana (3 mins)',
+        ],
+      },
+    ],
     equipment: [],
   },
   {
@@ -4448,7 +4844,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Shoulder CARs (5 each side - controlled articular rotations)',
           'Hip CARs (5 each side)',
           'Thoracic CARs (5 each side)',
-          'Ankle CARs (8 each side)'],
+          'Ankle CARs (8 each side)',
+        ],
       },
       {
         name: 'Unilateral Stability',
@@ -4458,7 +4855,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Single-Leg Dead Bug (8 each side)',
           'Single-Leg Bridge with Arm Reach (10 each side)',
           'Side Plank with Leg Lift (8 each side)',
-          'Single-Leg Romanian Hinge (8 each side)'],
+          'Single-Leg Romanian Hinge (8 each side)',
+        ],
       },
       {
         name: 'Overhead Stability',
@@ -4468,7 +4866,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Supine Shoulder Flexion with Band (12 reps)',
           'Kneeling Overhead Reach (10 each side)',
           'Half-Kneeling Press and Balance (8 each side)',
-          'Bear Crawl Hold (3 x 20s - scapular loading)'],
+          'Bear Crawl Hold (3 x 20s - scapular loading)',
+        ],
       },
       {
         name: 'Rotational Power',
@@ -4478,7 +4877,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Pilates Saw with Resistance (10 each side)',
           'Standing Thoracic Rotation with Hold (8 each side)',
           'Kneeling Chop Pattern (10 each side)',
-          'Seated Rotation into Reach (10 each side)'],
+          'Seated Rotation into Reach (10 each side)',
+        ],
       },
       {
         name: 'Breath and Reset',
@@ -4486,8 +4886,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Box breathing. 4s in, 4s hold, 4s out, 4s hold. This is performance recovery.',
         movements: [
           'Box Breathing (8 full cycles)',
-          'Progressive Muscle Relaxation (3 mins)'],
-      }],
+          'Progressive Muscle Relaxation (3 mins)',
+        ],
+      },
+    ],
     equipment: ['barbell', 'box', 'bands'],
   },
   {
@@ -4512,8 +4914,10 @@ export const workouts: StandaloneWorkoutSource[] = [
               '20 Burpee Box Jump Overs (24"/20")',
               '30 Chest to Bar Pull Ups',
               '40 Wall Balls (9kg/7kg)',
-              '50 Double Unders'],
-          }],
+              '50 Double Unders',
+            ],
+          },
+        ],
       },
       {
         scale: 'KENNEDY',
@@ -4526,8 +4930,10 @@ export const workouts: StandaloneWorkoutSource[] = [
               '20 Burpee Box Jump Overs (24"/20")',
               '20 Pull Ups',
               '40 Wall Balls (9kg/7kg)',
-              '40 Double Unders (or 80 Single Unders)'],
-          }],
+              '40 Double Unders (or 80 Single Unders)',
+            ],
+          },
+        ],
       },
       {
         scale: 'WOOD',
@@ -4540,10 +4946,19 @@ export const workouts: StandaloneWorkoutSource[] = [
               '15 Burpee Box Step Ups (24"/20")',
               '15 American Kettlebell Swings (20kg/12kg)',
               '30 Wall Balls (9kg/7kg)',
-              '30 Double Unders (or 60 Single Unders)'],
-          }],
-      }],
-    equipment: ['kettlebell', 'medicine ball', 'pull-up bar', 'box', 'skipping rope'],
+              '30 Double Unders (or 60 Single Unders)',
+            ],
+          },
+        ],
+      },
+    ],
+    equipment: [
+      'kettlebell',
+      'medicine ball',
+      'pull-up bar',
+      'box',
+      'skipping rope',
+    ],
   },
   {
     id: 'rh_11',
@@ -4586,7 +5001,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             instructions:
               'Max metres in 2 minutes. Note your distance as Score 3.',
             movements: ['Max Metres Row (2 mins)'],
-          }],
+          },
+        ],
       },
       {
         scale: 'KENNEDY',
@@ -4608,7 +5024,8 @@ export const workouts: StandaloneWorkoutSource[] = [
               'As many rounds as possible in 5 minutes. Score = rounds + reps.',
             movements: [
               '20m OH Plate Walking Lunges (20kg/15kg)',
-              '12 Toes to Bar'],
+              '12 Toes to Bar',
+            ],
           },
           {
             name: '08:00 - 09:00 - Transition',
@@ -4620,7 +5037,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             instructions:
               'Max metres in 2 minutes. Note your distance as Score 3.',
             movements: ['Max Metres Row (2 mins)'],
-          }],
+          },
+        ],
       },
       {
         scale: 'WOOD',
@@ -4642,7 +5060,8 @@ export const workouts: StandaloneWorkoutSource[] = [
               'As many rounds as possible in 5 minutes. Score = rounds + reps.',
             movements: [
               '20m OH Plate Walking Lunges (15kg/10kg)',
-              '10 Hanging Leg Raises'],
+              '10 Hanging Leg Raises',
+            ],
           },
           {
             name: '08:00 - 09:00 - Transition',
@@ -4654,8 +5073,10 @@ export const workouts: StandaloneWorkoutSource[] = [
             instructions:
               'Max metres in 2 minutes. Note your distance as Score 3.',
             movements: ['Max Metres Row (2 mins)'],
-          }],
-      }],
+          },
+        ],
+      },
+    ],
     equipment: ['rower', 'pull-up bar'],
   },
   {
@@ -4679,14 +5100,16 @@ export const workouts: StandaloneWorkoutSource[] = [
             movements: [
               '21 Deadlifts (70kg/50kg)',
               '15 Hang Cleans (70kg/50kg)',
-              '9 Shoulder to Overhead (70kg/50kg)'],
+              '9 Shoulder to Overhead (70kg/50kg)',
+            ],
           },
           {
             name: 'Max Distance Row',
             instructions:
               'Row for max metres in the remaining time. Score 1 = chipper finish time. Score 2 = metres rowed.',
             movements: ['Max Distance Row (metres)'],
-          }],
+          },
+        ],
       },
       {
         scale: 'KENNEDY',
@@ -4698,14 +5121,16 @@ export const workouts: StandaloneWorkoutSource[] = [
             movements: [
               '21 Deadlifts (60kg/42.5kg)',
               '15 Hang Cleans (60kg/42.5kg)',
-              '9 Shoulder to Overhead (60kg/42.5kg)'],
+              '9 Shoulder to Overhead (60kg/42.5kg)',
+            ],
           },
           {
             name: 'Max Distance Row',
             instructions:
               'Row for max metres in the remaining time. Score 1 = chipper finish time. Score 2 = metres rowed.',
             movements: ['Max Distance Row (metres)'],
-          }],
+          },
+        ],
       },
       {
         scale: 'RASTRICK',
@@ -4717,14 +5142,16 @@ export const workouts: StandaloneWorkoutSource[] = [
             movements: [
               '21 Deadlifts (50kg/35kg)',
               '15 Hang Cleans (50kg/35kg)',
-              '9 Shoulder to Overhead (50kg/35kg)'],
+              '9 Shoulder to Overhead (50kg/35kg)',
+            ],
           },
           {
             name: 'Max Distance Row',
             instructions:
               'Row for max metres in the remaining time. Score 1 = chipper finish time. Score 2 = metres rowed.',
             movements: ['Max Distance Row (metres)'],
-          }],
+          },
+        ],
       },
       {
         scale: 'WOOD',
@@ -4736,15 +5163,18 @@ export const workouts: StandaloneWorkoutSource[] = [
             movements: [
               '21 Deadlifts (40kg/27.5kg)',
               '15 Hang Cleans (40kg/27.5kg)',
-              '9 Shoulder to Overhead (40kg/27.5kg)'],
+              '9 Shoulder to Overhead (40kg/27.5kg)',
+            ],
           },
           {
             name: 'Max Distance Row',
             instructions:
               'Row for max metres in the remaining time. Score 1 = chipper finish time. Score 2 = metres rowed.',
             movements: ['Max Distance Row (metres)'],
-          }],
-      }],
+          },
+        ],
+      },
+    ],
     equipment: ['barbell', 'rower'],
   },
   {
@@ -4769,8 +5199,10 @@ export const workouts: StandaloneWorkoutSource[] = [
               '10 Deadlifts (110kg/85kg)',
               '20 Dual KB Thrusters (2x24kg/16kg)',
               '30/24 Chest to Bar Pull Ups',
-              '40 Kettlebell Box Step Ups (2x24kg/16kg)'],
-          }],
+              '40 Kettlebell Box Step Ups (2x24kg/16kg)',
+            ],
+          },
+        ],
       },
       {
         scale: 'KENNEDY',
@@ -4783,9 +5215,12 @@ export const workouts: StandaloneWorkoutSource[] = [
               '10 Deadlifts (100kg/75kg)',
               '20 Dual KB Thrusters (2x20kg/12kg)',
               '25 Chest to Bar Pull Ups / Pull Ups',
-              '40 Kettlebell Box Step Ups (2x20kg/12kg)'],
-          }],
-      }],
+              '40 Kettlebell Box Step Ups (2x20kg/12kg)',
+            ],
+          },
+        ],
+      },
+    ],
     equipment: ['kettlebell', 'barbell', 'pull-up bar', 'box'],
   },
   {
@@ -4811,8 +5246,10 @@ export const workouts: StandaloneWorkoutSource[] = [
               '10 Burpee Box Jump Over',
               '10 Toes to Bar',
               '10 Box Jumps',
-              'Add 2 reps to each movement until 09:00 - score total reps as 1.2'],
-          }],
+              'Add 2 reps to each movement until 09:00 - score total reps as 1.2',
+            ],
+          },
+        ],
       },
       {
         scale: 'KENNEDY',
@@ -4827,8 +5264,10 @@ export const workouts: StandaloneWorkoutSource[] = [
               '8 Burpee Box Jump Over',
               '8 Toes to Bar',
               '8 Box Jumps',
-              'Add 2 reps to each movement until 09:00 - score total reps as 1.2'],
-          }],
+              'Add 2 reps to each movement until 09:00 - score total reps as 1.2',
+            ],
+          },
+        ],
       },
       {
         scale: 'WOOD',
@@ -4843,9 +5282,12 @@ export const workouts: StandaloneWorkoutSource[] = [
               '8 Burpee Box Step Up',
               '8 Hanging Leg Raises',
               '8 Box Jumps / Step Up',
-              'Add 2 reps to each movement until 09:00 - score total reps as 1.2'],
-          }],
-      }],
+              'Add 2 reps to each movement until 09:00 - score total reps as 1.2',
+            ],
+          },
+        ],
+      },
+    ],
     equipment: ['kettlebell', 'pull-up bar', 'box'],
   },
   {
@@ -4877,8 +5319,10 @@ export const workouts: StandaloneWorkoutSource[] = [
               '10 Handstand Pushups',
               '10 Cal Row',
               '10 Double Dumbbell Thrusters (22.5kg/15kg)',
-              '75 Double Unders'],
-          }],
+              '75 Double Unders',
+            ],
+          },
+        ],
       },
       {
         scale: 'KENNEDY',
@@ -4898,8 +5342,10 @@ export const workouts: StandaloneWorkoutSource[] = [
               '10 Handstand Pushups',
               '10 Cal Row',
               '10 Double Dumbbell Thrusters (22.5kg/15kg)',
-              '50 Double Unders'],
-          }],
+              '50 Double Unders',
+            ],
+          },
+        ],
       },
       {
         scale: 'WOOD',
@@ -4919,9 +5365,12 @@ export const workouts: StandaloneWorkoutSource[] = [
               '5 Wall Walks',
               '10 Cal Row',
               '10 Dumbbell Thrusters (15kg/10kg)',
-              '30 Double Unders / 60 Single Unders'],
-          }],
-      }],
+              '30 Double Unders / 60 Single Unders',
+            ],
+          },
+        ],
+      },
+    ],
     equipment: ['dumbbell', 'rower', 'skipping rope'],
   },
   {
@@ -4959,8 +5408,10 @@ export const workouts: StandaloneWorkoutSource[] = [
               },
               '30 Double Unders',
               '6 Snatches (60kg/40kg)',
-              '10m Handstand Walk'],
-          }],
+              '10m Handstand Walk',
+            ],
+          },
+        ],
       },
       {
         scale: 'KENNEDY',
@@ -4986,9 +5437,12 @@ export const workouts: StandaloneWorkoutSource[] = [
               },
               '30 Double Unders',
               '6 Snatches (55kg/35kg)',
-              '10m Handstand Walk'],
-          }],
-      }],
+              '10m Handstand Walk',
+            ],
+          },
+        ],
+      },
+    ],
     equipment: ['barbell', 'skipping rope'],
   },
   {
@@ -5012,7 +5466,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '18 Wall Balls (9kg/7kg)',
           '18 Kettlebell Swings (20kg/12kg)',
           '15 Wall Balls (9kg/7kg)',
-          '15 Kettlebell Swings (20kg/12kg)'],
+          '15 Kettlebell Swings (20kg/12kg)',
+        ],
       },
       {
         name: 'Block 2 - 5 Min Cap',
@@ -5024,7 +5479,8 @@ export const workouts: StandaloneWorkoutSource[] = [
           '12 Box Jumps (24"/20")',
           '12 Pull Ups',
           '9 Box Jumps (24"/20") - note time here if needed',
-          '9 Chest to Bar Pull Ups'],
+          '9 Chest to Bar Pull Ups',
+        ],
       },
       {
         name: 'Block 3 - 4 Min Cap',
@@ -5036,8 +5492,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '9 Burpee Box Jump Overs (30"/24") - note time here if needed',
           '9 Bar Muscle Ups',
           '6 Burpee Box Jump Overs (30"/24")',
-          '6 Bar Muscle Ups'],
-      }],
+          '6 Bar Muscle Ups',
+        ],
+      },
+    ],
     equipment: ['kettlebell', 'medicine ball', 'pull-up bar', 'box'],
   },
   {
@@ -5074,8 +5532,10 @@ export const workouts: StandaloneWorkoutSource[] = [
               {
                 type: 'divider',
                 note: 'continue adding reps until time is up',
-              }],
-          }],
+              },
+            ],
+          },
+        ],
       },
       {
         scale: 'KENNEDY',
@@ -5100,8 +5560,10 @@ export const workouts: StandaloneWorkoutSource[] = [
               {
                 type: 'divider',
                 note: 'continue adding reps until time is up',
-              }],
-          }],
+              },
+            ],
+          },
+        ],
       },
       {
         scale: 'WOOD',
@@ -5126,9 +5588,12 @@ export const workouts: StandaloneWorkoutSource[] = [
               {
                 type: 'divider',
                 note: 'continue adding reps until time is up',
-              }],
-          }],
-      }],
+              },
+            ],
+          },
+        ],
+      },
+    ],
     equipment: ['kettlebell', 'pull-up bar'],
   },
   {
@@ -5177,7 +5642,8 @@ export const workouts: StandaloneWorkoutSource[] = [
               },
               '9 Alternating Single KB Snatch (24kg/16kg)',
               '8x8m Sandbag Carry (70kg/50kg)',
-              '9 Sandbag Squats (70kg/50kg)'],
+              '9 Sandbag Squats (70kg/50kg)',
+            ],
           },
           {
             name: 'Transition',
@@ -5189,7 +5655,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             instructions:
               'Max metres in 1 minute. Note your distance as Score 3.',
             movements: ['Max Metres Row (1 min)'],
-          }],
+          },
+        ],
       },
       {
         scale: 'KENNEDY',
@@ -5226,7 +5693,8 @@ export const workouts: StandaloneWorkoutSource[] = [
               },
               '9 Alternating Single KB Snatch (20kg/12kg)',
               '8x8m Sandbag Carry (50kg/30kg)',
-              '9 Sandbag Squats (50kg/30kg)'],
+              '9 Sandbag Squats (50kg/30kg)',
+            ],
           },
           {
             name: 'Transition',
@@ -5238,7 +5706,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             instructions:
               'Max metres in 1 minute. Note your distance as Score 3.',
             movements: ['Max Metres Row (1 min)'],
-          }],
+          },
+        ],
       },
       {
         scale: 'WOOD',
@@ -5272,7 +5741,8 @@ export const workouts: StandaloneWorkoutSource[] = [
                 note: 'third round',
               },
               '9 Alternating Single KB Snatch (16kg/8kg)',
-              '6 Sandbag Squats (50kg/30kg)'],
+              '6 Sandbag Squats (50kg/30kg)',
+            ],
           },
           {
             name: 'Transition',
@@ -5284,8 +5754,10 @@ export const workouts: StandaloneWorkoutSource[] = [
             instructions:
               'Max metres in 1 minute. Note your distance as Score 3.',
             movements: ['Max Metres Row (1 min)'],
-          }],
-      }],
+          },
+        ],
+      },
+    ],
     equipment: ['kettlebell', 'sandbag', 'rower'],
   },
   {
@@ -5309,7 +5781,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             movements: [
               '3 Deadlifts',
               '2 Hang Cleans',
-              '1 Shoulder to Overhead'],
+              '1 Shoulder to Overhead',
+            ],
           },
           {
             name: '06:00 - 07:00 - Transition',
@@ -5324,8 +5797,10 @@ export const workouts: StandaloneWorkoutSource[] = [
             movements: [
               '9 Deadlifts (70kg/50kg)',
               '6 Hang Cleans (70kg/50kg)',
-              '3 Shoulder to Overhead (70kg/50kg)'],
-          }],
+              '3 Shoulder to Overhead (70kg/50kg)',
+            ],
+          },
+        ],
       },
       {
         scale: 'KENNEDY',
@@ -5337,7 +5812,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             movements: [
               '3 Deadlifts',
               '2 Hang Cleans',
-              '1 Shoulder to Overhead'],
+              '1 Shoulder to Overhead',
+            ],
           },
           {
             name: '06:00 - 07:00 - Transition',
@@ -5352,8 +5828,10 @@ export const workouts: StandaloneWorkoutSource[] = [
             movements: [
               '9 Deadlifts (60kg/42.5kg)',
               '6 Hang Cleans (60kg/42.5kg)',
-              '3 Shoulder to Overhead (60kg/42.5kg)'],
-          }],
+              '3 Shoulder to Overhead (60kg/42.5kg)',
+            ],
+          },
+        ],
       },
       {
         scale: 'WOOD',
@@ -5365,7 +5843,8 @@ export const workouts: StandaloneWorkoutSource[] = [
             movements: [
               '3 Deadlifts',
               '2 Hang Cleans',
-              '1 Shoulder to Overhead'],
+              '1 Shoulder to Overhead',
+            ],
           },
           {
             name: '06:00 - 07:00 - Transition',
@@ -5380,9 +5859,12 @@ export const workouts: StandaloneWorkoutSource[] = [
             movements: [
               '9 Deadlifts (50kg/35kg)',
               '6 Hang Cleans (50kg/35kg)',
-              '3 Shoulder to Overhead (50kg/35kg)'],
-          }],
-      }],
+              '3 Shoulder to Overhead (50kg/35kg)',
+            ],
+          },
+        ],
+      },
+    ],
     equipment: ['barbell'],
   },
   {
@@ -5404,8 +5886,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '8 reps Burpees (Steady pace. Do not sprint round one.)',
           '15 reps Bodyweight Squats (Full range. Move with purpose.)',
-          '10 reps Push-ups (Chest to floor. Scale to knees to keep moving.)'],
-      }],
+          '10 reps Push-ups (Chest to floor. Scale to knees to keep moving.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_56',
@@ -5426,8 +5910,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '21 / 15 / 9 reps Squat Jumps (Land soft every rep. Full squat depth.)',
           '21 / 15 / 9 reps each side Reverse Lunge (Tall torso. Light touch of the back knee.)',
-          '21 / 15 / 9 reps Ball Slams (Full extension overhead before every slam. Drive it down.)'],
-      }],
+          '21 / 15 / 9 reps Ball Slams (Full extension overhead before every slam. Drive it down.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_57',
@@ -5449,8 +5935,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '20s on / 10s off Push-ups (Maximum reps with good form. Scale to knees when needed.)',
           '20s on / 10s off DB Push Press (Dip and drive. Keep the weight manageable enough to keep moving.)',
           '20s on / 10s off Ball Slams (Full extension, slam hard, pick it up fast.)',
-          '20s on / 10s off Pike Push-ups (Hips high. Lower with control. Press with everything.)'],
-      }],
+          '20s on / 10s off Pike Push-ups (Hips high. Lower with control. Press with everything.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_58',
@@ -5473,8 +5961,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '20 reps DB Goblet Front Squat (Upright torso. Drive hard out of the hole.)',
           '10 reps Pull-ups (Band or assist is fine. Every rep counts.)',
           '20 reps Ball Slams (Full extension overhead. Drive it into the floor.)',
-          '15 reps Squat Jumps (Land soft. Depth every rep.)'],
-      }],
+          '15 reps Squat Jumps (Land soft. Depth every rep.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_59',
@@ -5494,8 +5984,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           'Every minute on the minute, complete the prescribed reps. Rest is whatever is left of that minute. If you finish with less than 10s rest, your load or pace is too high.\n\nEMOM • 12 min',
         movements: [
           '10 reps (odd minutes) DB Thruster (Squat and press in one movement. Keep dumbbells at shoulders on the descent.)',
-          '8 reps (even minutes) Burpees (Consistent pace. Same speed every round.)'],
-      }],
+          '8 reps (even minutes) Burpees (Consistent pace. Same speed every round.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_60',
@@ -5517,8 +6009,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '10 reps Box Jumps/Step-ups (Step down every rep. Land soft, reset, go again.)',
           '12 reps DB Romanian Deadlift (Hinge clean. Squeeze at the top. Do not round the back.)',
           '10 reps/side Reverse Lunge (Tall torso. Drive up through the front heel.)',
-          '20 reps Bodyweight Calf Raises (Full range. Pause at the top.)'],
-      }],
+          '20 reps Bodyweight Calf Raises (Full range. Pause at the top.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_61',
@@ -5542,8 +6036,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '10 reps Squat Jumps (Land soft every rep. Full depth.)',
           '10 reps Push-ups (Chest to floor. Scale to knees to keep moving.)',
           '12 reps Kettlebell Swing (Hip drive. The bell floats.)',
-          '20 reps Bicycle Crunch (Rotate from the ribs. Slow and deliberate.)'],
-      }],
+          '20 reps Bicycle Crunch (Rotate from the ribs. Slow and deliberate.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_62',
@@ -5564,8 +6060,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '25 / 20 / 15 / 10 / 5 reps Burpees (Pace the first round. It gets easier as the reps drop.)',
           '25 / 20 / 15 / 10 / 5 reps Bodyweight Squats (Full depth. Drive up hard.)',
-          '25 / 20 / 15 / 10 / 5 reps Ball Slams (Full extension overhead every rep.)'],
-      }],
+          '25 / 20 / 15 / 10 / 5 reps Ball Slams (Full extension overhead every rep.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_63',
@@ -5588,8 +6086,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '12 reps Wall Balls (Squat to depth. Drive the ball up.)',
           '8 reps Pull-ups (Band or assist is fine. Chest to bar.)',
           '10 reps DB Thruster (Squat and press. Fluid movement.)',
-          '20s Plank (Active recovery within the round. Ribs down, breathe.)'],
-      }],
+          '20s Plank (Active recovery within the round. Ribs down, breathe.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_64',
@@ -5611,8 +6111,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '10 reps DB Push Press (Dip and drive. Full lockout overhead.)',
           '8 reps Chin-ups (Full hang to chin above bar. Control the lower.)',
           '12 reps Ball Slams (Full extension. Slam hard. Pick it up fast.)',
-          '20 reps Bicycle Crunch (Slow rotation from the ribs. Active recovery within the EMOM.)'],
-      }],
+          '20 reps Bicycle Crunch (Slow rotation from the ribs. Active recovery within the EMOM.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_65',
@@ -5636,8 +6138,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '25 reps Squat Jumps (Land soft. Full depth. Breathe.)',
           '20 reps DB Romanian Deadlift (Hinge clean. Squeeze up. Do not round the back.)',
           '15 reps/side Reverse Lunge (Controlled. Tall torso. Nearly there.)',
-          '60s Wall Sit (Last thing. Breathe through it. Hold position.)'],
-      }],
+          '60s Wall Sit (Last thing. Breathe through it. Hold position.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_66',
@@ -5660,8 +6164,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '15 reps Wall Balls (Squat to depth every rep.)',
           '8 reps Pull-ups (Band or assist is fine.)',
           '15 reps Ball Slams (Full extension. Drive it into the floor.)',
-          '30s DB Farmer Carry (Heavy. Posture tall. Walk steady.)'],
-      }],
+          '30s DB Farmer Carry (Heavy. Posture tall. Walk steady.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_67',
@@ -5682,8 +6188,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '10 reps Burpee Broad Jumps (Max effort. Drive forward every rep.)',
           '15 reps DB Thruster (Squat and press. No pausing at the bottom.)',
-          '20 reps Ball Slams (Everything you have. Full extension before every slam.)'],
-      }],
+          '20 reps Ball Slams (Everything you have. Full extension before every slam.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_68',
@@ -5705,8 +6213,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '20s on / 10s off Pull-ups (Max reps. Band or assist is fine.)',
           '20s on / 10s off Sit-ups (Full range. Controlled on the way down.)',
           '20s on / 10s off Inverted Row (Chest to bar every rep.)',
-          '20s on / 10s off Russian Twists (Use a light dumbbell. Rotate from the ribs.)'],
-      }],
+          '20s on / 10s off Russian Twists (Use a light dumbbell. Rotate from the ribs.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_69',
@@ -5729,8 +6239,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '10 reps Squat Jumps (Land soft. Depth every rep.)',
           '10 reps/side Reverse Lunge (Tall torso. Light touch of the back knee.)',
           '15 reps Kettlebell Swing (Hip drive. The bell floats.)',
-          '20 reps Glute Bridge March (Active recovery within the AMRAP. Hips level throughout.)'],
-      }],
+          '20 reps Glute Bridge March (Active recovery within the AMRAP. Hips level throughout.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_70',
@@ -5755,8 +6267,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '30 reps Russian Twists (Light dumbbell. Rotate from the ribs.)',
           '20 reps Ball Slams (Full extension every rep.)',
           '20 reps Sit-ups (Full range. Nearly there.)',
-          '10 reps Burpee Broad Jumps (Drive forward. Land soft. Finish strong.)'],
-      }],
+          '10 reps Burpee Broad Jumps (Drive forward. Land soft. Finish strong.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_71',
@@ -5777,8 +6291,10 @@ export const workouts: StandaloneWorkoutSource[] = [
         movements: [
           '5 / 10 / 15 / 20 reps Burpees (The round of 20 is coming. Pace accordingly.)',
           '5 / 10 / 15 / 20 reps Wall Balls (Squat to depth every rep. Drive the ball.)',
-          '5 / 10 / 15 / 20 reps Squat Jumps (Land soft every rep. Full depth.)'],
-      }],
+          '5 / 10 / 15 / 20 reps Squat Jumps (Land soft every rep. Full depth.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_72',
@@ -5801,8 +6317,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '8 reps Chin-ups (Full hang. Chin above bar. Control down.)',
           '12 reps DB Push Press (Dip and drive. Full lockout.)',
           '12 reps Inverted Row (Chest to bar. Squeeze at the top.)',
-          '15 reps Ball Slams (Full extension overhead. Drive it down.)'],
-      }],
+          '15 reps Ball Slams (Full extension overhead. Drive it down.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_73',
@@ -5828,8 +6346,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '40 reps/side Walking Lunges (Keep moving. Light dumbbells if available.)',
           '30 reps Ball Slams (Full extension overhead before each slam.)',
           '25 reps Squat Jumps (Land soft every rep.)',
-          '20 reps Burpees (Last station. Empty the tank.)'],
-      }],
+          '20 reps Burpees (Last station. Empty the tank.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_74',
@@ -5852,8 +6372,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '10 reps DB Thruster (Squat and press. Full range.)',
           '8 reps Pull-ups (Band or assist is fine.)',
           '12 reps Ball Slams (Full extension. Slam hard.)',
-          '30s (minutes 5, 10, 15, 20) DB Farmer Carry (Heavy. Posture tall. Active recovery between the hard stations.)'],
-      }],
+          '30s (minutes 5, 10, 15, 20) DB Farmer Carry (Heavy. Posture tall. Active recovery between the hard stations.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_76',
@@ -5877,8 +6399,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '25 reps Inverted Row (Chest to bar every rep.)',
           '15 reps Sit-ups (Controlled reps. Exhale as you sit up. Keep the chin tucked. Aim to feel the abs initiate the movement rather than yanking with the hip flexors.)',
           '15 reps Chin-ups (Underhand grip. Full hang to chin above bar.)',
-          '40 reps Russian Twists (Light dumbbell. Rotate from the ribs. Nearly done.)'],
-      }],
+          '40 reps Russian Twists (Light dumbbell. Rotate from the ribs. Nearly done.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_77',
@@ -5903,8 +6427,10 @@ export const workouts: StandaloneWorkoutSource[] = [
           '40 reps/side Walking Lunges (Keep moving. This is where week six is earned.)',
           '30 reps Ball Slams (Full extension overhead before every slam.)',
           '30 reps Squat Jumps (Land soft. Depth every rep.)',
-          '90s Wall Sit (Last thing. You earned it. Hold.)'],
-      }],
+          '90s Wall Sit (Last thing. You earned it. Hold.)',
+        ],
+      },
+    ],
   },
   {
     id: 'p_78',
@@ -5931,6 +6457,9 @@ export const workouts: StandaloneWorkoutSource[] = [
           '25 reps Squat Jumps (Land soft. Depth every rep.)',
           '15 reps DB Thruster (Squat and press. Full range. Keep going.)',
           '20 reps Inverted Row (Chest to bar. Squeeze. Nearly done.)',
-          '60s DB Farmer Carry (Last thing. Heavy. Posture tall. Walk to the finish.)'],
-      }],
-  }];
+          '60s DB Farmer Carry (Last thing. Heavy. Posture tall. Walk to the finish.)',
+        ],
+      },
+    ],
+  },
+];
