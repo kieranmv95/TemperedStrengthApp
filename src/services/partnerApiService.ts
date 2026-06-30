@@ -14,6 +14,7 @@ import {
   type PublicMapMarker,
   type PublicVenueAddress,
 } from '@/src/types/partner';
+import type { PartnerMapPoint } from '@/src/utils/partnerMapClustering';
 
 const API_BASE = 'https://temperedstrength.com';
 
@@ -88,14 +89,20 @@ function normalizeListingBaseFields(raw: {
   email?: unknown;
   phone?: unknown;
   mapMarker?: unknown;
+  imageUrl?: unknown;
 }): {
   email: string | null;
   phone: string | null;
   mapMarker: PublicMapMarker | null;
+  imageUrl: string | null;
 } {
   return {
     ...normalizeContactFields(raw),
     mapMarker: normalizeMapMarker(raw.mapMarker),
+    imageUrl:
+      typeof raw.imageUrl === 'string' && raw.imageUrl.trim().length > 0
+        ? raw.imageUrl.trim()
+        : null,
   };
 }
 
@@ -220,6 +227,28 @@ export function formatAddressMultiLine(address: PublicVenueAddress): string {
     address.country === 'GB' ? 'United Kingdom' : address.country,
   ].filter(Boolean);
   return lines.join('\n');
+}
+
+
+export function getPartnerMapPoints(listings: PartnerListing[]): PartnerMapPoint[] {
+  const points = [];
+
+  for (const listing of listings) {
+    const coords = getPartnerListingCoords(listing);
+    if (!coords) {
+      continue;
+    }
+
+    points.push({
+      listingId: listing.id,
+      kind: listing.kind,
+      name: listing.name,
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+    });
+  }
+
+  return points;
 }
 
 export function formatLocationSubtitle(address: PublicVenueAddress): string {

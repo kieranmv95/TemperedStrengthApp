@@ -13,12 +13,17 @@ export const partnerListingCardStyles = StyleSheet.create({
   iconTile: {
     width: 72,
     height: 72,
-    borderRadius: BorderRadius.lg,
+    borderRadius: 36,
     backgroundColor: Colors.backgroundElevated,
     borderWidth: 1,
     borderColor: Colors.backgroundSubtle,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  avatarImage: {
+    width: '100%',
+    height: '100%',
   },
   content: {
     flex: 1,

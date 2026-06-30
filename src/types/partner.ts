@@ -46,6 +46,7 @@ export type PublicListingBase = {
   links: PublicLink[];
   email: string | null;
   phone: string | null;
+  imageUrl: string | null;
   approvedAt: string | null;
   updatedAt: string;
 };

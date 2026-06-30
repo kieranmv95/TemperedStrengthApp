@@ -120,6 +120,7 @@ export default function RootLayout() {
                   />
                   <Stack.Screen name="shop" options={{ headerShown: false }} />
                   <Stack.Screen name="discover" options={{ headerShown: false }} />
+                  <Stack.Screen name="discover-map" options={{ headerShown: false }} />
                   <Stack.Screen name="recovery" options={{ headerShown: false }} />
                   <Stack.Screen
                     name="partner/[kind]/[id]"

@@ -1,10 +1,20 @@
 import { Pill } from '@/src/components/pill';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { getPartnerMapPoints } from '@/src/services/partnerApiService';
 import type { UserCoords } from '@/src/services/discoverLocationService';
 import type { PartnerListing } from '@/src/types/partner';
 import { partnerFavoriteKey } from '@/src/types/partner';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { PartnerListingCard } from './PartnerListingCard';
 
 type DiscoverTab = 'saved' | 'gym' | 'club' | 'coach';
@@ -74,14 +84,53 @@ export function DiscoverPartnersContent({
     }
   }, [activeTab, tabs]);
 
-  const activeListings =
-    tabs.find((tab) => tab.key === activeTab)?.listings ?? tabs[0]?.listings ?? [];
+  const activeListings = useMemo(
+    () =>
+      tabs.find((tab) => tab.key === activeTab)?.listings ??
+      tabs[0]?.listings ??
+      [],
+    [activeTab, tabs]
+  );
+
+  const activeMapPoints = useMemo(
+    () => getPartnerMapPoints(activeListings),
+    [activeListings]
+  );
+
+  const mapKind =
+    activeTab === 'saved'
+      ? 'saved'
+      : activeTab === 'gym'
+        ? 'gym'
+        : activeTab === 'club'
+          ? 'club'
+          : 'coach';
+
+  const viewMapLabel =
+    tabs.find((tab) => tab.key === activeTab)?.label ?? 'Listings';
+  const viewMapButtonText = `View ${viewMapLabel} on map`;
 
   const listHeader = (
     <View style={styles.headerContent}>
       <Text style={styles.description}>
-        Find local gyms, PT's and coaches near you
+        Find local gyms, PT&apos;s and coaches near you
       </Text>
+      {activeMapPoints.length > 0 ? (
+        <TouchableOpacity
+          style={styles.viewMapButton}
+          onPress={() =>
+            router.push({
+              pathname: '/discover-map',
+              params: { kind: mapKind },
+            })
+          }
+          accessibilityRole="button"
+          accessibilityLabel={viewMapButtonText}
+        >
+          <Ionicons name="map-outline" size={20} color={Colors.accent} />
+          <Text style={styles.viewMapButtonText}>{viewMapButtonText}</Text>
+        </TouchableOpacity>
+      ) : null}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -137,6 +186,23 @@ const styles = StyleSheet.create({
   },
   tabScrollContent: {
     gap: Spacing.md,
+  },
+  viewMapButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.sm,
+    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.xl,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.accentWashBorder,
+    backgroundColor: Colors.accentWashFill,
+  },
+  viewMapButtonText: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
   },
   listContent: {
     paddingHorizontal: Spacing.xxl,

@@ -1,0 +1,91 @@
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { StyleSheet } from 'react-native';
+
+export const partnerDiscoverMapStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.backgroundScreen,
+  },
+  map: {
+    flex: 1,
+  },
+  clusterBubble: {
+    minWidth: 36,
+    height: 36,
+    borderRadius: 18,
+    paddingHorizontal: Spacing.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.accent,
+    borderWidth: 2,
+    borderColor: Colors.backgroundScreen,
+  },
+  clusterCount: {
+    color: Colors.textOnAccent,
+    fontSize: FontSize.md,
+    fontWeight: '800',
+  },
+  markerWrap: {
+    alignItems: 'center',
+    maxWidth: 168,
+  },
+  markerLabel: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.sm,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginTop: Spacing.xs,
+    backgroundColor: 'rgba(18, 18, 18, 0.88)',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+    overflow: 'hidden',
+  },
+  markerLabelHidden: {
+    opacity: 0,
+    maxHeight: 0,
+    marginTop: 0,
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+  },
+  markerDot: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: Colors.accent,
+    borderWidth: 2,
+    borderColor: Colors.backgroundScreen,
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.section,
+    gap: Spacing.md,
+  },
+  emptyTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xl,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  emptyDescription: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    lineHeight: 22,
+    textAlign: 'center',
+  },
+  attribution: {
+    position: 'absolute',
+    right: Spacing.md,
+    bottom: Spacing.md,
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxs,
+    fontWeight: '600',
+    backgroundColor: 'rgba(18, 18, 18, 0.82)',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+    overflow: 'hidden',
+  },
+});

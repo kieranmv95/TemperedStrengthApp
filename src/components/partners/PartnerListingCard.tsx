@@ -14,6 +14,7 @@ import {
   type PartnerListing,
 } from '@/src/types/partner';
 import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { partnerListingCardStyles as styles } from './partnerListingCardStyles';
@@ -32,6 +33,35 @@ const KIND_ICONS: Record<
   club: 'people-outline',
   coach: 'person-outline',
 };
+
+type PartnerListingLeadMediaProps = {
+  listing: PartnerListing;
+};
+
+function PartnerListingLeadMedia({ listing }: PartnerListingLeadMediaProps) {
+  if (listing.imageUrl) {
+    return (
+      <View style={styles.iconTile}>
+        <Image
+          source={{ uri: listing.imageUrl }}
+          style={styles.avatarImage}
+          contentFit="cover"
+          accessibilityLabel={`${listing.name} cover`}
+        />
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.iconTile}>
+      <Ionicons
+        name={KIND_ICONS[listing.kind]}
+        size={28}
+        color={Colors.accent}
+      />
+    </View>
+  );
+}
 
 type PartnerListingCardProps = {
   listing: PartnerListing;
@@ -85,15 +115,7 @@ export function PartnerListingCard({
       accessibilityLabel={`Open ${listing.name}`}
       style={[styles.card, isCompact && styles.cardCompact]}
     >
-      {!isCompact ? (
-        <View style={styles.iconTile}>
-          <Ionicons
-            name={KIND_ICONS[listing.kind]}
-            size={28}
-            color={Colors.accent}
-          />
-        </View>
-      ) : null}
+      {!isCompact ? <PartnerListingLeadMedia listing={listing} /> : null}
       <View style={[styles.content, isCompact && styles.contentCompact]}>
         {!isCompact ? (
           <Text style={styles.kindLabel}>{KIND_LABELS[listing.kind]}</Text>
