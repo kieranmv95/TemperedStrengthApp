@@ -31,12 +31,21 @@ export type PublicVenueAddress = {
   longitude: number | null;
 };
 
+/** Exact map pin — preferred over address postcode centre when set. */
+export type PublicMapMarker = {
+  latitude: number;
+  longitude: number;
+};
+
 export type PublicListingBase = {
   id: string;
   name: string;
   description: string | null;
   address: PublicVenueAddress;
+  mapMarker: PublicMapMarker | null;
   links: PublicLink[];
+  email: string | null;
+  phone: string | null;
   approvedAt: string | null;
   updatedAt: string;
 };
@@ -109,7 +118,14 @@ export function partnerListingHidesLocation(listing: PartnerListing): boolean {
   return listing.hideLocation;
 }
 
+export function partnerListingHasContact(listing: PartnerListing): boolean {
+  return listing.email !== null || listing.phone !== null;
+}
+
 export function partnerListingHasAboutContent(listing: PartnerListing): boolean {
+  if (partnerListingHasContact(listing)) {
+    return true;
+  }
   if (listing.links.length > 0) {
     return true;
   }

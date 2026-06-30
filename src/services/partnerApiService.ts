@@ -1,4 +1,5 @@
-import { Platform } from 'react-native';
+import * as Linking from 'expo-linking';
+import { Alert, Platform } from 'react-native';
 
 import {
   partnerListingHidesLocation,
@@ -10,6 +11,7 @@ import {
   type PublicClubListing,
   type PublicCoachListing,
   type PublicGymListing,
+  type PublicMapMarker,
   type PublicVenueAddress,
 } from '@/src/types/partner';
 
@@ -45,6 +47,58 @@ async function fetchPartnerList<T>(path: string): Promise<T[]> {
   }
 }
 
+function normalizeContactFields(raw: {
+  email?: unknown;
+  phone?: unknown;
+}): { email: string | null; phone: string | null } {
+  return {
+    email:
+      typeof raw.email === 'string' && raw.email.trim().length > 0
+        ? raw.email.trim()
+        : null,
+    phone:
+      typeof raw.phone === 'string' && raw.phone.trim().length > 0
+        ? raw.phone.trim()
+        : null,
+  };
+}
+
+function normalizeMapMarker(raw: unknown): PublicMapMarker | null {
+  if (!raw || typeof raw !== 'object') {
+    return null;
+  }
+
+  const marker = raw as Record<string, unknown>;
+  const latitude = typeof marker.latitude === 'number' ? marker.latitude : null;
+  const longitude =
+    typeof marker.longitude === 'number' ? marker.longitude : null;
+
+  if (latitude == null || longitude == null) {
+    return null;
+  }
+
+  if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+    return null;
+  }
+
+  return { latitude, longitude };
+}
+
+function normalizeListingBaseFields(raw: {
+  email?: unknown;
+  phone?: unknown;
+  mapMarker?: unknown;
+}): {
+  email: string | null;
+  phone: string | null;
+  mapMarker: PublicMapMarker | null;
+} {
+  return {
+    ...normalizeContactFields(raw),
+    mapMarker: normalizeMapMarker(raw.mapMarker),
+  };
+}
+
 function normalizeGymListing(raw: PublicGymListing): PublicGymListing {
   const videoId =
     typeof raw.videoId === 'string' && raw.videoId.length > 0
@@ -52,6 +106,7 @@ function normalizeGymListing(raw: PublicGymListing): PublicGymListing {
       : null;
   return {
     ...raw,
+    ...normalizeListingBaseFields(raw),
     focusAreas: Array.isArray(raw.focusAreas) ? raw.focusAreas : [],
     videoId,
   };
@@ -66,6 +121,7 @@ function normalizeClubListing(raw: PublicClubListing): PublicClubListing {
   const hasOpeningHours = raw.hasOpeningHours === true;
   return {
     ...raw,
+    ...normalizeListingBaseFields(raw),
     hideLocation: raw.hideLocation === true,
     hasOpeningHours,
     openingHours: hasOpeningHours ? raw.openingHours : undefined,
@@ -80,6 +136,7 @@ export async function fetchClubs(): Promise<PublicClubListing[]> {
 function normalizeCoachListing(raw: PublicCoachListing): PublicCoachListing {
   return {
     ...raw,
+    ...normalizeListingBaseFields(raw),
     specialties: Array.isArray(raw.specialties) ? raw.specialties : [],
     radiusServedKm:
       typeof raw.radiusServedKm === 'number' ? raw.radiusServedKm : null,
@@ -175,10 +232,19 @@ export function getPartnerListingCoords(
   if (partnerListingHidesLocation(listing)) {
     return null;
   }
+
+  if (listing.mapMarker) {
+    return {
+      latitude: listing.mapMarker.latitude,
+      longitude: listing.mapMarker.longitude,
+    };
+  }
+
   const { latitude, longitude } = listing.address;
   if (latitude == null || longitude == null) {
     return null;
   }
+
   return { latitude, longitude };
 }
 
@@ -386,4 +452,55 @@ export function orderedOpeningHours(
     label: formatDayLabel(day),
     hours: formatOpeningHoursLine(day, openingHours[day]),
   }));
+}
+
+function sanitizePhoneDigits(phone: string): string {
+  return phone.replace(/[^\d+]/g, '');
+}
+
+export function buildPartnerTelUrl(phone: string): string {
+  const digits = sanitizePhoneDigits(phone);
+  if (Platform.OS === 'ios') {
+    return `telprompt:${digits}`;
+  }
+  return `tel:${digits}`;
+}
+
+export function buildPartnerMailtoUrl(email: string): string {
+  return `mailto:${email.trim()}`;
+}
+
+async function tryOpenUrl(url: string): Promise<boolean> {
+  try {
+    await Linking.openURL(url);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function openPartnerEmail(email: string): Promise<void> {
+  const trimmed = email.trim();
+  const url = buildPartnerMailtoUrl(trimmed);
+  if (await tryOpenUrl(url)) {
+    return;
+  }
+
+  Alert.alert('Email', trimmed, [{ text: 'OK' }]);
+}
+
+export async function openPartnerPhone(phone: string): Promise<void> {
+  const digits = sanitizePhoneDigits(phone);
+  const urls =
+    Platform.OS === 'ios'
+      ? [`telprompt:${digits}`, `tel:${digits}`]
+      : [`tel:${digits}`];
+
+  for (const url of urls) {
+    if (await tryOpenUrl(url)) {
+      return;
+    }
+  }
+
+  Alert.alert('Phone', phone.trim(), [{ text: 'OK' }]);
 }

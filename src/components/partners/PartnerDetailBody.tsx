@@ -15,6 +15,7 @@ import {
   gymHasVideo,
   gymShowsFocusAreas,
   partnerListingHasAboutContent,
+  partnerListingHasContact,
   partnerListingHasVisitContent,
   partnerListingHidesLocation,
   partnerListingOpeningHours,
@@ -22,7 +23,7 @@ import {
 } from '@/src/types/partner';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 const KIND_LABELS: Record<PartnerKind, string> = {
   gym: 'Gym',
@@ -35,12 +36,16 @@ type PartnerDetailTab = 'about' | 'visit';
 type PartnerDetailBodyProps = {
   listing: PartnerListing;
   onOpenLink: (url: string, label: string) => void;
+  onOpenEmail: (email: string) => void;
+  onOpenPhone: (phone: string) => void;
   onOpenInMaps: () => void;
 };
 
 export function PartnerDetailBody({
   listing,
   onOpenLink,
+  onOpenEmail,
+  onOpenPhone,
   onOpenInMaps,
 }: PartnerDetailBodyProps) {
   const openingHours = partnerListingOpeningHours(listing);
@@ -109,7 +114,12 @@ export function PartnerDetailBody({
       ) : null}
 
       {effectiveTab === 'about' ? (
-        <PartnerAboutPanel listing={listing} onOpenLink={onOpenLink} />
+        <PartnerAboutPanel
+          listing={listing}
+          onOpenLink={onOpenLink}
+          onOpenEmail={onOpenEmail}
+          onOpenPhone={onOpenPhone}
+        />
       ) : null}
 
       {effectiveTab === 'visit' ? (
@@ -128,6 +138,8 @@ export function PartnerDetailBody({
 type PartnerAboutPanelProps = {
   listing: PartnerListing;
   onOpenLink: (url: string, label: string) => void;
+  onOpenEmail: (email: string) => void;
+  onOpenPhone: (phone: string) => void;
 };
 
 function getAboutFocusItems(listing: PartnerListing): string[] {
@@ -142,7 +154,12 @@ function getAboutFocusItems(listing: PartnerListing): string[] {
   return [];
 }
 
-function PartnerAboutPanel({ listing, onOpenLink }: PartnerAboutPanelProps) {
+function PartnerAboutPanel({
+  listing,
+  onOpenLink,
+  onOpenEmail,
+  onOpenPhone,
+}: PartnerAboutPanelProps) {
   const focusItems = getAboutFocusItems(listing);
 
   return (
@@ -157,13 +174,18 @@ function PartnerAboutPanel({ listing, onOpenLink }: PartnerAboutPanelProps) {
       ) : null}
 
       {focusItems.length > 0 ? (
-        <View style={styles.focusAreasRow}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.focusAreasScroll}
+          contentContainerStyle={styles.focusAreasRow}
+        >
           {focusItems.map((item) => (
             <View key={item} style={styles.focusAreaPill}>
               <Text style={styles.focusAreaPillText}>{item}</Text>
             </View>
           ))}
-        </View>
+        </ScrollView>
       ) : null}
 
       {listing.links.length > 0 ? (
@@ -182,10 +204,70 @@ function PartnerAboutPanel({ listing, onOpenLink }: PartnerAboutPanelProps) {
         </View>
       ) : null}
 
+      <PartnerContactBlock
+        listing={listing}
+        onOpenEmail={onOpenEmail}
+        onOpenPhone={onOpenPhone}
+      />
+
       {listing.description ? (
         <View style={styles.contentBlock}>
           <Text style={styles.description}>{listing.description}</Text>
         </View>
+      ) : null}
+    </View>
+  );
+}
+
+type PartnerContactBlockProps = {
+  listing: PartnerListing;
+  onOpenEmail: (email: string) => void;
+  onOpenPhone: (phone: string) => void;
+};
+
+function PartnerContactBlock({
+  listing,
+  onOpenEmail,
+  onOpenPhone,
+}: PartnerContactBlockProps) {
+  if (!partnerListingHasContact(listing)) {
+    return null;
+  }
+
+  return (
+    <View style={styles.contentBlock}>
+      <Text style={styles.sectionTitle}>Contact</Text>
+      {listing.email ? (
+        <TouchableOpacity
+          style={styles.contactRow}
+          onPress={() => {
+            const email = listing.email;
+            if (email) {
+              onOpenEmail(email);
+            }
+          }}
+          accessibilityLabel={`Email ${listing.name}`}
+          accessibilityRole="link"
+        >
+          <Ionicons name="mail-outline" size={18} color={Colors.accent} />
+          <Text style={styles.contactValue}>{listing.email}</Text>
+        </TouchableOpacity>
+      ) : null}
+      {listing.phone ? (
+        <TouchableOpacity
+          style={styles.contactRow}
+          onPress={() => {
+            const phone = listing.phone;
+            if (phone) {
+              onOpenPhone(phone);
+            }
+          }}
+          accessibilityLabel={`Call ${listing.name}`}
+          accessibilityRole="link"
+        >
+          <Ionicons name="call-outline" size={18} color={Colors.accent} />
+          <Text style={styles.contactValue}>{listing.phone}</Text>
+        </TouchableOpacity>
       ) : null}
     </View>
   );

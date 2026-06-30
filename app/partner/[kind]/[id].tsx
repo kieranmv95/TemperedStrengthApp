@@ -6,6 +6,8 @@ import {
   buildPartnerMapsUrl,
   fetchAllPartnerListings,
   getCachedPartnerListing,
+  openPartnerEmail,
+  openPartnerPhone,
 } from '@/src/services/partnerApiService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { PartnerKind, PartnerListing } from '@/src/types/partner';
@@ -130,6 +132,34 @@ export default function PartnerDetailScreen() {
       });
   };
 
+  const handleOpenEmail = (email: string) => {
+    if (!listing) {
+      return;
+    }
+    posthog.capture(posthogEventsNames.content.partnerLinkPressed, {
+      partner_kind: listing.kind,
+      partner_id: listing.id,
+      link_label: 'Email',
+    });
+    void openPartnerEmail(email).catch((error) => {
+      console.error('Failed to open partner email:', error);
+    });
+  };
+
+  const handleOpenPhone = (phone: string) => {
+    if (!listing) {
+      return;
+    }
+    posthog.capture(posthogEventsNames.content.partnerLinkPressed, {
+      partner_kind: listing.kind,
+      partner_id: listing.id,
+      link_label: 'Phone',
+    });
+    void openPartnerPhone(phone).catch((error) => {
+      console.error('Failed to open partner phone:', error);
+    });
+  };
+
   const handleOpenLink = (url: string, label: string) => {
     if (!listing) {
       return;
@@ -239,6 +269,8 @@ export default function PartnerDetailScreen() {
         <PartnerDetailBody
           listing={listing}
           onOpenLink={handleOpenLink}
+          onOpenEmail={handleOpenEmail}
+          onOpenPhone={handleOpenPhone}
           onOpenInMaps={handleOpenInMaps}
         />
       </AppScrollView>

@@ -91,10 +91,13 @@ export const partnerDetailStyles = StyleSheet.create({
     padding: Spacing.xxl,
     gap: Spacing.lg,
   },
+  focusAreasScroll: {
+    marginHorizontal: -Spacing.xxl,
+  },
   focusAreasRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     gap: Spacing.md,
+    paddingHorizontal: Spacing.xxl,
   },
   focusAreaPill: {
     paddingHorizontal: Spacing.md,
@@ -122,6 +125,17 @@ export const partnerDetailStyles = StyleSheet.create({
     gap: Spacing.md,
   },
   textLink: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '600',
+    flex: 1,
+  },
+  contactRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  contactValue: {
     color: Colors.accent,
     fontSize: FontSize.lg,
     fontWeight: '600',
