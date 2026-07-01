@@ -37,8 +37,8 @@ const UK_FALLBACK_REGION: Region = {
 
 const CLUSTER_RADIUS = 56;
 const CLUSTER_MAX_ZOOM = 17;
-const LABEL_SHOW_ZOOM = 10;
-const LABEL_HIDE_ZOOM = 8;
+const LABEL_SHOW_ZOOM = 2;
+const LABEL_HIDE_ZOOM = 1;
 
 export function regionToBBox(region: Region): GeoJSON.BBox {
   const latHalf = region.latitudeDelta / 2;
@@ -49,6 +49,19 @@ export function regionToBBox(region: Region): GeoJSON.BBox {
     region.latitude - latHalf,
     region.longitude + lngHalf,
     region.latitude + latHalf,
+  ];
+}
+
+function padBBox(bbox: GeoJSON.BBox, paddingFraction = 0.2): GeoJSON.BBox {
+  const [west, south, east, north] = bbox;
+  const lngPad = (east - west) * paddingFraction;
+  const latPad = (north - south) * paddingFraction;
+
+  return [
+    Math.max(-180, west - lngPad),
+    Math.max(-90, south - latPad),
+    Math.min(180, east + lngPad),
+    Math.min(90, north + latPad),
   ];
 }
 
@@ -75,23 +88,14 @@ export function nextMarkerLabelVisibility(
   return current;
 }
 
-export function regionNeedsClusterUpdate(a: Region, b: Region): boolean {
-  if (getZoomFromRegion(a) !== getZoomFromRegion(b)) {
-    return true;
-  }
-
-  return !regionsAreSimilar(a, b);
-}
-
-export function regionsAreSimilar(a: Region, b: Region): boolean {
-  const latThreshold = Math.max(a.latitudeDelta, b.latitudeDelta) * 0.02;
-  const lngThreshold = Math.max(a.longitudeDelta, b.longitudeDelta) * 0.02;
+export function regionsAreIdentical(a: Region, b: Region): boolean {
+  const epsilon = 1e-7;
 
   return (
-    Math.abs(a.latitude - b.latitude) < latThreshold &&
-    Math.abs(a.longitude - b.longitude) < lngThreshold &&
-    Math.abs(a.latitudeDelta - b.latitudeDelta) < latThreshold &&
-    Math.abs(a.longitudeDelta - b.longitudeDelta) < lngThreshold
+    Math.abs(a.latitude - b.latitude) < epsilon &&
+    Math.abs(a.longitude - b.longitude) < epsilon &&
+    Math.abs(a.latitudeDelta - b.latitudeDelta) < epsilon &&
+    Math.abs(a.longitudeDelta - b.longitudeDelta) < epsilon
   );
 }
 
@@ -110,7 +114,7 @@ export function regionForCoordinateZoom(
 }
 
 export function getMapRegionForPoints(
-  points: Array<{ latitude: number; longitude: number }>
+  points: { latitude: number; longitude: number }[]
 ): Region {
   if (points.length === 0) {
     return UK_FALLBACK_REGION;
@@ -167,7 +171,10 @@ function toGeoJsonPoints(
 export function createPartnerMapClusterIndex(
   points: PartnerMapPoint[]
 ): Supercluster<PartnerMapPointProperties, PartnerMapClusterProperties> {
-  const index = new Supercluster<PartnerMapPointProperties, PartnerMapClusterProperties>({
+  const index = new Supercluster<
+    PartnerMapPointProperties,
+    PartnerMapClusterProperties
+  >({
     radius: CLUSTER_RADIUS,
     maxZoom: CLUSTER_MAX_ZOOM,
   });
@@ -180,7 +187,7 @@ export function getClustersForRegion(
   index: Supercluster<PartnerMapPointProperties, PartnerMapClusterProperties>,
   region: Region
 ): PartnerMapClusterFeature[] {
-  const bbox = regionToBBox(region);
+  const bbox = padBBox(regionToBBox(region));
   const zoom = getZoomFromRegion(region);
   return index.getClusters(bbox, zoom) as PartnerMapClusterFeature[];
 }
@@ -189,4 +196,21 @@ export function isClusterFeature(
   feature: PartnerMapClusterFeature
 ): feature is Supercluster.ClusterFeature<PartnerMapClusterProperties> {
   return feature.properties.cluster === true;
+}
+
+export function clusterMarkerKey(
+  latitude: number,
+  longitude: number,
+  clusterZoom: number
+): string {
+  return `cluster-${latitude.toFixed(4)}-${longitude.toFixed(4)}-z${clusterZoom}`;
+}
+
+export function pointMarkerKey(
+  kind: PartnerKind,
+  listingId: string,
+  clusterZoom: number,
+  showLabels: boolean
+): string {
+  return `point-${kind}-${listingId}-z${clusterZoom}${showLabels ? '-labeled' : ''}`;
 }

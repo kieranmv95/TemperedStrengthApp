@@ -44,13 +44,6 @@ export const partnerDiscoverMapStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.12)',
   },
-  markerLabelHidden: {
-    opacity: 0,
-    maxHeight: 0,
-    marginTop: 0,
-    paddingVertical: 0,
-    paddingHorizontal: 0,
-  },
   markerDot: {
     width: 20,
     height: 20,

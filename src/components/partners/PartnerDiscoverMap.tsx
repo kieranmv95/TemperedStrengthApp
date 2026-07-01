@@ -2,14 +2,16 @@ import { partnerDiscoverMapStyles as styles } from '@/src/components/partners/pa
 import type { UserCoords } from '@/src/services/discoverLocationService';
 import type { PartnerKind } from '@/src/types/partner';
 import {
+  clusterMarkerKey,
   createPartnerMapClusterIndex,
   getClustersForRegion,
   getMapRegionForPoints,
   getZoomFromRegion,
   isClusterFeature,
   nextMarkerLabelVisibility,
+  pointMarkerKey,
   regionForCoordinateZoom,
-  regionNeedsClusterUpdate,
+  regionsAreIdentical,
   type PartnerMapClusterFeature,
   type PartnerMapPoint,
 } from '@/src/utils/partnerMapClustering';
@@ -66,12 +68,11 @@ const PartnerMapMarker = React.memo(function PartnerMapMarker({
         ) : (
           <>
             <View style={styles.markerDot} />
-            <Text
-              style={[styles.markerLabel, !showLabel && styles.markerLabelHidden]}
-              numberOfLines={2}
-            >
-              {name}
-            </Text>
+            {showLabel ? (
+              <Text style={styles.markerLabel} numberOfLines={2}>
+                {name}
+              </Text>
+            ) : null}
           </>
         )}
       </View>
@@ -86,6 +87,7 @@ export function PartnerDiscoverMap({
 }: PartnerDiscoverMapProps) {
   const mapRef = useRef<MapView>(null);
   const onPressListingRef = useRef(onPressListing);
+  const hasMapSettledRef = useRef(false);
   const clusterIndex = useMemo(() => createPartnerMapClusterIndex(points), [points]);
   const initialRegion = useMemo(() => {
     const fitPoints = userCoords != null ? [...points, userCoords] : points;
@@ -95,10 +97,13 @@ export function PartnerDiscoverMap({
   const [committedRegion, setCommittedRegion] = useState(initialRegion);
   const [showLabels, setShowLabels] = useState(false);
   const [isMapReady, setIsMapReady] = useState(false);
+  const [isMapGesturing, setIsMapGesturing] = useState(false);
+  const [markerRenderEpoch, setMarkerRenderEpoch] = useState(0);
 
   onPressListingRef.current = onPressListing;
 
   useEffect(() => {
+    hasMapSettledRef.current = false;
     setCommittedRegion(initialRegion);
     setShowLabels(false);
   }, [initialRegion]);
@@ -110,16 +115,28 @@ export function PartnerDiscoverMap({
     [clusterIndex, committedRegion]
   );
 
+  const showMarkers = isMapReady && !isMapGesturing;
+
   const commitRegion = useCallback((nextRegion: Region) => {
     setCommittedRegion((current) =>
-      regionNeedsClusterUpdate(current, nextRegion) ? nextRegion : current
+      regionsAreIdentical(current, nextRegion) ? current : nextRegion
     );
     setShowLabels((current) => nextMarkerLabelVisibility(current, nextRegion));
   }, []);
 
+  const handleRegionChange = useCallback(() => {
+    if (!hasMapSettledRef.current) {
+      return;
+    }
+    setIsMapGesturing(true);
+  }, []);
+
   const handleRegionChangeComplete = useCallback(
     (nextRegion: Region) => {
+      hasMapSettledRef.current = true;
+      setIsMapGesturing(false);
       commitRegion(nextRegion);
+      setMarkerRenderEpoch((epoch) => epoch + 1);
     },
     [commitRegion]
   );
@@ -169,6 +186,7 @@ export function PartnerDiscoverMap({
           setIsMapReady(true);
           commitRegion(initialRegion);
         }}
+        onRegionChange={handleRegionChange}
         onRegionChangeComplete={handleRegionChangeComplete}
         moveOnMarkerPress={false}
         loadingEnabled
@@ -186,20 +204,18 @@ export function PartnerDiscoverMap({
           />
         ) : null}
 
-        {isMapReady
+        {showMarkers
           ? clusters.map((feature) => {
               const [longitude, latitude] = feature.geometry.coordinates;
               const coordinate = { latitude, longitude };
 
               if (isClusterFeature(feature)) {
-                const clusterId = feature.properties.cluster_id;
-                const markerKey = `cluster-${clusterId}-z${clusterZoom}`;
-                const identifier = markerKey;
+                const markerKey = `${clusterMarkerKey(latitude, longitude, clusterZoom)}-e${markerRenderEpoch}`;
 
                 return (
                   <PartnerMapMarker
                     key={markerKey}
-                    identifier={identifier}
+                    identifier={markerKey}
                     coordinate={coordinate}
                     isCluster
                     pointCount={feature.properties.point_count}
@@ -210,15 +226,17 @@ export function PartnerDiscoverMap({
               }
 
               const { listingId, kind, name } = feature.properties;
-              const markerKey = `point-${kind}-${listingId}-z${clusterZoom}${
-                showLabels ? '-labeled' : ''
-              }`;
-              const identifier = `point-${kind}-${listingId}`;
+              const markerKey = `${pointMarkerKey(
+                kind,
+                listingId,
+                clusterZoom,
+                showLabels
+              )}-e${markerRenderEpoch}`;
 
               return (
                 <PartnerMapMarker
                   key={markerKey}
-                  identifier={identifier}
+                  identifier={markerKey}
                   coordinate={coordinate}
                   isCluster={false}
                   name={name}
