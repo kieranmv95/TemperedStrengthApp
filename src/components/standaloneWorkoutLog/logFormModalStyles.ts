@@ -2,6 +2,9 @@ import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { StyleSheet } from 'react-native';
 
 export const logFormModalStyles = StyleSheet.create({
+  modalRoot: {
+    flex: 1,
+  },
   modalKeyboardRoot: {
     flex: 1,
   },
@@ -94,11 +97,7 @@ export const logFormModalStyles = StyleSheet.create({
     color: Colors.accent,
   },
   whenPickerOverlayAbsolute: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: Colors.overlayLight,
     justifyContent: 'flex-end',
     zIndex: 1000,
@@ -107,7 +106,7 @@ export const logFormModalStyles = StyleSheet.create({
     backgroundColor: Colors.backgroundCard,
     borderTopLeftRadius: BorderRadius.xxl,
     borderTopRightRadius: BorderRadius.xxl,
-    paddingBottom: Spacing.xxl,
+    paddingBottom: Spacing.md,
   },
   whenPickerToolbar: {
     flexDirection: 'row',

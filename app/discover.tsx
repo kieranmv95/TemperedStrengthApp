@@ -1,3 +1,4 @@
+import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 import { DiscoverPartnersContent } from '@/src/components/partners/DiscoverPartnersContent';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useDiscoverLocation } from '@/src/hooks/use-discover-location';
@@ -22,7 +23,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 
 function sortListingsByDistance<T extends PartnerListing>(
   listings: T[],

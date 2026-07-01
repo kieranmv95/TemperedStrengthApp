@@ -88,13 +88,13 @@ export function LogFormModal({
   };
 
   return (
-    <>
-      <Modal
-        visible={visible}
-        animationType="fade"
-        transparent
-        onRequestClose={onClose}
-      >
+    <Modal
+      visible={visible}
+      animationType="fade"
+      transparent
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalRoot}>
         <KeyboardAvoidingView
           style={styles.modalKeyboardRoot}
           behavior="padding"
@@ -183,13 +183,6 @@ export function LogFormModal({
                 </TouchableOpacity>
               </View>
             </View>
-
-            <LogFormModalWhenPickers
-              form={form}
-              onChangeForm={onChangeForm}
-              whenPickerVisible={whenPickerVisible}
-              setWhenPickerVisible={setWhenPickerVisible}
-            />
           </View>
         </KeyboardAvoidingView>
         {notesActive && keyboardHeight > 0 && (
@@ -203,7 +196,13 @@ export function LogFormModal({
             </TouchableOpacity>
           </View>
         )}
-      </Modal>
-    </>
+        <LogFormModalWhenPickers
+          form={form}
+          onChangeForm={onChangeForm}
+          whenPickerVisible={whenPickerVisible}
+          setWhenPickerVisible={setWhenPickerVisible}
+        />
+      </View>
+    </Modal>
   );
 }

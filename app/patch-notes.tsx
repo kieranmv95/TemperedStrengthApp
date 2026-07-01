@@ -22,7 +22,7 @@ const PATCH_NOTES: PatchNote[] = [
   {
     version: '2.10.0',
     dateLabel: '25th June 2026',
-    notes: ['Clubs, coaches and PTs have landed'],
+    notes: ['Clubs, coaches and PTs have landed', 'bug fix for score logging'],
   },
   {
     version: '2.9.0',
