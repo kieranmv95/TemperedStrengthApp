@@ -37,8 +37,8 @@ const UK_FALLBACK_REGION: Region = {
 
 const CLUSTER_RADIUS = 56;
 const CLUSTER_MAX_ZOOM = 17;
-const LABEL_SHOW_ZOOM = 14;
-const LABEL_HIDE_ZOOM = 12;
+const LABEL_SHOW_ZOOM = 10;
+const LABEL_HIDE_ZOOM = 8;
 
 export function regionToBBox(region: Region): GeoJSON.BBox {
   const latHalf = region.latitudeDelta / 2;

@@ -210,7 +210,9 @@ export function PartnerDiscoverMap({
               }
 
               const { listingId, kind, name } = feature.properties;
-              const markerKey = `point-${kind}-${listingId}-z${clusterZoom}`;
+              const markerKey = `point-${kind}-${listingId}-z${clusterZoom}${
+                showLabels ? '-labeled' : ''
+              }`;
               const identifier = `point-${kind}-${listingId}`;
 
               return (
