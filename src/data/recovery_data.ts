@@ -1023,4 +1023,33 @@ export const recoveryData: RecoveryFlowSource[] = [
     ],
     equipment: ['bands'],
   },
+  {
+    id: 'r_15',
+    title: 'Quick Full Body Flow',
+    description:
+      'Six minutes, head to toe. Spine, hips, shoulders, and a calm finish. No equipment. Move slowly and breathe through each block.',
+    difficulty: 'Beginner',
+    estimatedTime: 6,
+    tags: ['Full Body', 'Mobility', 'Morning'],
+    isPremium: false,
+    blocks: [
+      { movementId: 'cat_cow', dose: { kind: 'duration', seconds: 45 } },
+      { movementId: 'arm_swings', dose: { kind: 'duration', seconds: 30 } },
+      {
+        movementId: 'worlds_greatest_stretch',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 30 },
+      },
+      { movementId: 'downward_dog', dose: { kind: 'duration', seconds: 45 } },
+      {
+        movementId: 'hip_90_90',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 30 },
+      },
+      {
+        movementId: 'supine_twist',
+        dose: { kind: 'duration_bilateral', secondsPerSide: 30 },
+      },
+      { movementId: 'childs_pose', dose: { kind: 'duration', seconds: 60 } },
+    ],
+    equipment: [],
+  },
 ];

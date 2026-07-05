@@ -9,7 +9,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Chipper', 'Partner'],
+    tags: ['Chipper', 'For Time', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -17,15 +17,35 @@ export const hyrox: StandaloneWorkoutSource[] = [
         blocks: [
           {
             name: 'Warmup',
-            movements: [
-              '3 mins easy cardio of choice',
-              '10 wall balls, 10 burpees',
-            ],
+            mobilityFlow: 'r_15',
           },
           {
-            name: '8 Rounds',
+            name: 'Workout',
+            instructions:
+              'A chipper, work through the movements as quickly as possible in order with minimal break',
+            movements: [
+              '66 cal row',
+              '66 wall balls',
+              '66 cal ski erg',
+              '66 burpees',
+              '66m sled push',
+              '66 box jumps',
+            ],
+          },
+        ],
+      },
+      {
+        scale: 'Partner',
+        blocks: [
+          {
+            name: 'Warmup',
+            mobilityFlow: 'r_15',
+          },
+          {
+            name: 'Workout',
             instructions:
               'Partner format: alternate as you please, one rests the other works.',
+            highlightInstructions: 'One rests, the other works.',
             movements: [
               '66 cal row',
               '66 wall balls',
