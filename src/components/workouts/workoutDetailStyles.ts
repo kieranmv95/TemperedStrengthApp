@@ -217,4 +217,17 @@ export const workoutDetailStyles = StyleSheet.create({
     fontStyle: 'italic',
     marginLeft: Spacing.xxl,
   },
+  startFlowButton: {
+    alignSelf: 'flex-start',
+    borderWidth: 1,
+    borderColor: Colors.accent,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.sm,
+  },
+  startFlowText: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+  },
 });

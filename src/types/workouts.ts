@@ -208,9 +208,10 @@ export type WorkoutMovement = string | DetailedMovement | Divider;
 
 export type WorkoutBlockBase = {
   name: string;
+  mobilityFlow?: string;
   instructions?: string;
   highlightInstructions?: string;
-  movements: WorkoutMovement[];
+  movements?: WorkoutMovement[];
 };
 
 /** Bundled workout row in `workout_data.ts` before `logSchema` is merged in `workouts.ts`. */
@@ -233,6 +234,7 @@ export type StandaloneWorkoutSource = {
     | WorkoutBlockBase[]
     | {
         scale: string;
+        mobilityFlow?: string;
         highlightInstructions?: string;
         blocks: WorkoutBlockBase[];
       }[];
