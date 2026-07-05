@@ -37,7 +37,6 @@ export const WORKOUT_TAGS = [
   'Biceps',
   'Bike',
   'Boxing',
-  'Boxing HIIT',
   'Breathwork',
   'Burpees',
   'Calisthenics',

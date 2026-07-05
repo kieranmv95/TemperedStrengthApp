@@ -42,10 +42,7 @@ export function usePartnerListings() {
         }
       };
 
-      const subscription = AppState.addEventListener(
-        'change',
-        handleAppState
-      );
+      const subscription = AppState.addEventListener('change', handleAppState);
 
       return () => {
         cancelled = true;

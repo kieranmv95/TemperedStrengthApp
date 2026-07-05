@@ -153,8 +153,9 @@ export const workouts: StandaloneWorkoutSource[] = [
       {
         name: 'Warmup',
         movements: [
+          '10 Air Squats',
+          '10 Push-ups (kneeling if required)',
           '500m Easy Row',
-          '3 x 10 stroke power bursts (build each one)',
           '2 min rest before starting',
         ],
       },
@@ -173,7 +174,7 @@ export const workouts: StandaloneWorkoutSource[] = [
       {
         name: 'Cooldown',
         movements: [
-          '3 min easy row',
+          'Shoulder Health mobility flow OR:',
           '60s seated forward fold',
           '60s pigeon stretch each side',
         ],
@@ -194,7 +195,7 @@ export const workouts: StandaloneWorkoutSource[] = [
     blocks: [
       {
         name: 'Warmup',
-        movements: ['800m Run, 10 Burpees, 10 Air Squats'],
+        movements: ['500m Run, 10 Burpees, 10 Air Squats'],
       },
       {
         name: 'For Time',
@@ -226,7 +227,7 @@ export const workouts: StandaloneWorkoutSource[] = [
         name: 'Warmup',
         movements: [
           '20 Hip Hinges',
-          '10 Yoga Pushups',
+          '10 Pushups',
           '10 Romanian Deadlifts (light KB)',
           '10 KB Deadlifts (working weight)',
         ],
@@ -307,7 +308,7 @@ export const workouts: StandaloneWorkoutSource[] = [
     id: 'f_12',
     title: 'The Pushup Pyramid',
     description:
-      '100 pushups, every rep earned. You climb to 10 and fight your way back down. Rest only as long as the set took. Form over speed, chest to floor every time.',
+      'Every rep earned. You climb to 10 and fight your way back down. Rest only as long as the set took. Form over speed, chest to floor every time.',
     category: 'Strength',
     difficulty: 'Intermediate',
     estimatedTime: 20,
@@ -811,182 +812,6 @@ export const workouts: StandaloneWorkoutSource[] = [
       },
     ],
     equipment: ['rower', 'bike', 'ski erg'],
-  },
-  {
-    id: 'f_25',
-    title: 'Boxing HIIT: Power Jabs',
-    description:
-      'Upper body sweat with a boxing vibe. Keep your hands up, stay relaxed, and move with purpose.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
-    estimatedTime: 25,
-    tags: ['Boxing', 'Boxing HIIT'],
-    isPremium: false,
-    blocks: [
-      {
-        name: 'Warmup',
-        movements: [
-          '2 mins easy shadowboxing (light punches, light feet)',
-          '10 shoulder circles each way',
-          '10 inchworms',
-          '20s plank (knees down is fine)',
-        ],
-      },
-      {
-        name: '10-Min Boxing HIIT',
-        instructions:
-          'Alternate 40s work / 20s easy. Keep punches snappy, not tense.',
-        movements: [
-          'Jab-cross',
-          'Fast feet + light jabs',
-          'Hooks (left/right)',
-          'Uppercuts (left/right)',
-          'Jab-cross (pick up pace)',
-        ],
-      },
-      {
-        name: 'Finisher',
-        instructions: 'Rest 30–45s between rounds. Move with control.',
-        movements: [
-          '3 Rounds: 10 push-ups (elevated is fine), 20 air squats, 30s shadowboxing',
-        ],
-      },
-    ],
-    equipment: [],
-  },
-  {
-    id: 'f_26',
-    title: 'Boxing HIIT: Uppercut Burner',
-    description:
-      'A short, punchy upper body session. Breathe, keep your shoulders down, and stay moving.',
-    category: 'Conditioning',
-    difficulty: 'Intermediate',
-    estimatedTime: 25,
-    tags: ['Boxing', 'Boxing HIIT'],
-    isPremium: false,
-    blocks: [
-      {
-        name: 'Warmup',
-        movements: [
-          '90s easy shadowboxing',
-          '10 scapular push-ups',
-          '10 glute bridges',
-          '20s side plank each side (knee down is fine)',
-        ],
-      },
-      {
-        name: '12-Min Circuit',
-        instructions:
-          'Work 45s / rest 15s. Aim for steady effort the whole way.',
-        movements: [
-          'Uppercuts (light + fast)',
-          'Jab-cross (strong reps)',
-          'Hooks (hips drive the punch)',
-          'High knees (or march fast)',
-        ],
-      },
-      {
-        name: 'Cool Down',
-        movements: [
-          '60s slow breathing',
-          '60s chest/shoulder stretch',
-          '60s gentle forward fold (soft knees)',
-        ],
-      },
-    ],
-    equipment: [],
-  },
-  {
-    id: 'f_27',
-    title: 'Boxing HIIT: Round-by-Round',
-    description:
-      'Three short rounds that build. You choose the intensity—keep it empowering, not punishing.',
-    category: 'WOD',
-    difficulty: 'Beginner',
-    estimatedTime: 20,
-    tags: ['Boxing', 'Boxing HIIT'],
-    isPremium: false,
-    blocks: [
-      {
-        name: 'Warmup',
-        movements: [
-          '2 mins easy shadowboxing',
-          '10 bodyweight squats',
-          '10 inchworms',
-        ],
-      },
-      {
-        name: '3 Rounds',
-        instructions:
-          'Each round is 4 mins work + 1 min rest. Keep moving—slow is allowed.',
-        movements: [
-          '4 mins shadowboxing (mix jab-cross, hooks, uppercuts)',
-          '1 min rest',
-        ],
-      },
-    ],
-    equipment: [],
-  },
-  {
-    id: 'f_28',
-    title: 'Boxing HIIT: Arms on Fire',
-    description:
-      'Upper body endurance with a boxing feel. If your shoulders burn, drop the pace—not your form.',
-    category: 'Conditioning',
-    difficulty: 'Intermediate',
-    estimatedTime: 30,
-    tags: ['Boxing', 'Boxing HIIT'],
-    isPremium: false,
-    blocks: [
-      {
-        name: 'Warmup',
-        movements: [
-          '2 mins easy shadowboxing',
-          '10 shoulder circles each way',
-          '10 push-ups (elevated is fine)',
-        ],
-      },
-      {
-        name: 'E2MOM 16',
-        instructions:
-          'Every 2 mins for 16 mins: 75s work, then rest the remainder. Keep it smooth.',
-        movements: ['75s shadowboxing (continuous punches, light feet)'],
-      },
-      {
-        name: 'Core Finish',
-        instructions: 'Rest 30s between sets.',
-        movements: ['3 x 30–45s plank', '3 x 20–30s side plank each side'],
-      },
-    ],
-    equipment: [],
-  },
-  {
-    id: 'f_29',
-    title: 'Boxing HIIT: Sweat & Smile',
-    description:
-      'A feel-good finisher session. High energy, low pressure. You’ll be glad you did it.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
-    estimatedTime: 15,
-    tags: ['Boxing', 'Boxing HIIT'],
-    isPremium: false,
-    blocks: [
-      {
-        name: 'Warmup',
-        movements: ['60s easy shadowboxing', '10 bodyweight squats'],
-      },
-      {
-        name: '10-Min Sweat',
-        instructions: 'Work 30s / rest 15s. Stay light on your feet.',
-        movements: [
-          'Jab-cross',
-          'Hooks',
-          'Uppercuts',
-          'Fast feet (or march fast)',
-        ],
-      },
-    ],
-    equipment: [],
   },
   {
     id: 'f_30',
@@ -4025,7 +3850,7 @@ export const workouts: StandaloneWorkoutSource[] = [
     difficulty: 'Advanced',
     estimatedTime: 45,
     tags: ['Chipper', 'Partner'],
-    isPremium: true,
+    isPremium: false,
     blocks: [
       {
         name: 'Warmup',

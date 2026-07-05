@@ -5,9 +5,6 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-/** TEMP: flip to true when Discover is ready to ship. */
-const TEMP_DISCOVER_ENTRY_ENABLED = false;
-
 type HubPromoCardProps = {
   icon: keyof typeof Ionicons.glyphMap;
   eyebrow: string;
@@ -72,10 +69,8 @@ export function HubPromoRow({
   const { gyms, clubs, coaches } = usePartnerListings();
   const hasDiscoverListings =
     gyms.length > 0 || clubs.length > 0 || coaches.length > 0;
-  const showDiscoverEntry =
-    TEMP_DISCOVER_ENTRY_ENABLED && hasDiscoverListings;
 
-  if (shopUnavailable && !showDiscoverEntry) {
+  if (shopUnavailable && !hasDiscoverListings) {
     return null;
   }
 
@@ -93,7 +88,7 @@ export function HubPromoRow({
           accessibilityLabel="Browse partner products"
         />
       )}
-      {showDiscoverEntry ? (
+      {hasDiscoverListings ? (
         <HubPromoCard
           icon="compass-outline"
           eyebrow="Discover"
