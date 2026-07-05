@@ -155,6 +155,13 @@ export const workoutDetailStyles = StyleSheet.create({
     marginBottom: Spacing.xl,
     lineHeight: 20,
   },
+  blockHighlightInstructions: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '500',
+    marginBottom: Spacing.xl,
+    lineHeight: 20,
+  },
   movementsList: {
     gap: Spacing.md,
   },

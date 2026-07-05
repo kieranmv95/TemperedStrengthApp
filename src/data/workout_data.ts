@@ -58,6 +58,30 @@ export const workouts: StandaloneWorkoutSource[] = [
     equipment: [],
   },
   {
+    id: 'f_03',
+    title: 'Hold the Line',
+    description:
+      "Focus on 'bracing' your midsection. Movement should be slow and controlled.",
+    category: 'Mobility',
+    difficulty: 'Beginner',
+    estimatedTime: 15,
+    tags: ['Core', 'Abs'],
+    isPremium: false,
+    blocks: [
+      {
+        name: 'Warmup',
+        movements: ['2 Rounds: 10 Cat-Cow, 10 Bird-Dogs'],
+      },
+      {
+        name: '3 Rounds',
+        instructions:
+          'Rest 60s between rounds. Focus on keeping lower back glued to the floor during Hollow Rocks.',
+        movements: ['45s Plank', '15 Hollow Rocks', '30s Side Plank (L/R)'],
+      },
+    ],
+    equipment: [],
+  },
+  {
     id: 'f_04',
     title: 'The Century',
     description:
@@ -181,6 +205,34 @@ export const workouts: StandaloneWorkoutSource[] = [
       },
     ],
     equipment: ['rower'],
+  },
+  {
+    id: 'f_08',
+    title: 'Desk Job Recovery',
+    description:
+      'The antidote to sitting. Focus on breathing deeply into each stretch.',
+    category: 'Mobility',
+    difficulty: 'Beginner',
+    estimatedTime: 15,
+    tags: ['Recovery', 'Postures'],
+    isPremium: false,
+    blocks: [
+      {
+        name: 'Warmup',
+        movements: ['2 mins light walking or jogging to warm the tissues'],
+      },
+      {
+        name: 'Flow',
+        instructions:
+          "Hold each pose for the specified time. Don't force the range; let gravity do the work.",
+        movements: [
+          'Couch Stretch (2m/side)',
+          'Pigeon Pose (2m/side)',
+          'Thoracic Extensions (15 reps)',
+        ],
+      },
+    ],
+    equipment: [],
   },
   {
     id: 'f_09',
@@ -387,6 +439,34 @@ export const workouts: StandaloneWorkoutSource[] = [
     equipment: [],
   },
   {
+    id: 'f_14',
+    title: 'Handstand Prep',
+    description:
+      'Shoulder stability and technical positioning. Stop immediately if form breaks down.',
+    category: 'Mobility',
+    difficulty: 'Intermediate',
+    estimatedTime: 25,
+    tags: ['Shoulders', 'Skill'],
+    isPremium: false,
+    blocks: [
+      {
+        name: 'Warmup',
+        movements: ['3 Rounds: 10 Wrist Stretches, 10 Wall Slides'],
+      },
+      {
+        name: '3 Rounds',
+        instructions:
+          'Rest 2 mins between rounds. Quality is the goal here, not fatigue.',
+        movements: [
+          '30s Wall Walk/Hold',
+          '10 Scapular Pushups',
+          '20 Shoulder Taps',
+        ],
+      },
+    ],
+    equipment: [],
+  },
+  {
     id: 'f_15',
     title: 'The Endless Climb',
     description:
@@ -423,6 +503,34 @@ export const workouts: StandaloneWorkoutSource[] = [
       },
     ],
     equipment: [],
+  },
+  {
+    id: 'f_16',
+    title: 'Shoulder Health Flow',
+    description:
+      'Prehab for athletes with stiff shoulders. Use a light resistance band.',
+    category: 'Mobility',
+    difficulty: 'Beginner',
+    estimatedTime: 12,
+    tags: ['Shoulders', 'Prehab'],
+    isPremium: false,
+    blocks: [
+      {
+        name: 'Warmup',
+        movements: ['2 mins Arm Swings and Thoracic Twists'],
+      },
+      {
+        name: 'Flow',
+        instructions:
+          "Move through the reps slowly. Focus on 'feeling' the scapula move on the ribcage.",
+        movements: [
+          'Band Dislocates (20)',
+          'Face Pulls (20)',
+          'Wall Slides (15)',
+        ],
+      },
+    ],
+    equipment: ['bands'],
   },
   {
     id: 'f_17',
@@ -812,6 +920,182 @@ export const workouts: StandaloneWorkoutSource[] = [
       },
     ],
     equipment: ['rower', 'bike', 'ski erg'],
+  },
+  {
+    id: 'f_25',
+    title: 'Boxing HIIT: Power Jabs',
+    description:
+      'Upper body sweat with a boxing vibe. Keep your hands up, stay relaxed, and move with purpose.',
+    category: 'Conditioning',
+    difficulty: 'Beginner',
+    estimatedTime: 25,
+    tags: ['Boxing', 'Boxing HIIT'],
+    isPremium: false,
+    blocks: [
+      {
+        name: 'Warmup',
+        movements: [
+          '2 mins easy shadowboxing (light punches, light feet)',
+          '10 shoulder circles each way',
+          '10 inchworms',
+          '20s plank (knees down is fine)',
+        ],
+      },
+      {
+        name: '10-Min Boxing HIIT',
+        instructions:
+          'Alternate 40s work / 20s easy. Keep punches snappy, not tense.',
+        movements: [
+          'Jab-cross',
+          'Fast feet + light jabs',
+          'Hooks (left/right)',
+          'Uppercuts (left/right)',
+          'Jab-cross (pick up pace)',
+        ],
+      },
+      {
+        name: 'Finisher',
+        instructions: 'Rest 30–45s between rounds. Move with control.',
+        movements: [
+          '3 Rounds: 10 push-ups (elevated is fine), 20 air squats, 30s shadowboxing',
+        ],
+      },
+    ],
+    equipment: [],
+  },
+  {
+    id: 'f_26',
+    title: 'Boxing HIIT: Uppercut Burner',
+    description:
+      'A short, punchy upper body session. Breathe, keep your shoulders down, and stay moving.',
+    category: 'Conditioning',
+    difficulty: 'Intermediate',
+    estimatedTime: 25,
+    tags: ['Boxing', 'Boxing HIIT'],
+    isPremium: false,
+    blocks: [
+      {
+        name: 'Warmup',
+        movements: [
+          '90s easy shadowboxing',
+          '10 scapular push-ups',
+          '10 glute bridges',
+          '20s side plank each side (knee down is fine)',
+        ],
+      },
+      {
+        name: '12-Min Circuit',
+        instructions:
+          'Work 45s / rest 15s. Aim for steady effort the whole way.',
+        movements: [
+          'Uppercuts (light + fast)',
+          'Jab-cross (strong reps)',
+          'Hooks (hips drive the punch)',
+          'High knees (or march fast)',
+        ],
+      },
+      {
+        name: 'Cool Down',
+        movements: [
+          '60s slow breathing',
+          '60s chest/shoulder stretch',
+          '60s gentle forward fold (soft knees)',
+        ],
+      },
+    ],
+    equipment: [],
+  },
+  {
+    id: 'f_27',
+    title: 'Boxing HIIT: Round-by-Round',
+    description:
+      'Three short rounds that build. You choose the intensity—keep it empowering, not punishing.',
+    category: 'WOD',
+    difficulty: 'Beginner',
+    estimatedTime: 20,
+    tags: ['Boxing', 'Boxing HIIT'],
+    isPremium: false,
+    blocks: [
+      {
+        name: 'Warmup',
+        movements: [
+          '2 mins easy shadowboxing',
+          '10 bodyweight squats',
+          '10 inchworms',
+        ],
+      },
+      {
+        name: '3 Rounds',
+        instructions:
+          'Each round is 4 mins work + 1 min rest. Keep moving—slow is allowed.',
+        movements: [
+          '4 mins shadowboxing (mix jab-cross, hooks, uppercuts)',
+          '1 min rest',
+        ],
+      },
+    ],
+    equipment: [],
+  },
+  {
+    id: 'f_28',
+    title: 'Boxing HIIT: Arms on Fire',
+    description:
+      'Upper body endurance with a boxing feel. If your shoulders burn, drop the pace—not your form.',
+    category: 'Conditioning',
+    difficulty: 'Intermediate',
+    estimatedTime: 30,
+    tags: ['Boxing', 'Boxing HIIT'],
+    isPremium: false,
+    blocks: [
+      {
+        name: 'Warmup',
+        movements: [
+          '2 mins easy shadowboxing',
+          '10 shoulder circles each way',
+          '10 push-ups (elevated is fine)',
+        ],
+      },
+      {
+        name: 'E2MOM 16',
+        instructions:
+          'Every 2 mins for 16 mins: 75s work, then rest the remainder. Keep it smooth.',
+        movements: ['75s shadowboxing (continuous punches, light feet)'],
+      },
+      {
+        name: 'Core Finish',
+        instructions: 'Rest 30s between sets.',
+        movements: ['3 x 30–45s plank', '3 x 20–30s side plank each side'],
+      },
+    ],
+    equipment: [],
+  },
+  {
+    id: 'f_29',
+    title: 'Boxing HIIT: Sweat & Smile',
+    description:
+      'A feel-good finisher session. High energy, low pressure. You’ll be glad you did it.',
+    category: 'Conditioning',
+    difficulty: 'Beginner',
+    estimatedTime: 15,
+    tags: ['Boxing', 'Boxing HIIT'],
+    isPremium: false,
+    blocks: [
+      {
+        name: 'Warmup',
+        movements: ['60s easy shadowboxing', '10 bodyweight squats'],
+      },
+      {
+        name: '10-Min Sweat',
+        instructions: 'Work 30s / rest 15s. Stay light on your feet.',
+        movements: [
+          'Jab-cross',
+          'Hooks',
+          'Uppercuts',
+          'Fast feet (or march fast)',
+        ],
+      },
+    ],
+    equipment: [],
   },
   {
     id: 'f_30',
@@ -3860,7 +4144,7 @@ export const workouts: StandaloneWorkoutSource[] = [
         ],
       },
       {
-        name: 'Order 66',
+        name: '8 Rounds',
         instructions:
           'Partner format: alternate as you please, one rests the other works.',
         movements: [
@@ -5870,22 +6154,46 @@ export const workouts: StandaloneWorkoutSource[] = [
     id: 'p_62',
     title: 'Burn Out',
     description:
-      'Full body close to week two. The WOD is a descending rep scheme - starts with high reps, drops by 5 each round. Starts heavy, finishes fast.',
+      'This WOD is a descending rep scheme - starts with high reps, drops each round. Starts heavy, finishes fast.',
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['HIIT', 'For Time', 'Partner'],
     equipment: ['medicine ball'],
     isPremium: true,
     blocks: [
       {
-        name: 'WOD - Burn Out (For Time)',
-        instructions:
-          'Complete 25, 20, 15, 10, 5 reps of each movement in order. Each round drops by 5 reps. Time yourself.\n\nFor time',
-        movements: [
-          '25 / 20 / 15 / 10 / 5 reps Burpees (Pace the first round. It gets easier as the reps drop.)',
-          '25 / 20 / 15 / 10 / 5 reps Bodyweight Squats (Full depth. Drive up hard.)',
-          '25 / 20 / 15 / 10 / 5 reps Ball Slams (Full extension overhead every rep.)',
+        scale: 'RX',
+        blocks: [
+          {
+            name: 'WOD - Burn Out, For Time',
+            instructions:
+              'Complete 5 rounds. Each rounds rep range is like so: 25 reps, 20 reps, 15 reps, 10 reps and finally 5 reps of each movement in order. Each round drops by 5 reps. Time yourself.',
+            highlightInstructions: 'Rep Range: 25, 20, 15, 10, then 5.',
+            movements: [
+              'Burpees - Pace the first round. It gets easier as the reps drop.',
+              'Bodyweight Squats - Full depth. Drive up hard.',
+              'Ball Slams - Full extension overhead every rep.',
+            ],
+          },
+        ],
+      },
+      {
+        scale: 'Partner',
+        blocks: [
+          {
+            name: 'WOD - Burn Out, For Time',
+            instructions:
+              'You go, I go. One clock for the team.\n\n' +
+              'Complete 5 rounds. Reps per movement each round: 32, 28, 24, 20, 16, 12, then 8. ' +
+              'Alternate reps on each movement (Partner A does 1, Partner B does 1, and so on) until that movement’s reps are done, then move to the next. ',
+            highlightInstructions: 'Rep Range: 32, 28, 24, 20, 16, 12 then 8',
+            movements: [
+              'Burpees - Alternate reps. Pace round 1.',
+              'Bodyweight Squats - Alternate reps. Full depth every rep.',
+              'Ball Slams - Alternate reps. Full extension overhead every rep.',
+            ],
+          },
         ],
       },
     ],
@@ -5898,7 +6206,7 @@ export const workouts: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 15,
-    tags: ['HIIT', 'HIIT Shred', 'AMRAP'],
+    tags: ['HIIT', 'AMRAP'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -5924,7 +6232,7 @@ export const workouts: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 16,
-    tags: ['HIIT', 'HIIT Shred', 'EMOM'],
+    tags: ['HIIT', 'EMOM'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar'],
     isPremium: true,
     blocks: [
@@ -5949,7 +6257,7 @@ export const workouts: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['HIIT', 'For Time'],
     equipment: ['dumbbell', 'box'],
     isPremium: true,
     blocks: [
@@ -5976,7 +6284,7 @@ export const workouts: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['HIIT', 'For Time'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -6002,7 +6310,7 @@ export const workouts: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 15,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['HIIT', 'For Time'],
     equipment: ['dumbbell', 'medicine ball'],
     isPremium: true,
     blocks: [
@@ -6026,7 +6334,7 @@ export const workouts: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 8,
-    tags: ['HIIT', 'HIIT Shred', 'Tabata'],
+    tags: ['HIIT', 'Tabata'],
     equipment: ['dumbbell', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -6051,7 +6359,7 @@ export const workouts: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 18,
-    tags: ['HIIT', 'HIIT Shred', 'AMRAP'],
+    tags: ['HIIT', 'AMRAP'],
     equipment: ['kettlebell', 'box'],
     isPremium: true,
     blocks: [
@@ -6077,7 +6385,7 @@ export const workouts: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['HIIT', 'For Time'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar'],
     isPremium: true,
     blocks: [
@@ -6105,7 +6413,7 @@ export const workouts: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['HIIT', 'For Time'],
     equipment: ['medicine ball'],
     isPremium: true,
     blocks: [

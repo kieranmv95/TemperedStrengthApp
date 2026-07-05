@@ -209,6 +209,7 @@ export type WorkoutMovement = string | DetailedMovement | Divider;
 export type WorkoutBlockBase = {
   name: string;
   instructions?: string;
+  highlightInstructions?: string;
   movements: WorkoutMovement[];
 };
 
@@ -232,6 +233,7 @@ export type StandaloneWorkoutSource = {
     | WorkoutBlockBase[]
     | {
         scale: string;
+        highlightInstructions?: string;
         blocks: WorkoutBlockBase[];
       }[];
 };

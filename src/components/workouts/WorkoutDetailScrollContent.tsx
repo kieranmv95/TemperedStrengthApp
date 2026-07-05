@@ -183,6 +183,11 @@ export function WorkoutDetailScrollContent({
                   {block.instructions}
                 </Text>
               )}
+              {block.highlightInstructions && (
+                <Text style={styles.blockHighlightInstructions}>
+                  {block.highlightInstructions}
+                </Text>
+              )}
               <View style={styles.movementsList}>
                 {block.movements.map((movement, movementIndex) =>
                   renderMovementRow(movement, movementIndex)
@@ -197,6 +202,11 @@ export function WorkoutDetailScrollContent({
             <Text style={styles.blockName}>{block.name}</Text>
             {block.instructions && (
               <Text style={styles.blockInstructions}>{block.instructions}</Text>
+            )}
+            {block.highlightInstructions && (
+              <Text style={styles.blockHighlightInstructions}>
+                {block.highlightInstructions}
+              </Text>
             )}
             <View style={styles.movementsList}>
               {block.movements.map((movement, movementIndex) =>
