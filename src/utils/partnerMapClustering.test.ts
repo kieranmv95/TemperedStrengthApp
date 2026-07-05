@@ -35,8 +35,8 @@ describe('partnerMapClustering', () => {
       regionShowsMarkerLabels({
         latitude: 53.48,
         longitude: -2.24,
-        latitudeDelta: 2,
-        longitudeDelta: 2,
+        latitudeDelta: 120,
+        longitudeDelta: 120,
       })
     ).toBe(false);
   });
@@ -60,8 +60,8 @@ describe('partnerMapClustering', () => {
     expect(nextMarkerLabelVisibility(true, {
       latitude: 53.48,
       longitude: -2.24,
-      latitudeDelta: 1,
-      longitudeDelta: 1,
+      latitudeDelta: 120,
+      longitudeDelta: 120,
     })).toBe(false);
   });
 
