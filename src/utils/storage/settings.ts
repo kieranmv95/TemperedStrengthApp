@@ -5,6 +5,7 @@ import { syncRemoveItem, syncSetItem } from '@/src/sync/syncStorage';
 import {
   AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY,
   AUTO_REST_TIMERS_ENABLED_KEY,
+  DEV_PRO_OVERRIDE_ENABLED_KEY,
   ONBOARDED_KEY,
   ONBOARDING_PROFILE_KEY,
   PROGRAM_COOLDOWN_MODULE_ENABLED_KEY,
@@ -94,6 +95,34 @@ export const setWeightUnit = async (unit: WeightUnit): Promise<void> => {
     await syncSetItem(WEIGHT_UNIT_KEY, unit);
   } catch (error) {
     console.error('Error setting weight unit:', error);
+    throw error;
+  }
+};
+
+export const getDevProOverrideEnabled = async (): Promise<boolean> => {
+  if (!__DEV__) return false;
+
+  try {
+    const raw = await AsyncStorage.getItem(DEV_PRO_OVERRIDE_ENABLED_KEY);
+    return raw === 'true';
+  } catch (error) {
+    console.error('Error getting dev Pro override enabled:', error);
+    return false;
+  }
+};
+
+export const setDevProOverrideEnabled = async (
+  enabled: boolean
+): Promise<void> => {
+  if (!__DEV__) return;
+
+  try {
+    await AsyncStorage.setItem(
+      DEV_PRO_OVERRIDE_ENABLED_KEY,
+      enabled ? 'true' : 'false'
+    );
+  } catch (error) {
+    console.error('Error setting dev Pro override enabled:', error);
     throw error;
   }
 };

@@ -30,6 +30,7 @@ export const PROGRAM_COOLDOWN_MODULE_ENABLED_KEY =
   'program_cooldown_module_enabled';
 export const PROGRAM_SHOW_START_SESSION_BUTTON_KEY =
   'program_show_start_session_button';
+export const DEV_PRO_OVERRIDE_ENABLED_KEY = 'dev_pro_override_enabled';
 export const ONBOARDED_KEY = 'onboarded';
 export const ONBOARDING_PROFILE_KEY = 'onboarding_profile';
 
