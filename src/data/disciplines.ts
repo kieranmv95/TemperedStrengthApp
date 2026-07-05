@@ -8,7 +8,6 @@ export const NO_EQUIPMENT_DISCIPLINE_TAG = 'No Equipment';
 const DISCIPLINE_CATEGORY: Record<string, WorkoutCategory> = {
   CrossFit: 'WOD',
   Hyrox: 'Hyrox',
-  Pilates: 'Pilates',
   Rainhill: 'Rainhill',
 };
 
@@ -54,12 +53,6 @@ export const disciplines: Discipline[] = [
     tag: 'Hyrox',
     showTitle: true,
     image: require('@/assets/images/disciplines/hyrox.png'),
-  },
-  {
-    title: 'Pilates',
-    tag: 'Pilates',
-    showTitle: true,
-    image: require('@/assets/images/disciplines/pilates.png'),
   },
   {
     title: 'Partner',
