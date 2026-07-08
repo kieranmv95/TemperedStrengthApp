@@ -5,6 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+/** Discover ("Explore near you") isn't ready to ship yet — flip to true to re-enable. */
+const DISCOVER_ENABLED = false;
+
 type HubPromoCardProps = {
   icon: keyof typeof Ionicons.glyphMap;
   eyebrow: string;
@@ -68,7 +71,8 @@ export function HubPromoRow({
 }: HubPromoRowProps) {
   const { gyms, clubs, coaches } = usePartnerListings();
   const hasDiscoverListings =
-    gyms.length > 0 || clubs.length > 0 || coaches.length > 0;
+    DISCOVER_ENABLED &&
+    (gyms.length > 0 || clubs.length > 0 || coaches.length > 0);
 
   if (shopUnavailable && !hasDiscoverListings) {
     return null;
