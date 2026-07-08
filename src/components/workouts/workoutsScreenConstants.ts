@@ -1,15 +1,21 @@
-import type { SingleWorkout, WorkoutCategory, WorkoutEquipment } from '@/src/types/workouts';
+import type {
+  SingleWorkout,
+  WorkoutCategory,
+  WorkoutEquipment,
+} from '@/src/types/workouts';
 
 export type CategoryFilter = 'All' | WorkoutCategory | 'Favorites' | 'Pro';
 
 export type WorkoutSortBy = 'name' | 'duration';
 export type WorkoutSortDirection = 'asc' | 'desc';
 
-export const WORKOUT_SORT_BY_OPTIONS: { value: WorkoutSortBy; label: string }[] =
-  [
-    { value: 'name', label: 'Name' },
-    { value: 'duration', label: 'Duration' },
-  ];
+export const WORKOUT_SORT_BY_OPTIONS: {
+  value: WorkoutSortBy;
+  label: string;
+}[] = [
+  { value: 'name', label: 'Name' },
+  { value: 'duration', label: 'Duration' },
+];
 
 export const WORKOUT_SORT_DIRECTION_OPTIONS: {
   value: WorkoutSortDirection;
@@ -32,7 +38,6 @@ export const CATEGORY_FILTERS: CategoryFilter[] = [
   'WOD',
   'Hyrox',
   'Conditioning',
-  'Pilates',
   'Rainhill',
 ];
 
