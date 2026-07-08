@@ -128,7 +128,13 @@ describe('bundled standalone workouts', () => {
     const olySessions = allStandaloneWorkouts.filter((w) =>
       w.tags.includes('Olympic Lifting')
     );
-    expect(olySessions.map((w) => w.id).sort()).toEqual(['p_02', 'p_15']);
+    expect(olySessions.map((w) => w.id).sort()).toEqual([
+      'p_02',
+      'p_15',
+      'p_79',
+      'p_80',
+      'p_81',
+    ]);
     for (const w of olySessions) {
       expect(w.equipment).toContain('barbell');
     }

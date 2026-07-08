@@ -513,6 +513,15 @@ export const strength: StandaloneWorkoutSource[] = [
           'This is not a WOD, this is stability and conrol practice. OHS = Overhead squat.',
         movements: ['1 Power Snatch + 1 Hang Snatch + 1 OHS'],
       },
+      {
+        name: 'Strength Finisher',
+        instructions:
+          'Two heavy strength moves to reinforce the positions you just drilled. Build across the sets and rest 2 minutes between them. Keep every rep crisp.',
+        movements: [
+          '4 x 3 Overhead Squat (build to a heavy triple, taken from the rack)',
+          '4 x 3 Snatch Grip Deadlift (90-100% of snatch 1RM, slow controlled pull)',
+        ],
+      },
     ],
     equipment: ['barbell'],
   },

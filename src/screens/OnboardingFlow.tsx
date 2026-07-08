@@ -1,3 +1,4 @@
+import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 import { OnboardingOptionCard } from '@/src/components/onboarding/OnboardingOptionCard';
 import { OnboardingProgressBar } from '@/src/components/onboarding/OnboardingProgressBar';
 import { onboardingStyles as styles } from '@/src/components/onboarding/onboardingStyles';
@@ -37,7 +38,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TOTAL_STEPS = 8;

@@ -43,6 +43,12 @@ export const disciplines: Discipline[] = [
     link: 'https://therainhilltrials.myshopify.com/',
   },
   {
+    title: 'Olympic Lifting',
+    tag: 'Olympic Lifting',
+    showTitle: true,
+    image: require('@/assets/images/disciplines/crossfit.png'),
+  },
+  {
     title: 'CrossFit',
     tag: 'CrossFit',
     showTitle: true,
