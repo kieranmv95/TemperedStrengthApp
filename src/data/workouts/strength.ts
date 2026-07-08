@@ -483,7 +483,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Upper Body', 'Strength'],
+    tags: ['Olympic Lifting', 'Upper Body', 'Strength'],
     isPremium: true,
     blocks: [
       {

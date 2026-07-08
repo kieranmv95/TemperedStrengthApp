@@ -33,6 +33,7 @@ export const WORKOUT_FOCUS_TAGS = [
   'Cardio',
   'Strength',
   'Gymnastics',
+  'Olympic Lifting',
 ] as const;
 
 /** Workout structure / scoring — workouts typically have 1. */

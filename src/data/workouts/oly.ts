@@ -9,7 +9,7 @@ export const oly: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Upper Body', 'Strength'],
+    tags: ['Olympic Lifting', 'Upper Body', 'Strength'],
     isPremium: false,
     blocks: [
       {

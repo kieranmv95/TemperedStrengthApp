@@ -124,6 +124,16 @@ describe('bundled standalone workouts', () => {
     expect(wod!.tags).not.toContain('CrossFit');
   });
 
+  it('tags dedicated Olympic lifting sessions for focus filtering', () => {
+    const olySessions = allStandaloneWorkouts.filter((w) =>
+      w.tags.includes('Olympic Lifting')
+    );
+    expect(olySessions.map((w) => w.id).sort()).toEqual(['p_02', 'p_15']);
+    for (const w of olySessions) {
+      expect(w.equipment).toContain('barbell');
+    }
+  });
+
   it('includes HIIT Shred pro standalone copies p_55–p_78 (except removed p_75)', () => {
     for (let n = 55; n <= 78; n++) {
       if (n === 75) continue;
