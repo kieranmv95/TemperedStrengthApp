@@ -181,7 +181,7 @@ describe('formatExercisePbSubtitle', () => {
       formatExercisePbSubtitle({
         1: [{ id: 'a', weight: 80, achievedAt: t1 }],
       })
-    ).toBe('Best Single: 80kg');
+    ).toBe('80kg');
   });
 
   it('shows best and latest when the most recent 1RM log is below peak', () => {
@@ -192,7 +192,7 @@ describe('formatExercisePbSubtitle', () => {
           { id: 'b', weight: 50, achievedAt: t2 },
         ],
       })
-    ).toBe('Best Single: 70kg Latest Single: 50kg');
+    ).toBe('70kg / 50kg');
   });
 
   it('formats lb values rounded to nearest whole lb', () => {
@@ -204,7 +204,7 @@ describe('formatExercisePbSubtitle', () => {
         },
         'lb'
       )
-    ).toBe('Best Single: 220lb');
+    ).toBe('220lb');
   });
 });
 

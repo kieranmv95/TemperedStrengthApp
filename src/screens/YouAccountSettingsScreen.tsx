@@ -18,7 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Switch, Text, TouchableOpacity, View } from 'react-native';
 
 export function YouAccountSettingsScreen() {
   const [, setHasProgram] = useState<boolean>(false);
@@ -27,7 +27,15 @@ export function YouAccountSettingsScreen() {
   const [onboardingProfileState, setOnboardingProfileState] =
     useState<OnboardingProfile | null>(null);
   const [isRefreshingSanityHome, setIsRefreshingSanityHome] = useState(false);
-  const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
+  const [isUpdatingDevProOverride, setIsUpdatingDevProOverride] =
+    useState(false);
+  const {
+    isPro,
+    isDeveloperProOverrideEnabled,
+    isLoading: subscriptionLoading,
+    refresh,
+    setDeveloperProOverrideEnabled,
+  } = useSubscription();
 
   const checkProgramStatus = async () => {
     try {
@@ -134,6 +142,22 @@ export function YouAccountSettingsScreen() {
     })();
   };
 
+  const handleDevProOverrideChange = async (enabled: boolean) => {
+    if (isUpdatingDevProOverride) {
+      return;
+    }
+
+    setIsUpdatingDevProOverride(true);
+    try {
+      await setDeveloperProOverrideEnabled(enabled);
+    } catch (error) {
+      console.error('Error updating dev Pro override:', error);
+      Alert.alert('Error', 'Could not update the developer Pro override.');
+    } finally {
+      setIsUpdatingDevProOverride(false);
+    }
+  };
+
   const handleClearAllData = () => {
     Alert.alert(
       'Clear All Data',
@@ -149,6 +173,7 @@ export function YouAccountSettingsScreen() {
           onPress: async () => {
             try {
               await AsyncStorage.clear();
+              await setDeveloperProOverrideEnabled(false);
               setHasProgram(false);
               setActiveProgram(null);
               router.replace('/');
@@ -284,6 +309,24 @@ export function YouAccountSettingsScreen() {
           {__DEV__ && (
             <View style={styles.settingsSection}>
               <Text style={styles.settingsSectionTitle}>Dev settings</Text>
+
+              <View style={styles.settingItem}>
+                <View style={styles.settingContent}>
+                  <Text style={styles.settingTitle}>Force Pro mode</Text>
+                  <Text style={styles.settingDescription}>
+                    Treat this device as Pro for local testing. RevenueCat is not
+                    changed.
+                  </Text>
+                </View>
+                <Switch
+                  value={isDeveloperProOverrideEnabled}
+                  onValueChange={(enabled) => {
+                    void handleDevProOverrideChange(enabled);
+                  }}
+                  disabled={isUpdatingDevProOverride}
+                  accessibilityLabel="Force Pro mode"
+                />
+              </View>
 
               <TouchableOpacity
                 style={[styles.settingItem, styles.dangerItem]}

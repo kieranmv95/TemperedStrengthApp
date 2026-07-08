@@ -196,6 +196,7 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
   f_67: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   f_68: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   f_69: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_70: { kind: 'duration', label: 'Total time (incl. rest)', lowerIsBetter: true },
 
   // ---------------------------------------------------------------------------
   // CrossFit-style (WOD) — Pro
@@ -296,5 +297,4 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
   p_76: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   p_77: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   p_78: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
-  // Pilates p_37–p_54: DEFAULT_WORKOUT_LOG_SCHEMA (notes_only), like Mobility.
 };

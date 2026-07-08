@@ -8,7 +8,6 @@ export const NO_EQUIPMENT_DISCIPLINE_TAG = 'No Equipment';
 const DISCIPLINE_CATEGORY: Record<string, WorkoutCategory> = {
   CrossFit: 'WOD',
   Hyrox: 'Hyrox',
-  Pilates: 'Pilates',
   Rainhill: 'Rainhill',
 };
 
@@ -44,6 +43,12 @@ export const disciplines: Discipline[] = [
     link: 'https://therainhilltrials.myshopify.com/',
   },
   {
+    title: 'Olympic Lifting',
+    tag: 'Olympic Lifting',
+    showTitle: true,
+    image: require('@/assets/images/disciplines/oly.png'),
+  },
+  {
     title: 'CrossFit',
     tag: 'CrossFit',
     showTitle: true,
@@ -56,10 +61,13 @@ export const disciplines: Discipline[] = [
     image: require('@/assets/images/disciplines/hyrox.png'),
   },
   {
-    title: 'Pilates',
-    tag: 'Pilates',
+    title: 'Collabs',
+    tag: 'Collab',
+    isSponsor: true,
     showTitle: true,
-    image: require('@/assets/images/disciplines/pilates.png'),
+    image: require('@/assets/images/disciplines/collab.png'),
+    description:
+      'At Tempered Strength, sometimes we come across a workout that just takes our breath away... Literally. Find all the workouts from people we have collaborated with here.',
   },
   {
     title: 'Partner',
@@ -86,6 +94,12 @@ export function workoutMatchesDiscipline(
   }
   if (disciplineTag === 'Partner') {
     return workout.tags.includes('Partner');
+  }
+  if (disciplineTag === 'Olympic Lifting') {
+    return workout.tags.includes('Olympic Lifting');
+  }
+  if (disciplineTag === 'Collab') {
+    return Boolean(workout.collab);
   }
   return false;
 }

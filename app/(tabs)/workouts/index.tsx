@@ -1,17 +1,19 @@
 import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
-import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { WorkoutActiveFiltersBar } from '@/src/components/workouts/WorkoutActiveFiltersBar';
 import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
+import {
+  WorkoutFiltersSheet,
+  type WorkoutFiltersDraft,
+} from '@/src/components/workouts/WorkoutFiltersSheet';
 import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
 import {
   compareWorkouts,
+  WorkoutFiltersBarButton,
   WorkoutSortBarButton,
   WorkoutSortPanel,
 } from '@/src/components/workouts/WorkoutSortControls';
 import {
-  CATEGORY_FILTERS,
-  getEquipmentFiltersInUse,
   type CategoryFilter,
   type WorkoutSortBy,
   type WorkoutSortDirection,
@@ -21,8 +23,18 @@ import { disciplines } from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
-import type { SingleWorkout, WorkoutEquipment } from '@/src/types/workouts';
+import type { SingleWorkout } from '@/src/types/workouts';
+import type {
+  WorkoutFocusTag,
+  WorkoutFormatTag,
+} from '@/src/types/workouts';
+import type { WorkoutEquipment } from '@/src/types/workouts';
 import { getFavoriteWorkouts, toggleFavoriteWorkout } from '@/src/utils/storage';
+import {
+  countActiveWorkoutFilters,
+  workoutMatchesFilters,
+  type WorkoutTimeBucket,
+} from '@/src/utils/workoutFilters';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
@@ -33,17 +45,9 @@ import {
   ImageBackground,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-
-function equipmentFilterLabel(eq: WorkoutEquipment): string {
-  return eq
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
 
 export default function WorkoutsScreen() {
   const { isPro } = useSubscription();
@@ -55,6 +59,12 @@ export default function WorkoutsScreen() {
     WorkoutEquipment[]
   >([]);
   const [noEquipmentOnly, setNoEquipmentOnly] = useState(false);
+  const [selectedFocus, setSelectedFocus] = useState<WorkoutFocusTag[]>([]);
+  const [selectedFormat, setSelectedFormat] = useState<WorkoutFormatTag[]>([]);
+  const [selectedTimeBuckets, setSelectedTimeBuckets] = useState<
+    WorkoutTimeBucket[]
+  >([]);
+  const [filtersSheetVisible, setFiltersSheetVisible] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [sortExpanded, setSortExpanded] = useState(false);
   const [sortBy, setSortBy] = useState<WorkoutSortBy>('name');
@@ -131,18 +141,66 @@ export default function WorkoutsScreen() {
   const handleSelectCategoryFilter = (filter: CategoryFilter) => {
     captureFilter('category', filter);
     setActiveCategoryFilter(filter);
-
-    if (filter === 'All') {
-      setSelectedEquipment([]);
-      setNoEquipmentOnly(false);
-    }
   };
 
-  const hasActiveFilters =
-    searchQuery.trim().length > 0 ||
-    activeCategoryFilter !== 'All' ||
-    selectedEquipment.length > 0 ||
-    noEquipmentOnly;
+  const filterCriteria = useMemo(
+    () => ({
+      searchQuery,
+      activeCategoryFilter,
+      selectedEquipment,
+      noEquipmentOnly,
+      selectedFocus,
+      selectedFormat,
+      selectedTimeBuckets,
+      favoriteIds: favorites,
+    }),
+    [
+      searchQuery,
+      activeCategoryFilter,
+      selectedEquipment,
+      noEquipmentOnly,
+      selectedFocus,
+      selectedFormat,
+      selectedTimeBuckets,
+      favorites,
+    ]
+  );
+
+  const sheetFilterCount = useMemo(
+    () =>
+      countActiveWorkoutFilters({
+        searchQuery,
+        activeCategoryFilter,
+        selectedEquipment,
+        noEquipmentOnly,
+        selectedFocus,
+        selectedFormat,
+        selectedTimeBuckets,
+      }),
+    [
+      searchQuery,
+      activeCategoryFilter,
+      selectedEquipment,
+      noEquipmentOnly,
+      selectedFocus,
+      selectedFormat,
+      selectedTimeBuckets,
+    ]
+  );
+
+  const hasActiveFilters = useMemo(
+    () =>
+      countActiveWorkoutFilters({
+        searchQuery,
+        activeCategoryFilter,
+        selectedEquipment,
+        noEquipmentOnly,
+        selectedFocus,
+        selectedFormat,
+        selectedTimeBuckets,
+      }) > 0,
+    [filterCriteria]
+  );
 
   const handleResetAllFilters = () => {
     captureFilter('reset', 'all');
@@ -150,113 +208,49 @@ export default function WorkoutsScreen() {
     setActiveCategoryFilter('All');
     setSelectedEquipment([]);
     setNoEquipmentOnly(false);
+    setSelectedFocus([]);
+    setSelectedFormat([]);
+    setSelectedTimeBuckets([]);
   };
 
-  const equipmentFiltersInUse = useMemo(
-    () => getEquipmentFiltersInUse(allStandaloneWorkouts),
-    []
+  const handleApplyFilters = (draft: WorkoutFiltersDraft) => {
+    setSearchQuery(draft.searchQuery);
+    setActiveCategoryFilter(draft.activeCategoryFilter);
+    setSelectedEquipment(draft.selectedEquipment);
+    setNoEquipmentOnly(draft.noEquipmentOnly);
+    setSelectedFocus(draft.selectedFocus);
+    setSelectedFormat(draft.selectedFormat);
+    setSelectedTimeBuckets(draft.selectedTimeBuckets);
+    captureFilter('filters_apply', 'sheet');
+  };
+
+  const filtersDraft = useMemo(
+    (): WorkoutFiltersDraft => ({
+      searchQuery,
+      activeCategoryFilter,
+      selectedEquipment,
+      noEquipmentOnly,
+      selectedFocus,
+      selectedFormat,
+      selectedTimeBuckets,
+    }),
+    [
+      searchQuery,
+      activeCategoryFilter,
+      selectedEquipment,
+      noEquipmentOnly,
+      selectedFocus,
+      selectedFormat,
+      selectedTimeBuckets,
+    ]
   );
 
-  const handleSelectEquipmentAll = () => {
-    captureFilter('equipment', 'all');
-    setSelectedEquipment([]);
-    setNoEquipmentOnly(false);
-  };
-
-  const handleToggleNoEquipmentFilter = () => {
-    setNoEquipmentOnly((prev) => {
-      const next = !prev;
-      captureFilter('equipment', next ? 'no_equipment' : 'all');
-      return next;
-    });
-    setSelectedEquipment([]);
-  };
-
-  const handleToggleEquipmentFilter = (eq: WorkoutEquipment) => {
-    setNoEquipmentOnly(false);
-    setSelectedEquipment((prev) => {
-      const next = prev.includes(eq)
-        ? prev.filter((item) => item !== eq)
-        : [...prev, eq];
-      captureFilter(
-        'equipment',
-        next.length > 0 ? next.join(',') : 'all'
-      );
-      return next;
-    });
-  };
-
-  const matchesWorkout = useCallback((
-    workout: SingleWorkout,
-    overrides?: Partial<{
-      searchQuery: string;
-      activeCategoryFilter: CategoryFilter;
-      selectedEquipment: WorkoutEquipment[];
-      noEquipmentOnly: boolean;
-    }>
-  ): boolean => {
-    const effectiveSearchQuery = overrides?.searchQuery ?? searchQuery;
-    const effectiveCategoryFilter =
-      overrides?.activeCategoryFilter ?? activeCategoryFilter;
-    const effectiveSelectedEquipment =
-      overrides?.selectedEquipment ?? selectedEquipment;
-    const effectiveNoEquipmentOnly =
-      overrides?.noEquipmentOnly ?? noEquipmentOnly;
-
-    if (effectiveSearchQuery.trim()) {
-      const query = effectiveSearchQuery.trim().toLowerCase();
-      const matchesTitle = workout.title.toLowerCase().includes(query);
-      const matchesDescription = workout.description
-        .toLowerCase()
-        .includes(query);
-      const matchesTags = workout.tags.some((tag) =>
-        tag.toLowerCase().includes(query)
-      );
-      if (!matchesTitle && !matchesDescription && !matchesTags) return false;
-    }
-
-    if (effectiveNoEquipmentOnly) {
-      if (workout.equipment.length > 0) return false;
-    } else if (effectiveSelectedEquipment.length > 0) {
-      const hasAll = effectiveSelectedEquipment.every((eq) =>
-        workout.equipment.includes(eq)
-      );
-      if (!hasAll) return false;
-    }
-
-    if (effectiveCategoryFilter === 'All') return true;
-    if (effectiveCategoryFilter === 'Favorites')
-      return favorites.includes(workout.id);
-    if (effectiveCategoryFilter === 'Pro') return workout.isPremium;
-    return workout.category === effectiveCategoryFilter;
-  }, [searchQuery, activeCategoryFilter, selectedEquipment, noEquipmentOnly, favorites]);
-
-  function equipmentCountForFilter(eq: WorkoutEquipment | null): number {
-    if (eq === null) {
-      return allStandaloneWorkouts.filter((w) =>
-        matchesWorkout(w, { selectedEquipment: [], noEquipmentOnly: false })
-      ).length;
-    }
-    const hypothetical = selectedEquipment.includes(eq)
-      ? selectedEquipment
-      : [...selectedEquipment, eq];
-    return allStandaloneWorkouts.filter((w) =>
-      matchesWorkout(w, {
-        selectedEquipment: hypothetical,
-        noEquipmentOnly: false,
-      })
-    ).length;
-  }
-
-  function noEquipmentCountForFilter(): number {
-    return allStandaloneWorkouts.filter((w) =>
-      matchesWorkout(w, { selectedEquipment: [], noEquipmentOnly: true })
-    ).length;
-  }
-
   const filteredWorkouts = useMemo(
-    () => allStandaloneWorkouts.filter((workout) => matchesWorkout(workout)),
-    [matchesWorkout]
+    () =>
+      allStandaloneWorkouts.filter((workout) =>
+        workoutMatchesFilters(workout, filterCriteria)
+      ),
+    [filterCriteria]
   );
 
   const sortedWorkouts = useMemo(
@@ -282,19 +276,29 @@ export default function WorkoutsScreen() {
       title="Workouts"
       subtitle="Log your workouts and track your progress."
       disableScroll
+      filterBarOnly
       filterBarButtons={
-        <WorkoutSortBarButton
-          expanded={sortExpanded}
-          onPress={() => {
-            setSortExpanded((v) => {
-              const next = !v;
-              if (next) {
-                captureFilter('sort', 'panel_open');
-              }
-              return next;
-            });
-          }}
-        />
+        <>
+          <WorkoutFiltersBarButton
+            activeCount={sheetFilterCount}
+            onPress={() => {
+              setFiltersSheetVisible(true);
+              captureFilter('filters', 'panel_open');
+            }}
+          />
+          <WorkoutSortBarButton
+            expanded={sortExpanded}
+            onPress={() => {
+              setSortExpanded((v) => {
+                const next = !v;
+                if (next) {
+                  captureFilter('sort', 'panel_open');
+                }
+                return next;
+              });
+            }}
+          />
+        </>
       }
       filterBarBelowButtons={
         sortExpanded ? (
@@ -307,114 +311,22 @@ export default function WorkoutsScreen() {
         ) : null
       }
     >
-      <StandardLayout.AdvancedFilters>
-        <View style={styles.searchContainer}>
-          <Ionicons
-            name="search"
-            size={18}
-            color={Colors.textPlaceholder}
-            style={styles.searchIcon}
-          />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search workouts..."
-            placeholderTextColor={Colors.textPlaceholder}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            returnKeyType="search"
-            autoCorrect={false}
-            autoCapitalize="none"
-          />
-          {searchQuery.length > 0 && (
-            <TouchableOpacity
-              onPress={() => setSearchQuery('')}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <Ionicons
-                name="close-circle"
-                size={18}
-                color={Colors.textPlaceholder}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-
-        <View style={styles.filtersWrap}>
-          <View style={styles.filtersRow}>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.filterScrollContent}
-            >
-              <Text style={styles.filtersLabel}>Discipline</Text>
-              {CATEGORY_FILTERS.map((filter) => {
-                const isActive = activeCategoryFilter === filter;
-                const displayLabel = filter === 'WOD' ? 'CrossFit' : filter;
-                const count = allStandaloneWorkouts.filter((w) =>
-                  matchesWorkout(w, { activeCategoryFilter: filter })
-                ).length;
-
-                return (
-                  <Pill
-                    key={filter}
-                    onPress={() => handleSelectCategoryFilter(filter)}
-                    isActive={isActive}
-                    label={displayLabel}
-                    icon={
-                      filter === 'Favorites'
-                        ? 'heart'
-                        : filter === 'Pro'
-                          ? 'star'
-                          : undefined
-                    }
-                    count={count}
-                  />
-                );
-              })}
-            </ScrollView>
-          </View>
-
-          <View style={styles.filtersRow}>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.filterScrollContent}
-            >
-              <Text style={styles.filtersLabel}>Equipment</Text>
-              <Pill
-                label="All"
-                isActive={
-                  selectedEquipment.length === 0 && !noEquipmentOnly
-                }
-                onPress={handleSelectEquipmentAll}
-                count={equipmentCountForFilter(null)}
-              />
-              <Pill
-                label="No equipment"
-                isActive={noEquipmentOnly}
-                onPress={handleToggleNoEquipmentFilter}
-                count={noEquipmentCountForFilter()}
-              />
-              {equipmentFiltersInUse.map((eq) => (
-                <Pill
-                  key={eq}
-                  label={equipmentFilterLabel(eq)}
-                  isActive={selectedEquipment.includes(eq)}
-                  onPress={() => handleToggleEquipmentFilter(eq)}
-                  count={equipmentCountForFilter(eq)}
-                />
-              ))}
-            </ScrollView>
-          </View>
-        </View>
-      </StandardLayout.AdvancedFilters>
+      <WorkoutFiltersSheet
+        visible={filtersSheetVisible}
+        draft={filtersDraft}
+        favoriteIds={favorites}
+        onClose={() => setFiltersSheetVisible(false)}
+        onApply={handleApplyFilters}
+      />
       <StandardLayout.Body>
         <WorkoutActiveFiltersBar
           searchQuery={searchQuery}
           activeCategoryFilter={activeCategoryFilter}
           selectedEquipment={selectedEquipment}
           noEquipmentOnly={noEquipmentOnly}
-          equipmentLabel={equipmentFilterLabel}
+          selectedFocus={selectedFocus}
+          selectedFormat={selectedFormat}
+          selectedTimeBuckets={selectedTimeBuckets}
           onResetAll={handleResetAllFilters}
           onClearSearch={() => {
             captureFilter('search', 'clear');
@@ -434,6 +346,18 @@ export default function WorkoutsScreen() {
               );
               return next;
             });
+          }}
+          onRemoveFocus={(tag) => {
+            setSelectedFocus((prev) => prev.filter((t) => t !== tag));
+            captureFilter('focus', tag);
+          }}
+          onRemoveFormat={(tag) => {
+            setSelectedFormat((prev) => prev.filter((t) => t !== tag));
+            captureFilter('format', tag);
+          }}
+          onRemoveTimeBucket={(bucket) => {
+            setSelectedTimeBuckets((prev) => prev.filter((b) => b !== bucket));
+            captureFilter('time', bucket);
           }}
         />
         {sortedWorkouts.length === 0 ? (

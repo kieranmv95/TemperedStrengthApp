@@ -6,7 +6,11 @@ import {
   restorePurchases,
 } from '@/src/services/revenueCatService';
 import { getProgramById } from '@/src/utils/program';
-import { getActiveProgramId } from '@/src/utils/storage';
+import {
+  getActiveProgramId,
+  getDevProOverrideEnabled,
+  setDevProOverrideEnabled,
+} from '@/src/utils/storage';
 import { router } from 'expo-router';
 import React, {
   createContext,
@@ -25,6 +29,7 @@ import Purchases, {
 
 export type SubscriptionState = {
   isPro: boolean;
+  isDeveloperProOverrideEnabled: boolean;
   isLoading: boolean;
   customerInfo: CustomerInfo | null;
   offerings: Offerings | null;
@@ -45,9 +50,13 @@ type SubscriptionContextType = SubscriptionState & {
   }>;
   refresh: () => Promise<void>;
   loadOfferings: () => Promise<void>;
+  setDeveloperProOverrideEnabled: (enabled: boolean) => Promise<void>;
 };
 
 const SubscriptionContext = createContext<SubscriptionContextType | null>(null);
+
+const hasActiveProEntitlement = (customerInfo: CustomerInfo | null): boolean =>
+  customerInfo?.entitlements.active[PRO_ENTITLEMENT_ID] !== undefined;
 
 export function SubscriptionProvider({
   children,
@@ -56,6 +65,7 @@ export function SubscriptionProvider({
 }) {
   const [state, setState] = useState<SubscriptionState>({
     isPro: false,
+    isDeveloperProOverrideEnabled: false,
     isLoading: true,
     customerInfo: null,
     offerings: null,
@@ -114,8 +124,7 @@ export function SubscriptionProvider({
    */
   const updateStateFromCustomerInfo = useCallback(
     (customerInfo: CustomerInfo) => {
-      const isPro =
-        customerInfo.entitlements.active[PRO_ENTITLEMENT_ID] !== undefined;
+      const isPro = hasActiveProEntitlement(customerInfo);
 
       // Check for subscription expiry (was Pro, now not Pro)
       // Only check after initial load is complete to avoid false positives
@@ -138,7 +147,7 @@ export function SubscriptionProvider({
       setState((prev) => ({
         ...prev,
         customerInfo,
-        isPro,
+        isPro: isPro || prev.isDeveloperProOverrideEnabled,
         isLoading: false,
         error: null,
       }));
@@ -182,6 +191,18 @@ export function SubscriptionProvider({
       console.error('Error loading offerings:', error);
       setState((prev) => ({ ...prev, error: error as Error }));
     }
+  }, []);
+
+  const loadDeveloperProOverride = useCallback(async () => {
+    const isDeveloperProOverrideEnabled = await getDevProOverrideEnabled();
+
+    setState((prev) => ({
+      ...prev,
+      isDeveloperProOverrideEnabled,
+      isPro:
+        hasActiveProEntitlement(prev.customerInfo) ||
+        isDeveloperProOverrideEnabled,
+    }));
   }, []);
 
   /**
@@ -230,6 +251,20 @@ export function SubscriptionProvider({
     }
   }, [updateStateFromCustomerInfo]);
 
+  const setDeveloperProOverrideEnabled = useCallback(
+    async (enabled: boolean) => {
+      await setDevProOverrideEnabled(enabled);
+
+      setState((prev) => ({
+        ...prev,
+        isDeveloperProOverrideEnabled: __DEV__ ? enabled : false,
+        isPro:
+          hasActiveProEntitlement(prev.customerInfo) || (__DEV__ && enabled),
+      }));
+    },
+    []
+  );
+
   /**
    * Refresh customer info
    */
@@ -240,6 +275,7 @@ export function SubscriptionProvider({
   // Set up RevenueCat listener for customer info updates
   useEffect(() => {
     // Load initial data
+    loadDeveloperProOverride();
     loadCustomerInfo();
     loadOfferings();
 
@@ -258,7 +294,12 @@ export function SubscriptionProvider({
         listenerRef.current = null;
       }
     };
-  }, [loadCustomerInfo, loadOfferings, updateStateFromCustomerInfo]);
+  }, [
+    loadCustomerInfo,
+    loadDeveloperProOverride,
+    loadOfferings,
+    updateStateFromCustomerInfo,
+  ]);
 
   const value: SubscriptionContextType = {
     ...state,
@@ -266,6 +307,7 @@ export function SubscriptionProvider({
     restore,
     refresh,
     loadOfferings,
+    setDeveloperProOverrideEnabled,
   };
 
   return (

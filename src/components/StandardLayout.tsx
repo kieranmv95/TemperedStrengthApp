@@ -42,6 +42,8 @@ type StandardLayoutProps = {
   subtitle?: string;
   disableScroll?: boolean;
   onBackPress?: () => void;
+  /** Show filter bar row (Glossary + filterBarButtons) without expandable advanced filters. */
+  filterBarOnly?: boolean;
   /** Extra pills in the filter bar row (e.g. Sort by on Workouts). */
   filterBarButtons?: React.ReactNode;
   /** Content below the filter bar buttons (e.g. expanded sort panel). */
@@ -60,6 +62,7 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
   subtitle,
   disableScroll = false,
   onBackPress,
+  filterBarOnly = false,
   filterBarButtons,
   filterBarBelowButtons,
   children,
@@ -114,6 +117,7 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
 
   const hasFilters = !!filters;
   const hasAdvancedFilters = !!advancedFilters;
+  const showFilterBar = hasAdvancedFilters || filterBarOnly;
 
   return (
     <View
@@ -167,19 +171,21 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
           </View>
         ) : null}
         <View>
-          {hasAdvancedFilters ? (
+          {showFilterBar ? (
             <View style={styles.advancedFiltersContainer}>
               <View style={styles.advancedFiltersButtons}>
-                <TouchableOpacity
-                  style={styles.filtersToggle}
-                  onPress={() => setFiltersExpanded((v) => !v)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.filtersToggleText}>
-                    {filtersExpanded ? 'Hide filters' : 'Show filters'}
-                  </Text>
-                  <Ionicons name="filter" size={16} color={Colors.textMuted} />
-                </TouchableOpacity>
+                {hasAdvancedFilters ? (
+                  <TouchableOpacity
+                    style={styles.filtersToggle}
+                    onPress={() => setFiltersExpanded((v) => !v)}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.filtersToggleText}>
+                      {filtersExpanded ? 'Hide filters' : 'Show filters'}
+                    </Text>
+                    <Ionicons name="filter" size={16} color={Colors.textMuted} />
+                  </TouchableOpacity>
+                ) : null}
                 <TouchableOpacity
                   style={styles.filtersToggle}
                   onPress={() => router.push('/glossary')}
@@ -195,7 +201,7 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
                   {filterBarBelowButtons}
                 </View>
               ) : null}
-              {filtersExpanded ? (
+              {hasAdvancedFilters && filtersExpanded ? (
                 <View style={styles.advancedFiltersContent}>
                   <StandardLayoutAdvancedFilters>
                     {advancedFilters}
