@@ -1,9 +1,9 @@
 export type WorkoutCategory =
   | 'Strength'
+  | 'Skill'
   | 'WOD'
   | 'Hyrox'
   | 'Conditioning'
-  | 'Mobility'
   | 'Pilates'
   | 'Rainhill';
 
@@ -209,6 +209,7 @@ export type WorkoutMovement = string | DetailedMovement | Divider;
 export type WorkoutBlockBase = {
   name: string;
   mobilityFlow?: string;
+  mobilityFlowCopy?: string;
   instructions?: string;
   highlightInstructions?: string;
   movements?: WorkoutMovement[];

@@ -186,7 +186,7 @@ export function WorkoutDetailScrollContent({
                     params: { id: block.mobilityFlow as string },
                   });
                 }} style={styles.startFlowButton}>
-                  <Text style={styles.startFlowText}>Start Mobility Flow</Text>
+                  <Text style={styles.startFlowText}>{block.mobilityFlowCopy ? block.mobilityFlowCopy : 'Start Mobility Flow'}</Text>
                 </TouchableOpacity>
               )}
               {block.instructions && (
@@ -220,7 +220,7 @@ export function WorkoutDetailScrollContent({
                   params: { id: block.mobilityFlow as string },
                 });
               }} style={styles.startFlowButton}>
-                <Text style={styles.startFlowText}>Start Mobility Flow</Text>
+                <Text style={styles.startFlowText}>{block.mobilityFlowCopy ? block.mobilityFlowCopy : 'Start Mobility Flow'}</Text>
               </TouchableOpacity>
             )}
             {block.instructions && (

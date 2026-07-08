@@ -6,6 +6,7 @@ export const workoutDetailStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.backgroundScreen,
   },
+  blockInstructionsContainer: {},
   detailHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -141,25 +142,23 @@ export const workoutDetailStyles = StyleSheet.create({
     marginBottom: Spacing.xxl,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,
+    gap: Spacing.md,
   },
   blockName: {
     color: Colors.accent,
     fontSize: FontSize.displaySm,
     fontWeight: '700',
-    marginBottom: Spacing.md,
   },
   blockInstructions: {
     color: Colors.textMuted,
     fontSize: FontSize.lg,
     fontStyle: 'italic',
-    marginBottom: Spacing.xl,
     lineHeight: 20,
   },
   blockHighlightInstructions: {
     color: Colors.accent,
     fontSize: FontSize.lg,
     fontWeight: '500',
-    marginBottom: Spacing.xl,
     lineHeight: 20,
   },
   movementsList: {
