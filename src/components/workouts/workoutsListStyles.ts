@@ -79,6 +79,7 @@ export const workoutsListStyles = StyleSheet.create({
     marginBottom: Spacing.xl,
     borderWidth: 1,
     borderColor: Colors.accent,
+    gap: Spacing.lg,
   },
   sponsorTitle: {
     color: Colors.textPrimary,
@@ -90,7 +91,6 @@ export const workoutsListStyles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.lg,
     lineHeight: 20,
-    marginBottom: Spacing.lg,
   },
   sponsorLinkRow: {
     flexDirection: 'row',

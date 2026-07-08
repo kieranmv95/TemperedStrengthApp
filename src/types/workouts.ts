@@ -125,7 +125,24 @@ export type SingleWorkout = {
   logSchema: WorkoutLogSchema;
   /** True when designed to be done with a partner. */
   partner?: boolean;
+  /** Present when the workout is a collaboration; surfaced on the detail screen and Collab discipline. */
+  collab?: WorkoutCollab;
   blocks: StandaloneWorkoutSource['blocks'];
+};
+
+/** Optional partner/collaborator credit shown on a workout and used by the Collab discipline. */
+export type WorkoutCollab = {
+  name: string;
+  description: string;
+  link: string;
+  linkCopy?: string;
+  imageUrl?: string;
+  /** Optional white-label colours for the collab card; each falls back to the app theme. */
+  inColabWithColor?: string;
+  bgColor?: string;
+  nameColor?: string;
+  descriptionColor?: string;
+  linkAndBorderColor?: string;
 };
 
 export type DetailedMovement = {
@@ -166,6 +183,7 @@ export type StandaloneWorkoutSource = {
   equipment: WorkoutEquipment[];
   isPremium: boolean;
   partner?: boolean;
+  collab?: WorkoutCollab;
   blocks:
     | WorkoutBlockBase[]
     | {

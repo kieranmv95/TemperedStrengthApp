@@ -229,4 +229,56 @@ export const workoutDetailStyles = StyleSheet.create({
     fontSize: FontSize.lg,
     fontWeight: '700',
   },
+  collabCard: {
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    padding: Spacing.xl,
+    marginBottom: Spacing.xxl,
+    borderWidth: 1,
+    borderColor: Colors.accent,
+    gap: Spacing.lg,
+  },
+  collabHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.lg,
+  },
+  collabImage: {
+    width: 48,
+    height: 48,
+    borderRadius: BorderRadius.full,
+    resizeMode: 'cover',
+    backgroundColor: Colors.backgroundElevated,
+  },
+  collabHeaderText: {
+    flex: 1,
+    gap: 2,
+  },
+  collabLabel: {
+    color: Colors.textMuted,
+    fontSize: FontSize.sm,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  collabName: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xl,
+    fontWeight: '700',
+  },
+  collabDescription: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+  },
+  collabCtaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  collabCtaText: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+  },
 });

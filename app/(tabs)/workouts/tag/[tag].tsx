@@ -37,7 +37,7 @@ export default function WorkoutsByTagScreen() {
   const tag = typeof params.tag === 'string' ? params.tag : '';
 
   const discipline = disciplines.find((d) => d.tag === tag);
-  const showSponsorCard = Boolean(discipline?.isSponsor && discipline?.link);
+  const showSponsorCard = Boolean(discipline?.isSponsor);
 
   const [favorites, setFavorites] = useState<string[]>([]);
 
@@ -157,14 +157,16 @@ export default function WorkoutsByTagScreen() {
                     {discipline.description}
                   </Text>
                 )}
-                <View style={styles.sponsorLinkRow}>
-                  <Ionicons
-                    name="globe-outline"
-                    size={16}
-                    color={Colors.accent}
-                  />
-                  <Text style={styles.sponsorLinkText}>View event details</Text>
-                </View>
+                {!!discipline?.link && (
+                  <View style={styles.sponsorLinkRow}>
+                    <Ionicons
+                      name="globe-outline"
+                      size={16}
+                      color={Colors.accent}
+                    />
+                    <Text style={styles.sponsorLinkText}>View event details</Text>
+                  </View>
+                )}
               </TouchableOpacity>
             ) : null
           }

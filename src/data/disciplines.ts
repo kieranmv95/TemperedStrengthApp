@@ -46,7 +46,7 @@ export const disciplines: Discipline[] = [
     title: 'Olympic Lifting',
     tag: 'Olympic Lifting',
     showTitle: true,
-    image: require('@/assets/images/disciplines/crossfit.png'),
+    image: require('@/assets/images/disciplines/oly.png'),
   },
   {
     title: 'CrossFit',
@@ -59,6 +59,15 @@ export const disciplines: Discipline[] = [
     tag: 'Hyrox',
     showTitle: true,
     image: require('@/assets/images/disciplines/hyrox.png'),
+  },
+  {
+    title: 'Collabs',
+    tag: 'Collab',
+    isSponsor: true,
+    showTitle: true,
+    image: require('@/assets/images/disciplines/collab.png'),
+    description:
+      'At Tempered Strength, sometimes we come across a workout that just takes our breath away... Literally. Find all the workouts from people we have collaborated with here.',
   },
   {
     title: 'Partner',
@@ -85,6 +94,12 @@ export function workoutMatchesDiscipline(
   }
   if (disciplineTag === 'Partner') {
     return workout.tags.includes('Partner');
+  }
+  if (disciplineTag === 'Olympic Lifting') {
+    return workout.tags.includes('Olympic Lifting');
+  }
+  if (disciplineTag === 'Collab') {
+    return Boolean(workout.collab);
   }
   return false;
 }

@@ -115,13 +115,31 @@ describe('bundled standalone workouts', () => {
     const partner = allStandaloneWorkouts.find((w) =>
       w.tags.includes('Partner')
     );
+    const oly = allStandaloneWorkouts.find((w) =>
+      w.tags.includes('Olympic Lifting')
+    );
     expect(wod).toBeDefined();
     expect(hyrox).toBeDefined();
     expect(partner).toBeDefined();
+    expect(oly).toBeDefined();
     expect(workoutMatchesDiscipline(wod!, 'CrossFit')).toBe(true);
     expect(workoutMatchesDiscipline(hyrox!, 'Hyrox')).toBe(true);
     expect(workoutMatchesDiscipline(partner!, 'Partner')).toBe(true);
+    expect(workoutMatchesDiscipline(oly!, 'Olympic Lifting')).toBe(true);
     expect(wod!.tags).not.toContain('CrossFit');
+  });
+
+  it('collab discipline matches any workout with a collab property', () => {
+    const collabWorkouts = allStandaloneWorkouts.filter((w) => w.collab);
+    expect(collabWorkouts.length).toBeGreaterThan(0);
+    for (const w of collabWorkouts) {
+      expect(workoutMatchesDiscipline(w, 'Collab')).toBe(true);
+      expect(typeof w.collab?.name).toBe('string');
+      expect(typeof w.collab?.link).toBe('string');
+    }
+    const nonCollab = allStandaloneWorkouts.find((w) => !w.collab);
+    expect(nonCollab).toBeDefined();
+    expect(workoutMatchesDiscipline(nonCollab!, 'Collab')).toBe(false);
   });
 
   it('tags dedicated Olympic lifting sessions for focus filtering', () => {

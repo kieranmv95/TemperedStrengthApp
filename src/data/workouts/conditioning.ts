@@ -2,6 +2,62 @@ import type { StandaloneWorkoutSource } from '@/src/types/workouts';
 
 export const conditioning: StandaloneWorkoutSource[] = [
   {
+    id: 'f_70',
+    title: 'Redline',
+    description:
+      'Score is total time taken to complete. include the rest. its redline central and challenges the mind. The question is can you hang on? #chasepain',
+    category: 'Conditioning',
+    difficulty: 'Advanced',
+    estimatedTime: 15,
+    tags: ['Cardio', 'Full Body', 'For Time'],
+    isPremium: false,
+    collab: {
+      imageUrl:
+        'https://scontent-man2-1.cdninstagram.com/v/t51.82787-19/524893152_18523228096024599_5052690189735139261_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-man2-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gEgAW0c1AhOny3ZMcrCDtW-Nfb3ma7vVmDUk_oBGyvJL0oXl9-VdjhpZZscW6EpXf8&_nc_ohc=DTnEuI3LzwwQ7kNvwEx0H7L&_nc_gid=UgpisS-mYWtoZWgUf8aElg&edm=APoiHPcBAAAA&ccb=7-5&oh=00_AQBLg4OWtXeSNB8y4YBDyHzYDUg8RCgNBVppdosxftrpVQ&oe=6A5424DB&_nc_sid=22de04',
+      name: 'Chase Pain Podcast',
+      description:
+        'This workouts is brought to you by the chase pain podcast, sharing conversations with athletes from all different walks of life.',
+      link: 'https://open.spotify.com/show/2rifksaDS0rVXGpvZXRYPA?si=b9a72bd63a5b43b9&fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExUG5yYklXMFZyenNiRHNTa3NydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR79sza2w0Jy0jdsML1_C7diJjL08jToEygu7dY2KFBv2NHy0OH_lLhAHUWTyQ_aem_DjWeRXeGUarTdFxgxQbT3w&nd=1&dlsi=d9a047cdc9534f4a',
+      linkCopy: 'Click to Listen',
+      bgColor: '#000000',
+      linkAndBorderColor: '#ff00ff',
+      nameColor: '#ff00ff',
+    },
+    blocks: [
+      {
+        name: 'Warmup',
+        mobilityFlow: 'r_15',
+        highlightInstructions: 'Into:',
+        movements: [
+          '2 minutes easy cardio to raise the heart rate',
+          '5 slow burpees, 10 air squats',
+        ],
+      },
+      {
+        name: 'For Time',
+        instructions:
+          'The clock runs the whole way through - the rest periods are part of your score. Go hard but pace the row so you can attack the burpees, then empty the tank on the ski. Score is total time taken to complete everything, including the rest.',
+        highlightInstructions: 'The rest counts. Can you hang on?',
+        movements: [
+          '500m Row',
+          'Rest 1 min',
+          '50 Burpees to Plate',
+          'Rest 1 min',
+          '500m Ski',
+        ],
+      },
+      {
+        name: 'Cooldown',
+        movements: [
+          '60s seated forward fold',
+          '60s child\u2019s pose',
+          '90s easy walk to bring the heart rate down',
+        ],
+      },
+    ],
+    equipment: ['rower', 'ski erg'],
+  },
+  {
     id: 'f_07',
     title: 'Row Till You Break',
     description:
