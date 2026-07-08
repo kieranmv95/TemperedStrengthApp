@@ -3,7 +3,7 @@ import { workoutMatchesDiscipline } from '@/src/data/disciplines';
 import { STANDALONE_LOG_SCHEMA_BY_ID } from '@/src/data/standaloneLogSchemas';
 import { workouts as workoutsData } from '@/src/data/workout_data';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
-import { isWorkoutTag } from '@/src/types/workouts';
+import { isWorkoutTag, isWorkoutFocusTag } from '@/src/types/workouts';
 import type { WorkoutLogSchema } from '@/src/types/workouts';
 
 function assertWorkoutLogSchema(schema: WorkoutLogSchema, label: string): void {
@@ -101,8 +101,10 @@ describe('bundled standalone workouts', () => {
         expect(w.tags).not.toContain(tag);
       }
       for (const tag of w.tags) {
-        expect(tag).not.toBe(w.category);
         expect(tag).not.toBe(w.difficulty);
+        if (!isWorkoutFocusTag(tag)) {
+          expect(tag).not.toBe(w.category);
+        }
       }
     }
   });
@@ -129,7 +131,7 @@ describe('bundled standalone workouts', () => {
       const w = allStandaloneWorkouts.find((row) => row.id === id);
       expect(w).toBeDefined();
       expect(w?.isPremium).toBe(true);
-      expect(w?.tags).toContain('HIIT');
+      expect(w?.category).toBe('Conditioning');
       expect(w?.blocks.length).toBeGreaterThan(0);
       expect(STANDALONE_LOG_SCHEMA_BY_ID[id]).toBeDefined();
     }

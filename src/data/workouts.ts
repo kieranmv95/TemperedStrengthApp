@@ -15,7 +15,11 @@ export type {
   WorkoutTag,
 } from '@/src/types/workouts';
 
-export { WORKOUT_TAGS, isWorkoutTag } from '@/src/types/workouts';
+export { WORKOUT_TAGS, isWorkoutTag, isWorkoutFocusTag, isWorkoutFormatTag } from '@/src/types/workouts';
+export {
+  WORKOUT_FOCUS_TAGS,
+  WORKOUT_FORMAT_TAGS,
+} from '@/src/types/workouts';
 
 type WorkoutJson = StandaloneWorkoutSource;
 

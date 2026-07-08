@@ -9,7 +9,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Advanced',
     estimatedTime: 25,
-    tags: ['Benchmark'],
+    tags: ['Cardio', 'Intervals', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -48,7 +48,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Running', 'Speed', 'Benchmark'],
+    tags: ['Cardio', 'Intervals', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -91,7 +91,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['Cardio', 'Skill'],
+    tags: ['Cardio'],
     isPremium: false,
     blocks: [
       {
@@ -130,7 +130,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Benchmark', 'EMOM'],
+    tags: ['Cardio', 'EMOM', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -159,64 +159,6 @@ export const conditioning: StandaloneWorkoutSource[] = [
     equipment: ['rower', 'bike', 'ski erg'],
   },
   {
-    id: 'f_55',
-    title: 'Sandbag Lunge Repeatability',
-    description:
-      'Leg endurance with a Hyrox bias. Keep steps consistent and upright.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
-    estimatedTime: 40,
-    tags: ['Lunges', 'Run', 'Partner'],
-    isPremium: false,
-    blocks: [
-      {
-        scale: 'Individual',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-            highlightInstructions: 'Into:',
-            movements: [
-              '2 mins Easy Jog',
-              '2 x 10 lunges (bodyweight)',
-              '2 x 100m easy carry',
-            ],
-          },
-          {
-            name: '4 Sets for Time',
-            instructions:
-              'Keep steps consistent and upright. Rest as needed but keep the pace consistent and test breaks minimal.',
-            highlightInstructions: '4 Sets for time',
-            movements: ['800m Run', '200m Sandbag Lunges'],
-          },
-        ],
-      },
-      {
-        scale: 'Partner',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-            highlightInstructions: 'Into:',
-            movements: [
-              '2 mins Easy Jog',
-              '2 x 10 lunges (bodyweight)',
-              '2 x 100m easy carry',
-            ],
-          },
-          {
-            name: '4 Sets for Time',
-            instructions:
-              'Run together, split the carry work between the team in a tag team style approach. Walk with your partner whilst the work as active recovery and rest. Rest while your partner works. This should feel fast as a result.',
-            highlightInstructions: '4 Sets for time.',
-            movements: ['800m Run', '300m Sandbag Lunges'],
-          },
-        ],
-      },
-    ],
-    equipment: ['sandbag'],
-  },
-  {
     id: 'f_66',
     title: 'Run Pacing Ladder',
     description:
@@ -224,7 +166,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Intermediate',
     estimatedTime: 35,
-    tags: ['Run', 'Pacing', 'Engine'],
+    tags: ['Cardio', 'Intervals'],
     isPremium: false,
     blocks: [
       {
@@ -258,7 +200,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Endurance', 'Benchmark'],
+    tags: ['Cardio', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -292,7 +234,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Advanced',
     estimatedTime: 50,
-    tags: ['Running', 'Full Body', 'Endurance'],
+    tags: ['Full Body', 'For Time'],
     isPremium: true,
     blocks: [
       {
@@ -362,7 +304,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Skill'],
+    tags: ['Cardio'],
     isPremium: true,
     blocks: [
       {
@@ -433,7 +375,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Advanced',
     estimatedTime: 40,
-    tags: ['Ski', 'Bike', 'Run', 'Benchmark', 'Full Body'],
+    tags: ['Cardio', 'For Time', 'Benchmark', 'Chipper'],
     isPremium: true,
     blocks: [
       {
@@ -451,70 +393,6 @@ export const conditioning: StandaloneWorkoutSource[] = [
     equipment: ['rower', 'ski erg', 'bike'],
   },
   {
-    id: 'p_32',
-    title: 'Hyrox Heavy Sled Day',
-    description:
-      'Hyrox sled day. Heavy exposure with enough aerobic work to keep you honest.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
-    estimatedTime: 60,
-    tags: ['Heavy', 'Run', 'Partner'],
-    isPremium: true,
-    blocks: [
-      {
-        scale: 'Individual',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-            highlightInstructions: 'Into:',
-            movements: [
-              '2 mins easy cardio',
-              '2 x 20m light sled push, 2 x 20m light sled pull',
-            ],
-          },
-          {
-            name: 'Work',
-            instructions:
-              '6 Rounds for time of gruelling sled work and runs, aim to go for the official hyrox competition weight',
-            movements: [
-              '20m Sled Push (heavy)',
-              '20m Sled Pull (heavy)',
-              '600m Run (steady)',
-            ],
-          },
-        ],
-      },
-      {
-        scale: 'Partner',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-            highlightInstructions: 'Into:',
-            movements: [
-              '2 mins easy cardio',
-              '2 x 20m light sled push, 2 x 20m light sled pull',
-            ],
-          },
-          {
-            name: 'Work',
-            instructions:
-              '6 Rounds for time of gruelling sled work and runs, aim to go for the official hyrox competition weight',
-            highlightInstructions:
-              'Run together, split the sled work between 10m each in a tag team style approach. Rest while your partner works.',
-            movements: [
-              '40m Sled Push (heavy)',
-              '40m Sled Pull (heavy)',
-              '600m Run (steady)',
-            ],
-          },
-        ],
-      },
-    ],
-    equipment: ['sled'],
-  },
-  {
     id: 'p_55',
     title: 'Ignition',
     description:
@@ -522,7 +400,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 12,
-    tags: ['HIIT', 'HIIT Shred', 'AMRAP'],
+    tags: ['Full Body', 'AMRAP'],
     equipment: [],
     isPremium: true,
     blocks: [
@@ -552,7 +430,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['Full Body', 'For Time', 'Ladder'],
     equipment: ['medicine ball'],
     isPremium: true,
     blocks: [
@@ -579,7 +457,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 8,
-    tags: ['HIIT', 'HIIT Shred', 'Tabata'],
+    tags: ['Upper Body', 'Tabata'],
     equipment: ['dumbbell', 'medicine ball'],
     isPremium: true,
     blocks: [
@@ -600,7 +478,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['Full Body', 'For Time', 'Chipper'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -632,7 +510,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 12,
-    tags: ['HIIT', 'HIIT Shred', 'EMOM'],
+    tags: ['Full Body', 'EMOM'],
     equipment: ['dumbbell'],
     isPremium: true,
     blocks: [
@@ -665,7 +543,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['Lower Body', 'For Time'],
     equipment: ['dumbbell', 'box'],
     isPremium: true,
     blocks: [
@@ -696,7 +574,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 15,
-    tags: ['HIIT', 'HIIT Shred', 'AMRAP'],
+    tags: ['Full Body', 'AMRAP'],
     equipment: ['kettlebell', 'medicine ball'],
     isPremium: true,
     blocks: [
@@ -732,7 +610,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'For Time', 'Partner'],
+    tags: ['Full Body', 'For Time', 'Partner'],
     equipment: ['medicine ball'],
     isPremium: true,
     blocks: [
@@ -780,7 +658,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 15,
-    tags: ['HIIT', 'AMRAP'],
+    tags: ['Full Body', 'AMRAP'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar'],
     isPremium: true,
     blocks: [
@@ -814,7 +692,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 16,
-    tags: ['HIIT', 'EMOM'],
+    tags: ['Upper Body', 'EMOM'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar'],
     isPremium: true,
     blocks: [
@@ -847,7 +725,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'For Time'],
+    tags: ['Lower Body', 'For Time'],
     equipment: ['dumbbell', 'box', 'bands'],
     isPremium: true,
     blocks: [
@@ -880,7 +758,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['HIIT', 'For Time'],
+    tags: ['Full Body', 'For Time', 'Intervals'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -913,7 +791,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 15,
-    tags: ['HIIT', 'For Time'],
+    tags: ['Full Body', 'For Time', 'Intervals'],
     equipment: ['dumbbell', 'medicine ball'],
     isPremium: true,
     blocks: [
@@ -944,7 +822,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 6,
-    tags: ['HIIT', 'Tabata'],
+    tags: ['Upper Body', 'Tabata'],
     equipment: ['dumbbell', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -971,7 +849,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 18,
-    tags: ['HIIT', 'AMRAP'],
+    tags: ['Lower Body', 'AMRAP'],
     equipment: ['kettlebell', 'box'],
     isPremium: true,
     blocks: [
@@ -1004,7 +882,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'For Time'],
+    tags: ['Full Body', 'For Time', 'Chipper'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar'],
     isPremium: true,
     blocks: [
@@ -1039,7 +917,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'For Time'],
+    tags: ['Full Body', 'For Time', 'Ladder'],
     equipment: ['medicine ball'],
     isPremium: true,
     blocks: [
@@ -1066,7 +944,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['HIIT', 'HIIT Shred', 'AMRAP'],
+    tags: ['Full Body', 'AMRAP'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar'],
     isPremium: true,
     blocks: [
@@ -1098,7 +976,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['HIIT', 'HIIT Shred', 'EMOM'],
+    tags: ['Full Body', 'EMOM'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -1132,7 +1010,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['Upper Body', 'For Time', 'Chipper'],
     equipment: ['dumbbell', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -1167,7 +1045,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['Lower Body', 'For Time'],
     equipment: ['dumbbell', 'box', 'medicine ball'],
     isPremium: true,
     blocks: [
@@ -1196,7 +1074,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['Full Body', 'For Time', 'Chipper'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar'],
     isPremium: true,
     blocks: [

@@ -9,7 +9,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Intermediate',
     estimatedTime: 20,
-    tags: ['Chipper', 'Full Body'],
+    tags: ['Full Body', 'Chipper', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -36,7 +36,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Intermediate',
     estimatedTime: 15,
-    tags: ['AMRAP', 'Partner'],
+    tags: ['Full Body', 'AMRAP', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -83,7 +83,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 25,
-    tags: ['Sprint', 'Lungs'],
+    tags: ['Full Body', 'EMOM'],
     isPremium: false,
     blocks: [
       {
@@ -111,10 +111,10 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Hip Snap',
     description:
       'Posterior chain power, built one swing at a time. The reps climb every two minutes so there is no cruising. Flat back, aggressive hip snap, and let the bell float.',
-    category: 'Strength',
+    category: 'Conditioning',
     difficulty: 'Intermediate',
     estimatedTime: 10,
-    tags: ['Power'],
+    tags: ['Full Body', 'EMOM'],
     isPremium: false,
     blocks: [
       {
@@ -163,7 +163,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 10,
-    tags: ['Tabata', 'Quick'],
+    tags: ['Full Body', 'Tabata'],
     isPremium: false,
     blocks: [
       {
@@ -204,7 +204,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Intermediate',
     estimatedTime: 18,
-    tags: ['Legs', 'Lungs', 'Partner'],
+    tags: ['Full Body', 'AMRAP', 'Partner'],
     isPremium: true,
     blocks: [
       {
@@ -268,7 +268,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Intermediate',
     estimatedTime: 18,
-    tags: ['Full Body', 'Core'],
+    tags: ['Full Body', 'EMOM'],
     isPremium: false,
     blocks: [
       {
@@ -305,7 +305,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Intermediate',
     estimatedTime: 20,
-    tags: ['AMRAP', 'Benchmark'],
+    tags: ['Full Body', 'AMRAP', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -333,7 +333,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 15,
-    tags: ['For Time', 'Benchmark', 'Thrusters'],
+    tags: ['Upper Body', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -361,7 +361,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['For Time', 'Benchmark', 'Run'],
+    tags: ['Full Body', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -393,7 +393,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Intermediate',
     estimatedTime: 20,
-    tags: ['For Time', 'Benchmark', 'Core', 'Rope'],
+    tags: ['Core', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -419,7 +419,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 10,
-    tags: ['For Time', 'Benchmark', 'Clean and Jerk'],
+    tags: ['Upper Body', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -477,7 +477,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 15,
-    tags: ['For Time', 'Benchmark'],
+    tags: ['Full Body', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -504,7 +504,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['For Time', 'Benchmark', 'Thrusters'],
+    tags: ['Upper Body', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -534,7 +534,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['For Time', 'Benchmark', 'Run', 'Overhead Squat'],
+    tags: ['Full Body', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -562,7 +562,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['For Time', 'Benchmark', 'Deadlift', 'HSPU'],
+    tags: ['Upper Body', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -627,7 +627,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 10,
-    tags: ['For Time', 'Benchmark', 'Snatch'],
+    tags: ['Upper Body', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -654,7 +654,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 15,
-    tags: ['For Time', 'Benchmark', 'Clean'],
+    tags: ['Upper Body', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -681,7 +681,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 40,
-    tags: ['For Time', 'Benchmark', 'Chipper'],
+    tags: ['Full Body', 'For Time', 'Benchmark', 'Chipper'],
     isPremium: false,
     blocks: [
       {
@@ -719,7 +719,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['For Time', 'Benchmark', 'Intervals'],
+    tags: ['Full Body', 'Intervals', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -751,7 +751,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Intermediate',
     estimatedTime: 40,
-    tags: ['EMOM', 'Benchmark'],
+    tags: ['Full Body', 'EMOM', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -783,7 +783,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Benchmark', 'Intervals', 'For Score'],
+    tags: ['Full Body', 'Intervals', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -819,7 +819,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 25,
-    tags: ['Benchmark', 'AMRAP', 'Intervals'],
+    tags: ['Full Body', 'AMRAP', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -850,7 +850,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 25,
-    tags: ['For Time', 'Benchmark', 'Chipper'],
+    tags: ['Full Body', 'For Time', 'Benchmark', 'Chipper'],
     isPremium: false,
     blocks: [
       {
@@ -906,7 +906,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['For Time', 'Benchmark', 'Run'],
+    tags: ['Full Body', 'For Time', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -936,7 +936,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Benchmark', 'For Score', 'Bench Press'],
+    tags: ['Upper Body', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -967,7 +967,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['For Time', 'Benchmark', 'Thrusters', 'Burpees'],
+    tags: ['Full Body', 'For Time', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -998,7 +998,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['Sprint'],
+    tags: ['Full Body', 'For Time'],
     isPremium: true,
     blocks: [
       {
@@ -1024,7 +1024,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 60,
-    tags: ['Hero WOD', 'Long'],
+    tags: ['Full Body', 'For Time', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -1135,7 +1135,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 25,
-    tags: ['Explosive', 'Lungs', 'Partner', 'For Time'],
+    tags: ['Full Body', 'For Time', 'Partner'],
     isPremium: true,
     blocks: [
       {
@@ -1181,7 +1181,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Lungs'],
+    tags: ['Full Body', 'For Time', 'Ladder'],
     isPremium: true,
     blocks: [
       {
@@ -1224,7 +1224,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Benchmark', 'For Time', 'Run'],
+    tags: ['Full Body', 'For Time', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -1279,7 +1279,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['Benchmark', 'For Time', 'Heavy'],
+    tags: ['Upper Body', 'For Time', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -1341,7 +1341,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Benchmark', 'AMRAP', 'Gymnastics'],
+    tags: ['Gymnastics', 'AMRAP', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -1369,7 +1369,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['Benchmark', 'For Time', 'Snatch'],
+    tags: ['Upper Body', 'For Time', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -1394,7 +1394,7 @@ export const wods: StandaloneWorkoutSource[] = [
     category: 'WOD',
     difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['Benchmark', 'For Time', 'Gymnastics'],
+    tags: ['Gymnastics', 'For Time', 'Benchmark'],
     isPremium: true,
     blocks: [
       {

@@ -35,6 +35,34 @@ export function WorkoutSortBarButton({
   );
 }
 
+type WorkoutFiltersBarButtonProps = {
+  activeCount: number;
+  onPress: () => void;
+};
+
+export function WorkoutFiltersBarButton({
+  activeCount,
+  onPress,
+}: WorkoutFiltersBarButtonProps) {
+  return (
+    <TouchableOpacity
+      style={styles.filterBarButton}
+      onPress={onPress}
+      activeOpacity={0.8}
+      accessibilityRole="button"
+      accessibilityLabel="Filter workouts"
+    >
+      <Text style={styles.filterBarButtonText}>Filters</Text>
+      <Ionicons name="options-outline" size={16} color={Colors.textMuted} />
+      {activeCount > 0 ? (
+        <View style={styles.filterBadge}>
+          <Text style={styles.filterBadgeText}>{activeCount}</Text>
+        </View>
+      ) : null}
+    </TouchableOpacity>
+  );
+}
+
 type WorkoutSortPanelProps = {
   sortBy: WorkoutSortBy;
   sortDirection: WorkoutSortDirection;
@@ -112,6 +140,20 @@ const styles = StyleSheet.create({
   filterBarButtonText: {
     color: Colors.textPrimary,
     fontSize: FontSize.base,
+    fontWeight: '700',
+  },
+  filterBadge: {
+    minWidth: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: Colors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 6,
+  },
+  filterBadgeText: {
+    color: Colors.textOnAccent,
+    fontSize: FontSize.sm,
     fontWeight: '700',
   },
   sortPanel: {

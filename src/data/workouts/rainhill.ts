@@ -9,7 +9,7 @@ export const rainhill: StandaloneWorkoutSource[] = [
     category: 'Rainhill',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 10,
-    tags: ['AMRAP', 'Gymnastics'],
+    tags: ['Full Body', 'AMRAP', 'Gymnastics'],
     isPremium: false,
     blocks: [
       {
@@ -77,7 +77,7 @@ export const rainhill: StandaloneWorkoutSource[] = [
     category: 'Rainhill',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 11,
-    tags: ['AMRAP', 'Gymnastics', 'Lunges'],
+    tags: ['Full Body', 'AMRAP', 'Gymnastics'],
     isPremium: false,
     blocks: [
       {
@@ -196,7 +196,7 @@ export const rainhill: StandaloneWorkoutSource[] = [
     category: 'Rainhill',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 10,
-    tags: ['Chipper', 'For Time', 'Deadlift', 'Clean', 'Overhead'],
+    tags: ['Full Body', 'Chipper', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -294,7 +294,7 @@ export const rainhill: StandaloneWorkoutSource[] = [
     category: 'Rainhill',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 7,
-    tags: ['AMRAP', 'Gymnastics', 'Deadlift'],
+    tags: ['Full Body', 'AMRAP', 'Gymnastics'],
     isPremium: false,
     blocks: [
       {
@@ -339,7 +339,7 @@ export const rainhill: StandaloneWorkoutSource[] = [
     category: 'Rainhill',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 9,
-    tags: ['Track', 'Timecap', 'Running'],
+    tags: ['Cardio', 'For Time', 'Chipper'],
     isPremium: false,
     blocks: [
       {
@@ -407,7 +407,7 @@ export const rainhill: StandaloneWorkoutSource[] = [
     category: 'Rainhill',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 11,
-    tags: ['Chipper', 'For Time', 'Gymnastics'],
+    tags: ['Gymnastics', 'For Time', 'Chipper'],
     isPremium: false,
     blocks: [
       {
@@ -490,7 +490,7 @@ export const rainhill: StandaloneWorkoutSource[] = [
     category: 'Rainhill',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 10,
-    tags: ['Chipper', 'For Time', 'Snatch', 'Gymnastics'],
+    tags: ['Gymnastics', 'For Time', 'Chipper'],
     isPremium: false,
     blocks: [
       {
@@ -562,7 +562,7 @@ export const rainhill: StandaloneWorkoutSource[] = [
     category: 'Rainhill',
     difficulty: 'Advanced',
     estimatedTime: 15,
-    tags: ['Chipper', 'For Time', 'Gymnastics'],
+    tags: ['Full Body', 'For Time', 'Chipper'],
     isPremium: false,
     blocks: [
       {
@@ -615,7 +615,7 @@ export const rainhill: StandaloneWorkoutSource[] = [
     category: 'Rainhill',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 8,
-    tags: ['AMRAP', 'Carry', 'Lunges', 'Gymnastics'],
+    tags: ['Full Body', 'AMRAP', 'Gymnastics'],
     isPremium: false,
     blocks: [
       {
@@ -713,7 +713,7 @@ export const rainhill: StandaloneWorkoutSource[] = [
     category: 'Rainhill',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 12,
-    tags: ['Chipper', 'For Time'],
+    tags: ['Full Body', 'For Time', 'Chipper', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -877,7 +877,7 @@ export const rainhill: StandaloneWorkoutSource[] = [
     category: 'Rainhill',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 12,
-    tags: ['Chipper', 'For Time', 'Deadlift', 'Clean', 'Overhead'],
+    tags: ['Full Body', 'Chipper', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {

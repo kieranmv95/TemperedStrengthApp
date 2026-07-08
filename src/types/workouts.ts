@@ -24,115 +24,49 @@ export type WorkoutEquipment =
   | 'ghd'
   | 'sandbag';
 
-export const WORKOUT_TAGS = [
-  'AMRAP',
-  'Abs',
-  'Aerobic',
-  'Arms',
-  'Athletic',
-  'Back',
-  'Balance',
-  'Bench Press',
-  'Benchmark',
-  'Biceps',
-  'Bike',
-  'Boxing',
-  'Breathwork',
-  'Burpees',
-  'Calisthenics',
-  'Cardio',
-  'Carry',
-  'Chest',
-  'Chipper',
-  'Circuit',
-  'Classical',
-  'Clean',
-  'Clean and Jerk',
-  'Control',
-  'Core',
-  'Deadlift',
-  'Deep Stabilisers',
-  'Delts',
-  'EMOM',
-  'Eccentric',
-  'Elite',
-  'Endurance',
-  'Engine',
-  'Explosive',
-  'Finishers',
-  'Flexibility',
-  'For Score',
-  'For Time',
+/** Training stimulus / body area — workouts typically have 1–2. */
+export const WORKOUT_FOCUS_TAGS = [
   'Full Body',
-  'Glutes',
-  'Grip',
-  'Gymnastics',
-  'HIIT',
-  'HIIT Shred',
-  'HSPU',
-  'Hamstrings',
-  'Heavy',
-  'Hero WOD',
-  'Hip Stability',
-  'Hybrid',
-  'Hypertrophy',
-  'Intervals',
-  'Jumps',
-  'Lats',
-  'Legs',
-  'Long',
-  'Lunges',
-  'Lungs',
-  'Mobility',
-  'Morning',
-  'Overhead',
-  'Overhead Squat',
-  'Pacing',
-  'Partner',
-  'Pause',
-  'Posture',
-  'Postures',
-  'Power',
-  'Powerhouse',
-  'Prehab',
-  'Pump',
-  'Quads',
-  'Quick',
-  'Recovery',
-  'Reformer-Style',
-  'Rings',
-  'Rope',
-  'Rotation',
-  'Run',
-  'Running',
-  'Shoulders',
-  'Simulation',
-  'Ski',
-  'Skill',
-  'Snatch',
-  'Speed',
-  'Spine',
-  'Sprint',
-  'Squat',
-  'Stability',
-  'Stations',
-  'Strength',
-  'Tabata',
-  'Teaser',
-  'Technique',
-  'Test',
-  'Thoracic',
-  'Thrusters',
-  'Timecap',
-  'Track',
-  'Transitions',
-  'Triceps',
   'Upper Body',
-  'Volume',
-  'Zone 2',
+  'Lower Body',
+  'Core',
+  'Cardio',
+  'Strength',
+  'Gymnastics',
 ] as const;
 
+/** Workout structure / scoring — workouts typically have 1. */
+export const WORKOUT_FORMAT_TAGS = [
+  'AMRAP',
+  'EMOM',
+  'For Time',
+  'Intervals',
+  'Tabata',
+  'Chipper',
+  'Ladder',
+  'Benchmark',
+] as const;
+
+/** Modifier kept for Partner discipline filtering. */
+export const WORKOUT_MODIFIER_TAGS = ['Partner'] as const;
+
+export const WORKOUT_TAGS = [
+  ...WORKOUT_FOCUS_TAGS,
+  ...WORKOUT_FORMAT_TAGS,
+  ...WORKOUT_MODIFIER_TAGS,
+] as const;
+
+export type WorkoutFocusTag = (typeof WORKOUT_FOCUS_TAGS)[number];
+export type WorkoutFormatTag = (typeof WORKOUT_FORMAT_TAGS)[number];
 export type WorkoutTag = (typeof WORKOUT_TAGS)[number];
+
+export function isWorkoutFocusTag(tag: string): tag is WorkoutFocusTag {
+  return (WORKOUT_FOCUS_TAGS as readonly string[]).includes(tag);
+}
+
+export function isWorkoutFormatTag(tag: string): tag is WorkoutFormatTag {
+  return (WORKOUT_FORMAT_TAGS as readonly string[]).includes(tag);
+}
 
 export function isWorkoutTag(tag: string): tag is WorkoutTag {
   return (WORKOUT_TAGS as readonly string[]).includes(tag);

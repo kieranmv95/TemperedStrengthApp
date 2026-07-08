@@ -41,6 +41,17 @@ export const CATEGORY_FILTERS: CategoryFilter[] = [
   'Rainhill',
 ];
 
+/** Discipline options shown in the filter sheet (excludes implicit "All"). */
+export const DISCIPLINE_CATEGORY_FILTERS: Exclude<CategoryFilter, 'All'>[] = [
+  'Favorites',
+  'Pro',
+  'Strength',
+  'WOD',
+  'Hyrox',
+  'Conditioning',
+  'Rainhill',
+];
+
 export const WORKOUT_EQUIPMENT_OPTIONS: WorkoutEquipment[] = [
   'kettlebell',
   'dumbbell',

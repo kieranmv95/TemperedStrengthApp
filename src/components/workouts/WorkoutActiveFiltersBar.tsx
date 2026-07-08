@@ -4,7 +4,16 @@ import {
   type CategoryFilter,
 } from '@/src/components/workouts/workoutsScreenConstants';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
-import type { WorkoutEquipment } from '@/src/types/workouts';
+import type {
+  WorkoutEquipment,
+  WorkoutFocusTag,
+  WorkoutFormatTag,
+} from '@/src/types/workouts';
+import {
+  WORKOUT_TIME_BUCKET_OPTIONS,
+  equipmentFilterLabel,
+  type WorkoutTimeBucket,
+} from '@/src/utils/workoutFilters';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -16,12 +25,17 @@ type WorkoutActiveFiltersBarProps = {
   activeCategoryFilter: CategoryFilter;
   selectedEquipment: WorkoutEquipment[];
   noEquipmentOnly: boolean;
-  equipmentLabel: (eq: WorkoutEquipment) => string;
+  selectedFocus: WorkoutFocusTag[];
+  selectedFormat: WorkoutFormatTag[];
+  selectedTimeBuckets: WorkoutTimeBucket[];
   onResetAll: () => void;
   onClearSearch: () => void;
   onClearCategory: () => void;
   onClearNoEquipment: () => void;
   onRemoveEquipment: (eq: WorkoutEquipment) => void;
+  onRemoveFocus: (tag: WorkoutFocusTag) => void;
+  onRemoveFormat: (tag: WorkoutFormatTag) => void;
+  onRemoveTimeBucket: (bucket: WorkoutTimeBucket) => void;
 };
 
 export function WorkoutActiveFiltersBar({
@@ -29,12 +43,17 @@ export function WorkoutActiveFiltersBar({
   activeCategoryFilter,
   selectedEquipment,
   noEquipmentOnly,
-  equipmentLabel,
+  selectedFocus,
+  selectedFormat,
+  selectedTimeBuckets,
   onResetAll,
   onClearSearch,
   onClearCategory,
   onClearNoEquipment,
   onRemoveEquipment,
+  onRemoveFocus,
+  onRemoveFormat,
+  onRemoveTimeBucket,
 }: WorkoutActiveFiltersBarProps) {
   const trimmedSearch = searchQuery.trim();
 
@@ -43,9 +62,20 @@ export function WorkoutActiveFiltersBar({
       trimmedSearch.length > 0 ||
       activeCategoryFilter !== 'All' ||
       selectedEquipment.length > 0 ||
-      noEquipmentOnly
+      noEquipmentOnly ||
+      selectedFocus.length > 0 ||
+      selectedFormat.length > 0 ||
+      selectedTimeBuckets.length > 0
     );
-  }, [trimmedSearch, activeCategoryFilter, selectedEquipment, noEquipmentOnly]);
+  }, [
+    trimmedSearch,
+    activeCategoryFilter,
+    selectedEquipment,
+    noEquipmentOnly,
+    selectedFocus,
+    selectedFormat,
+    selectedTimeBuckets,
+  ]);
 
   if (!hasActiveFilters) {
     return null;
@@ -55,6 +85,9 @@ export function WorkoutActiveFiltersBar({
     trimmedSearch.length > SEARCH_LABEL_MAX
       ? `${trimmedSearch.slice(0, SEARCH_LABEL_MAX)}…`
       : trimmedSearch;
+
+  const timeBucketLabel = (bucket: WorkoutTimeBucket) =>
+    WORKOUT_TIME_BUCKET_OPTIONS.find((b) => b.id === bucket)?.label ?? bucket;
 
   return (
     <View style={styles.container}>
@@ -98,6 +131,33 @@ export function WorkoutActiveFiltersBar({
           />
         ) : null}
 
+        {selectedFocus.map((tag) => (
+          <Pill
+            key={`focus-${tag}`}
+            label={tag}
+            isActive
+            onPress={() => onRemoveFocus(tag)}
+          />
+        ))}
+
+        {selectedFormat.map((tag) => (
+          <Pill
+            key={`format-${tag}`}
+            label={tag}
+            isActive
+            onPress={() => onRemoveFormat(tag)}
+          />
+        ))}
+
+        {selectedTimeBuckets.map((bucket) => (
+          <Pill
+            key={`time-${bucket}`}
+            label={timeBucketLabel(bucket)}
+            isActive
+            onPress={() => onRemoveTimeBucket(bucket)}
+          />
+        ))}
+
         {noEquipmentOnly ? (
           <Pill
             label="No equipment"
@@ -109,7 +169,7 @@ export function WorkoutActiveFiltersBar({
         {selectedEquipment.map((eq) => (
           <Pill
             key={eq}
-            label={equipmentLabel(eq)}
+            label={equipmentFilterLabel(eq)}
             isActive
             onPress={() => onRemoveEquipment(eq)}
           />

@@ -9,7 +9,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Chipper', 'For Time', 'Partner'],
+    tags: ['Full Body', 'Chipper', 'For Time', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -68,7 +68,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Intermediate',
     estimatedTime: 30,
-    tags: ['Test'],
+    tags: ['Full Body', 'For Time', 'Benchmark', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -129,7 +129,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Intermediate',
     estimatedTime: 40,
-    tags: ['Benchmark', 'Full Body', 'Partner'],
+    tags: ['Full Body', 'Intervals', 'Benchmark', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -196,7 +196,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Intermediate',
     estimatedTime: 35,
-    tags: ['Engine', 'Run', 'Partner'],
+    tags: ['Cardio', 'Intervals', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -255,7 +255,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Beginner',
     estimatedTime: 35,
-    tags: ['Technique'],
+    tags: ['Lower Body', 'Intervals'],
     isPremium: true,
     blocks: [
       {
@@ -292,7 +292,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Intermediate',
     estimatedTime: 12,
-    tags: ['Benchmark', 'For Score'],
+    tags: ['Full Body', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -319,7 +319,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Intermediate',
     estimatedTime: 20,
-    tags: ['Intervals', 'Burpees', 'Jumps', 'Partner'],
+    tags: ['Full Body', 'Intervals', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -397,7 +397,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Intermediate',
     estimatedTime: 35,
-    tags: ['Carry', 'Grip', 'Run', 'Partner', 'For Time'],
+    tags: ['Full Body', 'For Time', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -448,7 +448,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Benchmark', 'Full Body'],
+    tags: ['Full Body', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -491,7 +491,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Intermediate',
     estimatedTime: 35,
-    tags: ['Engine', 'Run'],
+    tags: ['Cardio', 'For Time'],
     isPremium: false,
     blocks: [
       {
@@ -523,7 +523,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Run', 'Intervals', 'Partner'],
+    tags: ['Cardio', 'Intervals', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -581,7 +581,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Intermediate',
     estimatedTime: 30,
-    tags: ['Stations', 'Circuit', 'Partner'],
+    tags: ['Full Body', 'For Time', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -644,10 +644,10 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'The Quiet Work',
     description:
       'Not every session needs to hurt. Zone 2 work is where your engine actually gets built, and most people skip it because it feels too easy. It is not. Stay conversational the whole time, if you cannot hold a sentence you are going too hard. Pick your machine and settle in.',
-    category: 'Hyrox',
+    category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 40,
-    tags: ['Aerobic', 'Zone 2', 'Engine'],
+    tags: ['Cardio'],
     isPremium: true,
     blocks: [
       {
@@ -689,7 +689,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Intervals', 'Partner'],
+    tags: ['Lower Body', 'Intervals', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -748,7 +748,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Intervals', 'Partner'],
+    tags: ['Lower Body', 'Intervals', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -799,7 +799,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Intermediate',
     estimatedTime: 30,
-    tags: ['Transitions', 'Run', 'Partner'],
+    tags: ['Full Body', 'For Time', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -849,7 +849,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Intermediate',
     estimatedTime: 20,
-    tags: ['AMRAP', 'For Score', 'Engine', 'Partner'],
+    tags: ['Full Body', 'AMRAP', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -905,7 +905,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Intermediate',
     estimatedTime: 35,
-    tags: ['Benchmark', 'Test'],
+    tags: ['Full Body', 'For Time', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -936,7 +936,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Carry', 'Grip', 'For Time', 'Benchmark', 'Partner'],
+    tags: ['Full Body', 'For Time', 'Benchmark', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -1000,7 +1000,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 25,
-    tags: ['Benchmark', 'For Time'],
+    tags: ['Full Body', 'For Time', 'Benchmark'],
     isPremium: false,
     blocks: [
       {
@@ -1027,7 +1027,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Simulation', 'Run', 'Stations', 'Partner'],
+    tags: ['Full Body', 'For Time', 'Partner'],
     isPremium: false,
     blocks: [
       {
@@ -1097,7 +1097,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Heavy', 'Elite'],
+    tags: ['Full Body', 'For Time'],
     isPremium: true,
     blocks: [
       {
@@ -1125,10 +1125,10 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Earn Your 5k',
     description:
       'Anyone can run a 5k on fresh legs. This session makes sure you never do. A short burnout before the run taxes the legs just enough to make the first kilometre feel like the third. Hit the burnout, then run your best 5k anyway. Sub 20:00 is the target, sub 18:00 is elite.',
-    category: 'Hyrox',
+    category: 'Conditioning',
     difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Running', 'Aerobic', 'Benchmark'],
+    tags: ['Cardio', 'For Time', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -1170,7 +1170,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 40,
-    tags: ['Hybrid', 'Finishers'],
+    tags: ['Full Body', 'Chipper', 'For Time'],
     isPremium: true,
     blocks: [
       {
@@ -1203,7 +1203,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 85,
-    tags: ['Simulation', 'Run', 'Stations', 'Partner'],
+    tags: ['Full Body', 'For Time', 'Partner'],
     isPremium: true,
     blocks: [
       {
@@ -1302,7 +1302,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Stations', 'Intervals', 'Elite', 'Partner'],
+    tags: ['Full Body', 'Intervals', 'Partner'],
     isPremium: true,
     blocks: [
       {
@@ -1372,7 +1372,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 40,
-    tags: ['Benchmark', 'Test'],
+    tags: ['Full Body', 'For Time', 'Benchmark'],
     isPremium: true,
     blocks: [
       {
@@ -1403,7 +1403,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
     category: 'Hyrox',
     difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Transitions', 'Intervals', 'Stations', 'Partner'],
+    tags: ['Full Body', 'Intervals', 'Partner'],
     isPremium: true,
     blocks: [
       {
@@ -1452,10 +1452,10 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Hyrox Lite',
     description:
       'Hyrox-style session. Eight stations, one round each, for time. Functional movements, high volume, designed to replicate the feel of race-day conditioning. This is the longest lower body session of the programme - pace from station one.',
-    category: 'Hyrox',
+    category: 'Conditioning',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['HIIT', 'HIIT Shred', 'For Time'],
+    tags: ['Full Body', 'For Time'],
     equipment: ['dumbbell', 'box', 'medicine ball'],
     isPremium: true,
     blocks: [
@@ -1482,5 +1482,127 @@ export const hyrox: StandaloneWorkoutSource[] = [
         ],
       },
     ],
+  },
+  {
+    id: 'f_55',
+    title: 'Sandbag Lunge Repeatability',
+    description:
+      'Leg endurance with a Hyrox bias. Keep steps consistent and upright.',
+    category: 'Hyrox',
+    difficulty: 'Advanced',
+    estimatedTime: 40,
+    tags: ['Lower Body', 'For Time', 'Partner'],
+    isPremium: false,
+    blocks: [
+      {
+        scale: 'Individual',
+        blocks: [
+          {
+            name: 'Warmup',
+            mobilityFlow: 'r_15',
+            highlightInstructions: 'Into:',
+            movements: [
+              '2 mins Easy Jog',
+              '2 x 10 lunges (bodyweight)',
+              '2 x 100m easy carry',
+            ],
+          },
+          {
+            name: '4 Sets for Time',
+            instructions:
+              'Keep steps consistent and upright. Rest as needed but keep the pace consistent and test breaks minimal.',
+            highlightInstructions: '4 Sets for time',
+            movements: ['800m Run', '200m Sandbag Lunges'],
+          },
+        ],
+      },
+      {
+        scale: 'Partner',
+        blocks: [
+          {
+            name: 'Warmup',
+            mobilityFlow: 'r_15',
+            highlightInstructions: 'Into:',
+            movements: [
+              '2 mins Easy Jog',
+              '2 x 10 lunges (bodyweight)',
+              '2 x 100m easy carry',
+            ],
+          },
+          {
+            name: '4 Sets for Time',
+            instructions:
+              'Run together, split the carry work between the team in a tag team style approach. Walk with your partner whilst the work as active recovery and rest. Rest while your partner works. This should feel fast as a result.',
+            highlightInstructions: '4 Sets for time.',
+            movements: ['800m Run', '300m Sandbag Lunges'],
+          },
+        ],
+      },
+    ],
+    equipment: ['sandbag'],
+  },
+  {
+    id: 'p_32',
+    title: 'Hyrox Heavy Sled Day',
+    description:
+      'Hyrox sled day. Heavy exposure with enough aerobic work to keep you honest.',
+    category: 'Hyrox',
+    difficulty: 'Advanced',
+    estimatedTime: 60,
+    tags: ['Lower Body', 'For Time', 'Partner'],
+    isPremium: true,
+    blocks: [
+      {
+        scale: 'Individual',
+        blocks: [
+          {
+            name: 'Warmup',
+            mobilityFlow: 'r_15',
+            highlightInstructions: 'Into:',
+            movements: [
+              '2 mins easy cardio',
+              '2 x 20m light sled push, 2 x 20m light sled pull',
+            ],
+          },
+          {
+            name: 'Work',
+            instructions:
+              '6 Rounds for time of gruelling sled work and runs, aim to go for the official hyrox competition weight',
+            movements: [
+              '20m Sled Push (heavy)',
+              '20m Sled Pull (heavy)',
+              '600m Run (steady)',
+            ],
+          },
+        ],
+      },
+      {
+        scale: 'Partner',
+        blocks: [
+          {
+            name: 'Warmup',
+            mobilityFlow: 'r_15',
+            highlightInstructions: 'Into:',
+            movements: [
+              '2 mins easy cardio',
+              '2 x 20m light sled push, 2 x 20m light sled pull',
+            ],
+          },
+          {
+            name: 'Work',
+            instructions:
+              '6 Rounds for time of gruelling sled work and runs, aim to go for the official hyrox competition weight',
+            highlightInstructions:
+              'Run together, split the sled work between 10m each in a tag team style approach. Rest while your partner works.',
+            movements: [
+              '40m Sled Push (heavy)',
+              '40m Sled Pull (heavy)',
+              '600m Run (steady)',
+            ],
+          },
+        ],
+      },
+    ],
+    equipment: ['sled'],
   },
 ];

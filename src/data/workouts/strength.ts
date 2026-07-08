@@ -9,7 +9,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['Legs', 'Volume'],
+    tags: ['Lower Body', 'Strength'],
     isPremium: false,
     blocks: [
       {
@@ -37,7 +37,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Intermediate',
     estimatedTime: 30,
-    tags: ['Upper Body', 'Pump'],
+    tags: ['Upper Body', 'Strength'],
     isPremium: false,
     blocks: [
       {
@@ -68,7 +68,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Intermediate',
     estimatedTime: 20,
-    tags: ['Chest'],
+    tags: ['Upper Body', 'Strength'],
     isPremium: false,
     blocks: [
       {
@@ -156,7 +156,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['Grip', 'Arms'],
+    tags: ['Upper Body', 'Strength'],
     isPremium: false,
     blocks: [
       {
@@ -187,7 +187,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Intermediate',
     estimatedTime: 50,
-    tags: ['Chest', 'Triceps'],
+    tags: ['Upper Body', 'Strength'],
     isPremium: true,
     blocks: [
       {
@@ -288,7 +288,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Intermediate',
     estimatedTime: 50,
-    tags: ['Back', 'Biceps'],
+    tags: ['Upper Body', 'Strength'],
     isPremium: true,
     blocks: [
       {
@@ -378,7 +378,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Intermediate',
     estimatedTime: 55,
-    tags: ['Legs', 'Squat'],
+    tags: ['Lower Body', 'Strength'],
     isPremium: false,
     blocks: [
       {
@@ -483,7 +483,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Snatch', 'Speed'],
+    tags: ['Upper Body', 'Strength'],
     isPremium: true,
     blocks: [
       {
@@ -524,7 +524,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 60,
-    tags: ['Shoulders', 'Overhead', 'Upper Body'],
+    tags: ['Upper Body', 'Strength'],
     isPremium: true,
     blocks: [
       {
@@ -587,7 +587,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 50,
-    tags: ['Legs', 'Squat'],
+    tags: ['Lower Body', 'Strength'],
     isPremium: true,
     blocks: [
       {
@@ -658,7 +658,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Skill',
     difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Legs', 'Balance', 'Skill'],
+    tags: ['Lower Body', 'Gymnastics'],
     isPremium: true,
     blocks: [
       {
@@ -723,7 +723,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 65,
-    tags: ['Squat', 'Pause'],
+    tags: ['Lower Body', 'Strength'],
     isPremium: true,
     blocks: [
       {
@@ -802,7 +802,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Gymnastics', 'Skill', 'Upper Body', 'Rings'],
+    tags: ['Upper Body', 'Gymnastics'],
     isPremium: true,
     blocks: [
       {
@@ -873,7 +873,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 65,
-    tags: ['Calisthenics', 'Heavy', 'Upper Body'],
+    tags: ['Upper Body', 'Strength'],
     isPremium: true,
     blocks: [
       {
@@ -953,7 +953,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 60,
-    tags: ['Chest', 'Triceps', 'Hypertrophy'],
+    tags: ['Upper Body', 'Strength'],
     isPremium: true,
     blocks: [
       {
@@ -1059,7 +1059,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 60,
-    tags: ['Back', 'Lats', 'Hypertrophy'],
+    tags: ['Upper Body', 'Strength'],
     isPremium: true,
     blocks: [
       {
@@ -1158,7 +1158,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 65,
-    tags: ['Legs', 'Quads', 'Hamstrings', 'Glutes'],
+    tags: ['Lower Body', 'Strength'],
     isPremium: true,
     blocks: [
       {
@@ -1254,7 +1254,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Shoulders', 'Delts', 'Hypertrophy'],
+    tags: ['Upper Body', 'Strength'],
     isPremium: true,
     blocks: [
       {
@@ -1353,7 +1353,7 @@ export const strength: StandaloneWorkoutSource[] = [
     category: 'Strength',
     difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Arms', 'Biceps', 'Triceps', 'Hypertrophy'],
+    tags: ['Upper Body', 'Strength'],
     isPremium: true,
     blocks: [
       {
