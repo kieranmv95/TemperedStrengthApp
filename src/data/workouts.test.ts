@@ -142,6 +142,19 @@ describe('bundled standalone workouts', () => {
     expect(workoutMatchesDiscipline(nonCollab!, 'Collab')).toBe(false);
   });
 
+  it('arena discipline matches workouts tagged Arena', () => {
+    const arenaWorkouts = allStandaloneWorkouts.filter((w) =>
+      w.tags.includes('Arena')
+    );
+    expect(arenaWorkouts.length).toBeGreaterThan(0);
+    for (const w of arenaWorkouts) {
+      expect(workoutMatchesDiscipline(w, 'Arena')).toBe(true);
+    }
+    const nonArena = allStandaloneWorkouts.find((w) => !w.tags.includes('Arena'));
+    expect(nonArena).toBeDefined();
+    expect(workoutMatchesDiscipline(nonArena!, 'Arena')).toBe(false);
+  });
+
   it('tags dedicated Olympic lifting sessions for focus filtering', () => {
     const olySessions = allStandaloneWorkouts.filter((w) =>
       w.tags.includes('Olympic Lifting')

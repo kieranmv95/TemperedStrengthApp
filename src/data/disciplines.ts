@@ -11,6 +11,17 @@ const DISCIPLINE_CATEGORY: Record<string, WorkoutCategory> = {
   Rainhill: 'Rainhill',
 };
 
+export type DisciplineTheme = {
+  /** Card background; defaults to theme `backgroundCard`. */
+  bgColor?: string;
+  /** Card border; defaults to theme `accent`. */
+  borderColor?: string;
+  /** Description copy; defaults to theme `textMuted`. */
+  descriptionColor?: string;
+  /** Link label and icon; defaults to theme `accent`. */
+  linkColor?: string;
+};
+
 export type Discipline = {
   title: string;
   showTitle?: boolean;
@@ -24,9 +35,32 @@ export type Discipline = {
   description?: string;
   link?: string;
   isSponsor?: boolean;
+  /** Optional white-label colours for the sponsor card on the discipline screen. */
+  theme?: DisciplineTheme;
 };
 
 export const disciplines: Discipline[] = [
+  {
+    title: 'Arena Games',
+    tag: 'Arena',
+    showTitle: false,
+    isSponsor: true,
+    logo: {
+      source: require('@/assets/images/logos/arena.png'),
+      width: 100,
+      height: 35,
+    },
+    image: require('@/assets/images/disciplines/arena.png'),
+    description:
+      "Everybody has their own arena. The place that gives you the butterflies in your stomach, where you sometimes think 'I don't know if I can do this'. Then you find your grit: where you go into the trenches to come out stronger, where you lock in. The place where you feel like the only person in the room.",
+    link: 'https://www.thearenagames.co.uk/',
+    theme: {
+      bgColor: '#FF3801',
+      borderColor: '#FF3801',
+      descriptionColor: '#000000',
+      linkColor: '#000000',
+    },
+  },
   {
     title: 'The Rainhill Trials',
     tag: 'Rainhill',
@@ -97,6 +131,9 @@ export function workoutMatchesDiscipline(
   }
   if (disciplineTag === 'Olympic Lifting') {
     return workout.tags.includes('Olympic Lifting');
+  }
+  if (disciplineTag === 'Arena') {
+    return workout.tags.includes('Arena');
   }
   if (disciplineTag === 'Collab') {
     return Boolean(workout.collab);

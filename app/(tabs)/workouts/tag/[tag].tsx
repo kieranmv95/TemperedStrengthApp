@@ -38,6 +38,7 @@ export default function WorkoutsByTagScreen() {
 
   const discipline = disciplines.find((d) => d.tag === tag);
   const showSponsorCard = Boolean(discipline?.isSponsor);
+  const sponsorTheme = discipline?.theme;
 
   const [favorites, setFavorites] = useState<string[]>([]);
 
@@ -136,7 +137,15 @@ export default function WorkoutsByTagScreen() {
           ListHeaderComponent={
             showSponsorCard ? (
               <TouchableOpacity
-                style={styles.sponsorCard}
+                style={[
+                  styles.sponsorCard,
+                  sponsorTheme?.bgColor
+                    ? { backgroundColor: sponsorTheme.bgColor }
+                    : null,
+                  sponsorTheme?.borderColor
+                    ? { borderColor: sponsorTheme.borderColor }
+                    : null,
+                ]}
                 onPress={handleSponsorPress}
                 activeOpacity={0.85}
               >
@@ -153,7 +162,14 @@ export default function WorkoutsByTagScreen() {
                   />
                 )}
                 {!!discipline?.description && (
-                  <Text style={styles.sponsorDescription}>
+                  <Text
+                    style={[
+                      styles.sponsorDescription,
+                      sponsorTheme?.descriptionColor
+                        ? { color: sponsorTheme.descriptionColor }
+                        : null,
+                    ]}
+                  >
                     {discipline.description}
                   </Text>
                 )}
@@ -162,9 +178,18 @@ export default function WorkoutsByTagScreen() {
                     <Ionicons
                       name="globe-outline"
                       size={16}
-                      color={Colors.accent}
+                      color={sponsorTheme?.linkColor ?? Colors.accent}
                     />
-                    <Text style={styles.sponsorLinkText}>View event details</Text>
+                    <Text
+                      style={[
+                        styles.sponsorLinkText,
+                        sponsorTheme?.linkColor
+                          ? { color: sponsorTheme.linkColor }
+                          : null,
+                      ]}
+                    >
+                      View event details
+                    </Text>
                   </View>
                 )}
               </TouchableOpacity>

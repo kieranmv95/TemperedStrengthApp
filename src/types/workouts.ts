@@ -48,6 +48,8 @@ export const WORKOUT_FORMAT_TAGS = [
   'Benchmark',
 ] as const;
 
+export const BRAND_TAGS = ['Arena'] as const;
+
 /** Modifier kept for Partner discipline filtering. */
 export const WORKOUT_MODIFIER_TAGS = ['Partner'] as const;
 
@@ -55,6 +57,7 @@ export const WORKOUT_TAGS = [
   ...WORKOUT_FOCUS_TAGS,
   ...WORKOUT_FORMAT_TAGS,
   ...WORKOUT_MODIFIER_TAGS,
+  ...BRAND_TAGS,
 ] as const;
 
 export type WorkoutFocusTag = (typeof WORKOUT_FOCUS_TAGS)[number];

@@ -2,6 +2,7 @@ import { Card, SmallChevron } from '@/src/components/ds';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
 import { SponsorAdsCarousel } from '@/src/components/home/SponsorAdsCarousel';
+import { LiveCompetition } from '@/src/components/LiveCompetition';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors } from '@/src/constants/theme';
 import { getAllExercises } from '@/src/data/exercises';
@@ -295,6 +296,8 @@ export default function HomeTabScreen() {
               ) : null}
             </View>
           )}
+
+          <LiveCompetition />
 
           <View>
             {programSummary ? (
