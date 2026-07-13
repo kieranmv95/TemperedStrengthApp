@@ -9,7 +9,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 
 // Switch between test and production competition data from temperedstrength.com.
-const COMPETITION_FETCH_ENVIRONMENT: CompetitionFetchEnvironment = 'test';
+const COMPETITION_FETCH_ENVIRONMENT: CompetitionFetchEnvironment = 'production';
 
 function readCachedCompetition(): LiveCompetition | null | undefined {
   return peekStaleLiveCompetitionCache(COMPETITION_FETCH_ENVIRONMENT);
@@ -58,7 +58,9 @@ export function useLiveCompetition(): {
         return;
       }
 
-      const stale = peekStaleLiveCompetitionCache(COMPETITION_FETCH_ENVIRONMENT);
+      const stale = peekStaleLiveCompetitionCache(
+        COMPETITION_FETCH_ENVIRONMENT
+      );
       if (stale !== undefined) {
         setCompetition(stale);
         setIsLoading(false);

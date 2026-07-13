@@ -19,7 +19,7 @@ import {
   type WorkoutSortDirection,
 } from '@/src/components/workouts/workoutsScreenConstants';
 import { Colors } from '@/src/constants/theme';
-import { disciplines } from '@/src/data/disciplines';
+import { visibleDisciplines } from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -428,7 +428,7 @@ export default function WorkoutsScreen() {
                       showsHorizontalScrollIndicator={false}
                       contentContainerStyle={styles.curatedScrollContent}
                     >
-                      {disciplines.map((discipline) => (
+                      {visibleDisciplines.map((discipline) => (
                         <TouchableOpacity
                           style={styles.disciplineSection}
                           key={discipline.tag}

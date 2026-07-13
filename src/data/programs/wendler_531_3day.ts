@@ -121,7 +121,7 @@ export const wendler_531_3day: Program = {
   isPro: true,
   name: 'Wendler 5/3/1 (3-Day)',
   description:
-    '16-Week strength block over four 5/3/1 cycles. Three primary lifts - Back Squat, Strict Press, Deadlift - with your training max climbing every cycle.',
+    '16-Week strength block over four 5/3/1 cycles. Three primary lifts, Back Squat, Strict Press, Deadlift, with your training max climbing every cycle.',
   bodyChangesSummary:
     'You will get measurably stronger on the squat, strict press, and deadlift. Four cycles of 5/3/1 progression - with your training max rising each cycle and AMRAP top sets driving rep PRs - build durable strength, while the assistance work adds size to your legs, chest, shoulders, and back.',
   categories: ['strength', 'powerlifting'],

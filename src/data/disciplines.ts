@@ -25,6 +25,8 @@ export type DisciplineTheme = {
 export type Discipline = {
   title: string;
   showTitle?: boolean;
+  /** Hide from the discipline carousel while unreleased (data kept in place). */
+  hidden?: boolean;
   tag: string;
   image: ImageSourcePropType;
   logo?: {
@@ -44,6 +46,8 @@ export const disciplines: Discipline[] = [
     title: 'Arena Games',
     tag: 'Arena',
     showTitle: false,
+    // Not ready for release yet - hidden from the discipline carousel.
+    hidden: true,
     isSponsor: true,
     logo: {
       source: require('@/assets/images/logos/arena.png'),
@@ -110,6 +114,11 @@ export const disciplines: Discipline[] = [
     image: require('@/assets/images/disciplines/partner.png'),
   },
 ];
+
+/** Disciplines shown in the carousel (excludes any flagged `hidden`). */
+export const visibleDisciplines: Discipline[] = disciplines.filter(
+  (discipline) => !discipline.hidden
+);
 
 export function isNoEquipmentDiscipline(tag: string): boolean {
   return tag === NO_EQUIPMENT_DISCIPLINE_TAG;

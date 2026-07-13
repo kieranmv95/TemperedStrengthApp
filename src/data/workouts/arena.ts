@@ -14,229 +14,229 @@ const collab = {
 };
 
 export const arena: StandaloneWorkoutSource[] = [
-  {
-    id: 'ar_01',
-    title: 'Arena Games: Event 001',
-    description:
-      'A 4 Player workout (MMFF) with a x minute time cap, a true test of strength, skill and endurance.',
-    category: 'WOD',
-    difficulty: 'Advanced',
-    estimatedTime: 20,
-    tags: ['Full Body', 'Chipper', 'Benchmark', 'Arena', 'Partner'],
-    isPremium: false,
-    collab,
-    blocks: [
-      {
-        scale: 'Locked In',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-          },
-          {
-            name: 'Workout',
-            instructions: 'WORKOUT HERE.',
-            highlightInstructions: 'WORKOUT SUB INFO HERE.',
-            movements: [
-              'WORKOUT MOVEMENTS 1 HERE.',
-              'WORKOUT MOVEMENTS 2 HERE.',
-              'WORKOUT MOVEMENTS 3 HERE.',
-              'WORKOUT MOVEMENTS 4 HERE.',
-            ],
-          },
-        ],
-      },
-      {
-        scale: 'On The Job',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-          },
-          {
-            name: 'Workout',
-            instructions: 'WORKOUT HERE.',
-            highlightInstructions: 'WORKOUT SUB INFO HERE.',
-            movements: [
-              'WORKOUT MOVEMENTS 1 HERE.',
-              'WORKOUT MOVEMENTS 2 HERE.',
-              'WORKOUT MOVEMENTS 3 HERE.',
-              'WORKOUT MOVEMENTS 4 HERE.',
-            ],
-          },
-        ],
-      },
-      {
-        scale: 'In The Mix',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-          },
-          {
-            name: 'Workout',
-            instructions: 'WORKOUT HERE.',
-            highlightInstructions: 'WORKOUT SUB INFO HERE.',
-            movements: [
-              'WORKOUT MOVEMENTS 1 HERE.',
-              'WORKOUT MOVEMENTS 2 HERE.',
-              'WORKOUT MOVEMENTS 3 HERE.',
-              'WORKOUT MOVEMENTS 4 HERE.',
-            ],
-          },
-        ],
-      },
-    ],
-    equipment: [],
-  },
-  {
-    id: 'ar_02',
-    title: 'Arena Games: Event 002',
-    description:
-      'A 4 Player workout (MMFF) with a x minute time cap, a true test of strength, skill and endurance.',
-    category: 'WOD',
-    difficulty: 'Advanced',
-    estimatedTime: 20,
-    tags: ['Full Body', 'Chipper', 'Benchmark', 'Arena', 'Partner'],
-    isPremium: false,
-    collab,
-    blocks: [
-      {
-        scale: 'Locked In',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-          },
-          {
-            name: 'Workout',
-            instructions: 'WORKOUT HERE.',
-            highlightInstructions: 'WORKOUT SUB INFO HERE.',
-            movements: [
-              'WORKOUT MOVEMENTS 1 HERE.',
-              'WORKOUT MOVEMENTS 2 HERE.',
-              'WORKOUT MOVEMENTS 3 HERE.',
-              'WORKOUT MOVEMENTS 4 HERE.',
-            ],
-          },
-        ],
-      },
-      {
-        scale: 'On The Job',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-          },
-          {
-            name: 'Workout',
-            instructions: 'WORKOUT HERE.',
-            highlightInstructions: 'WORKOUT SUB INFO HERE.',
-            movements: [
-              'WORKOUT MOVEMENTS 1 HERE.',
-              'WORKOUT MOVEMENTS 2 HERE.',
-              'WORKOUT MOVEMENTS 3 HERE.',
-              'WORKOUT MOVEMENTS 4 HERE.',
-            ],
-          },
-        ],
-      },
-      {
-        scale: 'In The Mix',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-          },
-          {
-            name: 'Workout',
-            instructions: 'WORKOUT HERE.',
-            highlightInstructions: 'WORKOUT SUB INFO HERE.',
-            movements: [
-              'WORKOUT MOVEMENTS 1 HERE.',
-              'WORKOUT MOVEMENTS 2 HERE.',
-              'WORKOUT MOVEMENTS 3 HERE.',
-              'WORKOUT MOVEMENTS 4 HERE.',
-            ],
-          },
-        ],
-      },
-    ],
-    equipment: [],
-  },
-  {
-    id: 'ar_03',
-    title: 'Arena Games: Event 003',
-    description:
-      'A 4 Player workout (MMFF) with a x minute time cap, a true test of strength, skill and endurance.',
-    category: 'WOD',
-    difficulty: 'Advanced',
-    estimatedTime: 20,
-    tags: ['Full Body', 'Chipper', 'Benchmark', 'Arena', 'Partner'],
-    isPremium: false,
-    collab,
-    blocks: [
-      {
-        scale: 'Locked In',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-          },
-          {
-            name: 'Workout',
-            instructions: 'WORKOUT HERE.',
-            highlightInstructions: 'WORKOUT SUB INFO HERE.',
-            movements: [
-              'WORKOUT MOVEMENTS 1 HERE.',
-              'WORKOUT MOVEMENTS 2 HERE.',
-              'WORKOUT MOVEMENTS 3 HERE.',
-              'WORKOUT MOVEMENTS 4 HERE.',
-            ],
-          },
-        ],
-      },
-      {
-        scale: 'On The Job',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-          },
-          {
-            name: 'Workout',
-            instructions: 'WORKOUT HERE.',
-            highlightInstructions: 'WORKOUT SUB INFO HERE.',
-            movements: [
-              'WORKOUT MOVEMENTS 1 HERE.',
-              'WORKOUT MOVEMENTS 2 HERE.',
-              'WORKOUT MOVEMENTS 3 HERE.',
-              'WORKOUT MOVEMENTS 4 HERE.',
-            ],
-          },
-        ],
-      },
-      {
-        scale: 'In The Mix',
-        blocks: [
-          {
-            name: 'Warmup',
-            mobilityFlow: 'r_15',
-          },
-          {
-            name: 'Workout',
-            instructions: 'WORKOUT HERE.',
-            highlightInstructions: 'WORKOUT SUB INFO HERE.',
-            movements: [
-              'WORKOUT MOVEMENTS 1 HERE.',
-              'WORKOUT MOVEMENTS 2 HERE.',
-              'WORKOUT MOVEMENTS 3 HERE.',
-              'WORKOUT MOVEMENTS 4 HERE.',
-            ],
-          },
-        ],
-      },
-    ],
-    equipment: [],
-  },
+  // {
+  //   id: 'ar_01',
+  //   title: 'Arena Games: Event 001',
+  //   description:
+  //     'A 4 Player workout (MMFF) with a x minute time cap, a true test of strength, skill and endurance.',
+  //   category: 'WOD',
+  //   difficulty: 'Advanced',
+  //   estimatedTime: 20,
+  //   tags: ['Full Body', 'Chipper', 'Benchmark', 'Arena', 'Partner'],
+  //   isPremium: false,
+  //   collab,
+  //   blocks: [
+  //     {
+  //       scale: 'Locked In',
+  //       blocks: [
+  //         {
+  //           name: 'Warmup',
+  //           mobilityFlow: 'r_15',
+  //         },
+  //         {
+  //           name: 'Workout',
+  //           instructions: 'WORKOUT HERE.',
+  //           highlightInstructions: 'WORKOUT SUB INFO HERE.',
+  //           movements: [
+  //             'WORKOUT MOVEMENTS 1 HERE.',
+  //             'WORKOUT MOVEMENTS 2 HERE.',
+  //             'WORKOUT MOVEMENTS 3 HERE.',
+  //             'WORKOUT MOVEMENTS 4 HERE.',
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       scale: 'On The Job',
+  //       blocks: [
+  //         {
+  //           name: 'Warmup',
+  //           mobilityFlow: 'r_15',
+  //         },
+  //         {
+  //           name: 'Workout',
+  //           instructions: 'WORKOUT HERE.',
+  //           highlightInstructions: 'WORKOUT SUB INFO HERE.',
+  //           movements: [
+  //             'WORKOUT MOVEMENTS 1 HERE.',
+  //             'WORKOUT MOVEMENTS 2 HERE.',
+  //             'WORKOUT MOVEMENTS 3 HERE.',
+  //             'WORKOUT MOVEMENTS 4 HERE.',
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       scale: 'In The Mix',
+  //       blocks: [
+  //         {
+  //           name: 'Warmup',
+  //           mobilityFlow: 'r_15',
+  //         },
+  //         {
+  //           name: 'Workout',
+  //           instructions: 'WORKOUT HERE.',
+  //           highlightInstructions: 'WORKOUT SUB INFO HERE.',
+  //           movements: [
+  //             'WORKOUT MOVEMENTS 1 HERE.',
+  //             'WORKOUT MOVEMENTS 2 HERE.',
+  //             'WORKOUT MOVEMENTS 3 HERE.',
+  //             'WORKOUT MOVEMENTS 4 HERE.',
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   equipment: [],
+  // },
+  // {
+  //   id: 'ar_02',
+  //   title: 'Arena Games: Event 002',
+  //   description:
+  //     'A 4 Player workout (MMFF) with a x minute time cap, a true test of strength, skill and endurance.',
+  //   category: 'WOD',
+  //   difficulty: 'Advanced',
+  //   estimatedTime: 20,
+  //   tags: ['Full Body', 'Chipper', 'Benchmark', 'Arena', 'Partner'],
+  //   isPremium: false,
+  //   collab,
+  //   blocks: [
+  //     {
+  //       scale: 'Locked In',
+  //       blocks: [
+  //         {
+  //           name: 'Warmup',
+  //           mobilityFlow: 'r_15',
+  //         },
+  //         {
+  //           name: 'Workout',
+  //           instructions: 'WORKOUT HERE.',
+  //           highlightInstructions: 'WORKOUT SUB INFO HERE.',
+  //           movements: [
+  //             'WORKOUT MOVEMENTS 1 HERE.',
+  //             'WORKOUT MOVEMENTS 2 HERE.',
+  //             'WORKOUT MOVEMENTS 3 HERE.',
+  //             'WORKOUT MOVEMENTS 4 HERE.',
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       scale: 'On The Job',
+  //       blocks: [
+  //         {
+  //           name: 'Warmup',
+  //           mobilityFlow: 'r_15',
+  //         },
+  //         {
+  //           name: 'Workout',
+  //           instructions: 'WORKOUT HERE.',
+  //           highlightInstructions: 'WORKOUT SUB INFO HERE.',
+  //           movements: [
+  //             'WORKOUT MOVEMENTS 1 HERE.',
+  //             'WORKOUT MOVEMENTS 2 HERE.',
+  //             'WORKOUT MOVEMENTS 3 HERE.',
+  //             'WORKOUT MOVEMENTS 4 HERE.',
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       scale: 'In The Mix',
+  //       blocks: [
+  //         {
+  //           name: 'Warmup',
+  //           mobilityFlow: 'r_15',
+  //         },
+  //         {
+  //           name: 'Workout',
+  //           instructions: 'WORKOUT HERE.',
+  //           highlightInstructions: 'WORKOUT SUB INFO HERE.',
+  //           movements: [
+  //             'WORKOUT MOVEMENTS 1 HERE.',
+  //             'WORKOUT MOVEMENTS 2 HERE.',
+  //             'WORKOUT MOVEMENTS 3 HERE.',
+  //             'WORKOUT MOVEMENTS 4 HERE.',
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   equipment: [],
+  // },
+  // {
+  //   id: 'ar_03',
+  //   title: 'Arena Games: Event 003',
+  //   description:
+  //     'A 4 Player workout (MMFF) with a x minute time cap, a true test of strength, skill and endurance.',
+  //   category: 'WOD',
+  //   difficulty: 'Advanced',
+  //   estimatedTime: 20,
+  //   tags: ['Full Body', 'Chipper', 'Benchmark', 'Arena', 'Partner'],
+  //   isPremium: false,
+  //   collab,
+  //   blocks: [
+  //     {
+  //       scale: 'Locked In',
+  //       blocks: [
+  //         {
+  //           name: 'Warmup',
+  //           mobilityFlow: 'r_15',
+  //         },
+  //         {
+  //           name: 'Workout',
+  //           instructions: 'WORKOUT HERE.',
+  //           highlightInstructions: 'WORKOUT SUB INFO HERE.',
+  //           movements: [
+  //             'WORKOUT MOVEMENTS 1 HERE.',
+  //             'WORKOUT MOVEMENTS 2 HERE.',
+  //             'WORKOUT MOVEMENTS 3 HERE.',
+  //             'WORKOUT MOVEMENTS 4 HERE.',
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       scale: 'On The Job',
+  //       blocks: [
+  //         {
+  //           name: 'Warmup',
+  //           mobilityFlow: 'r_15',
+  //         },
+  //         {
+  //           name: 'Workout',
+  //           instructions: 'WORKOUT HERE.',
+  //           highlightInstructions: 'WORKOUT SUB INFO HERE.',
+  //           movements: [
+  //             'WORKOUT MOVEMENTS 1 HERE.',
+  //             'WORKOUT MOVEMENTS 2 HERE.',
+  //             'WORKOUT MOVEMENTS 3 HERE.',
+  //             'WORKOUT MOVEMENTS 4 HERE.',
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       scale: 'In The Mix',
+  //       blocks: [
+  //         {
+  //           name: 'Warmup',
+  //           mobilityFlow: 'r_15',
+  //         },
+  //         {
+  //           name: 'Workout',
+  //           instructions: 'WORKOUT HERE.',
+  //           highlightInstructions: 'WORKOUT SUB INFO HERE.',
+  //           movements: [
+  //             'WORKOUT MOVEMENTS 1 HERE.',
+  //             'WORKOUT MOVEMENTS 2 HERE.',
+  //             'WORKOUT MOVEMENTS 3 HERE.',
+  //             'WORKOUT MOVEMENTS 4 HERE.',
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   equipment: [],
+  // },
 ];
