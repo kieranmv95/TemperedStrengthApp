@@ -21,10 +21,15 @@ import {
   getLoggedSets,
   getPersonalBestsForExercise,
   getRemainingSwapCount,
+  getTrainingMax,
   saveCustomSetCount,
   saveLoggedSet,
   savePersonalBest,
 } from '@/src/utils/storage';
+import {
+  effectiveTrainingMaxKg,
+  trainingMaxSetWeightKg,
+} from '@/src/utils/trainingMax';
 import {
   formatWeightValueFromKg,
   parseUserWeightInputToKg,
@@ -85,9 +90,39 @@ export function useExerciseCardState({
   weightsRef.current = weights;
   repsRef.current = reps;
 
-  const defaultNumberOfSets = programExercise?.sets || 1;
+  const setScheme = programExercise?.setScheme ?? null;
+  const defaultNumberOfSets = setScheme?.length ?? programExercise?.sets ?? 1;
   const [numberOfSets, setNumberOfSets] = useState(defaultNumberOfSets);
   const restTimeSeconds = programExercise?.restTimeSeconds;
+
+  // Training max drives per-set target weights for `setScheme` lifts (e.g. 5/3/1).
+  const [trainingMaxKg, setTrainingMaxKg] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadTrainingMax = async () => {
+      if (!setScheme || !exerciseId) {
+        setTrainingMaxKg(null);
+        return;
+      }
+      try {
+        const tmId = programExercise?.trainingMaxExerciseId ?? exerciseId;
+        const tm = await getTrainingMax(tmId);
+        if (!cancelled) {
+          setTrainingMaxKg(tm);
+        }
+      } catch (error) {
+        console.error('Error loading training max for card:', error);
+        if (!cancelled) {
+          setTrainingMaxKg(null);
+        }
+      }
+    };
+    loadTrainingMax();
+    return () => {
+      cancelled = true;
+    };
+  }, [setScheme, exerciseId, programExercise?.trainingMaxExerciseId]);
 
   const getDefaultRepValue = useCallback((): string => {
     if (
@@ -100,6 +135,50 @@ export function useExerciseCardState({
     }
     return '';
   }, [programExercise]);
+
+  // Reps target for a specific set. `setScheme` lifts vary reps per set; every
+  // other exercise falls back to the single repRange default.
+  const getDefaultRepForSet = useCallback(
+    (setIndex: number): string => {
+      if (setScheme) {
+        const entry = setScheme[setIndex];
+        return entry ? entry.reps.toString() : '';
+      }
+      return getDefaultRepValue();
+    },
+    [setScheme, getDefaultRepValue]
+  );
+
+  // Pre-filled target weight (display string) for a `setScheme` set, computed
+  // from the stored training max plus any cycle increment. Empty when the lift
+  // is not scheme-driven or the training max has not been entered yet.
+  const getPrefilledWeightForSet = useCallback(
+    (setIndex: number): string => {
+      if (!setScheme || trainingMaxKg === null) {
+        return '';
+      }
+      const entry = setScheme[setIndex];
+      if (!entry) {
+        return '';
+      }
+      const effectiveTm = effectiveTrainingMaxKg(
+        trainingMaxKg,
+        programExercise?.trainingMaxIncrementLb ?? 0
+      );
+      const targetKg = trainingMaxSetWeightKg(
+        effectiveTm,
+        entry.percentOfTrainingMax,
+        weightUnit
+      );
+      return formatWeightValueFromKg(targetKg, weightUnit);
+    },
+    [
+      setScheme,
+      trainingMaxKg,
+      programExercise?.trainingMaxIncrementLb,
+      weightUnit,
+    ]
+  );
 
   useEffect(() => {
     const loadSwapCount = async () => {
@@ -159,8 +238,6 @@ export function useExerciseCardState({
           const initialSetStates: Map<number, 'completed' | 'failed'> =
             new Map();
 
-          const defaultRepValue = getDefaultRepValue();
-
           for (let i = 0; i < actualSetCount; i++) {
             const savedSet = savedSets[i];
             if (savedSet) {
@@ -176,8 +253,8 @@ export function useExerciseCardState({
                 }
               }
             } else {
-              initialWeights[i] = '';
-              initialReps[i] = defaultRepValue;
+              initialWeights[i] = getPrefilledWeightForSet(i);
+              initialReps[i] = getDefaultRepForSet(i);
             }
           }
 
@@ -192,9 +269,16 @@ export function useExerciseCardState({
           setNumberOfSets(defaultNumberOfSets);
         }
       } else {
-        const defaultRepValue = getDefaultRepValue();
-        setWeights(Array(defaultNumberOfSets).fill(''));
-        setReps(Array(defaultNumberOfSets).fill(defaultRepValue));
+        setWeights(
+          Array.from({ length: defaultNumberOfSets }, (_, i) =>
+            getPrefilledWeightForSet(i)
+          )
+        );
+        setReps(
+          Array.from({ length: defaultNumberOfSets }, (_, i) =>
+            getDefaultRepForSet(i)
+          )
+        );
         setSetStates(new Map());
         setNumberOfSets(defaultNumberOfSets);
       }
@@ -208,6 +292,8 @@ export function useExerciseCardState({
     slotIndex,
     exerciseId,
     getDefaultRepValue,
+    getDefaultRepForSet,
+    getPrefilledWeightForSet,
     weightUnit,
   ]);
 
@@ -504,11 +590,11 @@ export function useExerciseCardState({
 
   const incrementSets = async () => {
     if (dayIndex !== null) {
-      const defaultRepValue = getDefaultRepValue();
+      const newSetIndex = numberOfSets;
       const newCount = numberOfSets + 1;
       setNumberOfSets(newCount);
-      setWeights((prev) => [...prev, '']);
-      setReps((prev) => [...prev, defaultRepValue]);
+      setWeights((prev) => [...prev, getPrefilledWeightForSet(newSetIndex)]);
+      setReps((prev) => [...prev, getDefaultRepForSet(newSetIndex)]);
 
       await saveCustomSetCount(dayIndex, slotIndex, newCount);
     }

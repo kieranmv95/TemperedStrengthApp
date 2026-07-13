@@ -95,7 +95,9 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
   let repRangeText: string | null = null;
 
-  if (!programExercise?.hideReps) {
+  // `setScheme` lifts (e.g. 5/3/1) vary reps per set, so the single header chip
+  // would be misleading - each set row shows its own target instead.
+  if (!programExercise?.hideReps && !programExercise?.setScheme) {
     if (programExercise?.isAmrap) {
       repRangeText = 'MAX REPS (AMRAP)';
     } else if (programExercise?.repRange) {

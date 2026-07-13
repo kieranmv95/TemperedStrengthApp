@@ -6,6 +6,7 @@ import { RestTimer } from '@/src/components/RestTimer';
 import { SessionSummaryModal } from '@/src/components/SessionSummaryModal';
 import { SessionTimer } from '@/src/components/SessionTimer';
 import { SwapModal } from '@/src/components/SwapModal';
+import { TrainingMaxesCard } from '@/src/components/TrainingMaxesCard';
 import { WorkoutScreenBody } from '@/src/components/WorkoutScreenBody';
 import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 import { useSubscription } from '@/src/hooks/use-subscription';
@@ -34,6 +35,8 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
   const { isPro, isLoading: subscriptionLoading } = useSubscription();
   const c = useWorkoutScreenController();
   const { unit: weightUnit } = useWeightUnit();
+  const [trainingMaxRefresh, setTrainingMaxRefresh] = React.useState(0);
+  const requireRmId = c.program?.requireRmId ?? null;
 
   const handleViewAllPrograms = async () => {
     Alert.alert(
@@ -193,6 +196,15 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             : undefined
         }
         onExportWorkoutText={c.handleExportWorkoutText}
+        exerciseCardKeySuffix={trainingMaxRefresh}
+        headerAccessory={
+          requireRmId?.length ? (
+            <TrainingMaxesCard
+              exerciseIds={requireRmId}
+              onChanged={() => setTrainingMaxRefresh((n) => n + 1)}
+            />
+          ) : null
+        }
       />
 
       <SwapModal

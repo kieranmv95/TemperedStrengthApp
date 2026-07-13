@@ -23,6 +23,7 @@ import {
   PROGRAM_STORAGE_KEY,
   PROGRAM_WORKOUT_WEEKDAYS_KEY,
   REST_TIMER_KEY,
+  TRAINING_MAXES_KEY,
   WORKOUT_LOGS_KEY,
   WORKOUT_NOTES_KEY,
 } from './keys';
@@ -435,6 +436,7 @@ export const clearProgramData = async (): Promise<void> => {
     await syncRemoveItem(REST_TIMER_KEY);
     await syncRemoveItem(ACTIVE_SESSION_KEY);
     await syncRemoveItem(COMPLETED_SESSIONS_KEY);
+    await syncRemoveItem(TRAINING_MAXES_KEY);
   } catch (error) {
     console.error('Error clearing program data:', error);
     throw error;

@@ -11,6 +11,7 @@ export * from './storage/conditioning';
 export * from './storage/favorites';
 export * from './storage/standaloneLogs';
 export * from './storage/personalBests';
+export * from './storage/trainingMaxes';
 export {
   runStorageMigrations,
   LATEST_SCHEMA_VERSION,
@@ -40,3 +41,4 @@ export type {
   PersonalBestHistoryEntry,
   RepMax,
 } from '@/src/types/personalBests';
+export type { TrainingMaxesStore } from '@/src/types/trainingMaxes';

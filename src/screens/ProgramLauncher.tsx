@@ -32,7 +32,10 @@ import {
   setActiveProgramId,
   setProgramStartDate,
   setProgramWorkoutWeekdays,
+  setTrainingMaxes,
 } from '../utils/storage';
+import type { TrainingMaxesStore } from '../types/trainingMaxes';
+import { TrainingMaxModal } from '../components/TrainingMaxModal';
 import { ProgramLauncherDatePickerModal } from './ProgramLauncherDatePickerModal';
 import { ProgramLauncherDetailsModal } from './ProgramLauncherDetailsModal';
 import { ProgramLauncherProgramCard } from './ProgramLauncherProgramCard';
@@ -54,6 +57,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [showProgramDetails, setShowProgramDetails] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTrainingMaxModal, setShowTrainingMaxModal] = useState(false);
+  const [pendingStartDate, setPendingStartDate] = useState<Date | null>(null);
   const [startDate, setStartDate] = useState(new Date());
   const [selectedWeekdays, setSelectedWeekdays] = useState<
     ProgramDaySplitKey[]
@@ -323,6 +328,30 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     setShowDatePicker(true);
   };
 
+  const commitProgramStart = async (
+    program: Program,
+    toSave: Date,
+    trainingMaxes?: TrainingMaxesStore
+  ) => {
+    if (resetExistingProgramData) {
+      await clearProgramData();
+    }
+    await setActiveProgramId(program.id);
+    await setProgramStartDate(toSave.toISOString());
+    if (program.daysSplit?.length) {
+      await setProgramWorkoutWeekdays(
+        sortPatternByCalendarOrder(selectedWeekdays)
+      );
+    } else {
+      await clearProgramWorkoutWeekdays();
+    }
+    if (trainingMaxes) {
+      await setTrainingMaxes(trainingMaxes);
+    }
+    await increment('program_starts');
+    onProgramSelected();
+  };
+
   const handleConfirmDate = async () => {
     if (!selectedProgram) return;
 
@@ -347,24 +376,31 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
         : nearestProgramAnchorOnOrAfter(normalized, anchor);
     }
 
-    try {
-      if (resetExistingProgramData) {
-        await clearProgramData();
-      }
-      await setActiveProgramId(selectedProgram.id);
-      await setProgramStartDate(toSave.toISOString());
-      if (selectedProgram.daysSplit?.length) {
-        await setProgramWorkoutWeekdays(
-          sortPatternByCalendarOrder(selectedWeekdays)
-        );
-      } else {
-        await clearProgramWorkoutWeekdays();
-      }
-      await increment('program_starts');
+    // Programs that require training maxes gather them before committing, so a
+    // program is never left active without the values its loading depends on.
+    if (selectedProgram.requireRmId?.length) {
+      setPendingStartDate(toSave);
       setShowDatePicker(false);
-      onProgramSelected();
+      setShowTrainingMaxModal(true);
+      return;
+    }
+
+    try {
+      await commitProgramStart(selectedProgram, toSave);
+      setShowDatePicker(false);
     } catch (error) {
       console.error('Error saving program selection:', error);
+    }
+  };
+
+  const handleConfirmTrainingMaxes = async (values: TrainingMaxesStore) => {
+    if (!selectedProgram || !pendingStartDate) return;
+    try {
+      await commitProgramStart(selectedProgram, pendingStartDate, values);
+      setShowTrainingMaxModal(false);
+      setPendingStartDate(null);
+    } catch (error) {
+      console.error('Error saving training maxes at program start:', error);
     }
   };
 
@@ -534,6 +570,20 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           onConfirm={handleConfirmDate}
           bottomInset={getEffectiveBottomInset(insets.bottom)}
         />
+
+        {selectedProgram?.requireRmId?.length ? (
+          <TrainingMaxModal
+            visible={showTrainingMaxModal}
+            exerciseIds={selectedProgram.requireRmId}
+            mode="start"
+            onClose={() => {
+              setShowTrainingMaxModal(false);
+              setPendingStartDate(null);
+            }}
+            onConfirm={handleConfirmTrainingMaxes}
+            bottomInset={getEffectiveBottomInset(insets.bottom)}
+          />
+        ) : null}
       </StandardLayout.Body>
     </StandardLayout>
   );

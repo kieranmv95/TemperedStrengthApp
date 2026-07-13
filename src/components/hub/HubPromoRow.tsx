@@ -6,7 +6,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 /** Discover ("Explore near you") isn't ready to ship yet — flip to true to re-enable. */
-const DISCOVER_ENABLED = false;
+const DISCOVER_ENABLED = true;
 
 type HubPromoCardProps = {
   icon: keyof typeof Ionicons.glyphMap;

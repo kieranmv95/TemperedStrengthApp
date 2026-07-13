@@ -56,6 +56,8 @@ type WorkoutScreenBodyProps = {
   toggleNotesExpanded: () => void;
   onOpenCopyWorkoutNotesModal?: () => void;
   onExportWorkoutText: () => void | Promise<void>;
+  headerAccessory?: React.ReactNode;
+  exerciseCardKeySuffix?: string | number;
 };
 
 export function WorkoutScreenBody({
@@ -89,6 +91,8 @@ export function WorkoutScreenBody({
   toggleNotesExpanded,
   onOpenCopyWorkoutNotesModal,
   onExportWorkoutText,
+  headerAccessory,
+  exerciseCardKeySuffix = '',
 }: WorkoutScreenBodyProps) {
   const { unit: weightUnit } = useWeightUnit();
   if (showProgramCompleted) {
@@ -180,6 +184,8 @@ export function WorkoutScreenBody({
             </View>
           </View>
         </View>
+
+        {headerAccessory}
 
         {completedSession && !activeSession && (
           <View style={styles.completedSessionBanner}>
@@ -293,7 +299,7 @@ export function WorkoutScreenBody({
               exerciseSlotIndex++;
               return (
                 <ExerciseCard
-                  key={`${selectedDayIndex}-${index}-${slot.exerciseId}-${swapRefreshCounter}`}
+                  key={`${selectedDayIndex}-${index}-${slot.exerciseId}-${swapRefreshCounter}-${exerciseCardKeySuffix}`}
                   exerciseId={slot.exerciseId}
                   programExercise={slot.programExercise}
                   slotNumber={currentExerciseIndex + 1}

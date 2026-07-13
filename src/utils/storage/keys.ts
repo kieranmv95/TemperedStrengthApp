@@ -20,6 +20,7 @@ export const COMPLETED_SESSIONS_KEY = 'completed_sessions';
 export const CONDITIONING_WORKOUT_LOGS_KEY = 'conditioning_workout_logs';
 export const STANDALONE_WORKOUT_LOGS_KEY = 'standalone_workout_logs';
 export const PERSONAL_BESTS_KEY = 'personal_bests';
+export const TRAINING_MAXES_KEY = 'training_maxes';
 export const WEIGHT_UNIT_KEY = 'weight_unit';
 export const AUTO_REST_TIMERS_ENABLED_KEY = 'auto_rest_timers_enabled';
 export const AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY =

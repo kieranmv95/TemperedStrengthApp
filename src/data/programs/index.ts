@@ -12,6 +12,7 @@ import { powerbuilding_4day_pro } from './powerbuilding_4day_pro';
 import { powerlifting_3day } from './powerlifting_3day';
 import { ppl_01 } from './ppl_01';
 import { strength_5day } from './strength_5day';
+import { wendler_531_3day } from './wendler_531_3day';
 
 export const programList: Program[] = [
   bodybuilding_free,
@@ -19,6 +20,7 @@ export const programList: Program[] = [
   pilates_intro_4wk_free,
   ppl_01,
   strength_5day,
+  wendler_531_3day,
   full_body_2day,
   hiit_shred_6wk_pro,
   hiit_shred_free,

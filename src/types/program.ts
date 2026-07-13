@@ -5,6 +5,16 @@ export type Warmup = {
   description: string[];
 };
 
+/**
+ * One working set in a training-max-relative scheme (e.g. Wendler 5/3/1).
+ * `percentOfTrainingMax` is a whole percentage (65 = 65% of the training max).
+ */
+export type ExerciseSetPrescription = {
+  percentOfTrainingMax: number;
+  reps: number;
+  isAmrap?: boolean;
+};
+
 export type Exercise = {
   type: 'exercise';
   id: number;
@@ -16,6 +26,24 @@ export type Exercise = {
   restTimeSeconds?: number;
   isAmrap?: boolean;
   canSwap?: boolean;
+  /**
+   * Training-max-relative loading (e.g. Wendler 5/3/1). When present, each entry
+   * is one working set: its reps come from the scheme and its target weight is
+   * pre-filled from the lifter's stored training max for this lift. Requires the
+   * program to declare the lift in `requireRmId`.
+   */
+  setScheme?: ExerciseSetPrescription[];
+  /**
+   * Pounds added to the stored training max before `setScheme` percentages are
+   * applied. Used for cycle-over-cycle training-max increases (Wendler bumps the
+   * TM each cycle). Converted to the lifter's unit at display time.
+   */
+  trainingMaxIncrementLb?: number;
+  /**
+   * Exercise id whose stored training max drives `setScheme`. Defaults to this
+   * exercise's own `id` (set only when the lift and its TM source differ).
+   */
+  trainingMaxExerciseId?: number;
 };
 
 export type WorkoutMovement = {
@@ -153,4 +181,10 @@ export type Program = {
   categories: ProgramCategory[];
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   goals: ProgramGoal[];
+  /**
+   * Exercise ids the lifter must enter a training max (1RM or estimate) for
+   * before the program can start (e.g. the Wendler 5/3/1 primary lifts). Those
+   * values drive any `setScheme` loading. Omit for programs that don't need it.
+   */
+  requireRmId?: number[];
 };
