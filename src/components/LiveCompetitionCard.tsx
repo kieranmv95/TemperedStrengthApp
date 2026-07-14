@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
   },
   title: {
-    fontSize: FontSize.displaySm,
-    fontWeight: 'bold',
+    fontSize: FontSize.displayMd,
+    fontWeight: '700',
     marginBottom: Spacing.sm,
   },
   description: {
