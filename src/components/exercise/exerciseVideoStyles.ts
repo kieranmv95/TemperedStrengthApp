@@ -47,6 +47,10 @@ export const exerciseVideoStyles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: Colors.backgroundElevated,
   },
+  videoContainerFill: {
+    flex: 1,
+    aspectRatio: undefined,
+  },
   webView: {
     flex: 1,
     backgroundColor: Colors.backgroundElevated,

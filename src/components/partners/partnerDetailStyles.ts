@@ -144,6 +144,17 @@ export const partnerDetailStyles = StyleSheet.create({
   videoSection: {
     gap: Spacing.md,
   },
+  gymLeadMediaFrame: {
+    alignSelf: 'stretch',
+    aspectRatio: 16 / 9,
+    borderRadius: BorderRadius.xl,
+    overflow: 'hidden',
+    backgroundColor: Colors.backgroundElevated,
+  },
+  gymLeadMediaImage: {
+    width: '100%',
+    height: '100%',
+  },
   section: {
     gap: Spacing.md,
   },

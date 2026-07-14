@@ -1,4 +1,4 @@
-import { YoutubeEmbed } from '@/src/components/exercise/YoutubeEmbed';
+import { GymLeadMedia } from '@/src/components/partners/GymLeadMedia';
 import { PartnerMapPreview } from '@/src/components/partners/PartnerMapPreview';
 import { partnerDetailStyles as styles } from '@/src/components/partners/partnerDetailStyles';
 import { Pill } from '@/src/components/pill';
@@ -12,7 +12,7 @@ import {
 } from '@/src/services/partnerApiService';
 import type { OpeningHours, PartnerKind, PartnerListing } from '@/src/types/partner';
 import {
-  gymHasVideo,
+  gymHasLeadMedia,
   gymShowsFocusAreas,
   partnerListingHasAboutContent,
   partnerListingHasContact,
@@ -164,12 +164,9 @@ function PartnerAboutPanel({
 
   return (
     <View style={styles.tabPanel}>
-      {listing.kind === 'gym' && gymHasVideo(listing) ? (
+      {listing.kind === 'gym' && gymHasLeadMedia(listing) ? (
         <View style={styles.videoSection}>
-          <YoutubeEmbed
-            youtubeId={listing.videoId}
-            accessibilityLabel={`Tour video for ${listing.name}`}
-          />
+          <GymLeadMedia gym={listing} />
         </View>
       ) : null}
 

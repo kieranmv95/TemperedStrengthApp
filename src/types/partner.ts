@@ -55,6 +55,7 @@ export type PublicGymListing = PublicListingBase & {
   openingHours: OpeningHours;
   focusAreas: string[];
   videoId: string | null;
+  gymImageUrl: string | null;
 };
 
 export type PublicClubListing = PublicListingBase & {
@@ -84,6 +85,16 @@ export function gymHasVideo(
   gym: PublicGymListing
 ): gym is PublicGymListing & { videoId: string } {
   return gym.videoId != null && gym.videoId.length > 0;
+}
+
+export function gymHasImage(
+  gym: PublicGymListing
+): gym is PublicGymListing & { gymImageUrl: string } {
+  return gym.gymImageUrl != null && gym.gymImageUrl.length > 0;
+}
+
+export function gymHasLeadMedia(gym: PublicGymListing): boolean {
+  return gymHasVideo(gym) || gymHasImage(gym);
 }
 
 export function clubShowsHours(club: PublicClubListing): boolean {
@@ -133,7 +144,7 @@ export function partnerListingHasAboutContent(listing: PartnerListing): boolean 
   if (listing.description) {
     return true;
   }
-  if (listing.kind === 'gym' && gymHasVideo(listing)) {
+  if (listing.kind === 'gym' && gymHasLeadMedia(listing)) {
     return true;
   }
   return false;

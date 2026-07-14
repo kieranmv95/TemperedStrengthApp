@@ -106,7 +106,19 @@ function normalizeListingBaseFields(raw: {
   };
 }
 
-function normalizeGymListing(raw: PublicGymListing): PublicGymListing {
+function normalizeGymImageUrl(raw: {
+  gymImageUrl?: unknown;
+  gym_image_url?: unknown;
+}): string | null {
+  const value = raw.gymImageUrl ?? raw.gym_image_url;
+  return typeof value === 'string' && value.trim().length > 0
+    ? value.trim()
+    : null;
+}
+
+function normalizeGymListing(
+  raw: PublicGymListing & { gym_image_url?: unknown }
+): PublicGymListing {
   const videoId =
     typeof raw.videoId === 'string' && raw.videoId.length > 0
       ? raw.videoId
@@ -116,6 +128,7 @@ function normalizeGymListing(raw: PublicGymListing): PublicGymListing {
     ...normalizeListingBaseFields(raw),
     focusAreas: Array.isArray(raw.focusAreas) ? raw.focusAreas : [],
     videoId,
+    gymImageUrl: normalizeGymImageUrl(raw),
   };
 }
 
