@@ -273,6 +273,36 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
     placeholder:
       'Score 1: first 2min row (metres) / Score 2: AMRAP rounds + reps / Score 3: second 2min row (metres)',
   },
+
+  // ---------------------------------------------------------------------------
+  // Arena Games — Event 002
+  // ---------------------------------------------------------------------------
+  ar_01: {
+    kind: 'notes_only',
+    placeholder:
+      'Score 1: max calories ski + bike / Score 2: hang Grace finish time or "cap"',
+  },
+  ar_02: {
+    kind: 'duration',
+    label: 'Finish time',
+    lowerIsBetter: true,
+  },
+  ar_03: {
+    kind: 'notes_only',
+    placeholder:
+      'Score 1: FF 1RM clean (kg) / Score 2: MM 1RM clean (kg)',
+  },
+  ar_04: {
+    kind: 'max_reps',
+    label: 'Total deadlifts',
+    higherIsBetter: true,
+  },
+  ar_05: {
+    kind: 'notes_only',
+    placeholder:
+      'Score 1: AMRAP rounds + reps / Score 2: Part B finish time or "cap"',
+  },
+
   // HIIT Shred (6 Weeks) Pro — standalone WOD copies p_55–p_78
   p_55: { kind: 'amrap', timeCapMinutes: 10, roundsLabel: 'Rounds', extraRepsLabel: 'Extra reps' },
   p_56: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
