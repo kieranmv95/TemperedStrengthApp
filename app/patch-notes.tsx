@@ -20,6 +20,11 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.14.0',
+    dateLabel: '',
+    notes: [''],
+  },
+  {
     version: '2.13.0',
     dateLabel: '17th July 2026',
     notes: ['start programs on any day of the week', 'mark days as complete or skipped', 'removed the start session', 'Promo redemption'],
