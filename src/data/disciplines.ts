@@ -47,7 +47,7 @@ export const disciplines: Discipline[] = [
     tag: 'Arena',
     showTitle: false,
     // Not ready for release yet - hidden from the discipline carousel.
-    hidden: false,
+    hidden: true,
     isSponsor: true,
     logo: {
       source: require('@/assets/images/logos/arena.png'),
