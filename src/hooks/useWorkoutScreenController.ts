@@ -688,11 +688,43 @@ export function useWorkoutScreenController() {
     [activeSession, currentWorkout, selectedDayIndex]
   );
 
+  const unsetSessionStatus = useCallback(async () => {
+    if (selectedDayIndex === null) return;
+
+    try {
+      await clearProgramSessionStatus(selectedDayIndex);
+      // Also clear the completed-session record, otherwise the status would
+      // reload as completed from the legacy fallback.
+      await clearCompletedSession(selectedDayIndex);
+      setCompletedSession(null);
+      setSessionStatus(null);
+      setSessionStatuses((current) => {
+        const next = { ...current };
+        delete next[selectedDayIndex];
+        return next;
+      });
+    } catch (error) {
+      console.error('Error clearing program session status:', error);
+      Alert.alert(
+        'Unable to save',
+        'The session status could not be saved. Please try again.'
+      );
+    }
+  }, [selectedDayIndex]);
+
   const handleMarkSessionCompleted = useCallback(() => {
+    if (sessionStatus === 'completed') {
+      void unsetSessionStatus();
+      return;
+    }
     void applySessionStatus('completed');
-  }, [applySessionStatus]);
+  }, [sessionStatus, applySessionStatus, unsetSessionStatus]);
 
   const handleSkipSession = useCallback(() => {
+    if (sessionStatus === 'skipped') {
+      void unsetSessionStatus();
+      return;
+    }
     Alert.alert(
       'Skip this session?',
       'This session will be marked as skipped in your program calendar.',
@@ -707,7 +739,7 @@ export function useWorkoutScreenController() {
         },
       ]
     );
-  }, [applySessionStatus]);
+  }, [sessionStatus, applySessionStatus, unsetSessionStatus]);
 
   const handleRedoWorkout = useCallback(async () => {
     if (selectedDayIndex === null) return;
