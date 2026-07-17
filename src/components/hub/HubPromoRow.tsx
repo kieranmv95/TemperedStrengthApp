@@ -13,8 +13,9 @@ type HubPromoCardProps = {
   eyebrow: string;
   title: string;
   description: string;
-  onPress: () => void;
+  onPress?: () => void;
   accessibilityLabel: string;
+  isLoading?: boolean;
 };
 
 function HubPromoCard({
@@ -24,23 +25,26 @@ function HubPromoCard({
   description,
   onPress,
   accessibilityLabel,
+  isLoading = false,
 }: HubPromoCardProps) {
   return (
-    <Card
-      onPress={onPress}
-      accessibilityLabel={accessibilityLabel}
-      style={styles.promoCard}
-    >
-      <View style={styles.promoTopRow}>
-        <View style={styles.visualTile}>
-          <Ionicons name={icon} size={22} color={Colors.accent} />
+    <View style={[styles.promoCardSlot, isLoading && styles.promoCardLoading]}>
+      <Card
+        onPress={isLoading ? undefined : onPress}
+        accessibilityLabel={accessibilityLabel}
+        style={styles.promoCard}
+      >
+        <View style={styles.promoTopRow}>
+          <View style={styles.visualTile}>
+            <Ionicons name={icon} size={22} color={Colors.accent} />
+          </View>
+          <SmallChevron />
         </View>
-        <SmallChevron />
-      </View>
-      <Text style={styles.eyebrow}>{eyebrow}</Text>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.description}>{description}</Text>
-    </Card>
+        <Text style={styles.eyebrow}>{eyebrow}</Text>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.description}>{description}</Text>
+      </Card>
+    </View>
   );
 }
 
@@ -50,10 +54,12 @@ type HubPromoOfflineSlotProps = {
 
 function HubPromoOfflineSlot({ label }: HubPromoOfflineSlotProps) {
   return (
-    <View style={[styles.promoCard, styles.offlineSlot]}>
+    <View style={styles.promoCardSlot}>
+      <View style={[styles.promoCard, styles.offlineSlot]}>
       <Ionicons name="wifi-outline" size={22} color={Colors.backgroundSubtle} />
       <Text style={styles.offlineTitle}>No connection</Text>
       <Text style={styles.offlineLabel}>{label}</Text>
+      </View>
     </View>
   );
 }
@@ -69,12 +75,14 @@ export function HubPromoRow({
   onPressDiscover,
   shopUnavailable = false,
 }: HubPromoRowProps) {
-  const { gyms, clubs, coaches } = usePartnerListings();
+  const { gyms, clubs, coaches, isLoading: isDiscoverLoading } =
+    usePartnerListings();
   const hasDiscoverListings =
-    DISCOVER_ENABLED &&
-    (gyms.length > 0 || clubs.length > 0 || coaches.length > 0);
+    gyms.length > 0 || clubs.length > 0 || coaches.length > 0;
+  const showDiscoverCard =
+    DISCOVER_ENABLED && (isDiscoverLoading || hasDiscoverListings);
 
-  if (shopUnavailable && !hasDiscoverListings) {
+  if (shopUnavailable && !showDiscoverCard) {
     return null;
   }
 
@@ -92,7 +100,7 @@ export function HubPromoRow({
           accessibilityLabel="Browse partner products"
         />
       )}
-      {hasDiscoverListings ? (
+      {showDiscoverCard ? (
         <HubPromoCard
           icon="compass-outline"
           eyebrow="Discover"
@@ -100,6 +108,7 @@ export function HubPromoRow({
           description="Find your next gym, club or PT in one place."
           onPress={onPressDiscover}
           accessibilityLabel="Browse gyms, clubs, and coaches"
+          isLoading={isDiscoverLoading}
         />
       ) : null}
     </View>
@@ -111,11 +120,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: Spacing.md,
   },
-  promoCard: {
+  promoCardSlot: {
     flex: 1,
     minWidth: 0,
+  },
+  promoCardLoading: {
+    opacity: 0.5,
+  },
+  promoCard: {
     flexDirection: 'column',
     alignItems: 'stretch',
+    alignSelf: 'stretch',
     backgroundColor: Colors.accentWashFill,
     borderColor: Colors.accentWashBorder,
     padding: Spacing.lg,
@@ -153,6 +168,7 @@ const styles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.md,
     lineHeight: 16,
+    flexShrink: 1,
   },
   offlineSlot: {
     alignItems: 'center',

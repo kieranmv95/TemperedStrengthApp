@@ -1,5 +1,4 @@
 import { GymLeadMedia } from '@/src/components/partners/GymLeadMedia';
-import { PartnerMapPreview } from '@/src/components/partners/PartnerMapPreview';
 import { partnerDetailStyles as styles } from '@/src/components/partners/partnerDetailStyles';
 import { Pill } from '@/src/components/pill';
 import { Colors } from '@/src/constants/theme';
@@ -325,12 +324,15 @@ function PartnerVisitPanel({
             {formatAddressMultiLine(listing.address)}
           </Text>
           {mapCoords ? (
-            <PartnerMapPreview
-              latitude={mapCoords.latitude}
-              longitude={mapCoords.longitude}
+            <TouchableOpacity
+              style={styles.contactRow}
               onPress={onOpenInMaps}
-              accessibilityLabel={`View ${listing.name} on map`}
-            />
+              accessibilityRole="link"
+              accessibilityLabel={`Open ${listing.name} in Maps`}
+            >
+              <Ionicons name="map-outline" size={18} color={Colors.accent} />
+              <Text style={styles.contactValue}>Open in Maps</Text>
+            </TouchableOpacity>
           ) : null}
           {listing.kind === 'coach' && listing.radiusServedKm != null ? (
             <Text style={styles.sectionBody}>

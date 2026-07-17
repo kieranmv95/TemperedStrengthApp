@@ -25,7 +25,7 @@ export const Card = ({ children, onPress, style, accessibilityLabel, activeOpaci
     }
 
     return (
-        <View style={styles.card}>
+        <View style={[styles.card, style]}>
             {children}
         </View>
     );

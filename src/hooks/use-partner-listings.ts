@@ -12,6 +12,7 @@ export function usePartnerListings() {
   const [gyms, setGyms] = useState<PublicGymListing[]>([]);
   const [clubs, setClubs] = useState<PublicClubListing[]>([]);
   const [coaches, setCoaches] = useState<PublicCoachListing[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadPartners = useCallback(async (force = false) => {
     const data = await fetchAllPartnerListings(
@@ -27,13 +28,21 @@ export function usePartnerListings() {
       let cancelled = false;
 
       void (async () => {
-        const data = await fetchAllPartnerListings();
-        if (cancelled) {
-          return;
+        try {
+          const data = await fetchAllPartnerListings();
+          if (cancelled) {
+            return;
+          }
+          setGyms(data.gyms);
+          setClubs(data.clubs);
+          setCoaches(data.coaches);
+        } catch (error) {
+          console.error('Failed to load partner listings:', error);
+        } finally {
+          if (!cancelled) {
+            setIsLoading(false);
+          }
         }
-        setGyms(data.gyms);
-        setClubs(data.clubs);
-        setCoaches(data.coaches);
       })();
 
       const handleAppState = (state: AppStateStatus) => {
@@ -51,5 +60,5 @@ export function usePartnerListings() {
     }, [loadPartners])
   );
 
-  return { gyms, clubs, coaches };
+  return { gyms, clubs, coaches, isLoading };
 }

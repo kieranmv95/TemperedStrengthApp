@@ -14,8 +14,6 @@ import {
   type PublicMapMarker,
   type PublicVenueAddress,
 } from '@/src/types/partner';
-import type { PartnerMapPoint } from '@/src/utils/partnerMapClustering';
-
 const API_BASE = 'https://temperedstrength.com';
 
 const PARTNER_CACHE_TTL_MS = 5 * 60 * 1000;
@@ -242,27 +240,6 @@ export function formatAddressMultiLine(address: PublicVenueAddress): string {
   return lines.join('\n');
 }
 
-
-export function getPartnerMapPoints(listings: PartnerListing[]): PartnerMapPoint[] {
-  const points = [];
-
-  for (const listing of listings) {
-    const coords = getPartnerListingCoords(listing);
-    if (!coords) {
-      continue;
-    }
-
-    points.push({
-      listingId: listing.id,
-      kind: listing.kind,
-      name: listing.name,
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-    });
-  }
-
-  return points;
-}
 
 export function formatLocationSubtitle(address: PublicVenueAddress): string {
   return [address.city, address.postcode].filter(Boolean).join(', ');
