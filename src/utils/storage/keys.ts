@@ -29,8 +29,6 @@ export const PROGRAM_WARMUP_MODULE_ENABLED_KEY =
   'program_warmup_module_enabled';
 export const PROGRAM_COOLDOWN_MODULE_ENABLED_KEY =
   'program_cooldown_module_enabled';
-export const PROGRAM_SHOW_START_SESSION_BUTTON_KEY =
-  'program_show_start_session_button';
 export const DEV_PRO_OVERRIDE_ENABLED_KEY = 'dev_pro_override_enabled';
 export const PROMO_PRO_GRANT_KEY = 'promo_pro_grant';
 export const ONBOARDED_KEY = 'onboarded';

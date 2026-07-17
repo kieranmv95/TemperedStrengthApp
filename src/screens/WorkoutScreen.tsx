@@ -157,16 +157,6 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             ? c.openMoveSessionModal
             : undefined
         }
-        onStartSession={
-          !c.isRestDay &&
-            !c.loading &&
-            !c.activeSession &&
-            !c.completedSession &&
-            c.showStartSessionButton &&
-            c.currentWorkout
-            ? c.handleStartSession
-            : undefined
-        }
         slots={c.slots}
         swapRefreshCounter={c.swapRefreshCounter}
         completedSession={c.completedSession}

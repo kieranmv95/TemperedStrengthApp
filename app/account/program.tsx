@@ -9,10 +9,8 @@ import {
   getActiveProgramId,
   getAutoPbDetectionInProgramsEnabled,
   getAutoRestTimersEnabled,
-  getProgramShowStartSessionButton,
   setAutoPbDetectionInProgramsEnabled,
   setAutoRestTimersEnabled,
-  setProgramShowStartSessionButton,
 } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
@@ -39,10 +37,6 @@ export default function AccountProgramSettingsScreen() {
   const [autoTimersLoading, setAutoTimersLoading] = useState<boolean>(true);
   const [autoPbEnabled, setAutoPbEnabledState] = useState<boolean>(true);
   const [autoPbLoading, setAutoPbLoading] = useState<boolean>(true);
-  const [showStartSessionButton, setShowStartSessionButtonState] =
-    useState<boolean>(true);
-  const [showStartSessionButtonLoading, setShowStartSessionButtonLoading] =
-    useState<boolean>(true);
 
   const checkProgramStatus = async () => {
     try {
@@ -87,18 +81,6 @@ export default function AccountProgramSettingsScreen() {
     }
   };
 
-  const loadShowStartSessionButton = async () => {
-    try {
-      const enabled = await getProgramShowStartSessionButton();
-      setShowStartSessionButtonState(enabled);
-    } catch (error) {
-      console.error('Error loading show start session button:', error);
-      setShowStartSessionButtonState(true);
-    } finally {
-      setShowStartSessionButtonLoading(false);
-    }
-  };
-
   const persistAutoTimersEnabled = async (next: boolean) => {
     setAutoTimersEnabledState(next);
     try {
@@ -129,27 +111,11 @@ export default function AccountProgramSettingsScreen() {
     }
   };
 
-  const persistShowStartSessionButton = async (next: boolean) => {
-    setShowStartSessionButtonState(next);
-    try {
-      await setProgramShowStartSessionButton(next);
-      posthog.capture(posthogEventsNames.app.settingChanged, {
-        setting_name: 'show_start_session_button',
-        new_value: next ? 'true' : 'false',
-      });
-    } catch (error) {
-      console.error('Error saving show start session button:', error);
-      const prev = await getProgramShowStartSessionButton();
-      setShowStartSessionButtonState(prev);
-    }
-  };
-
   useFocusEffect(
     React.useCallback(() => {
       checkProgramStatus();
       loadAutoTimersEnabled();
       loadAutoPbEnabled();
-      loadShowStartSessionButton();
     }, [])
   );
 
@@ -249,26 +215,6 @@ export default function AccountProgramSettingsScreen() {
                 persistAutoPbEnabled(next);
               }}
               disabled={autoPbLoading}
-            />
-          </View>
-
-          <View style={styles.settingItem}>
-            <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>
-                Show “Start Session” button
-              </Text>
-              <Text style={styles.settingDescription}>
-                When disabled, the Start Session button won’t appear on workout
-                days.
-              </Text>
-            </View>
-            <Switch
-              value={showStartSessionButton}
-              onValueChange={(next) => {
-                if (showStartSessionButtonLoading) return;
-                persistShowStartSessionButton(next);
-              }}
-              disabled={showStartSessionButtonLoading}
             />
           </View>
 

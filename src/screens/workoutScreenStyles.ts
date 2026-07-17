@@ -353,10 +353,6 @@ export const workoutScreenStyles = StyleSheet.create({
     padding: Spacing.xxl,
     minHeight: 100,
   },
-  startSessionButtonContainer: {
-    paddingHorizontal: Spacing.xxl,
-    marginTop: Spacing.xl,
-  },
   startSessionButton: {
     borderWidth: 1,
     borderColor: Colors.accent,

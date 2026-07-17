@@ -7,7 +7,6 @@ export const posthogEventsNames = {
     sectionSkip: 'onboarding_section_skip',
   },
   program: {
-    sessionStarted: 'program_session_started',
     sessionFinished: 'program_session_finished',
     workoutRedo: 'program_workout_redo',
     swapClick: 'program_swap_click',

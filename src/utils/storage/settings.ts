@@ -9,7 +9,6 @@ import {
   ONBOARDED_KEY,
   ONBOARDING_PROFILE_KEY,
   PROGRAM_COOLDOWN_MODULE_ENABLED_KEY,
-  PROGRAM_SHOW_START_SESSION_BUTTON_KEY,
   PROGRAM_WARMUP_MODULE_ENABLED_KEY,
   PROMO_PRO_GRANT_KEY,
   WEIGHT_UNIT_KEY,
@@ -354,33 +353,6 @@ export const setProgramCooldownModuleEnabled = async (
     );
   } catch (error) {
     console.error('Error setting program cooldown module enabled:', error);
-    throw error;
-  }
-};
-
-export const getProgramShowStartSessionButton = async (): Promise<boolean> => {
-  try {
-    const raw = await AsyncStorage.getItem(
-      PROGRAM_SHOW_START_SESSION_BUTTON_KEY
-    );
-    if (raw === null) return true;
-    return raw === 'true';
-  } catch (error) {
-    console.error('Error getting program show start session button:', error);
-    return true;
-  }
-};
-
-export const setProgramShowStartSessionButton = async (
-  enabled: boolean
-): Promise<void> => {
-  try {
-    await syncSetItem(
-      PROGRAM_SHOW_START_SESSION_BUTTON_KEY,
-      enabled ? 'true' : 'false'
-    );
-  } catch (error) {
-    console.error('Error setting program show start session button:', error);
     throw error;
   }
 };

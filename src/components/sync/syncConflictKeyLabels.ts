@@ -24,7 +24,6 @@ const STORAGE_KEY_LABELS: Record<string, string> = {
   auto_pb_detection_in_programs_enabled: 'Auto PB detection',
   program_warmup_module_enabled: 'Warm-up module',
   program_cooldown_module_enabled: 'Cool-down module',
-  program_show_start_session_button: 'Start session button',
   onboarded: 'Onboarding state',
   onboarding_profile: 'Onboarding profile',
   icloud_sync_enabled: 'iCloud sync setting',

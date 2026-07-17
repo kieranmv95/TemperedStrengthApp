@@ -34,7 +34,6 @@ import {
   getConditioningLogsForDay,
   getExerciseSwapsForDay,
   getProgramCooldownModuleEnabled,
-  getProgramShowStartSessionButton,
   appendProgramSessionShift,
   getProgramSessionShiftsStore,
   getProgramStartDate,
@@ -44,7 +43,6 @@ import {
   getWorkoutLogsForDay,
   getWorkoutNotes,
   moveProgramDayData,
-  saveActiveSession,
   saveCompletedSession,
   saveRestTimer,
   saveWorkoutNotes,
@@ -52,7 +50,6 @@ import {
   setProgramWarmupModuleEnabled,
 } from '@/src/utils/storage';
 import { buildWorkoutExportText } from '@/src/utils/workoutExport';
-import { useFocusEffect } from '@react-navigation/native';
 import { usePostHog } from 'posthog-react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ScrollView, TextInput } from 'react-native';
@@ -142,7 +139,6 @@ export function useWorkoutScreenController() {
   const [warmupModuleEnabled, setWarmupModuleEnabled] = useState(false);
   const [cooldownModuleEnabled, setCooldownModuleEnabled] = useState(false);
   const [showProgramCompleted, setShowProgramCompleted] = useState(false);
-  const [showStartSessionButton, setShowStartSessionButton] = useState(true);
 
   const programRef = useRef<ReturnType<typeof getProgramById> | null>(null);
   const startDateRef = useRef<string | null>(null);
@@ -454,24 +450,6 @@ export function useWorkoutScreenController() {
     loadWorkoutData();
   }, [loadWorkoutData]);
 
-  useFocusEffect(
-    useCallback(() => {
-      let isActive = true;
-      (async () => {
-        try {
-          const enabled = await getProgramShowStartSessionButton();
-          if (isActive) setShowStartSessionButton(enabled);
-        } catch (error) {
-          console.error('Error loading show start session button:', error);
-          if (isActive) setShowStartSessionButton(true);
-        }
-      })();
-      return () => {
-        isActive = false;
-      };
-    }, [])
-  );
-
   const loadRestTimerState = useCallback(async () => {
     try {
       const timer = await getRestTimer();
@@ -516,26 +494,6 @@ export function useWorkoutScreenController() {
   useEffect(() => {
     loadActiveSessionState();
   }, [loadActiveSessionState]);
-
-  const handleStartSession = useCallback(async () => {
-    if (selectedDayIndex === null) return;
-    try {
-      const session: ActiveSession = {
-        dayIndex: selectedDayIndex,
-        startedAt: Date.now(),
-      };
-      const wk = analyticsWeekDayFromDayIndex(selectedDayIndex);
-      posthog.capture(posthogEventsNames.program.sessionStarted, {
-        program_id: program?.id ?? '',
-        week: wk.week,
-        day: wk.day,
-      });
-      await saveActiveSession(session);
-      setActiveSession(session);
-    } catch (error) {
-      console.error('Error starting session:', error);
-    }
-  }, [selectedDayIndex, program, posthog]);
 
   const finishSession = useCallback(async () => {
     if (!activeSession) return;
@@ -1281,10 +1239,8 @@ export function useWorkoutScreenController() {
     toggleWarmupModule,
     toggleCooldownModule,
     showProgramCompleted,
-    showStartSessionButton,
     loadWorkoutForDay,
     loadWorkoutData,
-    handleStartSession,
     handleFinishSession,
     handleRedoWorkout,
     handleDaySelect,
