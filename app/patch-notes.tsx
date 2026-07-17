@@ -20,6 +20,11 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.13.0',
+    dateLabel: '17th July 2026',
+    notes: ['start programs on any day of the week', 'mark days as complete or skipped', 'removed the start session', 'Promo redemption'],
+  },
+  {
     version: '2.12.0',
     dateLabel: '13th July 2026',
     notes: ['Competition banner support added', 'Wendler 5/3/1 (3-Day) program added'],
