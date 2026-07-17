@@ -225,6 +225,11 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
   p_35: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   p_36: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   rh_02: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  rainhill_wod_04: {
+    kind: 'notes_only',
+    placeholder:
+      'Score 1.1: 600m run time / Score 1.2: total reps after the run',
+  },
   rh_03: {
     kind: 'notes_only',
     placeholder:
