@@ -79,6 +79,12 @@ export const daySelectorStyles = StyleSheet.create({
   dotWorkoutOnDarkSurface: {
     backgroundColor: Colors.textMuted,
   },
+  dotCompleted: {
+    backgroundColor: Colors.recommended,
+  },
+  dotSkipped: {
+    backgroundColor: Colors.destructive,
+  },
   jumpToTodayButton: {
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.sm,

@@ -13,6 +13,9 @@ import type { Workout, WorkoutV1 } from '@/src/types/program';
 import type {
   ActiveSession,
   CompletedSession,
+  CompletedSessions,
+  ProgramSessionStatus,
+  ProgramSessionStatuses,
   RestTimerState,
 } from '@/src/types/storage';
 import { getProgramById } from '@/src/utils/program';
@@ -27,15 +30,19 @@ import {
 import {
   clearActiveSession,
   clearCompletedSession,
+  clearProgramSessionStatus,
   clearRestTimer,
   getActiveProgramId,
   getActiveSession,
   getCompletedSession,
+  getCompletedSessionsStore,
   getConditioningLogsForDay,
   getExerciseSwapsForDay,
   getProgramCooldownModuleEnabled,
   appendProgramSessionShift,
   getProgramSessionShiftsStore,
+  getProgramSessionStatus,
+  getProgramSessionStatuses,
   getProgramStartDate,
   getProgramWarmupModuleEnabled,
   getProgramWorkoutWeekdays,
@@ -47,6 +54,7 @@ import {
   saveRestTimer,
   saveWorkoutNotes,
   setProgramCooldownModuleEnabled,
+  setProgramSessionStatus,
   setProgramWarmupModuleEnabled,
 } from '@/src/utils/storage';
 import { buildWorkoutExportText } from '@/src/utils/workoutExport';
@@ -83,6 +91,20 @@ function isTodayOnOrAfterLocalDate(target: Date): boolean {
   return today.getTime() >= t.getTime();
 }
 
+function mergeSessionStatuses(
+  completedSessions: CompletedSessions,
+  explicitStatuses: ProgramSessionStatuses
+): Record<number, ProgramSessionStatus> {
+  const merged: Record<number, ProgramSessionStatus> = {};
+  for (const dayKey of Object.keys(completedSessions)) {
+    merged[Number(dayKey)] = 'completed';
+  }
+  for (const [dayKey, record] of Object.entries(explicitStatuses)) {
+    merged[Number(dayKey)] = record.status;
+  }
+  return merged;
+}
+
 export function useWorkoutScreenController() {
   const [slots, setSlots] = useState<WorkoutSlot[]>([]);
   const [currentWorkout, setCurrentWorkout] = useState<Workout | null>(null);
@@ -113,6 +135,11 @@ export function useWorkoutScreenController() {
   );
   const [completedSession, setCompletedSession] =
     useState<CompletedSession | null>(null);
+  const [sessionStatus, setSessionStatus] =
+    useState<ProgramSessionStatus | null>(null);
+  const [sessionStatuses, setSessionStatuses] = useState<
+    Record<number, ProgramSessionStatus>
+  >({});
   const [sessionSummary, setSessionSummary] = useState<{
     duration: number;
     totalVolume: number;
@@ -298,13 +325,19 @@ export function useWorkoutScreenController() {
         return;
       }
 
-      const [savedNotes, savedCompletedSession] = await Promise.all([
-        getWorkoutNotes(dayIdx),
-        getCompletedSession(dayIdx),
-      ]);
+      const [savedNotes, savedCompletedSession, savedSessionStatus] =
+        await Promise.all([
+          getWorkoutNotes(dayIdx),
+          getCompletedSession(dayIdx),
+          getProgramSessionStatus(dayIdx),
+        ]);
       setNotes(savedNotes);
       setIsNotesExpanded(savedNotes.length > 0);
       setCompletedSession(savedCompletedSession);
+      setSessionStatus(
+        savedSessionStatus?.status ??
+          (savedCompletedSession ? 'completed' : null)
+      );
 
       const startISO =
         startISOOverride !== undefined
@@ -349,6 +382,8 @@ export function useWorkoutScreenController() {
         savedSessionShifts,
         savedWarmupEnabled,
         savedCooldownEnabled,
+        savedCompletedSessions,
+        savedSessionStatuses,
       ] = await Promise.all([
         getActiveProgramId(),
         getProgramStartDate(),
@@ -356,6 +391,8 @@ export function useWorkoutScreenController() {
         getProgramSessionShiftsStore(),
         getProgramWarmupModuleEnabled(),
         getProgramCooldownModuleEnabled(),
+        getCompletedSessionsStore(),
+        getProgramSessionStatuses(),
       ]);
 
       if (!programId || !savedStartDate) {
@@ -394,6 +431,9 @@ export function useWorkoutScreenController() {
       setSessionShifts(savedSessionShifts);
       setWarmupModuleEnabled(savedWarmupEnabled);
       setCooldownModuleEnabled(savedCooldownEnabled);
+      setSessionStatuses(
+        mergeSessionStatuses(savedCompletedSessions, savedSessionStatuses)
+      );
 
       const daysSinceStart = calculateDaysSinceStart(savedStartDate);
       setDayIndex(daysSinceStart);
@@ -556,6 +596,7 @@ export function useWorkoutScreenController() {
       };
 
       await saveCompletedSession(completed);
+      await setProgramSessionStatus(activeSession.dayIndex, 'completed');
       await increment('program_workouts_completed');
 
       const durationMins = Math.max(0, Math.round(duration / 60_000));
@@ -577,6 +618,11 @@ export function useWorkoutScreenController() {
       await clearActiveSession();
       setActiveSession(null);
       setCompletedSession(completed);
+      setSessionStatus('completed');
+      setSessionStatuses((current) => ({
+        ...current,
+        [activeSession.dayIndex]: 'completed',
+      }));
       setSessionSummary({
         duration,
         totalVolume,
@@ -610,6 +656,59 @@ export function useWorkoutScreenController() {
     ]);
   }, [activeSession, finishSession]);
 
+  const applySessionStatus = useCallback(
+    async (status: ProgramSessionStatus) => {
+      if (selectedDayIndex === null || !currentWorkout) return;
+
+      try {
+        if (status === 'skipped') {
+          await clearCompletedSession(selectedDayIndex);
+          setCompletedSession(null);
+        }
+
+        if (activeSession?.dayIndex === selectedDayIndex) {
+          await clearActiveSession();
+          setActiveSession(null);
+        }
+
+        await setProgramSessionStatus(selectedDayIndex, status);
+        setSessionStatus(status);
+        setSessionStatuses((current) => ({
+          ...current,
+          [selectedDayIndex]: status,
+        }));
+      } catch (error) {
+        console.error('Error saving program session status:', error);
+        Alert.alert(
+          'Unable to save',
+          'The session status could not be saved. Please try again.'
+        );
+      }
+    },
+    [activeSession, currentWorkout, selectedDayIndex]
+  );
+
+  const handleMarkSessionCompleted = useCallback(() => {
+    void applySessionStatus('completed');
+  }, [applySessionStatus]);
+
+  const handleSkipSession = useCallback(() => {
+    Alert.alert(
+      'Skip this session?',
+      'This session will be marked as skipped in your program calendar.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Skip Session',
+          style: 'destructive',
+          onPress: () => {
+            void applySessionStatus('skipped');
+          },
+        },
+      ]
+    );
+  }, [applySessionStatus]);
+
   const handleRedoWorkout = useCallback(async () => {
     if (selectedDayIndex === null) return;
 
@@ -632,7 +731,14 @@ export function useWorkoutScreenController() {
                 });
               }
               await clearCompletedSession(selectedDayIndex);
+              await clearProgramSessionStatus(selectedDayIndex);
               setCompletedSession(null);
+              setSessionStatus(null);
+              setSessionStatuses((current) => {
+                const next = { ...current };
+                delete next[selectedDayIndex];
+                return next;
+              });
               await recomputeProgramCompleted();
             } catch (error) {
               console.error('Error clearing completed session:', error);
@@ -1110,6 +1216,15 @@ export function useWorkoutScreenController() {
       const nextShifts = await getProgramSessionShiftsStore();
       sessionShiftsRef.current = nextShifts;
       setSessionShifts(nextShifts);
+      setSessionStatuses((current) => {
+        const next = { ...current };
+        const movedStatus = next[from];
+        delete next[from];
+        if (movedStatus) {
+          next[to] = movedStatus;
+        }
+        return next;
+      });
 
       setSelectedDayIndex(to);
       setSwapRefreshCounter((prev) => prev + 1);
@@ -1217,6 +1332,8 @@ export function useWorkoutScreenController() {
     setIntensityModalVisible,
     activeSession,
     completedSession,
+    sessionStatus,
+    sessionStatuses,
     sessionSummary,
     setSessionSummary,
     keyboardHeight,
@@ -1242,6 +1359,8 @@ export function useWorkoutScreenController() {
     loadWorkoutForDay,
     loadWorkoutData,
     handleFinishSession,
+    handleMarkSessionCompleted,
+    handleSkipSession,
     handleRedoWorkout,
     handleDaySelect,
     handleSwapClick,

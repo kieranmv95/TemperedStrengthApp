@@ -16,6 +16,7 @@ const STORAGE_KEY_LABELS: Record<string, string> = {
   rest_timer: 'Rest timer',
   active_session: 'Active session',
   completed_sessions: 'Completed sessions',
+  program_session_statuses: 'Session statuses',
   conditioning_workout_logs: 'Conditioning logs',
   standalone_workout_logs: 'Standalone workout logs',
   personal_bests: 'Personal bests',

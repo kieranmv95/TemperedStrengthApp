@@ -4,6 +4,7 @@ import {
 } from '@/src/components/daySelectorConstants';
 import { DaySelectorDayChip } from '@/src/components/DaySelectorDayChip';
 import { daySelectorStyles as styles } from '@/src/components/daySelectorStyles';
+import type { ProgramSessionStatus } from '@/src/types/storage';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Dimensions,
@@ -20,6 +21,7 @@ type DaySelectorProps = {
   startDate: string;
   workoutDayIndices: number[];
   currentDayIndex: number;
+  sessionStatuses: Record<number, ProgramSessionStatus>;
   onDaySelect: (dayIndex: number) => void;
 };
 
@@ -27,6 +29,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   startDate,
   workoutDayIndices,
   currentDayIndex,
+  sessionStatuses,
   onDaySelect,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -222,8 +225,9 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
           const dayHasWorkout = hasWorkout(dayIndex);
           const dayIsToday = isToday(dayIndex);
           const isSelected = dayIndex === currentDayIndex;
+          const sessionStatus = sessionStatuses[dayIndex];
 
-          const dotKind = dayHasWorkout ? 'workout' : 'none';
+          const dotKind = sessionStatus ?? (dayHasWorkout ? 'workout' : 'none');
 
           return (
             <DaySelectorDayChip

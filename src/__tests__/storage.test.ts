@@ -8,6 +8,8 @@ import {
   getAutoRestTimersEnabled,
   getAutoPbDetectionInProgramsEnabled,
   getCompletedSession,
+  getProgramSessionStatus,
+  getProgramSessionStatuses,
   getPromoProGrant,
   getRestTimer,
   getWorkoutNotes,
@@ -18,6 +20,7 @@ import {
   saveCompletedSession,
   saveRestTimer,
   saveWorkoutNotes,
+  setProgramSessionStatus,
   clearRestTimer,
   setActiveProgramId,
   setAutoRestTimersEnabled,
@@ -185,6 +188,7 @@ describe('storage utilities', () => {
 
   it('moves program day-index keyed data to a new day index', async () => {
     await saveWorkoutNotes(2, 'Keep shoulders down');
+    await setProgramSessionStatus(2, 'skipped');
     await saveCompletedSession({
       dayIndex: 2,
       startedAt: 100,
@@ -205,6 +209,27 @@ describe('storage utilities', () => {
       completedAt: 200,
       totalVolume: 1234,
       setsCompleted: 10,
+    });
+    await expect(getProgramSessionStatus(2)).resolves.toBeNull();
+    await expect(getProgramSessionStatus(3)).resolves.toMatchObject({
+      dayIndex: 3,
+      status: 'skipped',
+    });
+  });
+
+  it('saves and updates explicit program session statuses', async () => {
+    await setProgramSessionStatus(4, 'completed');
+    await setProgramSessionStatus(7, 'skipped');
+
+    await expect(getProgramSessionStatuses()).resolves.toMatchObject({
+      4: { dayIndex: 4, status: 'completed' },
+      7: { dayIndex: 7, status: 'skipped' },
+    });
+
+    await setProgramSessionStatus(4, 'skipped');
+    await expect(getProgramSessionStatus(4)).resolves.toMatchObject({
+      dayIndex: 4,
+      status: 'skipped',
     });
   });
 

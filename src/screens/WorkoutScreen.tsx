@@ -73,7 +73,10 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
   if (c.loading) {
     return (
-      <AppSafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <AppSafeAreaView
+        style={styles.container}
+        edges={['top', 'left', 'right']}
+      >
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
@@ -123,6 +126,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           startDate={c.startDate}
           workoutDayIndices={c.workoutDayIndices}
           currentDayIndex={c.selectedDayIndex ?? c.dayIndex}
+          sessionStatuses={c.sessionStatuses}
           onDaySelect={c.handleDaySelect}
         />
       )}
@@ -157,6 +161,9 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             ? c.openMoveSessionModal
             : undefined
         }
+        sessionStatus={c.sessionStatus}
+        onMarkSessionCompleted={c.handleMarkSessionCompleted}
+        onSkipSession={c.handleSkipSession}
         slots={c.slots}
         swapRefreshCounter={c.swapRefreshCounter}
         completedSession={c.completedSession}
@@ -207,7 +214,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         originalExerciseId={
           c.currentSwapSlot !== null
             ? c.getExerciseSlots()[c.currentSwapSlot]?.programExercise?.id ||
-            null
+              null
             : null
         }
         dayIndex={c.selectedDayIndex}

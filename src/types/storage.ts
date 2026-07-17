@@ -82,3 +82,15 @@ export type CompletedSession = {
 export type CompletedSessions = {
   [dayIndex: number]: CompletedSession;
 };
+
+export type ProgramSessionStatus = 'completed' | 'skipped';
+
+export type ProgramSessionStatusRecord = {
+  dayIndex: number;
+  status: ProgramSessionStatus;
+  updatedAt: number;
+};
+
+export type ProgramSessionStatuses = {
+  [dayIndex: number]: ProgramSessionStatusRecord;
+};

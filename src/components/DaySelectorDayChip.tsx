@@ -3,7 +3,7 @@ import type { LayoutChangeEvent } from 'react-native';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { daySelectorStyles as styles } from './daySelectorStyles';
 
-type DotKind = 'workout' | 'none';
+type DotKind = 'completed' | 'skipped' | 'workout' | 'none';
 
 type DaySelectorDayChipProps = {
   label: string;
@@ -34,6 +34,14 @@ export function DaySelectorDayChip({
       ]}
       onPress={onPress}
       onLayout={onLayout}
+      accessibilityRole="button"
+      accessibilityLabel={`${label}${
+        dotKind === 'completed'
+          ? ', completed'
+          : dotKind === 'skipped'
+            ? ', skipped'
+            : ''
+      }`}
     >
       <Text
         style={[
@@ -58,11 +66,15 @@ export function DaySelectorDayChip({
       <View
         style={[
           styles.dot,
-          dotKind === 'workout'
-            ? isToday
-              ? styles.dotWorkoutToday
-              : styles.dotWorkoutOnDarkSurface
-            : styles.dotPlaceholder,
+          dotKind === 'completed'
+            ? styles.dotCompleted
+            : dotKind === 'skipped'
+              ? styles.dotSkipped
+              : dotKind === 'workout'
+                ? isToday
+                  ? styles.dotWorkoutToday
+                  : styles.dotWorkoutOnDarkSurface
+                : styles.dotPlaceholder,
         ]}
       />
     </TouchableOpacity>

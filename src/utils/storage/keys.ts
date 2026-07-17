@@ -17,6 +17,7 @@ export const FAVORITE_PARTNERS_KEY = 'favorite_partners';
 export const REST_TIMER_KEY = 'rest_timer';
 export const ACTIVE_SESSION_KEY = 'active_session';
 export const COMPLETED_SESSIONS_KEY = 'completed_sessions';
+export const PROGRAM_SESSION_STATUSES_KEY = 'program_session_statuses';
 export const CONDITIONING_WORKOUT_LOGS_KEY = 'conditioning_workout_logs';
 export const STANDALONE_WORKOUT_LOGS_KEY = 'standalone_workout_logs';
 export const PERSONAL_BESTS_KEY = 'personal_bests';

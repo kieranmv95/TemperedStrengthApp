@@ -3,6 +3,9 @@ import type {
   ActiveSession,
   CompletedSession,
   CompletedSessions,
+  ProgramSessionStatus,
+  ProgramSessionStatusRecord,
+  ProgramSessionStatuses,
   RestTimerState,
 } from '@/src/types/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,6 +13,7 @@ import { syncRemoveItem, syncSetItem } from '@/src/sync/syncStorage';
 import {
   ACTIVE_SESSION_KEY,
   COMPLETED_SESSIONS_KEY,
+  PROGRAM_SESSION_STATUSES_KEY,
   REST_TIMER_KEY,
 } from './keys';
 import { mutate, parseJsonMap } from './internal';
@@ -168,6 +172,74 @@ export const clearCompletedSession = async (
     );
   } catch (error) {
     console.error('Error clearing completed session:', error);
+    throw error;
+  }
+};
+
+export const getProgramSessionStatus = async (
+  dayIndex: number
+): Promise<ProgramSessionStatusRecord | null> => {
+  try {
+    const data = await AsyncStorage.getItem(PROGRAM_SESSION_STATUSES_KEY);
+    const statuses: ProgramSessionStatuses = data ? JSON.parse(data) : {};
+    return statuses[dayIndex] ?? null;
+  } catch (error) {
+    console.error('Error getting program session status:', error);
+    return null;
+  }
+};
+
+export const getProgramSessionStatuses =
+  async (): Promise<ProgramSessionStatuses> => {
+    try {
+      const data = await AsyncStorage.getItem(PROGRAM_SESSION_STATUSES_KEY);
+      return data ? (JSON.parse(data) as ProgramSessionStatuses) : {};
+    } catch (error) {
+      console.error('Error getting program session statuses:', error);
+      return {};
+    }
+  };
+
+export const setProgramSessionStatus = async (
+  dayIndex: number,
+  status: ProgramSessionStatus
+): Promise<ProgramSessionStatusRecord> => {
+  const record: ProgramSessionStatusRecord = {
+    dayIndex,
+    status,
+    updatedAt: Date.now(),
+  };
+
+  try {
+    await mutate<ProgramSessionStatuses>(
+      PROGRAM_SESSION_STATUSES_KEY,
+      parseJsonMap,
+      (statuses) => {
+        statuses[dayIndex] = record;
+        return statuses;
+      }
+    );
+    return record;
+  } catch (error) {
+    console.error('Error setting program session status:', error);
+    throw error;
+  }
+};
+
+export const clearProgramSessionStatus = async (
+  dayIndex: number
+): Promise<void> => {
+  try {
+    await mutate<ProgramSessionStatuses>(
+      PROGRAM_SESSION_STATUSES_KEY,
+      parseJsonMap,
+      (statuses) => {
+        delete statuses[dayIndex];
+        return statuses;
+      }
+    );
+  } catch (error) {
+    console.error('Error clearing program session status:', error);
     throw error;
   }
 };

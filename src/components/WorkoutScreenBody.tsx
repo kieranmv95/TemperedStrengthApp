@@ -11,6 +11,7 @@ import {
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
 import type { Workout } from '@/src/types/program';
 import type { ActiveSession, CompletedSession } from '@/src/types/storage';
+import type { ProgramSessionStatus } from '@/src/types/storage';
 import { formatVolumeFromKg } from '@/src/utils/weightUnits';
 import React from 'react';
 import {
@@ -24,6 +25,7 @@ import {
 import type { RestTimerStartPayload } from './ExerciseCard';
 import { ExerciseCard } from './ExerciseCard';
 import { ConditioningWorkoutBody } from './conditioning/ConditioningWorkoutBody';
+import { ProgramSessionStatusControls } from './ProgramSessionStatusControls';
 
 type WorkoutScreenBodyProps = {
   selectedDayIndex: number | null;
@@ -34,6 +36,9 @@ type WorkoutScreenBodyProps = {
   currentWorkout: Workout | null;
   showIntensity?: boolean;
   onMoveSession?: () => void;
+  sessionStatus: ProgramSessionStatus | null;
+  onMarkSessionCompleted: () => void;
+  onSkipSession: () => void;
   slots: WorkoutSlot[];
   swapRefreshCounter: number;
   completedSession: CompletedSession | null;
@@ -68,6 +73,9 @@ export function WorkoutScreenBody({
   currentWorkout,
   showIntensity = true,
   onMoveSession,
+  sessionStatus,
+  onMarkSessionCompleted,
+  onSkipSession,
   slots,
   swapRefreshCounter,
   completedSession,
@@ -137,31 +145,18 @@ export function WorkoutScreenBody({
                   {currentWorkout.description}
                 </Text>
               )}
-
-              {onMoveSession && (
-                <View style={styles.sessionCtaRow}>
-                  <TouchableOpacity
-                    style={[styles.startSessionButton, styles.sessionCtaHalf]}
-                    onPress={onMoveSession}
-                    activeOpacity={0.7}
-                  >
-                    <Text
-                      style={styles.startSessionButtonText}
-                      numberOfLines={1}
-                      adjustsFontSizeToFit
-                      minimumFontScale={0.8}
-                    >
-                      Move Session
-                    </Text>
-                  </TouchableOpacity>
-                  <View style={styles.sessionCtaHalf} />
-                </View>
-              )}
             </View>
           </View>
         </View>
 
         {headerAccessory}
+
+        <ProgramSessionStatusControls
+          status={sessionStatus}
+          onMove={onMoveSession}
+          onComplete={onMarkSessionCompleted}
+          onSkip={onSkipSession}
+        />
 
         {completedSession && !activeSession && (
           <View style={styles.completedSessionBanner}>

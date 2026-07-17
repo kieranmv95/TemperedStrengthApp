@@ -6,6 +6,7 @@ import type {
   ConditioningWorkoutLogs,
   CustomSetCounts,
   ExerciseSwaps,
+  ProgramSessionStatuses,
   WorkoutLogs,
   WorkoutNotes,
 } from '@/src/types/storage';
@@ -18,6 +19,7 @@ import {
   CONDITIONING_WORKOUT_LOGS_KEY,
   CUSTOM_SET_COUNTS_KEY,
   EXERCISE_SWAPS_KEY,
+  PROGRAM_SESSION_STATUSES_KEY,
   PROGRAM_SESSION_SHIFTS_KEY,
   PROGRAM_START_DATE_KEY,
   PROGRAM_STORAGE_KEY,
@@ -28,7 +30,11 @@ import {
   WORKOUT_NOTES_KEY,
 } from './keys';
 import { mutate, parseJsonMap } from './internal';
-import { getActiveSession, getCompletedSession } from './sessions';
+import {
+  getActiveSession,
+  getCompletedSession,
+  getProgramSessionStatus,
+} from './sessions';
 import {
   getExerciseSwapsForDay,
   getWorkoutLogsForDay,
@@ -214,6 +220,7 @@ type MoveProgramDayDataResult = { moved: boolean };
 const ensureNoDestinationData = async (toDayIndex: number): Promise<void> => {
   const [
     completedDest,
+    statusDest,
     logsDest,
     swapsDest,
     notesDest,
@@ -221,6 +228,7 @@ const ensureNoDestinationData = async (toDayIndex: number): Promise<void> => {
     rawCustomCounts,
   ] = await Promise.all([
     getCompletedSession(toDayIndex),
+    getProgramSessionStatus(toDayIndex),
     getWorkoutLogsForDay(toDayIndex),
     getExerciseSwapsForDay(toDayIndex),
     getWorkoutNotes(toDayIndex),
@@ -235,6 +243,7 @@ const ensureNoDestinationData = async (toDayIndex: number): Promise<void> => {
 
   const hasAny =
     completedDest !== null ||
+    statusDest !== null ||
     Object.keys(logsDest).length > 0 ||
     Object.keys(swapsDest).length > 0 ||
     notesDest.trim() !== '' ||
@@ -288,6 +297,20 @@ export const moveProgramDayData = async (
         sessions[toDayIndex] = { ...src, dayIndex: toDayIndex };
         delete sessions[fromDayIndex];
         entries.push([COMPLETED_SESSIONS_KEY, JSON.stringify(sessions)]);
+      }
+    }
+  }
+
+  // explicit completed/skipped status
+  {
+    const data = await AsyncStorage.getItem(PROGRAM_SESSION_STATUSES_KEY);
+    if (data) {
+      const statuses: ProgramSessionStatuses = JSON.parse(data);
+      const src = statuses[fromDayIndex];
+      if (src) {
+        statuses[toDayIndex] = { ...src, dayIndex: toDayIndex };
+        delete statuses[fromDayIndex];
+        entries.push([PROGRAM_SESSION_STATUSES_KEY, JSON.stringify(statuses)]);
       }
     }
   }
@@ -413,6 +436,21 @@ export const clearFutureWorkoutData = async (
       });
       return filteredSwaps;
     });
+
+    await mutate<ProgramSessionStatuses>(
+      PROGRAM_SESSION_STATUSES_KEY,
+      parseJsonMap,
+      (statuses) => {
+        const filteredStatuses: ProgramSessionStatuses = {};
+        Object.keys(statuses).forEach((dayKey) => {
+          const dayIdx = parseInt(dayKey, 10);
+          if (dayIdx < fromDayIndex) {
+            filteredStatuses[dayIdx] = statuses[dayIdx];
+          }
+        });
+        return filteredStatuses;
+      }
+    );
   } catch (error) {
     console.error('Error clearing future workout data:', error);
     throw error;
@@ -436,6 +474,7 @@ export const clearProgramData = async (): Promise<void> => {
     await syncRemoveItem(REST_TIMER_KEY);
     await syncRemoveItem(ACTIVE_SESSION_KEY);
     await syncRemoveItem(COMPLETED_SESSIONS_KEY);
+    await syncRemoveItem(PROGRAM_SESSION_STATUSES_KEY);
     await syncRemoveItem(TRAINING_MAXES_KEY);
   } catch (error) {
     console.error('Error clearing program data:', error);

@@ -53,16 +53,6 @@ export const workoutScreenStyles = StyleSheet.create({
   headerTextContainer: {
     flex: 1,
   },
-  sessionCtaRow: {
-    marginTop: Spacing.md,
-    flexDirection: 'row',
-    gap: Spacing.md,
-  },
-  sessionCtaHalf: {
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 0,
-  },
   headerActions: {
     alignItems: 'flex-end',
     gap: Spacing.sm,
