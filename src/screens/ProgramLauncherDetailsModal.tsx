@@ -1,13 +1,11 @@
 import { YoutubeEmbed } from '@/src/components/exercise/YoutubeEmbed';
 import type { Program } from '@/src/types/program';
 import { modalSheetBottomPadding } from '@/src/utils/platform';
-import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import { sessionsPerWeekFromProgram } from '@/src/utils/programWeekPattern';
 import React from 'react';
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SmallChevron } from '../components/ds/SmallChevron';
 import { Spacing } from '../constants/theme';
-import { ProgramLauncherWeekdayPicker } from './ProgramLauncherWeekdayPicker';
 import { programLauncherStyles as styles } from './programLauncherStyles';
 
 type ProgramLauncherDetailsModalProps = {
@@ -15,11 +13,6 @@ type ProgramLauncherDetailsModalProps = {
   onClose: () => void;
   selectedProgram: Program | null;
   isPro: boolean;
-  selectedWeekdays: ProgramDaySplitKey[];
-  onToggleWeekday: (key: ProgramDaySplitKey) => void;
-  sessionsRequired: number;
-  weekdaySelectionReady: boolean;
-  startBlockedByWeekdays: boolean;
   onStartProgram: () => void;
   onUpgradePress: () => void;
   bottomInset: number;
@@ -30,31 +23,22 @@ export function ProgramLauncherDetailsModal({
   onClose,
   selectedProgram,
   isPro,
-  selectedWeekdays,
-  onToggleWeekday,
-  sessionsRequired,
-  weekdaySelectionReady,
-  startBlockedByWeekdays,
   onStartProgram,
   onUpgradePress,
   bottomInset,
 }: ProgramLauncherDetailsModalProps) {
   const [bodyChangesExpanded, setBodyChangesExpanded] = React.useState(false);
-  const [step, setStep] = React.useState<'details' | 'selectDays'>('details');
 
-  const programRequiresDaySelection = !!selectedProgram?.daysSplit?.length;
-  const sessionsPerWeek = selectedProgram ? sessionsPerWeekFromProgram(selectedProgram) : 0;
-
+  const sessionsPerWeek = selectedProgram
+    ? sessionsPerWeekFromProgram(selectedProgram)
+    : 0;
 
   React.useEffect(() => {
     if (!visible) {
       setBodyChangesExpanded(false);
-      setStep('details');
       return;
     }
-    // When program changes (or modal reopens), reset to the top-level view.
     setBodyChangesExpanded(false);
-    setStep('details');
   }, [visible, selectedProgram?.id]);
 
   return (
@@ -83,21 +67,11 @@ export function ProgramLauncherDetailsModal({
           </View>
 
           <ScrollView style={styles.modalContent}>
-            {step === 'selectDays' && (
-              <TouchableOpacity
-                onPress={() => setStep('details')}
-                accessibilityRole="button"
-                style={styles.stepBackButton}
-              >
-                <Text style={styles.stepBackButtonText}>Back</Text>
-              </TouchableOpacity>
-            )}
-
-            {step === 'details' && (<Text style={styles.programDescription}>
+            <Text style={styles.programDescription}>
               {selectedProgram?.description}
-            </Text>)}
+            </Text>
 
-            {step === 'details' && selectedProgram?.bodyChangesSummary && (
+            {selectedProgram?.bodyChangesSummary && (
               <View style={styles.bodyChangesCard}>
                 <TouchableOpacity
                   onPress={() => setBodyChangesExpanded((v) => !v)}
@@ -108,7 +82,13 @@ export function ProgramLauncherDetailsModal({
                   <Text style={styles.bodyChangesLinkText}>
                     What this program can do for you
                   </Text>
-                  <View style={{ transform: [{ rotate: bodyChangesExpanded ? '-90deg' : '90deg' }] }}>
+                  <View
+                    style={{
+                      transform: [
+                        { rotate: bodyChangesExpanded ? '-90deg' : '90deg' },
+                      ],
+                    }}
+                  >
                     <SmallChevron />
                   </View>
                 </TouchableOpacity>
@@ -120,11 +100,9 @@ export function ProgramLauncherDetailsModal({
               </View>
             )}
 
-            {step === 'details' && (
-              <Text style={styles.sectionTitle}>Program Overview</Text>
-            )}
+            <Text style={styles.sectionTitle}>Program Overview</Text>
 
-            {step === 'details' && selectedProgram?.videoId ? (
+            {selectedProgram?.videoId ? (
               <View style={styles.programVideoContainer}>
                 <YoutubeEmbed
                   youtubeId={selectedProgram.videoId}
@@ -133,57 +111,47 @@ export function ProgramLauncherDetailsModal({
               </View>
             ) : null}
 
-            {step === 'details' && (
-              <View style={styles.programOverviewContainer}>
-                <View style={styles.statsContainer}>
+            <View style={styles.programOverviewContainer}>
+              <View style={styles.statsContainer}>
+                <View style={styles.statItem}>
+                  <Text style={styles.statValue}>
+                    {selectedProgram?.workouts.length}
+                  </Text>
+                  <Text style={styles.statLabel}>Workouts</Text>
+                </View>
+                {selectedProgram &&
+                  (() => {
+                    const maxDayIndex = Math.max(
+                      ...selectedProgram.workouts.map((w) => w.dayIndex)
+                    );
+                    const weekCount = Math.ceil((maxDayIndex + 1) / 7);
+                    return (
+                      <View style={styles.statItem}>
+                        <Text style={styles.statValue}>{weekCount}</Text>
+                        <Text style={styles.statLabel}>
+                          {weekCount === 1 ? 'Week' : 'Weeks'}
+                        </Text>
+                      </View>
+                    );
+                  })()}
+                {selectedProgram?.averageSessionDuration && (
                   <View style={styles.statItem}>
                     <Text style={styles.statValue}>
-                      {selectedProgram?.workouts.length}
+                      {selectedProgram.averageSessionDuration}
                     </Text>
-                    <Text style={styles.statLabel}>Workouts</Text>
-                  </View>
-                  {selectedProgram &&
-                    (() => {
-                      const maxDayIndex = Math.max(
-                        ...selectedProgram.workouts.map((w) => w.dayIndex)
-                      );
-                      const weekCount = Math.ceil((maxDayIndex + 1) / 7);
-                      return (
-                        <View style={styles.statItem}>
-                          <Text style={styles.statValue}>{weekCount}</Text>
-                          <Text style={styles.statLabel}>
-                            {weekCount === 1 ? 'Week' : 'Weeks'}
-                          </Text>
-                        </View>
-                      );
-                    })()}
-                  {selectedProgram?.averageSessionDuration && (
-                    <View style={styles.statItem}>
-                      <Text style={styles.statValue}>
-                        {selectedProgram.averageSessionDuration}
-                      </Text>
-                      <Text style={styles.statLabel}>Duration</Text>
-                    </View>
-                  )}
-                </View>
-                {sessionsPerWeek && (
-                  <View style={{ ...styles.statItem, marginTop: Spacing.lg }}>
-                    <Text style={styles.statValue}>
-                      {sessionsPerWeek} <Text style={styles.statLabel}>sessions per week</Text>
-                    </Text>
+                    <Text style={styles.statLabel}>Duration</Text>
                   </View>
                 )}
               </View>
-            )}
-
-            {programRequiresDaySelection && step === 'selectDays' && (
-              <ProgramLauncherWeekdayPicker
-                sessionsRequired={sessionsRequired}
-                selectedWeekdays={selectedWeekdays}
-                weekdaySelectionReady={weekdaySelectionReady}
-                onToggleWeekday={onToggleWeekday}
-              />
-            )}
+              {sessionsPerWeek ? (
+                <View style={{ ...styles.statItem, marginTop: Spacing.lg }}>
+                  <Text style={styles.statValue}>
+                    {sessionsPerWeek}{' '}
+                    <Text style={styles.statLabel}>sessions per week</Text>
+                  </Text>
+                </View>
+              ) : null}
+            </View>
           </ScrollView>
 
           <View
@@ -203,25 +171,11 @@ export function ProgramLauncherDetailsModal({
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
-                style={[
-                  styles.startProgramButton,
-                  step === 'selectDays' &&
-                  startBlockedByWeekdays &&
-                  styles.startProgramButtonDisabled,
-                ]}
-                onPress={() => {
-                  if (programRequiresDaySelection && step === 'details') {
-                    setStep('selectDays');
-                    return;
-                  }
-                  onStartProgram();
-                }}
-                disabled={step === 'selectDays' && startBlockedByWeekdays}
+                style={styles.startProgramButton}
+                onPress={onStartProgram}
               >
                 <Text style={styles.startProgramButtonText}>
-                  {programRequiresDaySelection && step === 'details'
-                    ? 'Select Days'
-                    : 'Select Start Date'}
+                  Select Start Date
                 </Text>
               </TouchableOpacity>
             )}

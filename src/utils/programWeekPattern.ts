@@ -27,30 +27,46 @@ export function sortPatternByCalendarOrder(
   );
 }
 
-/** Mon → Tue → … → Sun (ISO-style week order). */
-const MONDAY_FIRST_ORDER: Record<ProgramDaySplitKey, number> = {
-  mon: 0,
-  tue: 1,
-  wed: 2,
-  thu: 3,
-  fri: 4,
-  sat: 5,
-  sun: 6,
-};
-
 /**
- * Weekday for **program start** / session 1 of each rolling week: the earliest
- * selected day in Mon→Sun order (e.g. Tue, Sat, Sun → Tuesday).
+ * Builds a training-day pattern that always includes `startKey`, preferring
+ * `defaults` and filling/trimming in week order from the start day.
  */
-export function firstSessionWeekdayForPattern(
-  keys: ProgramDaySplitKey[]
-): ProgramDaySplitKey {
-  if (keys.length === 0) {
-    return 'mon';
+export function patternWithRequiredStartDay(
+  defaults: ProgramDaySplitKey[],
+  startKey: ProgramDaySplitKey,
+  sessionsRequired: number
+): ProgramDaySplitKey[] {
+  if (sessionsRequired <= 0) {
+    return [];
   }
-  return [...keys].sort(
-    (a, b) => MONDAY_FIRST_ORDER[a] - MONDAY_FIRST_ORDER[b]
-  )[0];
+
+  const preferred = new Set<ProgramDaySplitKey>([startKey, ...defaults]);
+  const weekOrder: ProgramDaySplitKey[] = [];
+  const startJs = programSplitKeyToJsDay(startKey);
+  for (let i = 0; i < 7; i++) {
+    weekOrder.push(jsDayToSplitKey((startJs + i) % 7));
+  }
+
+  const selected: ProgramDaySplitKey[] = [];
+  for (const key of weekOrder) {
+    if (preferred.has(key)) {
+      selected.push(key);
+    }
+    if (selected.length >= sessionsRequired) {
+      return selected;
+    }
+  }
+
+  for (const key of weekOrder) {
+    if (!selected.includes(key)) {
+      selected.push(key);
+    }
+    if (selected.length >= sessionsRequired) {
+      break;
+    }
+  }
+
+  return selected;
 }
 
 export function sessionsPerWeekFromProgram(program: Program): number {

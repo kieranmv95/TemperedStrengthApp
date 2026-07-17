@@ -50,9 +50,9 @@ export function MoveSessionModal({
         <View style={[styles.sheet, { paddingBottom: bottomInset + 24 }]}>
           <Text style={styles.title}>Move Session</Text>
           <Text style={styles.subtitle}>
-            Move session to another day this week. You cannot move a session
-            outside of this calendar week to not disrupt the overall flow of the
-            program
+            Move session to another day this program week. You cannot move a
+            session outside of this program week to not disrupt the overall
+            flow of the program
           </Text>
 
           <View style={styles.daysRow}>

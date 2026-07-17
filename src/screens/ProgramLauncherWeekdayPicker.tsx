@@ -1,6 +1,6 @@
 import {
-  CALENDAR_DAY_KEYS,
   CAL_DAY_LABELS,
+  weekKeysStartingFrom,
 } from '@/src/screens/programLauncherConstants';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import { programAnchorFullWeekdayName } from '@/src/utils/programStartWeekday';
@@ -11,6 +11,8 @@ import { programLauncherStyles as styles } from './programLauncherStyles';
 type ProgramLauncherWeekdayPickerProps = {
   sessionsRequired: number;
   selectedWeekdays: ProgramDaySplitKey[];
+  weekdayOrder?: ProgramDaySplitKey[];
+  lockedWeekday?: ProgramDaySplitKey | null;
   weekdaySelectionReady: boolean;
   onToggleWeekday: (key: ProgramDaySplitKey) => void;
 };
@@ -18,16 +20,25 @@ type ProgramLauncherWeekdayPickerProps = {
 export function ProgramLauncherWeekdayPicker({
   sessionsRequired,
   selectedWeekdays,
+  weekdayOrder,
+  lockedWeekday = null,
   weekdaySelectionReady,
   onToggleWeekday,
 }: ProgramLauncherWeekdayPickerProps) {
+  const orderedKeys =
+    weekdayOrder ?? weekKeysStartingFrom(lockedWeekday ?? 'mon');
+
   return (
     <View>
       <View style={styles.workoutDaysTitleBlock}>
         <Text style={styles.workoutTitle}>Workout Days (tap to change)</Text>
         <Text style={styles.workoutDaysHint}>
           You need exactly {sessionsRequired} training days before you can
-          start. Tap the days below to fit your schedule
+          start. Days are ordered from your program start day
+          {lockedWeekday
+            ? ` (${programAnchorFullWeekdayName(lockedWeekday)})`
+            : ''}
+          .
         </Text>
       </View>
       {!weekdaySelectionReady && (
@@ -37,16 +48,25 @@ export function ProgramLauncherWeekdayPicker({
         </Text>
       )}
       <View style={styles.daysSplitContainer}>
-        {CALENDAR_DAY_KEYS.map((key) => {
+        {orderedKeys.map((key) => {
           const selected = selectedWeekdays.includes(key);
+          const locked = lockedWeekday === key;
           return (
             <TouchableOpacity
               key={key}
-              style={[styles.dayItem, selected && styles.dayItemSelected]}
-              onPress={() => onToggleWeekday(key)}
+              style={[
+                styles.dayItem,
+                selected && styles.dayItemSelected,
+                locked && styles.dayItemLocked,
+              ]}
+              onPress={() => {
+                if (locked) return;
+                onToggleWeekday(key);
+              }}
+              disabled={locked}
               accessibilityRole="checkbox"
-              accessibilityState={{ checked: selected }}
-              accessibilityLabel={`${programAnchorFullWeekdayName(key)} training day`}
+              accessibilityState={{ checked: selected, disabled: locked }}
+              accessibilityLabel={`${programAnchorFullWeekdayName(key)} training day${locked ? ', program start day' : ''}`}
             >
               <Text
                 style={[styles.dayLabel, selected && styles.dayLabelSelected]}

@@ -21,8 +21,9 @@ import {
   normalizeToLocalMidnight,
 } from '../utils/programStartWeekday';
 import {
-  firstSessionWeekdayForPattern,
+  jsDayToSplitKey,
   nearestDateOnOrAfterAllowingWeekdays,
+  patternWithRequiredStartDay,
   sessionsPerWeekFromProgram,
   sortPatternByCalendarOrder,
 } from '../utils/programWeekPattern';
@@ -36,9 +37,11 @@ import {
 } from '../utils/storage';
 import type { TrainingMaxesStore } from '../types/trainingMaxes';
 import { TrainingMaxModal } from '../components/TrainingMaxModal';
+import { CALENDAR_DAY_KEYS, weekKeysStartingFrom } from './programLauncherConstants';
 import { ProgramLauncherDatePickerModal } from './ProgramLauncherDatePickerModal';
 import { ProgramLauncherDetailsModal } from './ProgramLauncherDetailsModal';
 import { ProgramLauncherProgramCard } from './ProgramLauncherProgramCard';
+import { ProgramLauncherWeekdayModal } from './ProgramLauncherWeekdayModal';
 
 type ProgramLauncherProps = {
   onProgramSelected: () => void;
@@ -57,6 +60,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [showProgramDetails, setShowProgramDetails] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showWeekdayPicker, setShowWeekdayPicker] = useState(false);
   const [showTrainingMaxModal, setShowTrainingMaxModal] = useState(false);
   const [pendingStartDate, setPendingStartDate] = useState<Date | null>(null);
   const [startDate, setStartDate] = useState(new Date());
@@ -94,11 +98,18 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     if (!selectedProgram.daysSplit?.length) {
       return [getProgramAnchorWeekdayKey(selectedProgram)];
     }
-    if (selectedWeekdays.length === 0) {
-      return [getProgramAnchorWeekdayKey(selectedProgram)];
-    }
-    return [firstSessionWeekdayForPattern(selectedWeekdays)];
-  }, [selectedProgram, selectedWeekdays]);
+    return CALENDAR_DAY_KEYS;
+  }, [selectedProgram]);
+
+  const startWeekdayKey = useMemo(
+    () => jsDayToSplitKey(normalizeToLocalMidnight(startDate).getDay()),
+    [startDate]
+  );
+
+  const weekdayOrder = useMemo(
+    () => weekKeysStartingFrom(startWeekdayKey),
+    [startWeekdayKey]
+  );
 
   const availableCategories = useMemo((): ProgramCategory[] => {
     const set = new Set<ProgramCategory>();
@@ -259,12 +270,13 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const weekdaySelectionReady =
     !selectedProgram?.daysSplit?.length ||
     (selectedWeekdays.length === sessionsRequired &&
-      new Set(selectedWeekdays).size === sessionsRequired);
-
-  const startBlockedByWeekdays =
-    !!selectedProgram?.daysSplit?.length && !weekdaySelectionReady;
+      new Set(selectedWeekdays).size === sessionsRequired &&
+      selectedWeekdays.includes(startWeekdayKey));
 
   const toggleWeekday = (key: ProgramDaySplitKey) => {
+    if (key === startWeekdayKey) {
+      return;
+    }
     setSelectedWeekdays((prev) => {
       if (prev.includes(key)) {
         return prev.filter((k) => k !== key);
@@ -355,26 +367,27 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   const handleConfirmDate = async () => {
     if (!selectedProgram) return;
 
-    let toSave: Date;
+    const normalized = normalizeToLocalMidnight(startDate);
 
     if (selectedProgram.daysSplit?.length) {
-      const sortedPattern = sortPatternByCalendarOrder(selectedWeekdays);
-      if (
-        sortedPattern.length !== sessionsRequired ||
-        new Set(sortedPattern).size !== sessionsRequired
-      ) {
-        return;
-      }
-      const startWeekday = firstSessionWeekdayForPattern(sortedPattern);
-      const normalized = normalizeToLocalMidnight(startDate);
-      toSave = nearestDateOnOrAfterAllowingWeekdays(normalized, [startWeekday]);
-    } else {
-      const anchor = getProgramAnchorWeekdayKey(selectedProgram);
-      const normalized = normalizeToLocalMidnight(startDate);
-      toSave = isProgramAnchorDate(normalized, anchor)
-        ? normalized
-        : nearestProgramAnchorOnOrAfter(normalized, anchor);
+      const startKey = jsDayToSplitKey(normalized.getDay());
+      setStartDate(normalized);
+      setSelectedWeekdays(
+        patternWithRequiredStartDay(
+          selectedProgram.daysSplit,
+          startKey,
+          sessionsRequired
+        )
+      );
+      setShowDatePicker(false);
+      setShowWeekdayPicker(true);
+      return;
     }
+
+    const anchor = getProgramAnchorWeekdayKey(selectedProgram);
+    const toSave = isProgramAnchorDate(normalized, anchor)
+      ? normalized
+      : nearestProgramAnchorOnOrAfter(normalized, anchor);
 
     // Programs that require training maxes gather them before committing, so a
     // program is never left active without the values its loading depends on.
@@ -388,6 +401,35 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     try {
       await commitProgramStart(selectedProgram, toSave);
       setShowDatePicker(false);
+    } catch (error) {
+      console.error('Error saving program selection:', error);
+    }
+  };
+
+  const handleConfirmWeekdays = async () => {
+    if (!selectedProgram?.daysSplit?.length) return;
+
+    const sortedPattern = sortPatternByCalendarOrder(selectedWeekdays);
+    if (
+      sortedPattern.length !== sessionsRequired ||
+      new Set(sortedPattern).size !== sessionsRequired ||
+      !sortedPattern.includes(startWeekdayKey)
+    ) {
+      return;
+    }
+
+    const toSave = normalizeToLocalMidnight(startDate);
+
+    if (selectedProgram.requireRmId?.length) {
+      setPendingStartDate(toSave);
+      setShowWeekdayPicker(false);
+      setShowTrainingMaxModal(true);
+      return;
+    }
+
+    try {
+      await commitProgramStart(selectedProgram, toSave);
+      setShowWeekdayPicker(false);
     } catch (error) {
       console.error('Error saving program selection:', error);
     }
@@ -547,11 +589,6 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           onClose={() => setShowProgramDetails(false)}
           selectedProgram={selectedProgram}
           isPro={isPro}
-          selectedWeekdays={selectedWeekdays}
-          onToggleWeekday={toggleWeekday}
-          sessionsRequired={sessionsRequired}
-          weekdaySelectionReady={weekdaySelectionReady}
-          startBlockedByWeekdays={startBlockedByWeekdays}
           onStartProgram={handleStartProgram}
           onUpgradePress={() => {
             setShowProgramDetails(false);
@@ -567,7 +604,27 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           onChangeStartDate={handleChangeStartDate}
           selectedProgram={selectedProgram}
           startDatePickerAllowedWeekdays={startDatePickerAllowedWeekdays}
+          confirmLabel={
+            selectedProgram?.daysSplit?.length ? 'Next' : 'Confirm'
+          }
           onConfirm={handleConfirmDate}
+          bottomInset={getEffectiveBottomInset(insets.bottom)}
+        />
+
+        <ProgramLauncherWeekdayModal
+          visible={showWeekdayPicker}
+          onClose={() => setShowWeekdayPicker(false)}
+          onBack={() => {
+            setShowWeekdayPicker(false);
+            setShowDatePicker(true);
+          }}
+          sessionsRequired={sessionsRequired}
+          selectedWeekdays={selectedWeekdays}
+          weekdayOrder={weekdayOrder}
+          lockedWeekday={startWeekdayKey}
+          weekdaySelectionReady={weekdaySelectionReady}
+          onToggleWeekday={toggleWeekday}
+          onConfirm={handleConfirmWeekdays}
           bottomInset={getEffectiveBottomInset(insets.bottom)}
         />
 

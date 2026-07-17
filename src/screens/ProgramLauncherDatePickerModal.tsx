@@ -17,6 +17,7 @@ type ProgramLauncherDatePickerModalProps = {
   onChangeStartDate: (d: Date) => void;
   selectedProgram: Program | null;
   startDatePickerAllowedWeekdays: ProgramDaySplitKey[];
+  confirmLabel?: string;
   onConfirm: () => void;
   bottomInset: number;
 };
@@ -28,6 +29,7 @@ export function ProgramLauncherDatePickerModal({
   onChangeStartDate,
   selectedProgram,
   startDatePickerAllowedWeekdays,
+  confirmLabel = 'Confirm',
   onConfirm,
   bottomInset,
 }: ProgramLauncherDatePickerModalProps) {
@@ -51,7 +53,7 @@ export function ProgramLauncherDatePickerModal({
             </TouchableOpacity>
             <Text style={styles.datePickerTitle}>Select Start Date</Text>
             <TouchableOpacity onPress={onConfirm} style={styles.confirmButton}>
-              <Text style={styles.confirmButtonText}>Confirm</Text>
+              <Text style={styles.confirmButtonText}>{confirmLabel}</Text>
             </TouchableOpacity>
           </View>
           <ScrollView
@@ -62,14 +64,8 @@ export function ProgramLauncherDatePickerModal({
             <Text style={styles.datePickerExplanation}>
               {selectedProgram?.daysSplit?.length ? (
                 <>
-                  Your first session each week is the earliest day you picked
-                  (Mon→Sun order). Pick a start date on{' '}
-                  <Text style={styles.datePickerExplanationEmphasis}>
-                    {`${programAnchorFullWeekdayName(
-                      startDatePickerAllowedWeekdays[0] ?? 'mon'
-                    )}s`}
-                  </Text>
-                  . Other weekdays are greyed out.
+                  Pick any day to start. That weekday becomes day 1 of each
+                  program week — you&apos;ll choose your training days next.
                 </>
               ) : (
                 <>

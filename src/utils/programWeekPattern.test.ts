@@ -1,16 +1,17 @@
 import type { Program } from '@/src/types/program';
 import {
   clampStartDateToPatternAndToday,
-  firstSessionWeekdayForPattern,
   getWorkoutForDaySinceStart,
   getShiftedWorkoutForDaySinceStart,
   jsDayToSplitKey,
   listTrainingDayDeltasForProgram,
   listShiftedTrainingDayDeltasForProgram,
   nearestDateOnOrAfterAllowingWeekdays,
+  patternWithRequiredStartDay,
   sessionsPerWeekFromProgram,
   sortPatternByCalendarOrder,
 } from './programWeekPattern';
+import { weekKeysStartingFrom } from '@/src/screens/programLauncherConstants';
 
 function threeDayMiniProgram(): Program {
   return {
@@ -83,14 +84,41 @@ describe('programWeekPattern', () => {
     ]);
   });
 
-  it('firstSessionWeekdayForPattern picks earliest Mon→Sun among selection', () => {
-    expect(firstSessionWeekdayForPattern(['tue', 'sat', 'sun'])).toBe('tue');
-    expect(firstSessionWeekdayForPattern(['sat', 'sun'])).toBe('sat');
-    expect(firstSessionWeekdayForPattern(['sun', 'mon'])).toBe('mon');
-  });
-
   it('sessionsPerWeekFromProgram uses daysSplit when present', () => {
     expect(sessionsPerWeekFromProgram(threeDayMiniProgram())).toBe(3);
+  });
+
+  it('weekKeysStartingFrom rotates Mon-first strip from start day', () => {
+    expect(weekKeysStartingFrom('tue')).toEqual([
+      'tue',
+      'wed',
+      'thu',
+      'fri',
+      'sat',
+      'sun',
+      'mon',
+    ]);
+    expect(weekKeysStartingFrom('fri')).toEqual([
+      'fri',
+      'sat',
+      'sun',
+      'mon',
+      'tue',
+      'wed',
+      'thu',
+    ]);
+  });
+
+  it('patternWithRequiredStartDay keeps defaults when start is included', () => {
+    expect(
+      patternWithRequiredStartDay(['mon', 'wed', 'fri'], 'fri', 3)
+    ).toEqual(['fri', 'mon', 'wed']);
+  });
+
+  it('patternWithRequiredStartDay inserts start and trims to session count', () => {
+    expect(
+      patternWithRequiredStartDay(['mon', 'wed', 'fri'], 'tue', 3)
+    ).toEqual(['tue', 'wed', 'fri']);
   });
 
   it('nearestDateOnOrAfterAllowingWeekdays finds next Tue from Mon', () => {
@@ -149,6 +177,66 @@ describe('programWeekPattern', () => {
       expect(
         getWorkoutForDaySinceStart(program, startISO, pattern, 11)?.label
       ).toBe('Legs W2');
+    });
+
+    it('pattern Mon/Wed/Fri from Monday start maps block 0 (legacy earliest-day)', () => {
+      const startMon = new Date(2024, 0, 1); // Monday
+      startMon.setHours(0, 0, 0, 0);
+      const monPattern = sortPatternByCalendarOrder(['mon', 'wed', 'fri']);
+      expect(
+        getWorkoutForDaySinceStart(
+          program,
+          startMon.toISOString(),
+          monPattern,
+          0
+        )?.label
+      ).toBe('Push');
+      expect(
+        getWorkoutForDaySinceStart(
+          program,
+          startMon.toISOString(),
+          monPattern,
+          2
+        )?.label
+      ).toBe('Pull');
+      expect(
+        getWorkoutForDaySinceStart(
+          program,
+          startMon.toISOString(),
+          monPattern,
+          4
+        )?.label
+      ).toBe('Legs');
+    });
+
+    it('pattern Mon/Wed/Fri from Friday start maps block 0 in chrono order', () => {
+      const startFri = new Date(2024, 0, 5); // Friday
+      startFri.setHours(0, 0, 0, 0);
+      const monPattern = sortPatternByCalendarOrder(['mon', 'wed', 'fri']);
+      expect(
+        getWorkoutForDaySinceStart(
+          program,
+          startFri.toISOString(),
+          monPattern,
+          0
+        )?.label
+      ).toBe('Push');
+      expect(
+        getWorkoutForDaySinceStart(
+          program,
+          startFri.toISOString(),
+          monPattern,
+          3
+        )?.label
+      ).toBe('Pull');
+      expect(
+        getWorkoutForDaySinceStart(
+          program,
+          startFri.toISOString(),
+          monPattern,
+          5
+        )?.label
+      ).toBe('Legs');
     });
   });
 

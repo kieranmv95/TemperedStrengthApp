@@ -199,6 +199,13 @@ export const programLauncherStyles = StyleSheet.create({
     fontSize: FontSize.xxl,
     fontWeight: '700',
   },
+  confirmButtonTextDisabled: {
+    color: Colors.textMuted,
+  },
+  weekdayModalBody: {
+    paddingHorizontal: Spacing.xxl,
+    paddingBottom: Spacing.xxl,
+  },
   datePickerScroll: {
     maxHeight: 420,
     width: '100%',
@@ -299,6 +306,10 @@ export const programLauncherStyles = StyleSheet.create({
     backgroundColor: Colors.accentWashFill,
     borderWidth: 1,
     borderColor: Colors.accentWashBorder,
+  },
+  dayItemLocked: {
+    borderWidth: 1,
+    borderColor: Colors.accentWashOutline,
   },
   dayLabelSelected: {
     color: Colors.accent,
