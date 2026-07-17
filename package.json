@@ -18,7 +18,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "update:production": "eas update --channel production",
-    "update:preview": "eas update --channel preview"
+    "update:preview": "eas update --channel preview",
+    "bump-version": "node ./scripts/bump-version.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
