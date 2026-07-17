@@ -9,7 +9,11 @@ import { getProgramById } from '@/src/utils/program';
 import {
   getActiveProgramId,
   getDevProOverrideEnabled,
+  getPromoProGrant,
+  isPromoProGrantActive,
   setDevProOverrideEnabled,
+  setPromoProGrant,
+  type PromoProGrant,
 } from '@/src/utils/storage';
 import { router } from 'expo-router';
 import React, {
@@ -20,7 +24,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Alert } from 'react-native';
+import { Alert, AppState, type AppStateStatus } from 'react-native';
 import Purchases, {
   CustomerInfo,
   PurchasesOffering as Offerings,
@@ -29,7 +33,10 @@ import Purchases, {
 
 export type SubscriptionState = {
   isPro: boolean;
+  isPromoPro: boolean;
+  isRevenueCatPro: boolean;
   isDeveloperProOverrideEnabled: boolean;
+  promoProGrant: PromoProGrant | null;
   isLoading: boolean;
   customerInfo: CustomerInfo | null;
   offerings: Offerings | null;
@@ -49,6 +56,8 @@ type SubscriptionContextType = SubscriptionState & {
     error?: Error;
   }>;
   refresh: () => Promise<void>;
+  refreshPromoPro: () => Promise<void>;
+  applyPromoProGrant: (grant: PromoProGrant) => Promise<void>;
   loadOfferings: () => Promise<void>;
   setDeveloperProOverrideEnabled: (enabled: boolean) => Promise<void>;
 };
@@ -58,6 +67,15 @@ const SubscriptionContext = createContext<SubscriptionContextType | null>(null);
 const hasActiveProEntitlement = (customerInfo: CustomerInfo | null): boolean =>
   customerInfo?.entitlements.active[PRO_ENTITLEMENT_ID] !== undefined;
 
+const computeIsPro = (input: {
+  customerInfo: CustomerInfo | null;
+  promoProGrant: PromoProGrant | null;
+  isDeveloperProOverrideEnabled: boolean;
+}): boolean =>
+  hasActiveProEntitlement(input.customerInfo) ||
+  isPromoProGrantActive(input.promoProGrant) ||
+  input.isDeveloperProOverrideEnabled;
+
 export function SubscriptionProvider({
   children,
 }: {
@@ -65,7 +83,10 @@ export function SubscriptionProvider({
 }) {
   const [state, setState] = useState<SubscriptionState>({
     isPro: false,
+    isPromoPro: false,
+    isRevenueCatPro: false,
     isDeveloperProOverrideEnabled: false,
+    promoProGrant: null,
     isLoading: true,
     customerInfo: null,
     offerings: null,
@@ -80,6 +101,8 @@ export function SubscriptionProvider({
   const previousIsProRef = useRef<boolean | null>(null);
   // Track if initial load is complete to avoid false expiry detection
   const initialLoadCompleteRef = useRef<boolean>(false);
+  const promoProGrantRef = useRef<PromoProGrant | null>(null);
+  const isDeveloperProOverrideEnabledRef = useRef(false);
 
   /**
    * Handle subscription expiry - if the user is on a Pro program, preserve it
@@ -119,40 +142,62 @@ export function SubscriptionProvider({
     }
   }, []);
 
-  /**
-   * Update state based on customer info
-   */
-  const updateStateFromCustomerInfo = useCallback(
-    (customerInfo: CustomerInfo) => {
-      const isPro = hasActiveProEntitlement(customerInfo);
+  const applyEffectiveProState = useCallback(
+    (input: {
+      customerInfo: CustomerInfo | null;
+      promoProGrant: PromoProGrant | null;
+      isDeveloperProOverrideEnabled: boolean;
+      preserveLoading?: boolean;
+    }) => {
+      const isRevenueCatPro = hasActiveProEntitlement(input.customerInfo);
+      const isPromoPro = isPromoProGrantActive(input.promoProGrant);
+      const isPro = computeIsPro(input);
 
-      // Check for subscription expiry (was Pro, now not Pro)
-      // Only check after initial load is complete to avoid false positives
       if (
         initialLoadCompleteRef.current &&
         previousIsProRef.current === true &&
         !isPro
       ) {
-        handleSubscriptionExpiry();
+        void handleSubscriptionExpiry();
       }
 
-      // Update previous Pro status
       previousIsProRef.current = isPro;
-
-      // Mark initial load as complete after first update
       if (!initialLoadCompleteRef.current) {
         initialLoadCompleteRef.current = true;
       }
 
+      promoProGrantRef.current = input.promoProGrant;
+      isDeveloperProOverrideEnabledRef.current =
+        input.isDeveloperProOverrideEnabled;
+
       setState((prev) => ({
         ...prev,
-        customerInfo,
-        isPro: isPro || prev.isDeveloperProOverrideEnabled,
-        isLoading: false,
+        customerInfo: input.customerInfo,
+        promoProGrant: input.promoProGrant,
+        isDeveloperProOverrideEnabled: input.isDeveloperProOverrideEnabled,
+        isRevenueCatPro,
+        isPromoPro,
+        isPro,
+        isLoading: input.preserveLoading ? prev.isLoading : false,
         error: null,
       }));
     },
     [handleSubscriptionExpiry]
+  );
+
+  /**
+   * Update state based on customer info
+   */
+  const updateStateFromCustomerInfo = useCallback(
+    (customerInfo: CustomerInfo) => {
+      applyEffectiveProState({
+        customerInfo,
+        promoProGrant: promoProGrantRef.current,
+        isDeveloperProOverrideEnabled:
+          isDeveloperProOverrideEnabledRef.current,
+      });
+    },
+    [applyEffectiveProState]
   );
 
   /**
@@ -164,7 +209,9 @@ export function SubscriptionProvider({
       const customerInfo = await getCustomerInfo();
       updateStateFromCustomerInfo(customerInfo);
     } catch (error) {
-      const purchasesError = error as any;
+      const purchasesError = error as {
+        info?: { backendErrorCode?: number };
+      };
       // Handle 429 errors (concurrent request) gracefully
       if (purchasesError?.info?.backendErrorCode === 7638) {
         console.log('Customer info request already in flight, skipping...');
@@ -193,16 +240,61 @@ export function SubscriptionProvider({
     }
   }, []);
 
-  const loadDeveloperProOverride = useCallback(async () => {
-    const isDeveloperProOverrideEnabled = await getDevProOverrideEnabled();
+  const refreshPromoPro = useCallback(async () => {
+    const promoProGrant = await getPromoProGrant();
+    promoProGrantRef.current = promoProGrant;
 
-    setState((prev) => ({
-      ...prev,
-      isDeveloperProOverrideEnabled,
-      isPro:
-        hasActiveProEntitlement(prev.customerInfo) ||
-        isDeveloperProOverrideEnabled,
-    }));
+    setState((prev) => {
+      const next = {
+        customerInfo: prev.customerInfo,
+        promoProGrant,
+        isDeveloperProOverrideEnabled: prev.isDeveloperProOverrideEnabled,
+      };
+      const isRevenueCatPro = hasActiveProEntitlement(next.customerInfo);
+      const isPromoPro = isPromoProGrantActive(next.promoProGrant);
+      const isPro = computeIsPro(next);
+
+      if (
+        initialLoadCompleteRef.current &&
+        previousIsProRef.current === true &&
+        !isPro
+      ) {
+        void handleSubscriptionExpiry();
+      }
+      previousIsProRef.current = isPro;
+
+      return {
+        ...prev,
+        promoProGrant,
+        isRevenueCatPro,
+        isPromoPro,
+        isPro,
+      };
+    });
+  }, [handleSubscriptionExpiry]);
+
+  const applyPromoProGrant = useCallback(async (grant: PromoProGrant) => {
+    await setPromoProGrant(grant);
+    promoProGrantRef.current = grant;
+
+    setState((prev) => {
+      const next = {
+        customerInfo: prev.customerInfo,
+        promoProGrant: grant,
+        isDeveloperProOverrideEnabled: prev.isDeveloperProOverrideEnabled,
+      };
+      const isRevenueCatPro = hasActiveProEntitlement(next.customerInfo);
+      const isPromoPro = isPromoProGrantActive(next.promoProGrant);
+      const isPro = computeIsPro(next);
+      previousIsProRef.current = isPro;
+      return {
+        ...prev,
+        promoProGrant: grant,
+        isRevenueCatPro,
+        isPromoPro,
+        isPro,
+      };
+    });
   }, []);
 
   /**
@@ -236,8 +328,12 @@ export function SubscriptionProvider({
     try {
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
       const customerInfo = await restorePurchases();
-      const isPro =
-        customerInfo.entitlements.active[PRO_ENTITLEMENT_ID] !== undefined;
+      const isPro = computeIsPro({
+        customerInfo,
+        promoProGrant: promoProGrantRef.current,
+        isDeveloperProOverrideEnabled:
+          isDeveloperProOverrideEnabledRef.current,
+      });
       updateStateFromCustomerInfo(customerInfo);
       return { success: true, customerInfo, isPro };
     } catch (error) {
@@ -254,13 +350,23 @@ export function SubscriptionProvider({
   const setDeveloperProOverrideEnabled = useCallback(
     async (enabled: boolean) => {
       await setDevProOverrideEnabled(enabled);
+      const nextEnabled = __DEV__ ? enabled : false;
+      isDeveloperProOverrideEnabledRef.current = nextEnabled;
 
-      setState((prev) => ({
-        ...prev,
-        isDeveloperProOverrideEnabled: __DEV__ ? enabled : false,
-        isPro:
-          hasActiveProEntitlement(prev.customerInfo) || (__DEV__ && enabled),
-      }));
+      setState((prev) => {
+        const next = {
+          customerInfo: prev.customerInfo,
+          promoProGrant: prev.promoProGrant,
+          isDeveloperProOverrideEnabled: nextEnabled,
+        };
+        return {
+          ...prev,
+          isDeveloperProOverrideEnabled: nextEnabled,
+          isPro: computeIsPro(next),
+          isRevenueCatPro: hasActiveProEntitlement(next.customerInfo),
+          isPromoPro: isPromoProGrantActive(next.promoProGrant),
+        };
+      });
     },
     []
   );
@@ -269,15 +375,46 @@ export function SubscriptionProvider({
    * Refresh customer info
    */
   const refresh = useCallback(async () => {
-    await loadCustomerInfo();
-  }, [loadCustomerInfo]);
+    await Promise.all([loadCustomerInfo(), refreshPromoPro()]);
+  }, [loadCustomerInfo, refreshPromoPro]);
 
   // Set up RevenueCat listener for customer info updates
   useEffect(() => {
-    // Load initial data
-    loadDeveloperProOverride();
-    loadCustomerInfo();
-    loadOfferings();
+    let cancelled = false;
+
+    void (async () => {
+      const [promoProGrant, isDeveloperProOverrideEnabled] = await Promise.all([
+        getPromoProGrant(),
+        getDevProOverrideEnabled(),
+      ]);
+      if (cancelled) {
+        return;
+      }
+
+      promoProGrantRef.current = promoProGrant;
+      isDeveloperProOverrideEnabledRef.current = isDeveloperProOverrideEnabled;
+
+      setState((prev) => {
+        const next = {
+          customerInfo: prev.customerInfo,
+          promoProGrant,
+          isDeveloperProOverrideEnabled,
+        };
+        return {
+          ...prev,
+          promoProGrant,
+          isDeveloperProOverrideEnabled,
+          isRevenueCatPro: hasActiveProEntitlement(next.customerInfo),
+          isPromoPro: isPromoProGrantActive(next.promoProGrant),
+          isPro: computeIsPro(next),
+        };
+      });
+
+      await loadCustomerInfo();
+      if (!cancelled) {
+        await loadOfferings();
+      }
+    })();
 
     // Set up listener for customer info changes (fires on purchases, restores, etc.)
     const listener = (customerInfo: CustomerInfo) => {
@@ -287,25 +424,36 @@ export function SubscriptionProvider({
     Purchases.addCustomerInfoUpdateListener(listener);
     listenerRef.current = listener;
 
+    const handleAppState = (nextState: AppStateStatus) => {
+      if (nextState === 'active') {
+        void refreshPromoPro();
+      }
+    };
+    const appStateSubscription = AppState.addEventListener(
+      'change',
+      handleAppState
+    );
+
     // Cleanup listener on unmount
     return () => {
+      cancelled = true;
       if (listenerRef.current) {
         Purchases.removeCustomerInfoUpdateListener(listenerRef.current);
         listenerRef.current = null;
       }
+      appStateSubscription.remove();
     };
-  }, [
-    loadCustomerInfo,
-    loadDeveloperProOverride,
-    loadOfferings,
-    updateStateFromCustomerInfo,
-  ]);
+    // Mount-only: listeners and initial load. Callbacks read latest refs/state.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const value: SubscriptionContextType = {
     ...state,
     purchase,
     restore,
     refresh,
+    refreshPromoPro,
+    applyPromoProGrant,
     loadOfferings,
     setDeveloperProOverrideEnabled,
   };

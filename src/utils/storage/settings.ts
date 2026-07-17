@@ -11,10 +11,131 @@ import {
   PROGRAM_COOLDOWN_MODULE_ENABLED_KEY,
   PROGRAM_SHOW_START_SESSION_BUTTON_KEY,
   PROGRAM_WARMUP_MODULE_ENABLED_KEY,
+  PROMO_PRO_GRANT_KEY,
   WEIGHT_UNIT_KEY,
 } from './keys';
 
 export type WeightUnit = 'kg' | 'lb';
+
+export type PromoProGrant = {
+  code: string;
+  email: string;
+  redeemedAt: string;
+  daysGranted: number;
+  expiresAt: string;
+};
+
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+function parsePromoProGrant(raw: string | null): PromoProGrant | null {
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (
+      typeof parsed !== 'object' ||
+      parsed === null ||
+      Array.isArray(parsed)
+    ) {
+      return null;
+    }
+    const record = parsed as Record<string, unknown>;
+    const code = typeof record.code === 'string' ? record.code.trim() : '';
+    const email = typeof record.email === 'string' ? record.email.trim() : '';
+    const redeemedAt =
+      typeof record.redeemedAt === 'string' ? record.redeemedAt : '';
+    const expiresAt =
+      typeof record.expiresAt === 'string' ? record.expiresAt : '';
+    const daysGranted =
+      typeof record.daysGranted === 'number' &&
+      Number.isFinite(record.daysGranted)
+        ? record.daysGranted
+        : NaN;
+
+    if (
+      code.length === 0 ||
+      email.length === 0 ||
+      redeemedAt.length === 0 ||
+      expiresAt.length === 0 ||
+      !Number.isFinite(daysGranted) ||
+      daysGranted <= 0
+    ) {
+      return null;
+    }
+
+    const expiresMs = Date.parse(expiresAt);
+    const redeemedMs = Date.parse(redeemedAt);
+    if (Number.isNaN(expiresMs) || Number.isNaN(redeemedMs)) {
+      return null;
+    }
+
+    return {
+      code,
+      email,
+      redeemedAt,
+      daysGranted,
+      expiresAt,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export const getPromoProGrant = async (): Promise<PromoProGrant | null> => {
+  try {
+    const raw = await AsyncStorage.getItem(PROMO_PRO_GRANT_KEY);
+    return parsePromoProGrant(raw);
+  } catch (error) {
+    console.error('Error getting promo Pro grant:', error);
+    return null;
+  }
+};
+
+export const isPromoProGrantActive = (
+  grant: PromoProGrant | null,
+  now: Date = new Date()
+): boolean => {
+  if (!grant) return false;
+  const expiresMs = Date.parse(grant.expiresAt);
+  if (Number.isNaN(expiresMs)) return false;
+  return expiresMs > now.getTime();
+};
+
+export const buildPromoProGrant = (input: {
+  code: string;
+  email: string;
+  daysGranted: number;
+  redeemedAt?: Date;
+}): PromoProGrant => {
+  const redeemedAt = input.redeemedAt ?? new Date();
+  const expiresAt = new Date(
+    redeemedAt.getTime() + input.daysGranted * MS_PER_DAY
+  );
+  return {
+    code: input.code.trim().toUpperCase(),
+    email: input.email.trim(),
+    redeemedAt: redeemedAt.toISOString(),
+    daysGranted: input.daysGranted,
+    expiresAt: expiresAt.toISOString(),
+  };
+};
+
+export const setPromoProGrant = async (grant: PromoProGrant): Promise<void> => {
+  try {
+    await syncSetItem(PROMO_PRO_GRANT_KEY, JSON.stringify(grant));
+  } catch (error) {
+    console.error('Error setting promo Pro grant:', error);
+    throw error;
+  }
+};
+
+export const clearPromoProGrant = async (): Promise<void> => {
+  try {
+    await syncRemoveItem(PROMO_PRO_GRANT_KEY);
+  } catch (error) {
+    console.error('Error clearing promo Pro grant:', error);
+    throw error;
+  }
+};
 
 export const getOnboarded = async (): Promise<boolean> => {
   try {

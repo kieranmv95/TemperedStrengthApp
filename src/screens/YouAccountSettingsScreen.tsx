@@ -31,11 +31,56 @@ export function YouAccountSettingsScreen() {
     useState(false);
   const {
     isPro,
+    isPromoPro,
+    isRevenueCatPro,
     isDeveloperProOverrideEnabled,
+    promoProGrant,
     isLoading: subscriptionLoading,
     refresh,
     setDeveloperProOverrideEnabled,
   } = useSubscription();
+
+  const promoExpiryLabel =
+    isPromoPro && promoProGrant
+      ? new Date(promoProGrant.expiresAt).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        })
+      : null;
+
+  const promoDaysRemaining =
+    isPromoPro && promoProGrant
+      ? Math.max(
+          0,
+          Math.ceil(
+            (Date.parse(promoProGrant.expiresAt) - Date.now()) /
+              (24 * 60 * 60 * 1000)
+          )
+        )
+      : null;
+
+  const promoRemainingLabel =
+    promoDaysRemaining !== null && promoExpiryLabel
+      ? promoDaysRemaining === 0
+        ? `Expires today (${promoExpiryLabel})`
+        : promoDaysRemaining === 1
+          ? `1 day remaining · until ${promoExpiryLabel}`
+          : `${promoDaysRemaining} days remaining · until ${promoExpiryLabel}`
+      : null;
+
+  const proBannerDescription = (() => {
+    if (isRevenueCatPro && promoRemainingLabel) {
+      return `Manage your subscription. Promo code also active — ${promoRemainingLabel}.`;
+    }
+    if (isRevenueCatPro) {
+      return 'Manage your subscription and access Pro features';
+    }
+    if (promoRemainingLabel) {
+      return `Pro via promo code · ${promoRemainingLabel}`;
+    }
+    return 'Access Pro features';
+  })();
 
   const checkProgramStatus = async () => {
     try {
@@ -82,11 +127,15 @@ export function YouAccountSettingsScreen() {
   );
 
   const handleSubscriptionPress = () => {
-    if (isPro) {
+    if (isRevenueCatPro) {
       router.push('/customer-center');
-    } else {
-      router.push('/paywall');
+      return;
     }
+    if (isPromoPro) {
+      router.push('/account/redeem-promo');
+      return;
+    }
+    router.push('/paywall');
   };
 
   const handleResetOnboarding = () => {
@@ -202,8 +251,11 @@ export function YouAccountSettingsScreen() {
           {isPro ? (
             <TouchableOpacity
               style={[styles.settingItem, styles.proItem]}
-              onPress={handleSubscriptionPress}
-              disabled={subscriptionLoading}
+              onPress={
+                isRevenueCatPro ? handleSubscriptionPress : undefined
+              }
+              disabled={subscriptionLoading || !isRevenueCatPro}
+              activeOpacity={isRevenueCatPro ? 0.2 : 1}
             >
               <View style={styles.settingContent}>
                 <View style={styles.settingTitleRow}>
@@ -213,7 +265,7 @@ export function YouAccountSettingsScreen() {
                   </View>
                 </View>
                 <Text style={styles.settingDescription}>
-                  Manage your subscription and access Pro features
+                  {proBannerDescription}
                 </Text>
                 <View style={styles.proFeaturesList}>
                   <Text style={styles.proTitle}>
@@ -236,9 +288,33 @@ export function YouAccountSettingsScreen() {
                   </Text>
                 </View>
               </View>
-              <SmallChevron />
+              {isRevenueCatPro ? <SmallChevron /> : null}
             </TouchableOpacity>
           ) : null}
+
+          <TouchableOpacity
+            style={[
+              styles.settingItem,
+              isPromoPro && styles.settingItemDisabled,
+            ]}
+            onPress={
+              isPromoPro
+                ? undefined
+                : () => router.push('/account/redeem-promo')
+            }
+            disabled={isPromoPro}
+            activeOpacity={isPromoPro ? 1 : 0.2}
+          >
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Redeem Pro code</Text>
+              <Text style={styles.settingDescription}>
+                {promoRemainingLabel
+                  ? `${promoRemainingLabel}. Redeem another code once this expires.`
+                  : 'Unlock Pro with a promo code.'}
+              </Text>
+            </View>
+            {isPromoPro ? null : <SmallChevron />}
+          </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.settingItem}

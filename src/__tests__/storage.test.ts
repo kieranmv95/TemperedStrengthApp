@@ -1,14 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
+  buildPromoProGrant,
+  clearPromoProGrant,
   getActiveProgramId,
   getAllWorkoutNotes,
   getFavoriteWorkouts,
   getAutoRestTimersEnabled,
   getAutoPbDetectionInProgramsEnabled,
   getCompletedSession,
+  getPromoProGrant,
   getRestTimer,
   getWorkoutNotes,
   incrementSwapCount,
+  isPromoProGrantActive,
   moveProgramDayData,
   runStorageMigrations,
   saveCompletedSession,
@@ -18,6 +22,7 @@ import {
   setActiveProgramId,
   setAutoRestTimersEnabled,
   setAutoPbDetectionInProgramsEnabled,
+  setPromoProGrant,
   toggleFavoriteWorkout,
 } from '../utils/storage';
 
@@ -200,6 +205,84 @@ describe('storage utilities', () => {
       completedAt: 200,
       totalVolume: 1234,
       setsCompleted: 10,
+    });
+  });
+
+  describe('promo Pro grant', () => {
+    it('persists and retrieves an active grant', async () => {
+      const now = new Date('2026-07-17T10:00:00Z');
+      jest.useFakeTimers().setSystemTime(now);
+
+      const grant = buildPromoProGrant({
+        code: 'rainhill',
+        email: 'user@example.com',
+        daysGranted: 365,
+      });
+
+      await setPromoProGrant(grant);
+
+      await expect(getPromoProGrant()).resolves.toEqual({
+        code: 'RAINHILL',
+        email: 'user@example.com',
+        daysGranted: 365,
+        redeemedAt: '2026-07-17T10:00:00.000Z',
+        expiresAt: '2027-07-17T10:00:00.000Z',
+      });
+      expect(isPromoProGrantActive(grant, now)).toBe(true);
+    });
+
+    it('treats an expired grant as inactive', async () => {
+      const grant = buildPromoProGrant({
+        code: 'OLDCODE',
+        email: 'user@example.com',
+        daysGranted: 1,
+        redeemedAt: new Date('2026-01-01T00:00:00Z'),
+      });
+
+      expect(
+        isPromoProGrantActive(grant, new Date('2026-01-03T00:00:00Z'))
+      ).toBe(false);
+    });
+
+    it('returns null for malformed stored grants', async () => {
+      await AsyncStorage.setItem(
+        'promo_pro_grant',
+        JSON.stringify({ code: 'X' })
+      );
+
+      await expect(getPromoProGrant()).resolves.toBeNull();
+    });
+
+    it('replaces an existing grant on re-redeem', async () => {
+      const first = buildPromoProGrant({
+        code: 'FIRST',
+        email: 'a@example.com',
+        daysGranted: 30,
+        redeemedAt: new Date('2026-01-01T00:00:00Z'),
+      });
+      await setPromoProGrant(first);
+
+      const second = buildPromoProGrant({
+        code: 'SECOND',
+        email: 'b@example.com',
+        daysGranted: 10,
+        redeemedAt: new Date('2026-07-17T12:00:00Z'),
+      });
+      await setPromoProGrant(second);
+
+      await expect(getPromoProGrant()).resolves.toEqual(second);
+    });
+
+    it('clears a stored grant', async () => {
+      await setPromoProGrant(
+        buildPromoProGrant({
+          code: 'CLEARME',
+          email: 'user@example.com',
+          daysGranted: 7,
+        })
+      );
+      await clearPromoProGrant();
+      await expect(getPromoProGrant()).resolves.toBeNull();
     });
   });
 });

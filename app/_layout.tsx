@@ -146,6 +146,10 @@ export default function RootLayout() {
                     options={{ headerShown: false }}
                   />
                   <Stack.Screen
+                    name="account/redeem-promo"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
                     name="onboarding"
                     options={{
                       headerShown: false,
