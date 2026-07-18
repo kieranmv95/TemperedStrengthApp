@@ -4,8 +4,7 @@ import type {
   LiveCompetitionEntry,
   LiveCompetitionOrderBy,
 } from '@/src/types/live-competition';
-
-export type CompetitionFetchEnvironment = 'test' | 'production';
+import { type CompetitionEnvironment } from '../utils/environment';
 
 export const LIVE_COMPETITION_CACHE_TTL_MS = 60 * 1000;
 
@@ -25,7 +24,7 @@ type LiveCompetitionApiResponse = {
 };
 
 type LiveCompetitionCache = {
-  environment: CompetitionFetchEnvironment;
+  environment: CompetitionEnvironment;
   competition: LiveCompetition | null;
   fetchedAt: number;
 };
@@ -120,7 +119,7 @@ export function parseLiveCompetitionResponse(
 
 function isCacheFresh(
   cache: LiveCompetitionCache,
-  environment: CompetitionFetchEnvironment
+  environment: CompetitionEnvironment
 ): boolean {
   return (
     cache.environment === environment &&
@@ -130,9 +129,12 @@ function isCacheFresh(
 
 /** Fresh cached value, or `undefined` when missing/expired/wrong environment. */
 export function peekLiveCompetitionCache(
-  environment: CompetitionFetchEnvironment
+  environment: CompetitionEnvironment
 ): LiveCompetition | null | undefined {
-  if (!liveCompetitionCache || !isCacheFresh(liveCompetitionCache, environment)) {
+  if (
+    !liveCompetitionCache ||
+    !isCacheFresh(liveCompetitionCache, environment)
+  ) {
     return undefined;
   }
 
@@ -141,9 +143,12 @@ export function peekLiveCompetitionCache(
 
 /** Cached value even when stale, or `undefined` when nothing is cached. */
 export function peekStaleLiveCompetitionCache(
-  environment: CompetitionFetchEnvironment
+  environment: CompetitionEnvironment
 ): LiveCompetition | null | undefined {
-  if (!liveCompetitionCache || liveCompetitionCache.environment !== environment) {
+  if (
+    !liveCompetitionCache ||
+    liveCompetitionCache.environment !== environment
+  ) {
     return undefined;
   }
 
@@ -155,7 +160,7 @@ export function clearLiveCompetitionCache(): void {
 }
 
 async function fetchLiveCompetitionFromApi(
-  environment: CompetitionFetchEnvironment
+  environment: CompetitionEnvironment
 ): Promise<LiveCompetition | null> {
   const url = `${TEMPERED_STRENGTH_API_ORIGIN}/api/live-competition?environment=${environment}&_=${Date.now()}`;
 
@@ -199,7 +204,7 @@ async function fetchLiveCompetitionFromApi(
 }
 
 export async function loadLiveCompetition(
-  environment: CompetitionFetchEnvironment,
+  environment: CompetitionEnvironment,
   options?: LoadLiveCompetitionOptions
 ): Promise<LiveCompetition | null> {
   const forceRefresh = options?.forceRefresh ?? false;

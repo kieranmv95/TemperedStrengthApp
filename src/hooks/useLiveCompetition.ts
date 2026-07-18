@@ -2,14 +2,18 @@ import {
   loadLiveCompetition,
   peekLiveCompetitionCache,
   peekStaleLiveCompetitionCache,
-  type CompetitionFetchEnvironment,
 } from '@/src/services/liveCompetitionService';
 import type { LiveCompetition } from '@/src/types/live-competition';
+import {
+  type CompetitionEnvironment,
+  environments,
+} from '@/src/utils/environment';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 
 // Switch between test and production competition data from temperedstrength.com.
-const COMPETITION_FETCH_ENVIRONMENT: CompetitionFetchEnvironment = 'test';
+const COMPETITION_FETCH_ENVIRONMENT: CompetitionEnvironment =
+  environments.competition;
 
 function readCachedCompetition(): LiveCompetition | null | undefined {
   return peekStaleLiveCompetitionCache(COMPETITION_FETCH_ENVIRONMENT);
