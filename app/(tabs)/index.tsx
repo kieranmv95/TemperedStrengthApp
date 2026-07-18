@@ -21,6 +21,7 @@ import {
 } from '@/src/services/streakService';
 import type { PersonalBestsStore } from '@/src/types/personalBests';
 import {
+  formatHomeProgramSessionMeta,
   loadHomeProgramSummary,
   type HomeProgramSummary,
 } from '@/src/utils/homeProgramSummary';
@@ -317,7 +318,11 @@ export default function HomeTabScreen() {
                     {programSummary.todaySessionLabel}
                   </Text>
                   <Text style={styles.programSessionsRemaining}>
-                    {programSummary.sessionsRemaining} session{programSummary.sessionsRemaining === 1 ? '' : 's'} remaining
+                    {formatHomeProgramSessionMeta({
+                      sessionsCompleted: programSummary.sessionsCompleted,
+                      sessionsSkipped: programSummary.sessionsSkipped,
+                      sessionsRemaining: programSummary.sessionsRemaining,
+                    })}
                   </Text>
 
                   <View

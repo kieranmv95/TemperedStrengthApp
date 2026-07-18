@@ -1,3 +1,8 @@
+import type {
+  CompletedSessions,
+  ProgramSessionStatus,
+  ProgramSessionStatuses,
+} from '@/src/types/storage';
 import { getProgramById } from '@/src/utils/program';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import {
@@ -6,10 +11,67 @@ import {
 } from '@/src/utils/programWeekPattern';
 import {
   getActiveProgramId,
+  getCompletedSessionsStore,
   getProgramSessionShiftsStore,
+  getProgramSessionStatuses,
   getProgramStartDate,
   getProgramWorkoutWeekdays,
 } from '@/src/utils/storage';
+
+/** Explicit status wins over legacy completed-session records. */
+function mergeSessionStatuses(
+  completedSessions: CompletedSessions,
+  explicitStatuses: ProgramSessionStatuses
+): Record<number, ProgramSessionStatus> {
+  const merged: Record<number, ProgramSessionStatus> = {};
+  for (const dayKey of Object.keys(completedSessions)) {
+    merged[Number(dayKey)] = 'completed';
+  }
+  for (const [dayKey, record] of Object.entries(explicitStatuses)) {
+    merged[Number(dayKey)] = record.status;
+  }
+  return merged;
+}
+
+function countTrainingSessionStatuses(
+  trainingDeltas: number[],
+  statuses: Record<number, ProgramSessionStatus>
+): { sessionsCompleted: number; sessionsSkipped: number } {
+  const trainingDays = new Set(trainingDeltas);
+  let sessionsCompleted = 0;
+  let sessionsSkipped = 0;
+  for (const [dayKey, status] of Object.entries(statuses)) {
+    if (!trainingDays.has(Number(dayKey))) {
+      continue;
+    }
+    if (status === 'completed') {
+      sessionsCompleted += 1;
+    } else if (status === 'skipped') {
+      sessionsSkipped += 1;
+    }
+  }
+  return { sessionsCompleted, sessionsSkipped };
+}
+
+/** e.g. `2 completed · 1 skip · 11 sessions left` */
+export function formatHomeProgramSessionMeta(args: {
+  sessionsCompleted: number;
+  sessionsSkipped: number;
+  sessionsRemaining: number;
+}): string {
+  const parts: string[] = [];
+  if (args.sessionsCompleted > 0) {
+    parts.push(`${args.sessionsCompleted} completed`);
+  }
+  if (args.sessionsSkipped > 0) {
+    parts.push(
+      `${args.sessionsSkipped} ${args.sessionsSkipped === 1 ? 'skip' : 'skips'}`
+    );
+  }
+  const remaining = args.sessionsRemaining;
+  parts.push(`${remaining} session${remaining === 1 ? '' : 's'} left`);
+  return parts.join(' · ');
+}
 
 function calculateDaysSinceStart(startDateStr: string): number {
   const start = new Date(startDateStr);
@@ -69,6 +131,8 @@ export type HomeProgramSummary = {
   programName: string;
   todaySessionLabel: string;
   sessionsRemaining: number;
+  sessionsCompleted: number;
+  sessionsSkipped: number;
   programCompleted: boolean;
   /** True while calendar is before the program start date (label is e.g. "Starts in N days"). */
   awaitingProgramStart: boolean;
@@ -91,10 +155,13 @@ export async function loadHomeProgramSummary(): Promise<HomeProgramSummary | nul
     return null;
   }
 
-  const [savedWeekPattern, shifts] = await Promise.all([
-    getProgramWorkoutWeekdays(),
-    getProgramSessionShiftsStore(),
-  ]);
+  const [savedWeekPattern, shifts, completedSessions, explicitStatuses] =
+    await Promise.all([
+      getProgramWorkoutWeekdays(),
+      getProgramSessionShiftsStore(),
+      getCompletedSessionsStore(),
+      getProgramSessionStatuses(),
+    ]);
 
   const effectivePattern: ProgramDaySplitKey[] | null =
     savedWeekPattern && savedWeekPattern.length > 0 ? savedWeekPattern : null;
@@ -130,6 +197,11 @@ export async function loadHomeProgramSummary(): Promise<HomeProgramSummary | nul
     (d) => d > todayDayDelta
   ).length;
 
+  const { sessionsCompleted, sessionsSkipped } = countTrainingSessionStatuses(
+    trainingDeltas,
+    mergeSessionStatuses(completedSessions, explicitStatuses)
+  );
+
   let todaySessionLabel: string;
   if (programCompleted) {
     todaySessionLabel = 'Program finished';
@@ -152,6 +224,8 @@ export async function loadHomeProgramSummary(): Promise<HomeProgramSummary | nul
     programName: program.name,
     todaySessionLabel,
     sessionsRemaining,
+    sessionsCompleted,
+    sessionsSkipped,
     programCompleted,
     awaitingProgramStart: todayDayDelta < 0,
     calendarSessionSpanProgress: spanProgress,
