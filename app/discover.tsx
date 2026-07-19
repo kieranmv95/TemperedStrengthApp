@@ -7,10 +7,7 @@ import { sortPartnerListingsByDistance } from '@/src/services/partnerApiService'
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { PartnerListing } from '@/src/types/partner';
 import { partnerFavoriteKey } from '@/src/types/partner';
-import {
-  getFavoritePartners,
-  setFavoritePartners,
-} from '@/src/utils/storage';
+import { getFavoritePartners, setFavoritePartners } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
@@ -174,8 +171,8 @@ export default function DiscoverScreen() {
           />
           <Text style={styles.emptyTitle}>Nothing to discover yet</Text>
           <Text style={styles.emptyDescription}>
-            Approved gyms, clubs, and coaches will appear here when they join the
-            network.
+            Approved gyms, clubs, and coaches will appear here when they join
+            the network.
           </Text>
         </View>
       ) : (

@@ -54,8 +54,7 @@ export default function WorkoutsByTagScreen() {
   const filteredWorkouts = useMemo(() => {
     if (!tag) return [];
     const isDisciplineTag =
-      isNoEquipmentDiscipline(tag) ||
-      disciplines.some((d) => d.tag === tag);
+      isNoEquipmentDiscipline(tag) || disciplines.some((d) => d.tag === tag);
     if (!isDisciplineTag) return [];
     return allStandaloneWorkouts.filter((w) =>
       workoutMatchesDiscipline(w, tag)

@@ -25,10 +25,7 @@ const KIND_LABELS: Record<PartnerKind, string> = {
   coach: 'Coach',
 };
 
-const KIND_ICONS: Record<
-  PartnerKind,
-  keyof typeof Ionicons.glyphMap
-> = {
+const KIND_ICONS: Record<PartnerKind, keyof typeof Ionicons.glyphMap> = {
   gym: 'barbell-outline',
   club: 'people-outline',
   coach: 'person-outline',
@@ -123,7 +120,9 @@ export function PartnerListingCard({
         <Text style={styles.title} numberOfLines={isCompact ? 1 : 2}>
           {listing.name}
         </Text>
-        {locationSubtitle || distanceLabel || (isCompact && openStatus !== null) ? (
+        {locationSubtitle ||
+        distanceLabel ||
+        (isCompact && openStatus !== null) ? (
           <View style={styles.locationRow}>
             {locationSubtitle || distanceLabel ? (
               <>

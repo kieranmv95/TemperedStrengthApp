@@ -38,13 +38,18 @@ Production builds use `npm run build:ios:production` and
 - `src/hooks/`, `src/services/`, `src/sync/` — app logic and integrations
 - `src/utils/` — storage, program, and formatting helpers
 
-App data is persisted with AsyncStorage, with optional iCloud sync. Pro
-subscriptions are managed through RevenueCat.
+App data is persisted with AsyncStorage, with optional Supabase account backup.
+Pro subscriptions are managed through RevenueCat.
 
 Store builds require production RevenueCat keys in EAS:
 
 - `EXPO_PUBLIC_REVENUECAT_API_KEY_IOS`
 - `EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID`
+
+Account backup also requires:
+
+- `EXPO_PUBLIC_SUPABASE_URL`
+- `EXPO_PUBLIC_SUPABASE_ANON_KEY`
 
 In-app purchases and timer notifications require a development or store build,
 not Expo Go.

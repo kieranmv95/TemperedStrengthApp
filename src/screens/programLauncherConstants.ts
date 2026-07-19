@@ -28,8 +28,5 @@ export function weekKeysStartingFrom(
   if (idx <= 0) {
     return [...CALENDAR_DAY_KEYS];
   }
-  return [
-    ...CALENDAR_DAY_KEYS.slice(idx),
-    ...CALENDAR_DAY_KEYS.slice(0, idx),
-  ];
+  return [...CALENDAR_DAY_KEYS.slice(idx), ...CALENDAR_DAY_KEYS.slice(0, idx)];
 }

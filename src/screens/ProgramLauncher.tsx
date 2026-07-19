@@ -37,7 +37,10 @@ import {
 } from '../utils/storage';
 import type { TrainingMaxesStore } from '../types/trainingMaxes';
 import { TrainingMaxModal } from '../components/TrainingMaxModal';
-import { CALENDAR_DAY_KEYS, weekKeysStartingFrom } from './programLauncherConstants';
+import {
+  CALENDAR_DAY_KEYS,
+  weekKeysStartingFrom,
+} from './programLauncherConstants';
 import { ProgramLauncherDatePickerModal } from './ProgramLauncherDatePickerModal';
 import { ProgramLauncherDetailsModal } from './ProgramLauncherDetailsModal';
 import { ProgramLauncherProgramCard } from './ProgramLauncherProgramCard';
@@ -468,8 +471,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   selectedDifficulty === 'all'
                     ? programs.length
                     : programs.filter(
-                      (p) => p.difficulty === selectedDifficulty
-                    ).length
+                        (p) => p.difficulty === selectedDifficulty
+                      ).length
                 }
               />
               {availableCategories.map((category) => {
@@ -502,8 +505,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   selectedCategory === 'all'
                     ? programs.length
                     : programs.filter((p) =>
-                      p.categories.includes(selectedCategory)
-                    ).length
+                        p.categories.includes(selectedCategory)
+                      ).length
                 }
               />
               {availableDifficulties.map((difficulty) => (
@@ -533,18 +536,18 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   selectedCategory === 'all' && selectedDifficulty === 'all'
                     ? programs.length
                     : programs.filter((p) => {
-                      if (
-                        selectedCategory !== 'all' &&
-                        !p.categories.includes(selectedCategory)
-                      )
-                        return false;
-                      if (
-                        selectedDifficulty !== 'all' &&
-                        p.difficulty !== selectedDifficulty
-                      )
-                        return false;
-                      return true;
-                    }).length
+                        if (
+                          selectedCategory !== 'all' &&
+                          !p.categories.includes(selectedCategory)
+                        )
+                          return false;
+                        if (
+                          selectedDifficulty !== 'all' &&
+                          p.difficulty !== selectedDifficulty
+                        )
+                          return false;
+                        return true;
+                      }).length
                 }
               />
               {availableGoals.map((goal) => {
@@ -604,9 +607,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           onChangeStartDate={handleChangeStartDate}
           selectedProgram={selectedProgram}
           startDatePickerAllowedWeekdays={startDatePickerAllowedWeekdays}
-          confirmLabel={
-            selectedProgram?.daysSplit?.length ? 'Next' : 'Confirm'
-          }
+          confirmLabel={selectedProgram?.daysSplit?.length ? 'Next' : 'Confirm'}
           onConfirm={handleConfirmDate}
           bottomInset={getEffectiveBottomInset(insets.bottom)}
         />

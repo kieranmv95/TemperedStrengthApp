@@ -176,7 +176,12 @@ export const createOnboardingStyles = (colors: ThemeColors) =>
       fontWeight: '800',
       lineHeight: 24,
     },
-    iCloudCard: {
+    accountChoiceContainer: {
+      flex: 1,
+      justifyContent: 'space-between',
+      paddingTop: Spacing.section,
+    },
+    accountCard: {
       backgroundColor: colors.backgroundElevated,
       borderRadius: BorderRadius.xxl,
       padding: Spacing.xxl,
@@ -184,32 +189,15 @@ export const createOnboardingStyles = (colors: ThemeColors) =>
       borderColor: colors.backgroundSubtle,
       gap: Spacing.md,
     },
-    iCloudTitle: {
+    accountCardTitle: {
       color: colors.textPrimary,
       fontSize: FontSize.displaySm,
       fontWeight: '700',
     },
-    iCloudDescription: {
+    accountCardDescription: {
       color: colors.textMuted,
       fontSize: FontSize.lg,
       lineHeight: 20,
-    },
-    iCloudRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginTop: Spacing.md,
-    },
-    iCloudToggleLabel: {
-      color: colors.textPrimary,
-      fontSize: FontSize.xxl,
-      fontWeight: '700',
-    },
-    iCloudUnavailable: {
-      color: colors.textPlaceholder,
-      fontSize: FontSize.md,
-      fontStyle: 'italic',
-      marginTop: Spacing.sm,
     },
     footer: {
       flexShrink: 0,

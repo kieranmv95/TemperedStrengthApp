@@ -35,9 +35,7 @@ export function TogetherWeLiftBanner({ onPress }: TogetherWeLiftBannerProps) {
             {TOGETHER_WE_LIFT.name}
           </Text>
         </View>
-        <Text
-          style={[styles.bannerDescription, { color: colors.description }]}
-        >
+        <Text style={[styles.bannerDescription, { color: colors.description }]}>
           {TOGETHER_WE_LIFT.bannerIntro}
         </Text>
       </View>

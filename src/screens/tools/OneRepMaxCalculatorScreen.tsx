@@ -18,7 +18,13 @@ import { getWeightUnit } from '@/src/utils/storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Keyboard,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 const TOOL = getToolById('one-rep-max')!;
 
@@ -173,8 +179,7 @@ export function OneRepMaxCalculatorScreen() {
       {displayOneRm !== null ? (
         <View style={styles.card}>
           <Text style={styles.resultHeading}>
-            Your one rep max is{' '}
-            {formatDisplayWeight(displayOneRm, weightUnit)}
+            Your one rep max is {formatDisplayWeight(displayOneRm, weightUnit)}
           </Text>
 
           <View>

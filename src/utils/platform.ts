@@ -1,7 +1,7 @@
 import { Spacing } from '@/src/constants/theme';
 import { Platform } from 'react-native';
 
-/** True when running on iOS (iCloud sync and related UI are iOS-only). */
+/** True when running on iOS. */
 export const isIos = Platform.OS === 'ios';
 
 /** Typical Android gesture-navigation bar height when edge-to-edge reports 0. */

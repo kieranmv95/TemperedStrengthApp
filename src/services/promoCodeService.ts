@@ -46,7 +46,8 @@ const ERROR_FALLBACKS: Record<PromoApiErrorCode, string> = {
   invalid_password: 'Incorrect password.',
   already_redeemed: 'This email already redeemed this code.',
   invalid_email: 'Enter a valid email.',
-  network_error: 'Could not reach the server. Check your connection and try again.',
+  network_error:
+    'Could not reach the server. Check your connection and try again.',
   unknown: 'Something went wrong. Please try again.',
 };
 

@@ -196,7 +196,11 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
   f_67: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   f_68: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   f_69: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
-  f_70: { kind: 'duration', label: 'Total time (incl. rest)', lowerIsBetter: true },
+  f_70: {
+    kind: 'duration',
+    label: 'Total time (incl. rest)',
+    lowerIsBetter: true,
+  },
 
   // ---------------------------------------------------------------------------
   // CrossFit-style (WOD) — Pro
@@ -294,8 +298,7 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
   },
   ar_03: {
     kind: 'notes_only',
-    placeholder:
-      'Score 1: FF 1RM clean (kg) / Score 2: MM 1RM clean (kg)',
+    placeholder: 'Score 1: FF 1RM clean (kg) / Score 2: MM 1RM clean (kg)',
   },
   ar_04: {
     kind: 'max_reps',
@@ -309,26 +312,51 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
   },
 
   // HIIT Shred (6 Weeks) Pro — standalone WOD copies p_55–p_78
-  p_55: { kind: 'amrap', timeCapMinutes: 10, roundsLabel: 'Rounds', extraRepsLabel: 'Extra reps' },
+  p_55: {
+    kind: 'amrap',
+    timeCapMinutes: 10,
+    roundsLabel: 'Rounds',
+    extraRepsLabel: 'Extra reps',
+  },
   p_56: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
-  p_57: { kind: 'notes_only', placeholder: "How did the session go?" },
+  p_57: { kind: 'notes_only', placeholder: 'How did the session go?' },
   p_58: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
-  p_59: { kind: 'notes_only', placeholder: "How did the session go?" },
+  p_59: { kind: 'notes_only', placeholder: 'How did the session go?' },
   p_60: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
-  p_61: { kind: 'amrap', timeCapMinutes: 15, roundsLabel: 'Rounds', extraRepsLabel: 'Extra reps' },
+  p_61: {
+    kind: 'amrap',
+    timeCapMinutes: 15,
+    roundsLabel: 'Rounds',
+    extraRepsLabel: 'Extra reps',
+  },
   p_62: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
-  p_63: { kind: 'amrap', timeCapMinutes: 15, roundsLabel: 'Rounds', extraRepsLabel: 'Extra reps' },
-  p_64: { kind: 'notes_only', placeholder: "How did the session go?" },
+  p_63: {
+    kind: 'amrap',
+    timeCapMinutes: 15,
+    roundsLabel: 'Rounds',
+    extraRepsLabel: 'Extra reps',
+  },
+  p_64: { kind: 'notes_only', placeholder: 'How did the session go?' },
   p_65: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   p_66: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   p_67: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
-  p_68: { kind: 'notes_only', placeholder: "How did the session go?" },
-  p_69: { kind: 'amrap', timeCapMinutes: 18, roundsLabel: 'Rounds', extraRepsLabel: 'Extra reps' },
+  p_68: { kind: 'notes_only', placeholder: 'How did the session go?' },
+  p_69: {
+    kind: 'amrap',
+    timeCapMinutes: 18,
+    roundsLabel: 'Rounds',
+    extraRepsLabel: 'Extra reps',
+  },
   p_70: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   p_71: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
-  p_72: { kind: 'amrap', timeCapMinutes: 20, roundsLabel: 'Rounds', extraRepsLabel: 'Extra reps' },
+  p_72: {
+    kind: 'amrap',
+    timeCapMinutes: 20,
+    roundsLabel: 'Rounds',
+    extraRepsLabel: 'Extra reps',
+  },
   p_73: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
-  p_74: { kind: 'notes_only', placeholder: "How did the session go?" },
+  p_74: { kind: 'notes_only', placeholder: 'How did the session go?' },
   p_76: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   p_77: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
   p_78: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },

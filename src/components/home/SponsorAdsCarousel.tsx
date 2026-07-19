@@ -8,7 +8,7 @@ import { Spacing } from '@/src/constants/theme';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { HomeSponsorAd } from '@/src/services/sanitySponsorAds';
 import { usePostHog } from 'posthog-react-native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import {
   FlatList,
   useWindowDimensions,
@@ -31,14 +31,16 @@ function hostFromUrl(url: string): string {
   }
 }
 
-export function SponsorAdsCarousel({ ads, onPressCta }: SponsorAdsCarouselProps) {
+export function SponsorAdsCarousel({
+  ads,
+  onPressCta,
+}: SponsorAdsCarouselProps) {
   const posthog = usePostHog();
   const { width: windowWidth } = useWindowDimensions();
   const cardWidth = windowWidth - Spacing.xxl * 2;
   const listRef = useRef<FlatList<HomeSponsorAd>>(null);
   const activeIndexRef = useRef(0);
   const pausedRef = useRef(false);
-  const [activeIndex, setActiveIndex] = useState(0);
 
   const handlePressCta = useCallback(
     (ad: HomeSponsorAd) => {
@@ -58,7 +60,6 @@ export function SponsorAdsCarousel({ ads, onPressCta }: SponsorAdsCarouselProps)
       if (primary?.index != null && primary.item) {
         const index = primary.index;
         activeIndexRef.current = index;
-        setActiveIndex(index);
       }
     }
   ).current;
@@ -78,7 +79,6 @@ export function SponsorAdsCarousel({ ads, onPressCta }: SponsorAdsCarouselProps)
       const nextIndex = (activeIndexRef.current + 1) % ads.length;
       listRef.current?.scrollToIndex({ index: nextIndex, animated: true });
       activeIndexRef.current = nextIndex;
-      setActiveIndex(nextIndex);
     }, SPONSOR_AUTO_SCROLL_MS);
     return () => clearInterval(timer);
   }, [ads]);
@@ -94,7 +94,6 @@ export function SponsorAdsCarousel({ ads, onPressCta }: SponsorAdsCarouselProps)
       const index = Math.round(offsetX / cardWidth);
       const clamped = Math.max(0, Math.min(index, ads.length - 1));
       activeIndexRef.current = clamped;
-      setActiveIndex(clamped);
     },
     [ads, cardWidth]
   );

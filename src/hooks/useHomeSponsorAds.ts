@@ -18,7 +18,9 @@ export function useHomeSponsorAds(): {
   const [isRefetching, setIsRefetching] = useState(false);
 
   const fetchAds = useCallback(async (forceRefresh: boolean) => {
-    return loadHomeSponsorAds(forceRefresh ? { forceRefresh: true } : undefined);
+    return loadHomeSponsorAds(
+      forceRefresh ? { forceRefresh: true } : undefined
+    );
   }, []);
 
   const refetch = useCallback(async () => {

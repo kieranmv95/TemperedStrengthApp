@@ -37,9 +37,9 @@ const SORT_DIRECTION_OPTIONS: {
   value: RecoverySortDirection;
   label: string;
 }[] = [
-    { value: 'asc', label: 'Ascending' },
-    { value: 'desc', label: 'Descending' },
-  ];
+  { value: 'asc', label: 'Ascending' },
+  { value: 'desc', label: 'Descending' },
+];
 
 function equipmentLabel(equipment: RecoveryEquipment): string {
   return equipment

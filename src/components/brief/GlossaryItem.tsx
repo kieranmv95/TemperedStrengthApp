@@ -2,12 +2,7 @@ import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { GlossaryTerm } from '@/src/types/brief';
 import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
-import {
-  LayoutAnimation,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { LayoutAnimation, StyleSheet, Text, View } from 'react-native';
 import { BorderRadius, Colors, FontSize, Spacing } from '../../constants/theme';
 import { Card, SmallChevron } from '../ds';
 
@@ -45,7 +40,12 @@ export function GlossaryItem({ term, variant = 'compact' }: GlossaryItemProps) {
             </View>
           )}
         </View>
-        <View style={[styles.chevronContainer, isExpanded && styles.chevronContainerExpanded]}>
+        <View
+          style={[
+            styles.chevronContainer,
+            isExpanded && styles.chevronContainerExpanded,
+          ]}
+        >
           <SmallChevron />
         </View>
       </View>

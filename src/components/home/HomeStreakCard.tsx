@@ -1,7 +1,10 @@
 import { Card } from '@/src/components/ds';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { Colors } from '@/src/constants/theme';
-import { weekDaysStartingMonday, type StreakSnapshot } from '@/src/services/streakService';
+import {
+  weekDaysStartingMonday,
+  type StreakSnapshot,
+} from '@/src/services/streakService';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
@@ -42,7 +45,8 @@ export function HomeStreakCard({ snapshot }: HomeStreakCardProps) {
               <Text style={styles.streakCountUnit}>{dayLabel}</Text>
             </View>
             <Text style={styles.streakBestLine}>
-              Best: {snapshot.bestStreak} {snapshot.bestStreak === 1 ? 'day' : 'days'}
+              Best: {snapshot.bestStreak}{' '}
+              {snapshot.bestStreak === 1 ? 'day' : 'days'}
             </Text>
           </View>
 

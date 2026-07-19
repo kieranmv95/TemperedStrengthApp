@@ -1,11 +1,11 @@
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { SmallChevron } from '@/src/components/ds/SmallChevron';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
+import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { refreshSanityHomeContent } from '@/src/services/sanityHomeContent';
 import type { OnboardingProfile } from '@/src/types/onboarding';
 import type { Program } from '@/src/types/program';
-import { isIos } from '@/src/utils/platform';
 import { getProgramById } from '@/src/utils/program';
 import {
   clearOnboarding,
@@ -16,7 +16,7 @@ import {
 import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { router, type Href } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Switch, Text, TouchableOpacity, View } from 'react-native';
 
@@ -29,6 +29,9 @@ export function YouAccountSettingsScreen() {
   const [isRefreshingSanityHome, setIsRefreshingSanityHome] = useState(false);
   const [isUpdatingDevProOverride, setIsUpdatingDevProOverride] =
     useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  const { deleteAccount, isConfigured, signOut, syncError, user } =
+    useSyncManager();
   const {
     isPro,
     isPromoPro,
@@ -138,6 +141,58 @@ export function YouAccountSettingsScreen() {
     router.push('/paywall');
   };
 
+  const handleSignOut = () => {
+    Alert.alert(
+      'Sign out?',
+      'Your training data stays on this device, but changes will not be backed up until you sign in again.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Sign out',
+          style: 'destructive',
+          onPress: () => {
+            void signOut().catch((error) => {
+              console.error('Failed to sign out:', error);
+              Alert.alert('Could not sign out', 'Please try again.');
+            });
+          },
+        },
+      ]
+    );
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      'Delete account and cloud backup?',
+      'This permanently deletes your account and all cloud backup data. Your training data will remain on this device so you can continue using the app locally. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete account',
+          style: 'destructive',
+          onPress: () => {
+            setIsDeletingAccount(true);
+            void deleteAccount()
+              .then(() => {
+                Alert.alert(
+                  'Account deleted',
+                  'Your cloud account and backup were deleted. Local data remains on this device.'
+                );
+              })
+              .catch((error) => {
+                console.error('Failed to delete account:', error);
+                Alert.alert(
+                  'Could not delete account',
+                  'Please check your connection and try again.'
+                );
+              })
+              .finally(() => setIsDeletingAccount(false));
+          },
+        },
+      ]
+    );
+  };
+
   const handleResetOnboarding = () => {
     Alert.alert(
       'Reset Onboarding',
@@ -184,7 +239,10 @@ export function YouAccountSettingsScreen() {
         );
       } catch (error) {
         console.error('Dev Sanity refresh failed:', error);
-        Alert.alert('Error', 'Could not refresh Sanity home content. Try again.');
+        Alert.alert(
+          'Error',
+          'Could not refresh Sanity home content. Try again.'
+        );
       } finally {
         setIsRefreshingSanityHome(false);
       }
@@ -248,12 +306,71 @@ export function YouAccountSettingsScreen() {
     >
       <StandardLayout.Body>
         <View style={styles.settingsList}>
+          {user ? (
+            <>
+              <TouchableOpacity
+                style={styles.settingItem}
+                onPress={handleSignOut}
+              >
+                <View style={styles.settingContent}>
+                  <Text style={styles.settingTitle}>Signed in</Text>
+                  <Text style={styles.settingDescription}>
+                    {user.email ?? 'Your account'} ·{' '}
+                    {syncError
+                      ? `Backup needs attention: ${syncError}`
+                      : 'Data backup is active. Tap to sign out.'}
+                  </Text>
+                </View>
+                <SmallChevron />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.settingItem, styles.dangerItem]}
+                onPress={handleDeleteAccount}
+                disabled={isDeletingAccount}
+              >
+                <View style={styles.settingContent}>
+                  <Text style={[styles.settingTitle, styles.dangerText]}>
+                    Delete account
+                  </Text>
+                  <Text style={styles.settingDescription}>
+                    {isDeletingAccount
+                      ? 'Deleting account and cloud backup…'
+                      : 'Permanently delete your account and cloud backup. Local data stays on this device.'}
+                  </Text>
+                </View>
+                <SmallChevron />
+              </TouchableOpacity>
+            </>
+          ) : (
+            <TouchableOpacity
+              style={styles.settingItem}
+              onPress={() =>
+                router.push({
+                  pathname: '/account/create-account',
+                  params: {
+                    intent: 'create',
+                    returnTo: '/records/account',
+                  },
+                } as unknown as Href)
+              }
+              disabled={!isConfigured}
+            >
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>Back up your data</Text>
+                <Text style={styles.settingDescription}>
+                  {isConfigured
+                    ? 'Create or sign in to an account. Your data is not currently backed up.'
+                    : 'Account backup is not configured in this build.'}
+                </Text>
+              </View>
+              {isConfigured ? <SmallChevron /> : null}
+            </TouchableOpacity>
+          )}
+
           {isPro ? (
             <TouchableOpacity
               style={[styles.settingItem, styles.proItem]}
-              onPress={
-                isRevenueCatPro ? handleSubscriptionPress : undefined
-              }
+              onPress={isRevenueCatPro ? handleSubscriptionPress : undefined}
               disabled={subscriptionLoading || !isRevenueCatPro}
               activeOpacity={isRevenueCatPro ? 0.2 : 1}
             >
@@ -323,9 +440,7 @@ export function YouAccountSettingsScreen() {
             <View style={styles.settingContent}>
               <Text style={styles.settingTitle}>General settings</Text>
               <Text style={styles.settingDescription}>
-                {isIos
-                  ? 'Weight units, iCloud sync, onboarding preferences.'
-                  : 'Weight units and onboarding preferences.'}
+                Weight units and onboarding preferences.
               </Text>
             </View>
             <SmallChevron />
@@ -373,10 +488,10 @@ export function YouAccountSettingsScreen() {
               <View style={styles.settingContent}>
                 <Text style={styles.settingTitle}>Partner offers</Text>
                 <Text style={styles.settingDescription}>
-                  Highlights on Home and in the Shop are partner placements. When
-                  you follow a link and buy (or sign up), Tempered Strength may
-                  earn a commission or referral fee. That does not change what
-                  you pay.
+                  Highlights on Home and in the Shop are partner placements.
+                  When you follow a link and buy (or sign up), Tempered Strength
+                  may earn a commission or referral fee. That does not change
+                  what you pay.
                 </Text>
               </View>
             </View>
@@ -390,8 +505,8 @@ export function YouAccountSettingsScreen() {
                 <View style={styles.settingContent}>
                   <Text style={styles.settingTitle}>Force Pro mode</Text>
                   <Text style={styles.settingDescription}>
-                    Treat this device as Pro for local testing. RevenueCat is not
-                    changed.
+                    Treat this device as Pro for local testing. RevenueCat is
+                    not changed.
                   </Text>
                 </View>
                 <Switch

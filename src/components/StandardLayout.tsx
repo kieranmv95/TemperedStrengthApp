@@ -160,7 +160,10 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
         )}
         {subtitle ? (
           <Text
-            style={[styles.subtitle, onBackPress ? styles.subtitleWithBack : null]}
+            style={[
+              styles.subtitle,
+              onBackPress ? styles.subtitleWithBack : null,
+            ]}
           >
             {subtitle}
           </Text>
@@ -183,7 +186,11 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
                     <Text style={styles.filtersToggleText}>
                       {filtersExpanded ? 'Hide filters' : 'Show filters'}
                     </Text>
-                    <Ionicons name="filter" size={16} color={Colors.textMuted} />
+                    <Ionicons
+                      name="filter"
+                      size={16}
+                      color={Colors.textMuted}
+                    />
                   </TouchableOpacity>
                 ) : null}
                 <TouchableOpacity

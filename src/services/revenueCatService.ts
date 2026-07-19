@@ -31,9 +31,7 @@ if (__DEV__) {
 
   if (!isTestKey && !isValidProductionKey) {
     const expected =
-      Platform.OS === 'android'
-        ? "'test_' or 'goog_'"
-        : "'test_' or 'appl_'";
+      Platform.OS === 'android' ? "'test_' or 'goog_'" : "'test_' or 'appl_'";
     console.warn(
       `⚠️ RevenueCat API key format may be invalid. Expected ${expected} prefix.`
     );

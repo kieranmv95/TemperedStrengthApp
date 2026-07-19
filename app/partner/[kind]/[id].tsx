@@ -1,4 +1,7 @@
-import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
+import {
+  AppSafeAreaView,
+  AppScrollView,
+} from '@/src/components/AppSafeAreaView';
 import { PartnerDetailBody } from '@/src/components/partners/PartnerDetailBody';
 import { partnerDetailStyles as styles } from '@/src/components/partners/partnerDetailStyles';
 import { Colors } from '@/src/constants/theme';
@@ -12,10 +15,7 @@ import {
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { PartnerKind, PartnerListing } from '@/src/types/partner';
 import { partnerFavoriteKey } from '@/src/types/partner';
-import {
-  getFavoritePartners,
-  setFavoritePartners,
-} from '@/src/utils/storage';
+import { getFavoritePartners, setFavoritePartners } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -87,9 +87,7 @@ export default function PartnerDetailScreen() {
           }
           favoritesRef.current = favorites;
           if (isPartnerKind(kind) && id) {
-            setIsFavorite(
-              favorites.includes(partnerFavoriteKey(kind, id))
-            );
+            setIsFavorite(favorites.includes(partnerFavoriteKey(kind, id)));
           }
         } catch (error) {
           console.error('Failed to load favorite partners:', error);
@@ -249,9 +247,7 @@ export default function PartnerDetailScreen() {
         <TouchableOpacity
           style={styles.favoriteButton}
           onPress={handleToggleFavorite}
-          accessibilityLabel={
-            isFavorite ? 'Remove from saved' : 'Save listing'
-          }
+          accessibilityLabel={isFavorite ? 'Remove from saved' : 'Save listing'}
         >
           <Ionicons
             name={isFavorite ? 'bookmark' : 'bookmark-outline'}

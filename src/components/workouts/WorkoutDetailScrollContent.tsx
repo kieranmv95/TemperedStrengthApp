@@ -42,8 +42,9 @@ function isScaledBlocks(
 
 function movementToRowText(movement: string | DetailedMovement): string {
   if (typeof movement === 'string') return movement;
-  return `${movement.name}: ${movement.value}${movement.note ? ` (${movement.note})` : ''
-    }`;
+  return `${movement.name}: ${movement.value}${
+    movement.note ? ` (${movement.note})` : ''
+  }`;
 }
 
 function isDivider(movement: unknown): movement is Divider {
@@ -241,7 +242,7 @@ export function WorkoutDetailScrollContent({
               label={tag}
               isActive={false}
               disabled
-              onPress={() => { }}
+              onPress={() => {}}
             />
           ))}
         </ScrollView>
@@ -269,13 +270,20 @@ export function WorkoutDetailScrollContent({
             <View key={blockIndex} style={styles.blockContainer}>
               <Text style={styles.blockName}>{block.name}</Text>
               {block.mobilityFlow && (
-                <TouchableOpacity onPress={() => {
-                  router.push({
-                    pathname: '/recovery/[id]',
-                    params: { id: block.mobilityFlow as string },
-                  });
-                }} style={styles.startFlowButton}>
-                  <Text style={styles.startFlowText}>{block.mobilityFlowCopy ? block.mobilityFlowCopy : 'Start Mobility Flow'}</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    router.push({
+                      pathname: '/recovery/[id]',
+                      params: { id: block.mobilityFlow as string },
+                    });
+                  }}
+                  style={styles.startFlowButton}
+                >
+                  <Text style={styles.startFlowText}>
+                    {block.mobilityFlowCopy
+                      ? block.mobilityFlowCopy
+                      : 'Start Mobility Flow'}
+                  </Text>
                 </TouchableOpacity>
               )}
               {block.instructions && (
@@ -303,13 +311,20 @@ export function WorkoutDetailScrollContent({
           <View key={blockIndex} style={styles.blockContainer}>
             <Text style={styles.blockName}>{block.name}</Text>
             {block.mobilityFlow && (
-              <TouchableOpacity onPress={() => {
-                router.push({
-                  pathname: '/recovery/[id]',
-                  params: { id: block.mobilityFlow as string },
-                });
-              }} style={styles.startFlowButton}>
-                <Text style={styles.startFlowText}>{block.mobilityFlowCopy ? block.mobilityFlowCopy : 'Start Mobility Flow'}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push({
+                    pathname: '/recovery/[id]',
+                    params: { id: block.mobilityFlow as string },
+                  });
+                }}
+                style={styles.startFlowButton}
+              >
+                <Text style={styles.startFlowText}>
+                  {block.mobilityFlowCopy
+                    ? block.mobilityFlowCopy
+                    : 'Start Mobility Flow'}
+                </Text>
               </TouchableOpacity>
             )}
             {block.instructions && (

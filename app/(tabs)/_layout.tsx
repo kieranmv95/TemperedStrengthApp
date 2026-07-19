@@ -26,14 +26,11 @@ export default function TabLayout() {
   useEffect(() => {
     const sub = AppState.addEventListener('change', (state) => {
       if (state === 'active') {
-        void (async () => {
-          await syncNow();
-          await applyDailyStreakCheckIn();
-        })();
+        void applyDailyStreakCheckIn();
       }
     });
     return () => sub.remove();
-  }, [syncNow]);
+  }, []);
 
   return (
     <Tabs

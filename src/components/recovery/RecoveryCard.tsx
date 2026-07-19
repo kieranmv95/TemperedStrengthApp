@@ -80,7 +80,9 @@ export function RecoveryCard({
         <View style={styles.tagsContainer}>
           {recovery.equipment.map((equipment, index) => (
             <View key={index} style={[styles.tag, styles.tagGold]}>
-              <Text style={[styles.tagText, styles.tagGoldText]}>{equipment}</Text>
+              <Text style={[styles.tagText, styles.tagGoldText]}>
+                {equipment}
+              </Text>
             </View>
           ))}
           {recovery.tags.slice(0, 3).map((tag, index) => (

@@ -75,7 +75,10 @@ export default function ShopScreen() {
   }, [activeCategory, categories]);
 
   const categoryFilters = useMemo(
-    () => [{ key: 'all', label: 'All' }, ...categories.map((c) => ({ key: c, label: c }))],
+    () => [
+      { key: 'all', label: 'All' },
+      ...categories.map((c) => ({ key: c, label: c })),
+    ],
     [categories]
   );
 
@@ -253,9 +256,7 @@ export default function ShopScreen() {
 
               return (
                 <Pill
-                  onPress={() =>
-                    setActiveCategory(isAll ? 'All' : item.key)
-                  }
+                  onPress={() => setActiveCategory(isAll ? 'All' : item.key)}
                   isActive={isActive}
                   label={item.label}
                   count={count}

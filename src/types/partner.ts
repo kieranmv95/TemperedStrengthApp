@@ -134,7 +134,9 @@ export function partnerListingHasContact(listing: PartnerListing): boolean {
   return listing.email !== null || listing.phone !== null;
 }
 
-export function partnerListingHasAboutContent(listing: PartnerListing): boolean {
+export function partnerListingHasAboutContent(
+  listing: PartnerListing
+): boolean {
   if (partnerListingHasContact(listing)) {
     return true;
   }
@@ -150,7 +152,9 @@ export function partnerListingHasAboutContent(listing: PartnerListing): boolean 
   return false;
 }
 
-export function partnerListingHasVisitContent(listing: PartnerListing): boolean {
+export function partnerListingHasVisitContent(
+  listing: PartnerListing
+): boolean {
   if (!partnerListingHidesLocation(listing)) {
     return true;
   }

@@ -11,10 +11,7 @@ import { fetchArticles } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { ArticleCategory, ArticleListItem } from '@/src/types/brief';
-import {
-  getFavoriteArticles,
-  setFavoriteArticles,
-} from '@/src/utils/storage';
+import { getFavoriteArticles, setFavoriteArticles } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
@@ -213,7 +210,11 @@ export default function HubScreen() {
             >
               <View style={styles.hubCtaContent}>
                 <View style={styles.hubCtaTitleRow}>
-                  <Ionicons name="book-outline" size={18} color={Colors.accent} />
+                  <Ionicons
+                    name="book-outline"
+                    size={18}
+                    color={Colors.accent}
+                  />
                   <Text style={styles.hubCtaTitle}>Browse the glossary</Text>
                 </View>
                 <Text style={styles.hubCtaDescription}>
@@ -263,7 +264,7 @@ export default function HubScreen() {
                   : isAllChip
                     ? activeCategory === 'All' && !showFavoritesOnly
                     : activeCategory === (item.key as ArticleCategory) &&
-                    !showFavoritesOnly;
+                      !showFavoritesOnly;
 
                 const count = isFavoritesChip
                   ? favorites.length

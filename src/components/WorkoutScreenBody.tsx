@@ -10,8 +10,11 @@ import {
 } from '@/src/screens/workoutScreenConstants';
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
 import type { Workout } from '@/src/types/program';
-import type { ActiveSession, CompletedSession } from '@/src/types/storage';
-import type { ProgramSessionStatus } from '@/src/types/storage';
+import type {
+  ActiveSession,
+  CompletedSession,
+  ProgramSessionStatus,
+} from '@/src/types/storage';
 import { formatVolumeFromKg } from '@/src/utils/weightUnits';
 import React from 'react';
 import {

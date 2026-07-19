@@ -174,10 +174,7 @@ export default function ExercisePersonalBestsScreen() {
           <Text style={localStyles.meta}>
             {exercise.muscle} · {exercise.equipment}
           </Text>
-          <ExerciseVideoPlayButton
-            exerciseId={exercise.id}
-            variant="banner"
-          />
+          <ExerciseVideoPlayButton exerciseId={exercise.id} variant="banner" />
           <View style={styles.emptyState}>
             <Text style={styles.emptyDescription}>
               Personal bests for rep maxes apply to rep-based exercises only.
@@ -211,18 +208,11 @@ export default function ExercisePersonalBestsScreen() {
           {exercise.muscle} · {exercise.equipment}
         </Text>
 
-        <ExerciseVideoPlayButton
-          exerciseId={exercise.id}
-          variant="banner"
-        />
+        <ExerciseVideoPlayButton exerciseId={exercise.id} variant="banner" />
 
         <TouchableOpacity style={localStyles.logButton} onPress={openLog}>
           <Text style={localStyles.logButtonText}>Log Lift</Text>
-          <Ionicons
-            name="add"
-            size={22}
-            color={Colors.textOnAccent}
-          />
+          <Ionicons name="add" size={22} color={Colors.textOnAccent} />
         </TouchableOpacity>
 
         {loading || pbs === null ? (
@@ -279,7 +269,9 @@ export default function ExercisePersonalBestsScreen() {
                                 {formatWeightFromKg(latest.weight, weightUnit)}
                               </Text>
                               <Text style={localStyles.tierDate}>
-                                {new Date(latest.achievedAt).toLocaleDateString()}
+                                {new Date(
+                                  latest.achievedAt
+                                ).toLocaleDateString()}
                               </Text>
                             </View>
                           </View>

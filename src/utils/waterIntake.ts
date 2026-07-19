@@ -1,5 +1,4 @@
 import { parseBodyweightToKg } from '@/src/utils/creatine';
-import type { WeightUnit } from '@/src/utils/storage';
 
 /** Base hydration (ml per kg body mass). */
 export const WATER_BASE_ML_PER_KG = 35;

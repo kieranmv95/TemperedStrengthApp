@@ -16,13 +16,9 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.kieranvenison.temperedstrengthapp",
-      "entitlements": {
-        "com.apple.developer.ubiquity-kvstore-identifier": "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
-      },
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      },
-      "usesIcloudStorage": true
+      }
     },
     "android": {
       "package": "com.kieranvenison.temperedstrengthapp",
@@ -31,9 +27,7 @@
         "foregroundImage": "./assets/images/android_icon.png",
         "backgroundColor": "#121212"
       },
-      "permissions": [
-        "android.permission.POST_NOTIFICATIONS"
-      ]
+      "permissions": ["android.permission.POST_NOTIFICATIONS"]
     },
     "web": {
       "output": "static",

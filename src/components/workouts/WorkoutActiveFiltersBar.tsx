@@ -16,7 +16,13 @@ import {
 } from '@/src/utils/workoutFilters';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 const SEARCH_LABEL_MAX = 28;
 
@@ -159,11 +165,7 @@ export function WorkoutActiveFiltersBar({
         ))}
 
         {noEquipmentOnly ? (
-          <Pill
-            label="No equipment"
-            isActive
-            onPress={onClearNoEquipment}
-          />
+          <Pill label="No equipment" isActive onPress={onClearNoEquipment} />
         ) : null}
 
         {selectedEquipment.map((eq) => (

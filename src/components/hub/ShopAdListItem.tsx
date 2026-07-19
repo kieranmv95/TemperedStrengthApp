@@ -32,9 +32,7 @@ export function ShopAdListItem({ ad, onPress }: ShopAdListItemProps) {
         <View style={[styles.thumbWrap, { backgroundColor: ad.bgColor }]}>
           <Image
             source={{ uri: thumbnailUrl }}
-            style={
-              isLogoThumb ? styles.thumbImageLogo : styles.thumbImage
-            }
+            style={isLogoThumb ? styles.thumbImageLogo : styles.thumbImage}
             contentFit={isLogoThumb ? 'contain' : 'cover'}
             contentPosition={isLogoThumb ? 'left center' : 'center'}
             accessibilityIgnoresInvertColors

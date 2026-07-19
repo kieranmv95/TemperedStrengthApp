@@ -50,7 +50,7 @@ import {
   Animated,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 
 const exerciseNameById: ReadonlyMap<number, string> = (() => {
@@ -273,15 +273,13 @@ export default function HomeTabScreen() {
                 </Text>
               ) : null}
               {remoteNotification.ctaText.length > 0 &&
-                remoteNotification.ctaUrl.length > 0 ? (
+              remoteNotification.ctaUrl.length > 0 ? (
                 <TouchableOpacity
                   style={[
                     styles.notificationCta,
                     { backgroundColor: remoteNotification.ctaColor },
                   ]}
-                  onPress={() =>
-                    openHomeCtaUrl(remoteNotification.ctaUrl)
-                  }
+                  onPress={() => openHomeCtaUrl(remoteNotification.ctaUrl)}
                   accessibilityRole="button"
                   accessibilityLabel={remoteNotification.ctaText}
                 >
@@ -348,7 +346,7 @@ export default function HomeTabScreen() {
                               0,
                               Math.round(
                                 programSummary.calendarSessionSpanProgress *
-                                10000
+                                  10000
                               ) / 100
                             )
                           )}%`,
@@ -371,8 +369,8 @@ export default function HomeTabScreen() {
                 <View style={styles.cardBody}>
                   <Text style={styles.cardTitle}>Pick a program</Text>
                   <Text style={styles.cardMuted}>
-                    Head to the Program tab and choose one then we will surface the
-                    good stuff here.
+                    Head to the Program tab and choose one then we will surface
+                    the good stuff here.
                   </Text>
                 </View>
                 <SmallChevron />
@@ -395,17 +393,19 @@ export default function HomeTabScreen() {
             {hasPersonalBests ? (
               <Card
                 onPress={() =>
-                  trackHomeLink(
-                    'recent_wins_card',
-                    '/records',
-                    () => router.push('/records')
+                  trackHomeLink('recent_wins_card', '/records', () =>
+                    router.push('/records')
                   )
                 }
                 accessibilityLabel="Open personal bests"
               >
                 <View style={[styles.cardBody, styles.pbListContent]}>
                   <View style={styles.pbListTitleRow}>
-                    <Ionicons name="trophy-outline" size={18} color={Colors.accent} />
+                    <Ionicons
+                      name="trophy-outline"
+                      size={18}
+                      color={Colors.accent}
+                    />
                     <Text style={styles.pbListTitle}>Your latest PB</Text>
                   </View>
                   {recentPbs.map((row, index) => (
@@ -451,7 +451,8 @@ export default function HomeTabScreen() {
                 <View style={styles.cardBody}>
                   <Text style={styles.cardTitle}>No PRs yet</Text>
                   <Text style={styles.emptySubtitle}>
-                    Your latest PB from your programs or on the you will show up here.
+                    Your latest PB from your programs or on the you will show up
+                    here.
                   </Text>
                 </View>
                 <SmallChevron />

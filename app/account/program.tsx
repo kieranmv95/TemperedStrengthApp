@@ -26,7 +26,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
+import {
+  AppSafeAreaView,
+  AppScrollView,
+} from '@/src/components/AppSafeAreaView';
 
 export default function AccountProgramSettingsScreen() {
   const posthog = usePostHog();

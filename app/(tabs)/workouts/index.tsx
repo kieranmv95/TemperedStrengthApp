@@ -23,13 +23,16 @@ import { visibleDisciplines } from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
-import type { SingleWorkout } from '@/src/types/workouts';
 import type {
+  SingleWorkout,
+  WorkoutEquipment,
   WorkoutFocusTag,
   WorkoutFormatTag,
 } from '@/src/types/workouts';
-import type { WorkoutEquipment } from '@/src/types/workouts';
-import { getFavoriteWorkouts, toggleFavoriteWorkout } from '@/src/utils/storage';
+import {
+  getFavoriteWorkouts,
+  toggleFavoriteWorkout,
+} from '@/src/utils/storage';
 import {
   countActiveWorkoutFilters,
   workoutMatchesFilters,
@@ -39,7 +42,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   FlatList,
   ImageBackground,
@@ -188,19 +197,7 @@ export default function WorkoutsScreen() {
     ]
   );
 
-  const hasActiveFilters = useMemo(
-    () =>
-      countActiveWorkoutFilters({
-        searchQuery,
-        activeCategoryFilter,
-        selectedEquipment,
-        noEquipmentOnly,
-        selectedFocus,
-        selectedFormat,
-        selectedTimeBuckets,
-      }) > 0,
-    [filterCriteria]
-  );
+  const hasActiveFilters = sheetFilterCount > 0;
 
   const handleResetAllFilters = () => {
     captureFilter('reset', 'all');
@@ -409,8 +406,12 @@ export default function WorkoutsScreen() {
                         <Ionicons name="body" size={30} color={Colors.accent} />
                       </View>
                       <View style={styles.recoveryCtaTextColumn}>
-                        <Text style={styles.shopEyebrow}>Move &amp; restore</Text>
-                        <Text style={styles.hubCtaTitle}>Mobility &amp; flows</Text>
+                        <Text style={styles.shopEyebrow}>
+                          Move &amp; restore
+                        </Text>
+                        <Text style={styles.hubCtaTitle}>
+                          Mobility &amp; flows
+                        </Text>
                         <Text style={styles.hubCtaDescription}>
                           Guided flows to help you recover and move better.
                         </Text>
@@ -420,7 +421,7 @@ export default function WorkoutsScreen() {
                     <CuratedSection
                       title="Disciplines"
                       description="get started with what you already know"
-                      size='large'
+                      size="large"
                       style={styles.titleSpace}
                     />
                     <ScrollView
@@ -466,13 +467,15 @@ export default function WorkoutsScreen() {
                 )}
 
                 <CuratedSection
-                  title={hasActiveFilters ? 'Filtered Workouts' : 'All Workouts'}
+                  title={
+                    hasActiveFilters ? 'Filtered Workouts' : 'All Workouts'
+                  }
                   description={
                     hasActiveFilters
                       ? `${sortedWorkouts.length} Results Found`
                       : `All our workouts, over ${allStandaloneWorkouts.length}+ workouts.`
                   }
-                  size='large'
+                  size="large"
                   style={styles.titleSpace}
                 />
               </View>

@@ -2,8 +2,8 @@
 //
 // AsyncStorage runs in a single JS process, so a per-key promise chain is enough
 // to serialize read-modify-write sequences and prevent the "two callers read the
-// same blob, last write wins" data loss. Cross-device conflicts are a separate
-// concern handled by the sync layer (`SyncManager.decideWinner`).
+// same blob, last write wins" data loss. Cross-device conflicts are resolved by
+// the account sync layer using per-key timestamps.
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { syncRemoveItem, syncSetItem } from '@/src/sync/syncStorage';
 

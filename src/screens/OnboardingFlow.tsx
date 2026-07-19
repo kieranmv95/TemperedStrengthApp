@@ -3,8 +3,11 @@ import { OnboardingOptionCard } from '@/src/components/onboarding/OnboardingOpti
 import { OnboardingProgressBar } from '@/src/components/onboarding/OnboardingProgressBar';
 import { onboardingStyles as styles } from '@/src/components/onboarding/onboardingStyles';
 import { Colors } from '@/src/constants/theme';
-import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
+import {
+  markAccountCreationSkipped,
+  markAccountIntroDismissed,
+} from '@/src/sync/accountStorage';
 import type {
   OnboardingExperienceLevel,
   OnboardingGender,
@@ -21,7 +24,7 @@ import {
   type WeightUnit,
 } from '@/src/utils/storage';
 import { useEventListener } from 'expo';
-import { router, type Href } from 'expo-router';
+import { router, type Href, useLocalSearchParams } from 'expo-router';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -32,7 +35,6 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -41,33 +43,16 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TOTAL_STEPS = 8;
-const ICLOUD_STEP_INDEX = 6;
+const ACCOUNT_STEP_INDEX = 6;
 const WELCOME_STEP_INDEX = 7;
 const ONBOARDING_GENDER_IMAGES = {
   female: require('@/assets/images/onboarding/FEMALE.png'),
   male: require('@/assets/images/onboarding/MALE.png'),
 } as const;
-const TOTAL_PROGRESS_STEPS = isIos ? TOTAL_STEPS - 1 : TOTAL_STEPS - 2;
-
-function nextStepIndex(current: number): number {
-  if (!isIos && current === ICLOUD_STEP_INDEX - 1) {
-    return WELCOME_STEP_INDEX;
-  }
-  return current + 1;
-}
-
-function prevStepIndex(current: number): number {
-  if (!isIos && current === WELCOME_STEP_INDEX) {
-    return ICLOUD_STEP_INDEX - 1;
-  }
-  return current - 1;
-}
+const TOTAL_PROGRESS_STEPS = TOTAL_STEPS - 2;
 
 function progressStepForIndex(stepIndex: number): number {
   if (stepIndex <= 0) return 1;
-  if (!isIos && stepIndex >= WELCOME_STEP_INDEX) {
-    return TOTAL_PROGRESS_STEPS;
-  }
   return Math.min(stepIndex, TOTAL_PROGRESS_STEPS);
 }
 
@@ -84,7 +69,7 @@ function onboardingStepName(stepIndex: number): string {
     case 5:
       return 'weight_units';
     case 6:
-      return 'icloud_backup';
+      return 'account_backup';
     case 7:
       return 'welcome_final';
     default:
@@ -118,21 +103,24 @@ const EXPERIENCE_OPTIONS: {
   value: OnboardingExperienceLevel;
   label: string;
 }[] = [
-    { value: 'beginner', label: 'Beginner' },
-    { value: 'intermediate', label: 'Intermediate' },
-    { value: 'advanced', label: 'Advanced' },
-  ];
+  { value: 'beginner', label: 'Beginner' },
+  { value: 'intermediate', label: 'Intermediate' },
+  { value: 'advanced', label: 'Advanced' },
+];
 
 function OnboardingFlow() {
   const insets = useSafeAreaInsets();
   const posthog = usePostHog();
-  const {
-    enabled: iCloudSyncEnabled,
-    isAvailable,
-    setEnabled,
-  } = useSyncManager();
+  const params = useLocalSearchParams<{
+    mode?: string;
+    accountCreated?: string;
+  }>();
+  const bypassAccountChoice =
+    params.mode === 'edit' || params.accountCreated === '1';
 
   const [stepIndex, setStepIndex] = useState(0);
+  const [accountChoiceMade, setAccountChoiceMade] =
+    useState(bypassAccountChoice);
   const [profile, setProfile] = useState<OnboardingProfile>({});
   const [introDone, setIntroDone] = useState(false);
 
@@ -141,15 +129,11 @@ function OnboardingFlow() {
   const [interests, setInterests] = useState<OnboardingInterest[]>([]);
   const [experienceLevel, setExperienceLevel] =
     useState<OnboardingExperienceLevel | null>(null);
-  const [iCloudStepToggle, setICloudStepToggle] = useState(false);
-  const [iCloudSaving, setICloudSaving] = useState(false);
   const [weightUnitStep, setWeightUnitStep] = useState<WeightUnit>('kg');
   const [weightUnitSaving, setWeightUnitSaving] = useState(false);
   const [completing, setCompleting] = useState(false);
 
   // Preload any existing profile so "Update Preferences" replays with current values.
-  // If no stored preference exists, default the iCloud toggle to the current
-  // sync manager state.
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -159,33 +143,25 @@ function OnboardingFlow() {
 
       const existing = await getOnboardingProfile();
       if (cancelled) return;
-      if (!existing) {
-        if (isIos) {
-          setICloudStepToggle(iCloudSyncEnabled);
-        }
-        return;
-      }
+      if (!existing) return;
       setProfile(existing);
       if (existing.name) setName(existing.name);
       if (existing.gender) setGender(existing.gender);
       if (existing.interests) setInterests(existing.interests);
       if (existing.experienceLevel)
         setExperienceLevel(existing.experienceLevel);
-      if (isIos) {
-        setICloudStepToggle(
-          typeof existing.iCloudSyncEnabled === 'boolean'
-            ? existing.iCloudSyncEnabled
-            : iCloudSyncEnabled
-        );
-      }
     })();
     return () => {
       cancelled = true;
     };
-    // We intentionally only want to run this on mount; `iCloudSyncEnabled` is
-    // only used to pick a sensible default when no preference exists.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (params.accountCreated !== '1') return;
+    setAccountChoiceMade(true);
+    setIntroDone(true);
+    setStepIndex(WELCOME_STEP_INDEX);
+  }, [params.accountCreated]);
 
   const fade = useRef(new Animated.Value(1)).current;
 
@@ -207,11 +183,13 @@ function OnboardingFlow() {
     [fade]
   );
 
-  const goToNameStep = useCallback(() => {
+  const finishIntro = useCallback(() => {
     if (introDone || completing) return;
     setIntroDone(true);
-    animateStepChange(() => setStepIndex(1));
-  }, [animateStepChange, completing, introDone]);
+    if (accountChoiceMade) {
+      animateStepChange(() => setStepIndex(1));
+    }
+  }, [accountChoiceMade, animateStepChange, completing, introDone]);
 
   const introVideoPlayer = useVideoPlayer(
     require('../../assets/onboarding.mp4'),
@@ -223,15 +201,20 @@ function OnboardingFlow() {
   );
 
   useEventListener(introVideoPlayer, 'playToEnd', () => {
-    goToNameStep();
+    finishIntro();
   });
 
   const skipIntro = useCallback(() => {
     posthog.capture(posthogEventsNames.onboarding.skip, {
       step_name: 'intro',
     });
-    goToNameStep();
-  }, [posthog, goToNameStep]);
+    finishIntro();
+  }, [posthog, finishIntro]);
+
+  const continueAsNewUser = useCallback(() => {
+    setAccountChoiceMade(true);
+    animateStepChange(() => setStepIndex(1));
+  }, [animateStepChange]);
 
   const toggleInterest = (value: OnboardingInterest) => {
     setInterests((prev) =>
@@ -247,6 +230,7 @@ function OnboardingFlow() {
     try {
       await setOnboardingProfile(finalProfile);
       await setOnboarded(true);
+      await markAccountIntroDismissed();
       router.replace(destination);
     } catch (error) {
       console.error('Error completing onboarding:', error);
@@ -264,13 +248,17 @@ function OnboardingFlow() {
       return;
     }
     setProfile(nextProfile);
-    animateStepChange(() => setStepIndex((i) => nextStepIndex(i)));
+    animateStepChange(() => setStepIndex((i) => i + 1));
   };
 
   const handleSkipStep = () => {
     // Advance without committing this step's field to the profile.
     if (stepIndex === 0) {
-      goToNameStep();
+      finishIntro();
+      return;
+    }
+    if (stepIndex === ACCOUNT_STEP_INDEX) {
+      handleSkipAccount();
       return;
     }
     posthog.capture(posthogEventsNames.onboarding.skip, {
@@ -280,28 +268,29 @@ function OnboardingFlow() {
       completeOnboarding(profile);
       return;
     }
-    animateStepChange(() => setStepIndex((i) => nextStepIndex(i)));
+    animateStepChange(() => setStepIndex((i) => i + 1));
   };
 
   const handleBackStep = () => {
     if (stepIndex <= 1) return;
-    animateStepChange(() => setStepIndex((i) => Math.max(1, prevStepIndex(i))));
+    animateStepChange(() => setStepIndex((i) => Math.max(1, i - 1)));
   };
 
   const handleSkipSetup = () => {
     Alert.alert(
-      'Skip setup?',
-      'You can run onboarding again any time from Account.',
+      'Skip setup and account creation?',
+      'Without an account, your data only lives on this device. If you uninstall the app or lose your phone, it may be gone for good.',
       [
         { text: 'Go back', style: 'cancel' },
         {
           text: 'Skip anyway',
           style: 'destructive',
-          onPress: () => {
+          onPress: async () => {
             posthog.capture(posthogEventsNames.onboarding.sectionSkip, {
               section_name: 'full_setup',
             });
-            completeOnboarding(profile);
+            await markAccountCreationSkipped();
+            await completeOnboarding(profile);
           },
         },
       ]
@@ -351,36 +340,45 @@ function OnboardingFlow() {
     }
   };
 
-  const handleContinueICloud = async () => {
-    setICloudSaving(true);
+  const handleCreateAccount = async () => {
     try {
-      if (iCloudStepToggle) {
-        const result = await setEnabled(true);
-        if (!result.isAvailable) {
-          Alert.alert(
-            'iCloud Unavailable',
-            "We couldn't access iCloud on this device/account. Your data will remain local only."
-          );
-          await setEnabled(false);
-          advanceOrFinish({ ...profile, iCloudSyncEnabled: false });
-          return;
-        }
-        advanceOrFinish({ ...profile, iCloudSyncEnabled: true });
-      } else {
-        if (iCloudSyncEnabled) {
-          await setEnabled(false);
-        }
-        advanceOrFinish({ ...profile, iCloudSyncEnabled: false });
-      }
+      await setOnboardingProfile(profile);
+      router.push({
+        pathname: '/account/create-account',
+        params: { intent: 'create', returnTo: '/onboarding' },
+      } as unknown as Href);
     } catch (error) {
-      console.error('Error updating iCloud sync during onboarding:', error);
+      console.error('Error saving onboarding profile before account:', error);
       Alert.alert(
         'Something went wrong',
-        'We could not update iCloud sync. Please try again.'
+        'We could not save your preferences. Please try again.'
       );
-    } finally {
-      setICloudSaving(false);
     }
+  };
+
+  const handleSkipAccount = () => {
+    Alert.alert(
+      'Continue without an account?',
+      'Your data will only live on this device. If you uninstall the app or lose your phone, it may be gone for good.',
+      [
+        {
+          text: 'Create account',
+          onPress: () => {
+            void handleCreateAccount();
+          },
+        },
+        {
+          text: 'Skip anyway',
+          style: 'destructive',
+          onPress: () => {
+            void (async () => {
+              await markAccountCreationSkipped();
+              advanceOrFinish(profile);
+            })();
+          },
+        },
+      ]
+    );
   };
 
   const renderStep = () => {
@@ -392,7 +390,8 @@ function OnboardingFlow() {
           <View style={styles.stepBody}>
             <Text style={styles.stepTitle}>What can we call you?</Text>
             <Text style={styles.stepSubtitle}>
-              Add a name or nickname so we can make the app feel a bit more personal.
+              Add a name or nickname so we can make the app feel a bit more
+              personal.
             </Text>
             <TextInput
               value={name}
@@ -489,29 +488,17 @@ function OnboardingFlow() {
       case 6:
         return (
           <View style={styles.stepBody}>
-            <Text style={styles.stepTitle}>Back up to iCloud</Text>
+            <Text style={styles.stepTitle}>Save your progress</Text>
             <Text style={styles.stepSubtitle}>
-              Keep your programs, logs, and personal bests safe across devices.
+              Create an account to keep your programs, logs, preferences, and
+              personal bests safe across devices.
             </Text>
-            <View style={styles.iCloudCard}>
-              <Text style={styles.iCloudTitle}>iCloud Sync</Text>
-              <Text style={styles.iCloudDescription}>
-                AsyncStorage stays primary on this device; iCloud is used for
-                backup and restore.
+            <View style={styles.accountCard}>
+              <Text style={styles.accountCardTitle}>Local-first backup</Text>
+              <Text style={styles.accountCardDescription}>
+                The app keeps working offline. When you’re online, signed-in
+                devices securely sync your data.
               </Text>
-              <View style={styles.iCloudRow}>
-                <Text style={styles.iCloudToggleLabel}>Enable iCloud Sync</Text>
-                <Switch
-                  value={iCloudStepToggle}
-                  onValueChange={setICloudStepToggle}
-                  disabled={iCloudSaving}
-                />
-              </View>
-              {iCloudStepToggle && !isAvailable ? (
-                <Text style={styles.iCloudUnavailable}>
-                  iCloud is currently unavailable on this device/account.
-                </Text>
-              ) : null}
             </View>
           </View>
         );
@@ -546,7 +533,7 @@ function OnboardingFlow() {
       case 0:
         return {
           label: 'Continue',
-          onPress: goToNameStep,
+          onPress: finishIntro,
           disabled: completing,
         };
       case 1:
@@ -581,9 +568,9 @@ function OnboardingFlow() {
         };
       case 6:
         return {
-          label: 'Continue',
-          onPress: handleContinueICloud,
-          disabled: iCloudSaving || completing,
+          label: 'Create account',
+          onPress: handleCreateAccount,
+          disabled: completing,
         };
       case 7:
         return {
@@ -592,14 +579,15 @@ function OnboardingFlow() {
           disabled: completing,
         };
       default:
-        return { label: 'Continue', onPress: () => { }, disabled: true };
+        return { label: 'Continue', onPress: () => {}, disabled: true };
     }
   };
 
   const cta = primaryCta();
   const isLastStep = stepIndex === TOTAL_STEPS - 1;
   const canGoBack = stepIndex > 1;
-  const showIntro = stepIndex === 0;
+  const showIntro = stepIndex === 0 && !introDone;
+  const showAccountChoice = stepIndex === 0 && introDone && !accountChoiceMade;
   const progressCurrent = progressStepForIndex(stepIndex);
 
   const KeyboardWrapper = isIos ? KeyboardAvoidingView : View;
@@ -638,7 +626,11 @@ function OnboardingFlow() {
                   disabled={completing}
                 >
                   <Text
-                    style={{ color: Colors.textPrimary, fontSize: 16, fontWeight: '700' }}
+                    style={{
+                      color: Colors.textPrimary,
+                      fontSize: 16,
+                      fontWeight: '700',
+                    }}
                   >
                     Skip
                   </Text>
@@ -646,6 +638,39 @@ function OnboardingFlow() {
               </View>
 
               <View style={{ gap: 12 }} />
+            </View>
+          </View>
+        ) : showAccountChoice ? (
+          <View style={styles.accountChoiceContainer}>
+            <View style={[styles.stepBody, { paddingHorizontal: 24 }]}>
+              <Text style={styles.stepTitle}>
+                Have you used Tempered Strength before?
+              </Text>
+              <Text style={styles.stepSubtitle}>
+                Sign in to restore your training data, or continue if you’re
+                new.
+              </Text>
+            </View>
+            <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
+              <TouchableOpacity
+                style={styles.primaryButton}
+                onPress={() =>
+                  router.push({
+                    pathname: '/account/create-account',
+                    params: { intent: 'restore', returnTo: '/' },
+                  } as unknown as Href)
+                }
+              >
+                <Text style={styles.primaryButtonText}>
+                  I already have an account
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.skipStepButton}
+                onPress={continueAsNewUser}
+              >
+                <Text style={styles.skipStepText}>I’m new</Text>
+              </TouchableOpacity>
             </View>
           </View>
         ) : (
@@ -686,9 +711,7 @@ function OnboardingFlow() {
               </ScrollView>
             )}
 
-            <View
-              style={[styles.footer, { paddingBottom: insets.bottom }]}
-            >
+            <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
               <TouchableOpacity
                 style={[
                   styles.primaryButton,
@@ -706,7 +729,7 @@ function OnboardingFlow() {
                   <TouchableOpacity
                     style={styles.backStepButton}
                     onPress={handleBackStep}
-                    disabled={completing || iCloudSaving || weightUnitSaving}
+                    disabled={completing || weightUnitSaving}
                     accessibilityRole="button"
                     accessibilityLabel="Go back"
                   >
@@ -733,9 +756,7 @@ function OnboardingFlow() {
                   disabled={completing}
                   accessibilityRole="button"
                   accessibilityLabel={
-                    isLastStep
-                      ? 'Skip this step and finish'
-                      : 'Skip this step'
+                    isLastStep ? 'Skip this step and finish' : 'Skip this step'
                   }
                 >
                   <Text style={styles.skipStepText}>Skip</Text>

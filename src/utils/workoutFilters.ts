@@ -6,10 +6,7 @@ import type {
   WorkoutFocusTag,
   WorkoutFormatTag,
 } from '@/src/types/workouts';
-import {
-  isWorkoutFocusTag,
-  isWorkoutFormatTag,
-} from '@/src/types/workouts';
+import { isWorkoutFocusTag, isWorkoutFormatTag } from '@/src/types/workouts';
 
 export type WorkoutTimeBucket = 'quick' | 'short' | 'medium' | 'long';
 

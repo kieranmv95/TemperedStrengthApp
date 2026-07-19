@@ -2,13 +2,11 @@ import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
+  AppSafeAreaView,
+  AppScrollView,
+} from '@/src/components/AppSafeAreaView';
 
 type ToolScreenShellProps = {
   title: string;

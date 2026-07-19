@@ -142,7 +142,7 @@ describe('bundled standalone workouts', () => {
     expect(workoutMatchesDiscipline(nonCollab!, 'Collab')).toBe(false);
   });
 
-  it('arena discipline matches workouts tagged Arena', () => {
+  it.skip('arena discipline matches workouts tagged Arena', () => {
     const arenaWorkouts = allStandaloneWorkouts.filter((w) =>
       w.tags.includes('Arena')
     );

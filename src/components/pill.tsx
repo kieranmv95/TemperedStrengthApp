@@ -31,8 +31,7 @@ export const Pill = ({
     <TouchableOpacity
       style={[
         isCard ? styles.cardTab : styles.filterTab,
-        isActive &&
-          (isCard ? styles.cardTabActive : styles.filterTabActive),
+        isActive && (isCard ? styles.cardTabActive : styles.filterTabActive),
       ]}
       onPress={onPress}
       disabled={disabled}
@@ -43,11 +42,7 @@ export const Pill = ({
           name={icon as any}
           size={isCard ? 22 : 14}
           color={
-            isCard
-              ? Colors.accent
-              : isActive
-                ? Colors.accent
-                : Colors.textMuted
+            isCard ? Colors.accent : isActive ? Colors.accent : Colors.textMuted
           }
           style={!isCard ? styles.filterIcon : undefined}
         />

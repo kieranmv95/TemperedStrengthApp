@@ -3,7 +3,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Spacing } from '@/src/constants/theme';
 import { logFormModalStyles as styles } from './logFormModalStyles';
 
 type LogFormModalWhenPickersProps = {

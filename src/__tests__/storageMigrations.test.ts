@@ -6,6 +6,7 @@ const WORKOUT_NOTES_KEY = 'workout_notes';
 const SWAP_COUNT_KEY = 'swap_count';
 const SWAP_COUNT_MONTH_KEY = 'swap_count_month';
 const SWAP_COUNT_STATE_KEY = 'swap_count_state';
+const ONBOARDING_PROFILE_KEY = 'onboarding_profile';
 
 describe('storage migrations', () => {
   beforeEach(async () => {
@@ -16,7 +17,7 @@ describe('storage migrations', () => {
   it('records the latest schema version after running', async () => {
     await runStorageMigrations();
     const version = await AsyncStorage.getItem(SCHEMA_VERSION_KEY);
-    expect(Number(version)).toBeGreaterThanOrEqual(2);
+    expect(Number(version)).toBeGreaterThanOrEqual(3);
   });
 
   it('is idempotent across repeated runs', async () => {
@@ -105,5 +106,23 @@ describe('storage migrations', () => {
         AsyncStorage.getItem(SWAP_COUNT_STATE_KEY)
       ).resolves.toBeNull();
     });
+  });
+
+  it('removes retired iCloud settings', async () => {
+    await AsyncStorage.multiSet([
+      ['icloud_sync_enabled', 'true'],
+      [
+        ONBOARDING_PROFILE_KEY,
+        JSON.stringify({ name: 'Sam', iCloudSyncEnabled: true }),
+      ],
+    ]);
+
+    await runStorageMigrations();
+
+    await expect(
+      AsyncStorage.getItem('icloud_sync_enabled')
+    ).resolves.toBeNull();
+    const profile = await AsyncStorage.getItem(ONBOARDING_PROFILE_KEY);
+    expect(JSON.parse(profile as string)).toEqual({ name: 'Sam' });
   });
 });

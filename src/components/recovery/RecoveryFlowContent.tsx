@@ -72,7 +72,9 @@ function BlockCard({
                 <Ionicons name={iconName} size={18} color={Colors.accent} />
                 <Text style={flowStyles.doseText}>
                   {step.label ? (
-                    <Text style={flowStyles.doseStepLabel}>{step.label} · </Text>
+                    <Text style={flowStyles.doseStepLabel}>
+                      {step.label} ·{' '}
+                    </Text>
                   ) : null}
                   {step.text}
                 </Text>
@@ -83,7 +85,9 @@ function BlockCard({
             <RecoveryBlockTimer dose={block.dose} />
           ) : null}
           {block.instructions ? (
-            <Text style={flowStyles.blockInstructions}>{block.instructions}</Text>
+            <Text style={flowStyles.blockInstructions}>
+              {block.instructions}
+            </Text>
           ) : null}
         </View>
       </View>
@@ -182,7 +186,7 @@ export function RecoveryFlowContent({ recovery }: RecoveryFlowContentProps) {
                     label={tag}
                     isActive={false}
                     disabled
-                    onPress={() => { }}
+                    onPress={() => {}}
                   />
                 ))}
               </View>
@@ -218,7 +222,12 @@ export function RecoveryFlowContent({ recovery }: RecoveryFlowContentProps) {
       <View
         style={[
           flowStyles.footer,
-          { paddingBottom: Math.max(getEffectiveBottomInset(insets.bottom), Spacing.lg) },
+          {
+            paddingBottom: Math.max(
+              getEffectiveBottomInset(insets.bottom),
+              Spacing.lg
+            ),
+          },
         ]}
       >
         <View style={flowStyles.footerActions}>

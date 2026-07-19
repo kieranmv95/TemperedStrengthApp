@@ -7,7 +7,8 @@ import { useEffect } from 'react';
 import { ActivityIndicator, StyleSheet } from 'react-native';
 
 export default function CompetitionRoute() {
-  const { competition, isLoading, isRefetching, refetch } = useLiveCompetition();
+  const { competition, isLoading, isRefetching, refetch } =
+    useLiveCompetition();
 
   useEffect(() => {
     if (!isLoading && !competition) {

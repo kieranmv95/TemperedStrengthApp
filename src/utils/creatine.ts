@@ -79,7 +79,9 @@ export function calculateCreatineSizeFocusedDoseG(
 }
 
 /** Total daily amount during a typical loading phase (5–7 days). */
-export function calculateCreatineLoadingDoseG(bodyweightKg: number): number | null {
+export function calculateCreatineLoadingDoseG(
+  bodyweightKg: number
+): number | null {
   if (!Number.isFinite(bodyweightKg) || bodyweightKg <= 0) {
     return null;
   }

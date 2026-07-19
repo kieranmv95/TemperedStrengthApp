@@ -180,11 +180,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             style={styles.setControlButton}
             onPress={incrementSets}
           >
-            <Ionicons
-              name="add"
-              size={24}
-              color={Colors.accent}
-            />
+            <Ionicons name="add" size={24} color={Colors.accent} />
           </TouchableOpacity>
           {restTimeSeconds && dayIndex !== null && (
             <TouchableOpacity
@@ -254,8 +250,9 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             <Text style={styles.swapButtonText}>
               {isPro
                 ? 'Swap Exercise'
-                : `Swap Exercise${remainingSwaps !== null ? ` (${remainingSwaps})` : ''
-                }`}
+                : `Swap Exercise${
+                    remainingSwaps !== null ? ` (${remainingSwaps})` : ''
+                  }`}
             </Text>
           </TouchableOpacity>
         </View>

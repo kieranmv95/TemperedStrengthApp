@@ -11,7 +11,7 @@ description: What Tempered Strength is and where code lives
 - **Expo Router** (file-based routing) — `app/` is thin route files; screens live under `src/screens/`.
 - **React Native / TypeScript** — Expo SDK 54, React 19.
 - **State** — No Redux/Zustand-style global store. **React Context** for subscription (RevenueCat) and sync; otherwise **local component state** and hooks. **AsyncStorage** (via `src/utils/storage.ts`) for persisted app data.
-- **Data** — **Local-first**: programs, workouts, exercises, and Brief content ship as **bundled data** in `src/data/` (and JSON where used). Subscriptions via **RevenueCat** (`src/services/revenueCatService.ts`). Optional **iCloud KVS** sync under `src/sync/`.
+- **Data** — **Local-first**: programs, workouts, exercises, and Brief content ship as **bundled data** in `src/data/` (and JSON where used). Subscriptions via **RevenueCat** (`src/services/revenueCatService.ts`). Optional account backup uses **Supabase** under `src/sync/`.
 
 ## Structure
 
@@ -22,5 +22,5 @@ description: What Tempered Strength is and where code lives
 - **`src/data/`** — Programs (`data/programs/`), workouts, exercises, Brief (`data/brief/`).
 - **`src/utils/`** — Storage, program math, pivot/swap engine, formatting helpers.
 - **`src/services/`** — External integrations (e.g. RevenueCat, metrics).
-- **`src/sync/`** — Sync manager and iCloud provider plumbing.
+- **`src/sync/`** — Offline queue and Supabase account sync.
 - **`src/types/`** — Shared TypeScript types.

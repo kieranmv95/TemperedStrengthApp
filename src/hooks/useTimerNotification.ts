@@ -39,7 +39,8 @@ export function useTimerNotification() {
     async (durationSeconds: number) => {
       await cancelTimerNotification();
 
-      const identifier = await scheduleTimerFinishedNotification(durationSeconds);
+      const identifier =
+        await scheduleTimerFinishedNotification(durationSeconds);
       notificationIdRef.current = identifier;
     },
     [cancelTimerNotification]

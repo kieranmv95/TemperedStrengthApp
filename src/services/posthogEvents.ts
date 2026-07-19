@@ -63,6 +63,10 @@ export const posthogEventsNames = {
     notesCopyReplaceConfirmed: 'notes_copy_replace_confirmed',
     notesCopyReplaceCancelled: 'notes_copy_replace_cancelled',
   },
+  sync: {
+    /** A synced KV value exceeded the 30% backup size warning threshold. */
+    kvSizeLimit: 'KV_SIZE_LIMIT',
+  },
 } as const;
 
 /** Maps program training day index to week/day blocks for analytics (1-based). */

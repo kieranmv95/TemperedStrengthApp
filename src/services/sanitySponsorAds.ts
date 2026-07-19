@@ -6,7 +6,7 @@ const SANITY_PROJECT_ID = 'n1zlvrwu';
 const SANITY_DATASET = environments.sanity;
 const SANITY_API_VERSION = '2024-01-01';
 
-/** AsyncStorage key for home carousel sponsor ads; local-only (not iCloud-synced). */
+/** AsyncStorage key for home carousel sponsor ads; local-only. */
 export const SANITY_SPONSOR_ADS_CACHE_KEY = 'sanity_sponsor_ads_v1';
 /** AsyncStorage key for Hub shop catalog (all sponsor ads). */
 export const SANITY_SPONSOR_SHOP_CACHE_KEY = 'sanity_sponsor_shop_v1';

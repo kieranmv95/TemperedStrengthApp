@@ -5,6 +5,7 @@ import {
   purchasePackage,
   restorePurchases,
 } from '@/src/services/revenueCatService';
+import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { getProgramById } from '@/src/utils/program';
 import {
   getActiveProgramId,
@@ -81,6 +82,7 @@ export function SubscriptionProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const { dataRevision } = useSyncManager();
   const [state, setState] = useState<SubscriptionState>({
     isPro: false,
     isPromoPro: false,
@@ -193,8 +195,7 @@ export function SubscriptionProvider({
       applyEffectiveProState({
         customerInfo,
         promoProGrant: promoProGrantRef.current,
-        isDeveloperProOverrideEnabled:
-          isDeveloperProOverrideEnabledRef.current,
+        isDeveloperProOverrideEnabled: isDeveloperProOverrideEnabledRef.current,
       });
     },
     [applyEffectiveProState]
@@ -331,8 +332,7 @@ export function SubscriptionProvider({
       const isPro = computeIsPro({
         customerInfo,
         promoProGrant: promoProGrantRef.current,
-        isDeveloperProOverrideEnabled:
-          isDeveloperProOverrideEnabledRef.current,
+        isDeveloperProOverrideEnabled: isDeveloperProOverrideEnabledRef.current,
       });
       updateStateFromCustomerInfo(customerInfo);
       return { success: true, customerInfo, isPro };
@@ -377,6 +377,12 @@ export function SubscriptionProvider({
   const refresh = useCallback(async () => {
     await Promise.all([loadCustomerInfo(), refreshPromoPro()]);
   }, [loadCustomerInfo, refreshPromoPro]);
+
+  // Account sync writes AsyncStorage directly; re-read promo/pro flags after pull.
+  useEffect(() => {
+    if (dataRevision === 0) return;
+    void refreshPromoPro();
+  }, [dataRevision, refreshPromoPro]);
 
   // Set up RevenueCat listener for customer info updates
   useEffect(() => {
