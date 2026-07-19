@@ -84,7 +84,7 @@ export function SubscriptionProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { dataRevision, user, isReady: isAuthReady } = useSyncManager();
+  const { dataRevision, user, isSessionReady } = useSyncManager();
   const [state, setState] = useState<SubscriptionState>({
     isPro: false,
     isPromoPro: false,
@@ -108,6 +108,15 @@ export function SubscriptionProvider({
   /** Bumped on every identity change so in-flight CustomerInfo fetches are ignored. */
   const identityEpochRef = useRef(0);
   const boundRevenueCatUserIdRef = useRef<string | null | undefined>(undefined);
+  const identitySyncInFlightRef = useRef(false);
+  const identityRetryCountRef = useRef(0);
+  const userIdRef = useRef<string | null>(user?.id ?? null);
+  const isSessionReadyRef = useRef(isSessionReady);
+  const reconcileRevenueCatIdentityRef = useRef<
+    ((nextUserId: string | null) => Promise<void>) | null
+  >(null);
+  userIdRef.current = user?.id ?? null;
+  isSessionReadyRef.current = isSessionReady;
 
   const handleSubscriptionExpiry = useCallback(async () => {
     try {
@@ -377,59 +386,88 @@ export function SubscriptionProvider({
     await Promise.all([loadCustomerInfo(), refreshPromoPro()]);
   }, [loadCustomerInfo, refreshPromoPro]);
 
-  useEffect(() => {
-    if (dataRevision === 0) return;
-    void refreshPromoPro();
-  }, [dataRevision, refreshPromoPro]);
+  const reconcileRevenueCatIdentity = useCallback(
+    async (nextUserId: string | null) => {
+      if (boundRevenueCatUserIdRef.current === nextUserId) {
+        return;
+      }
+      if (identitySyncInFlightRef.current) {
+        return;
+      }
 
-  // Wait for auth readiness, then bind RevenueCat identity before trusting Pro state.
-  // Without this, an anonymous getCustomerInfo() can finish after logIn() and
-  // overwrite Pro with free + fire a false "Subscription Expired" alert.
-  useEffect(() => {
-    if (!isAuthReady) return;
+      const epoch = ++identityEpochRef.current;
+      identitySyncInFlightRef.current = true;
+      identitySettledRef.current = false;
+      previousIsProRef.current = null;
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-    const nextUserId = user?.id ?? null;
-    if (boundRevenueCatUserIdRef.current === nextUserId) {
-      return;
-    }
-
-    const epoch = ++identityEpochRef.current;
-    identitySettledRef.current = false;
-    setState((prev) => ({ ...prev, isLoading: true, error: null }));
-
-    let cancelled = false;
-    void (async () => {
       try {
         const customerInfo = await syncRevenueCatIdentity(nextUserId);
-        if (cancelled || epoch !== identityEpochRef.current) return;
+        if (epoch !== identityEpochRef.current) return;
 
         boundRevenueCatUserIdRef.current = nextUserId;
         identitySettledRef.current = true;
+        identityRetryCountRef.current = 0;
 
         if (customerInfo) {
-          // Identity switches can look like Pro→free; never alert for that.
           updateStateFromCustomerInfo(customerInfo, { detectExpiry: false });
         } else {
           await loadCustomerInfo({ detectExpiry: false });
         }
       } catch (error) {
-        if (cancelled || epoch !== identityEpochRef.current) return;
+        if (epoch !== identityEpochRef.current) return;
         console.error('Failed to sync RevenueCat identity:', error);
-        // Still mark settled so the UI is not stuck loading forever.
-        boundRevenueCatUserIdRef.current = nextUserId;
-        identitySettledRef.current = true;
-        try {
-          await loadCustomerInfo({ detectExpiry: false });
-        } catch {
-          setState((prev) => ({ ...prev, isLoading: false }));
+        // Leave unbound so foreground / delayed retry can call logIn again.
+        // Do not apply anonymous CustomerInfo for a signed-in user.
+        identitySettledRef.current = false;
+        setState((prev) => ({
+          ...prev,
+          isLoading: true,
+          error: error as Error,
+        }));
+        if (identityRetryCountRef.current < 1) {
+          identityRetryCountRef.current += 1;
+          setTimeout(() => {
+            if (
+              epoch === identityEpochRef.current &&
+              boundRevenueCatUserIdRef.current !== nextUserId
+            ) {
+              void reconcileRevenueCatIdentityRef.current?.(nextUserId);
+            }
+          }, 2_000);
+        }
+        setTimeout(() => {
+          if (
+            epoch === identityEpochRef.current &&
+            boundRevenueCatUserIdRef.current !== nextUserId
+          ) {
+            setState((prev) => ({ ...prev, isLoading: false }));
+          }
+        }, 8_000);
+      } finally {
+        if (epoch === identityEpochRef.current) {
+          identitySyncInFlightRef.current = false;
         }
       }
-    })();
+    },
+    [loadCustomerInfo, updateStateFromCustomerInfo]
+  );
+  reconcileRevenueCatIdentityRef.current = reconcileRevenueCatIdentity;
 
-    return () => {
-      cancelled = true;
-    };
-  }, [isAuthReady, user?.id, loadCustomerInfo, updateStateFromCustomerInfo]);
+  useEffect(() => {
+    if (dataRevision === 0) return;
+    void refreshPromoPro();
+  }, [dataRevision, refreshPromoPro]);
+
+  // Wait for session resolution, then bind RevenueCat identity before trusting Pro.
+  // Without this, an anonymous getCustomerInfo() can finish after logIn() and
+  // overwrite Pro with free + fire a false "Subscription Expired" alert.
+  // Uses isSessionReady (not full KV isReady) so Pro is not blocked on sync.
+  useEffect(() => {
+    if (!isSessionReady) return;
+    identityRetryCountRef.current = 0;
+    void reconcileRevenueCatIdentity(user?.id ?? null);
+  }, [isSessionReady, user?.id, reconcileRevenueCatIdentity]);
 
   // Local flags, offerings, and RevenueCat listener. Do not finalize Pro here —
   // identity reconciliation owns the first trusted CustomerInfo apply.
@@ -491,8 +529,20 @@ export function SubscriptionProvider({
     listenerRef.current = listener;
 
     const handleAppState = (nextState: AppStateStatus) => {
-      if (nextState === 'active') {
-        void refreshPromoPro();
+      if (nextState !== 'active') return;
+
+      void refreshPromoPro();
+
+      if (
+        isSessionReadyRef.current &&
+        boundRevenueCatUserIdRef.current !== userIdRef.current
+      ) {
+        void reconcileRevenueCatIdentityRef.current?.(userIdRef.current);
+        return;
+      }
+
+      if (identitySettledRef.current) {
+        void loadCustomerInfo();
       }
     };
     const appStateSubscription = AppState.addEventListener(

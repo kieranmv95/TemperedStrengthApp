@@ -58,7 +58,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   onClose: _onClose,
 }) => {
   const insets = useSafeAreaInsets();
-  const { isPro } = useSubscription();
+  const { isPro, isLoading: subscriptionLoading } = useSubscription();
   const { profile } = useOnboardingProfile();
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [showProgramDetails, setShowProgramDetails] = useState(false);
@@ -294,6 +294,9 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   };
 
   const handleStartProgram = () => {
+    if (subscriptionLoading) {
+      return;
+    }
     if (selectedProgram?.isPro && !isPro) {
       Alert.alert(
         'Pro Required',
@@ -581,7 +584,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           <ProgramLauncherProgramCard
             key={program.id}
             program={program}
-            isLocked={program.isPro && !isPro}
+            isLocked={program.isPro && !subscriptionLoading && !isPro}
             isRecommended={isRecommended}
             onSelect={handleSelectProgram}
           />
@@ -591,7 +594,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           visible={showProgramDetails}
           onClose={() => setShowProgramDetails(false)}
           selectedProgram={selectedProgram}
-          isPro={isPro}
+          isPro={subscriptionLoading || isPro}
           onStartProgram={handleStartProgram}
           onUpgradePress={() => {
             setShowProgramDetails(false);

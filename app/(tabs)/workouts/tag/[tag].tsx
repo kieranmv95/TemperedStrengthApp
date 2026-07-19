@@ -31,7 +31,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WorkoutsByTagScreen() {
-  const { isPro } = useSubscription();
+  const { isPro, isLoading: subscriptionLoading } = useSubscription();
   const posthog = usePostHog();
   const params = useLocalSearchParams<{ tag?: string }>();
   const tag = typeof params.tag === 'string' ? params.tag : '';
@@ -198,7 +198,7 @@ export default function WorkoutsByTagScreen() {
             <WorkoutCard
               workout={item}
               isFavorite={favorites.includes(item.id)}
-              isPro={isPro}
+              isPro={isPro || subscriptionLoading}
               onToggleFavorite={handleToggleFavorite}
               onPress={handleWorkoutPress}
               onLockedPress={handleLockedPress}

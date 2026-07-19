@@ -59,7 +59,7 @@ import {
 } from 'react-native';
 
 export default function WorkoutsScreen() {
-  const { isPro } = useSubscription();
+  const { isPro, isLoading: subscriptionLoading } = useSubscription();
   const posthog = usePostHog();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategoryFilter, setActiveCategoryFilter] =
@@ -484,7 +484,7 @@ export default function WorkoutsScreen() {
               <WorkoutCard
                 workout={item}
                 isFavorite={favorites.includes(item.id)}
-                isPro={isPro}
+                isPro={isPro || subscriptionLoading}
                 onToggleFavorite={handleToggleFavorite}
                 onPress={handleWorkoutPress}
                 onLockedPress={handleLockedPress}

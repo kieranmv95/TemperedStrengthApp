@@ -31,6 +31,12 @@ import {
 
 type SyncContextValue = {
   isConfigured: boolean;
+  /**
+   * True once getSession() has resolved (before account KV sync finishes).
+   * Use for auth-dependent SDK binding (e.g. RevenueCat identity).
+   */
+  isSessionReady: boolean;
+  /** True once initial session restore + first sync attempt have finished. */
   isReady: boolean;
   /** Increments after local storage is updated by account sync/pull. */
   dataRevision: number;
@@ -74,6 +80,7 @@ type SyncManagerProviderProps = {
 };
 
 export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
+  const [isSessionReady, setIsSessionReady] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [dataRevision, setDataRevision] = useState(0);
   const [syncError, setSyncError] = useState<string | null>(null);
@@ -101,6 +108,7 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
 
   useEffect(() => {
     if (!supabase) {
+      setIsSessionReady(true);
       setIsReady(true);
       return;
     }
@@ -113,6 +121,8 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
       const restoredSession = data.session;
       sessionRef.current = restoredSession;
       setSession(restoredSession);
+      // Session is known — allow RevenueCat identity bind before KV sync.
+      setIsSessionReady(true);
       if (restoredSession) {
         await setAccountActive(restoredSession.user.id);
         await syncNow();
@@ -265,6 +275,7 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
   const value = useMemo<SyncContextValue>(
     () => ({
       isConfigured: isSupabaseConfigured,
+      isSessionReady,
       isReady,
       dataRevision,
       syncError,
@@ -280,6 +291,7 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
       dataRevision,
       deleteAccount,
       isReady,
+      isSessionReady,
       sendOtp,
       session,
       signOut,

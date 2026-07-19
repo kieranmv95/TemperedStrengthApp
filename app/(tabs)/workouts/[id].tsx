@@ -31,7 +31,7 @@ export default function WorkoutDetailScreen() {
     return getStandaloneWorkoutById(workoutId);
   }, [workoutId]);
 
-  const { isPro } = useSubscription();
+  const { isPro, isLoading: subscriptionLoading } = useSubscription();
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const viewSource =
@@ -106,7 +106,7 @@ export default function WorkoutDetailScreen() {
     );
   }
 
-  const isLocked = workout.isPremium && !isPro;
+  const isLocked = workout.isPremium && !subscriptionLoading && !isPro;
   const isFavorite = favorites.includes(workout.id);
 
   return (
