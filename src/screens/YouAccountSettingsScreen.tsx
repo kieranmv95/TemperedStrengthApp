@@ -473,6 +473,60 @@ export function YouAccountSettingsScreen() {
           </TouchableOpacity>
 
           <View style={styles.settingsSection}>
+            <Text style={styles.settingsSectionTitle}>
+              Pro across devices FAQ
+            </Text>
+            <View style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>
+                  Use the same account on every device
+                </Text>
+                <Text style={styles.settingDescription}>
+                  Sign in with the same Tempered Strength account on iPhone and
+                  Android. Pro follows your account, not just the phone you paid
+                  on.
+                </Text>
+              </View>
+            </View>
+            <View style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>
+                  Billing stays with the store you bought from
+                </Text>
+                <Text style={styles.settingDescription}>
+                  An Apple purchase renews through Apple. A Google Play purchase
+                  renews through Google. You still get Pro on both platforms when
+                  signed in.
+                </Text>
+              </View>
+            </View>
+            <View style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>
+                  “Restore purchases” is store-specific
+                </Text>
+                <Text style={styles.settingDescription}>
+                  Restore on Android only restores Google Play purchases. For an
+                  Apple subscription on Android, sign into your Tempered Strength
+                  account instead.
+                </Text>
+              </View>
+            </View>
+            <View style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>
+                  Bought Pro before creating an account?
+                </Text>
+                <Text style={styles.settingDescription}>
+                  Open the app on the device you purchased on, sign in once, then
+                  sign into the same account on your other device. That links Pro
+                  to your account.
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.settingsSection}>
             <Text style={styles.settingsSectionTitle}>Legal</Text>
             <View style={styles.settingItem}>
               <View style={styles.settingContent}>

@@ -231,12 +231,30 @@ export async function setUserId(userId: string): Promise<void> {
 /**
  * Log out current user
  */
-export async function logOutUser(): Promise<CustomerInfo> {
+export async function logOutUser(): Promise<CustomerInfo | null> {
   try {
+    const anonymous = await Purchases.isAnonymous();
+    if (anonymous) {
+      return null;
+    }
     const customerInfo = await Purchases.logOut();
     return customerInfo;
   } catch (error) {
     console.error('Error logging out user:', error);
     throw error;
   }
+}
+
+/**
+ * Tie RevenueCat identity to the signed-in account (or return to anonymous).
+ * Call whenever Supabase auth session appears or clears.
+ */
+export async function syncRevenueCatIdentity(
+  userId: string | null
+): Promise<CustomerInfo | null> {
+  if (userId) {
+    const { customerInfo } = await Purchases.logIn(userId);
+    return customerInfo;
+  }
+  return logOutUser();
 }

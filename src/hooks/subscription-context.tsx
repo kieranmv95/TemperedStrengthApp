@@ -4,6 +4,7 @@ import {
   PRO_ENTITLEMENT_ID,
   purchasePackage,
   restorePurchases,
+  syncRevenueCatIdentity,
 } from '@/src/services/revenueCatService';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { getProgramById } from '@/src/utils/program';
@@ -82,7 +83,7 @@ export function SubscriptionProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { dataRevision } = useSyncManager();
+  const { dataRevision, user } = useSyncManager();
   const [state, setState] = useState<SubscriptionState>({
     isPro: false,
     isPromoPro: false,
@@ -105,6 +106,9 @@ export function SubscriptionProvider({
   const initialLoadCompleteRef = useRef<boolean>(false);
   const promoProGrantRef = useRef<PromoProGrant | null>(null);
   const isDeveloperProOverrideEnabledRef = useRef(false);
+  const revenueCatIdentityUserIdRef = useRef<string | null | undefined>(
+    undefined
+  );
 
   /**
    * Handle subscription expiry - if the user is on a Pro program, preserve it
@@ -383,6 +387,35 @@ export function SubscriptionProvider({
     if (dataRevision === 0) return;
     void refreshPromoPro();
   }, [dataRevision, refreshPromoPro]);
+
+  // Keep RevenueCat App User ID aligned with the signed-in Supabase account so
+  // Pro entitlements follow the account across iOS and Android.
+  useEffect(() => {
+    const nextUserId = user?.id ?? null;
+    if (revenueCatIdentityUserIdRef.current === nextUserId) {
+      return;
+    }
+
+    let cancelled = false;
+    void (async () => {
+      try {
+        const customerInfo = await syncRevenueCatIdentity(nextUserId);
+        if (cancelled) return;
+        revenueCatIdentityUserIdRef.current = nextUserId;
+        if (customerInfo) {
+          updateStateFromCustomerInfo(customerInfo);
+        } else {
+          await loadCustomerInfo();
+        }
+      } catch (error) {
+        console.error('Failed to sync RevenueCat identity:', error);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id, loadCustomerInfo, updateStateFromCustomerInfo]);
 
   // Set up RevenueCat listener for customer info updates
   useEffect(() => {
