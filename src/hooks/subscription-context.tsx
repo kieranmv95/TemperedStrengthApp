@@ -1,6 +1,7 @@
 import {
   getCustomerInfo,
   getOfferings,
+  invalidateCustomerInfoRequest,
   PRO_ENTITLEMENT_ID,
   purchasePackage,
   restorePurchases,
@@ -83,7 +84,7 @@ export function SubscriptionProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { dataRevision, user } = useSyncManager();
+  const { dataRevision, user, isReady: isAuthReady } = useSyncManager();
   const [state, setState] = useState<SubscriptionState>({
     isPro: false,
     isPromoPro: false,
@@ -96,24 +97,18 @@ export function SubscriptionProvider({
     error: null,
   });
 
-  // Track listener reference for cleanup (RevenueCat requires passing the same function to remove)
   const listenerRef = useRef<((customerInfo: CustomerInfo) => void) | null>(
     null
   );
-  // Track previous Pro status to detect subscription expiry
   const previousIsProRef = useRef<boolean | null>(null);
-  // Track if initial load is complete to avoid false expiry detection
-  const initialLoadCompleteRef = useRef<boolean>(false);
+  /** True only after auth-ready identity sync has produced a trusted Pro state. */
+  const identitySettledRef = useRef(false);
   const promoProGrantRef = useRef<PromoProGrant | null>(null);
   const isDeveloperProOverrideEnabledRef = useRef(false);
-  const revenueCatIdentityUserIdRef = useRef<string | null | undefined>(
-    undefined
-  );
+  /** Bumped on every identity change so in-flight CustomerInfo fetches are ignored. */
+  const identityEpochRef = useRef(0);
+  const boundRevenueCatUserIdRef = useRef<string | null | undefined>(undefined);
 
-  /**
-   * Handle subscription expiry - if the user is on a Pro program, preserve it
-   * and prompt them to re-enable Pro instead of wiping progress.
-   */
   const handleSubscriptionExpiry = useCallback(async () => {
     try {
       const programId = await getActiveProgramId();
@@ -122,8 +117,6 @@ export function SubscriptionProvider({
       const program = getProgramById(programId);
       if (!program?.isPro) return;
 
-      // User was on a Pro program but subscription expired.
-      // Do NOT clear program/progress; keep it and prompt to renew.
       console.log(
         'Subscription expired while on Pro program, locking access...'
       );
@@ -154,13 +147,20 @@ export function SubscriptionProvider({
       promoProGrant: PromoProGrant | null;
       isDeveloperProOverrideEnabled: boolean;
       preserveLoading?: boolean;
+      /**
+       * When false, Pro→free transitions do not show the expiry alert.
+       * Used during anonymous→identified identity switches.
+       */
+      detectExpiry?: boolean;
     }) => {
       const isRevenueCatPro = hasActiveProEntitlement(input.customerInfo);
       const isPromoPro = isPromoProGrantActive(input.promoProGrant);
       const isPro = computeIsPro(input);
+      const detectExpiry = input.detectExpiry !== false;
 
       if (
-        initialLoadCompleteRef.current &&
+        detectExpiry &&
+        identitySettledRef.current &&
         previousIsProRef.current === true &&
         !isPro
       ) {
@@ -168,9 +168,6 @@ export function SubscriptionProvider({
       }
 
       previousIsProRef.current = isPro;
-      if (!initialLoadCompleteRef.current) {
-        initialLoadCompleteRef.current = true;
-      }
 
       promoProGrantRef.current = input.promoProGrant;
       isDeveloperProOverrideEnabledRef.current =
@@ -191,50 +188,58 @@ export function SubscriptionProvider({
     [handleSubscriptionExpiry]
   );
 
-  /**
-   * Update state based on customer info
-   */
   const updateStateFromCustomerInfo = useCallback(
-    (customerInfo: CustomerInfo) => {
+    (
+      customerInfo: CustomerInfo,
+      options?: { detectExpiry?: boolean; preserveLoading?: boolean }
+    ) => {
       applyEffectiveProState({
         customerInfo,
         promoProGrant: promoProGrantRef.current,
         isDeveloperProOverrideEnabled: isDeveloperProOverrideEnabledRef.current,
+        detectExpiry: options?.detectExpiry,
+        preserveLoading: options?.preserveLoading,
       });
     },
     [applyEffectiveProState]
   );
 
-  /**
-   * Load customer info and check entitlement status
-   */
-  const loadCustomerInfo = useCallback(async () => {
-    try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
-      const customerInfo = await getCustomerInfo();
-      updateStateFromCustomerInfo(customerInfo);
-    } catch (error) {
-      const purchasesError = error as {
-        info?: { backendErrorCode?: number };
-      };
-      // Handle 429 errors (concurrent request) gracefully
-      if (purchasesError?.info?.backendErrorCode === 7638) {
-        console.log('Customer info request already in flight, skipping...');
-        setState((prev) => ({ ...prev, isLoading: false }));
-        return;
+  const loadCustomerInfo = useCallback(
+    async (options?: { detectExpiry?: boolean }) => {
+      const epochAtStart = identityEpochRef.current;
+      try {
+        setState((prev) => ({ ...prev, isLoading: true, error: null }));
+        const customerInfo = await getCustomerInfo();
+        if (epochAtStart !== identityEpochRef.current) {
+          // Identity changed while we were fetching; the newer epoch owns loading.
+          return;
+        }
+        updateStateFromCustomerInfo(customerInfo, {
+          detectExpiry: options?.detectExpiry,
+        });
+      } catch (error) {
+        if (epochAtStart !== identityEpochRef.current) {
+          return;
+        }
+        const purchasesError = error as {
+          info?: { backendErrorCode?: number };
+        };
+        if (purchasesError?.info?.backendErrorCode === 7638) {
+          console.log('Customer info request already in flight, skipping...');
+          setState((prev) => ({ ...prev, isLoading: false }));
+          return;
+        }
+        console.error('Error loading customer info:', error);
+        setState((prev) => ({
+          ...prev,
+          error: error as Error,
+          isLoading: false,
+        }));
       }
-      console.error('Error loading customer info:', error);
-      setState((prev) => ({
-        ...prev,
-        error: error as Error,
-        isLoading: false,
-      }));
-    }
-  }, [updateStateFromCustomerInfo]);
+    },
+    [updateStateFromCustomerInfo]
+  );
 
-  /**
-   * Load available offerings (products)
-   */
   const loadOfferings = useCallback(async () => {
     try {
       const offerings = await getOfferings();
@@ -260,7 +265,7 @@ export function SubscriptionProvider({
       const isPro = computeIsPro(next);
 
       if (
-        initialLoadCompleteRef.current &&
+        identitySettledRef.current &&
         previousIsProRef.current === true &&
         !isPro
       ) {
@@ -302,15 +307,11 @@ export function SubscriptionProvider({
     });
   }, []);
 
-  /**
-   * Purchase a package
-   */
   const purchase = useCallback(
     async (packageToPurchase: PurchasesPackage) => {
       try {
         setState((prev) => ({ ...prev, isLoading: true, error: null }));
         const customerInfo = await purchasePackage(packageToPurchase);
-        // The listener will also fire, but we update immediately for responsiveness
         updateStateFromCustomerInfo(customerInfo);
         return { success: true, customerInfo };
       } catch (error) {
@@ -326,9 +327,6 @@ export function SubscriptionProvider({
     [updateStateFromCustomerInfo]
   );
 
-  /**
-   * Restore purchases
-   */
   const restore = useCallback(async () => {
     try {
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
@@ -375,49 +373,66 @@ export function SubscriptionProvider({
     []
   );
 
-  /**
-   * Refresh customer info
-   */
   const refresh = useCallback(async () => {
     await Promise.all([loadCustomerInfo(), refreshPromoPro()]);
   }, [loadCustomerInfo, refreshPromoPro]);
 
-  // Account sync writes AsyncStorage directly; re-read promo/pro flags after pull.
   useEffect(() => {
     if (dataRevision === 0) return;
     void refreshPromoPro();
   }, [dataRevision, refreshPromoPro]);
 
-  // Keep RevenueCat App User ID aligned with the signed-in Supabase account so
-  // Pro entitlements follow the account across iOS and Android.
+  // Wait for auth readiness, then bind RevenueCat identity before trusting Pro state.
+  // Without this, an anonymous getCustomerInfo() can finish after logIn() and
+  // overwrite Pro with free + fire a false "Subscription Expired" alert.
   useEffect(() => {
+    if (!isAuthReady) return;
+
     const nextUserId = user?.id ?? null;
-    if (revenueCatIdentityUserIdRef.current === nextUserId) {
+    if (boundRevenueCatUserIdRef.current === nextUserId) {
       return;
     }
+
+    const epoch = ++identityEpochRef.current;
+    identitySettledRef.current = false;
+    setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     let cancelled = false;
     void (async () => {
       try {
         const customerInfo = await syncRevenueCatIdentity(nextUserId);
-        if (cancelled) return;
-        revenueCatIdentityUserIdRef.current = nextUserId;
+        if (cancelled || epoch !== identityEpochRef.current) return;
+
+        boundRevenueCatUserIdRef.current = nextUserId;
+        identitySettledRef.current = true;
+
         if (customerInfo) {
-          updateStateFromCustomerInfo(customerInfo);
+          // Identity switches can look like Pro→free; never alert for that.
+          updateStateFromCustomerInfo(customerInfo, { detectExpiry: false });
         } else {
-          await loadCustomerInfo();
+          await loadCustomerInfo({ detectExpiry: false });
         }
       } catch (error) {
+        if (cancelled || epoch !== identityEpochRef.current) return;
         console.error('Failed to sync RevenueCat identity:', error);
+        // Still mark settled so the UI is not stuck loading forever.
+        boundRevenueCatUserIdRef.current = nextUserId;
+        identitySettledRef.current = true;
+        try {
+          await loadCustomerInfo({ detectExpiry: false });
+        } catch {
+          setState((prev) => ({ ...prev, isLoading: false }));
+        }
       }
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [user?.id, loadCustomerInfo, updateStateFromCustomerInfo]);
+  }, [isAuthReady, user?.id, loadCustomerInfo, updateStateFromCustomerInfo]);
 
-  // Set up RevenueCat listener for customer info updates
+  // Local flags, offerings, and RevenueCat listener. Do not finalize Pro here —
+  // identity reconciliation owns the first trusted CustomerInfo apply.
   useEffect(() => {
     let cancelled = false;
 
@@ -426,39 +441,51 @@ export function SubscriptionProvider({
         getPromoProGrant(),
         getDevProOverrideEnabled(),
       ]);
-      if (cancelled) {
-        return;
-      }
+      if (cancelled) return;
 
       promoProGrantRef.current = promoProGrant;
       isDeveloperProOverrideEnabledRef.current = isDeveloperProOverrideEnabled;
 
-      setState((prev) => {
-        const next = {
+      setState((prev) => ({
+        ...prev,
+        promoProGrant,
+        isDeveloperProOverrideEnabled,
+        isPromoPro: isPromoProGrantActive(promoProGrant),
+        isPro: computeIsPro({
           customerInfo: prev.customerInfo,
           promoProGrant,
           isDeveloperProOverrideEnabled,
-        };
-        return {
-          ...prev,
-          promoProGrant,
-          isDeveloperProOverrideEnabled,
-          isRevenueCatPro: hasActiveProEntitlement(next.customerInfo),
-          isPromoPro: isPromoProGrantActive(next.promoProGrant),
-          isPro: computeIsPro(next),
-        };
-      });
+        }),
+      }));
 
-      await loadCustomerInfo();
       if (!cancelled) {
         await loadOfferings();
       }
     })();
 
-    // Set up listener for customer info changes (fires on purchases, restores, etc.)
-    const listener = (customerInfo: CustomerInfo) => {
+    const listener = (_customerInfo: CustomerInfo) => {
+      // Ignore listener updates until identity has settled once; otherwise an
+      // anonymous CustomerInfo callback can clobber the post-login Pro state.
+      if (!identitySettledRef.current) return;
+      const epoch = identityEpochRef.current;
       console.log('RevenueCat: Customer info updated via listener');
-      updateStateFromCustomerInfo(customerInfo);
+      // Re-fetch instead of trusting the callback payload — a stale anonymous
+      // update can arrive after Purchases.logIn() has already returned Pro.
+      void (async () => {
+        try {
+          invalidateCustomerInfoRequest();
+          const fresh = await getCustomerInfo();
+          if (
+            !identitySettledRef.current ||
+            epoch !== identityEpochRef.current
+          ) {
+            return;
+          }
+          updateStateFromCustomerInfo(fresh);
+        } catch (error) {
+          console.error('Error refreshing customer info from listener:', error);
+        }
+      })();
     };
     Purchases.addCustomerInfoUpdateListener(listener);
     listenerRef.current = listener;
@@ -473,7 +500,6 @@ export function SubscriptionProvider({
       handleAppState
     );
 
-    // Cleanup listener on unmount
     return () => {
       cancelled = true;
       if (listenerRef.current) {
@@ -482,7 +508,6 @@ export function SubscriptionProvider({
       }
       appStateSubscription.remove();
     };
-    // Mount-only: listeners and initial load. Callbacks read latest refs/state.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

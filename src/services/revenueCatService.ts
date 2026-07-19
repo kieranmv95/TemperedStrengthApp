@@ -77,6 +77,14 @@ export async function initializeRevenueCat(userId?: string): Promise<void> {
 let pendingCustomerInfoRequest: Promise<CustomerInfo> | null = null;
 
 /**
+ * Drop any in-flight getCustomerInfo() so a post-login fetch cannot reuse a
+ * pre-login (anonymous) response.
+ */
+export function invalidateCustomerInfoRequest(): void {
+  pendingCustomerInfoRequest = null;
+}
+
+/**
  * Get current customer info
  * Uses request deduplication to prevent concurrent calls
  */
@@ -252,9 +260,14 @@ export async function logOutUser(): Promise<CustomerInfo | null> {
 export async function syncRevenueCatIdentity(
   userId: string | null
 ): Promise<CustomerInfo | null> {
+  // Any getCustomerInfo() started as anonymous must not be reused after this.
+  invalidateCustomerInfoRequest();
   if (userId) {
     const { customerInfo } = await Purchases.logIn(userId);
+    invalidateCustomerInfoRequest();
     return customerInfo;
   }
-  return logOutUser();
+  const customerInfo = await logOutUser();
+  invalidateCustomerInfoRequest();
+  return customerInfo;
 }
