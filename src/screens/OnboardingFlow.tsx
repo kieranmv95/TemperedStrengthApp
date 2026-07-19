@@ -3,6 +3,7 @@ import { OnboardingOptionCard } from '@/src/components/onboarding/OnboardingOpti
 import { OnboardingProgressBar } from '@/src/components/onboarding/OnboardingProgressBar';
 import { onboardingStyles as styles } from '@/src/components/onboarding/onboardingStyles';
 import { Colors } from '@/src/constants/theme';
+import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
   markAccountCreationSkipped,
@@ -77,6 +78,19 @@ function onboardingStepName(stepIndex: number): string {
   }
 }
 
+/** Skip the account-backup step when moving forward/back through the flow. */
+function stepAfterSkippingAccount(
+  fromStep: number,
+  direction: 1 | -1,
+  skipAccountStep: boolean
+): number {
+  let next = fromStep + direction;
+  if (skipAccountStep && next === ACCOUNT_STEP_INDEX) {
+    next += direction;
+  }
+  return Math.max(1, Math.min(next, TOTAL_STEPS - 1));
+}
+
 const GENDER_OPTIONS: { value: OnboardingGender; label: string }[] = [
   { value: 'male', label: 'Male' },
   { value: 'female', label: 'Female' },
@@ -111,12 +125,15 @@ const EXPERIENCE_OPTIONS: {
 function OnboardingFlow() {
   const insets = useSafeAreaInsets();
   const posthog = usePostHog();
+  const { session } = useSyncManager();
   const params = useLocalSearchParams<{
     mode?: string;
     accountCreated?: string;
   }>();
-  const bypassAccountChoice =
-    params.mode === 'edit' || params.accountCreated === '1';
+  const isEditMode = params.mode === 'edit';
+  const bypassAccountChoice = isEditMode || params.accountCreated === '1';
+  // Signed-in users (and preference replay) should never see "Save your progress".
+  const skipAccountBackupStep = Boolean(session) || isEditMode;
 
   const [stepIndex, setStepIndex] = useState(0);
   const [accountChoiceMade, setAccountChoiceMade] =
@@ -162,6 +179,11 @@ function OnboardingFlow() {
     setIntroDone(true);
     setStepIndex(WELCOME_STEP_INDEX);
   }, [params.accountCreated]);
+
+  useEffect(() => {
+    if (!skipAccountBackupStep || stepIndex !== ACCOUNT_STEP_INDEX) return;
+    setStepIndex(WELCOME_STEP_INDEX);
+  }, [skipAccountBackupStep, stepIndex]);
 
   const fade = useRef(new Animated.Value(1)).current;
 
@@ -248,7 +270,9 @@ function OnboardingFlow() {
       return;
     }
     setProfile(nextProfile);
-    animateStepChange(() => setStepIndex((i) => i + 1));
+    animateStepChange(() =>
+      setStepIndex((i) => stepAfterSkippingAccount(i, 1, skipAccountBackupStep))
+    );
   };
 
   const handleSkipStep = () => {
@@ -258,6 +282,10 @@ function OnboardingFlow() {
       return;
     }
     if (stepIndex === ACCOUNT_STEP_INDEX) {
+      if (skipAccountBackupStep) {
+        animateStepChange(() => setStepIndex(WELCOME_STEP_INDEX));
+        return;
+      }
       handleSkipAccount();
       return;
     }
@@ -268,12 +296,18 @@ function OnboardingFlow() {
       completeOnboarding(profile);
       return;
     }
-    animateStepChange(() => setStepIndex((i) => i + 1));
+    animateStepChange(() =>
+      setStepIndex((i) => stepAfterSkippingAccount(i, 1, skipAccountBackupStep))
+    );
   };
 
   const handleBackStep = () => {
     if (stepIndex <= 1) return;
-    animateStepChange(() => setStepIndex((i) => Math.max(1, i - 1)));
+    animateStepChange(() =>
+      setStepIndex((i) =>
+        stepAfterSkippingAccount(i, -1, skipAccountBackupStep)
+      )
+    );
   };
 
   const handleSkipSetup = () => {
