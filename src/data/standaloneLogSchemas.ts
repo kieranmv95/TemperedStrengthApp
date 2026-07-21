@@ -284,7 +284,7 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
   },
 
   // ---------------------------------------------------------------------------
-  // Arena Games — Event 002
+  // Arena Games — Event 001 (ar_01–ar_05), Event 002 (ar_06–ar_07)
   // ---------------------------------------------------------------------------
   ar_01: {
     kind: 'notes_only',

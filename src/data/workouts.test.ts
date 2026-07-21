@@ -162,6 +162,7 @@ describe('bundled standalone workouts', () => {
       w.tags.includes('Olympic Lifting')
     );
     expect(olySessions.map((w) => w.id).sort()).toEqual([
+      'ar_03',
       'p_02',
       'p_15',
       'p_79',
