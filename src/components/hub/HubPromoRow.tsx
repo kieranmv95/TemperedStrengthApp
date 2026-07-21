@@ -56,9 +56,13 @@ function HubPromoOfflineSlot({ label }: HubPromoOfflineSlotProps) {
   return (
     <View style={styles.promoCardSlot}>
       <View style={[styles.promoCard, styles.offlineSlot]}>
-      <Ionicons name="wifi-outline" size={22} color={Colors.backgroundSubtle} />
-      <Text style={styles.offlineTitle}>No connection</Text>
-      <Text style={styles.offlineLabel}>{label}</Text>
+        <Ionicons
+          name="wifi-outline"
+          size={22}
+          color={Colors.backgroundSubtle}
+        />
+        <Text style={styles.offlineTitle}>No connection</Text>
+        <Text style={styles.offlineLabel}>{label}</Text>
       </View>
     </View>
   );
@@ -75,8 +79,12 @@ export function HubPromoRow({
   onPressDiscover,
   shopUnavailable = false,
 }: HubPromoRowProps) {
-  const { gyms, clubs, coaches, isLoading: isDiscoverLoading } =
-    usePartnerListings();
+  const {
+    gyms,
+    clubs,
+    coaches,
+    isLoading: isDiscoverLoading,
+  } = usePartnerListings();
   const hasDiscoverListings =
     gyms.length > 0 || clubs.length > 0 || coaches.length > 0;
   const showDiscoverCard =

@@ -1,8 +1,5 @@
 import { exerciseVideoStyles as styles } from '@/src/components/exercise/exerciseVideoStyles';
-import {
-  getYoutubeEmbedHtml,
-  YOUTUBE_EMBED_ORIGIN,
-} from '@/src/utils/youtube';
+import { getYoutubeEmbedHtml, YOUTUBE_EMBED_ORIGIN } from '@/src/utils/youtube';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
@@ -20,10 +17,7 @@ export function YoutubeEmbed({
   youtubeId,
   accessibilityLabel,
 }: YoutubeEmbedProps) {
-  const embedHtml = useMemo(
-    () => getYoutubeEmbedHtml(youtubeId),
-    [youtubeId]
-  );
+  const embedHtml = useMemo(() => getYoutubeEmbedHtml(youtubeId), [youtubeId]);
 
   return (
     <View

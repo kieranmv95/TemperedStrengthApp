@@ -2,12 +2,7 @@ import { Colors } from '@/src/constants/theme';
 import type { ArticleListItem } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import {
-  Image,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { Card, SmallChevron } from '../ds';
 import { articleCardStyles as styles } from './articleCardStyles';
 

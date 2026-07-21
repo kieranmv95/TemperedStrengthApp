@@ -1,4 +1,7 @@
-import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
+import {
+  AppSafeAreaView,
+  AppScrollView,
+} from '@/src/components/AppSafeAreaView';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import {

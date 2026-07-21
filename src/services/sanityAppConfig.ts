@@ -2,12 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient, type SanityClient } from '@sanity/client';
 
 import { Colors } from '@/src/constants/theme';
+import { environments } from '@/src/utils/environment';
 
 const SANITY_PROJECT_ID = 'n1zlvrwu';
-const SANITY_DATASET = 'production';
+const SANITY_DATASET = environments.sanity;
 const SANITY_API_VERSION = '2024-01-01';
 
-/** AsyncStorage key for cached Sanity notification banner; local-only (not iCloud-synced). */
+/** AsyncStorage key for cached Sanity notification banner; local-only. */
 export const SANITY_APP_CONFIG_NOTIFICATION_CACHE_KEY =
   'sanity_app_config_notification_v1';
 const CACHE_TTL_MS = __DEV__ ? 0 : 60 * 60 * 1000;

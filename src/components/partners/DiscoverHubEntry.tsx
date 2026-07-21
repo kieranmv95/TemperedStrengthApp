@@ -11,8 +11,7 @@ type DiscoverHubEntryProps = {
 
 export function DiscoverHubEntry({ onPress }: DiscoverHubEntryProps) {
   const { gyms, clubs, coaches } = usePartnerListings();
-  const hasListings =
-    gyms.length > 0 || clubs.length > 0 || coaches.length > 0;
+  const hasListings = gyms.length > 0 || clubs.length > 0 || coaches.length > 0;
 
   if (!hasListings) {
     return null;

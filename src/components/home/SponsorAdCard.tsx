@@ -101,8 +101,8 @@ export function SponsorAdCard({ ad, width, onPressCta }: SponsorAdCardProps) {
         </View>
       ) : null}
       {ad.title.length > 0 &&
-        (ad.layout === 'textHeader' ||
-          (ad.layout === 'logoHeader' && !ad.logoUrl)) ? (
+      (ad.layout === 'textHeader' ||
+        (ad.layout === 'logoHeader' && !ad.logoUrl)) ? (
         <Text
           style={[styles.sponsorTitle, { color: ad.titleColor }]}
           numberOfLines={1}

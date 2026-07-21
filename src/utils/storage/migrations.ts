@@ -2,7 +2,7 @@
 //
 // Migrations run once per device at app launch, BEFORE the sync manager starts
 // mirroring (see app/_layout.tsx). They write through plain AsyncStorage rather
-// than the sync helpers so normalizing local data does not churn iCloud
+// than the sync helpers so normalizing local data does not churn account sync
 // timestamps or spuriously win conflicts against a device on a newer version.
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -11,6 +11,7 @@ import {
   SWAP_COUNT_MONTH_KEY,
   SWAP_COUNT_STATE_KEY,
   WORKOUT_NOTES_KEY,
+  ONBOARDING_PROFILE_KEY,
 } from './keys';
 
 type Migration = {
@@ -110,9 +111,31 @@ async function foldSwapCountState(): Promise<void> {
   await AsyncStorage.multiRemove([SWAP_COUNT_KEY, SWAP_COUNT_MONTH_KEY]);
 }
 
+async function removeICloudSettings(): Promise<void> {
+  await AsyncStorage.removeItem('icloud_sync_enabled');
+  const rawProfile = await AsyncStorage.getItem(ONBOARDING_PROFILE_KEY);
+  if (!rawProfile) return;
+  try {
+    const profile = JSON.parse(rawProfile) as unknown;
+    if (
+      typeof profile !== 'object' ||
+      profile === null ||
+      Array.isArray(profile)
+    ) {
+      return;
+    }
+    const next = { ...(profile as Record<string, unknown>) };
+    delete next.iCloudSyncEnabled;
+    await AsyncStorage.setItem(ONBOARDING_PROFILE_KEY, JSON.stringify(next));
+  } catch {
+    // Leave malformed data untouched; the normal profile reader handles it.
+  }
+}
+
 const MIGRATIONS: Migration[] = [
   { version: 1, run: normalizeWorkoutNotes },
   { version: 2, run: foldSwapCountState },
+  { version: 3, run: removeICloudSettings },
 ];
 
 export const LATEST_SCHEMA_VERSION = MIGRATIONS.reduce(

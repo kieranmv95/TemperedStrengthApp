@@ -1,20 +1,16 @@
-export { SyncManager } from './SyncManager';
 export {
-  SYNC_ENABLED_KEY,
+  ACCOUNT_FEATURE_INTRO_DISMISSED_KEY,
+  ACCOUNT_NUDGE_SHOWN_AT_KEY,
+  HAS_ACCOUNT_KEY,
+  LAST_SYNCED_AT_KEY,
+  SKIPPED_ACCOUNT_CREATION_AT_KEY,
+  SYNC_QUEUE_KEY,
   SYNC_TS_PREFIX,
-  isExcludedFromSync,
-  isInternalKey,
 } from './constants';
-export { decideWinner } from './decision';
-export type {
-  SyncDecision,
-  SyncConflict,
-  SyncMerger,
-  SyncMergerRegistry,
-} from './types';
-export type {
-  SyncProvider,
-  SyncProviderAvailability,
-} from './providers/SyncProvider';
-export { ICloudKvsProvider } from './providers/ICloudKvsProvider';
-export { NoopSyncProvider } from './providers/NoopSyncProvider';
+export { shouldSync, SYNCED_KEYS } from './syncedKeys';
+export {
+  migrateLocalDataToSupabase,
+  pullChanges,
+  pushQueue,
+  syncNow,
+} from './syncEngine';

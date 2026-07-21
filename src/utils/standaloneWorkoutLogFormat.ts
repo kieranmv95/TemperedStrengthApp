@@ -98,7 +98,10 @@ export function formatStandaloneLogSummary(
     case 'amrap':
       return `${payload.rounds} rounds + ${payload.extraReps} reps`;
     case 'max_reps':
-      return `${payload.reps} reps`;
+      return schema.kind === 'max_reps' &&
+        schema.label.toLowerCase().includes('calorie')
+        ? `${payload.reps} calories`
+        : `${payload.reps} reps`;
     case 'distance': {
       const unit = schema.kind === 'distance' ? schema.unit : 'm';
       return `${payload.value} ${unit}`;

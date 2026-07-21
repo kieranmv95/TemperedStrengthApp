@@ -48,9 +48,9 @@ describe('liveCompetition utils', () => {
 
 describe('resolveLiveCompetitionActiveCategory', () => {
   it('keeps the current category when it still exists', () => {
-    expect(resolveLiveCompetitionActiveCategory(['Male', 'Female'], 'Female')).toBe(
-      'Female'
-    );
+    expect(
+      resolveLiveCompetitionActiveCategory(['Male', 'Female'], 'Female')
+    ).toBe('Female');
   });
 
   it('falls back to the first category when the current one disappears', () => {

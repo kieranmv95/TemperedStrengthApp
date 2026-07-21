@@ -21,9 +21,7 @@ import type {
 import { getProgramById } from '@/src/utils/program';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import {
-  getWorkoutForDaySinceStart,
   getShiftedWorkoutForDaySinceStart,
-  listTrainingDayDeltasForProgram,
   listShiftedTrainingDayDeltasForProgram,
   type ProgramSessionShiftsStore,
 } from '@/src/utils/programWeekPattern';
@@ -637,7 +635,6 @@ export function useWorkoutScreenController() {
     activeSession,
     getWorkoutForDayIndex,
     recomputeProgramCompleted,
-    program,
     posthog,
   ]);
 

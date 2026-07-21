@@ -37,9 +37,9 @@ const SORT_DIRECTION_OPTIONS: {
   value: RecoverySortDirection;
   label: string;
 }[] = [
-    { value: 'asc', label: 'Ascending' },
-    { value: 'desc', label: 'Descending' },
-  ];
+  { value: 'asc', label: 'Ascending' },
+  { value: 'desc', label: 'Descending' },
+];
 
 function equipmentLabel(equipment: RecoveryEquipment): string {
   return equipment
@@ -70,7 +70,7 @@ function compareRecoveries(
 }
 
 export default function RecoveryScreen() {
-  const { isPro } = useSubscription();
+  const { isPro, isLoading: subscriptionLoading } = useSubscription();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<RecoveryTag[]>([]);
   const [selectedEquipment, setSelectedEquipment] = useState<
@@ -399,7 +399,7 @@ export default function RecoveryScreen() {
           renderItem={({ item }) => (
             <RecoveryCard
               recovery={item}
-              isPro={isPro}
+              isPro={isPro || subscriptionLoading}
               onPress={handleRecoveryPress}
               onLockedPress={handleLockedPress}
             />

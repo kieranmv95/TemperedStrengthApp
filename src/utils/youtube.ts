@@ -1,7 +1,8 @@
 import type { Exercise } from '@/src/types/exercise';
 
 /** Must match ios.bundleIdentifier / android.package in app.json */
-export const YOUTUBE_EMBED_ORIGIN = 'https://com.kieranvenison.temperedstrengthapp';
+export const YOUTUBE_EMBED_ORIGIN =
+  'https://com.kieranvenison.temperedstrengthapp';
 
 export function getYoutubeEmbedUrl(youtubeId: string): string {
   const params = new URLSearchParams({

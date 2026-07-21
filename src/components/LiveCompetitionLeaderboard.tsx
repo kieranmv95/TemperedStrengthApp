@@ -43,9 +43,7 @@ export function LiveCompetitionLeaderboard({
   const scoreLabel = getLiveCompetitionScoreLabel(competition.orderBy);
 
   if (categories.length === 0) {
-    return (
-      <Text style={styles.emptyState}>No leaderboard entries yet.</Text>
-    );
+    return <Text style={styles.emptyState}>No leaderboard entries yet.</Text>;
   }
 
   return (
@@ -68,13 +66,13 @@ export function LiveCompetitionLeaderboard({
       <View style={styles.tableHeader}>
         <Text style={[styles.headerCell, styles.rankHeader]}>#</Text>
         <Text style={[styles.headerCell, styles.nameHeader]}>Name</Text>
-        <Text style={[styles.headerCell, styles.scoreHeader]}>{scoreLabel}</Text>
+        <Text style={[styles.headerCell, styles.scoreHeader]}>
+          {scoreLabel}
+        </Text>
       </View>
 
       {rankedEntries.length === 0 ? (
-        <Text style={styles.emptyState}>
-          No results for this category yet.
-        </Text>
+        <Text style={styles.emptyState}>No results for this category yet.</Text>
       ) : (
         <View style={styles.tableBody}>
           {rankedEntries.map((item, index) => (

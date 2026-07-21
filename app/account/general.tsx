@@ -1,8 +1,6 @@
 import { SmallChevron } from '@/src/components/ds/SmallChevron';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
-import { useSyncManager } from '@/src/hooks/sync-manager-context';
-import { isIos } from '@/src/utils/platform';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
   getWeightUnit,
@@ -14,25 +12,16 @@ import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
-  Alert,
-  StyleSheet,
-  Switch,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
+  AppSafeAreaView,
+  AppScrollView,
+} from '@/src/components/AppSafeAreaView';
 
 export default function AccountGeneralSettingsScreen() {
   const posthog = usePostHog();
   const [weightUnit, setWeightUnitState] = useState<WeightUnit>('kg');
   const [weightUnitLoading, setWeightUnitLoading] = useState<boolean>(true);
-  const {
-    enabled: iCloudSyncEnabled,
-    isAvailable,
-    setEnabled,
-  } = useSyncManager();
 
   const loadWeightUnit = async () => {
     try {
@@ -70,9 +59,8 @@ export default function AccountGeneralSettingsScreen() {
   const handleUpdatePreferences = () => {
     // Do not flip the `onboarded` flag here. The boot redirect in `app/_layout.tsx`
     // only fires on cold start; navigating here is enough to replay the flow.
-    // Flipping it to `false` previously meant an aborted replay (or iCloud mirror)
-    // could push already-onboarded users — including other devices — back into onboarding.
-    router.push('/onboarding');
+    // The edit mode bypasses the new-device account question.
+    router.push('/onboarding?mode=edit');
   };
 
   return (
@@ -159,54 +147,6 @@ export default function AccountGeneralSettingsScreen() {
               </TouchableOpacity>
             </View>
           </View>
-
-          {isIos ? (
-            <View style={styles.settingItem}>
-              <View style={styles.settingContent}>
-                <Text style={styles.settingTitle}>iCloud Sync</Text>
-                <Text style={styles.settingDescription}>
-                  Keep a backup of your data in iCloud. AsyncStorage stays
-                  primary; iCloud is used for backup and restore.
-                </Text>
-                {iCloudSyncEnabled && !isAvailable && (
-                  <Text style={styles.settingDescription}>
-                    iCloud is currently unavailable on this device/account.
-                  </Text>
-                )}
-              </View>
-              <Switch
-                value={iCloudSyncEnabled}
-                onValueChange={async (next) => {
-                  if (!next) {
-                    await setEnabled(false);
-                    posthog.capture(posthogEventsNames.app.settingChanged, {
-                      setting_name: 'icloud_sync',
-                      new_value: 'false',
-                    });
-                    return;
-                  }
-
-                  const result = await setEnabled(true);
-                  if (!result.isAvailable) {
-                    Alert.alert(
-                      'iCloud Unavailable',
-                      "We couldn't access iCloud on this device/account. Your data will remain local only."
-                    );
-                    await setEnabled(false);
-                    posthog.capture(posthogEventsNames.app.settingChanged, {
-                      setting_name: 'icloud_sync',
-                      new_value: 'false',
-                    });
-                  } else {
-                    posthog.capture(posthogEventsNames.app.settingChanged, {
-                      setting_name: 'icloud_sync',
-                      new_value: 'true',
-                    });
-                  }
-                }}
-              />
-            </View>
-          ) : null}
 
           <TouchableOpacity
             style={styles.settingItem}

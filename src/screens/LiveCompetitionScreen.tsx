@@ -58,7 +58,10 @@ export function LiveCompetitionScreen({
       >
         <LiveCompetitionCard competition={competition}>
           <Text
-            style={[styles.additionalInfo, { color: competition.theme.copyColor }]}
+            style={[
+              styles.additionalInfo,
+              { color: competition.theme.copyColor },
+            ]}
           >
             {competition.additionalInfo}
           </Text>

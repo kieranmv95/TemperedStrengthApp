@@ -13,10 +13,7 @@ import type {
   WorkoutFocusTag,
   WorkoutFormatTag,
 } from '@/src/types/workouts';
-import {
-  WORKOUT_FOCUS_TAGS,
-  WORKOUT_FORMAT_TAGS,
-} from '@/src/types/workouts';
+import { WORKOUT_FOCUS_TAGS, WORKOUT_FORMAT_TAGS } from '@/src/types/workouts';
 import {
   countWithEquipmentOption,
   countWithMultiSelectOption,
@@ -148,7 +145,9 @@ export function WorkoutFiltersSheet({
     }));
   };
 
-  const selectDiscipline = (filter: (typeof DISCIPLINE_CATEGORY_FILTERS)[number]) => {
+  const selectDiscipline = (
+    filter: (typeof DISCIPLINE_CATEGORY_FILTERS)[number]
+  ) => {
     setLocalDraft((prev) => ({
       ...prev,
       activeCategoryFilter:

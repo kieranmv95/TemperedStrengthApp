@@ -2,19 +2,28 @@ import { Colors } from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { getOfferings } from '@/src/services/revenueCatService';
 import { router } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
 import { PURCHASES_ERROR_CODE, PurchasesError } from 'react-native-purchases';
 import RevenueCatUI from 'react-native-purchases-ui';
 
 export default function PaywallScreen() {
-  const { isPro, refresh } = useSubscription();
+  const { isPro, isLoading, refresh } = useSubscription();
+  const hasPresentedRef = useRef(false);
 
-  // Present the paywall from RevenueCat dashboard when screen mounts
+  // Present only after subscription identity has settled. Otherwise a signed-in
+  // Pro user can briefly look free and get a confusing paywall experience.
   useEffect(() => {
-    // Don't present if user is already Pro
+    if (isLoading || hasPresentedRef.current) return;
+    hasPresentedRef.current = true;
+
     if (isPro) {
-      router.back();
+      Alert.alert('You’re already Pro', 'Your Pro access is active.', [
+        {
+          text: 'OK',
+          onPress: () => router.back(),
+        },
+      ]);
       return;
     }
 
@@ -148,13 +157,11 @@ export default function PaywallScreen() {
             },
           ]
         );
-      } finally {
       }
     };
 
-    presentPaywall();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run once on mount
+    void presentPaywall();
+  }, [isLoading, isPro, refresh]);
 
   // Show loading indicator while presenting paywall
   return (

@@ -37,7 +37,6 @@ export const ONBOARDING_PROFILE_KEY = 'onboarding_profile';
 
 /**
  * Per-device schema version used by the migration runner. This must never sync
- * (each device migrates its own local store), so it is excluded from iCloud
- * mirroring in `src/sync/constants.ts`.
+ * because each device migrates its own local store.
  */
 export const SCHEMA_VERSION_KEY = 'storage_schema_version';

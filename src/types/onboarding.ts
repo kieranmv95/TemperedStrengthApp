@@ -25,5 +25,4 @@ export type OnboardingProfile = {
   gender?: OnboardingGender;
   interests?: OnboardingInterest[];
   experienceLevel?: OnboardingExperienceLevel;
-  iCloudSyncEnabled?: boolean;
 };

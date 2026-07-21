@@ -4,13 +4,7 @@ import type { UserCoords } from '@/src/services/discoverLocationService';
 import type { PartnerListing } from '@/src/types/partner';
 import { partnerFavoriteKey } from '@/src/types/partner';
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { PartnerListingCard } from './PartnerListingCard';
 
 type DiscoverTab = 'saved' | 'gym' | 'club' | 'coach';

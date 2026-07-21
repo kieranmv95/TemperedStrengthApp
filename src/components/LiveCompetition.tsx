@@ -5,14 +5,16 @@ import { BorderRadius, FontSize, Spacing } from '../constants/theme';
 import { LiveCompetitionCard } from './LiveCompetitionCard';
 
 const styles = StyleSheet.create({
+  link: {
+    alignSelf: 'flex-start',
+  },
   linkText: {
-    fontSize: FontSize.lg,
-    fontWeight: 'bold',
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
+    fontSize: FontSize.base,
+    fontWeight: '700',
+    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.xxl,
     borderRadius: BorderRadius.lg,
     textAlign: 'center',
-    marginTop: Spacing.lg,
   },
 });
 
@@ -26,8 +28,9 @@ export const LiveCompetition = () => {
   const { linkText, theme } = competition;
 
   return (
-    <LiveCompetitionCard competition={competition}>
+    <LiveCompetitionCard competition={competition} showChevron>
       <TouchableOpacity
+        style={styles.link}
         onPress={() => {
           router.push('/competition');
         }}

@@ -63,21 +63,23 @@ describe('liveCompetitionService', () => {
 
   it('returns null for malformed payloads', () => {
     expect(parseLiveCompetitionResponse(null)).toBeNull();
-    expect(parseLiveCompetitionResponse({ title: 'Missing fields' })).toBeNull();
+    expect(
+      parseLiveCompetitionResponse({ title: 'Missing fields' })
+    ).toBeNull();
   });
 
   it('defaults missing additionalInfo to an empty string', () => {
     const { additionalInfo, ...withoutAdditionalInfo } = apiResponse;
 
-    expect(parseLiveCompetitionResponse(withoutAdditionalInfo)?.additionalInfo).toBe(
-      ''
-    );
+    expect(
+      parseLiveCompetitionResponse(withoutAdditionalInfo)?.additionalInfo
+    ).toBe('');
   });
 
   it('accepts an empty entries array', () => {
-    expect(parseLiveCompetitionResponse({ ...apiResponse, entries: [] })?.entries).toEqual(
-      []
-    );
+    expect(
+      parseLiveCompetitionResponse({ ...apiResponse, entries: [] })?.entries
+    ).toEqual([]);
   });
 
   it('returns fresh cache without refetching', async () => {

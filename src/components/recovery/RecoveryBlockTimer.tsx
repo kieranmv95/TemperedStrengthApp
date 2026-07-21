@@ -6,8 +6,20 @@ import {
   isTimeBasedRecoveryDose,
 } from '@/src/utils/recoveryTimer';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AppState, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import {
+  AppState,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 type RecoveryBlockTimerProps = {
   dose: RecoveryDose;

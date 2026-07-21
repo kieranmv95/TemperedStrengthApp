@@ -2,7 +2,10 @@ import {
   DEFAULT_WORKOUT_LOG_SCHEMA,
   STANDALONE_LOG_SCHEMA_BY_ID,
 } from '@/src/data/standaloneLogSchemas';
-import type { SingleWorkout, StandaloneWorkoutSource } from '@/src/types/workouts';
+import type {
+  SingleWorkout,
+  StandaloneWorkoutSource,
+} from '@/src/types/workouts';
 
 import { workouts as workoutsData } from './workout_data';
 
@@ -15,11 +18,13 @@ export type {
   WorkoutTag,
 } from '@/src/types/workouts';
 
-export { WORKOUT_TAGS, isWorkoutTag, isWorkoutFocusTag, isWorkoutFormatTag } from '@/src/types/workouts';
 export {
-  WORKOUT_FOCUS_TAGS,
-  WORKOUT_FORMAT_TAGS,
+  WORKOUT_TAGS,
+  isWorkoutTag,
+  isWorkoutFocusTag,
+  isWorkoutFormatTag,
 } from '@/src/types/workouts';
+export { WORKOUT_FOCUS_TAGS, WORKOUT_FORMAT_TAGS } from '@/src/types/workouts';
 
 type WorkoutJson = StandaloneWorkoutSource;
 

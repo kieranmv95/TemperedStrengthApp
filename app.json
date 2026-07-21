@@ -2,7 +2,7 @@
   "expo": {
     "name": "tempered-strength-app",
     "slug": "tempered-strength-app",
-    "version": "2.13.0",
+    "version": "2.14.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "temperedstrengthapp",
@@ -16,13 +16,9 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.kieranvenison.temperedstrengthapp",
-      "entitlements": {
-        "com.apple.developer.ubiquity-kvstore-identifier": "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
-      },
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      },
-      "usesIcloudStorage": true
+      }
     },
     "android": {
       "package": "com.kieranvenison.temperedstrengthapp",

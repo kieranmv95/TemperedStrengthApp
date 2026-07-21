@@ -37,7 +37,10 @@ import {
 } from '../utils/storage';
 import type { TrainingMaxesStore } from '../types/trainingMaxes';
 import { TrainingMaxModal } from '../components/TrainingMaxModal';
-import { CALENDAR_DAY_KEYS, weekKeysStartingFrom } from './programLauncherConstants';
+import {
+  CALENDAR_DAY_KEYS,
+  weekKeysStartingFrom,
+} from './programLauncherConstants';
 import { ProgramLauncherDatePickerModal } from './ProgramLauncherDatePickerModal';
 import { ProgramLauncherDetailsModal } from './ProgramLauncherDetailsModal';
 import { ProgramLauncherProgramCard } from './ProgramLauncherProgramCard';
@@ -55,7 +58,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   onClose: _onClose,
 }) => {
   const insets = useSafeAreaInsets();
-  const { isPro } = useSubscription();
+  const { isPro, isLoading: subscriptionLoading } = useSubscription();
   const { profile } = useOnboardingProfile();
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [showProgramDetails, setShowProgramDetails] = useState(false);
@@ -291,6 +294,9 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   };
 
   const handleStartProgram = () => {
+    if (subscriptionLoading) {
+      return;
+    }
     if (selectedProgram?.isPro && !isPro) {
       Alert.alert(
         'Pro Required',
@@ -468,8 +474,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   selectedDifficulty === 'all'
                     ? programs.length
                     : programs.filter(
-                      (p) => p.difficulty === selectedDifficulty
-                    ).length
+                        (p) => p.difficulty === selectedDifficulty
+                      ).length
                 }
               />
               {availableCategories.map((category) => {
@@ -502,8 +508,8 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   selectedCategory === 'all'
                     ? programs.length
                     : programs.filter((p) =>
-                      p.categories.includes(selectedCategory)
-                    ).length
+                        p.categories.includes(selectedCategory)
+                      ).length
                 }
               />
               {availableDifficulties.map((difficulty) => (
@@ -533,18 +539,18 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
                   selectedCategory === 'all' && selectedDifficulty === 'all'
                     ? programs.length
                     : programs.filter((p) => {
-                      if (
-                        selectedCategory !== 'all' &&
-                        !p.categories.includes(selectedCategory)
-                      )
-                        return false;
-                      if (
-                        selectedDifficulty !== 'all' &&
-                        p.difficulty !== selectedDifficulty
-                      )
-                        return false;
-                      return true;
-                    }).length
+                        if (
+                          selectedCategory !== 'all' &&
+                          !p.categories.includes(selectedCategory)
+                        )
+                          return false;
+                        if (
+                          selectedDifficulty !== 'all' &&
+                          p.difficulty !== selectedDifficulty
+                        )
+                          return false;
+                        return true;
+                      }).length
                 }
               />
               {availableGoals.map((goal) => {
@@ -578,7 +584,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           <ProgramLauncherProgramCard
             key={program.id}
             program={program}
-            isLocked={program.isPro && !isPro}
+            isLocked={program.isPro && !subscriptionLoading && !isPro}
             isRecommended={isRecommended}
             onSelect={handleSelectProgram}
           />
@@ -588,7 +594,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           visible={showProgramDetails}
           onClose={() => setShowProgramDetails(false)}
           selectedProgram={selectedProgram}
-          isPro={isPro}
+          isPro={subscriptionLoading || isPro}
           onStartProgram={handleStartProgram}
           onUpgradePress={() => {
             setShowProgramDetails(false);
@@ -604,9 +610,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           onChangeStartDate={handleChangeStartDate}
           selectedProgram={selectedProgram}
           startDatePickerAllowedWeekdays={startDatePickerAllowedWeekdays}
-          confirmLabel={
-            selectedProgram?.daysSplit?.length ? 'Next' : 'Confirm'
-          }
+          confirmLabel={selectedProgram?.daysSplit?.length ? 'Next' : 'Confirm'}
           onConfirm={handleConfirmDate}
           bottomInset={getEffectiveBottomInset(insets.bottom)}
         />

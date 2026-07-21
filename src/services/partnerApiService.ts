@@ -46,10 +46,10 @@ async function fetchPartnerList<T>(path: string): Promise<T[]> {
   }
 }
 
-function normalizeContactFields(raw: {
-  email?: unknown;
-  phone?: unknown;
-}): { email: string | null; phone: string | null } {
+function normalizeContactFields(raw: { email?: unknown; phone?: unknown }): {
+  email: string | null;
+  phone: string | null;
+} {
   return {
     email:
       typeof raw.email === 'string' && raw.email.trim().length > 0
@@ -239,7 +239,6 @@ export function formatAddressMultiLine(address: PublicVenueAddress): string {
   ].filter(Boolean);
   return lines.join('\n');
 }
-
 
 export function formatLocationSubtitle(address: PublicVenueAddress): string {
   return [address.city, address.postcode].filter(Boolean).join(', ');

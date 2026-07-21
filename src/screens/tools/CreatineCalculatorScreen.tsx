@@ -136,8 +136,8 @@ export function CreatineCalculatorScreen() {
           </Text>
           <Text style={localStyles.resultSubtext}>
             Take this amount daily to support muscle creatine stores and
-            training performance. Based on ~0.03 g per kg bodyweight, within
-            the usual 3-5 g/day range used in research.
+            training performance. Based on ~0.03 g per kg bodyweight, within the
+            usual 3-5 g/day range used in research.
           </Text>
 
           <View style={localStyles.sizeBlock}>
@@ -161,8 +161,8 @@ export function CreatineCalculatorScreen() {
                 Warning: Loading above{' '}
                 {formatCreatineGrams(CREATINE_LOADING_GI_WARNING_THRESHOLD_G)}{' '}
                 per day can cause stomach / GI distress for some people. If you
-                load, split the total into 3-4 smaller doses with meals - or skip
-                loading and stick to daily dosing.
+                load, split the total into 3-4 smaller doses with meals - or
+                skip loading and stick to daily dosing.
               </Text>
             ) : null}
             <Text style={localStyles.resultSubtext}>

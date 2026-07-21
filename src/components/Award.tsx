@@ -39,7 +39,9 @@ export default function Award({
           />
         </View>
       </View>
-      <View style={[styles.content, (!granted || isProGateLocked) && styles.locked]}>
+      <View
+        style={[styles.content, (!granted || isProGateLocked) && styles.locked]}
+      >
         <Text style={styles.title}>
           {isProGateLocked ? 'Locked Award' : title}
         </Text>

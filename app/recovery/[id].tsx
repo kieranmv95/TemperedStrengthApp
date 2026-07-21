@@ -22,7 +22,7 @@ export default function RecoveryDetailScreen() {
     return getRecoveryById(recoveryId);
   }, [recoveryId]);
 
-  const { isPro } = useSubscription();
+  const { isPro, isLoading: subscriptionLoading } = useSubscription();
 
   useFocusEffect(
     useCallback(() => {
@@ -67,7 +67,7 @@ export default function RecoveryDetailScreen() {
     );
   }
 
-  const isLocked = recovery.isPremium && !isPro;
+  const isLocked = recovery.isPremium && !subscriptionLoading && !isPro;
 
   return (
     <AppSafeAreaView style={styles.container}>

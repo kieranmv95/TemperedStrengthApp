@@ -1,4 +1,7 @@
-import { AppSafeAreaView, AppScrollView } from '@/src/components/AppSafeAreaView';
+import {
+  AppSafeAreaView,
+  AppScrollView,
+} from '@/src/components/AppSafeAreaView';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -20,19 +23,35 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.14.0',
+    dateLabel: '',
+    notes: ['accounts'],
+  },
+  {
     version: '2.13.0',
     dateLabel: '17th July 2026',
-    notes: ['start programs on any day of the week', 'mark days as complete or skipped', 'removed the start session', 'Promo redemption'],
+    notes: [
+      'start programs on any day of the week',
+      'mark days as complete or skipped',
+      'removed the start session',
+      'Promo redemption',
+    ],
   },
   {
     version: '2.12.0',
     dateLabel: '13th July 2026',
-    notes: ['Competition banner support added', 'Wendler 5/3/1 (3-Day) program added'],
+    notes: [
+      'Competition banner support added',
+      'Wendler 5/3/1 (3-Day) program added',
+    ],
   },
   {
     version: '2.11.0',
     dateLabel: '15th July 2026',
-    notes: ['Clubs, coaches and PTs have landed', 'Workouts Review, top to bottom'],
+    notes: [
+      'Clubs, coaches and PTs have landed',
+      'Workouts Review, top to bottom',
+    ],
   },
   {
     version: '2.10.0',
@@ -42,9 +61,7 @@ const PATCH_NOTES: PatchNote[] = [
   {
     version: '2.9.0',
     dateLabel: '18th June 2026',
-    notes: [
-      'Redesigned the entire app navigation and flow',
-    ],
+    notes: ['Redesigned the entire app navigation and flow'],
   },
   {
     version: '2.8.0',
@@ -96,10 +113,7 @@ const PATCH_NOTES: PatchNote[] = [
   {
     version: '2.5.0',
     dateLabel: '20th May 2026',
-    notes: [
-      'Improved ALL of our workouts',
-      'Added the SHOP!',
-    ]
+    notes: ['Improved ALL of our workouts', 'Added the SHOP!'],
   },
   {
     version: '2.4.1',
@@ -121,9 +135,7 @@ const PATCH_NOTES: PatchNote[] = [
   {
     version: '2.3.2',
     dateLabel: '12th May 2026',
-    notes: [
-      'Sweeping UI changes / fixes / enhancements',
-    ],
+    notes: ['Sweeping UI changes / fixes / enhancements'],
   },
   {
     version: '2.3.1',
@@ -258,7 +270,7 @@ const PATCH_NOTES: PatchNote[] = [
     version: '1.6.0',
     dateLabel: '10 Apr 2026',
     notes: [
-      'iCloud data sync! no more lost data',
+      'Early cloud data sync support',
       'You can now select a program start date in the past',
       'Change program removed in favour of end program',
       'Settings renamed to accounts',

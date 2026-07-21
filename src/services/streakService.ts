@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { syncSetItem } from '@/src/sync/syncStorage';
 
-/** Single JSON blob; mirrored via syncSetItem when iCloud sync is on. LWW conflicts could drop a day in rare multi-device offline cases — see plan. */
+/** Single JSON blob persisted locally and queued for account sync when signed in. */
 export const STREAK_STATE_KEY = 'streak_state_v1';
 
 const MAX_STORED_DATES = 800;
@@ -184,11 +184,11 @@ export function applyDailyStreakCheckIn(
  */
 export function mergeStreakState(
   localRaw: string | null,
-  icloudRaw: string | null
+  cloudRaw: string | null
 ): string | null {
-  if (localRaw === null && icloudRaw === null) return null;
+  if (localRaw === null && cloudRaw === null) return null;
   const local = parseStreakState(localRaw);
-  const cloud = parseStreakState(icloudRaw);
+  const cloud = parseStreakState(cloudRaw);
   const dates = trimOldestDates(
     uniqueSortedDates([...local.dates, ...cloud.dates])
   );

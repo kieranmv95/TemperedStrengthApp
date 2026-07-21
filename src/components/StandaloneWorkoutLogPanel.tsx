@@ -59,11 +59,12 @@ function exerciseCountForWorkout(workout: SingleWorkout): number {
   if (isScaledBlocks(workout.blocks)) {
     return workout.blocks.reduce(
       (n, s) =>
-        n + s.blocks.reduce((inner, b) => inner + b.movements.length, 0),
+        n +
+        s.blocks.reduce((inner, b) => inner + (b.movements?.length ?? 0), 0),
       0
     );
   }
-  return workout.blocks.reduce((n, b) => n + b.movements.length, 0);
+  return workout.blocks.reduce((n, b) => n + (b.movements?.length ?? 0), 0);
 }
 
 function durationMinsForLog(
@@ -156,20 +157,20 @@ export function StandaloneWorkoutLogPanel({
 
     const entry: StandaloneWorkoutLogEntry = editingEntry
       ? {
-        ...editingEntry,
-        loggedAt,
-        payload: built.payload,
-        notes: optionalSessionNotes,
-        updatedAt: now,
-      }
+          ...editingEntry,
+          loggedAt,
+          payload: built.payload,
+          notes: optionalSessionNotes,
+          updatedAt: now,
+        }
       : {
-        id: newStandaloneLogId(),
-        workoutId: workout.id,
-        loggedAt,
-        updatedAt: now,
-        payload: built.payload,
-        notes: optionalSessionNotes,
-      };
+          id: newStandaloneLogId(),
+          workoutId: workout.id,
+          loggedAt,
+          updatedAt: now,
+          payload: built.payload,
+          notes: optionalSessionNotes,
+        };
 
     try {
       await increment('workouts_logged');

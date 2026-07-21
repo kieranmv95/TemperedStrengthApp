@@ -1,4 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
+import type { Session, User } from '@supabase/supabase-js';
 import React, {
   createContext,
   useCallback,
@@ -8,33 +9,61 @@ import React, {
   useState,
 } from 'react';
 import { AppState } from 'react-native';
-import { isIos } from '@/src/utils/platform';
 import {
-  SYNC_ENABLED_KEY,
-  SyncManager,
-  type SyncDecision,
-  type SyncConflict,
-  type SyncMergerRegistry,
-} from '@/src/sync';
-import { ICloudKvsProvider } from '@/src/sync/providers/ICloudKvsProvider';
-import { NoopSyncProvider } from '@/src/sync/providers/NoopSyncProvider';
-import { ICloudSyncConflictModal } from '@/src/components/sync/ICloudSyncConflictModal';
-import { setRuntimeSyncManager } from '@/src/sync/runtime';
+  getSupabaseClient,
+  isSupabaseConfigured,
+  supabase,
+} from '@/src/services/supabaseClient';
 import {
-  STREAK_STATE_KEY,
-  mergeStreakState,
-} from '@/src/services/streakService';
-
-const SYNC_MERGERS: SyncMergerRegistry = {
-  [STREAK_STATE_KEY]: mergeStreakState,
-};
+  clearAccountActive,
+  getActiveAccountUserId,
+  setAccountActive,
+} from '@/src/sync/accountStorage';
+import {
+  clearSyncedLocalData,
+  enqueueCurrentLocalData,
+  migrateLocalDataToSupabase,
+  pullChanges,
+  remoteDataExists,
+  SyncPayloadTooLargeError,
+  syncNow as runSync,
+} from '@/src/sync/syncEngine';
 
 type SyncContextValue = {
-  enabled: boolean;
-  isAvailable: boolean;
-  setEnabled: (enabled: boolean) => Promise<{ isAvailable: boolean }>;
+  isConfigured: boolean;
+  /**
+   * True once getSession() has resolved (before account KV sync finishes).
+   * Use for auth-dependent SDK binding (e.g. RevenueCat identity).
+   */
+  isSessionReady: boolean;
+  /** True once initial session restore + first sync attempt have finished. */
+  isReady: boolean;
+  /** Increments after local storage is updated by account sync/pull. */
+  dataRevision: number;
+  syncError: string | null;
+  session: Session | null;
+  user: User | null;
   syncNow: () => Promise<void>;
+  sendOtp: (email: string, intent: AccountIntent) => Promise<void>;
+  verifyOtp: (
+    email: string,
+    token: string,
+    intent: AccountIntent
+  ) => Promise<{ restored: boolean }>;
+  signOut: () => Promise<void>;
+  deleteAccount: () => Promise<void>;
 };
+
+export type AccountIntent = 'create' | 'restore';
+
+export class AccountRestoreEmptyError extends Error {
+  constructor() {
+    super(
+      'This account does not have any backed-up data yet. Your local data has not been changed.'
+    );
+    this.name = 'AccountRestoreEmptyError';
+  }
+}
 
 const SyncContext = createContext<SyncContextValue | null>(null);
 
@@ -51,138 +80,226 @@ type SyncManagerProviderProps = {
 };
 
 export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
-  const [enabled, setEnabledState] = useState(false);
-  const [isAvailable, setIsAvailable] = useState(false);
+  const [isSessionReady, setIsSessionReady] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [dataRevision, setDataRevision] = useState(0);
+  const [syncError, setSyncError] = useState<string | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const sessionRef = useRef<Session | null>(null);
 
-  const managerRef = useRef<SyncManager | null>(null);
+  const markLocalDataUpdated = useCallback(() => {
+    setDataRevision((value) => value + 1);
+  }, []);
 
-  const [pendingConflicts, setPendingConflicts] = useState<
-    SyncConflict[] | null
-  >(null);
-  const pendingResolverRef = useRef<((decision: SyncDecision) => void) | null>(
-    null
-  );
+  const syncNow = useCallback(async () => {
+    const userId = sessionRef.current?.user.id;
+    if (!userId) return;
+    try {
+      await runSync(userId);
+      setSyncError(null);
+      markLocalDataUpdated();
+    } catch (error) {
+      setSyncError(
+        error instanceof Error ? error.message : 'Account backup failed.'
+      );
+      console.error('Account sync failed; changes will retry later:', error);
+    }
+  }, [markLocalDataUpdated]);
 
-  const requestConflictDecision = useCallback(
-    async (conflicts: SyncConflict[]) => {
-      return await new Promise<SyncDecision>((resolve) => {
-        pendingResolverRef.current = resolve;
-        setPendingConflicts(conflicts);
+  useEffect(() => {
+    if (!supabase) {
+      setIsSessionReady(true);
+      setIsReady(true);
+      return;
+    }
+    let mounted = true;
+    void supabase.auth.getSession().then(async ({ data, error }) => {
+      if (error) {
+        console.error('Failed to restore account session:', error);
+      }
+      if (!mounted) return;
+      const restoredSession = data.session;
+      sessionRef.current = restoredSession;
+      setSession(restoredSession);
+      // Session is known — allow RevenueCat identity bind before KV sync.
+      setIsSessionReady(true);
+      if (restoredSession) {
+        await setAccountActive(restoredSession.user.id);
+        await syncNow();
+      }
+      if (mounted) setIsReady(true);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, nextSession) => {
+        sessionRef.current = nextSession;
+        setSession(nextSession);
+      }
+    );
+    return () => {
+      mounted = false;
+      listener.subscription.unsubscribe();
+    };
+  }, [syncNow]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
+        supabase?.auth.startAutoRefresh();
+        void syncNow();
+      } else {
+        supabase?.auth.stopAutoRefresh();
+      }
+    });
+    return () => subscription.remove();
+  }, [syncNow]);
+
+  useEffect(() => {
+    let wasConnected: boolean | null = null;
+    return NetInfo.addEventListener((state) => {
+      const connected = state.isConnected === true;
+      if (connected && wasConnected === false) void syncNow();
+      wasConnected = connected;
+    });
+  }, [syncNow]);
+
+  useEffect(() => {
+    if (!session) return;
+    const interval = setInterval(
+      () => {
+        if (AppState.currentState === 'active') void syncNow();
+      },
+      5 * 60 * 1000
+    );
+    return () => clearInterval(interval);
+  }, [session, syncNow]);
+
+  const sendOtp = useCallback(
+    async (email: string, intent: AccountIntent): Promise<void> => {
+      const { error } = await getSupabaseClient().auth.signInWithOtp({
+        email: email.trim().toLowerCase(),
+        options: { shouldCreateUser: intent === 'create' },
       });
+      if (error) throw error;
     },
     []
   );
 
-  const buildManager = useCallback(
-    async (nextEnabled: boolean) => {
-      if (!nextEnabled || !isIos) {
-        managerRef.current = new SyncManager({
-          provider: new NoopSyncProvider(),
-          requestConflictDecision,
-          mergers: SYNC_MERGERS,
-        });
-        setRuntimeSyncManager(managerRef.current);
-        setIsAvailable(false);
-        return false;
-      }
-
-      const provider = new ICloudKvsProvider();
-      const availability = await provider.getAvailability();
-      managerRef.current = new SyncManager({
-        provider,
-        requestConflictDecision,
-        mergers: SYNC_MERGERS,
+  const verifyOtp = useCallback(
+    async (
+      email: string,
+      token: string,
+      intent: AccountIntent
+    ): Promise<{ restored: boolean }> => {
+      const client = getSupabaseClient();
+      const { data, error } = await client.auth.verifyOtp({
+        email: email.trim().toLowerCase(),
+        token: token.trim(),
+        type: 'email',
       });
-      setRuntimeSyncManager(managerRef.current);
-      setIsAvailable(availability.available);
-      return availability.available;
-    },
-    [requestConflictDecision]
-  );
-
-  const syncNow = useCallback(async () => {
-    if (!enabled) return;
-    await managerRef.current?.reconcileOnce();
-  }, [enabled]);
-
-  const setEnabled = useCallback(
-    async (nextEnabled: boolean) => {
-      const effectiveEnabled = isIos && nextEnabled;
-      setEnabledState(effectiveEnabled);
-      await AsyncStorage.setItem(
-        SYNC_ENABLED_KEY,
-        effectiveEnabled ? 'true' : 'false'
-      );
-      const available = await buildManager(effectiveEnabled);
-
-      if (effectiveEnabled) {
-        await managerRef.current?.reconcileOnce();
+      if (error) throw error;
+      if (!data.session || !data.user) {
+        throw new Error('Supabase did not return an authenticated session.');
       }
-      return { isAvailable: effectiveEnabled ? available : false };
-    },
-    [buildManager]
-  );
 
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
+      sessionRef.current = data.session;
+      setSession(data.session);
+      const userId = data.user.id;
       try {
-        const raw = await AsyncStorage.getItem(SYNC_ENABLED_KEY);
-        let initialEnabled = raw === 'true';
-        if (!isIos && initialEnabled) {
-          await AsyncStorage.setItem(SYNC_ENABLED_KEY, 'false');
-          initialEnabled = false;
-        }
-        if (!mounted) return;
-        setEnabledState(initialEnabled);
-        await buildManager(initialEnabled);
-        if (initialEnabled) {
-          await managerRef.current?.reconcileOnce();
-        }
-      } catch (error) {
-        console.error('Failed to initialize sync:', error);
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, [buildManager]);
+        const previousUserId = await getActiveAccountUserId();
+        const hasRemoteData = await remoteDataExists(userId);
 
-  useEffect(() => {
-    if (!enabled) return;
-    const subscription = AppState.addEventListener('change', (state) => {
-      if (state === 'active') {
-        syncNow().catch((error) => {
-          console.error('Sync on foreground failed:', error);
-        });
-      }
-    });
-    return () => subscription.remove();
-  }, [enabled, syncNow]);
+        if (intent === 'restore' && !hasRemoteData) {
+          throw new AccountRestoreEmptyError();
+        }
 
-  const onConflictDecision = useCallback((decision: SyncDecision) => {
-    const resolve = pendingResolverRef.current;
-    pendingResolverRef.current = null;
-    setPendingConflicts(null);
-    resolve?.(decision);
+        if (hasRemoteData || intent === 'restore') {
+          if (previousUserId !== userId) {
+            await clearSyncedLocalData();
+          }
+          await setAccountActive(userId);
+          if (previousUserId === userId) {
+            await enqueueCurrentLocalData();
+            try {
+              await runSync(userId);
+              setSyncError(null);
+            } catch (syncFailure) {
+              if (syncFailure instanceof SyncPayloadTooLargeError) {
+                setSyncError(syncFailure.message);
+              } else {
+                throw syncFailure;
+              }
+            }
+          } else {
+            await pullChanges(userId, { full: true });
+          }
+          markLocalDataUpdated();
+          return { restored: true };
+        }
+
+        await migrateLocalDataToSupabase(userId);
+        await setAccountActive(userId);
+        await pullChanges(userId, { full: true });
+        setSyncError(null);
+        markLocalDataUpdated();
+        return { restored: false };
+      } catch (finalizeError) {
+        await client.auth.signOut();
+        sessionRef.current = null;
+        setSession(null);
+        await clearAccountActive();
+        throw finalizeError;
+      }
+    },
+    [markLocalDataUpdated]
+  );
+
+  const signOut = useCallback(async (): Promise<void> => {
+    const { error } = await getSupabaseClient().auth.signOut();
+    if (error) throw error;
+    sessionRef.current = null;
+    setSession(null);
+    await clearAccountActive();
+  }, []);
+
+  const deleteAccount = useCallback(async (): Promise<void> => {
+    const client = getSupabaseClient();
+    const { error } = await client.rpc('delete_own_account');
+    if (error) throw error;
+    await client.auth.signOut({ scope: 'local' });
+    sessionRef.current = null;
+    setSession(null);
+    setSyncError(null);
+    await clearAccountActive({ forgetUser: true });
   }, []);
 
   const value = useMemo<SyncContextValue>(
-    () => ({ enabled, isAvailable, setEnabled, syncNow }),
-    [enabled, isAvailable, setEnabled, syncNow]
+    () => ({
+      isConfigured: isSupabaseConfigured,
+      isSessionReady,
+      isReady,
+      dataRevision,
+      syncError,
+      session,
+      user: session?.user ?? null,
+      syncNow,
+      sendOtp,
+      verifyOtp,
+      signOut,
+      deleteAccount,
+    }),
+    [
+      dataRevision,
+      deleteAccount,
+      isReady,
+      isSessionReady,
+      sendOtp,
+      session,
+      signOut,
+      syncError,
+      syncNow,
+      verifyOtp,
+    ]
   );
 
-  const shouldShowModal = pendingConflicts !== null;
-
-  return (
-    <SyncContext.Provider value={value}>
-      {children}
-      <ICloudSyncConflictModal
-        visible={shouldShowModal}
-        conflicts={pendingConflicts}
-        onKeepLocal={() => onConflictDecision('keep_local')}
-        onKeepICloud={() => onConflictDecision('keep_icloud')}
-      />
-    </SyncContext.Provider>
-  );
+  return <SyncContext.Provider value={value}>{children}</SyncContext.Provider>;
 }

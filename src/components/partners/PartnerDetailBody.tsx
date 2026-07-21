@@ -9,7 +9,11 @@ import {
   isOpenNow,
   orderedOpeningHours,
 } from '@/src/services/partnerApiService';
-import type { OpeningHours, PartnerKind, PartnerListing } from '@/src/types/partner';
+import type {
+  OpeningHours,
+  PartnerKind,
+  PartnerListing,
+} from '@/src/types/partner';
 import {
   gymHasLeadMedia,
   gymShowsFocusAreas,
@@ -89,7 +93,9 @@ export function PartnerDetailBody({
           <View
             style={[
               styles.openStatusDot,
-              openStatus ? styles.openStatusDotOpen : styles.openStatusDotClosed,
+              openStatus
+                ? styles.openStatusDotOpen
+                : styles.openStatusDotClosed,
             ]}
             accessibilityLabel={openStatus ? 'Open now' : 'Closed'}
           />
@@ -300,7 +306,9 @@ function PartnerVisitPanel({
               {openStatus ? 'Open now' : 'Closed'}
             </Text>
           ) : null}
-          <Text style={styles.description}>Exact address not listed publicly.</Text>
+          <Text style={styles.description}>
+            Exact address not listed publicly.
+          </Text>
           {listing.kind === 'coach' && listing.radiusServedKm != null ? (
             <Text style={styles.description}>
               {formatServiceRadius(listing.radiusServedKm)}

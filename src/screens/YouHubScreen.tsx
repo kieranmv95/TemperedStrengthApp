@@ -22,8 +22,7 @@ type HubDestination = {
 const DESTINATIONS: HubDestination[] = [
   {
     title: 'Account & Settings',
-    description:
-      'Weight units, program preferences, and patch notes.',
+    description: 'Weight units, program preferences, and patch notes.',
     icon: 'person-outline',
     route: '/records/account',
     accessibilityLabel: 'Open account and settings',

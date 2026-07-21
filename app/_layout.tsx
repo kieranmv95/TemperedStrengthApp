@@ -1,3 +1,5 @@
+import { AccountPromptController } from '@/src/components/account/AccountPromptController';
+import { PostHogCaptureBridge } from '@/src/components/PostHogCaptureBridge';
 import { ExerciseVideoProvider } from '@/src/hooks/exercise-video-context';
 import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
@@ -94,14 +96,22 @@ export default function RootLayout() {
         ...(__DEV__ ? { flushAt: 1, flushInterval: 2_000 } : null),
       }}
     >
+      <PostHogCaptureBridge />
       <ThemeProvider value={DarkTheme}>
         <SyncManagerProvider>
+          <AccountPromptController />
           <SubscriptionProvider>
             <TogetherWeLiftProvider>
               <ExerciseVideoProvider>
                 <Stack>
-                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                  <Stack.Screen name="glossary" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="(tabs)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="glossary"
+                    options={{ headerShown: false }}
+                  />
                   <Stack.Screen
                     name="tools/one-rep-max"
                     options={{ headerShown: false }}
@@ -119,12 +129,18 @@ export default function RootLayout() {
                     options={{ headerShown: false }}
                   />
                   <Stack.Screen name="shop" options={{ headerShown: false }} />
-                  <Stack.Screen name="discover" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="discover"
+                    options={{ headerShown: false }}
+                  />
                   <Stack.Screen
                     name="competition"
                     options={{ headerShown: false }}
                   />
-                  <Stack.Screen name="recovery" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="recovery"
+                    options={{ headerShown: false }}
+                  />
                   <Stack.Screen
                     name="partner/[kind]/[id]"
                     options={{ headerShown: false }}
@@ -148,6 +164,14 @@ export default function RootLayout() {
                   <Stack.Screen
                     name="account/redeem-promo"
                     options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="account/create-account"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="account/verify-otp"
+                    options={{ headerShown: false, gestureEnabled: false }}
                   />
                   <Stack.Screen
                     name="onboarding"

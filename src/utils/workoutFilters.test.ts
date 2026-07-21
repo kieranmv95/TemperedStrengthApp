@@ -39,7 +39,9 @@ describe('workoutFilters', () => {
 
   it('covers every minute with at least one bucket', () => {
     for (let minutes = 5; minutes <= 90; minutes += 1) {
-      const matches = WORKOUT_TIME_BUCKET_OPTIONS.some((b) => b.matches(minutes));
+      const matches = WORKOUT_TIME_BUCKET_OPTIONS.some((b) =>
+        b.matches(minutes)
+      );
       expect(matches).toBe(true);
     }
   });
@@ -96,7 +98,10 @@ describe('workoutFilters', () => {
   });
 
   it('faceted counts ignore the group own selection so they never grow', () => {
-    const emomOnly = { activeCategoryFilter: 'All' as const, selectedFormat: ['EMOM' as const] };
+    const emomOnly = {
+      activeCategoryFilter: 'All' as const,
+      selectedFormat: ['EMOM' as const],
+    };
     const emomOnlyCount = allStandaloneWorkouts.filter((w) =>
       workoutMatchesFilters(w, emomOnly)
     ).length;

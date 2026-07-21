@@ -11,7 +11,7 @@ import type {
   WorkoutNotes,
 } from '@/src/types/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getRuntimeSyncManager } from '@/src/sync/runtime';
+import { recordLocalSet } from '@/src/sync/syncEngine';
 import { syncRemoveItem, syncSetItem } from '@/src/sync/syncStorage';
 import {
   ACTIVE_SESSION_KEY,
@@ -391,17 +391,11 @@ export const moveProgramDayData = async (
 
   await AsyncStorage.multiSet(entries);
 
-  const manager = getRuntimeSyncManager();
-  if (manager) {
-    for (const [key, value] of entries) {
-      try {
-        await manager.mirrorSet(key, value);
-      } catch (error) {
-        console.error(
-          'Failed to mirror moved program day to sync provider:',
-          error
-        );
-      }
+  for (const [key, value] of entries) {
+    try {
+      await recordLocalSet(key, value);
+    } catch (error) {
+      console.error('Failed to enqueue moved program day for sync:', error);
     }
   }
 

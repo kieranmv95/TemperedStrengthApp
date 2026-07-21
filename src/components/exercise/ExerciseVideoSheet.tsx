@@ -1,10 +1,7 @@
 import { exerciseVideoStyles as styles } from '@/src/components/exercise/exerciseVideoStyles';
 import { Colors, Spacing } from '@/src/constants/theme';
 import { getExerciseById } from '@/src/data/exercises';
-import {
-  getYoutubeEmbedHtml,
-  YOUTUBE_EMBED_ORIGIN,
-} from '@/src/utils/youtube';
+import { getYoutubeEmbedHtml, YOUTUBE_EMBED_ORIGIN } from '@/src/utils/youtube';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo } from 'react';
 import {
@@ -55,10 +52,7 @@ export function ExerciseVideoSheet({
           accessibilityLabel="Close exercise video"
         />
         <View
-          style={[
-            styles.sheet,
-            { paddingBottom: insets.bottom + Spacing.lg },
-          ]}
+          style={[styles.sheet, { paddingBottom: insets.bottom + Spacing.lg }]}
         >
           {exercise && embedHtml ? (
             <>
@@ -98,9 +92,7 @@ export function ExerciseVideoSheet({
                 </View>
 
                 {exercise.description ? (
-                  <Text style={styles.description}>
-                    {exercise.description}
-                  </Text>
+                  <Text style={styles.description}>{exercise.description}</Text>
                 ) : null}
               </ScrollView>
             </>
