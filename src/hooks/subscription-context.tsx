@@ -1,7 +1,6 @@
 import {
   getCustomerInfo,
   getOfferings,
-  invalidateCustomerInfoRequest,
   PRO_ENTITLEMENT_ID,
   purchasePackage,
   restorePurchases,
@@ -511,7 +510,6 @@ export function SubscriptionProvider({
       // update can arrive after Purchases.logIn() has already returned Pro.
       void (async () => {
         try {
-          invalidateCustomerInfoRequest();
           const fresh = await getCustomerInfo();
           if (
             !identitySettledRef.current ||
@@ -521,6 +519,12 @@ export function SubscriptionProvider({
           }
           updateStateFromCustomerInfo(fresh);
         } catch (error) {
+          const purchasesError = error as {
+            info?: { backendErrorCode?: number };
+          };
+          if (purchasesError?.info?.backendErrorCode === 7638) {
+            return;
+          }
           console.error('Error refreshing customer info from listener:', error);
         }
       })();

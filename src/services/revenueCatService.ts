@@ -73,37 +73,85 @@ export async function initializeRevenueCat(userId?: string): Promise<void> {
   }
 }
 
-// Request deduplication: track pending requests to prevent concurrent calls
+// Request deduplication + SDK serialization. RevenueCat returns 7638 when
+// getCustomerInfo() is invoked while another request is still in flight.
 let pendingCustomerInfoRequest: Promise<CustomerInfo> | null = null;
+let sdkCustomerInfoMutex: Promise<void> = Promise.resolve();
+/** Bumped on invalidate so callers after logIn never reuse a pre-login result. */
+let customerInfoRequestGeneration = 0;
+
+const REQUEST_IN_FLIGHT_ERROR_CODE = 7638;
+const MAX_CUSTOMER_INFO_ATTEMPTS = 3;
+
+function isRequestInFlightError(error: unknown): boolean {
+  const purchasesError = error as {
+    info?: { backendErrorCode?: number };
+  };
+  return purchasesError?.info?.backendErrorCode === REQUEST_IN_FLIGHT_ERROR_CODE;
+}
+
+async function fetchCustomerInfoFromSdk(): Promise<CustomerInfo> {
+  const previous = sdkCustomerInfoMutex;
+  let releaseMutex!: () => void;
+  sdkCustomerInfoMutex = new Promise<void>((resolve) => {
+    releaseMutex = resolve;
+  });
+
+  await previous;
+  try {
+    return await Purchases.getCustomerInfo();
+  } finally {
+    releaseMutex();
+  }
+}
 
 /**
- * Drop any in-flight getCustomerInfo() so a post-login fetch cannot reuse a
- * pre-login (anonymous) response.
+ * Drop any cached getCustomerInfo() result so a post-login fetch cannot reuse a
+ * pre-login (anonymous) response. Does not interrupt an in-flight SDK request.
  */
 export function invalidateCustomerInfoRequest(): void {
+  customerInfoRequestGeneration += 1;
   pendingCustomerInfoRequest = null;
 }
 
 /**
  * Get current customer info
- * Uses request deduplication to prevent concurrent calls
+ * Uses request deduplication and SDK serialization to prevent concurrent calls
  */
 export async function getCustomerInfo(): Promise<CustomerInfo> {
-  // If there's already a pending request, return it instead of creating a new one
   if (pendingCustomerInfoRequest) {
     return pendingCustomerInfoRequest;
   }
 
-  // Create a new request
+  const generationAtStart = customerInfoRequestGeneration;
   pendingCustomerInfoRequest = (async () => {
     try {
-      const customerInfo = await Purchases.getCustomerInfo();
-      return customerInfo;
-    } catch (error) {
-      console.error('Error fetching customer info:', error);
-      throw error;
+      for (let attempt = 0; attempt < MAX_CUSTOMER_INFO_ATTEMPTS; attempt++) {
+        try {
+          const customerInfo = await fetchCustomerInfoFromSdk();
+          if (generationAtStart !== customerInfoRequestGeneration) {
+            pendingCustomerInfoRequest = null;
+            return getCustomerInfo();
+          }
+          return customerInfo;
+        } catch (error) {
+          if (
+            isRequestInFlightError(error) &&
+            attempt < MAX_CUSTOMER_INFO_ATTEMPTS - 1
+          ) {
+            await new Promise((resolve) =>
+              setTimeout(resolve, 250 * (attempt + 1))
+            );
+            continue;
+          }
+          if (!isRequestInFlightError(error)) {
+            console.error('Error fetching customer info:', error);
+          }
+          throw error;
+        }
+      }
+      throw new Error('Failed to fetch customer info');
     } finally {
-      // Clear the pending request when done (success or error)
       pendingCustomerInfoRequest = null;
     }
   })();
@@ -116,7 +164,7 @@ export async function getCustomerInfo(): Promise<CustomerInfo> {
  */
 export async function hasProEntitlement(): Promise<boolean> {
   try {
-    const customerInfo = await Purchases.getCustomerInfo();
+    const customerInfo = await getCustomerInfo();
     return customerInfo.entitlements.active[PRO_ENTITLEMENT_ID] !== undefined;
   } catch (error) {
     console.error('Error checking entitlement:', error);
@@ -178,7 +226,7 @@ export async function restorePurchases(): Promise<CustomerInfo> {
  */
 export async function isSubscribed(): Promise<boolean> {
   try {
-    const customerInfo = await Purchases.getCustomerInfo();
+    const customerInfo = await getCustomerInfo();
     const entitlement = customerInfo.entitlements.active[PRO_ENTITLEMENT_ID];
 
     if (!entitlement) {
@@ -202,7 +250,7 @@ export async function isSubscribed(): Promise<boolean> {
  */
 export async function getActiveProductIdentifier(): Promise<string | null> {
   try {
-    const customerInfo = await Purchases.getCustomerInfo();
+    const customerInfo = await getCustomerInfo();
     const entitlement = customerInfo.entitlements.active[PRO_ENTITLEMENT_ID];
     return entitlement?.productIdentifier || null;
   } catch (error) {
@@ -216,8 +264,7 @@ export async function getActiveProductIdentifier(): Promise<string | null> {
  */
 export async function syncPurchases(): Promise<CustomerInfo> {
   try {
-    const customerInfo = await Purchases.getCustomerInfo();
-    return customerInfo;
+    return await getCustomerInfo();
   } catch (error) {
     console.error('Error syncing purchases:', error);
     throw error;

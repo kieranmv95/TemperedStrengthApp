@@ -310,6 +310,16 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
     placeholder:
       'Score 1: AMRAP rounds + reps / Score 2: Part B finish time or "cap"',
   },
+  ar_06: {
+    kind: 'max_reps',
+    label: 'Total calories',
+    higherIsBetter: true,
+  },
+  ar_07: {
+    kind: 'duration',
+    label: 'Finish time',
+    lowerIsBetter: true,
+  },
 
   // HIIT Shred (6 Weeks) Pro — standalone WOD copies p_55–p_78
   p_55: {

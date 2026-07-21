@@ -103,6 +103,11 @@ describe('formatStandaloneLogSummary', () => {
     kind: 'max_reps',
     label: 'Reps',
   };
+  const caloriesSchema: WorkoutLogSchema = {
+    kind: 'max_reps',
+    label: 'Total calories',
+    higherIsBetter: true,
+  };
   const distanceM: WorkoutLogSchema = {
     kind: 'distance',
     unit: 'm',
@@ -139,6 +144,12 @@ describe('formatStandaloneLogSummary', () => {
     expect(
       formatStandaloneLogSummary({ kind: 'max_reps', reps: 42 }, maxRepsSchema)
     ).toBe('42 reps');
+  });
+
+  it('formats max_reps calories payload', () => {
+    expect(
+      formatStandaloneLogSummary({ kind: 'max_reps', reps: 42 }, caloriesSchema)
+    ).toBe('42 calories');
   });
 
   it('formats distance with schema unit m', () => {
