@@ -1,8 +1,7 @@
 import type { StandaloneWorkoutSource } from '@/src/types/workouts';
 
 const collab = {
-  imageUrl:
-    'https://scontent-man2-1.cdninstagram.com/v/t51.82787-19/559154916_17854417824547327_2276666834850858080_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby40NzAuYzIifQ&_nc_ht=scontent-man2-1.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2gF6p8x6XKJ4bcmSxauRTcHDsDOaPSncIUTGl0rdMbjZUExdtpB9d_jD_kOlkDHve8k&_nc_ohc=WzfANukQ2rEQ7kNvwFuKRyx&_nc_gid=mfsJZ0PGDRy2eLZOR1kEWw&edm=APoiHPcBAAAA&ccb=7-5&oh=00_AQCHEMvSZPGSmjgE97mj71jOgxmXa7bq6RdGGdZQpUF_EA&oe=6A56AD0A&_nc_sid=22de04',
+  image: require('@/assets/images/collabs/arena_games.jpg'),
   name: 'Arena Games',
   description:
     'This workout is brought to you by Arena Games, where we put everyday athletes on the big stage.',

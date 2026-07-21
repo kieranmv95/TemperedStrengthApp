@@ -23,6 +23,11 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.14.1',
+    dateLabel: '',
+    notes: ['OTP countdown fixed', 'collab images fixed'],
+  },
+  {
     version: '2.14.0',
     dateLabel: '',
     notes: ['accounts'],

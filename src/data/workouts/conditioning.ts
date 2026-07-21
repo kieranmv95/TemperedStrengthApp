@@ -12,8 +12,7 @@ export const conditioning: StandaloneWorkoutSource[] = [
     tags: ['Cardio', 'Full Body', 'For Time'],
     isPremium: false,
     collab: {
-      imageUrl:
-        'https://scontent-man2-1.cdninstagram.com/v/t51.82787-19/524893152_18523228096024599_5052690189735139261_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-man2-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gEgAW0c1AhOny3ZMcrCDtW-Nfb3ma7vVmDUk_oBGyvJL0oXl9-VdjhpZZscW6EpXf8&_nc_ohc=DTnEuI3LzwwQ7kNvwEx0H7L&_nc_gid=UgpisS-mYWtoZWgUf8aElg&edm=APoiHPcBAAAA&ccb=7-5&oh=00_AQBLg4OWtXeSNB8y4YBDyHzYDUg8RCgNBVppdosxftrpVQ&oe=6A5424DB&_nc_sid=22de04',
+      image: require('@/assets/images/collabs/chase_pain.jpg'),
       name: 'Chase Pain Podcast',
       description:
         'This workouts is brought to you by the chase pain podcast, sharing conversations with athletes from all different walks of life.',

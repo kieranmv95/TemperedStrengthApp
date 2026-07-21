@@ -1,3 +1,5 @@
+import type { ImageSourcePropType } from 'react-native';
+
 export type WorkoutCategory =
   | 'Strength'
   | 'Skill'
@@ -139,7 +141,7 @@ export type WorkoutCollab = {
   description: string;
   link: string;
   linkCopy?: string;
-  imageUrl?: string;
+  image?: ImageSourcePropType;
   /** Optional white-label colours for the collab card; each falls back to the app theme. */
   inColabWithColor?: string;
   bgColor?: string;

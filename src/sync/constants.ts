@@ -7,3 +7,4 @@ export const SKIPPED_ACCOUNT_CREATION_AT_KEY =
 export const ACCOUNT_NUDGE_SHOWN_AT_KEY = '__account_nudge_shown_at__';
 export const ACCOUNT_FEATURE_INTRO_DISMISSED_KEY =
   '__account_feature_intro_dismissed__';
+export const OTP_LAST_SENT_AT_KEY = '__otp_last_sent_at__';

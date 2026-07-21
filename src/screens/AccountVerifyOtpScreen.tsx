@@ -5,11 +5,17 @@ import {
   useSyncManager,
   type AccountIntent,
 } from '@/src/hooks/sync-manager-context';
+import {
+  clearOtpLastSentAt,
+  getOtpLastSentAt,
+  getOtpResendCooldownRemainingSeconds,
+} from '@/src/sync/accountStorage';
 import { SyncPayloadTooLargeError } from '@/src/sync/syncEngine';
 import { router, useLocalSearchParams, type Href } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
+  AppState,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -18,8 +24,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
-const RESEND_COOLDOWN_SECONDS = 60;
 
 export function AccountVerifyOtpScreen() {
   const params = useLocalSearchParams<{
@@ -35,13 +39,40 @@ export function AccountVerifyOtpScreen() {
   const [code, setCode] = useState('');
   const [verifying, setVerifying] = useState(false);
   const [resending, setResending] = useState(false);
-  const [cooldown, setCooldown] = useState(RESEND_COOLDOWN_SECONDS);
+  const [sentAt, setSentAt] = useState<number | null>(null);
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    let cancelled = false;
+    void getOtpLastSentAt(email).then((storedSentAt) => {
+      if (cancelled) return;
+      setSentAt(storedSentAt ?? Date.now());
+      setNow(Date.now());
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [email]);
+
+  const cooldown = useMemo(
+    () => getOtpResendCooldownRemainingSeconds(sentAt, now),
+    [sentAt, now]
+  );
 
   useEffect(() => {
     if (cooldown <= 0) return;
-    const timer = setTimeout(() => setCooldown((value) => value - 1), 1000);
-    return () => clearTimeout(timer);
+    const interval = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(interval);
   }, [cooldown]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
+        setNow(Date.now());
+      }
+    });
+    return () => subscription.remove();
+  }, []);
 
   const submit = async () => {
     if (code.trim().length < 6) {
@@ -51,6 +82,7 @@ export function AccountVerifyOtpScreen() {
     setVerifying(true);
     try {
       const result = await verifyOtp(email, code, intent);
+      await clearOtpLastSentAt();
       const destination = result.restored
         ? '/'
         : intent === 'create'
@@ -80,7 +112,9 @@ export function AccountVerifyOtpScreen() {
     setResending(true);
     try {
       await sendOtp(email, intent);
-      setCooldown(RESEND_COOLDOWN_SECONDS);
+      const nextSentAt = Date.now();
+      setSentAt(nextSentAt);
+      setNow(nextSentAt);
       Alert.alert('Code sent', 'Check your email for a new code.');
     } catch (error) {
       console.error('Failed to resend account OTP:', error);
@@ -133,7 +167,7 @@ export function AccountVerifyOtpScreen() {
         <TouchableOpacity
           style={styles.secondaryButton}
           onPress={() => void resend()}
-          disabled={cooldown > 0 || resending}
+          disabled={sentAt === null || cooldown > 0 || resending}
         >
           <Text style={styles.secondaryButtonText}>
             {cooldown > 0

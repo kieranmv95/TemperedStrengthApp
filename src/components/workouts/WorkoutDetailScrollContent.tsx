@@ -171,11 +171,8 @@ export function WorkoutDetailScrollContent({
           accessibilityLabel={`In collaboration with ${collab.name}. Find out more.`}
         >
           <View style={styles.collabHeaderRow}>
-            {collab.imageUrl ? (
-              <Image
-                source={{ uri: collab.imageUrl }}
-                style={styles.collabImage}
-              />
+            {collab.image ? (
+              <Image source={collab.image} style={styles.collabImage} />
             ) : null}
             <View style={styles.collabHeaderText}>
               <Text

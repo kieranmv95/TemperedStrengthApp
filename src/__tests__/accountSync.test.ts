@@ -19,7 +19,12 @@ import {
 import {
   ACTIVE_ACCOUNT_USER_ID_KEY,
   clearAccountActive,
+  getOtpLastSentAt,
+  getOtpResendCooldownRemainingSeconds,
+  OTP_RESEND_COOLDOWN_MS,
+  recordOtpSent,
 } from '@/src/sync/accountStorage';
+import { OTP_LAST_SENT_AT_KEY } from '@/src/sync/constants';
 import { shouldSync } from '@/src/sync/syncedKeys';
 
 jest.mock('@/src/services/posthogClient', () => ({
@@ -107,5 +112,29 @@ describe('account sync local queue', () => {
     await expect(
       AsyncStorage.getItem(ACTIVE_ACCOUNT_USER_ID_KEY)
     ).resolves.toBeNull();
+  });
+
+  it('tracks OTP resend cooldown by wall-clock time', async () => {
+    const email = 'user@example.com';
+    const sentAt = Date.now() - 25_000;
+
+    await recordOtpSent(email);
+    const stored = await AsyncStorage.getItem(OTP_LAST_SENT_AT_KEY);
+    expect(stored).not.toBeNull();
+
+    const parsed = JSON.parse(stored ?? '{}') as {
+      email: string;
+      sentAt: number;
+    };
+    expect(parsed.email).toBe(email);
+
+    expect(getOtpResendCooldownRemainingSeconds(sentAt, sentAt + 25_000)).toBe(
+      Math.ceil((OTP_RESEND_COOLDOWN_MS - 25_000) / 1000)
+    );
+    expect(getOtpResendCooldownRemainingSeconds(sentAt, sentAt + 70_000)).toBe(
+      0
+    );
+    expect(await getOtpLastSentAt('other@example.com')).toBeNull();
+    expect(await getOtpLastSentAt(email)).toBe(parsed.sentAt);
   });
 });

@@ -4,9 +4,55 @@ import {
   ACCOUNT_NUDGE_SHOWN_AT_KEY,
   HAS_ACCOUNT_KEY,
   LAST_SYNCED_AT_KEY,
+  OTP_LAST_SENT_AT_KEY,
   SKIPPED_ACCOUNT_CREATION_AT_KEY,
   SYNC_QUEUE_KEY,
 } from './constants';
+
+export const OTP_RESEND_COOLDOWN_MS = 60_000;
+
+type OtpLastSent = {
+  email: string;
+  sentAt: number;
+};
+
+function normalizeAccountEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
+export function getOtpResendCooldownRemainingSeconds(
+  sentAt: number | null,
+  now: number = Date.now()
+): number {
+  if (sentAt === null) return 0;
+  const remainingMs = sentAt + OTP_RESEND_COOLDOWN_MS - now;
+  return Math.max(0, Math.ceil(remainingMs / 1000));
+}
+
+export async function recordOtpSent(email: string): Promise<void> {
+  const payload: OtpLastSent = {
+    email: normalizeAccountEmail(email),
+    sentAt: Date.now(),
+  };
+  await AsyncStorage.setItem(OTP_LAST_SENT_AT_KEY, JSON.stringify(payload));
+}
+
+export async function getOtpLastSentAt(email: string): Promise<number | null> {
+  const raw = await AsyncStorage.getItem(OTP_LAST_SENT_AT_KEY);
+  if (!raw) return null;
+
+  try {
+    const parsed = JSON.parse(raw) as OtpLastSent;
+    if (parsed.email !== normalizeAccountEmail(email)) return null;
+    return parsed.sentAt;
+  } catch {
+    return null;
+  }
+}
+
+export async function clearOtpLastSentAt(): Promise<void> {
+  await AsyncStorage.removeItem(OTP_LAST_SENT_AT_KEY);
+}
 
 export const ACTIVE_ACCOUNT_USER_ID_KEY = '__active_account_user_id__';
 

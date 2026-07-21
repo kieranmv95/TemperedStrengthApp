@@ -17,6 +17,7 @@ import {
 import {
   clearAccountActive,
   getActiveAccountUserId,
+  recordOtpSent,
   setAccountActive,
 } from '@/src/sync/accountStorage';
 import {
@@ -180,6 +181,7 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
         options: { shouldCreateUser: intent === 'create' },
       });
       if (error) throw error;
+      await recordOtpSent(email);
     },
     []
   );
