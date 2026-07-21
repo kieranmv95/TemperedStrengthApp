@@ -2,7 +2,7 @@ import { TEMPERED_STRENGTH_API_ORIGIN } from '@/src/services/temperedStrengthApi
 import type {
   LiveCompetition,
   LiveCompetitionEntry,
-  LiveCompetitionOrderBy,
+  LiveCompetitionMetricType,
 } from '@/src/types/live-competition';
 import { type CompetitionEnvironment } from '../utils/environment';
 
@@ -18,7 +18,7 @@ type LiveCompetitionApiResponse = {
   description: unknown;
   additionalInfo: unknown;
   linkText: unknown;
-  orderBy: unknown;
+  metricType: unknown;
   theme: unknown;
   entries: unknown;
 };
@@ -31,10 +31,23 @@ type LiveCompetitionCache = {
 
 let liveCompetitionCache: LiveCompetitionCache | null = null;
 
-function isLiveCompetitionOrderBy(
+const LIVE_COMPETITION_METRIC_TYPES = [
+  'max_weight',
+  'max_reps',
+  'max_time',
+  'max_calories',
+  'max_distance',
+] as const satisfies readonly LiveCompetitionMetricType[];
+
+function isLiveCompetitionMetricType(
   value: unknown
-): value is LiveCompetitionOrderBy {
-  return value === 'weight' || value === 'time';
+): value is LiveCompetitionMetricType {
+  return (
+    typeof value === 'string' &&
+    LIVE_COMPETITION_METRIC_TYPES.includes(
+      value as LiveCompetitionMetricType
+    )
+  );
 }
 
 function parseEntry(raw: unknown): LiveCompetitionEntry | null {
@@ -72,7 +85,7 @@ export function parseLiveCompetitionResponse(
     typeof data.title !== 'string' ||
     typeof data.description !== 'string' ||
     typeof data.linkText !== 'string' ||
-    !isLiveCompetitionOrderBy(data.orderBy) ||
+    !isLiveCompetitionMetricType(data.metricType) ||
     !data.theme ||
     typeof data.theme !== 'object' ||
     !Array.isArray(data.entries)
@@ -105,7 +118,7 @@ export function parseLiveCompetitionResponse(
     additionalInfo:
       typeof data.additionalInfo === 'string' ? data.additionalInfo : '',
     linkText: data.linkText,
-    orderBy: data.orderBy,
+    metricType: data.metricType,
     theme: {
       borderColor: theme.borderColor as string,
       bgColor: theme.bgColor as string,

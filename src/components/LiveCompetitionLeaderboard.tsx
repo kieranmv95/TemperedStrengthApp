@@ -37,10 +37,10 @@ export function LiveCompetitionLeaderboard({
       (entry) => entry.category === activeCategory
     );
 
-    return sortLiveCompetitionEntries(categoryEntries, competition.orderBy);
-  }, [activeCategory, competition.entries, competition.orderBy]);
+    return sortLiveCompetitionEntries(categoryEntries, competition.metricType);
+  }, [activeCategory, competition.entries, competition.metricType]);
 
-  const scoreLabel = getLiveCompetitionScoreLabel(competition.orderBy);
+  const scoreLabel = getLiveCompetitionScoreLabel(competition.metricType);
 
   if (categories.length === 0) {
     return <Text style={styles.emptyState}>No leaderboard entries yet.</Text>;
@@ -84,7 +84,10 @@ export function LiveCompetitionLeaderboard({
                   {item.name}
                 </Text>
                 <Text style={[styles.cell, styles.scoreCell]}>
-                  {formatLiveCompetitionScore(item.score, competition.orderBy)}
+                  {formatLiveCompetitionScore(
+                    item.score,
+                    competition.metricType
+                  )}
                 </Text>
               </View>
             </View>

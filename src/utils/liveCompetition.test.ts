@@ -1,7 +1,9 @@
 import type { LiveCompetitionEntry } from '@/src/types/live-competition';
 import {
+  compareLiveCompetitionEntries,
   formatLiveCompetitionScore,
   getLiveCompetitionCategories,
+  getLiveCompetitionScoreLabel,
   resolveLiveCompetitionActiveCategory,
   sortLiveCompetitionEntries,
 } from '@/src/utils/liveCompetition';
@@ -18,31 +20,57 @@ describe('liveCompetition utils', () => {
     expect(getLiveCompetitionCategories(entries)).toEqual(['Male', 'Female']);
   });
 
-  it('sorts weight entries highest first', () => {
+  it('sorts max_weight entries highest first', () => {
     const maleEntries = entries.filter((entry) => entry.category === 'Male');
-    expect(sortLiveCompetitionEntries(maleEntries, 'weight')).toEqual([
+    expect(sortLiveCompetitionEntries(maleEntries, 'max_weight')).toEqual([
       { name: 'B', score: 150, category: 'Male' },
       { name: 'A', score: 100, category: 'Male' },
     ]);
   });
 
-  it('sorts time entries fastest first', () => {
+  it('sorts max_time entries fastest first', () => {
     const timeEntries: LiveCompetitionEntry[] = [
       { name: 'A', score: 95, category: 'Male' },
       { name: 'B', score: 72, category: 'Male' },
       { name: 'C', score: 110, category: 'Male' },
     ];
 
-    expect(sortLiveCompetitionEntries(timeEntries, 'time')).toEqual([
+    expect(sortLiveCompetitionEntries(timeEntries, 'max_time')).toEqual([
       { name: 'B', score: 72, category: 'Male' },
       { name: 'A', score: 95, category: 'Male' },
       { name: 'C', score: 110, category: 'Male' },
     ]);
   });
 
-  it('formats scores for weight and time', () => {
-    expect(formatLiveCompetitionScore(142, 'weight')).toBe('142 kg');
-    expect(formatLiveCompetitionScore(95, 'time')).toBe('1:35');
+  it('sorts max_reps, max_calories, and max_distance highest first', () => {
+    const repsEntries: LiveCompetitionEntry[] = [
+      { name: 'A', score: 10, category: 'Male' },
+      { name: 'B', score: 25, category: 'Male' },
+    ];
+
+    expect(compareLiveCompetitionEntries(repsEntries[0], repsEntries[1], 'max_reps')).toBeGreaterThan(0);
+    expect(
+      compareLiveCompetitionEntries(repsEntries[0], repsEntries[1], 'max_calories')
+    ).toBeGreaterThan(0);
+    expect(
+      compareLiveCompetitionEntries(repsEntries[0], repsEntries[1], 'max_distance')
+    ).toBeGreaterThan(0);
+  });
+
+  it('formats scores for each metric type', () => {
+    expect(formatLiveCompetitionScore(142, 'max_weight')).toBe('142 kg');
+    expect(formatLiveCompetitionScore(25, 'max_reps')).toBe('25 reps');
+    expect(formatLiveCompetitionScore(95, 'max_time')).toBe('1:35');
+    expect(formatLiveCompetitionScore(450, 'max_calories')).toBe('450 kcal');
+    expect(formatLiveCompetitionScore(5000, 'max_distance')).toBe('5000 m');
+  });
+
+  it('returns score labels for each metric type', () => {
+    expect(getLiveCompetitionScoreLabel('max_weight')).toBe('Weight');
+    expect(getLiveCompetitionScoreLabel('max_reps')).toBe('Reps');
+    expect(getLiveCompetitionScoreLabel('max_time')).toBe('Time');
+    expect(getLiveCompetitionScoreLabel('max_calories')).toBe('Calories');
+    expect(getLiveCompetitionScoreLabel('max_distance')).toBe('Distance');
   });
 });
 

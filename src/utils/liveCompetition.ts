@@ -1,8 +1,7 @@
 import type {
   LiveCompetitionEntry,
-  LiveCompetitionOrderBy,
+  LiveCompetitionMetricType,
 } from '@/src/types/live-competition';
-import { formatDurationSeconds } from '@/src/utils/standaloneWorkoutLogFormat';
 
 export function getLiveCompetitionCategories(
   entries: LiveCompetitionEntry[]
@@ -20,36 +19,63 @@ export function getLiveCompetitionCategories(
   return categories;
 }
 
+export function compareLiveCompetitionEntries(
+  a: LiveCompetitionEntry,
+  b: LiveCompetitionEntry,
+  metricType: LiveCompetitionMetricType
+): number {
+  const ascending = metricType === 'max_time';
+  return ascending ? a.score - b.score : b.score - a.score;
+}
+
 export function sortLiveCompetitionEntries(
   entries: LiveCompetitionEntry[],
-  orderBy: LiveCompetitionOrderBy
+  metricType: LiveCompetitionMetricType
 ): LiveCompetitionEntry[] {
-  const sorted = [...entries];
+  return [...entries].sort((a, b) =>
+    compareLiveCompetitionEntries(a, b, metricType)
+  );
+}
 
-  if (orderBy === 'weight') {
-    sorted.sort((a, b) => b.score - a.score);
-    return sorted;
-  }
-
-  sorted.sort((a, b) => a.score - b.score);
-  return sorted;
+function formatTimeScore(seconds: number): string {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.round(seconds % 60);
+  return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
 }
 
 export function formatLiveCompetitionScore(
   score: number,
-  orderBy: LiveCompetitionOrderBy
+  metricType: LiveCompetitionMetricType
 ): string {
-  if (orderBy === 'time') {
-    return formatDurationSeconds(score);
+  switch (metricType) {
+    case 'max_time':
+      return formatTimeScore(score);
+    case 'max_reps':
+      return `${score} reps`;
+    case 'max_calories':
+      return `${score} kcal`;
+    case 'max_distance':
+      return `${score} m`;
+    case 'max_weight':
+      return `${score} kg`;
   }
-
-  return `${score} kg`;
 }
 
 export function getLiveCompetitionScoreLabel(
-  orderBy: LiveCompetitionOrderBy
+  metricType: LiveCompetitionMetricType
 ): string {
-  return orderBy === 'time' ? 'Time' : 'Weight';
+  switch (metricType) {
+    case 'max_time':
+      return 'Time';
+    case 'max_reps':
+      return 'Reps';
+    case 'max_calories':
+      return 'Calories';
+    case 'max_distance':
+      return 'Distance';
+    case 'max_weight':
+      return 'Weight';
+  }
 }
 
 export function resolveLiveCompetitionActiveCategory(

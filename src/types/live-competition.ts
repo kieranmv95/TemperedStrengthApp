@@ -6,7 +6,12 @@ export type LiveCompetitionTheme = {
   borderColor: string;
 };
 
-export type LiveCompetitionOrderBy = 'weight' | 'time';
+export type LiveCompetitionMetricType =
+  | 'max_weight'
+  | 'max_reps'
+  | 'max_time'
+  | 'max_calories'
+  | 'max_distance';
 
 export type LiveCompetitionEntry = {
   name: string;
@@ -15,7 +20,7 @@ export type LiveCompetitionEntry = {
 };
 
 export type LiveCompetition = {
-  orderBy: LiveCompetitionOrderBy;
+  metricType: LiveCompetitionMetricType;
   title: string;
   description: string;
   additionalInfo: string;

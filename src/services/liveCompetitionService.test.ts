@@ -11,7 +11,7 @@ const apiResponse = {
   description: 'Get down to the stand.',
   additionalInfo: 'Grip strength test.',
   linkText: 'View The Leaderboard',
-  orderBy: 'weight',
+  metricType: 'max_weight',
   theme: {
     borderColor: '#FF3801',
     bgColor: '#FF3801',
@@ -34,7 +34,7 @@ describe('liveCompetitionService', () => {
       description: 'Get down to the stand.',
       additionalInfo: 'Grip strength test.',
       linkText: 'View The Leaderboard',
-      orderBy: 'weight',
+      metricType: 'max_weight',
       theme: {
         borderColor: '#FF3801',
         bgColor: '#FF3801',
@@ -46,10 +46,27 @@ describe('liveCompetitionService', () => {
     });
   });
 
-  it('returns null for invalid orderBy values', () => {
+  it('returns null for invalid metricType values', () => {
     expect(
-      parseLiveCompetitionResponse({ ...apiResponse, orderBy: 'distance' })
+      parseLiveCompetitionResponse({ ...apiResponse, metricType: 'weight' })
     ).toBeNull();
+    expect(
+      parseLiveCompetitionResponse({ ...apiResponse, metricType: 'distance' })
+    ).toBeNull();
+  });
+
+  it('accepts all supported metric types', () => {
+    for (const metricType of [
+      'max_weight',
+      'max_reps',
+      'max_time',
+      'max_calories',
+      'max_distance',
+    ] as const) {
+      expect(
+        parseLiveCompetitionResponse({ ...apiResponse, metricType })?.metricType
+      ).toBe(metricType);
+    }
   });
 
   it('coerces numeric score strings from the API', () => {
