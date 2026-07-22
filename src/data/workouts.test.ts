@@ -163,6 +163,7 @@ describe('bundled standalone workouts', () => {
     );
     expect(olySessions.map((w) => w.id).sort()).toEqual([
       'ar_03',
+      'ar_08',
       'p_02',
       'p_15',
       'p_79',

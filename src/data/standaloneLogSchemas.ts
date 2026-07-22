@@ -284,7 +284,7 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
   },
 
   // ---------------------------------------------------------------------------
-  // Arena Games — Event 001 (ar_01–ar_05), Event 002 (ar_06–ar_07)
+  // Arena Games — Event 001 (ar_01–ar_05), Event 002 (ar_06–ar_08)
   // ---------------------------------------------------------------------------
   ar_01: {
     kind: 'notes_only',
@@ -319,6 +319,11 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
     kind: 'duration',
     label: 'Finish time',
     lowerIsBetter: true,
+  },
+  ar_08: {
+    kind: 'max_reps',
+    label: 'Total complex weight (kg)',
+    higherIsBetter: true,
   },
 
   // HIIT Shred (6 Weeks) Pro — standalone WOD copies p_55–p_78
