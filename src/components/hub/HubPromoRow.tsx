@@ -34,15 +34,15 @@ function HubPromoCard({
         accessibilityLabel={accessibilityLabel}
         style={styles.promoCard}
       >
-        <View style={styles.promoTopRow}>
-          <View style={styles.visualTile}>
-            <Ionicons name={icon} size={22} color={Colors.accent} />
-          </View>
-          <SmallChevron />
+        <View style={styles.visualTile}>
+          <Ionicons name={icon} size={22} color={Colors.accent} />
         </View>
-        <Text style={styles.eyebrow}>{eyebrow}</Text>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.description}>{description}</Text>
+        <View style={styles.textBlock}>
+          <Text style={styles.eyebrow}>{eyebrow}</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.description}>{description}</Text>
+        </View>
+        <SmallChevron />
       </Card>
     </View>
   );
@@ -125,29 +125,23 @@ export function HubPromoRow({
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     gap: Spacing.md,
   },
   promoCardSlot: {
-    flex: 1,
-    minWidth: 0,
+    width: '100%',
   },
   promoCardLoading: {
     opacity: 0.5,
   },
   promoCard: {
-    flexDirection: 'column',
-    alignItems: 'stretch',
+    flexDirection: 'row',
+    alignItems: 'center',
     alignSelf: 'stretch',
     backgroundColor: Colors.accentWashFill,
     borderColor: Colors.accentWashBorder,
     padding: Spacing.lg,
-    gap: Spacing.sm,
-  },
-  promoTopRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: Spacing.lg,
   },
   visualTile: {
     width: 44,
@@ -158,6 +152,12 @@ const styles = StyleSheet.create({
     borderColor: Colors.accentWashOutline,
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
+  },
+  textBlock: {
+    flex: 1,
+    minWidth: 0,
+    gap: Spacing.xs,
   },
   eyebrow: {
     color: Colors.accent,
@@ -176,13 +176,13 @@ const styles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.md,
     lineHeight: 16,
-    flexShrink: 1,
   },
   offlineSlot: {
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     gap: Spacing.xs,
-    minHeight: 108,
+    minHeight: 64,
   },
   offlineTitle: {
     color: Colors.textPrimary,

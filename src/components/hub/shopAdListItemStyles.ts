@@ -1,54 +1,37 @@
 import { BorderRadius, FontSize, Spacing } from '@/src/constants/theme';
 import { StyleSheet } from 'react-native';
 
-export const SHOP_THUMB_SIZE = 72;
-
 export const shopAdListItemStyles = StyleSheet.create({
   card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
+    width: '100%',
+    aspectRatio: 1,
     borderRadius: BorderRadius.xxl,
-    paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.lg,
-    overflow: 'hidden',
-  },
-  thumbWrap: {
-    width: SHOP_THUMB_SIZE,
-    height: SHOP_THUMB_SIZE,
-    borderRadius: BorderRadius.lg,
+    borderWidth: 1.5,
+    padding: Spacing.lg,
     overflow: 'hidden',
     justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  thumbImage: {
-    width: SHOP_THUMB_SIZE,
-    height: SHOP_THUMB_SIZE,
-  },
-  thumbImageLogo: {
-    width: SHOP_THUMB_SIZE,
-    height: SHOP_THUMB_SIZE,
-  },
-  thumbPlaceholder: {
-    width: SHOP_THUMB_SIZE,
-    height: SHOP_THUMB_SIZE,
-    borderRadius: BorderRadius.lg,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  content: {
-    flex: 1,
-    minWidth: 0,
-    gap: Spacing.xs,
   },
   title: {
-    fontSize: FontSize.displaySm,
+    position: 'absolute',
+    top: Spacing.lg,
+    left: Spacing.lg,
+    right: Spacing.lg,
+    zIndex: 1,
+    fontSize: FontSize.md,
     fontWeight: '800',
     letterSpacing: -0.2,
+    textAlign: 'center',
+    opacity: 0.75,
   },
-  description: {
-    fontSize: FontSize.base,
-    lineHeight: 19,
-    fontWeight: '500',
+  thumbWrap: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: '70%',
+    height: '70%',
   },
 });

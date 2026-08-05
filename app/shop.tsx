@@ -1,3 +1,4 @@
+import { AppFlatList, AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 import { ShopAdListItem } from '@/src/components/hub/ShopAdListItem';
 import { ShopSponsorAdSheet } from '@/src/components/hub/ShopSponsorAdSheet';
 import { Pill } from '@/src/components/pill';
@@ -24,7 +25,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AppSafeAreaView, AppFlatList } from '@/src/components/AppSafeAreaView';
 
 export default function ShopScreen() {
   const posthog = usePostHog();
@@ -174,13 +174,15 @@ export default function ShopScreen() {
     return (
       <AppFlatList
         data={filteredAds}
+        numColumns={2}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ShopAdListItem ad={item} onPress={handlePressAd} />
+          <View style={styles.gridCell}>
+            <ShopAdListItem ad={item} onPress={handlePressAd} />
+          </View>
         )}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListHeaderComponent={
           <Text style={styles.resultsCount}>
             {filteredAds.length}{' '}
@@ -344,18 +346,23 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   listContent: {
-    paddingHorizontal: Spacing.xxl,
+    paddingHorizontal: Spacing.xxl - Spacing.md / 2,
     paddingBottom: Spacing.section,
   },
-  separator: {
-    height: Spacing.md,
+  gridCell: {
+    width: '50%',
+    paddingHorizontal: Spacing.md / 2,
+    paddingBottom: Spacing.md,
   },
   resultsCount: {
     color: Colors.textMuted,
     fontSize: FontSize.base,
     fontWeight: '600',
     marginBottom: Spacing.lg,
+    width: '100%',
+    paddingHorizontal: Spacing.md / 2,
   },
+
   centeredState: {
     flex: 1,
     alignItems: 'center',
