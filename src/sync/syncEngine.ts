@@ -3,6 +3,8 @@ import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { getSupabaseClient } from '@/src/services/supabaseClient';
 import { clearPersonalBestsDomainMeta } from '@/src/db/domains/personalBests/meta';
 import { clearAllPersonalBestRows } from '@/src/db/domains/personalBests/repository';
+import { clearWorkoutLogsDomainMeta } from '@/src/db/domains/workoutLogs/meta';
+import { clearAllWorkoutLogSetRows } from '@/src/db/domains/workoutLogs/repository';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   HAS_ACCOUNT_KEY,
@@ -16,6 +18,12 @@ import {
   pullPersonalBestChanges,
   pushDirtyPersonalBests,
 } from './domains/personalBests';
+import {
+  ensureWorkoutLogsCloudMigrated,
+  pullWorkoutLogChanges,
+  pushDirtyWorkoutLogs,
+  WORKOUT_LOG_SETS_TABLE,
+} from './domains/workoutLogs';
 import { shouldSync, SYNCED_KEYS } from './syncedKeys';
 
 const EPOCH = '1970-01-01T00:00:00.000Z';
@@ -257,16 +265,43 @@ export async function pullChanges(
 export async function syncNow(userId: string): Promise<void> {
   if (syncInFlight) return syncInFlight;
   syncInFlight = (async () => {
-    // Structured domains (SQLite ↔ relational tables), then legacy KV.
-    await ensurePersonalBestsCloudMigrated(userId);
-    await pushDirtyPersonalBests(userId);
+    // Structured domains must not block each other (or the KV queue).
+    const domainErrors: unknown[] = [];
+
+    for (const step of [
+      () => ensurePersonalBestsCloudMigrated(userId),
+      () => ensureWorkoutLogsCloudMigrated(userId),
+      () => pushDirtyPersonalBests(userId),
+      () => pushDirtyWorkoutLogs(userId),
+    ]) {
+      try {
+        await step();
+      } catch (error) {
+        console.error('Structured domain sync step failed:', error);
+        domainErrors.push(error);
+      }
+    }
 
     const oversizedKeys = await pushQueue(userId);
     await pullChanges(userId);
-    await pullPersonalBestChanges(userId);
+
+    for (const step of [
+      () => pullPersonalBestChanges(userId),
+      () => pullWorkoutLogChanges(userId),
+    ]) {
+      try {
+        await step();
+      } catch (error) {
+        console.error('Structured domain pull step failed:', error);
+        domainErrors.push(error);
+      }
+    }
 
     if (oversizedKeys.length > 0) {
       throw new SyncPayloadTooLargeError(oversizedKeys);
+    }
+    if (domainErrors.length > 0) {
+      throw domainErrors[0];
     }
   })();
   try {
@@ -294,7 +329,17 @@ export async function remoteDataExists(userId: string): Promise<boolean> {
     .eq('user_id', userId)
     .limit(1);
   if (pbError) throw pbError;
-  return (pbRows?.length ?? 0) > 0;
+  if ((pbRows?.length ?? 0) > 0) {
+    return true;
+  }
+
+  const { data: wlRows, error: wlError } = await client
+    .from(WORKOUT_LOG_SETS_TABLE)
+    .select('id')
+    .eq('user_id', userId)
+    .limit(1);
+  if (wlError) throw wlError;
+  return (wlRows?.length ?? 0) > 0;
 }
 
 export async function migrateLocalDataToSupabase(
@@ -344,8 +389,9 @@ export async function migrateLocalDataToSupabase(
   await AsyncStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify([]));
   await AsyncStorage.setItem(LAST_SYNCED_AT_KEY, migratedAt);
 
-  // Personal bests are structured rows, not KV.
+  // Structured domains (not KV blobs).
   await ensurePersonalBestsCloudMigrated(userId);
+  await ensureWorkoutLogsCloudMigrated(userId);
 }
 
 export async function enqueueCurrentLocalData(): Promise<void> {
@@ -367,10 +413,14 @@ export async function clearSyncedLocalData(): Promise<void> {
     ...timestampKeys,
     SYNC_QUEUE_KEY,
     LAST_SYNCED_AT_KEY,
-    // Legacy personal_bests blob if still present mid-upgrade.
+    // Legacy structured-domain blobs if still present mid-upgrade.
     'personal_bests',
     `${SYNC_TS_PREFIX}personal_bests`,
+    'workout_logs',
+    `${SYNC_TS_PREFIX}workout_logs`,
   ]);
   await clearAllPersonalBestRows();
   await clearPersonalBestsDomainMeta();
+  await clearAllWorkoutLogSetRows();
+  await clearWorkoutLogsDomainMeta();
 }

@@ -1,10 +1,11 @@
 // Program workout logging: exercise swaps, swap budget, logged sets,
 // custom set counts, and per-day notes.
+//
+// Logged sets live in SQLite (see src/db/domains/workoutLogs). Other keys here
+// remain AsyncStorage / KV-synced.
 import type {
   CustomSetCounts,
   ExerciseSwaps,
-  LoggedSet,
-  WorkoutLogs,
   WorkoutNotes,
 } from '@/src/types/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,10 +14,22 @@ import {
   CUSTOM_SET_COUNTS_KEY,
   EXERCISE_SWAPS_KEY,
   SWAP_COUNT_STATE_KEY,
-  WORKOUT_LOGS_KEY,
   WORKOUT_NOTES_KEY,
 } from './keys';
 import { mutate, parseJsonMap, withKeyLock } from './internal';
+
+export {
+  saveLoggedSet,
+  getLoggedSets,
+  hasLoggedSets,
+  clearLoggedSetsForSlot,
+  clearLoggedSet,
+  getWorkoutLogsForDay,
+  clearAllWorkoutLogsLocal,
+  clearFutureWorkoutLogsLocal,
+  moveWorkoutLogsDayLocal,
+  migrateWorkoutLogsFromKvLocal,
+} from '@/src/db/domains/workoutLogs/storage';
 
 /**
  * Save an exercise swap for a specific day and slot
@@ -145,105 +158,6 @@ export const incrementSwapCount = async (): Promise<number> => {
 };
 
 /**
- * Save a logged set for a specific day, slot, and set index
- * @param state - Set state (completed, failed, null for unchecked, or undefined to preserve)
- */
-export const saveLoggedSet = async (
-  dayIndex: number,
-  slotIndex: number,
-  setIndex: number,
-  weight: number | null,
-  reps: number,
-  state?: 'completed' | 'failed' | null
-): Promise<void> => {
-  try {
-    await mutate<WorkoutLogs>(WORKOUT_LOGS_KEY, parseJsonMap, (logs) => {
-      if (!logs[dayIndex]) {
-        logs[dayIndex] = {};
-      }
-      if (!logs[dayIndex][slotIndex]) {
-        logs[dayIndex][slotIndex] = {};
-      }
-
-      const setData: LoggedSet = { weight, reps };
-      if (state !== undefined) {
-        // Explicitly set the state (including null for unchecked)
-        setData.state = state;
-      } else {
-        // If state is undefined, preserve the existing state (for auto-save)
-        const existing = logs[dayIndex][slotIndex][setIndex];
-        if (existing?.state !== undefined) {
-          setData.state = existing.state;
-        }
-      }
-
-      logs[dayIndex][slotIndex][setIndex] = setData;
-      return logs;
-    });
-  } catch (error) {
-    console.error('Error saving logged set:', error);
-    throw error;
-  }
-};
-
-/**
- * Get logged sets for a specific day and slot
- */
-export const getLoggedSets = async (
-  dayIndex: number,
-  slotIndex: number
-): Promise<{ [setIndex: number]: LoggedSet }> => {
-  try {
-    const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
-    const logs: WorkoutLogs = data ? JSON.parse(data) : {};
-    return logs[dayIndex]?.[slotIndex] || {};
-  } catch (error) {
-    console.error('Error getting logged sets:', error);
-    return {};
-  }
-};
-
-/**
- * Check if any sets are logged for a specific day and slot
- */
-export const hasLoggedSets = async (
-  dayIndex: number,
-  slotIndex: number
-): Promise<boolean> => {
-  try {
-    const loggedSets = await getLoggedSets(dayIndex, slotIndex);
-    return Object.keys(loggedSets).length > 0;
-  } catch (error) {
-    console.error('Error checking logged sets:', error);
-    return false;
-  }
-};
-
-/**
- * Clear logged sets for a specific day and slot
- */
-export const clearLoggedSetsForSlot = async (
-  dayIndex: number,
-  slotIndex: number
-): Promise<void> => {
-  try {
-    await mutate<WorkoutLogs>(WORKOUT_LOGS_KEY, parseJsonMap, (logs) => {
-      if (logs[dayIndex]?.[slotIndex]) {
-        delete logs[dayIndex][slotIndex];
-        // Clean up empty day/slot objects
-        if (Object.keys(logs[dayIndex]).length === 0) {
-          delete logs[dayIndex];
-        }
-      }
-      return logs;
-    });
-  } catch (error) {
-    console.error('Error clearing logged sets for slot:', error);
-    throw error;
-  }
-};
-
-/**
  * Save custom set count for a specific day and slot
  */
 export const saveCustomSetCount = async (
@@ -284,37 +198,6 @@ export const getCustomSetCount = async (
   } catch (error) {
     console.error('Error getting custom set count:', error);
     return null;
-  }
-};
-
-/**
- * Clear a specific logged set
- */
-export const clearLoggedSet = async (
-  dayIndex: number,
-  slotIndex: number,
-  setIndex: number
-): Promise<void> => {
-  try {
-    await mutate<WorkoutLogs>(WORKOUT_LOGS_KEY, parseJsonMap, (logs) => {
-      if (logs[dayIndex]?.[slotIndex]?.[setIndex]) {
-        delete logs[dayIndex][slotIndex][setIndex];
-
-        // Clean up empty slot objects
-        if (Object.keys(logs[dayIndex][slotIndex]).length === 0) {
-          delete logs[dayIndex][slotIndex];
-        }
-
-        // Clean up empty day objects
-        if (Object.keys(logs[dayIndex]).length === 0) {
-          delete logs[dayIndex];
-        }
-      }
-      return logs;
-    });
-  } catch (error) {
-    console.error('Error clearing logged set:', error);
-    throw error;
   }
 };
 
@@ -383,22 +266,6 @@ export const getAllWorkoutNotes = async (): Promise<WorkoutNotes> => {
     return out;
   } catch (error) {
     console.error('Error getting all workout notes:', error);
-    return {};
-  }
-};
-
-/**
- * Get all workout logs for a specific day (all slots and sets)
- */
-export const getWorkoutLogsForDay = async (
-  dayIndex: number
-): Promise<{ [slotIndex: number]: { [setIndex: number]: LoggedSet } }> => {
-  try {
-    const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
-    const logs: WorkoutLogs = data ? JSON.parse(data) : {};
-    return logs[dayIndex] ?? {};
-  } catch (error) {
-    console.error('Error getting workout logs for day:', error);
     return {};
   }
 };

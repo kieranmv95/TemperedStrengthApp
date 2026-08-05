@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { openAppDatabase, closeAppDatabaseForTests } from '../db/database';
 import {
   addFavoriteWorkout,
   getFavoriteWorkouts,
@@ -12,7 +13,13 @@ import {
 describe('storage write-race safety', () => {
   beforeEach(async () => {
     await AsyncStorage.clear();
+    await closeAppDatabaseForTests();
+    await openAppDatabase();
     jest.clearAllMocks();
+  });
+
+  afterEach(async () => {
+    await closeAppDatabaseForTests();
   });
 
   it('keeps every concurrent logged set on the same day', async () => {

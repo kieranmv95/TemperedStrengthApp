@@ -243,6 +243,68 @@ export function YouAccountSettingsScreen() {
     })();
   };
 
+  const handleDevDumpWorkoutLogSetsSqlite = () => {
+    void (async () => {
+      try {
+        const { logWorkoutLogSetsSqliteDebug } = await import(
+          '@/src/db/domains/workoutLogs/debug'
+        );
+        const summary = await logWorkoutLogSetsSqliteDebug('dev settings dump');
+        Alert.alert(
+          'SQLite workout log sets',
+          `total: ${summary.total}\nactive: ${summary.active}\ndirty (pending cloud): ${summary.dirty}\n\nFull rows are in the Metro console as [sqlite].`
+        );
+      } catch (error) {
+        console.error('Dev SQLite workout log dump failed:', error);
+        Alert.alert(
+          'Error',
+          error instanceof Error
+            ? error.message
+            : 'Could not read workout_log_sets from SQLite.'
+        );
+      }
+    })();
+  };
+
+  const handleDevPurgeStructuredData = () => {
+    Alert.alert(
+      'Purge structured data',
+      'Deletes personal bests + workout logs from:\n\n• Local SQLite\n• Supabase tables (if signed in)\n\nDoes not clear AsyncStorage prefs/KV.\n\nCannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            void (async () => {
+              try {
+                const { purgeStructuredDataLocalAndRemote } = await import(
+                  '@/src/db/devPurgeStructuredData'
+                );
+                const result = await purgeStructuredDataLocalAndRemote();
+                const localLine = result.localCleared
+                  ? 'Local SQLite: cleared (PBs + workout logs + domain meta).'
+                  : 'Local SQLite: failed.';
+                const remoteLine = result.remoteCleared
+                  ? `Remote: deleted ${result.remotePersonalBestDeleted ?? 0} PB rows, ${result.remoteWorkoutLogDeleted ?? 0} set log rows.`
+                  : `Remote: skipped/failed — ${result.remoteSkippedReason ?? 'unknown'}`;
+                Alert.alert('Structured data purged', `${localLine}\n\n${remoteLine}`);
+              } catch (error) {
+                console.error('Dev structured purge failed:', error);
+                Alert.alert(
+                  'Error',
+                  error instanceof Error
+                    ? error.message
+                    : 'Could not purge structured data.'
+                );
+              }
+            })();
+          },
+        },
+      ]
+    );
+  };
+
   const handleDevRefreshSanityHomeContent = () => {
     if (isRefreshingSanityHome) {
       return;
@@ -622,6 +684,38 @@ export function YouAccountSettingsScreen() {
                   <Text style={styles.settingDescription}>
                     Log every personal_best_entries row to Metro and show counts.
                     Use after logging a PB.
+                  </Text>
+                </View>
+                <SmallChevron />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.settingItem}
+                onPress={handleDevDumpWorkoutLogSetsSqlite}
+              >
+                <View style={styles.settingContent}>
+                  <Text style={styles.settingTitle}>
+                    Dump workout log sets SQLite
+                  </Text>
+                  <Text style={styles.settingDescription}>
+                    Log every workout_log_sets row to Metro and show dirty counts.
+                    Use after logging a set.
+                  </Text>
+                </View>
+                <SmallChevron />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.settingItem, styles.dangerItem]}
+                onPress={handleDevPurgeStructuredData}
+              >
+                <View style={styles.settingContent}>
+                  <Text style={[styles.settingTitle, styles.dangerText]}>
+                    Purge SQLite + cloud structured data
+                  </Text>
+                  <Text style={styles.settingDescription}>
+                    Delete personal bests and workout_log_sets from this device
+                    and from Supabase (when signed in). Dev only.
                   </Text>
                 </View>
                 <SmallChevron />

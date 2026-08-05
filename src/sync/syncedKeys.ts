@@ -24,7 +24,6 @@ import {
   SWAP_COUNT_STATE_KEY,
   TRAINING_MAXES_KEY,
   WEIGHT_UNIT_KEY,
-  WORKOUT_LOGS_KEY,
   WORKOUT_NOTES_KEY,
 } from '@/src/utils/storage/keys';
 
@@ -37,7 +36,7 @@ export const SYNCED_KEYS = new Set<string>([
   PROGRAM_WORKOUT_WEEKDAYS_KEY,
   PROGRAM_SESSION_SHIFTS_KEY,
   EXERCISE_SWAPS_KEY,
-  WORKOUT_LOGS_KEY,
+  // workout_logs: row-synced via SQLite + workout_log_sets (not KV).
   CUSTOM_SET_COUNTS_KEY,
   SWAP_COUNT_STATE_KEY,
   WORKOUT_NOTES_KEY,

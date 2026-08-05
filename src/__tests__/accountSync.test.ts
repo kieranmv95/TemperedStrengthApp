@@ -40,7 +40,7 @@ describe('account sync local queue', () => {
 
   it('uses an explicit user-data allowlist', () => {
     expect(shouldSync('onboarding_profile')).toBe(true);
-    expect(shouldSync('workout_logs')).toBe(true);
+    expect(shouldSync('workout_logs')).toBe(false);
     expect(shouldSync('personal_bests')).toBe(false);
     expect(shouldSync('active_session')).toBe(false);
     expect(shouldSync('rest_timer')).toBe(false);
@@ -49,26 +49,26 @@ describe('account sync local queue', () => {
   });
 
   it('does not queue writes before an account exists', async () => {
-    await recordLocalSet('workout_logs', '{"day":1}');
+    await recordLocalSet('exercise_swaps', '{"0":{"0":1}}');
 
     expect(await AsyncStorage.getItem(SYNC_QUEUE_KEY)).toBeNull();
     expect(
-      await AsyncStorage.getItem(`${SYNC_TS_PREFIX}workout_logs`)
+      await AsyncStorage.getItem(`${SYNC_TS_PREFIX}exercise_swaps`)
     ).not.toBeNull();
   });
 
   it('collapses pending operations by key', async () => {
     await AsyncStorage.setItem(HAS_ACCOUNT_KEY, 'true');
 
-    await recordLocalSet('workout_logs', '{"day":1}');
-    await recordLocalSet('workout_logs', '{"day":2}');
-    await recordLocalDelete('workout_logs');
+    await recordLocalSet('exercise_swaps', '{"0":{"0":1}}');
+    await recordLocalSet('exercise_swaps', '{"0":{"0":2}}');
+    await recordLocalDelete('exercise_swaps');
 
     const raw = await AsyncStorage.getItem(SYNC_QUEUE_KEY);
     const queue = JSON.parse(raw ?? '[]') as SyncOperation[];
     expect(queue).toHaveLength(1);
     expect(queue[0]).toMatchObject({
-      key: 'workout_logs',
+      key: 'exercise_swaps',
       op: 'delete',
     });
   });
@@ -86,17 +86,17 @@ describe('account sync local queue', () => {
     const underWarning = 'a'.repeat(KV_SIZE_WARNING_BYTES);
     const overWarning = 'a'.repeat(KV_SIZE_WARNING_BYTES + 1);
 
-    await recordLocalSet('workout_logs', underWarning);
+    await recordLocalSet('exercise_swaps', underWarning);
     expect(captureAnalyticsEvent).not.toHaveBeenCalled();
 
-    await recordLocalSet('workout_logs', overWarning);
-    await recordLocalSet('workout_logs', overWarning);
+    await recordLocalSet('exercise_swaps', overWarning);
+    await recordLocalSet('exercise_swaps', overWarning);
 
     expect(captureAnalyticsEvent).toHaveBeenCalledTimes(1);
     expect(captureAnalyticsEvent).toHaveBeenCalledWith(
       posthogEventsNames.sync.kvSizeLimit,
       {
-        key: 'workout_logs',
+        key: 'exercise_swaps',
         size_bytes: KV_SIZE_WARNING_BYTES + 1,
         warning_bytes: KV_SIZE_WARNING_BYTES,
         max_bytes: MAX_SYNC_VALUE_BYTES,

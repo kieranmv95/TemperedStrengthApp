@@ -30,6 +30,7 @@ import {
   syncNow as runSync,
 } from '@/src/sync/syncEngine';
 import { ensurePersonalBestsCloudMigrated } from '@/src/sync/domains/personalBests';
+import { ensureWorkoutLogsCloudMigrated } from '@/src/sync/domains/workoutLogs';
 
 type SyncContextValue = {
   isConfigured: boolean;
@@ -236,6 +237,7 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
             await pullChanges(userId, { full: true });
             // Structured domains (rows, not KV).
             await ensurePersonalBestsCloudMigrated(userId);
+            await ensureWorkoutLogsCloudMigrated(userId);
           }
           markLocalDataUpdated();
           return { restored: true };

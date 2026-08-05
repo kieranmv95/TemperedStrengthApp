@@ -7,7 +7,6 @@ import type {
   CustomSetCounts,
   ExerciseSwaps,
   ProgramSessionStatuses,
-  WorkoutLogs,
   WorkoutNotes,
 } from '@/src/types/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,7 +25,6 @@ import {
   PROGRAM_WORKOUT_WEEKDAYS_KEY,
   REST_TIMER_KEY,
   TRAINING_MAXES_KEY,
-  WORKOUT_LOGS_KEY,
   WORKOUT_NOTES_KEY,
 } from './keys';
 import { mutate, parseJsonMap } from './internal';
@@ -36,9 +34,12 @@ import {
   getProgramSessionStatus,
 } from './sessions';
 import {
+  clearAllWorkoutLogsLocal,
+  clearFutureWorkoutLogsLocal,
   getExerciseSwapsForDay,
   getWorkoutLogsForDay,
   getWorkoutNotes,
+  moveWorkoutLogsDayLocal,
 } from './workoutLogs';
 import { getConditioningLogsForDay } from './conditioning';
 
@@ -315,19 +316,8 @@ export const moveProgramDayData = async (
     }
   }
 
-  // workout logs
-  {
-    const data = await AsyncStorage.getItem(WORKOUT_LOGS_KEY);
-    if (data) {
-      const logs: WorkoutLogs = JSON.parse(data);
-      const src = logs[fromDayIndex];
-      if (src) {
-        logs[toDayIndex] = src;
-        delete logs[fromDayIndex];
-        entries.push([WORKOUT_LOGS_KEY, JSON.stringify(logs)]);
-      }
-    }
-  }
+  // workout logs (SQLite domain)
+  await moveWorkoutLogsDayLocal(fromDayIndex, toDayIndex);
 
   // exercise swaps
   {
@@ -409,16 +399,7 @@ export const clearFutureWorkoutData = async (
   fromDayIndex: number
 ): Promise<void> => {
   try {
-    await mutate<WorkoutLogs>(WORKOUT_LOGS_KEY, parseJsonMap, (logs) => {
-      const filteredLogs: WorkoutLogs = {};
-      Object.keys(logs).forEach((dayKey) => {
-        const dayIdx = parseInt(dayKey, 10);
-        if (dayIdx < fromDayIndex) {
-          filteredLogs[dayIdx] = logs[dayIdx];
-        }
-      });
-      return filteredLogs;
-    });
+    await clearFutureWorkoutLogsLocal(fromDayIndex);
 
     await mutate<ExerciseSwaps>(EXERCISE_SWAPS_KEY, parseJsonMap, (swaps) => {
       const filteredSwaps: ExerciseSwaps = {};
@@ -461,7 +442,8 @@ export const clearProgramData = async (): Promise<void> => {
     await syncRemoveItem(PROGRAM_WORKOUT_WEEKDAYS_KEY);
     await syncRemoveItem(PROGRAM_SESSION_SHIFTS_KEY);
     await syncRemoveItem(EXERCISE_SWAPS_KEY);
-    await syncRemoveItem(WORKOUT_LOGS_KEY);
+    // Program set logs are SQLite rows (hard wipe local + remote when online).
+    await clearAllWorkoutLogsLocal();
     await syncRemoveItem(CONDITIONING_WORKOUT_LOGS_KEY);
     await syncRemoveItem(CUSTOM_SET_COUNTS_KEY);
     await syncRemoveItem(WORKOUT_NOTES_KEY);
