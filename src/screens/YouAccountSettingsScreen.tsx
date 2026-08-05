@@ -220,6 +220,29 @@ export function YouAccountSettingsScreen() {
     );
   };
 
+  const handleDevDumpPersonalBestsSqlite = () => {
+    void (async () => {
+      try {
+        const { logPersonalBestsSqliteDebug } = await import(
+          '@/src/db/domains/personalBests/debug'
+        );
+        const summary = await logPersonalBestsSqliteDebug('dev settings dump');
+        Alert.alert(
+          'SQLite personal bests',
+          `total: ${summary.total}\nactive: ${summary.active}\ndirty (pending cloud): ${summary.dirty}\n\nFull rows are in the Metro console as [sqlite].`
+        );
+      } catch (error) {
+        console.error('Dev SQLite PB dump failed:', error);
+        Alert.alert(
+          'Error',
+          error instanceof Error
+            ? error.message
+            : 'Could not read personal_best_entries from SQLite.'
+        );
+      }
+    })();
+  };
+
   const handleDevRefreshSanityHomeContent = () => {
     if (isRefreshingSanityHome) {
       return;
@@ -583,6 +606,22 @@ export function YouAccountSettingsScreen() {
                   </Text>
                   <Text style={styles.settingDescription}>
                     Permanently delete all stored data
+                  </Text>
+                </View>
+                <SmallChevron />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.settingItem}
+                onPress={handleDevDumpPersonalBestsSqlite}
+              >
+                <View style={styles.settingContent}>
+                  <Text style={styles.settingTitle}>
+                    Dump personal bests SQLite
+                  </Text>
+                  <Text style={styles.settingDescription}>
+                    Log every personal_best_entries row to Metro and show counts.
+                    Use after logging a PB.
                   </Text>
                 </View>
                 <SmallChevron />

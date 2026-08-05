@@ -41,6 +41,7 @@ describe('account sync local queue', () => {
   it('uses an explicit user-data allowlist', () => {
     expect(shouldSync('onboarding_profile')).toBe(true);
     expect(shouldSync('workout_logs')).toBe(true);
+    expect(shouldSync('personal_bests')).toBe(false);
     expect(shouldSync('active_session')).toBe(false);
     expect(shouldSync('rest_timer')).toBe(false);
     expect(shouldSync('sanity_sponsor_ads_v1')).toBe(false);

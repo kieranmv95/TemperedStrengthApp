@@ -1,6 +1,8 @@
 import { captureAnalyticsEvent } from '@/src/services/posthogClient';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { getSupabaseClient } from '@/src/services/supabaseClient';
+import { clearPersonalBestsDomainMeta } from '@/src/db/domains/personalBests/meta';
+import { clearAllPersonalBestRows } from '@/src/db/domains/personalBests/repository';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   HAS_ACCOUNT_KEY,
@@ -8,6 +10,12 @@ import {
   SYNC_QUEUE_KEY,
   SYNC_TS_PREFIX,
 } from './constants';
+import {
+  ensurePersonalBestsCloudMigrated,
+  PERSONAL_BEST_ENTRIES_TABLE,
+  pullPersonalBestChanges,
+  pushDirtyPersonalBests,
+} from './domains/personalBests';
 import { shouldSync, SYNCED_KEYS } from './syncedKeys';
 
 const EPOCH = '1970-01-01T00:00:00.000Z';
@@ -249,8 +257,14 @@ export async function pullChanges(
 export async function syncNow(userId: string): Promise<void> {
   if (syncInFlight) return syncInFlight;
   syncInFlight = (async () => {
+    // Structured domains (SQLite ↔ relational tables), then legacy KV.
+    await ensurePersonalBestsCloudMigrated(userId);
+    await pushDirtyPersonalBests(userId);
+
     const oversizedKeys = await pushQueue(userId);
     await pullChanges(userId);
+    await pullPersonalBestChanges(userId);
+
     if (oversizedKeys.length > 0) {
       throw new SyncPayloadTooLargeError(oversizedKeys);
     }
@@ -263,13 +277,24 @@ export async function syncNow(userId: string): Promise<void> {
 }
 
 export async function remoteDataExists(userId: string): Promise<boolean> {
-  const { data, error } = await getSupabaseClient()
+  const client = getSupabaseClient();
+  const { data, error } = await client
     .from('user_kv_store')
     .select('id')
     .eq('user_id', userId)
     .limit(1);
   if (error) throw error;
-  return (data?.length ?? 0) > 0;
+  if ((data?.length ?? 0) > 0) {
+    return true;
+  }
+
+  const { data: pbRows, error: pbError } = await client
+    .from(PERSONAL_BEST_ENTRIES_TABLE)
+    .select('id')
+    .eq('user_id', userId)
+    .limit(1);
+  if (pbError) throw pbError;
+  return (pbRows?.length ?? 0) > 0;
 }
 
 export async function migrateLocalDataToSupabase(
@@ -318,6 +343,9 @@ export async function migrateLocalDataToSupabase(
   }
   await AsyncStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify([]));
   await AsyncStorage.setItem(LAST_SYNCED_AT_KEY, migratedAt);
+
+  // Personal bests are structured rows, not KV.
+  await ensurePersonalBestsCloudMigrated(userId);
 }
 
 export async function enqueueCurrentLocalData(): Promise<void> {
@@ -339,5 +367,10 @@ export async function clearSyncedLocalData(): Promise<void> {
     ...timestampKeys,
     SYNC_QUEUE_KEY,
     LAST_SYNCED_AT_KEY,
+    // Legacy personal_bests blob if still present mid-upgrade.
+    'personal_bests',
+    `${SYNC_TS_PREFIX}personal_bests`,
   ]);
+  await clearAllPersonalBestRows();
+  await clearPersonalBestsDomainMeta();
 }

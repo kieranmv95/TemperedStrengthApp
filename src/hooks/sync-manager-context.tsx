@@ -29,6 +29,7 @@ import {
   SyncPayloadTooLargeError,
   syncNow as runSync,
 } from '@/src/sync/syncEngine';
+import { ensurePersonalBestsCloudMigrated } from '@/src/sync/domains/personalBests';
 
 type SyncContextValue = {
   isConfigured: boolean;
@@ -233,6 +234,8 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
             }
           } else {
             await pullChanges(userId, { full: true });
+            // Structured domains (rows, not KV).
+            await ensurePersonalBestsCloudMigrated(userId);
           }
           markLocalDataUpdated();
           return { restored: true };

@@ -6,6 +6,7 @@ import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
 import { TogetherWeLiftProvider } from '@/src/hooks/together-we-lift-context';
 import { Colors } from '@/src/constants/theme';
 import { initializeRevenueCat } from '@/src/services/revenueCatService';
+import { openAppDatabase } from '@/src/db/database';
 import { getOnboarded, runStorageMigrations } from '@/src/utils/storage';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { isRunningInExpoGo } from 'expo';
@@ -43,7 +44,12 @@ export default function RootLayout() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      // Run storage migrations before anything reads persisted data and before
+      try {
+        await openAppDatabase();
+      } catch (error) {
+        console.error('Failed to open app database:', error);
+      }
+      // Run AsyncStorage migrations before anything reads persisted data and before
       // the sync manager (mounted only once boot is ready) starts mirroring.
       try {
         await runStorageMigrations();
