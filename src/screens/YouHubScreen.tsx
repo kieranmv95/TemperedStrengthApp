@@ -1,4 +1,5 @@
 import { Card, SmallChevron } from '@/src/components/ds';
+import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
 import { settingsScreenStyles as settingsStyles } from '@/src/components/settings/settingsScreenStyles';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
@@ -10,38 +11,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-type HubDestination = {
-  title: string;
-  description: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  route: '/records/account' | '/records/personal-bests' | '/records/trophies';
-  accessibilityLabel: string;
-};
-
-const DESTINATIONS: HubDestination[] = [
-  {
-    title: 'Account & Settings',
-    description: 'Weight units, program preferences, and patch notes.',
-    icon: 'person-outline',
-    route: '/records/account',
-    accessibilityLabel: 'Open account and settings',
-  },
-  {
-    title: 'Personal Bests',
-    description: 'View and manage your personal records by exercise.',
-    icon: 'barbell-outline',
-    route: '/records/personal-bests',
-    accessibilityLabel: 'Open personal bests',
-  },
-  {
-    title: 'Trophies',
-    description: 'Track achievements and milestones across your training.',
-    icon: 'trophy-outline',
-    route: '/records/trophies',
-    accessibilityLabel: 'Open trophies',
-  },
-];
 
 export function YouHubScreen() {
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
@@ -59,7 +28,7 @@ export function YouHubScreen() {
   return (
     <StandardLayout
       title="You"
-      subtitle="Account, personal bests, and trophies"
+      subtitle="Records, trophies, and account"
     >
       <StandardLayout.Body>
         <View style={styles.list}>
@@ -84,28 +53,45 @@ export function YouHubScreen() {
               <Text style={settingsStyles.upgradePromptCta}>See plans →</Text>
             </TouchableOpacity>
           ) : null}
-          {DESTINATIONS.map((destination) => (
-            <Card
-              key={destination.route}
-              onPress={() => router.push(destination.route)}
-              accessibilityLabel={destination.accessibilityLabel}
-            >
-              <View style={styles.cardContent}>
-                <View style={styles.titleRow}>
-                  <Ionicons
-                    name={destination.icon}
-                    size={18}
-                    color={Colors.accent}
-                  />
-                  <Text style={styles.cardTitle}>{destination.title}</Text>
-                </View>
-                <Text style={styles.cardDescription}>
-                  {destination.description}
-                </Text>
-              </View>
-              <SmallChevron />
-            </Card>
-          ))}
+
+          <View style={styles.promoStack}>
+            <HubPromoCard
+              icon="barbell-outline"
+              eyebrow="Records"
+              title="Personal Bests"
+              description="View and manage your personal records by exercise."
+              onPress={() => router.push('/records/personal-bests')}
+              accessibilityLabel="Open personal bests"
+            />
+            <HubPromoCard
+              icon="trophy-outline"
+              eyebrow="Achievements"
+              title="Trophies"
+              description="Track awards and milestones across your training."
+              onPress={() => router.push('/records/trophies')}
+              accessibilityLabel="Open trophies"
+            />
+          </View>
+
+          <Card
+            onPress={() => router.push('/records/account')}
+            accessibilityLabel="Open account and settings"
+          >
+            <View style={styles.accountIconWrap}>
+              <Ionicons
+                name="person-outline"
+                size={18}
+                color={Colors.textMuted}
+              />
+            </View>
+            <View style={styles.cardContent}>
+              <Text style={styles.accountTitle}>Account & Settings</Text>
+              <Text style={styles.cardDescription}>
+                Weight units, program preferences, and patch notes.
+              </Text>
+            </View>
+            <SmallChevron />
+          </Card>
         </View>
       </StandardLayout.Body>
     </StandardLayout>
@@ -113,36 +99,31 @@ export function YouHubScreen() {
 }
 
 const styles = StyleSheet.create({
-  hiContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.lg,
-    paddingTop: Spacing.md,
+  list: {
+    gap: Spacing.xxl,
   },
   hiText: {
     color: Colors.textPrimary,
     fontSize: FontSize.displayXl,
     fontWeight: '700',
   },
-  hiSubtext: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
+  promoStack: {
+    gap: Spacing.md,
   },
-  list: {
-    gap: Spacing.xl,
+  accountIconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.backgroundElevated,
   },
   cardContent: {
     flex: 1,
     paddingRight: Spacing.xl,
     gap: Spacing.xs,
   },
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-  },
-  cardTitle: {
+  accountTitle: {
     color: Colors.textPrimary,
     fontSize: FontSize.xl,
     fontWeight: '700',

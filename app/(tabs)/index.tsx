@@ -2,6 +2,7 @@ import { Card, SmallChevron } from '@/src/components/ds';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
 import { SponsorAdsCarousel } from '@/src/components/home/SponsorAdsCarousel';
+import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
 import { LiveCompetition } from '@/src/components/LiveCompetition';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors } from '@/src/constants/theme';
@@ -378,6 +379,19 @@ export default function HomeTabScreen() {
             )}
           </View>
 
+          <HubPromoCard
+            icon="barbell-outline"
+            eyebrow="Open workouts"
+            title="Just fancy a workout?"
+            description="Strength sessions, mobility flows and more when you fancy something outside a program."
+            onPress={() =>
+              trackHomeLink('just_a_workout_card', '/workouts', () =>
+                router.push('/workouts')
+              )
+            }
+            accessibilityLabel="Browse workouts"
+          />
+
           {sponsorAds.length > 0 ? (
             <SponsorAdsCarousel ads={sponsorAds} onPressCta={openSponsorCta} />
           ) : null}
@@ -388,6 +402,19 @@ export default function HomeTabScreen() {
               displayName={displayName}
             />
           ) : null}
+
+          <HubPromoCard
+            icon="cart-outline"
+            eyebrow="Partner picks"
+            title="Browse the shop"
+            description="The best gear at exclusive prices."
+            onPress={() =>
+              trackHomeLink('browse_shop_card', '/shop', () =>
+                router.push('/shop')
+              )
+            }
+            accessibilityLabel="Browse partner products"
+          />
 
           <View>
             {hasPersonalBests ? (

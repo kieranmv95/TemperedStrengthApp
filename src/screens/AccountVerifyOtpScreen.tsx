@@ -83,12 +83,41 @@ export function AccountVerifyOtpScreen() {
     try {
       const result = await verifyOtp(email, code, intent);
       await clearOtpLastSentAt();
-      const destination = result.restored
-        ? '/'
-        : intent === 'create'
-          ? `${returnTo}${returnTo.includes('?') ? '&' : '?'}accountCreated=1`
-          : returnTo;
-      router.replace(destination as Href);
+
+      // Default to a clean app root so account stack / stale routes don't linger.
+      // Mid-onboarding create still resumes that flow via accountCreated.
+      const isOnboardingReturn = returnTo.startsWith('/onboarding');
+      let destination: string = '/';
+      if (
+        !result.restored &&
+        intent === 'create' &&
+        isOnboardingReturn
+      ) {
+        const separator = returnTo.includes('?') ? '&' : '?';
+        destination = `${returnTo}${separator}accountCreated=1`;
+      }
+
+      const successBody = result.restored
+        ? 'Your account backup is loaded on this device.'
+        : 'Your account is ready. Training data will sync while you stay signed in.';
+
+      Alert.alert(
+        'Successfully logged in',
+        successBody,
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              // Drop account screens from the stack, then land on a fresh root.
+              if (router.canDismiss()) {
+                router.dismissAll();
+              }
+              router.replace(destination as Href);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
     } catch (error) {
       console.error('Failed to verify account OTP:', error);
       if (

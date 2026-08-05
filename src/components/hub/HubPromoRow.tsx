@@ -18,7 +18,7 @@ type HubPromoCardProps = {
   isLoading?: boolean;
 };
 
-function HubPromoCard({
+export function HubPromoCard({
   icon,
   eyebrow,
   title,

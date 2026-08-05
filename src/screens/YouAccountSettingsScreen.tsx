@@ -46,21 +46,21 @@ export function YouAccountSettingsScreen() {
   const promoExpiryLabel =
     isPromoPro && promoProGrant
       ? new Date(promoProGrant.expiresAt).toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
       : null;
 
   const promoDaysRemaining =
     isPromoPro && promoProGrant
       ? Math.max(
-          0,
-          Math.ceil(
-            (Date.parse(promoProGrant.expiresAt) - Date.now()) /
-              (24 * 60 * 60 * 1000)
-          )
+        0,
+        Math.ceil(
+          (Date.parse(promoProGrant.expiresAt) - Date.now()) /
+          (24 * 60 * 60 * 1000)
         )
+      )
       : null;
 
   const promoRemainingLabel =
@@ -408,23 +408,6 @@ export function YouAccountSettingsScreen() {
                 </View>
                 <SmallChevron />
               </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.settingItem, styles.dangerItem]}
-                onPress={handleDeleteAccount}
-                disabled={isDeletingAccount}
-              >
-                <View style={styles.settingContent}>
-                  <Text style={[styles.settingTitle, styles.dangerText]}>
-                    Delete account
-                  </Text>
-                  <Text style={styles.settingDescription}>
-                    {isDeletingAccount
-                      ? 'Deleting account and cloud backup…'
-                      : 'Permanently delete your account and cloud backup. Local data stays on this device.'}
-                  </Text>
-                </View>
-                <SmallChevron />
-              </TouchableOpacity>
             </>
           ) : (
             <TouchableOpacity
@@ -441,7 +424,7 @@ export function YouAccountSettingsScreen() {
               disabled={!isConfigured}
             >
               <View style={styles.settingContent}>
-                <Text style={styles.settingTitle}>Back up your data</Text>
+                <Text style={styles.settingTitle}>Login / Sign up</Text>
                 <Text style={styles.settingDescription}>
                   {isConfigured
                     ? 'Create or sign in to an account. Your data is not currently backed up.'
@@ -635,6 +618,26 @@ export function YouAccountSettingsScreen() {
               </View>
             </View>
           </View>
+
+          {user ? (
+            <TouchableOpacity
+              style={[styles.settingItem, styles.dangerItem]}
+              onPress={handleDeleteAccount}
+              disabled={isDeletingAccount}
+            >
+              <View style={styles.settingContent}>
+                <Text style={[styles.settingTitle, styles.dangerText]}>
+                  Delete account
+                </Text>
+                <Text style={styles.settingDescription}>
+                  {isDeletingAccount
+                    ? 'Deleting account and cloud backup…'
+                    : 'Permanently delete your account and cloud backup. Local data stays on this device.'}
+                </Text>
+              </View>
+              <SmallChevron />
+            </TouchableOpacity>
+          ) : null}
 
           {__DEV__ && (
             <View style={styles.settingsSection}>
