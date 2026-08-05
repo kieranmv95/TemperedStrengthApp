@@ -35,7 +35,7 @@ function HubPromoCard({
         style={styles.promoCard}
       >
         <View style={styles.visualTile}>
-          <Ionicons name={icon} size={22} color={Colors.accent} />
+          <Ionicons name={icon} size={24} color={Colors.accent} />
         </View>
         <View style={styles.textBlock}>
           <Text style={styles.eyebrow}>{eyebrow}</Text>
@@ -138,18 +138,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'stretch',
-    backgroundColor: Colors.accentWashFill,
-    borderColor: Colors.accentWashBorder,
-    padding: Spacing.lg,
-    gap: Spacing.lg,
+    backgroundColor: Colors.backgroundCard,
+    borderColor: Colors.accentWashOutline,
+    borderWidth: 1.5,
+    paddingVertical: Spacing.xl,
+    paddingHorizontal: Spacing.xxl,
+    gap: Spacing.xl,
   },
   visualTile: {
-    width: 44,
-    height: 44,
-    borderRadius: BorderRadius.lg,
-    backgroundColor: Colors.backgroundElevated,
-    borderWidth: 1,
-    borderColor: Colors.accentWashOutline,
+    width: 48,
+    height: 48,
+    borderRadius: BorderRadius.xl,
+    backgroundColor: Colors.accentWashFill,
+    borderWidth: 1.5,
+    borderColor: Colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -163,19 +165,19 @@ const styles = StyleSheet.create({
     color: Colors.accent,
     fontSize: FontSize.sm,
     fontWeight: '700',
-    letterSpacing: 0.5,
+    letterSpacing: 0.6,
     textTransform: 'uppercase',
   },
   title: {
     color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
-    lineHeight: 18,
+    fontSize: FontSize.xl,
+    fontWeight: '800',
+    lineHeight: 20,
   },
   description: {
-    color: Colors.textMuted,
+    color: Colors.textSecondary,
     fontSize: FontSize.md,
-    lineHeight: 16,
+    lineHeight: 17,
   },
   offlineSlot: {
     flexDirection: 'column',
