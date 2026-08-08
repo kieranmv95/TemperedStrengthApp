@@ -15,7 +15,7 @@ const collab = {
 export const arena: StandaloneWorkoutSource[] = [
   {
     id: 'ar_06',
-    title: 'Event 002 - ICEY',
+    title: 'ICEY',
     description:
       'A 4-person workout (2M/2F). Complete 60 sync down ups into max bike/rower cals, rest, then 120 reverse lunges into max bike/rower cals. Score = total cals (bike + rower). Same for all divisions.',
     category: 'WOD',
@@ -65,7 +65,7 @@ export const arena: StandaloneWorkoutSource[] = [
   },
   {
     id: 'ar_07',
-    title: 'Event 002 - FLEX FM',
+    title: 'FLEX FM',
     description:
       'The ultimate test of teamwork. A 4-person workout (2M/2F). For time with a 15-minute cap — buy in with sync double dumbbell snatches, 6 rounds of gymnastics and thrusters, then cash out with dumbbell snatches.',
     category: 'WOD',
@@ -178,7 +178,7 @@ export const arena: StandaloneWorkoutSource[] = [
   },
   {
     id: 'ar_08',
-    title: 'Event 002 - Back 2 Back',
+    title: 'Back 2 Back',
     description:
       'A 4-person workout (2M/2F). Two-parter in a 20-minute window — buy in with sync hang cleans, front squats and STOH, then each athlete builds a 1RM complex (hang clean + front squat + STOH) in the remaining time. Score = sum of all four complex weights.',
     category: 'WOD',
@@ -328,7 +328,7 @@ export const arena: StandaloneWorkoutSource[] = [
   },
   {
     id: 'ar_01',
-    title: 'Event 001 - Workout 1',
+    title: 'SKI GRACE',
     description:
       'A 4-person workout (2M/2F). Eight minutes of max ski and bike, four minutes rest, then both mixed pairs race through 30 sync hang Grace.',
     category: 'WOD',
@@ -404,7 +404,7 @@ export const arena: StandaloneWorkoutSource[] = [
   },
   {
     id: 'ar_02',
-    title: 'Event 001 - Workout 2',
+    title: 'DESCENDER',
     description:
       'A 4-person workout (2M/2F). A synchro chipper with descending reps across snatches, toes to bar, lunges, chest to bar, devil presses and bar muscle-ups.',
     category: 'WOD',
@@ -479,7 +479,7 @@ export const arena: StandaloneWorkoutSource[] = [
   },
   {
     id: 'ar_03',
-    title: 'Event 001 - Workout 3',
+    title: 'CLEAN CUT',
     description:
       'A 4-person workout (2M/2F). A clean ladder — females buy in and build to a 1RM, then males do the same after a short rest. Heavy and precise.',
     category: 'WOD',
@@ -591,7 +591,7 @@ export const arena: StandaloneWorkoutSource[] = [
   },
   {
     id: 'ar_04',
-    title: 'Event 001 - Workout 4',
+    title: 'DEAD RUN',
     description:
       'A 4-person workout (2M/2F). Each round is one 3x8m shuttle run, then an unbroken set of deadlifts. Score is total deadlifts.',
     category: 'WOD',
@@ -645,7 +645,7 @@ export const arena: StandaloneWorkoutSource[] = [
   },
   {
     id: 'ar_05',
-    title: 'Event 001 - Workout 5',
+    title: 'DOUBLE DOWN',
     description:
       'A 4-person workout (2M/2F). Five minutes of sync hang snatches and burpees, one minute rest, then a descending double-under and thruster chipper for time.',
     category: 'WOD',

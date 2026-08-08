@@ -1,6 +1,70 @@
 import type { StandaloneWorkoutSource } from '@/src/types/workouts';
 
+const replabCollab = {
+  image: require('@/assets/images/collabs/replab.jpg'),
+  name: 'RepLab',
+  description:
+    'Creatine + electrolytes in tear-and-pour sachets. Fuel strength, hydration, and recovery without the tubs and scoops. Use code TS10 for 10% off.',
+  link: 'https://thereplab.co.uk/',
+  linkCopy: 'Shop RepLab — TS10 for 10% off',
+  bgColor: '#000000',
+  nameColor: '#FFFFFF',
+  descriptionColor: '#B0B0B0',
+  linkAndBorderColor: '#FFFFFF',
+  inColabWithColor: '#888888',
+};
+
 export const hyrox: StandaloneWorkoutSource[] = [
+  {
+    id: 'f_71',
+    title: 'Performance Ritual',
+    description:
+      'A Hyrox-style chipper into a short bodyweight finisher. Move well, keep transitions tight, and empty the tank on the last 10 burpees.',
+    category: 'Hyrox',
+    difficulty: 'Intermediate',
+    estimatedTime: 25,
+    tags: ['Full Body', 'Chipper', 'For Time'],
+    isPremium: false,
+    collab: replabCollab,
+    blocks: [
+      {
+        name: 'Warmup',
+        mobilityFlow: 'r_15',
+        highlightInstructions: 'Into:',
+        movements: [
+          '2 mins easy jog or rower',
+          '10 air squats, 5 burpees, 10 walking lunges',
+        ],
+      },
+      {
+        name: 'For Time',
+        instructions:
+          'Work straight through every movement with minimal rest. Keep the run honest so you can still attack the burpee broad jumps and wall balls, then empty the tank on the finisher. Score is total time from the run to the last burpee.',
+        highlightInstructions: 'One clock. Chipper into finisher.',
+        movements: [
+          '500m Run',
+          '20 Burpee Broad Jumps',
+          '20 Walking Lunges',
+          '15 Wall Balls',
+          '250m Row',
+          '20m Farmer\u2019s Carry',
+          { type: 'divider', note: 'Finisher' },
+          '30 Bodyweight Squats',
+          '30 Sit-ups',
+          '10 Burpees',
+        ],
+      },
+      {
+        name: 'Cooldown',
+        movements: [
+          '90s easy walk to bring the heart rate down',
+          '60s seated forward fold',
+          '60s hip flexor stretch each side',
+        ],
+      },
+    ],
+    equipment: ['medicine ball', 'rower', 'dumbbell'],
+  },
   {
     id: 'p_36',
     title: 'Order 66',
