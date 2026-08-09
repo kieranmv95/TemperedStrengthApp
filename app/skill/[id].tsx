@@ -95,10 +95,10 @@ export default function SkillDetailScreen() {
   return (
     <StandardLayout
       title={skill.name}
-      subtitle={skill.description}
       onBackPress={() => router.back()}
     >
       <StandardLayout.Body>
+        <Text style={styles.description}>{skill.description}</Text>
         <View style={styles.sections}>
           {sections.map((section) => {
             if (section.count === 0) {
@@ -147,5 +147,11 @@ const styles = StyleSheet.create({
     fontSize: FontSize.lg,
     lineHeight: 22,
     textAlign: 'center',
+  },
+  description: {
+    color: Colors.textPlaceholder,
+    fontSize: FontSize.lg,
+    lineHeight: 22,
+    marginBottom: Spacing.section,
   },
 });

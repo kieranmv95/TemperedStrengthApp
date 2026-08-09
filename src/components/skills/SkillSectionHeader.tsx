@@ -20,12 +20,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
+    fontSize: FontSize.displayLg,
     fontWeight: '800',
-  },
-  count: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
   },
 });
