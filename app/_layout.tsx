@@ -140,6 +140,10 @@ export default function RootLayout() {
                     options={{ headerShown: false }}
                   />
                   <Stack.Screen
+                    name="skills-and-cues"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
                     name="competition"
                     options={{ headerShown: false }}
                   />

@@ -1,6 +1,7 @@
 import { ArticleCard } from '@/src/components/brief/ArticleCard';
 import { Card, CuratedSection } from '@/src/components/ds';
 import { HubPromoRow } from '@/src/components/hub/HubPromoRow';
+import { SkillsAndCuesCard } from '@/src/components/hub/SkillsAndCuesCard';
 import { TogetherWeLiftBanner } from '@/src/components/hub/TogetherWeLiftBanner';
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
@@ -153,6 +154,10 @@ export default function HubScreen() {
     router.push('/discover');
   };
 
+  const handleOpenSkillsAndCues = () => {
+    router.push('/skills-and-cues');
+  };
+
   const charityBanner = (
     <TogetherWeLiftBanner onPress={() => openTogetherWeLift('hub_banner')} />
   );
@@ -170,11 +175,15 @@ export default function HubScreen() {
   const listHeader = (
     <View>
       <View style={styles.section}>
-        <HubPromoRow
-          onPressShop={handleOpenShop}
-          onPressDiscover={handleOpenDiscover}
-          shopUnavailable={networkUnavailable}
-        />
+        <View style={styles.skillsAndCuesSection}>
+          <SkillsAndCuesCard onPress={handleOpenSkillsAndCues} />
+
+          <HubPromoRow
+            onPressShop={handleOpenShop}
+            onPressDiscover={handleOpenDiscover}
+            shopUnavailable={networkUnavailable}
+          />
+        </View>
 
         <View style={styles.subSection}>
           <CuratedSection
@@ -264,7 +273,7 @@ export default function HubScreen() {
                   : isAllChip
                     ? activeCategory === 'All' && !showFavoritesOnly
                     : activeCategory === (item.key as ArticleCategory) &&
-                      !showFavoritesOnly;
+                    !showFavoritesOnly;
 
                 const count = isFavoritesChip
                   ? favorites.length
@@ -356,6 +365,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.sm,
+  },
+  skillsAndCuesSection: {
+    gap: Spacing.md,
   },
   sectionOffline: {
     alignItems: 'center',
