@@ -1,9 +1,13 @@
+import { SkillCard } from '@/src/components/skills/SkillCard';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { getSkills } from '@/src/data/skills';
+import type { Skill } from '@/src/types/skills';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
+  FlatList,
   StyleSheet,
   Text,
   TextInput,
@@ -13,11 +17,33 @@ import {
 
 export default function SkillsAndCuesScreen() {
   const [searchQuery, setSearchQuery] = useState('');
+  const skills = useMemo(() => getSkills(), []);
+
+  const filteredSkills = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) {
+      return skills;
+    }
+
+    return skills.filter((skill) => {
+      return (
+        skill.name.toLowerCase().includes(query) ||
+        skill.description.toLowerCase().includes(query)
+      );
+    });
+  }, [searchQuery, skills]);
+
+  const handleSkillPress = (skill: Skill) => {
+    router.push({
+      pathname: '/skill/[id]',
+      params: { id: skill.id },
+    });
+  };
 
   return (
     <StandardLayout
       title="Skills & Cues"
-      subtitle="Resources to nail down them complex skills."
+      subtitle="Pro resources to nail down them complex skills."
       onBackPress={() => router.back()}
       disableScroll
     >
@@ -51,17 +77,29 @@ export default function SkillsAndCuesScreen() {
         </View>
       </StandardLayout.Filters>
       <StandardLayout.Body>
-        <View style={styles.emptyState}>
-          <Ionicons
-            name="barbell-outline"
-            size={64}
-            color={Colors.backgroundSubtle}
-          />
-          <Text style={styles.emptyTitle}>Skills coming soon</Text>
-          <Text style={styles.emptyDescription}>
-            Skill cards and resources will appear here in a follow-up update.
-          </Text>
-        </View>
+        <FlatList
+          data={filteredSkills}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <SkillCard skill={item} onPress={handleSkillPress} />
+          )}
+          contentContainerStyle={styles.listContent}
+          style={styles.list}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Ionicons
+                name="search-outline"
+                size={64}
+                color={Colors.backgroundSubtle}
+              />
+              <Text style={styles.emptyTitle}>No skills found</Text>
+              <Text style={styles.emptyDescription}>
+                Try a different search term.
+              </Text>
+            </View>
+          }
+        />
       </StandardLayout.Body>
     </StandardLayout>
   );
@@ -84,12 +122,22 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     fontSize: FontSize.xxl,
   },
+  list: {
+    flex: 1,
+  },
+  listContent: {
+    paddingTop: Spacing.xxl,
+    paddingBottom: Spacing.section,
+    gap: Spacing.md,
+    flexGrow: 1,
+  },
   emptyState: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacing.section,
     gap: Spacing.lg,
+    paddingTop: Spacing.section,
   },
   emptyTitle: {
     color: Colors.textPrimary,
