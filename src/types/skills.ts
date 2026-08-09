@@ -1,10 +1,9 @@
 import type { ImageSourcePropType } from 'react-native';
 
-export type SkillCue = {
+export type SkillVideo = {
   id: string;
   name: string;
   description: string;
-  imagePath: ImageSourcePropType;
 };
 
 export type Skill = {
@@ -12,10 +11,10 @@ export type Skill = {
   name: string;
   thumbnailPath: ImageSourcePropType;
   description: string;
-  videoIds?: string[];
+  videoIds?: SkillVideo[];
   tips?: string[];
   recoveryFlowIds?: string[];
-  cues?: SkillCue[];
+  cues?: ImageSourcePropType[];
   workoutsIds?: string[];
   articleIds?: string[];
 };

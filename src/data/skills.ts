@@ -7,17 +7,16 @@ const SkillsData: Skill[] = [
     thumbnailPath: require('@/assets/images/skills/thumbnails/Handstand.jpg'),
     description:
       'Pull-Up is a bodyweight exercise that targets the back, biceps, and forearms. It is a great exercise for building strength and endurance in the upper body.',
-    videoIds: ['oJf2Mnn4NVc'],
-    recoveryFlowIds: ['r_01'],
-    articleIds: ['ao_1'],
-    cues: [
+    videoIds: [
       {
-        id: '1',
+        id: 'oJf2Mnn4NVc',
         name: 'Hand Stand Push Up',
         description: 'Hand Stand Push Up',
-        imagePath: require('@/assets/images/skills/thumbnails/Handstand.jpg'),
       },
     ],
+    recoveryFlowIds: ['r_01'],
+    articleIds: ['ao_1'],
+    cues: [require('@/assets/images/skills/thumbnails/Handstand.jpg')],
     workoutsIds: ['w_01'],
     tips: [
       'Keep your hips square to the ground',
@@ -34,17 +33,16 @@ const SkillsData: Skill[] = [
     thumbnailPath: require('@/assets/images/skills/thumbnails/Snatch.jpg'),
     description:
       'The snatch is a powerful Olympic lift that combines the power of the clean and jerk into a single movement to get the barbell off the ground and over the head.',
-    videoIds: ['oJf2Mnn4NVc'],
-    recoveryFlowIds: ['r_01'],
-    articleIds: ['ao_1'],
-    cues: [
+    videoIds: [
       {
-        id: '1',
-        name: 'Hand Stand Push Up',
-        description: 'Hand Stand Push Up',
-        imagePath: require('@/assets/images/skills/thumbnails/Handstand.jpg'),
+        id: 'oJf2Mnn4NVc',
+        name: 'Snatch',
+        description: 'Snatch',
       },
     ],
+    recoveryFlowIds: ['r_01'],
+    articleIds: ['ao_1'],
+    cues: [require('@/assets/images/skills/thumbnails/Snatch.jpg')],
   },
 ];
 
