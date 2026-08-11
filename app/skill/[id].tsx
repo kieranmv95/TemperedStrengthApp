@@ -1,6 +1,8 @@
 import { SkillArticles } from '@/src/components/skills/SkillArticles';
 import { SkillCues } from '@/src/components/skills/SkillCues';
+import { SkillLockedTeaser } from '@/src/components/skills/SkillLockedTeaser';
 import { SkillMobilityFlows } from '@/src/components/skills/SkillMobilityFlows';
+import { SkillProRequiredBanner } from '@/src/components/skills/SkillProRequiredBanner';
 import { SkillSectionHeader } from '@/src/components/skills/SkillSectionHeader';
 import { SkillTipsCarousel } from '@/src/components/skills/SkillTipsCarousel';
 import { SkillVideos } from '@/src/components/skills/SkillVideos';
@@ -8,6 +10,7 @@ import { SkillWorkouts } from '@/src/components/skills/SkillWorkouts';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getSkillById } from '@/src/data/skills';
+import { useSubscription } from '@/src/hooks/use-subscription';
 import type { Skill } from '@/src/types/skills';
 import { asStringId } from '@/src/utils/routeParams';
 import { Ionicons } from '@expo/vector-icons';
@@ -19,41 +22,71 @@ type SkillDetailSection = {
   key: string;
   title: string;
   subtitle?: string;
+  resourceLabel: string;
   count: number;
 };
 
-function getSkillDetailSections(skill: Skill): SkillDetailSection[] {
+function pluralize(count: number, singular: string, plural: string): string {
+  return count === 1 ? singular : plural;
+}
+
+function getSkillDetailSections(
+  skill: Skill,
+  isLocked: boolean
+): SkillDetailSection[] {
   const sections: SkillDetailSection[] = [
     {
       key: 'videos',
       title: 'Videos',
-      subtitle: 'Tap a video to open and watch.',
+      subtitle: isLocked ? undefined : 'Tap a video to open and watch.',
+      resourceLabel: pluralize(
+        skill.videoIds?.length ?? 0,
+        'video',
+        'videos'
+      ),
       count: skill.videoIds?.length ?? 0,
     },
     {
       key: 'tips',
       title: 'Tips',
+      resourceLabel: pluralize(skill.tips?.length ?? 0, 'tip', 'tips'),
       count: skill.tips?.length ?? 0,
     },
     {
       key: 'cues',
       title: 'Cues',
-      subtitle: 'Tap a cue to view it fullscreen.',
+      subtitle: isLocked ? undefined : 'Tap a cue to view it fullscreen.',
+      resourceLabel: pluralize(skill.cues?.length ?? 0, 'cue', 'cues'),
       count: skill.cues?.length ?? 0,
     },
     {
       key: 'articles',
       title: 'Articles',
+      resourceLabel: pluralize(
+        skill.articleSlugs?.length ?? 0,
+        'article',
+        'articles'
+      ),
       count: skill.articleSlugs?.length ?? 0,
     },
     {
       key: 'mobility',
       title: 'Mobility Flows',
+      resourceLabel: pluralize(
+        skill.recoveryFlowIds?.length ?? 0,
+        'mobility flow',
+        'mobility flows'
+      ),
       count: skill.recoveryFlowIds?.length ?? 0,
     },
     {
       key: 'workouts',
       title: 'Workouts',
+      resourceLabel: pluralize(
+        skill.workoutsIds?.length ?? 0,
+        'workout',
+        'workouts'
+      ),
       count: skill.workoutsIds?.length ?? 0,
     },
   ];
@@ -61,9 +94,62 @@ function getSkillDetailSections(skill: Skill): SkillDetailSection[] {
   return sections.filter((section) => section.count > 0);
 }
 
+function renderSectionBody(skill: Skill, sectionKey: string) {
+  if (sectionKey === 'videos' && skill.videoIds) {
+    return <SkillVideos videos={skill.videoIds} />;
+  }
+  if (sectionKey === 'tips' && skill.tips) {
+    return <SkillTipsCarousel tips={skill.tips} />;
+  }
+  if (sectionKey === 'cues' && skill.cues) {
+    return <SkillCues cues={skill.cues} />;
+  }
+  if (sectionKey === 'articles' && skill.articleSlugs) {
+    return <SkillArticles articleSlugs={skill.articleSlugs} />;
+  }
+  if (sectionKey === 'mobility' && skill.recoveryFlowIds) {
+    return <SkillMobilityFlows recoveryFlowIds={skill.recoveryFlowIds} />;
+  }
+  if (sectionKey === 'workouts' && skill.workoutsIds) {
+    return <SkillWorkouts workoutsIds={skill.workoutsIds} />;
+  }
+  return null;
+}
+
+function renderSkillSections(
+  skill: Skill,
+  sections: SkillDetailSection[],
+  isLocked: boolean
+) {
+  return (
+    <View style={styles.sections}>
+      {sections.map((section) => {
+        return (
+          <View key={section.key} style={styles.section}>
+            <SkillSectionHeader
+              title={section.title}
+              subtitle={section.subtitle}
+            />
+            {isLocked ? (
+              <SkillLockedTeaser
+                count={section.count}
+                resourceLabel={section.resourceLabel}
+              />
+            ) : (
+              renderSectionBody(skill, section.key)
+            )}
+          </View>
+        );
+      })}
+    </View>
+  );
+}
+
 export default function SkillDetailScreen() {
   const { id: idParam } = useLocalSearchParams<{ id?: string }>();
   const skillId = asStringId(idParam);
+  const { isPro, isLoading: subscriptionLoading } = useSubscription();
+
   const skill = useMemo(() => {
     if (!skillId) {
       return undefined;
@@ -71,9 +157,11 @@ export default function SkillDetailScreen() {
     return getSkillById(skillId);
   }, [skillId]);
 
+  const isLocked = !subscriptionLoading && !isPro;
+
   const sections = useMemo(
-    () => (skill ? getSkillDetailSections(skill) : []),
-    [skill]
+    () => (skill ? getSkillDetailSections(skill, isLocked) : []),
+    [skill, isLocked]
   );
 
   if (!skillId || !skill) {
@@ -103,34 +191,10 @@ export default function SkillDetailScreen() {
   return (
     <StandardLayout title={skill.name} onBackPress={() => router.back()}>
       <StandardLayout.Body>
-        <Text style={styles.description}>{skill.description}</Text>
-        <View style={styles.sections}>
-          {sections.map((section) => (
-            <View key={section.key} style={styles.section}>
-              <SkillSectionHeader
-                title={section.title}
-                subtitle={section.subtitle}
-              />
-              {section.key === 'videos' && skill.videoIds ? (
-                <SkillVideos videos={skill.videoIds} />
-              ) : null}
-              {section.key === 'tips' && skill.tips ? (
-                <SkillTipsCarousel tips={skill.tips} />
-              ) : null}
-              {section.key === 'cues' && skill.cues ? (
-                <SkillCues cues={skill.cues} />
-              ) : null}
-              {section.key === 'articles' && skill.articleSlugs ? (
-                <SkillArticles articleSlugs={skill.articleSlugs} />
-              ) : null}
-              {section.key === 'mobility' && skill.recoveryFlowIds ? (
-                <SkillMobilityFlows recoveryFlowIds={skill.recoveryFlowIds} />
-              ) : null}
-              {section.key === 'workouts' && skill.workoutsIds ? (
-                <SkillWorkouts workoutsIds={skill.workoutsIds} />
-              ) : null}
-            </View>
-          ))}
+        <View style={styles.body}>
+          <Text style={styles.description}>{skill.description}</Text>
+          {isLocked ? <SkillProRequiredBanner /> : null}
+          {renderSkillSections(skill, sections, isLocked)}
         </View>
       </StandardLayout.Body>
     </StandardLayout>
@@ -138,6 +202,9 @@ export default function SkillDetailScreen() {
 }
 
 const styles = StyleSheet.create({
+  body: {
+    gap: Spacing.xl,
+  },
   sections: {
     gap: Spacing.section,
     paddingBottom: Spacing.section,
@@ -168,6 +235,5 @@ const styles = StyleSheet.create({
     color: Colors.textPlaceholder,
     fontSize: FontSize.lg,
     lineHeight: 22,
-    marginBottom: Spacing.section,
   },
 });

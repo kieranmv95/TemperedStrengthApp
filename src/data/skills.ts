@@ -10,7 +10,7 @@ const SkillsData: Skill[] = [
     videoIds: [
       {
         id: 'oJf2Mnn4NVc',
-        name: 'Hookk Grip 101',
+        name: 'Hook Grip 101',
         description: 'What is a hook grip and how to do it',
       },
       {
