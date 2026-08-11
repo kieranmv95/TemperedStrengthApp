@@ -10,13 +10,15 @@ import { SkillWorkouts } from '@/src/components/skills/SkillWorkouts';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getSkillById } from '@/src/data/skills';
-import { useSubscription } from '@/src/hooks/use-subscription';
+import { useRoles } from '@/src/hooks/useRoles';
 import type { Skill } from '@/src/types/skills';
 import { asStringId } from '@/src/utils/routeParams';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
+const COACH_ROLE = 'coach';
 
 type SkillDetailSection = {
   key: string;
@@ -148,7 +150,7 @@ function renderSkillSections(
 export default function SkillDetailScreen() {
   const { id: idParam } = useLocalSearchParams<{ id?: string }>();
   const skillId = asStringId(idParam);
-  const { isPro, isLoading: subscriptionLoading } = useSubscription();
+  const { roles, isPro, isLoading: accessLoading } = useRoles();
 
   const skill = useMemo(() => {
     if (!skillId) {
@@ -157,7 +159,8 @@ export default function SkillDetailScreen() {
     return getSkillById(skillId);
   }, [skillId]);
 
-  const isLocked = !subscriptionLoading && !isPro;
+  const hasAccess = isPro || roles.includes(COACH_ROLE);
+  const isLocked = !accessLoading && !hasAccess;
 
   const sections = useMemo(
     () => (skill ? getSkillDetailSections(skill, isLocked) : []),
