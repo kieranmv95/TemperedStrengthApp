@@ -148,8 +148,8 @@ export function SkillArticles({ articleSlugs }: SkillArticlesProps) {
       style={styles.scrollBleed}
       contentContainerStyle={styles.list}
     >
-      {resolvedArticles.map((article) => (
-        <View key={article.slug} style={{ width: multiCardWidth }}>
+      {resolvedArticles.map((article, index) => (
+        <View key={`${article.slug}-${index}`} style={{ width: multiCardWidth }}>
           <ArticleCard
             article={article}
             onPress={handlePress}

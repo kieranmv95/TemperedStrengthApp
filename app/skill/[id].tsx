@@ -3,6 +3,7 @@ import { SkillCues } from '@/src/components/skills/SkillCues';
 import { SkillMobilityFlows } from '@/src/components/skills/SkillMobilityFlows';
 import { SkillSectionHeader } from '@/src/components/skills/SkillSectionHeader';
 import { SkillTipsCarousel } from '@/src/components/skills/SkillTipsCarousel';
+import { SkillVideos } from '@/src/components/skills/SkillVideos';
 import { SkillWorkouts } from '@/src/components/skills/SkillWorkouts';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
@@ -17,6 +18,7 @@ import { StyleSheet, Text, View } from 'react-native';
 type SkillDetailSection = {
   key: string;
   title: string;
+  subtitle?: string;
   count: number;
 };
 
@@ -25,6 +27,7 @@ function getSkillDetailSections(skill: Skill): SkillDetailSection[] {
     {
       key: 'videos',
       title: 'Videos',
+      subtitle: 'Tap a video to open and watch.',
       count: skill.videoIds?.length ?? 0,
     },
     {
@@ -35,6 +38,7 @@ function getSkillDetailSections(skill: Skill): SkillDetailSection[] {
     {
       key: 'cues',
       title: 'Cues',
+      subtitle: 'Tap a cue to view it fullscreen.',
       count: skill.cues?.length ?? 0,
     },
     {
@@ -103,7 +107,13 @@ export default function SkillDetailScreen() {
         <View style={styles.sections}>
           {sections.map((section) => (
             <View key={section.key} style={styles.section}>
-              <SkillSectionHeader title={section.title} />
+              <SkillSectionHeader
+                title={section.title}
+                subtitle={section.subtitle}
+              />
+              {section.key === 'videos' && skill.videoIds ? (
+                <SkillVideos videos={skill.videoIds} />
+              ) : null}
               {section.key === 'tips' && skill.tips ? (
                 <SkillTipsCarousel tips={skill.tips} />
               ) : null}

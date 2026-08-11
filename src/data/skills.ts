@@ -10,8 +10,14 @@ const SkillsData: Skill[] = [
     videoIds: [
       {
         id: 'oJf2Mnn4NVc',
-        name: 'Hand Stand Push Up',
-        description: 'Hand Stand Push Up',
+        name: 'Hookk Grip 101',
+        description: 'What is a hook grip and how to do it',
+      },
+      {
+        id: 'oJf2Mnn4NVc',
+        name: 'Progressions',
+        description:
+          'progressions from the flow to the top of a handstand push up',
       },
     ],
     recoveryFlowIds: ['r_01', 'r_02'],
@@ -40,29 +46,6 @@ const SkillsData: Skill[] = [
       'Keep your feet together',
       'Keep your head up',
       'Keep your chest up',
-    ],
-  },
-  {
-    id: '2',
-    name: 'Snatch',
-    thumbnailPath: require('@/assets/images/skills/thumbnails/Snatch.jpg'),
-    description:
-      'The snatch is a powerful Olympic lift that combines the power of the clean and jerk into a single movement to get the barbell off the ground and over the head.',
-    videoIds: [
-      {
-        id: 'oJf2Mnn4NVc',
-        name: 'Snatch',
-        description: 'Snatch',
-      },
-    ],
-    recoveryFlowIds: ['r_01'],
-    articleSlugs: ['the-science-of-progressive-overload'],
-    cues: [
-      {
-        title: 'Snatch',
-        description: 'Snatch',
-        imagePath: require('@/assets/images/test.jpg'),
-      },
     ],
   },
 ];
