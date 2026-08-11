@@ -148,6 +148,10 @@ export default function RootLayout() {
                     options={{ headerShown: false }}
                   />
                   <Stack.Screen
+                    name="workout"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
                     name="competition"
                     options={{ headerShown: false }}
                   />

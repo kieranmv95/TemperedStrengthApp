@@ -54,10 +54,8 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
   }
 
   const handlePress = (workout: SingleWorkout) => {
-    router.push({
-      pathname: '/workouts/[id]',
-      params: { id: workout.id, view_source: 'browse' },
-    });
+    // Root stack route so back returns to the skill (not the Workouts tab).
+    router.push(`/workout/${workout.id}?view_source=skills`);
   };
 
   const handleLockedPress = () => {
