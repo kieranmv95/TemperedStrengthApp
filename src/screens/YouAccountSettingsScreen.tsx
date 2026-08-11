@@ -312,21 +312,22 @@ export function YouAccountSettingsScreen() {
     setIsRefreshingSanityHome(true);
     void (async () => {
       try {
-        const { notification, sponsorAds, shopAds } =
+        const { notification, sponsorAds, shopAds, skills } =
           await refreshSanityHomeContent();
         const sponsorCount = sponsorAds.length;
         const shopCount = shopAds.length;
+        const skillsCount = skills.length;
         const notificationNote =
           notification !== null ? 'Notification loaded.' : 'No notification.';
         Alert.alert(
-          'Sanity home content refreshed',
-          `${notificationNote} ${sponsorCount} carousel ad${sponsorCount === 1 ? '' : 's'}, ${shopCount} in shop. Open Home or Hub to preview.`
+          'Sanity content refreshed',
+          `${notificationNote} ${sponsorCount} carousel ad${sponsorCount === 1 ? '' : 's'}, ${shopCount} in shop, ${skillsCount} skill${skillsCount === 1 ? '' : 's'}. Open Home, Hub, or Skills & Cues to preview.`
         );
       } catch (error) {
         console.error('Dev Sanity refresh failed:', error);
         Alert.alert(
           'Error',
-          'Could not refresh Sanity home content. Try again.'
+          'Could not refresh Sanity content. Try again.'
         );
       } finally {
         setIsRefreshingSanityHome(false);
@@ -735,8 +736,8 @@ export function YouAccountSettingsScreen() {
                   </Text>
                   <Text style={styles.settingDescription}>
                     {isRefreshingSanityHome
-                      ? 'Fetching notification and sponsor ads from Sanity…'
-                      : 'Clear cached home content and refetch from Sanity. Open Home to preview what users see.'}
+                      ? 'Fetching notification, sponsor ads, and skills from Sanity…'
+                      : 'Clear cached Sanity content (home + skills) and refetch. Open Home, Hub, or Skills & Cues to preview.'}
                   </Text>
                 </View>
                 <SmallChevron />

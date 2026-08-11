@@ -1,12 +1,13 @@
 import { SkillCard } from '@/src/components/skills/SkillCard';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
-import { getSkills } from '@/src/data/skills';
+import { useSkills } from '@/src/hooks/useSkills';
 import type { Skill } from '@/src/types/skills';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -17,7 +18,7 @@ import {
 
 export default function SkillsAndCuesScreen() {
   const [searchQuery, setSearchQuery] = useState('');
-  const skills = useMemo(() => getSkills(), []);
+  const { skills, isLoading } = useSkills();
 
   const filteredSkills = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -77,29 +78,37 @@ export default function SkillsAndCuesScreen() {
         </View>
       </StandardLayout.Filters>
       <StandardLayout.Body>
-        <FlatList
-          data={filteredSkills}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <SkillCard skill={item} onPress={handleSkillPress} />
-          )}
-          contentContainerStyle={styles.listContent}
-          style={styles.list}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <View style={styles.emptyState}>
-              <Ionicons
-                name="search-outline"
-                size={64}
-                color={Colors.backgroundSubtle}
-              />
-              <Text style={styles.emptyTitle}>No skills found</Text>
-              <Text style={styles.emptyDescription}>
-                Try a different search term.
-              </Text>
-            </View>
-          }
-        />
+        {isLoading ? (
+          <View style={styles.loadingState}>
+            <ActivityIndicator color={Colors.accent} />
+          </View>
+        ) : (
+          <FlatList
+            data={filteredSkills}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <SkillCard skill={item} onPress={handleSkillPress} />
+            )}
+            contentContainerStyle={styles.listContent}
+            style={styles.list}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <View style={styles.emptyState}>
+                <Ionicons
+                  name="search-outline"
+                  size={64}
+                  color={Colors.backgroundSubtle}
+                />
+                <Text style={styles.emptyTitle}>No skills found</Text>
+                <Text style={styles.emptyDescription}>
+                  {searchQuery.trim().length > 0
+                    ? 'Try a different search term.'
+                    : 'Skills will appear here once published in Sanity.'}
+                </Text>
+              </View>
+            }
+          />
+        )}
       </StandardLayout.Body>
     </StandardLayout>
   );
@@ -130,6 +139,12 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.section,
     gap: Spacing.md,
     flexGrow: 1,
+  },
+  loadingState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: Spacing.section,
   },
   emptyState: {
     flex: 1,

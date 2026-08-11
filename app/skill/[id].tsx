@@ -9,14 +9,14 @@ import { SkillVideos } from '@/src/components/skills/SkillVideos';
 import { SkillWorkouts } from '@/src/components/skills/SkillWorkouts';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
-import { getSkillById } from '@/src/data/skills';
 import { useRoles } from '@/src/hooks/useRoles';
+import { useSkill } from '@/src/hooks/useSkills';
 import type { Skill } from '@/src/types/skills';
 import { asStringId } from '@/src/utils/routeParams';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 const COACH_ROLE = 'coach';
 
@@ -151,13 +151,7 @@ export default function SkillDetailScreen() {
   const { id: idParam } = useLocalSearchParams<{ id?: string }>();
   const skillId = asStringId(idParam);
   const { roles, isPro, isLoading: accessLoading } = useRoles();
-
-  const skill = useMemo(() => {
-    if (!skillId) {
-      return undefined;
-    }
-    return getSkillById(skillId);
-  }, [skillId]);
+  const { skill, isLoading: skillLoading } = useSkill(skillId);
 
   const hasAccess = isPro || roles.includes(COACH_ROLE);
   const isLocked = !accessLoading && !hasAccess;
@@ -167,7 +161,47 @@ export default function SkillDetailScreen() {
     [skill, isLocked]
   );
 
-  if (!skillId || !skill) {
+  if (!skillId) {
+    return (
+      <StandardLayout
+        title="Skill"
+        onBackPress={() => router.back()}
+        disableScroll
+      >
+        <StandardLayout.Body>
+          <View style={styles.emptyState}>
+            <Ionicons
+              name="barbell-outline"
+              size={64}
+              color={Colors.backgroundSubtle}
+            />
+            <Text style={styles.emptyTitle}>Skill not found</Text>
+            <Text style={styles.emptyDescription}>
+              This skill may have been removed or the link is invalid.
+            </Text>
+          </View>
+        </StandardLayout.Body>
+      </StandardLayout>
+    );
+  }
+
+  if (skillLoading) {
+    return (
+      <StandardLayout
+        title="Skill"
+        onBackPress={() => router.back()}
+        disableScroll
+      >
+        <StandardLayout.Body>
+          <View style={styles.emptyState}>
+            <ActivityIndicator color={Colors.accent} />
+          </View>
+        </StandardLayout.Body>
+      </StandardLayout>
+    );
+  }
+
+  if (!skill) {
     return (
       <StandardLayout
         title="Skill"
