@@ -1,4 +1,5 @@
 import { SkillArticles } from '@/src/components/skills/SkillArticles';
+import { SkillCues } from '@/src/components/skills/SkillCues';
 import { SkillMobilityFlows } from '@/src/components/skills/SkillMobilityFlows';
 import { SkillSectionHeader } from '@/src/components/skills/SkillSectionHeader';
 import { SkillTipsCarousel } from '@/src/components/skills/SkillTipsCarousel';
@@ -105,6 +106,9 @@ export default function SkillDetailScreen() {
               <SkillSectionHeader title={section.title} />
               {section.key === 'tips' && skill.tips ? (
                 <SkillTipsCarousel tips={skill.tips} />
+              ) : null}
+              {section.key === 'cues' && skill.cues ? (
+                <SkillCues cues={skill.cues} />
               ) : null}
               {section.key === 'articles' && skill.articleSlugs ? (
                 <SkillArticles articleSlugs={skill.articleSlugs} />

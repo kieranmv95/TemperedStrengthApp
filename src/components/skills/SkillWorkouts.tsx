@@ -81,6 +81,7 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
+      style={styles.scrollBleed}
       contentContainerStyle={styles.list}
     >
       {workouts.map((workout) => (
@@ -101,9 +102,12 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
 }
 
 const styles = StyleSheet.create({
+  scrollBleed: {
+    marginHorizontal: -Spacing.xxl,
+  },
   list: {
     gap: Spacing.md,
-    paddingRight: Spacing.xxl,
+    paddingHorizontal: Spacing.xxl,
   },
   card: {
     marginBottom: 0,

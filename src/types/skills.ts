@@ -6,6 +6,12 @@ export type SkillVideo = {
   description: string;
 };
 
+export type SkillCue = {
+  title?: string;
+  description?: string;
+  imagePath: ImageSourcePropType;
+};
+
 export type Skill = {
   id: string;
   name: string;
@@ -14,7 +20,7 @@ export type Skill = {
   videoIds?: SkillVideo[];
   tips?: string[];
   recoveryFlowIds?: string[];
-  cues?: ImageSourcePropType[];
+  cues?: SkillCue[];
   workoutsIds?: string[];
   articleSlugs?: string[];
 };

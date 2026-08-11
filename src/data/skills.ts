@@ -19,7 +19,19 @@ const SkillsData: Skill[] = [
       'the-science-of-progressive-overload',
       'the-science-of-progressive-overload',
     ],
-    cues: [require('@/assets/images/skills/thumbnails/Handstand.jpg')],
+    cues: [
+      {
+        title: 'Hand Stand Push Up',
+        description:
+          'The average head is approximately 10% of your height. This is the recommended distance to dip during the push press or jerk. The average head is approximately 10% of your height. This is the recommended distance to dip during the push press or jerk. The average head is approximately 10% of your height. This is the recommended distance to dip during the push press or jerk. The average head is approximately 10% of your height. This is the recommended distance to dip during the push press or jerk.',
+        imagePath: require('@/assets/images/test.jpg'),
+      },
+      {
+        title: 'Hand Stand Push Up',
+        description: 'Hand Stand Push Up',
+        imagePath: require('@/assets/images/test.jpg'),
+      },
+    ],
     workoutsIds: ['f_17', 'rh_09'],
     tips: [
       'Keep your hips square to the ground',
@@ -45,7 +57,13 @@ const SkillsData: Skill[] = [
     ],
     recoveryFlowIds: ['r_01'],
     articleSlugs: ['the-science-of-progressive-overload'],
-    cues: [require('@/assets/images/skills/thumbnails/Snatch.jpg')],
+    cues: [
+      {
+        title: 'Snatch',
+        description: 'Snatch',
+        imagePath: require('@/assets/images/test.jpg'),
+      },
+    ],
   },
 ];
 

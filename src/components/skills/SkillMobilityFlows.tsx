@@ -48,6 +48,7 @@ export function SkillMobilityFlows({
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
+      style={styles.scrollBleed}
       contentContainerStyle={styles.list}
     >
       {flows.map((recovery) => (
@@ -66,9 +67,12 @@ export function SkillMobilityFlows({
 }
 
 const styles = StyleSheet.create({
+  scrollBleed: {
+    marginHorizontal: -Spacing.xxl,
+  },
   list: {
     gap: Spacing.md,
-    paddingRight: Spacing.xxl,
+    paddingHorizontal: Spacing.xxl,
   },
   card: {
     marginBottom: 0,

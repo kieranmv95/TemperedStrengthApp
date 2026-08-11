@@ -145,6 +145,7 @@ export function SkillArticles({ articleSlugs }: SkillArticlesProps) {
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
+      style={styles.scrollBleed}
       contentContainerStyle={styles.list}
     >
       {resolvedArticles.map((article) => (
@@ -163,9 +164,12 @@ export function SkillArticles({ articleSlugs }: SkillArticlesProps) {
 }
 
 const styles = StyleSheet.create({
+  scrollBleed: {
+    marginHorizontal: -Spacing.xxl,
+  },
   list: {
     gap: Spacing.md,
-    paddingRight: Spacing.xxl,
+    paddingHorizontal: Spacing.xxl,
   },
   card: {
     marginBottom: 0,
