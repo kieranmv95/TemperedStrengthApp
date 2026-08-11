@@ -16,5 +16,5 @@ export type Skill = {
   recoveryFlowIds?: string[];
   cues?: ImageSourcePropType[];
   workoutsIds?: string[];
-  articleIds?: string[];
+  articleSlugs?: string[];
 };

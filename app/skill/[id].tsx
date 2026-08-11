@@ -1,5 +1,8 @@
+import { SkillArticles } from '@/src/components/skills/SkillArticles';
+import { SkillMobilityFlows } from '@/src/components/skills/SkillMobilityFlows';
 import { SkillSectionHeader } from '@/src/components/skills/SkillSectionHeader';
 import { SkillTipsCarousel } from '@/src/components/skills/SkillTipsCarousel';
+import { SkillWorkouts } from '@/src/components/skills/SkillWorkouts';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getSkillById } from '@/src/data/skills';
@@ -36,7 +39,7 @@ function getSkillDetailSections(skill: Skill): SkillDetailSection[] {
     {
       key: 'articles',
       title: 'Articles',
-      count: skill.articleIds?.length ?? 0,
+      count: skill.articleSlugs?.length ?? 0,
     },
     {
       key: 'mobility',
@@ -93,28 +96,27 @@ export default function SkillDetailScreen() {
   }
 
   return (
-    <StandardLayout
-      title={skill.name}
-      onBackPress={() => router.back()}
-    >
+    <StandardLayout title={skill.name} onBackPress={() => router.back()}>
       <StandardLayout.Body>
         <Text style={styles.description}>{skill.description}</Text>
         <View style={styles.sections}>
-          {sections.map((section) => {
-            if (section.count === 0) {
-              return null;
-            }
-            return (
-              <View key={section.key} style={styles.section}>
-                <SkillSectionHeader
-                  title={section.title}
-                />
-                {section.key === 'tips' && skill.tips ? (
-                  <SkillTipsCarousel tips={skill.tips} />
-                ) : null}
-              </View>
-            )
-          })}
+          {sections.map((section) => (
+            <View key={section.key} style={styles.section}>
+              <SkillSectionHeader title={section.title} />
+              {section.key === 'tips' && skill.tips ? (
+                <SkillTipsCarousel tips={skill.tips} />
+              ) : null}
+              {section.key === 'articles' && skill.articleSlugs ? (
+                <SkillArticles articleSlugs={skill.articleSlugs} />
+              ) : null}
+              {section.key === 'mobility' && skill.recoveryFlowIds ? (
+                <SkillMobilityFlows recoveryFlowIds={skill.recoveryFlowIds} />
+              ) : null}
+              {section.key === 'workouts' && skill.workoutsIds ? (
+                <SkillWorkouts workoutsIds={skill.workoutsIds} />
+              ) : null}
+            </View>
+          ))}
         </View>
       </StandardLayout.Body>
     </StandardLayout>

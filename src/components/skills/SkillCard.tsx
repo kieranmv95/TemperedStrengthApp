@@ -18,7 +18,7 @@ function pluralize(count: number, singular: string, plural: string): string {
 function getSkillMetaItems(skill: Skill): SkillMetaItem[] {
   const items: SkillMetaItem[] = [];
 
-  const articleCount = skill.articleIds?.length ?? 0;
+  const articleCount = skill.articleSlugs?.length ?? 0;
   if (articleCount > 0) {
     items.push({
       key: 'articles',

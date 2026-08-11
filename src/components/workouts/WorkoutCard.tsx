@@ -2,7 +2,14 @@ import { Colors } from '@/src/constants/theme';
 import type { SingleWorkout } from '@/src/types/workouts';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  StyleProp,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { Card } from '../ds';
 import { CATEGORY_ICONS, DIFFICULTY_COLORS } from './workoutUiConstants';
 import { workoutsListStyles as styles } from './workoutsListStyles';
@@ -14,6 +21,7 @@ type WorkoutCardProps = {
   onToggleFavorite: (workout: SingleWorkout) => void;
   onPress: (workout: SingleWorkout) => void;
   onLockedPress: () => void;
+  style?: StyleProp<ViewStyle>;
 };
 
 export function WorkoutCard({
@@ -23,6 +31,7 @@ export function WorkoutCard({
   onToggleFavorite,
   onPress,
   onLockedPress,
+  style,
 }: WorkoutCardProps) {
   const isLocked = workout.isPremium && !isPro;
 
@@ -36,7 +45,11 @@ export function WorkoutCard({
 
   return (
     <Card
-      style={[styles.workoutCard, isLocked && styles.workoutCardLocked]}
+      style={[
+        styles.workoutCard,
+        isLocked && styles.workoutCardLocked,
+        style,
+      ]}
       onPress={handlePress}
       activeOpacity={0.7}
       accessibilityLabel="Open workout"

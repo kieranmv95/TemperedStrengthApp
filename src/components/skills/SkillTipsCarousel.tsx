@@ -37,35 +37,39 @@ export function SkillTipsCarousel({ tips }: SkillTipsCarouselProps) {
 
   return (
     <View style={styles.card}>
-      <TouchableOpacity
-        style={[styles.navButton, !canGoPrev && styles.navButtonDisabled]}
-        onPress={handlePrev}
-        disabled={!canGoPrev}
-        accessibilityRole="button"
-        accessibilityLabel="Previous tip"
-      >
-        <Ionicons name="chevron-back" size={20} color={Colors.accent} />
-      </TouchableOpacity>
+      <Text style={styles.progress} accessibilityLabel={`Tip ${index + 1} of ${tips.length}`}>
+        ({index + 1}/{tips.length})
+      </Text>
 
-      <Text style={styles.tipText}>{tips[index]}</Text>
+      <View style={styles.contentRow}>
+        <TouchableOpacity
+          style={[styles.navButton, !canGoPrev && styles.navButtonDisabled]}
+          onPress={handlePrev}
+          disabled={!canGoPrev}
+          accessibilityRole="button"
+          accessibilityLabel="Previous tip"
+        >
+          <Ionicons name="chevron-back" size={20} color={Colors.accent} />
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.navButton, !canGoNext && styles.navButtonDisabled]}
-        onPress={handleNext}
-        disabled={!canGoNext}
-        accessibilityRole="button"
-        accessibilityLabel="Next tip"
-      >
-        <Ionicons name="chevron-forward" size={20} color={Colors.accent} />
-      </TouchableOpacity>
+        <Text style={styles.tipText}>{tips[index]}</Text>
+
+        <TouchableOpacity
+          style={[styles.navButton, !canGoNext && styles.navButtonDisabled]}
+          onPress={handleNext}
+          disabled={!canGoNext}
+          accessibilityRole="button"
+          accessibilityLabel="Next tip"
+        >
+          <Ionicons name="chevron-forward" size={20} color={Colors.accent} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    flexDirection: 'row',
-    alignItems: 'center',
     gap: Spacing.xl,
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
@@ -74,6 +78,17 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xxl,
     paddingHorizontal: Spacing.xl,
     minHeight: 120,
+  },
+  progress: {
+    color: Colors.accent,
+    fontSize: FontSize.md,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  contentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xl,
   },
   navButton: {
     width: 36,

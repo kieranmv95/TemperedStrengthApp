@@ -14,10 +14,13 @@ const SkillsData: Skill[] = [
         description: 'Hand Stand Push Up',
       },
     ],
-    recoveryFlowIds: ['r_01'],
-    articleIds: ['ao_1'],
+    recoveryFlowIds: ['r_01', 'r_02'],
+    articleSlugs: [
+      'the-science-of-progressive-overload',
+      'the-science-of-progressive-overload',
+    ],
     cues: [require('@/assets/images/skills/thumbnails/Handstand.jpg')],
-    workoutsIds: ['w_01'],
+    workoutsIds: ['f_17', 'rh_09'],
     tips: [
       'Keep your hips square to the ground',
       'Keep your shoulders down and back',
@@ -41,7 +44,7 @@ const SkillsData: Skill[] = [
       },
     ],
     recoveryFlowIds: ['r_01'],
-    articleIds: ['ao_1'],
+    articleSlugs: ['the-science-of-progressive-overload'],
     cues: [require('@/assets/images/skills/thumbnails/Snatch.jpg')],
   },
 ];

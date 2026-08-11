@@ -2,7 +2,7 @@ import { Colors } from '@/src/constants/theme';
 import type { Recovery } from '@/src/types/recovery';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import { Card } from '../ds';
 import { DIFFICULTY_COLORS } from '../workouts/workoutUiConstants';
 import { workoutsListStyles as styles } from '../workouts/workoutsListStyles';
@@ -12,6 +12,7 @@ type RecoveryCardProps = {
   isPro: boolean;
   onPress: (recovery: Recovery) => void;
   onLockedPress: () => void;
+  style?: StyleProp<ViewStyle>;
 };
 
 export function RecoveryCard({
@@ -19,6 +20,7 @@ export function RecoveryCard({
   isPro,
   onPress,
   onLockedPress,
+  style,
 }: RecoveryCardProps) {
   const isLocked = recovery.isPremium && !isPro;
 
@@ -32,7 +34,11 @@ export function RecoveryCard({
 
   return (
     <Card
-      style={[styles.workoutCard, isLocked && styles.workoutCardLocked]}
+      style={[
+        styles.workoutCard,
+        isLocked && styles.workoutCardLocked,
+        style,
+      ]}
       onPress={handlePress}
       activeOpacity={0.7}
       accessibilityLabel="Open recovery flow"
