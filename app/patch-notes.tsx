@@ -25,7 +25,7 @@ const PATCH_NOTES: PatchNote[] = [
   {
     version: '3.1.0',
     dateLabel: '28th August 2026',
-    notes: ['skills section'],
+    notes: ['skills section', 'new collab workouts added'],
   },
   {
     version: '3.0.0',

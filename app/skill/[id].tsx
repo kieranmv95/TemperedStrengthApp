@@ -41,55 +41,43 @@ function getSkillDetailSections(
       key: 'videos',
       title: 'Videos',
       subtitle: isLocked ? undefined : 'Tap a video to open and watch.',
-      resourceLabel: pluralize(
-        skill.videoIds?.length ?? 0,
-        'video',
-        'videos'
-      ),
-      count: skill.videoIds?.length ?? 0,
+      resourceLabel: pluralize(skill.videoCount, 'video', 'videos'),
+      count: skill.videoCount,
     },
     {
       key: 'tips',
       title: 'Tips',
-      resourceLabel: pluralize(skill.tips?.length ?? 0, 'tip', 'tips'),
-      count: skill.tips?.length ?? 0,
+      resourceLabel: pluralize(skill.tipCount, 'tip', 'tips'),
+      count: skill.tipCount,
     },
     {
       key: 'cues',
       title: 'Cues',
       subtitle: isLocked ? undefined : 'Tap a cue to view it fullscreen.',
-      resourceLabel: pluralize(skill.cues?.length ?? 0, 'cue', 'cues'),
-      count: skill.cues?.length ?? 0,
+      resourceLabel: pluralize(skill.cueCount, 'cue', 'cues'),
+      count: skill.cueCount,
     },
     {
       key: 'articles',
       title: 'Articles',
-      resourceLabel: pluralize(
-        skill.articleSlugs?.length ?? 0,
-        'article',
-        'articles'
-      ),
-      count: skill.articleSlugs?.length ?? 0,
+      resourceLabel: pluralize(skill.articleCount, 'article', 'articles'),
+      count: skill.articleCount,
     },
     {
       key: 'mobility',
       title: 'Mobility Flows',
       resourceLabel: pluralize(
-        skill.recoveryFlowIds?.length ?? 0,
+        skill.recoveryFlowCount,
         'mobility flow',
         'mobility flows'
       ),
-      count: skill.recoveryFlowIds?.length ?? 0,
+      count: skill.recoveryFlowCount,
     },
     {
       key: 'workouts',
       title: 'Workouts',
-      resourceLabel: pluralize(
-        skill.workoutsIds?.length ?? 0,
-        'workout',
-        'workouts'
-      ),
-      count: skill.workoutsIds?.length ?? 0,
+      resourceLabel: pluralize(skill.workoutCount, 'workout', 'workouts'),
+      count: skill.workoutCount,
     },
   ];
 

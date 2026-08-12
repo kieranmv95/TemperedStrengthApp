@@ -13,13 +13,13 @@ import {
   invalidateSanitySkillsCache,
   loadSkills,
 } from '@/src/services/sanitySkills';
-import type { Skill } from '@/src/types/skills';
+import type { SkillSummary } from '@/src/types/skills';
 
 export type SanityHomeContent = {
   notification: HomeRemoteNotificationBanner | null;
   sponsorAds: HomeSponsorAd[];
   shopAds: HomeSponsorAd[];
-  skills: Skill[];
+  skills: SkillSummary[];
 };
 
 /** Clears AsyncStorage caches for notification, sponsor ads, and skills. */

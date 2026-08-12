@@ -1,6 +1,6 @@
 import { Card, SmallChevron } from '@/src/components/ds';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
-import type { Skill } from '@/src/types/skills';
+import type { SkillSummary } from '@/src/types/skills';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
@@ -15,60 +15,58 @@ function pluralize(count: number, singular: string, plural: string): string {
   return `${count} ${count === 1 ? singular : plural}`;
 }
 
-function getSkillMetaItems(skill: Skill): SkillMetaItem[] {
+function getSkillMetaItems(skill: SkillSummary): SkillMetaItem[] {
   const items: SkillMetaItem[] = [];
 
-  const articleCount = skill.articleSlugs?.length ?? 0;
-  if (articleCount > 0) {
+  if (skill.articleCount > 0) {
     items.push({
       key: 'articles',
       icon: 'newspaper-outline',
-      label: pluralize(articleCount, 'Article', 'Articles'),
+      label: pluralize(skill.articleCount, 'Article', 'Articles'),
     });
   }
 
-  const videoCount = skill.videoIds?.length ?? 0;
-  if (videoCount > 0) {
+  if (skill.videoCount > 0) {
     items.push({
       key: 'videos',
       icon: 'videocam-outline',
-      label: pluralize(videoCount, 'Video', 'Videos'),
+      label: pluralize(skill.videoCount, 'Video', 'Videos'),
     });
   }
 
-  const tipCount = skill.tips?.length ?? 0;
-  if (tipCount > 0) {
+  if (skill.tipCount > 0) {
     items.push({
       key: 'tips',
       icon: 'bulb-outline',
-      label: pluralize(tipCount, 'Tip', 'Tips'),
+      label: pluralize(skill.tipCount, 'Tip', 'Tips'),
     });
   }
 
-  const mobilityCount = skill.recoveryFlowIds?.length ?? 0;
-  if (mobilityCount > 0) {
+  if (skill.recoveryFlowCount > 0) {
     items.push({
       key: 'mobility',
       icon: 'body-outline',
-      label: pluralize(mobilityCount, 'Mobility Flow', 'Mobility Flows'),
+      label: pluralize(
+        skill.recoveryFlowCount,
+        'Mobility Flow',
+        'Mobility Flows'
+      ),
     });
   }
 
-  const cueCount = skill.cues?.length ?? 0;
-  if (cueCount > 0) {
+  if (skill.cueCount > 0) {
     items.push({
       key: 'cues',
       icon: 'list-outline',
-      label: pluralize(cueCount, 'Cue', 'Cues'),
+      label: pluralize(skill.cueCount, 'Cue', 'Cues'),
     });
   }
 
-  const workoutCount = skill.workoutsIds?.length ?? 0;
-  if (workoutCount > 0) {
+  if (skill.workoutCount > 0) {
     items.push({
       key: 'workouts',
       icon: 'barbell-outline',
-      label: pluralize(workoutCount, 'Workout', 'Workouts'),
+      label: pluralize(skill.workoutCount, 'Workout', 'Workouts'),
     });
   }
 
@@ -76,8 +74,8 @@ function getSkillMetaItems(skill: Skill): SkillMetaItem[] {
 }
 
 type SkillCardProps = {
-  skill: Skill;
-  onPress: (skill: Skill) => void;
+  skill: SkillSummary;
+  onPress: (skill: SkillSummary) => void;
 };
 
 export function SkillCard({ skill, onPress }: SkillCardProps) {

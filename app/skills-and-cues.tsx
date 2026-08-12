@@ -2,7 +2,7 @@ import { SkillCard } from '@/src/components/skills/SkillCard';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useSkills } from '@/src/hooks/useSkills';
-import type { Skill } from '@/src/types/skills';
+import type { SkillSummary } from '@/src/types/skills';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
@@ -34,7 +34,7 @@ export default function SkillsAndCuesScreen() {
     });
   }, [searchQuery, skills]);
 
-  const handleSkillPress = (skill: Skill) => {
+  const handleSkillPress = (skill: SkillSummary) => {
     router.push({
       pathname: '/skill/[id]',
       params: { id: skill.id },
