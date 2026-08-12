@@ -202,6 +202,7 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
     lowerIsBetter: true,
   },
   f_71: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  f_72: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
 
   // ---------------------------------------------------------------------------
   // CrossFit-style (WOD) — Pro
