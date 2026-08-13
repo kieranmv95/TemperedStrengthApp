@@ -10,6 +10,7 @@ import { getAllExercises } from '@/src/data/exercises';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useHomeRemoteNotification } from '@/src/hooks/useHomeRemoteNotification';
 import { useHomeSponsorAds } from '@/src/hooks/useHomeSponsorAds';
+import { useRoles } from '@/src/hooks/useRoles';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { HomeSponsorAd } from '@/src/services/sanitySponsorAds';
@@ -33,6 +34,7 @@ import {
   getPersonalBestsStore,
 } from '@/src/utils/storage';
 import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
+import { COACH_ROLE } from '@/src/utils/workoutAccess';
 import { formatWeightFromKg } from '@/src/utils/weightUnits';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
@@ -76,6 +78,22 @@ function timeOfDayGreeting(): string {
   return 'Hey';
 }
 
+function accountTypeBadgeLabel(
+  isPro: boolean,
+  isCoach: boolean
+): 'PRO' | 'COACH' | 'PRO & COACH' | null {
+  if (isPro && isCoach) {
+    return 'PRO & COACH';
+  }
+  if (isPro) {
+    return 'PRO';
+  }
+  if (isCoach) {
+    return 'COACH';
+  }
+  return null;
+}
+
 export default function HomeTabScreen() {
   const posthog = usePostHog();
   const { banner: remoteNotification } = useHomeRemoteNotification();
@@ -86,6 +104,10 @@ export default function HomeTabScreen() {
     isLoading: subscriptionLoading,
     refresh: refreshSubscription,
   } = useSubscription();
+  const { roles, isLoading: rolesLoading } = useRoles();
+  const isCoach = roles.includes(COACH_ROLE);
+  const accessLoading = subscriptionLoading || rolesLoading;
+  const accountBadge = accountTypeBadgeLabel(isPro, isCoach);
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [programSummary, setProgramSummary] =
@@ -176,7 +198,7 @@ export default function HomeTabScreen() {
     return listRecentPersonalBestRows(pbStore, exerciseNameById, 1);
   }, [pbStore]);
 
-  const showFreeStrip = !subscriptionLoading && !isPro;
+  const showFreeStrip = !accessLoading && !isPro;
   const freeStripOpacity = useRef(new Animated.Value(0)).current;
   const freeStripHasRevealed = useRef(false);
 
@@ -216,32 +238,50 @@ export default function HomeTabScreen() {
     <StandardLayout title={greetingTitle} subtitle={headerSubtitle}>
       <StandardLayout.Body>
         <View style={styles.spacing}>
-          {showFreeStrip && (
-            <Animated.View
-              style={[styles.welcomeStrip, { opacity: freeStripOpacity }]}
-            >
-              <TouchableOpacity
-                activeOpacity={0.85}
-                onPress={() =>
-                  trackHomeLink('welcome_strip', '/records', () =>
-                    router.push('/records')
-                  )
-                }
-                accessibilityRole="button"
-                accessibilityLabel="Upgrade to Pro, free tier"
-                accessibilityHint="Opens the You tab where you can upgrade to Tempered Strength Pro"
-              >
-                <View style={styles.welcomeStripTopRow}>
-                  <View style={styles.welcomeHeadlineCell}>
-                    <Text style={styles.welcomeTitle}>Upgrade to Pro</Text>
-                  </View>
-                  <View style={styles.planBadgeFree} pointerEvents="none">
-                    <Text style={styles.planBadgeLabelFree}>FREE TIER</Text>
-                  </View>
+          {!accessLoading && (accountBadge || showFreeStrip) ? (
+            <View style={styles.accountStatusRow}>
+              {accountBadge ? (
+                <View
+                  style={styles.planBadgePro}
+                  accessibilityRole="text"
+                  accessibilityLabel={`Account type ${accountBadge}`}
+                >
+                  <Text style={styles.planBadgeLabelPro}>{accountBadge}</Text>
                 </View>
-              </TouchableOpacity>
-            </Animated.View>
-          )}
+              ) : null}
+
+              {showFreeStrip ? (
+                <Animated.View
+                  style={[
+                    styles.welcomeStrip,
+                    styles.welcomeStripFlex,
+                    { opacity: freeStripOpacity },
+                  ]}
+                >
+                  <TouchableOpacity
+                    activeOpacity={0.85}
+                    onPress={() =>
+                      trackHomeLink('welcome_strip', '/records', () =>
+                        router.push('/records')
+                      )
+                    }
+                    accessibilityRole="button"
+                    accessibilityLabel="Upgrade to Pro, free tier"
+                    accessibilityHint="Opens the You tab where you can upgrade to Tempered Strength Pro"
+                  >
+                    <View style={styles.welcomeStripTopRow}>
+                      <View style={styles.welcomeHeadlineCell}>
+                        <Text style={styles.welcomeTitle}>Upgrade to Pro</Text>
+                      </View>
+                      <View style={styles.planBadgeFree} pointerEvents="none">
+                        <Text style={styles.planBadgeLabelFree}>FREE TIER</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </Animated.View>
+              ) : null}
+            </View>
+          ) : null}
 
           {remoteNotification && (
             <View

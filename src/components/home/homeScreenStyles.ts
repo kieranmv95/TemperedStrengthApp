@@ -21,6 +21,11 @@ export const homeScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  accountStatusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
   welcomeStrip: {
     borderRadius: BorderRadius.xxl,
     backgroundColor: Colors.accentWashFill,
@@ -28,6 +33,10 @@ export const homeScreenStyles = StyleSheet.create({
     borderColor: Colors.accentWashBorder,
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.xxl,
+  },
+  welcomeStripFlex: {
+    flex: 1,
+    minWidth: 0,
   },
   welcomeStripTopRow: {
     flexDirection: 'row',
