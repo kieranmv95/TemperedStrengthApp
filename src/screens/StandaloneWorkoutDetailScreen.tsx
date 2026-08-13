@@ -2,13 +2,14 @@ import { WorkoutDetailScrollContent } from '@/src/components/workouts/WorkoutDet
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
 import { Colors } from '@/src/constants/theme';
 import { getStandaloneWorkoutById } from '@/src/data/workouts';
-import { useSubscription } from '@/src/hooks/use-subscription';
+import { useRoles } from '@/src/hooks/useRoles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { asStringId } from '@/src/utils/routeParams';
 import {
   getFavoriteWorkouts,
   toggleFavoriteWorkout,
 } from '@/src/utils/storage';
+import { isWorkoutLocked } from '@/src/utils/workoutAccess';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -31,7 +32,7 @@ export default function StandaloneWorkoutDetailScreen() {
     return getStandaloneWorkoutById(workoutId);
   }, [workoutId]);
 
-  const { isPro, isLoading: subscriptionLoading } = useSubscription();
+  const { isPro, roles, isLoading: accessLoading } = useRoles();
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const viewSource =
@@ -106,7 +107,8 @@ export default function StandaloneWorkoutDetailScreen() {
     );
   }
 
-  const isLocked = workout.isPremium && !subscriptionLoading && !isPro;
+  const isLocked =
+    !accessLoading && isWorkoutLocked(workout, { isPro, roles });
   const isFavorite = favorites.includes(workout.id);
 
   return (

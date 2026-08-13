@@ -2,7 +2,7 @@ import { RecoveryFlowContent } from '@/src/components/recovery/RecoveryFlowConte
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
 import { Colors } from '@/src/constants/theme';
 import { getRecoveryById } from '@/src/data/recovery';
-import { useSubscription } from '@/src/hooks/use-subscription';
+import { useRoles } from '@/src/hooks/useRoles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { asStringId } from '@/src/utils/routeParams';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,6 +13,8 @@ import React, { useCallback, useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
 
+const COACH_ROLE = 'coach';
+
 export default function RecoveryDetailScreen() {
   const { id: idParam } = useLocalSearchParams<{ id?: string }>();
   const posthog = usePostHog();
@@ -22,7 +24,8 @@ export default function RecoveryDetailScreen() {
     return getRecoveryById(recoveryId);
   }, [recoveryId]);
 
-  const { isPro, isLoading: subscriptionLoading } = useSubscription();
+  const { isPro, roles, isLoading: accessLoading } = useRoles();
+  const hasAccess = isPro || roles.includes(COACH_ROLE);
 
   useFocusEffect(
     useCallback(() => {
@@ -67,7 +70,7 @@ export default function RecoveryDetailScreen() {
     );
   }
 
-  const isLocked = recovery.isPremium && !subscriptionLoading && !isPro;
+  const isLocked = recovery.isPremium && !accessLoading && !hasAccess;
 
   return (
     <AppSafeAreaView style={styles.container}>

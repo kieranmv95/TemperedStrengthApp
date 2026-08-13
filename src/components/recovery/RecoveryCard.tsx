@@ -1,5 +1,6 @@
 import { Colors } from '@/src/constants/theme';
 import type { Recovery } from '@/src/types/recovery';
+import { COACH_ROLE, premiumAccessBadgeLabel } from '@/src/utils/workoutAccess';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
@@ -13,6 +14,10 @@ type RecoveryCardProps = {
   onPress: (recovery: Recovery) => void;
   onLockedPress: () => void;
   style?: StyleProp<ViewStyle>;
+  /** Hide equipment/tag pills under the meta row. */
+  hidePills?: boolean;
+  /** Hide the PRO pill; premium flows use a gold border instead. */
+  hideProBadge?: boolean;
 };
 
 export function RecoveryCard({
@@ -21,8 +26,14 @@ export function RecoveryCard({
   onPress,
   onLockedPress,
   style,
+  hidePills = false,
+  hideProBadge = false,
 }: RecoveryCardProps) {
   const isLocked = recovery.isPremium && !isPro;
+  const showProBadge = recovery.isPremium && !hideProBadge;
+  const usePremiumBorder = recovery.isPremium && hideProBadge;
+  // All premium mobility flows unlock for coaches.
+  const premiumBadge = premiumAccessBadgeLabel([COACH_ROLE]);
 
   const handlePress = () => {
     if (isLocked) {
@@ -37,6 +48,7 @@ export function RecoveryCard({
       style={[
         styles.workoutCard,
         isLocked && styles.workoutCardLocked,
+        usePremiumBorder && styles.workoutCardLocked,
         style,
       ]}
       onPress={handlePress}
@@ -44,11 +56,11 @@ export function RecoveryCard({
       accessibilityLabel="Open recovery flow"
     >
       <View>
-        {recovery.isPremium ? (
+        {showProBadge ? (
           <View style={styles.cardHeader}>
             <View style={styles.cardTitleRow}>
               <View style={styles.premiumBadge}>
-                <Text style={styles.premiumBadgeText}>PRO</Text>
+                <Text style={styles.premiumBadgeText}>{premiumBadge}</Text>
               </View>
             </View>
           </View>
@@ -83,20 +95,22 @@ export function RecoveryCard({
           </View>
         </View>
 
-        <View style={styles.tagsContainer}>
-          {recovery.equipment.map((equipment, index) => (
-            <View key={index} style={[styles.tag, styles.tagGold]}>
-              <Text style={[styles.tagText, styles.tagGoldText]}>
-                {equipment}
-              </Text>
-            </View>
-          ))}
-          {recovery.tags.slice(0, 3).map((tag, index) => (
-            <View key={index} style={styles.tag}>
-              <Text style={styles.tagText}>{tag}</Text>
-            </View>
-          ))}
-        </View>
+        {hidePills ? null : (
+          <View style={styles.tagsContainer}>
+            {recovery.equipment.map((equipment, index) => (
+              <View key={index} style={[styles.tag, styles.tagGold]}>
+                <Text style={[styles.tagText, styles.tagGoldText]}>
+                  {equipment}
+                </Text>
+              </View>
+            ))}
+            {recovery.tags.slice(0, 3).map((tag, index) => (
+              <View key={index} style={styles.tag}>
+                <Text style={styles.tagText}>{tag}</Text>
+              </View>
+            ))}
+          </View>
+        )}
       </View>
     </Card>
   );

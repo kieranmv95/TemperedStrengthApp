@@ -21,7 +21,7 @@ import {
 import { Colors } from '@/src/constants/theme';
 import { visibleDisciplines } from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
-import { useSubscription } from '@/src/hooks/use-subscription';
+import { useRoles } from '@/src/hooks/useRoles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type {
   SingleWorkout,
@@ -59,7 +59,7 @@ import {
 } from 'react-native';
 
 export default function WorkoutsScreen() {
-  const { isPro, isLoading: subscriptionLoading } = useSubscription();
+  const { isPro, roles, isLoading: accessLoading } = useRoles();
   const posthog = usePostHog();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategoryFilter, setActiveCategoryFilter] =
@@ -484,7 +484,8 @@ export default function WorkoutsScreen() {
               <WorkoutCard
                 workout={item}
                 isFavorite={favorites.includes(item.id)}
-                isPro={isPro || subscriptionLoading}
+                isPro={isPro || accessLoading}
+                roles={roles}
                 onToggleFavorite={handleToggleFavorite}
                 onPress={handleWorkoutPress}
                 onLockedPress={handleLockedPress}

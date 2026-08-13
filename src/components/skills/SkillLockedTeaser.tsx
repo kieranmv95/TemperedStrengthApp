@@ -11,7 +11,7 @@ type SkillLockedTeaserProps = {
 };
 
 /**
- * Locked-section preview: shows how many resources Pro unlocks,
+ * Locked-section preview: shows how many resources Pro or Coach unlocks,
  * without revealing the real content.
  */
 export function SkillLockedTeaser({
@@ -33,12 +33,12 @@ export function SkillLockedTeaser({
       onPress={handlePress}
       activeOpacity={0.85}
       accessibilityRole="button"
-      accessibilityLabel={`${count} ${resourceLabel} with Pro. Upgrade to unlock.`}
+      accessibilityLabel={`${count} ${resourceLabel} with Pro or Coach. Upgrade to unlock.`}
     >
       <View style={styles.topRow}>
         <View style={styles.lockBadge}>
           <Ionicons name="lock-closed" size={14} color={Colors.accent} />
-          <Text style={styles.lockLabel}>PRO</Text>
+          <Text style={styles.lockLabel}>PRO / COACH</Text>
         </View>
         <View style={styles.countBlock}>
           <Text style={styles.count}>{count}</Text>
@@ -47,7 +47,7 @@ export function SkillLockedTeaser({
       </View>
 
       <Text style={styles.headline}>
-        Unlock {count} {resourceLabel} with Pro
+        Unlock {count} {resourceLabel} with Pro or Coach
       </Text>
       <Text style={styles.subcopy}>
         Full coaching breakdowns, cues, and progressions for this skill.

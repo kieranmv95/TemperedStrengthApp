@@ -24,10 +24,10 @@ export function SkillProRequiredBanner({
       onPress={handlePress}
       activeOpacity={0.85}
       accessibilityRole="button"
-      accessibilityLabel="Pro required. Upgrade to unlock Skills and Cues"
+      accessibilityLabel="Pro or Coach required. Upgrade to unlock Skills and Cues"
     >
       <View style={styles.textBlock}>
-        <Text style={styles.title}>Pro Required</Text>
+        <Text style={styles.title}>Pro or Coach Required</Text>
         <Text style={styles.subtitle}>
           Are you a Coach, PT or Gym owner? DM us for free access
         </Text>

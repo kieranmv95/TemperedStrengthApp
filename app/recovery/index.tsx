@@ -4,7 +4,7 @@ import { workoutDetailStyles as headerStyles } from '@/src/components/workouts/w
 import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { recoveries } from '@/src/data/recovery';
-import { useSubscription } from '@/src/hooks/use-subscription';
+import { useRoles } from '@/src/hooks/useRoles';
 import {
   RECOVERY_TAGS,
   type Recovery,
@@ -24,6 +24,8 @@ import {
   View,
 } from 'react-native';
 import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+
+const COACH_ROLE = 'coach';
 
 type RecoverySortBy = 'name' | 'access';
 type RecoverySortDirection = 'asc' | 'desc';
@@ -70,7 +72,8 @@ function compareRecoveries(
 }
 
 export default function RecoveryScreen() {
-  const { isPro, isLoading: subscriptionLoading } = useSubscription();
+  const { isPro, roles, isLoading: accessLoading } = useRoles();
+  const hasAccess = isPro || roles.includes(COACH_ROLE) || accessLoading;
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<RecoveryTag[]>([]);
   const [selectedEquipment, setSelectedEquipment] = useState<
@@ -399,7 +402,7 @@ export default function RecoveryScreen() {
           renderItem={({ item }) => (
             <RecoveryCard
               recovery={item}
-              isPro={isPro || subscriptionLoading}
+              isPro={hasAccess}
               onPress={handleRecoveryPress}
               onLockedPress={handleLockedPress}
             />

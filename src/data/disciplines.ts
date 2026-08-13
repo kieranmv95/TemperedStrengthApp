@@ -87,6 +87,14 @@ export const disciplines: Discipline[] = [
     image: require('@/assets/images/disciplines/oly.png'),
   },
   {
+    title: 'Skills',
+    tag: 'Skill',
+    showTitle: true,
+    image: require('@/assets/images/skills/thumbnails/Handstand.jpg'),
+    description:
+      'Drill-led sessions for complex movements — snatches, muscle-ups, handstands, and more. Positions and progressions before load.',
+  },
+  {
     title: 'CrossFit',
     tag: 'CrossFit',
     showTitle: true,
@@ -140,6 +148,9 @@ export function workoutMatchesDiscipline(
   }
   if (disciplineTag === 'Olympic Lifting') {
     return workout.tags.includes('Olympic Lifting');
+  }
+  if (disciplineTag === 'Skill') {
+    return workout.tags.includes('Skill');
   }
   if (disciplineTag === 'Arena') {
     return workout.tags.includes('Arena');

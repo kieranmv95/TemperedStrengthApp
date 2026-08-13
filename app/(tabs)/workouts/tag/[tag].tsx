@@ -8,7 +8,7 @@ import {
   workoutMatchesDiscipline,
 } from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
-import { useSubscription } from '@/src/hooks/use-subscription';
+import { useRoles } from '@/src/hooks/useRoles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { SingleWorkout } from '@/src/types/workouts';
 import {
@@ -31,7 +31,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WorkoutsByTagScreen() {
-  const { isPro, isLoading: subscriptionLoading } = useSubscription();
+  const { isPro, roles, isLoading: accessLoading } = useRoles();
   const posthog = usePostHog();
   const params = useLocalSearchParams<{ tag?: string }>();
   const tag = typeof params.tag === 'string' ? params.tag : '';
@@ -198,7 +198,8 @@ export default function WorkoutsByTagScreen() {
             <WorkoutCard
               workout={item}
               isFavorite={favorites.includes(item.id)}
-              isPro={isPro || subscriptionLoading}
+              isPro={isPro || accessLoading}
+              roles={roles}
               onToggleFavorite={handleToggleFavorite}
               onPress={handleWorkoutPress}
               onLockedPress={handleLockedPress}
