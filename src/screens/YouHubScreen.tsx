@@ -2,10 +2,10 @@ import { Card, SmallChevron } from '@/src/components/ds';
 import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
 import { settingsScreenStyles as settingsStyles } from '@/src/components/settings/settingsScreenStyles';
 import { StandardLayout } from '@/src/components/StandardLayout';
-import { Colors, FontSize, Spacing, BorderRadius } from '@/src/constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
-import { useRoles } from '@/src/hooks/useRoles';
 import { useOnboardingProfile } from '@/src/hooks/useOnboardingProfile';
+import { useRoles } from '@/src/hooks/useRoles';
 import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
 import { COACH_ROLE } from '@/src/utils/workoutAccess';
 import { Ionicons } from '@expo/vector-icons';
@@ -49,8 +49,8 @@ export function YouHubScreen() {
           <Text style={styles.hiText}>
             {isCoach
               ? displayName
-                ? `Hi, coach ${displayName}!`
-                : 'Hi, coach!'
+                ? `Hi, Coach ${displayName}!`
+                : 'Hi, Coach!'
               : displayName
                 ? `Hi, ${displayName}!`
                 : 'Hi there!'}
