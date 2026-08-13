@@ -47,7 +47,13 @@ export function YouHubScreen() {
       <StandardLayout.Body>
         <View style={styles.list}>
           <Text style={styles.hiText}>
-            Hi{displayName ? `, ${displayName}` : ' there'}!
+            {isCoach
+              ? displayName
+                ? `Hi, coach ${displayName}!`
+                : 'Hi, coach!'
+              : displayName
+                ? `Hi, ${displayName}!`
+                : 'Hi there!'}
           </Text>
           {!accessLoading && !isPro ? (
             <TouchableOpacity
