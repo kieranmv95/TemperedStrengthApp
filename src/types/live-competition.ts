@@ -9,6 +9,7 @@ export type LiveCompetitionTheme = {
 export type LiveCompetitionMetricType =
   | 'max_weight'
   | 'max_reps'
+  | 'max_reps_no_label'
   | 'max_time'
   | 'max_calories'
   | 'max_distance';
