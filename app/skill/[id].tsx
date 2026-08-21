@@ -45,17 +45,17 @@ function getSkillDetailSections(
       count: skill.videoCount,
     },
     {
-      key: 'tips',
-      title: 'Tips',
-      resourceLabel: pluralize(skill.tipCount, 'tip', 'tips'),
-      count: skill.tipCount,
-    },
-    {
       key: 'cues',
       title: 'Cues',
       subtitle: isLocked ? undefined : 'Tap a cue to view it fullscreen.',
       resourceLabel: pluralize(skill.cueCount, 'cue', 'cues'),
       count: skill.cueCount,
+    },
+    {
+      key: 'tips',
+      title: 'Tips',
+      resourceLabel: pluralize(skill.tipCount, 'tip', 'tips'),
+      count: skill.tipCount,
     },
     {
       key: 'articles',
