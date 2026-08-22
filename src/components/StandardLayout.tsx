@@ -41,6 +41,8 @@ type StandardLayoutProps = {
   title: string;
   subtitle?: string;
   disableScroll?: boolean;
+  /** Drop body horizontal padding so nested rows can scroll edge-to-edge. */
+  edgeToEdgeBody?: boolean;
   onBackPress?: () => void;
   /** Show filter bar row (Glossary + filterBarButtons) without expandable advanced filters. */
   filterBarOnly?: boolean;
@@ -61,6 +63,7 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
   title,
   subtitle,
   disableScroll = false,
+  edgeToEdgeBody = false,
   onBackPress,
   filterBarOnly = false,
   filterBarButtons,
@@ -220,14 +223,23 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
         </View>
       </View>
       {disableScroll ? (
-        <View style={[styles.content, styles.nonScrollContent]}>
+        <View
+          style={[
+            styles.content,
+            styles.nonScrollContent,
+            edgeToEdgeBody ? styles.edgeToEdgeBody : null,
+          ]}
+        >
           {body ? <StandardLayoutBody>{body}</StandardLayoutBody> : null}
           {rest.length > 0 ? <View>{rest}</View> : null}
         </View>
       ) : (
         <ScrollView
           style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[
+            styles.scrollContent,
+            edgeToEdgeBody ? styles.edgeToEdgeBody : null,
+          ]}
         >
           {body ? <StandardLayoutBody>{body}</StandardLayoutBody> : null}
           {rest.length > 0 ? <View>{rest}</View> : null}
@@ -347,5 +359,8 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingHorizontal: Spacing.xxl,
     flex: 1,
+  },
+  edgeToEdgeBody: {
+    paddingHorizontal: 0,
   },
 });

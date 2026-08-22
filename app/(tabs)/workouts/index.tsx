@@ -273,6 +273,7 @@ export default function WorkoutsScreen() {
       title="Workouts"
       subtitle="Log your workouts and track your progress."
       disableScroll
+      edgeToEdgeBody
       filterBarOnly
       filterBarButtons={
         <>
@@ -316,47 +317,49 @@ export default function WorkoutsScreen() {
         onApply={handleApplyFilters}
       />
       <StandardLayout.Body>
-        <WorkoutActiveFiltersBar
-          searchQuery={searchQuery}
-          activeCategoryFilter={activeCategoryFilter}
-          selectedEquipment={selectedEquipment}
-          noEquipmentOnly={noEquipmentOnly}
-          selectedFocus={selectedFocus}
-          selectedFormat={selectedFormat}
-          selectedTimeBuckets={selectedTimeBuckets}
-          onResetAll={handleResetAllFilters}
-          onClearSearch={() => {
-            captureFilter('search', 'clear');
-            setSearchQuery('');
-          }}
-          onClearCategory={() => handleSelectCategoryFilter('All')}
-          onClearNoEquipment={() => {
-            captureFilter('equipment', 'all');
-            setNoEquipmentOnly(false);
-          }}
-          onRemoveEquipment={(eq) => {
-            setSelectedEquipment((prev) => {
-              const next = prev.filter((item) => item !== eq);
-              captureFilter(
-                'equipment',
-                next.length > 0 ? next.join(',') : 'all'
-              );
-              return next;
-            });
-          }}
-          onRemoveFocus={(tag) => {
-            setSelectedFocus((prev) => prev.filter((t) => t !== tag));
-            captureFilter('focus', tag);
-          }}
-          onRemoveFormat={(tag) => {
-            setSelectedFormat((prev) => prev.filter((t) => t !== tag));
-            captureFilter('format', tag);
-          }}
-          onRemoveTimeBucket={(bucket) => {
-            setSelectedTimeBuckets((prev) => prev.filter((b) => b !== bucket));
-            captureFilter('time', bucket);
-          }}
-        />
+        <View style={styles.pageGutter}>
+          <WorkoutActiveFiltersBar
+            searchQuery={searchQuery}
+            activeCategoryFilter={activeCategoryFilter}
+            selectedEquipment={selectedEquipment}
+            noEquipmentOnly={noEquipmentOnly}
+            selectedFocus={selectedFocus}
+            selectedFormat={selectedFormat}
+            selectedTimeBuckets={selectedTimeBuckets}
+            onResetAll={handleResetAllFilters}
+            onClearSearch={() => {
+              captureFilter('search', 'clear');
+              setSearchQuery('');
+            }}
+            onClearCategory={() => handleSelectCategoryFilter('All')}
+            onClearNoEquipment={() => {
+              captureFilter('equipment', 'all');
+              setNoEquipmentOnly(false);
+            }}
+            onRemoveEquipment={(eq) => {
+              setSelectedEquipment((prev) => {
+                const next = prev.filter((item) => item !== eq);
+                captureFilter(
+                  'equipment',
+                  next.length > 0 ? next.join(',') : 'all'
+                );
+                return next;
+              });
+            }}
+            onRemoveFocus={(tag) => {
+              setSelectedFocus((prev) => prev.filter((t) => t !== tag));
+              captureFilter('focus', tag);
+            }}
+            onRemoveFormat={(tag) => {
+              setSelectedFormat((prev) => prev.filter((t) => t !== tag));
+              captureFilter('format', tag);
+            }}
+            onRemoveTimeBucket={(bucket) => {
+              setSelectedTimeBuckets((prev) => prev.filter((b) => b !== bucket));
+              captureFilter('time', bucket);
+            }}
+          />
+        </View>
         {sortedWorkouts.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons
@@ -392,38 +395,44 @@ export default function WorkoutsScreen() {
             ListHeaderComponent={
               <View style={styles.curatedSectionList}>
                 {hasActiveFilters ? (
-                  <Text style={styles.sectionsHiddenNote}>
+                  <Text style={[styles.sectionsHiddenNote, styles.pageGutter]}>
                     Mobility &amp; flows and Disciplines hidden due to filters
                   </Text>
                 ) : (
                   <View>
-                    <Card
-                      onPress={handleOpenRecovery}
-                      accessibilityLabel="Browse recovery flows"
-                      style={styles.recoveryCard}
-                    >
-                      <View style={styles.recoveryVisualTile}>
-                        <Ionicons name="body" size={30} color={Colors.accent} />
-                      </View>
-                      <View style={styles.recoveryCtaTextColumn}>
-                        <Text style={styles.shopEyebrow}>
-                          Move &amp; restore
-                        </Text>
-                        <Text style={styles.hubCtaTitle}>
-                          Mobility &amp; flows
-                        </Text>
-                        <Text style={styles.hubCtaDescription}>
-                          Guided flows to help you recover and move better.
-                        </Text>
-                      </View>
-                      <SmallChevron />
-                    </Card>
-                    <CuratedSection
-                      title="Disciplines"
-                      description="get started with what you already know"
-                      size="large"
-                      style={styles.titleSpace}
-                    />
+                    <View style={styles.pageGutter}>
+                      <Card
+                        onPress={handleOpenRecovery}
+                        accessibilityLabel="Browse recovery flows"
+                        style={styles.recoveryCard}
+                      >
+                        <View style={styles.recoveryVisualTile}>
+                          <Ionicons
+                            name="body"
+                            size={30}
+                            color={Colors.accent}
+                          />
+                        </View>
+                        <View style={styles.recoveryCtaTextColumn}>
+                          <Text style={styles.shopEyebrow}>
+                            Move &amp; restore
+                          </Text>
+                          <Text style={styles.hubCtaTitle}>
+                            Mobility &amp; flows
+                          </Text>
+                          <Text style={styles.hubCtaDescription}>
+                            Guided flows to help you recover and move better.
+                          </Text>
+                        </View>
+                        <SmallChevron />
+                      </Card>
+                      <CuratedSection
+                        title="Disciplines"
+                        description="get started with what you already know"
+                        size="large"
+                        style={styles.titleSpace}
+                      />
+                    </View>
                     <ScrollView
                       horizontal
                       showsHorizontalScrollIndicator={false}
@@ -466,30 +475,34 @@ export default function WorkoutsScreen() {
                   </View>
                 )}
 
-                <CuratedSection
-                  title={
-                    hasActiveFilters ? 'Filtered Workouts' : 'All Workouts'
-                  }
-                  description={
-                    hasActiveFilters
-                      ? `${sortedWorkouts.length} Results Found`
-                      : `All our workouts, over ${allStandaloneWorkouts.length}+ workouts.`
-                  }
-                  size="large"
-                  style={styles.titleSpace}
-                />
+                <View style={styles.pageGutter}>
+                  <CuratedSection
+                    title={
+                      hasActiveFilters ? 'Filtered Workouts' : 'All Workouts'
+                    }
+                    description={
+                      hasActiveFilters
+                        ? `${sortedWorkouts.length} Results Found`
+                        : `All our workouts, over ${allStandaloneWorkouts.length}+ workouts.`
+                    }
+                    size="large"
+                    style={styles.titleSpace}
+                  />
+                </View>
               </View>
             }
             renderItem={({ item }) => (
-              <WorkoutCard
-                workout={item}
-                isFavorite={favorites.includes(item.id)}
-                isPro={isPro || accessLoading}
-                roles={roles}
-                onToggleFavorite={handleToggleFavorite}
-                onPress={handleWorkoutPress}
-                onLockedPress={handleLockedPress}
-              />
+              <View style={styles.pageGutter}>
+                <WorkoutCard
+                  workout={item}
+                  isFavorite={favorites.includes(item.id)}
+                  isPro={isPro || accessLoading}
+                  roles={roles}
+                  onToggleFavorite={handleToggleFavorite}
+                  onPress={handleWorkoutPress}
+                  onLockedPress={handleLockedPress}
+                />
+              </View>
             )}
             showsVerticalScrollIndicator={false}
           />

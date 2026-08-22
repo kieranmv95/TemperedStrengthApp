@@ -175,7 +175,7 @@ export default function HubScreen() {
   const listHeader = (
     <View>
       <View style={styles.section}>
-        <View style={styles.skillsAndCuesSection}>
+        <View style={[styles.skillsAndCuesSection, styles.pageGutter]}>
           <SkillsAndCuesCard onPress={handleOpenSkillsAndCues} />
 
           <HubPromoRow
@@ -186,13 +186,15 @@ export default function HubScreen() {
         </View>
 
         <View style={styles.subSection}>
-          <CuratedSection
-            icon="calculator-outline"
-            iconSizeOverride={18}
-            title="Tools"
-            description="Calculators and training utilities you can open anywhere"
-            size="large"
-          />
+          <View style={styles.pageGutter}>
+            <CuratedSection
+              icon="calculator-outline"
+              iconSizeOverride={18}
+              title="Tools"
+              description="Calculators and training utilities you can open anywhere"
+              size="large"
+            />
+          </View>
 
           <ScrollView
             horizontal
@@ -213,37 +215,41 @@ export default function HubScreen() {
           {networkUnavailable ? (
             renderNetworkOfflineMessage()
           ) : (
-            <Card
-              onPress={handleSeeAllGlossary}
-              accessibilityLabel="Browse the glossary"
-            >
-              <View style={styles.hubCtaContent}>
-                <View style={styles.hubCtaTitleRow}>
-                  <Ionicons
-                    name="book-outline"
-                    size={18}
-                    color={Colors.accent}
-                  />
-                  <Text style={styles.hubCtaTitle}>Browse the glossary</Text>
+            <View style={styles.pageGutter}>
+              <Card
+                onPress={handleSeeAllGlossary}
+                accessibilityLabel="Browse the glossary"
+              >
+                <View style={styles.hubCtaContent}>
+                  <View style={styles.hubCtaTitleRow}>
+                    <Ionicons
+                      name="book-outline"
+                      size={18}
+                      color={Colors.accent}
+                    />
+                    <Text style={styles.hubCtaTitle}>Browse the glossary</Text>
+                  </View>
+                  <Text style={styles.hubCtaDescription}>
+                    Learn the terms we use across training, nutrition, and
+                    recovery.
+                  </Text>
                 </View>
-                <Text style={styles.hubCtaDescription}>
-                  Learn the terms we use across training, nutrition, and
-                  recovery.
-                </Text>
-              </View>
-            </Card>
+              </Card>
+            </View>
           )}
-          {charityBanner}
+          <View style={styles.pageGutter}>{charityBanner}</View>
         </View>
 
         <View style={styles.articlesSection}>
-          <CuratedSection
-            icon="newspaper-outline"
-            iconSizeOverride={18}
-            title="Articles"
-            description="Your daily intel for the iron game"
-            size="large"
-          />
+          <View style={styles.pageGutter}>
+            <CuratedSection
+              icon="newspaper-outline"
+              iconSizeOverride={18}
+              title="Articles"
+              description="Your daily intel for the iron game"
+              size="large"
+            />
+          </View>
 
           {networkUnavailable ? (
             renderNetworkOfflineMessage()
@@ -338,12 +344,14 @@ export default function HubScreen() {
         )
       }
       renderItem={({ item }) => (
-        <ArticleCard
-          article={item}
-          onPress={handleArticlePress}
-          isFavorite={favorites.includes(item.slug)}
-          onToggleFavorite={handleToggleFavorite}
-        />
+        <View style={styles.pageGutter}>
+          <ArticleCard
+            article={item}
+            onPress={handleArticlePress}
+            isFavorite={favorites.includes(item.slug)}
+            onToggleFavorite={handleToggleFavorite}
+          />
+        </View>
       )}
       ListFooterComponent={<View style={styles.bottomSpacer} />}
     />
@@ -354,6 +362,7 @@ export default function HubScreen() {
       title="Explore"
       subtitle="Tools, products, and articles to help you train."
       disableScroll
+      edgeToEdgeBody
     >
       <StandardLayout.Body>{renderBody()}</StandardLayout.Body>
     </StandardLayout>
@@ -397,12 +406,17 @@ const styles = StyleSheet.create({
   articlesSection: {
     gap: Spacing.md,
   },
+  pageGutter: {
+    paddingHorizontal: Spacing.xxl,
+  },
   filterScrollContent: {
     paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.xxl,
     gap: Spacing.md,
   },
   toolsScrollContent: {
     gap: Spacing.md,
+    paddingHorizontal: Spacing.xxl,
   },
   section: {
     gap: Spacing.section,
