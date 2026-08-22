@@ -151,6 +151,9 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
       <WorkoutScreenBody
         selectedDayIndex={c.selectedDayIndex}
         isRestDay={c.isRestDay}
+        programId={c.program?.id ?? null}
+        startDate={c.startDate}
+        workoutWeekPattern={c.workoutWeekPattern}
         onProgramReset={onProgramReset}
         showProgramCompleted={c.showProgramCompleted}
         onViewAllPrograms={handleViewAllPrograms}

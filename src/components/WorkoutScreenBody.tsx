@@ -9,7 +9,7 @@ import {
   type WorkoutSlot,
 } from '@/src/screens/workoutScreenConstants';
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
-import type { Workout } from '@/src/types/program';
+import type { Program, Workout } from '@/src/types/program';
 import type {
   ActiveSession,
   CompletedSession,
@@ -33,6 +33,9 @@ import { ProgramSessionStatusControls } from './ProgramSessionStatusControls';
 type WorkoutScreenBodyProps = {
   selectedDayIndex: number | null;
   isRestDay: boolean;
+  programId?: string | null;
+  startDate?: string | null;
+  workoutWeekPattern?: Program['daysSplit'] | null;
   onProgramReset?: () => void;
   showProgramCompleted: boolean;
   onViewAllPrograms: () => void | Promise<void>;
@@ -70,6 +73,9 @@ type WorkoutScreenBodyProps = {
 export function WorkoutScreenBody({
   selectedDayIndex,
   isRestDay,
+  programId = null,
+  startDate = null,
+  workoutWeekPattern = null,
   onProgramReset,
   showProgramCompleted,
   onViewAllPrograms,
@@ -113,7 +119,15 @@ export function WorkoutScreenBody({
   }
 
   if (isRestDay) {
-    return <RestDayScreen onProgramReset={onProgramReset} />;
+    return (
+      <RestDayScreen
+        programId={programId}
+        selectedDayIndex={selectedDayIndex}
+        startDate={startDate}
+        workoutWeekPattern={workoutWeekPattern}
+        onProgramReset={onProgramReset}
+      />
+    );
   }
 
   if (!currentWorkout) {
