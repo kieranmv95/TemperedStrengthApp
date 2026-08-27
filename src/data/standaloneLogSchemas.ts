@@ -328,6 +328,11 @@ export const STANDALONE_LOG_SCHEMA_BY_ID: Record<string, WorkoutLogSchema> = {
     higherIsBetter: true,
   },
 
+  // The Girl Games — partner Metcons (gg_01–gg_03)
+  gg_01: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  gg_02: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+  gg_03: { kind: 'duration', label: 'Finish time', lowerIsBetter: true },
+
   // HIIT Shred (6 Weeks) Pro — standalone WOD copies p_55–p_78
   p_55: {
     kind: 'amrap',

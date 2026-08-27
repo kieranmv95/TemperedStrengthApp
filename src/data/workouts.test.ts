@@ -83,6 +83,8 @@ describe('bundled standalone workouts', () => {
       'Hyrox',
       'Pilates',
       'Rainhill',
+      'Girl Games',
+      'The Girl Games',
       'No Equipment',
       'Bodyweight',
       'Kettlebell',
@@ -130,6 +132,30 @@ describe('bundled standalone workouts', () => {
     expect(workoutMatchesDiscipline(oly!, 'Olympic Lifting')).toBe(true);
     expect(workoutMatchesDiscipline(skill!, 'Skill')).toBe(true);
     expect(wod!.tags).not.toContain('CrossFit');
+  });
+
+  it('girl games discipline matches workouts in the Girl Games category', () => {
+    const girlGamesWorkouts = allStandaloneWorkouts.filter(
+      (w) => w.category === 'Girl Games'
+    );
+    expect(girlGamesWorkouts.map((w) => w.id).sort()).toEqual([
+      'gg_01',
+      'gg_02',
+      'gg_03',
+    ]);
+    for (const w of girlGamesWorkouts) {
+      expect(workoutMatchesDiscipline(w, 'Girl Games')).toBe(true);
+      expect(workoutMatchesDiscipline(w, 'Collab')).toBe(true);
+      expect(w.partner).toBe(true);
+      expect(w.tags).toContain('Partner');
+      expect(w.collab?.name).toBe('The Girl Games');
+      expect(w.collab?.link).toBe('https://www.instagram.com/thegirlgames_/');
+    }
+    const nonGirlGames = allStandaloneWorkouts.find(
+      (w) => w.category !== 'Girl Games'
+    );
+    expect(nonGirlGames).toBeDefined();
+    expect(workoutMatchesDiscipline(nonGirlGames!, 'Girl Games')).toBe(false);
   });
 
   it('collab discipline matches any workout with a collab property', () => {

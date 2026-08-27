@@ -9,6 +9,7 @@ export const CATEGORY_ICONS: Record<WorkoutCategory, string> = {
   Conditioning: 'heart',
   Pilates: 'body-outline',
   Rainhill: 'rainhill',
+  'Girl Games': 'trophy-outline',
 };
 
 export const DIFFICULTY_COLORS: Record<string, string> = {

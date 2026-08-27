@@ -7,7 +7,8 @@ export type WorkoutCategory =
   | 'Hyrox'
   | 'Conditioning'
   | 'Pilates'
-  | 'Rainhill';
+  | 'Rainhill'
+  | 'Girl Games';
 
 export type WorkoutEquipment =
   | 'kettlebell'

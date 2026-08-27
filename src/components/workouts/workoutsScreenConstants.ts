@@ -39,6 +39,7 @@ export const CATEGORY_FILTERS: CategoryFilter[] = [
   'Hyrox',
   'Conditioning',
   'Rainhill',
+  'Girl Games',
 ];
 
 /** Discipline options shown in the filter sheet (excludes implicit "All"). */
@@ -50,6 +51,7 @@ export const DISCIPLINE_CATEGORY_FILTERS: Exclude<CategoryFilter, 'All'>[] = [
   'Hyrox',
   'Conditioning',
   'Rainhill',
+  'Girl Games',
 ];
 
 export const WORKOUT_EQUIPMENT_OPTIONS: WorkoutEquipment[] = [

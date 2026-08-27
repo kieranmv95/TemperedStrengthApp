@@ -9,6 +9,7 @@ const DISCIPLINE_CATEGORY: Record<string, WorkoutCategory> = {
   CrossFit: 'WOD',
   Hyrox: 'Hyrox',
   Rainhill: 'Rainhill',
+  'Girl Games': 'Girl Games',
 };
 
 export type DisciplineTheme = {
@@ -79,6 +80,22 @@ export const disciplines: Discipline[] = [
     description:
       "Get a feel for what a rainhill event is like by trying some of their past workouts. Don't forget to visit their website and get signed up for future events. Note that all workout weights are in kg, not lbs as it is a european event.",
     link: 'https://therainhilltrials.myshopify.com/',
+  },
+  {
+    title: 'The Girl Games',
+    tag: 'Girl Games',
+    showTitle: false,
+    isSponsor: true,
+    image: require('@/assets/images/disciplines/thegirlgames.png'),
+    description:
+      'A fitness competition made for women, by women. Get a feel for the event with these past Metcons, then get signed up for the next one. Weights are in kg.',
+    link: 'https://www.instagram.com/thegirlgames_/',
+    theme: {
+      bgColor: '#000000',
+      borderColor: '#FF4BB8',
+      descriptionColor: '#FFFFFF',
+      linkColor: '#FF4BB8',
+    },
   },
   {
     title: 'Olympic Lifting',
