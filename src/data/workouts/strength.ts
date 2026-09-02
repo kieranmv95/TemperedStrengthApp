@@ -72,6 +72,43 @@ export const strength: StandaloneWorkoutSource[] = [
     isPremium: false,
     blocks: [
       {
+        scale: 'Scaled',
+        blocks: [
+          {
+            name: 'Warmup',
+            movements: ['3 Rounds: 5 Shoulder Taps, 5 Scapular Pushups'],
+          },
+          {
+            name: 'The Pyramid',
+            instructions:
+              'Work up from 1 rep to 10, then back down to 1. Rest between each set for roughly the same time it took to complete it. No rushing, no sloppy reps.',
+            highlightInstructions:
+              'Rest as long as it takes to complete the set.',
+            movements: [
+              '1 Kneeling Pushup, rest',
+              '2 Kneeling Pushups, rest',
+              '3 Kneeling Pushups, rest',
+              '4 Kneeling Pushups, rest',
+              '5 Kneeling Pushups, rest',
+              '6 Kneeling Pushups, rest',
+              '7 Kneeling Pushups, rest',
+              '8 Kneeling Pushups, rest',
+              '9 Kneeling Pushups, rest',
+              '10 Kneeling Pushups, rest',
+              '9 Kneeling Pushups, rest',
+              '8 Kneeling Pushups, rest',
+              '7 Kneeling Pushups, rest',
+              '6 Kneeling Pushups, rest',
+              '5 Kneeling Pushups, rest',
+              '4 Kneeling Pushups, rest',
+              '3 Kneeling Pushups, rest',
+              '2 Kneeling Pushups, rest',
+              '1 Kneeling Pushup',
+            ],
+          },
+        ],
+      },
+      {
         scale: 'Advanced',
         blocks: [
           {
@@ -104,43 +141,6 @@ export const strength: StandaloneWorkoutSource[] = [
               '3 Pushups, rest',
               '2 Pushups, rest',
               '1 Pushup',
-            ],
-          },
-        ],
-      },
-      {
-        scale: 'Advanced',
-        blocks: [
-          {
-            name: 'Warmup',
-            movements: ['3 Rounds: 5 Shoulder Taps, 5 Scapular Pushups'],
-          },
-          {
-            name: 'The Pyramid',
-            instructions:
-              'Work up from 1 rep to 10, then back down to 1. Rest between each set for roughly the same time it took to complete it. No rushing, no sloppy reps.',
-            highlightInstructions:
-              'Rest as long as it takes to complete the set.',
-            movements: [
-              '1 Kneeling Pushup, rest',
-              '2 Kneeling Pushups, rest',
-              '3 Kneeling Pushups, rest',
-              '4 Kneeling Pushups, rest',
-              '5 Kneeling Pushups, rest',
-              '6 Kneeling Pushups, rest',
-              '7 Kneeling Pushups, rest',
-              '8 Kneeling Pushups, rest',
-              '9 Kneeling Pushups, rest',
-              '10 Kneeling Pushups, rest',
-              '9 Kneeling Pushups, rest',
-              '8 Kneeling Pushups, rest',
-              '7 Kneeling Pushups, rest',
-              '6 Kneeling Pushups, rest',
-              '5 Kneeling Pushups, rest',
-              '4 Kneeling Pushups, rest',
-              '3 Kneeling Pushups, rest',
-              '2 Kneeling Pushups, rest',
-              '1 Kneeling Pushup',
             ],
           },
         ],

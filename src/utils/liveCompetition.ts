@@ -52,6 +52,8 @@ export function formatLiveCompetitionScore(
       return formatTimeScore(score);
     case 'max_reps':
       return `${score} reps`;
+    case 'max_reps_no_label':
+      return `${score}`;
     case 'max_calories':
       return `${score} kcal`;
     case 'max_distance':
@@ -69,6 +71,8 @@ export function getLiveCompetitionScoreLabel(
       return 'Time';
     case 'max_reps':
       return 'Reps';
+    case 'max_reps_no_label':
+      return '';
     case 'max_calories':
       return 'Calories';
     case 'max_distance':

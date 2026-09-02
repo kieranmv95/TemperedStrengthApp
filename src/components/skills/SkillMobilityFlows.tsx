@@ -1,0 +1,86 @@
+import { RecoveryCard } from '@/src/components/recovery/RecoveryCard';
+import { Spacing } from '@/src/constants/theme';
+import { getRecoveryById } from '@/src/data/recovery';
+import { useRoles } from '@/src/hooks/useRoles';
+import type { Recovery } from '@/src/types/recovery';
+import { router } from 'expo-router';
+import React, { useMemo } from 'react';
+import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
+
+const COACH_ROLE = 'coach';
+
+type SkillMobilityFlowsProps = {
+  recoveryFlowIds: string[];
+};
+
+export function SkillMobilityFlows({
+  recoveryFlowIds,
+}: SkillMobilityFlowsProps) {
+  const { width: windowWidth } = useWindowDimensions();
+  const cardWidth = windowWidth * 0.6;
+  const { isPro, roles, isLoading: accessLoading } = useRoles();
+  const hasAccess =
+    isPro || roles.includes(COACH_ROLE) || accessLoading;
+
+  const flows = useMemo(() => {
+    const resolved: Recovery[] = [];
+    for (const id of recoveryFlowIds) {
+      const flow = getRecoveryById(id);
+      if (flow) {
+        resolved.push(flow);
+      }
+    }
+    return resolved;
+  }, [recoveryFlowIds]);
+
+  if (flows.length === 0) {
+    return null;
+  }
+
+  const handlePress = (recovery: Recovery) => {
+    router.push({
+      pathname: '/recovery/[id]',
+      params: { id: recovery.id },
+    });
+  };
+
+  const handleLockedPress = () => {
+    router.push('/records');
+  };
+
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      style={styles.scrollBleed}
+      contentContainerStyle={styles.list}
+    >
+      {flows.map((recovery) => (
+        <View key={recovery.id} style={{ width: cardWidth }}>
+          <RecoveryCard
+            recovery={recovery}
+            isPro={hasAccess}
+            onPress={handlePress}
+            onLockedPress={handleLockedPress}
+            style={styles.card}
+            hidePills
+            hideProBadge
+          />
+        </View>
+      ))}
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  scrollBleed: {
+    marginHorizontal: -Spacing.xxl,
+  },
+  list: {
+    gap: Spacing.md,
+    paddingHorizontal: Spacing.xxl,
+  },
+  card: {
+    marginBottom: 0,
+  },
+});

@@ -34,6 +34,7 @@ let liveCompetitionCache: LiveCompetitionCache | null = null;
 const LIVE_COMPETITION_METRIC_TYPES = [
   'max_weight',
   'max_reps',
+  'max_reps_no_label',
   'max_time',
   'max_calories',
   'max_distance',

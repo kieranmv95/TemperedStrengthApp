@@ -55,9 +55,12 @@ export const workoutsListStyles = StyleSheet.create({
   curatedSectionList: {
     gap: Spacing.section,
   },
+  pageGutter: {
+    paddingHorizontal: Spacing.xxl,
+  },
   curatedScrollContent: {
     gap: Spacing.lg,
-    paddingRight: Spacing.xl,
+    paddingHorizontal: Spacing.xxl,
   },
   titleSpace: {
     marginBottom: Spacing.md,

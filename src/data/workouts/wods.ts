@@ -1418,4 +1418,93 @@ export const wods: StandaloneWorkoutSource[] = [
     ],
     equipment: ['barbell', 'pull-up bar'],
   },
+  {
+    id: 'f_72',
+    title: 'The Fixus Games 1',
+    description:
+      'A long chipper from CrossFit Fixus in Middleton. Four 1km runs broken up by wall balls, kettlebell swings, box step overs and dumbbell thrusters. Partner or individual — 40 minute cap.',
+    category: 'WOD',
+    difficulty: 'Multiple Difficulties',
+    estimatedTime: 40,
+    tags: ['Full Body', 'For Time', 'Chipper', 'Partner'],
+    isPremium: false,
+    partner: true,
+    collab: {
+      image: require('@/assets/images/collabs/crossfit_fIxus.jpg'),
+      name: 'CrossFit Fixus',
+      description:
+        'At CrossFit Fixus, we believe fitness should be both challenging and enjoyable. Our community-driven workouts make hard work feel like play, helping you build strength, confidence, and lasting friendships.',
+      link: 'https://www.crossfit-fixus.com/',
+      linkCopy: 'Visit the CrossFit Fixus website',
+      bgColor: '#1E1E1E',
+      inColabWithColor: '#1b8890',
+      nameColor: '#F29300',
+      descriptionColor: '#FFFFFF',
+      linkAndBorderColor: '#F29300',
+    },
+    blocks: [
+      {
+        scale: 'RX',
+        blocks: [
+          {
+            name: 'Warmup',
+            mobilityFlow: 'r_15',
+            highlightInstructions: 'Into:',
+            movements: [
+              '400m easy jog',
+              '2 rounds: 5 wall balls, 5 kettlebell swings, 5 box step overs, 5 dumbbell thrusters',
+            ],
+          },
+          {
+            name: 'For Time (40:00 Cap)',
+            instructions:
+              'Partner or individual. Work straight through the chipper. Pace the runs so you can still attack the stations. Score is total time, or reps completed if you hit the 40 minute cap.',
+            highlightInstructions: 'Partner or individual. 40 minute cap.',
+            movements: [
+              '1km Run',
+              '50 Wall Balls',
+              '1km Run',
+              '50 Kettlebell Swings (24/16kg)',
+              '1km Run',
+              '50 Box Step Overs (24"/20")',
+              '1km Run',
+              '50 Dumbbell Thrusters (2×15/10kg)',
+            ],
+          },
+        ],
+      },
+      {
+        scale: 'Scaled',
+        blocks: [
+          {
+            name: 'Warmup',
+            mobilityFlow: 'r_15',
+            highlightInstructions: 'Into:',
+            movements: [
+              '400m easy jog or 500m easy bike',
+              '2 rounds: 8 wall balls, 8 kettlebell swings, 6 box step overs, 6 dumbbell thrusters',
+            ],
+          },
+          {
+            name: 'For Time (40:00 Cap)',
+            instructions:
+              'Partner or individual. Swap each 1km run for 1000m bike or 500m run, drop every station to 30 reps, and reduce the loads. Score is total time, or reps completed if you hit the 40 minute cap.',
+            highlightInstructions:
+              '1000m bike or 500m run. 30 reps. Reduce weight.',
+            movements: [
+              '1000m Bike or 500m Run',
+              '30 Wall Balls',
+              '1000m Bike or 500m Run',
+              '30 Kettlebell Swings (reduce weight)',
+              '1000m Bike or 500m Run',
+              '30 Box Step Overs',
+              '1000m Bike or 500m Run',
+              '30 Dumbbell Thrusters (reduce weight)',
+            ],
+          },
+        ],
+      },
+    ],
+    equipment: ['medicine ball', 'kettlebell', 'box', 'dumbbell', 'bike'],
+  },
 ];

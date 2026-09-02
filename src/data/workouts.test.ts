@@ -83,6 +83,8 @@ describe('bundled standalone workouts', () => {
       'Hyrox',
       'Pilates',
       'Rainhill',
+      'Girl Games',
+      'The Girl Games',
       'No Equipment',
       'Bodyweight',
       'Kettlebell',
@@ -118,15 +120,42 @@ describe('bundled standalone workouts', () => {
     const oly = allStandaloneWorkouts.find((w) =>
       w.tags.includes('Olympic Lifting')
     );
+    const skill = allStandaloneWorkouts.find((w) => w.tags.includes('Skill'));
     expect(wod).toBeDefined();
     expect(hyrox).toBeDefined();
     expect(partner).toBeDefined();
     expect(oly).toBeDefined();
+    expect(skill).toBeDefined();
     expect(workoutMatchesDiscipline(wod!, 'CrossFit')).toBe(true);
     expect(workoutMatchesDiscipline(hyrox!, 'Hyrox')).toBe(true);
     expect(workoutMatchesDiscipline(partner!, 'Partner')).toBe(true);
     expect(workoutMatchesDiscipline(oly!, 'Olympic Lifting')).toBe(true);
+    expect(workoutMatchesDiscipline(skill!, 'Skill')).toBe(true);
     expect(wod!.tags).not.toContain('CrossFit');
+  });
+
+  it('girl games discipline matches workouts in the Girl Games category', () => {
+    const girlGamesWorkouts = allStandaloneWorkouts.filter(
+      (w) => w.category === 'Girl Games'
+    );
+    expect(girlGamesWorkouts.map((w) => w.id).sort()).toEqual([
+      'gg_01',
+      'gg_02',
+      'gg_03',
+    ]);
+    for (const w of girlGamesWorkouts) {
+      expect(workoutMatchesDiscipline(w, 'Girl Games')).toBe(true);
+      expect(workoutMatchesDiscipline(w, 'Collab')).toBe(true);
+      expect(w.partner).toBe(true);
+      expect(w.tags).toContain('Partner');
+      expect(w.collab?.name).toBe('The Girl Games');
+      expect(w.collab?.link).toBe('https://www.instagram.com/thegirlgames_/');
+    }
+    const nonGirlGames = allStandaloneWorkouts.find(
+      (w) => w.category !== 'Girl Games'
+    );
+    expect(nonGirlGames).toBeDefined();
+    expect(workoutMatchesDiscipline(nonGirlGames!, 'Girl Games')).toBe(false);
   });
 
   it('collab discipline matches any workout with a collab property', () => {
@@ -157,6 +186,22 @@ describe('bundled standalone workouts', () => {
     expect(workoutMatchesDiscipline(nonArena!, 'Arena')).toBe(false);
   });
 
+  it('skill discipline matches workouts tagged Skill', () => {
+    const skillWorkouts = allStandaloneWorkouts.filter((w) =>
+      w.tags.includes('Skill')
+    );
+    expect(skillWorkouts.length).toBeGreaterThan(0);
+    for (const w of skillWorkouts) {
+      expect(workoutMatchesDiscipline(w, 'Skill')).toBe(true);
+      expect(w.category).toBe('Skill');
+    }
+    const nonSkill = allStandaloneWorkouts.find(
+      (w) => !w.tags.includes('Skill')
+    );
+    expect(nonSkill).toBeDefined();
+    expect(workoutMatchesDiscipline(nonSkill!, 'Skill')).toBe(false);
+  });
+
   it('tags dedicated Olympic lifting sessions for focus filtering', () => {
     const olySessions = allStandaloneWorkouts.filter((w) =>
       w.tags.includes('Olympic Lifting')
@@ -169,9 +214,24 @@ describe('bundled standalone workouts', () => {
       'p_79',
       'p_80',
       'p_81',
+      'sw_01',
+      'sw_02',
+      'sw_03',
+      'sw_13',
     ]);
     for (const w of olySessions) {
       expect(w.equipment).toContain('barbell');
+    }
+  });
+
+  it('skill workouts allow the coach role', () => {
+    const skillWorkouts = allStandaloneWorkouts.filter((w) =>
+      w.tags.includes('Skill')
+    );
+    expect(skillWorkouts.length).toBeGreaterThan(0);
+    for (const w of skillWorkouts) {
+      expect(w.allowedRoles).toEqual(['coach']);
+      expect(w.isPremium).toBe(true);
     }
   });
 

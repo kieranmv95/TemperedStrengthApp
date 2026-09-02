@@ -1,7 +1,7 @@
 import { SponsorAdCard } from '@/src/components/home/SponsorAdCard';
 import {
   SPONSOR_AUTO_SCROLL_MS,
-  SPONSOR_CARD_HEIGHT,
+  SPONSOR_CAROUSEL_GAP,
   homeScreenStyles as styles,
 } from '@/src/components/home/homeScreenStyles';
 import { Spacing } from '@/src/constants/theme';
@@ -31,6 +31,10 @@ function hostFromUrl(url: string): string {
   }
 }
 
+function SponsorCarouselSeparator() {
+  return <View style={styles.sponsorCarouselSeparator} />;
+}
+
 export function SponsorAdsCarousel({
   ads,
   onPressCta,
@@ -38,6 +42,7 @@ export function SponsorAdsCarousel({
   const posthog = usePostHog();
   const { width: windowWidth } = useWindowDimensions();
   const cardWidth = windowWidth - Spacing.xxl * 2;
+  const snapInterval = cardWidth + SPONSOR_CAROUSEL_GAP;
   const listRef = useRef<FlatList<HomeSponsorAd>>(null);
   const activeIndexRef = useRef(0);
   const pausedRef = useRef(false);
@@ -91,20 +96,20 @@ export function SponsorAdsCarousel({
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       pausedRef.current = false;
       const offsetX = event.nativeEvent.contentOffset.x;
-      const index = Math.round(offsetX / cardWidth);
+      const index = Math.round(offsetX / snapInterval);
       const clamped = Math.max(0, Math.min(index, ads.length - 1));
       activeIndexRef.current = clamped;
     },
-    [ads, cardWidth]
+    [ads, snapInterval]
   );
 
   const getItemLayout = useCallback(
     (_: ArrayLike<HomeSponsorAd> | null | undefined, index: number) => ({
       length: cardWidth,
-      offset: cardWidth * index,
+      offset: snapInterval * index,
       index,
     }),
-    [cardWidth]
+    [cardWidth, snapInterval]
   );
 
   const renderItem = useCallback(
@@ -119,17 +124,17 @@ export function SponsorAdsCarousel({
   }
 
   return (
-    <View style={styles.sponsorCarousel}>
+    <View style={[styles.sponsorCarousel, styles.sponsorCarouselBleed]}>
       <FlatList
         ref={listRef}
         data={ads}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
+        ItemSeparatorComponent={SponsorCarouselSeparator}
         horizontal
-        pagingEnabled
         showsHorizontalScrollIndicator={false}
         decelerationRate="fast"
-        snapToInterval={cardWidth}
+        snapToInterval={snapInterval}
         snapToAlignment="start"
         disableIntervalMomentum
         getItemLayout={getItemLayout}
@@ -139,11 +144,12 @@ export function SponsorAdsCarousel({
         viewabilityConfig={viewabilityConfig}
         onScrollToIndexFailed={(info) => {
           listRef.current?.scrollToOffset({
-            offset: info.averageItemLength * info.index,
+            offset: snapInterval * info.index,
             animated: false,
           });
         }}
-        style={{ height: SPONSOR_CARD_HEIGHT }}
+        style={styles.sponsorCarouselList}
+        contentContainerStyle={styles.sponsorCarouselContent}
       />
     </View>
   );

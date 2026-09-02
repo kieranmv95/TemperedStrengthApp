@@ -9,6 +9,7 @@ const DISCIPLINE_CATEGORY: Record<string, WorkoutCategory> = {
   CrossFit: 'WOD',
   Hyrox: 'Hyrox',
   Rainhill: 'Rainhill',
+  'Girl Games': 'Girl Games',
 };
 
 export type DisciplineTheme = {
@@ -81,10 +82,34 @@ export const disciplines: Discipline[] = [
     link: 'https://therainhilltrials.myshopify.com/',
   },
   {
+    title: 'The Girl Games',
+    tag: 'Girl Games',
+    showTitle: false,
+    isSponsor: true,
+    image: require('@/assets/images/disciplines/thegirlgames.png'),
+    description:
+      'A fitness competition made for women, by women. Get a feel for the event with these past Metcons, then get signed up for the next one. Weights are in kg.',
+    link: 'https://www.instagram.com/thegirlgames_/',
+    theme: {
+      bgColor: '#000000',
+      borderColor: '#FF4BB8',
+      descriptionColor: '#FFFFFF',
+      linkColor: '#FF4BB8',
+    },
+  },
+  {
     title: 'Olympic Lifting',
     tag: 'Olympic Lifting',
     showTitle: true,
     image: require('@/assets/images/disciplines/oly.png'),
+  },
+  {
+    title: 'Skills',
+    tag: 'Skill',
+    showTitle: true,
+    image: require('@/assets/images/skills/thumbnails/Handstand.jpg'),
+    description:
+      'Drill-led sessions for complex movements — snatches, muscle-ups, handstands, and more. Positions and progressions before load.',
   },
   {
     title: 'CrossFit',
@@ -140,6 +165,9 @@ export function workoutMatchesDiscipline(
   }
   if (disciplineTag === 'Olympic Lifting') {
     return workout.tags.includes('Olympic Lifting');
+  }
+  if (disciplineTag === 'Skill') {
+    return workout.tags.includes('Skill');
   }
   if (disciplineTag === 'Arena') {
     return workout.tags.includes('Arena');

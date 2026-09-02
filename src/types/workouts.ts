@@ -7,7 +7,8 @@ export type WorkoutCategory =
   | 'Hyrox'
   | 'Conditioning'
   | 'Pilates'
-  | 'Rainhill';
+  | 'Rainhill'
+  | 'Girl Games';
 
 export type WorkoutEquipment =
   | 'kettlebell'
@@ -36,6 +37,7 @@ export const WORKOUT_FOCUS_TAGS = [
   'Strength',
   'Gymnastics',
   'Olympic Lifting',
+  'Skill',
 ] as const;
 
 /** Workout structure / scoring — workouts typically have 1. */
@@ -128,6 +130,11 @@ export type SingleWorkout = {
   equipment: WorkoutEquipment[];
   isPremium: boolean;
   logSchema: WorkoutLogSchema;
+  /**
+   * When premium, these roles may still access the workout without Pro
+   * (e.g. `coach` for skill sessions).
+   */
+  allowedRoles?: string[];
   /** True when designed to be done with a partner. */
   partner?: boolean;
   /** Present when the workout is a collaboration; surfaced on the detail screen and Collab discipline. */
@@ -187,6 +194,7 @@ export type StandaloneWorkoutSource = {
   tags: WorkoutTag[];
   equipment: WorkoutEquipment[];
   isPremium: boolean;
+  allowedRoles?: string[];
   partner?: boolean;
   collab?: WorkoutCollab;
   blocks:

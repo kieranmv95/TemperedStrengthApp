@@ -2,7 +2,14 @@ import { Colors } from '@/src/constants/theme';
 import type { ArticleListItem } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  StyleProp,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { Card, SmallChevron } from '../ds';
 import { articleCardStyles as styles } from './articleCardStyles';
 
@@ -11,6 +18,7 @@ type ArticleCardProps = {
   onPress: (article: ArticleListItem) => void;
   isFavorite?: boolean;
   onToggleFavorite?: (slug: string) => void;
+  style?: StyleProp<ViewStyle>;
 };
 
 export function ArticleCard({
@@ -18,6 +26,7 @@ export function ArticleCard({
   onPress,
   isFavorite = false,
   onToggleFavorite,
+  style,
 }: ArticleCardProps) {
   const canFavorite = Boolean(onToggleFavorite);
   // The bookmark button sits inside the card's press target. Stop propagation
@@ -34,7 +43,7 @@ export function ArticleCard({
     <Card
       onPress={() => onPress(article)}
       accessibilityLabel="Open article"
-      style={styles.card}
+      style={[styles.card, style]}
     >
       <Image source={{ uri: article.image }} style={styles.compactImage} />
       <View style={styles.compactContent}>

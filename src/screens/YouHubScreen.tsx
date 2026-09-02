@@ -2,20 +2,28 @@ import { Card, SmallChevron } from '@/src/components/ds';
 import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
 import { settingsScreenStyles as settingsStyles } from '@/src/components/settings/settingsScreenStyles';
 import { StandardLayout } from '@/src/components/StandardLayout';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useOnboardingProfile } from '@/src/hooks/useOnboardingProfile';
+import { useRoles } from '@/src/hooks/useRoles';
 import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
+import { COACH_ROLE } from '@/src/utils/workoutAccess';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+const COACH_INSTAGRAM_URL = 'https://www.instagram.com/temperedstrength/';
+const COACH_INSTAGRAM_HANDLE = '@temperedstrength';
 
 export function YouHubScreen() {
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
+  const { roles, isLoading: rolesLoading } = useRoles();
   const { profile } = useOnboardingProfile();
   const displayName = profile?.name;
+  const accessLoading = subscriptionLoading || rolesLoading;
+  const isCoach = roles.includes(COACH_ROLE);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -25,6 +33,12 @@ export function YouHubScreen() {
     }, [refresh])
   );
 
+  const handleCoachPress = () => {
+    Linking.openURL(COACH_INSTAGRAM_URL).catch((error) => {
+      console.error('Failed to open Instagram URL:', error);
+    });
+  };
+
   return (
     <StandardLayout
       title="You"
@@ -33,9 +47,15 @@ export function YouHubScreen() {
       <StandardLayout.Body>
         <View style={styles.list}>
           <Text style={styles.hiText}>
-            Hi{displayName ? `, ${displayName}` : ' there'}!
+            {isCoach
+              ? displayName
+                ? `Hi, Coach ${displayName}!`
+                : 'Hi, Coach!'
+              : displayName
+                ? `Hi, ${displayName}!`
+                : 'Hi there!'}
           </Text>
-          {!subscriptionLoading && !isPro ? (
+          {!accessLoading && !isPro ? (
             <TouchableOpacity
               style={settingsStyles.upgradePrompt}
               onPress={() => router.push('/paywall')}
@@ -92,6 +112,31 @@ export function YouHubScreen() {
             </View>
             <SmallChevron />
           </Card>
+
+          {!accessLoading && !isCoach ? (
+            <TouchableOpacity
+              style={styles.coachPrompt}
+              onPress={handleCoachPress}
+              activeOpacity={0.85}
+              accessibilityRole="button"
+              accessibilityLabel={`Are you a coach? Message ${COACH_INSTAGRAM_HANDLE} on Instagram for free coach mode`}
+            >
+              <Text style={styles.coachEyebrow}>For coaches</Text>
+              <Text style={styles.coachTitle}>Are you a coach?</Text>
+              <Text style={styles.coachBody}>
+                Reach out to Tempered Strength on Instagram{' '}
+                <Text style={styles.coachHandle}>{COACH_INSTAGRAM_HANDLE}</Text>{' '}
+                and we will upgrade you to coach mode for free.
+              </Text>
+              <Text style={styles.coachPerks}>
+                Coach unlocks all Skill discipline workouts, the Skills & Cues
+                explore section, and all mobility flows.
+              </Text>
+              <Text style={styles.coachCta}>
+                Message {COACH_INSTAGRAM_HANDLE} →
+              </Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </StandardLayout.Body>
     </StandardLayout>
@@ -132,5 +177,47 @@ const styles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.lg,
     lineHeight: 20,
+  },
+  coachPrompt: {
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.accentWashOutline,
+    padding: Spacing.xxl,
+    gap: Spacing.sm,
+  },
+  coachEyebrow: {
+    color: Colors.accent,
+    fontSize: FontSize.sm,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+  coachTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxxl,
+    fontWeight: '800',
+  },
+  coachBody: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+    fontWeight: '500',
+  },
+  coachHandle: {
+    color: Colors.accent,
+    fontWeight: '700',
+  },
+  coachPerks: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+    marginTop: Spacing.xs,
+  },
+  coachCta: {
+    color: Colors.accent,
+    fontSize: FontSize.xl,
+    fontWeight: '700',
+    marginTop: Spacing.lg,
   },
 });

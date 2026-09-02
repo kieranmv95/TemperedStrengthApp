@@ -60,6 +60,7 @@ describe('liveCompetition utils', () => {
   it('formats scores for each metric type', () => {
     expect(formatLiveCompetitionScore(142, 'max_weight')).toBe('142 kg');
     expect(formatLiveCompetitionScore(25, 'max_reps')).toBe('25 reps');
+    expect(formatLiveCompetitionScore(100, 'max_reps_no_label')).toBe('100');
     expect(formatLiveCompetitionScore(95, 'max_time')).toBe('1:35');
     expect(formatLiveCompetitionScore(450, 'max_calories')).toBe('450 kcal');
     expect(formatLiveCompetitionScore(5000, 'max_distance')).toBe('5000 m');
@@ -68,6 +69,7 @@ describe('liveCompetition utils', () => {
   it('returns score labels for each metric type', () => {
     expect(getLiveCompetitionScoreLabel('max_weight')).toBe('Weight');
     expect(getLiveCompetitionScoreLabel('max_reps')).toBe('Reps');
+    expect(getLiveCompetitionScoreLabel('max_reps_no_label')).toBe('');
     expect(getLiveCompetitionScoreLabel('max_time')).toBe('Time');
     expect(getLiveCompetitionScoreLabel('max_calories')).toBe('Calories');
     expect(getLiveCompetitionScoreLabel('max_distance')).toBe('Distance');

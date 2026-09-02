@@ -11,6 +11,8 @@ export const SPONSOR_PRODUCT_IMAGE_SIZE = SPONSOR_CARD_HEIGHT - Spacing.lg * 2;
 export const SPONSOR_PRODUCT_RAIL_WIDTH = SPONSOR_PRODUCT_IMAGE_SIZE * 0.75;
 export const SPONSOR_PRODUCT_IMAGE_BLEED = SPONSOR_PRODUCT_IMAGE_SIZE * 0.25;
 export const SPONSOR_AUTO_SCROLL_MS = 6000;
+/** Matches page inset so adjacent cards sit on the screen edge at rest. */
+export const SPONSOR_CAROUSEL_GAP = Spacing.xxl;
 
 export const homeScreenStyles = StyleSheet.create({
   spacing: {
@@ -21,6 +23,11 @@ export const homeScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  accountStatusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
   welcomeStrip: {
     borderRadius: BorderRadius.xxl,
     backgroundColor: Colors.accentWashFill,
@@ -28,6 +35,10 @@ export const homeScreenStyles = StyleSheet.create({
     borderColor: Colors.accentWashBorder,
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.xxl,
+  },
+  welcomeStripFlex: {
+    flex: 1,
+    minWidth: 0,
   },
   welcomeStripTopRow: {
     flexDirection: 'row',
@@ -117,6 +128,18 @@ export const homeScreenStyles = StyleSheet.create({
   },
   sponsorCarousel: {
     gap: Spacing.sm,
+  },
+  sponsorCarouselBleed: {
+    marginHorizontal: -Spacing.xxl,
+  },
+  sponsorCarouselList: {
+    height: SPONSOR_CARD_HEIGHT,
+  },
+  sponsorCarouselContent: {
+    paddingHorizontal: Spacing.xxl,
+  },
+  sponsorCarouselSeparator: {
+    width: SPONSOR_CAROUSEL_GAP,
   },
   sponsorCard: {
     borderRadius: BorderRadius.xxl,

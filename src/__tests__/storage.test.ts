@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { closeAppDatabaseForTests, openAppDatabase } from '../db/database';
 import {
   buildPromoProGrant,
   clearPromoProGrant,
@@ -32,10 +33,13 @@ import {
 describe('storage utilities', () => {
   beforeEach(async () => {
     await AsyncStorage.clear();
+    await closeAppDatabaseForTests();
+    await openAppDatabase();
     jest.clearAllMocks();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await closeAppDatabaseForTests();
     jest.useRealTimers();
   });
 
