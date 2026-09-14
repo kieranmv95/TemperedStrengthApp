@@ -283,10 +283,10 @@ export function YouAccountSettingsScreen() {
                 );
                 const result = await purgeStructuredDataLocalAndRemote();
                 const localLine = result.localCleared
-                  ? 'Local SQLite: cleared (PBs + workout logs + domain meta).'
+                  ? 'Local SQLite: cleared (PBs + workout logs + check-in + domain meta).'
                   : 'Local SQLite: failed.';
                 const remoteLine = result.remoteCleared
-                  ? `Remote: deleted ${result.remotePersonalBestDeleted ?? 0} PB rows, ${result.remoteWorkoutLogDeleted ?? 0} set log rows.`
+                  ? `Remote: deleted ${result.remotePersonalBestDeleted ?? 0} PB rows, ${result.remoteWorkoutLogDeleted ?? 0} set log rows, ${result.remoteCheckinDeleted ?? 0} check-in rows.`
                   : `Remote: skipped/failed — ${result.remoteSkippedReason ?? 'unknown'}`;
                 Alert.alert('Structured data purged', `${localLine}\n\n${remoteLine}`);
               } catch (error) {

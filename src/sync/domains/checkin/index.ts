@@ -1,0 +1,12 @@
+export {
+  pushDirtyCheckin,
+  pullCheckinChanges,
+} from './rowSync';
+export {
+  CHECKIN_SETTINGS_TABLE,
+  CHECKIN_TRACKED_BEHAVIOURS_TABLE,
+  CHECKIN_BEHAVIOUR_ENTRIES_TABLE,
+  CHECKIN_SUPPLEMENTS_TABLE,
+  CHECKIN_SUPPLEMENT_LOGS_TABLE,
+  BEHAVIOUR_CATALOGUE_TABLE,
+} from './constants';

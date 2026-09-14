@@ -6,7 +6,7 @@ import { TogetherWeLiftBanner } from '@/src/components/hub/TogetherWeLiftBanner'
 import { Pill } from '@/src/components/pill';
 import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
-import { TOOLS } from '@/src/data/tools';
+import { TOOLS, type ToolRoute } from '@/src/data/tools';
 import { useTogetherWeLift } from '@/src/hooks/use-together-we-lift';
 import { fetchArticles } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
@@ -142,7 +142,7 @@ export default function HubScreen() {
     router.push('/glossary');
   };
 
-  const handleOpenTool = (route: (typeof TOOLS)[number]['route']) => {
+  const handleOpenTool = (route: ToolRoute) => {
     router.push(route);
   };
 
@@ -279,7 +279,7 @@ export default function HubScreen() {
                   : isAllChip
                     ? activeCategory === 'All' && !showFavoritesOnly
                     : activeCategory === (item.key as ArticleCategory) &&
-                    !showFavoritesOnly;
+                      !showFavoritesOnly;
 
                 const count = isFavoritesChip
                   ? favorites.length

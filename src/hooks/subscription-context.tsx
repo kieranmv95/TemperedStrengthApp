@@ -11,9 +11,11 @@ import { getProgramById } from '@/src/utils/program';
 import {
   getActiveProgramId,
   getDevProOverrideEnabled,
+  getLastKnownPro,
   getPromoProGrant,
   isPromoProGrantActive,
   setDevProOverrideEnabled,
+  setLastKnownPro,
   setPromoProGrant,
   type PromoProGrant,
 } from '@/src/utils/storage';
@@ -181,6 +183,8 @@ export function SubscriptionProvider({
       isDeveloperProOverrideEnabledRef.current =
         input.isDeveloperProOverrideEnabled;
 
+      void setLastKnownPro(isPro);
+
       setState((prev) => ({
         ...prev,
         customerInfo: input.customerInfo,
@@ -242,6 +246,7 @@ export function SubscriptionProvider({
           ...prev,
           error: error as Error,
           isLoading: false,
+          // Keep last-known Pro on fetch failure (offline-tolerant).
         }));
       }
     },
@@ -474,25 +479,30 @@ export function SubscriptionProvider({
     let cancelled = false;
 
     void (async () => {
-      const [promoProGrant, isDeveloperProOverrideEnabled] = await Promise.all([
-        getPromoProGrant(),
-        getDevProOverrideEnabled(),
-      ]);
+      const [promoProGrant, isDeveloperProOverrideEnabled, lastKnownPro] =
+        await Promise.all([
+          getPromoProGrant(),
+          getDevProOverrideEnabled(),
+          getLastKnownPro(),
+        ]);
       if (cancelled) return;
 
       promoProGrantRef.current = promoProGrant;
       isDeveloperProOverrideEnabledRef.current = isDeveloperProOverrideEnabled;
+
+      const seededIsPro =
+        computeIsPro({
+          customerInfo: null,
+          promoProGrant,
+          isDeveloperProOverrideEnabled,
+        }) || lastKnownPro === true;
 
       setState((prev) => ({
         ...prev,
         promoProGrant,
         isDeveloperProOverrideEnabled,
         isPromoPro: isPromoProGrantActive(promoProGrant),
-        isPro: computeIsPro({
-          customerInfo: prev.customerInfo,
-          promoProGrant,
-          isDeveloperProOverrideEnabled,
-        }),
+        isPro: seededIsPro || prev.isPro,
       }));
 
       if (!cancelled) {

@@ -65,6 +65,23 @@ export async function cancelAllScheduledNotifications(): Promise<void> {
   await Notifications.cancelAllScheduledNotificationsAsync();
 }
 
+/**
+ * Cancel only rest-timer notifications. Prefer this over cancelAll so
+ * supplement reminders are preserved.
+ */
+export async function cancelTimerFinishedNotifications(): Promise<void> {
+  const Notifications = getNotificationsModule();
+  if (!Notifications) return;
+
+  const pending = await Notifications.getAllScheduledNotificationsAsync();
+  for (const item of pending) {
+    const data = item.content.data as { timerFinished?: boolean } | null;
+    if (data?.timerFinished === true) {
+      await Notifications.cancelScheduledNotificationAsync(item.identifier);
+    }
+  }
+}
+
 export async function scheduleTimerFinishedNotification(
   durationSeconds: number
 ): Promise<string | null> {

@@ -1,4 +1,5 @@
 import { AccountPromptController } from '@/src/components/account/AccountPromptController';
+import { SupplementReminderBridge } from '@/src/components/checkin/SupplementReminderBridge';
 import { PostHogCaptureBridge } from '@/src/components/PostHogCaptureBridge';
 import { ExerciseVideoProvider } from '@/src/hooks/exercise-video-context';
 import { SubscriptionProvider } from '@/src/hooks/subscription-context';
@@ -107,6 +108,7 @@ export default function RootLayout() {
         <SyncManagerProvider>
           <AccountPromptController />
           <SubscriptionProvider>
+            <SupplementReminderBridge />
             <TogetherWeLiftProvider>
               <ExerciseVideoProvider>
                 <Stack>
@@ -132,6 +134,10 @@ export default function RootLayout() {
                   />
                   <Stack.Screen
                     name="tools/water-intake"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="checkin"
                     options={{ headerShown: false }}
                   />
                   <Stack.Screen name="shop" options={{ headerShown: false }} />

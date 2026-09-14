@@ -13,7 +13,7 @@ import { useSubscription } from '@/src/hooks/use-subscription';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { useWorkoutScreenController } from '@/src/hooks/useWorkoutScreenController';
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
-import { cancelAllScheduledNotifications } from '@/src/services/localNotifications';
+import { cancelTimerFinishedNotifications } from '@/src/services/localNotifications';
 import { clearProgramData } from '@/src/utils/storage';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { router } from 'expo-router';
@@ -49,7 +49,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           style: 'destructive',
           onPress: async () => {
             try {
-              await cancelAllScheduledNotifications();
+              await cancelTimerFinishedNotifications();
             } catch (error) {
               console.error('Error cancelling scheduled notifications:', error);
             }
