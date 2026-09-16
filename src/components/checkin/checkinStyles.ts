@@ -101,14 +101,24 @@ export const checkinStyles = StyleSheet.create({
     backgroundColor: Colors.overlay,
     justifyContent: 'flex-end',
   },
+  modalDismissArea: {
+    flex: 1,
+  },
   modalContent: {
-    backgroundColor: Colors.backgroundScreen,
+    backgroundColor: Colors.backgroundCard,
     borderTopLeftRadius: BorderRadius.full,
     borderTopRightRadius: BorderRadius.full,
     paddingHorizontal: Spacing.xxl,
-    paddingTop: Spacing.xxl,
-    paddingBottom: Spacing.section,
+    paddingTop: Spacing.lg,
     gap: Spacing.xxl,
+  },
+  modalGrabber: {
+    alignSelf: 'center',
+    width: 40,
+    height: 4,
+    borderRadius: BorderRadius.pill,
+    backgroundColor: Colors.backgroundBorder,
+    marginBottom: Spacing.sm,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -133,6 +143,32 @@ export const checkinStyles = StyleSheet.create({
   modalCloseButton: {
     padding: Spacing.xs,
   },
+  booleanRow: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  booleanButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Spacing.xxl,
+    borderRadius: BorderRadius.xxl,
+    backgroundColor: Colors.backgroundScreen,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+  },
+  booleanButtonActive: {
+    backgroundColor: Colors.accentWashFill,
+    borderColor: Colors.accentWashBorder,
+  },
+  booleanButtonText: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.displaySm,
+    fontWeight: '700',
+  },
+  booleanButtonTextActive: {
+    color: Colors.accent,
+  },
   optionRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -142,7 +178,7 @@ export const checkinStyles = StyleSheet.create({
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.xl,
     borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: Colors.backgroundScreen,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,
   },
@@ -158,9 +194,58 @@ export const checkinStyles = StyleSheet.create({
   optionChipTextActive: {
     color: Colors.accent,
   },
+  scaleSection: {
+    gap: Spacing.xl,
+    alignItems: 'center',
+  },
+  scaleSelectedNumber: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayXXXl,
+    fontWeight: '800',
+    letterSpacing: -1,
+  },
+  scaleSelectedLabel: {
+    color: Colors.textMuted,
+    fontSize: FontSize.xl,
+    fontWeight: '600',
+    marginTop: -Spacing.sm,
+  },
+  scaleTrack: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    alignSelf: 'stretch',
+    gap: Spacing.md,
+    marginTop: Spacing.md,
+  },
+  scaleDot: {
+    flex: 1,
+    aspectRatio: 1,
+    maxWidth: 56,
+    borderRadius: BorderRadius.pill,
+    backgroundColor: Colors.backgroundScreen,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scaleDotActive: {
+    backgroundColor: Colors.accent,
+    borderColor: Colors.accent,
+  },
+  scaleDotText: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.xxl,
+    fontWeight: '700',
+  },
+  scaleDotTextActive: {
+    color: Colors.textOnAccent,
+  },
   scaleLabelRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignSelf: 'stretch',
+    paddingHorizontal: Spacing.xs,
   },
   scaleLabel: {
     color: Colors.textMuted,
@@ -177,7 +262,7 @@ export const checkinStyles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundCard,
+    backgroundColor: Colors.backgroundScreen,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,
     alignItems: 'center',
@@ -206,6 +291,7 @@ export const checkinStyles = StyleSheet.create({
     borderRadius: BorderRadius.pill,
     paddingVertical: Spacing.xxl,
     alignItems: 'center',
+    alignSelf: 'stretch',
   },
   modalPrimaryButtonDisabled: {
     opacity: 0.5,

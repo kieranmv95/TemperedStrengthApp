@@ -3,6 +3,7 @@ export type Warmup = {
   title?: string;
   additionalDescription?: string | null;
   description: string[];
+  videoUrl?: string | null;
 };
 
 /**

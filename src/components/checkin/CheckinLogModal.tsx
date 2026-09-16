@@ -1,11 +1,19 @@
 import { checkinStyles as styles } from '@/src/components/checkin/checkinStyles';
 import { Colors } from '@/src/constants/theme';
 import type { CatalogueBehaviour } from '@/src/types/checkin';
+import { modalSheetBottomPadding } from '@/src/utils/platform';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { Modal, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Modal,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const SCALE_VALUES = [1, 2, 3, 4, 5];
+const SCALE_VALUES = [1, 2, 3, 4, 5] as const;
 
 type CheckinLogModalProps = {
   visible: boolean;
@@ -18,6 +26,18 @@ type CheckinLogModalProps = {
   onSave: (value: boolean | number | string) => void;
 };
 
+function scaleEndpointLabel(
+  scaleValue: number,
+  labels: { low: string; high: string } | undefined
+): string | null {
+  if (!labels) {
+    return null;
+  }
+  if (scaleValue === 1) return labels.low;
+  if (scaleValue === 5) return labels.high;
+  return null;
+}
+
 export function CheckinLogModal({
   visible,
   behaviour,
@@ -27,13 +47,20 @@ export function CheckinLogModal({
   onClose,
   onSave,
 }: CheckinLogModalProps) {
+  const insets = useSafeAreaInsets();
   const [quantity, setQuantity] = useState(0);
+  const [pendingScale, setPendingScale] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!visible || behaviour?.responseType !== 'quantity') {
+    if (!visible || !behaviour) {
       return;
     }
-    setQuantity(typeof value === 'number' ? value : 0);
+    if (behaviour.responseType === 'quantity') {
+      setQuantity(typeof value === 'number' ? value : 0);
+    }
+    if (behaviour.responseType === 'scale_1_5') {
+      setPendingScale(typeof value === 'number' ? value : null);
+    }
   }, [visible, behaviour, value]);
 
   if (!behaviour) {
@@ -42,27 +69,32 @@ export function CheckinLogModal({
 
   const quantityStep = behaviour.quantityStep ?? 1;
   const quantityMax = behaviour.quantityMax ?? Number.MAX_SAFE_INTEGER;
+  const sheetPaddingBottom = modalSheetBottomPadding(insets.bottom);
 
   const renderBooleanBody = () => (
-    <View style={styles.optionRow}>
+    <View style={styles.booleanRow}>
       {[
-        { label: 'Did it', optionValue: true },
-        { label: 'Didn’t', optionValue: false },
+        { label: 'Yes', optionValue: true },
+        { label: 'No', optionValue: false },
       ].map((option) => {
         const isActive = value === option.optionValue;
         return (
           <TouchableOpacity
             key={option.label}
-            style={[styles.optionChip, isActive && styles.optionChipActive]}
+            style={[
+              styles.booleanButton,
+              isActive && styles.booleanButtonActive,
+            ]}
             onPress={() => onSave(option.optionValue)}
             disabled={saving}
             accessibilityRole="button"
             accessibilityState={{ selected: isActive }}
+            accessibilityLabel={option.label}
           >
             <Text
               style={[
-                styles.optionChipText,
-                isActive && styles.optionChipTextActive,
+                styles.booleanButtonText,
+                isActive && styles.booleanButtonTextActive,
               ]}
             >
               {option.label}
@@ -73,42 +105,82 @@ export function CheckinLogModal({
     </View>
   );
 
-  const renderScaleBody = () => (
-    <View style={styles.section}>
-      <View style={styles.optionRow}>
-        {SCALE_VALUES.map((scaleValue) => {
-          const isActive = value === scaleValue;
-          return (
-            <TouchableOpacity
-              key={scaleValue}
-              style={[styles.optionChip, isActive && styles.optionChipActive]}
-              onPress={() => onSave(scaleValue)}
-              disabled={saving}
-              accessibilityRole="button"
-              accessibilityState={{ selected: isActive }}
-            >
-              <Text
-                style={[
-                  styles.optionChipText,
-                  isActive && styles.optionChipTextActive,
-                ]}
+  const renderScaleBody = () => {
+    const selected =
+      pendingScale ?? (typeof value === 'number' ? value : null);
+    const endpointLabel =
+      selected !== null
+        ? scaleEndpointLabel(selected, behaviour.scaleLabels)
+        : null;
+
+    return (
+      <View style={styles.scaleSection}>
+        <Text style={styles.scaleSelectedNumber}>
+          {selected !== null ? selected : '—'}
+        </Text>
+        <Text style={styles.scaleSelectedLabel}>
+          {endpointLabel ?? (selected !== null ? 'Selected' : 'Tap a number')}
+        </Text>
+
+        <View style={styles.scaleTrack}>
+          {SCALE_VALUES.map((scaleValue) => {
+            const isActive = selected === scaleValue;
+            return (
+              <TouchableOpacity
+                key={scaleValue}
+                style={[styles.scaleDot, isActive && styles.scaleDotActive]}
+                onPress={() => setPendingScale(scaleValue)}
+                disabled={saving}
+                accessibilityRole="button"
+                accessibilityState={{ selected: isActive }}
+                accessibilityLabel={`${scaleValue}${
+                  behaviour.scaleLabels &&
+                  scaleEndpointLabel(scaleValue, behaviour.scaleLabels)
+                    ? `, ${scaleEndpointLabel(scaleValue, behaviour.scaleLabels)}`
+                    : ''
+                }`}
               >
-                {scaleValue}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-      {behaviour.scaleLabels ? (
-        <View style={styles.scaleLabelRow}>
-          <Text style={styles.scaleLabel}>1 — {behaviour.scaleLabels.low}</Text>
-          <Text style={styles.scaleLabel}>
-            5 — {behaviour.scaleLabels.high}
-          </Text>
+                <Text
+                  style={[
+                    styles.scaleDotText,
+                    isActive && styles.scaleDotTextActive,
+                  ]}
+                >
+                  {scaleValue}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
-      ) : null}
-    </View>
-  );
+
+        {behaviour.scaleLabels ? (
+          <View style={styles.scaleLabelRow}>
+            <Text style={styles.scaleLabel}>{behaviour.scaleLabels.low}</Text>
+            <Text style={styles.scaleLabel}>{behaviour.scaleLabels.high}</Text>
+          </View>
+        ) : null}
+
+        <TouchableOpacity
+          style={[
+            styles.modalPrimaryButton,
+            (saving || selected === null) && styles.modalPrimaryButtonDisabled,
+          ]}
+          onPress={() => {
+            if (selected !== null) {
+              onSave(selected);
+            }
+          }}
+          disabled={saving || selected === null}
+          accessibilityRole="button"
+          accessibilityLabel={`Save ${behaviour.label}`}
+        >
+          <Text style={styles.modalPrimaryButtonText}>
+            {saving ? 'Saving…' : 'Save'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   const renderChoiceBody = () => (
     <View style={styles.optionRow}>
@@ -215,7 +287,16 @@ export function CheckinLogModal({
       onRequestClose={onClose}
     >
       <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
+        <Pressable
+          style={styles.modalDismissArea}
+          onPress={onClose}
+          accessibilityRole="button"
+          accessibilityLabel="Dismiss"
+        />
+        <View
+          style={[styles.modalContent, { paddingBottom: sheetPaddingBottom }]}
+        >
+          <View style={styles.modalGrabber} />
           <View style={styles.modalHeader}>
             <View style={styles.modalHeaderText}>
               <Text style={styles.modalTitle}>{behaviour.label}</Text>

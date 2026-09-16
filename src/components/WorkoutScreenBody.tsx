@@ -28,6 +28,7 @@ import {
 import type { RestTimerStartPayload } from './ExerciseCard';
 import { ExerciseCard } from './ExerciseCard';
 import { ConditioningWorkoutBody } from './conditioning/ConditioningWorkoutBody';
+import { YoutubeEmbed } from './exercise/YoutubeEmbed';
 import { ProgramSessionStatusControls } from './ProgramSessionStatusControls';
 
 type WorkoutScreenBodyProps = {
@@ -280,6 +281,14 @@ export function WorkoutScreenBody({
                       </View>
                     ))}
                   </View>
+                  {slot.warmup.videoUrl ? (
+                    <View style={styles.warmupVideo}>
+                      <YoutubeEmbed
+                        youtubeId={slot.warmup.videoUrl}
+                        accessibilityLabel={`Warm-up video for ${slot.warmup.title ?? 'Warm-Up'}`}
+                      />
+                    </View>
+                  ) : null}
                 </View>
               );
             } else {

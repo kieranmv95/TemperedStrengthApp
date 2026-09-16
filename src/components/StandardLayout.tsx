@@ -239,6 +239,7 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
           contentContainerStyle={[
             styles.scrollContent,
             edgeToEdgeBody ? styles.edgeToEdgeBody : null,
+            { paddingBottom: insets.bottom + Spacing.section },
           ]}
         >
           {body ? <StandardLayoutBody>{body}</StandardLayoutBody> : null}

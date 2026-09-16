@@ -25,7 +25,10 @@ import { deriveDosesForDate } from '@/src/utils/storage/checkin';
 describe('checkin catalogue', () => {
   it('uses bundled catalogue with contractual version and week start', () => {
     const bundled = getBundledCatalogue();
-    expect(bundled.catalogueVersion).toBe(1);
+    expect(bundled.catalogueVersion).toBe(2);
+    expect(
+      bundled.behaviours.some((b) => b.id === 'recovery_activity')
+    ).toBe(true);
     expect(bundled.weekStartsOn).toBe(1);
     expect(bundled.behaviours.length).toBeGreaterThan(50);
     expect(bundled.behaviours.some((b) => b.id === 'strength_session')).toBe(

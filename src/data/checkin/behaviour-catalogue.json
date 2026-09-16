@@ -1,6 +1,6 @@
 {
-  "catalogueVersion": 1,
-  "updatedAt": "2026-09-14",
+  "catalogueVersion": 2,
+  "updatedAt": "2026-09-16",
   "weekStartsOn": 1,
   "categories": [
     { "id": "training", "label": "Training", "sortOrder": 10, "sensitive": false },
@@ -435,6 +435,19 @@
       "autofillable": false,
       "sensitive": false,
       "sortOrder": 110,
+      "deprecated": false
+    },
+    {
+      "id": "recovery_activity",
+      "category": "sleep_recovery",
+      "label": "Perform recovery activity",
+      "description": "Any recovery work — stretch, foam roll, walk, or rest protocol.",
+      "responseType": "boolean",
+      "goalable": true,
+      "goalDirection": "at_least",
+      "autofillable": false,
+      "sensitive": false,
+      "sortOrder": 120,
       "deprecated": false
     },
 
