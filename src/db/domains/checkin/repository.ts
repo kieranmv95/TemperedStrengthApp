@@ -12,10 +12,7 @@ import type {
   RemoteSupplementRow,
   RemoteTrackedBehaviourRow,
 } from './types';
-import {
-  CHECKIN_SETTINGS_LOCAL_ID,
-  settingsRowToApp,
-} from './types';
+import { CHECKIN_SETTINGS_LOCAL_ID, settingsRowToApp } from './types';
 
 type LwwLocalRow = {
   updated_at: string;
@@ -185,7 +182,9 @@ function mapSupplementRow(row: SqliteSupplementRow): LocalSupplementRow {
   };
 }
 
-function mapSupplementLogRow(row: SqliteSupplementLogRow): LocalSupplementLogRow {
+function mapSupplementLogRow(
+  row: SqliteSupplementLogRow
+): LocalSupplementLogRow {
   return {
     id: row.id,
     local_date: row.local_date,
@@ -207,9 +206,7 @@ function remoteBehaviourEntryValueToStorage(
 
 // --- Settings ---
 
-export async function getLocalCheckinSettings(): Promise<
-  LocalCheckinSettingsRow | null
-> {
+export async function getLocalCheckinSettings(): Promise<LocalCheckinSettingsRow | null> {
   const row = await getDatabase().getFirstAsync<SqliteCheckinSettingsRow>(
     `SELECT ${CHECKIN_SETTINGS_COLUMNS}
      FROM checkin_settings
@@ -382,9 +379,7 @@ export async function applyRemoteTrackedBehaviour(
   remote: RemoteTrackedBehaviourRow
 ): Promise<void> {
   const db = getDatabase();
-  const byKey = await db.getFirstAsync<
-    LwwLocalRow & { id: string }
-  >(
+  const byKey = await db.getFirstAsync<LwwLocalRow & { id: string }>(
     `SELECT id, updated_at, dirty
      FROM checkin_tracked_behaviours
      WHERE behaviour_id = ?`,
@@ -685,19 +680,48 @@ export async function upsertLocalSupplement(
   );
 }
 
+/** Tombstone a supplement and scrub identifying fields so they leave the backup. */
 export async function softDeleteSupplement(
   id: string,
   deletedAt: string
 ): Promise<boolean> {
   const result = await getDatabase().runAsync(
     `UPDATE checkin_supplements
-     SET deleted_at = ?, updated_at = ?, status = 'archived', dirty = 1
+     SET name = '',
+         brand = NULL,
+         notes = NULL,
+         reminders_enabled = 0,
+         schedule = ?,
+         status = 'archived',
+         deleted_at = ?,
+         updated_at = ?,
+         dirty = 1
      WHERE id = ? AND deleted_at IS NULL`,
+    JSON.stringify({
+      type: 'as_needed',
+      times: [],
+      startDate: '1970-01-01',
+    }),
     deletedAt,
     deletedAt,
     id
   );
   return result.changes > 0;
+}
+
+export async function softDeleteSupplementLogsForSupplement(
+  supplementId: string,
+  deletedAt: string
+): Promise<number> {
+  const result = await getDatabase().runAsync(
+    `UPDATE checkin_supplement_logs
+     SET deleted_at = ?, updated_at = ?, dirty = 1
+     WHERE supplement_id = ? AND deleted_at IS NULL`,
+    deletedAt,
+    deletedAt,
+    supplementId
+  );
+  return result.changes;
 }
 
 export async function applyRemoteSupplement(
@@ -898,9 +922,7 @@ export async function applyRemoteSupplementLog(
   });
 }
 
-export async function markSupplementLogRowsClean(
-  ids: string[]
-): Promise<void> {
+export async function markSupplementLogRowsClean(ids: string[]): Promise<void> {
   if (ids.length === 0) {
     return;
   }

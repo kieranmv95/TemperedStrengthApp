@@ -30,6 +30,8 @@ import {
   listActiveSupplementLogsInRange,
   listActiveSupplements,
   listActiveTrackedBehaviours,
+  softDeleteSupplement,
+  softDeleteSupplementLogsForSupplement,
   softDeleteTrackedBehaviour,
   upsertLocalBehaviourEntry,
   upsertLocalCheckinSettings,
@@ -332,6 +334,25 @@ export async function setSupplementStatus(
   });
 }
 
+/** Permanently hide a supplement and its dose history, including from backup. */
+export async function deleteSupplement(id: string): Promise<boolean> {
+  const existing = await getSupplementById(id);
+  if (!existing || existing.deleted_at) {
+    return false;
+  }
+  const now = new Date().toISOString();
+  const deleted = await softDeleteSupplement(id, now);
+  if (!deleted) {
+    return false;
+  }
+  await softDeleteSupplementLogsForSupplement(id, now);
+  const settings = await getSettingsFromRepo();
+  if (settings.editableSupplementId === id) {
+    await updateCheckinSettings({ editableSupplementId: null });
+  }
+  return true;
+}
+
 export async function getSupplementLogsForDate(
   date: string
 ): Promise<SupplementLog[]> {
@@ -415,9 +436,10 @@ export function deriveDosesForDate(input: {
       });
     }
   }
-  return doses.sort((a, b) =>
-    a.scheduledTime.localeCompare(b.scheduledTime) ||
-    a.name.localeCompare(b.name)
+  return doses.sort(
+    (a, b) =>
+      a.scheduledTime.localeCompare(b.scheduledTime) ||
+      a.name.localeCompare(b.name)
   );
 }
 

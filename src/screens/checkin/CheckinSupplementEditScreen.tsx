@@ -31,6 +31,7 @@ import {
   canAddActiveSupplement,
 } from '@/src/utils/checkin/caps';
 import {
+  deleteSupplement,
   getSupplement,
   getSupplements,
   upsertSupplement,
@@ -44,6 +45,7 @@ import { router } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Switch,
   Text,
   TextInput,
@@ -97,6 +99,7 @@ export function CheckinSupplementEditScreen({
 
   const [loading, setLoading] = useState(isEditing);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showCapUpsell, setShowCapUpsell] = useState(false);
 
@@ -300,6 +303,38 @@ export function CheckinSupplementEditScreen({
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    setError(null);
+    try {
+      await deleteSupplement(id);
+      void rebuildSupplementReminders({ isPro });
+      router.back();
+    } catch (deleteError) {
+      console.error('Error deleting supplement:', deleteError);
+      setError('Could not delete that supplement. Try again.');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const handleDeletePress = () => {
+    Alert.alert(
+      'Delete this supplement?',
+      'This removes it and its dose history from this device and your backup. It cannot be undone. Archive it instead if you only want to stop tracking it.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            void handleDelete();
+          },
+        },
+      ]
+    );
   };
 
   const renderSeedPicker = () => {
@@ -707,6 +742,7 @@ export function CheckinSupplementEditScreen({
               </View>
               <Text style={styles.fieldHint}>
                 Paused and archived supplements stop producing daily doses.
+                Archive keeps them in your list. Delete removes them completely.
               </Text>
             </View>
 
@@ -726,10 +762,10 @@ export function CheckinSupplementEditScreen({
             <TouchableOpacity
               style={[
                 styles.primaryButton,
-                saving && styles.primaryButtonDisabled,
+                (saving || deleting) && styles.primaryButtonDisabled,
               ]}
               onPress={() => void handleSave()}
-              disabled={saving}
+              disabled={saving || deleting}
               accessibilityRole="button"
               accessibilityLabel="Save supplement"
             >
@@ -737,6 +773,30 @@ export function CheckinSupplementEditScreen({
                 {saving ? 'Saving…' : 'Save supplement'}
               </Text>
             </TouchableOpacity>
+
+            {isEditing ? (
+              <View style={styles.fieldGroup}>
+                <TouchableOpacity
+                  style={[
+                    styles.destructiveButton,
+                    (saving || deleting) && styles.primaryButtonDisabled,
+                  ]}
+                  onPress={handleDeletePress}
+                  disabled={saving || deleting}
+                  accessibilityRole="button"
+                  accessibilityLabel="Delete supplement"
+                >
+                  <Text style={styles.destructiveButtonText}>
+                    {deleting ? 'Deleting…' : 'Delete supplement'}
+                  </Text>
+                </TouchableOpacity>
+                <Text style={styles.fieldHint}>
+                  Permanently removes this supplement and its dose history. Use
+                  this for anything you do not want kept on this device or in
+                  backup.
+                </Text>
+              </View>
+            ) : null}
 
             <IosKeyboardDoneAccessory />
           </View>

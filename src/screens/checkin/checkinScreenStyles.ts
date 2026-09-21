@@ -167,6 +167,21 @@ export const checkinScreenStyles = StyleSheet.create({
     fontSize: FontSize.lg,
     fontWeight: '700',
   },
+  destructiveButton: {
+    backgroundColor: Colors.destructiveWashFill,
+    borderRadius: BorderRadius.pill,
+    paddingVertical: Spacing.xxl,
+    paddingHorizontal: Spacing.section,
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    borderWidth: 1,
+    borderColor: Colors.destructive,
+  },
+  destructiveButtonText: {
+    color: Colors.destructive,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+  },
 
   slotsRow: {
     flexDirection: 'row',
