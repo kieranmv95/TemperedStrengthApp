@@ -21,7 +21,7 @@ create policy behaviour_catalogue_public_read
 -- One row per user.
 create table if not exists public.checkin_settings (
   user_id uuid primary key references auth.users (id) on delete cascade,
-  womens_health_visible boolean not null default false,
+  womens_health_visible boolean not null default true,
   health_sync_opt_in boolean not null default false,
   lapse_pending boolean not null default false,
   editable_behaviour_ids jsonb,

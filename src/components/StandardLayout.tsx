@@ -44,6 +44,8 @@ type StandardLayoutProps = {
   /** Drop body horizontal padding so nested rows can scroll edge-to-edge. */
   edgeToEdgeBody?: boolean;
   onBackPress?: () => void;
+  /** Trailing controls in the title row, beside the back button and title. */
+  headerActions?: React.ReactNode;
   /** Show filter bar row (Glossary + filterBarButtons) without expandable advanced filters. */
   filterBarOnly?: boolean;
   /** Extra pills in the filter bar row (e.g. Sort by on Workouts). */
@@ -65,6 +67,7 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
   disableScroll = false,
   edgeToEdgeBody = false,
   onBackPress,
+  headerActions,
   filterBarOnly = false,
   filterBarButtons,
   filterBarBelowButtons,
@@ -170,6 +173,9 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
           >
             {subtitle}
           </Text>
+        ) : null}
+        {headerActions ? (
+          <View style={styles.headerActions}>{headerActions}</View>
         ) : null}
         {hasFilters ? (
           <View style={styles.filtersContainer}>
@@ -297,6 +303,13 @@ const styles = StyleSheet.create({
   titleInRow: {
     flex: 1,
     minWidth: 0,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    marginTop: Spacing.lg,
   },
   subtitleWithBack: {
     marginTop: Spacing.xs,

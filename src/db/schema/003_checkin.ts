@@ -9,7 +9,7 @@ export const migration003Checkin: LocalSchemaMigration = {
     await db.execAsync(`
       CREATE TABLE IF NOT EXISTS checkin_settings (
         id TEXT PRIMARY KEY NOT NULL,
-        womens_health_visible INTEGER NOT NULL DEFAULT 0,
+        womens_health_visible INTEGER NOT NULL DEFAULT 1,
         health_sync_opt_in INTEGER NOT NULL DEFAULT 0,
         lapse_pending INTEGER NOT NULL DEFAULT 0,
         editable_behaviour_ids TEXT,

@@ -46,25 +46,20 @@ export const checkinScreenStyles = StyleSheet.create({
     color: Colors.textOnAccent,
   },
 
-  headerLinkRow: {
-    flexDirection: 'row',
-    gap: Spacing.md,
-  },
-  headerLink: {
-    flex: 1,
+  headerAction: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     gap: Spacing.sm,
-    paddingVertical: Spacing.xl,
-    borderRadius: BorderRadius.xxl,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.pill,
     backgroundColor: Colors.backgroundCard,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,
   },
-  headerLinkText: {
+  headerActionText: {
     color: Colors.textPrimary,
-    fontSize: FontSize.lg,
+    fontSize: FontSize.base,
     fontWeight: '700',
   },
 
@@ -338,6 +333,14 @@ export const checkinScreenStyles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: Spacing.md,
+  },
+  chipScroll: {
+    marginHorizontal: -Spacing.xxl,
+  },
+  chipScrollContent: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+    paddingHorizontal: Spacing.xxl,
   },
   chip: {
     paddingHorizontal: Spacing.xl,

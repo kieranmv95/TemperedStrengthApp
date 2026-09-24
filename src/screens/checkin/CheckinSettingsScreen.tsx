@@ -28,7 +28,13 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 export function CheckinSettingsScreen() {
   const { isPro, isLoading: subscriptionLoading } = useSubscription();
@@ -165,11 +171,6 @@ export function CheckinSettingsScreen() {
               <Text style={styles.trackedRowTitle}>
                 {behaviourLabel(item.behaviourId)}
               </Text>
-              {item.sensitive ? (
-                <Text style={styles.trackedRowMeta}>
-                  Women’s health · stays on this device unless you opt in
-                </Text>
-              ) : null}
             </View>
             <TouchableOpacity
               style={[
@@ -306,7 +307,12 @@ export function CheckinSettingsScreen() {
 
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Browse</Text>
-              <View style={styles.chipRow}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={styles.chipScroll}
+                contentContainerStyle={styles.chipScrollContent}
+              >
                 {categories.map((category) => (
                   <Pill
                     key={category.id}
@@ -315,7 +321,7 @@ export function CheckinSettingsScreen() {
                     onPress={() => setActiveCategory(category.id)}
                   />
                 ))}
-              </View>
+              </ScrollView>
               {renderCategoryBehaviours()}
             </View>
           </View>

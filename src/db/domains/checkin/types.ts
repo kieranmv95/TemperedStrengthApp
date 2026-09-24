@@ -148,7 +148,7 @@ export function settingsRowToApp(
 ): CheckinSettings {
   if (!row) {
     return {
-      womensHealthVisible: false,
+      womensHealthVisible: true,
       healthSyncOptIn: false,
       lapsePending: false,
       editableBehaviourIds: null,

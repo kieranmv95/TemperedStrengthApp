@@ -366,27 +366,27 @@ export function CheckinScreen() {
     [loadHistoryDate]
   );
 
-  const renderHeaderLinks = () => (
-    <View style={styles.headerLinkRow}>
+  const renderHeaderActions = () => (
+    <>
       <TouchableOpacity
-        style={styles.headerLink}
+        style={styles.headerAction}
         onPress={() => router.push('/checkin/settings')}
         accessibilityRole="button"
-        accessibilityLabel="Choose behaviours"
+        accessibilityLabel="Add behaviours"
       >
-        <Ionicons name="options-outline" size={18} color={Colors.accent} />
-        <Text style={styles.headerLinkText}>Behaviours</Text>
+        <Ionicons name="add" size={16} color={Colors.accent} />
+        <Text style={styles.headerActionText}>Behaviours</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={styles.headerLink}
+        style={styles.headerAction}
         onPress={() => router.push('/checkin/supplements')}
         accessibilityRole="button"
-        accessibilityLabel="Manage supplements"
+        accessibilityLabel="Add supplements"
       >
-        <Ionicons name="flask-outline" size={18} color={Colors.accent} />
-        <Text style={styles.headerLinkText}>Supplements</Text>
+        <Ionicons name="add" size={16} color={Colors.accent} />
+        <Text style={styles.headerActionText}>Supplements</Text>
       </TouchableOpacity>
-    </View>
+    </>
   );
 
   const renderSegments = () => (
@@ -579,10 +579,10 @@ export function CheckinScreen() {
       title="Daily check-in"
       subtitle="Tick off the habits that keep you consistent."
       onBackPress={() => router.back()}
+      headerActions={renderHeaderActions()}
     >
       <StandardLayout.Body>
         <View style={styles.page}>
-          {renderHeaderLinks()}
           {renderSegments()}
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
           {loading ? (

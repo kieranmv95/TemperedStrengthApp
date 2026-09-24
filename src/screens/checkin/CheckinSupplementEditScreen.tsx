@@ -46,6 +46,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  ScrollView,
   Switch,
   Text,
   TextInput,
@@ -526,7 +527,13 @@ export function CheckinSupplementEditScreen({
 
             <View style={styles.fieldGroup}>
               <Text style={styles.fieldLabel}>Form</Text>
-              <View style={styles.chipRow}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+                style={styles.chipScroll}
+                contentContainerStyle={styles.chipScrollContent}
+              >
                 {FORMS.map((option) => {
                   const isActive = form === option;
                   return (
@@ -549,7 +556,7 @@ export function CheckinSupplementEditScreen({
                     </TouchableOpacity>
                   );
                 })}
-              </View>
+              </ScrollView>
             </View>
 
             <View style={styles.fieldGroup}>
@@ -563,7 +570,13 @@ export function CheckinSupplementEditScreen({
                 placeholderTextColor={Colors.textPlaceholder}
                 inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
               />
-              <View style={styles.chipRow}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+                style={styles.chipScroll}
+                contentContainerStyle={styles.chipScrollContent}
+              >
                 {DOSE_UNITS.map((option) => {
                   const isActive = doseUnit === option;
                   return (
@@ -586,12 +599,18 @@ export function CheckinSupplementEditScreen({
                     </TouchableOpacity>
                   );
                 })}
-              </View>
+              </ScrollView>
             </View>
 
             <View style={styles.fieldGroup}>
               <Text style={styles.fieldLabel}>Schedule</Text>
-              <View style={styles.chipRow}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+                style={styles.chipScroll}
+                contentContainerStyle={styles.chipScrollContent}
+              >
                 {SCHEDULE_TYPES.map((option) => {
                   const isActive = scheduleType === option;
                   return (
@@ -614,7 +633,7 @@ export function CheckinSupplementEditScreen({
                     </TouchableOpacity>
                   );
                 })}
-              </View>
+              </ScrollView>
             </View>
 
             {renderScheduleDetails()}

@@ -27,7 +27,7 @@ export default function AccountGeneralSettingsScreen() {
   const [weightUnit, setWeightUnitState] = useState<WeightUnit>('kg');
   const [weightUnitLoading, setWeightUnitLoading] = useState<boolean>(true);
   const [womensHealthVisible, setWomensHealthVisible] =
-    useState<boolean>(false);
+    useState<boolean>(true);
   const [healthSyncOptIn, setHealthSyncOptIn] = useState<boolean>(false);
   const [checkinSettingsLoading, setCheckinSettingsLoading] =
     useState<boolean>(true);
