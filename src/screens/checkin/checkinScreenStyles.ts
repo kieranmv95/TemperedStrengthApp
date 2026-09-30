@@ -1,0 +1,458 @@
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { StyleSheet } from 'react-native';
+
+/** Shared styles for every screen under `app/checkin`. */
+export const checkinScreenStyles = StyleSheet.create({
+  page: {
+    gap: Spacing.xxl,
+  },
+  loadingBox: {
+    paddingVertical: Spacing.section,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorText: {
+    backgroundColor: Colors.destructiveWashFill,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    padding: Spacing.xl,
+    color: Colors.destructive,
+    fontSize: FontSize.md,
+  },
+
+  segmentRow: {
+    flexDirection: 'row',
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.pill,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    overflow: 'hidden',
+  },
+  segmentOption: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: Spacing.xl,
+  },
+  segmentOptionActive: {
+    backgroundColor: Colors.accent,
+  },
+  segmentText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.xl,
+    fontWeight: '700',
+  },
+  segmentTextActive: {
+    color: Colors.textOnAccent,
+  },
+
+  headerAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.pill,
+    backgroundColor: Colors.backgroundCard,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+  },
+  headerActionText: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.base,
+    fontWeight: '700',
+  },
+
+  statsRow: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  statCard: {
+    flex: 1,
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    paddingVertical: Spacing.xl,
+    paddingHorizontal: Spacing.md,
+    alignItems: 'center',
+    gap: Spacing.xxs,
+  },
+  statValue: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayLg,
+    fontWeight: '800',
+  },
+  statLabel: {
+    color: Colors.textMuted,
+    fontSize: FontSize.sm,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+
+  section: {
+    gap: Spacing.md,
+  },
+  sectionTitle: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+    paddingHorizontal: Spacing.sm,
+  },
+  sectionNote: {
+    color: Colors.textPlaceholder,
+    fontSize: FontSize.md,
+    lineHeight: 17,
+    paddingHorizontal: Spacing.sm,
+  },
+  list: {
+    gap: Spacing.md,
+  },
+
+  emptyState: {
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    padding: Spacing.section,
+    gap: Spacing.xl,
+    alignItems: 'center',
+  },
+  emptyTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displaySm,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  emptyBody: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    lineHeight: 20,
+    textAlign: 'center',
+  },
+
+  primaryButton: {
+    backgroundColor: Colors.accent,
+    borderRadius: BorderRadius.pill,
+    paddingVertical: Spacing.xxl,
+    paddingHorizontal: Spacing.section,
+    alignItems: 'center',
+    alignSelf: 'stretch',
+  },
+  primaryButtonDisabled: {
+    opacity: 0.5,
+  },
+  primaryButtonText: {
+    color: Colors.textOnAccent,
+    fontSize: FontSize.displaySm,
+    fontWeight: '700',
+  },
+  secondaryButton: {
+    backgroundColor: Colors.backgroundElevated,
+    borderRadius: BorderRadius.pill,
+    paddingVertical: Spacing.xxl,
+    paddingHorizontal: Spacing.section,
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    borderWidth: 1,
+    borderColor: Colors.backgroundBorder,
+  },
+  secondaryButtonText: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+  },
+  destructiveButton: {
+    backgroundColor: Colors.destructiveWashFill,
+    borderRadius: BorderRadius.pill,
+    paddingVertical: Spacing.xxl,
+    paddingHorizontal: Spacing.section,
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    borderWidth: 1,
+    borderColor: Colors.destructive,
+  },
+  destructiveButtonText: {
+    color: Colors.destructive,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+  },
+
+  slotsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.md,
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    paddingVertical: Spacing.xl,
+    paddingHorizontal: Spacing.xxl,
+  },
+  slotsLabel: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.lg,
+    fontWeight: '600',
+  },
+  slotsValue: {
+    color: Colors.accent,
+    fontSize: FontSize.displaySm,
+    fontWeight: '800',
+  },
+
+  trackedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.xxl,
+  },
+  trackedRowTextBlock: {
+    flex: 1,
+    minWidth: 0,
+    gap: Spacing.xxs,
+  },
+  trackedRowTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xl,
+    fontWeight: '700',
+  },
+  trackedRowMeta: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+  },
+  reorderButton: {
+    width: 36,
+    height: 36,
+    borderRadius: BorderRadius.lg,
+    backgroundColor: Colors.backgroundScreen,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  reorderButtonDisabled: {
+    opacity: 0.35,
+  },
+
+  categoryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.md,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.sm,
+  },
+  categoryTitle: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.displaySm,
+    fontWeight: '700',
+  },
+  categoryCount: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '600',
+  },
+
+  supplementCard: {
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    padding: Spacing.xxl,
+    gap: Spacing.sm,
+  },
+  supplementTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  supplementName: {
+    flex: 1,
+    minWidth: 0,
+    color: Colors.textPrimary,
+    fontSize: FontSize.displaySm,
+    fontWeight: '700',
+  },
+  supplementMeta: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.lg,
+  },
+  supplementAdherence: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '600',
+  },
+  disclaimer: {
+    color: Colors.textPlaceholder,
+    fontSize: FontSize.md,
+    lineHeight: 17,
+  },
+
+  fieldGroup: {
+    gap: Spacing.md,
+  },
+  fieldLabel: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+  },
+  fieldHint: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    lineHeight: 17,
+  },
+  textInput: {
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.lg,
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxl,
+  },
+  textInputMultiline: {
+    minHeight: 88,
+    textAlignVertical: 'top',
+  },
+  inlineFieldRow: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  inlineField: {
+    flex: 1,
+    gap: Spacing.md,
+  },
+  chipRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.md,
+  },
+  chipScroll: {
+    marginHorizontal: -Spacing.xxl,
+  },
+  chipScrollContent: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+    paddingHorizontal: Spacing.xxl,
+  },
+  chip: {
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.lg,
+    borderRadius: BorderRadius.pill,
+    backgroundColor: Colors.backgroundCard,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+  },
+  chipActive: {
+    backgroundColor: Colors.accentWashFill,
+    borderColor: Colors.accentWashBorder,
+  },
+  chipText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.lg,
+    fontWeight: '600',
+  },
+  chipTextActive: {
+    color: Colors.accent,
+  },
+  seedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.md,
+    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.xl,
+    borderRadius: BorderRadius.xl,
+    backgroundColor: Colors.backgroundCard,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+  },
+  seedName: {
+    flex: 1,
+    minWidth: 0,
+    color: Colors.textPrimary,
+    fontSize: FontSize.lg,
+    fontWeight: '600',
+  },
+  seedDose: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
+    fontWeight: '600',
+  },
+  timeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.xl,
+    borderRadius: BorderRadius.xl,
+    backgroundColor: Colors.backgroundCard,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+  },
+  timeText: {
+    flex: 1,
+    color: Colors.textPrimary,
+    fontSize: FontSize.xxl,
+    fontWeight: '700',
+  },
+  addTimeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  addTimeInput: {
+    flex: 1,
+  },
+  numberStepperRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xl,
+  },
+  numberStepperButton: {
+    width: 44,
+    height: 44,
+    borderRadius: BorderRadius.pill,
+    backgroundColor: Colors.backgroundCard,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  numberStepperValue: {
+    minWidth: 56,
+    textAlign: 'center',
+    color: Colors.textPrimary,
+    fontSize: FontSize.displayMd,
+    fontWeight: '700',
+  },
+  switchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.xl,
+    backgroundColor: Colors.backgroundCard,
+    borderRadius: BorderRadius.xxl,
+    borderWidth: 1,
+    borderColor: Colors.backgroundElevated,
+    paddingVertical: Spacing.xl,
+    paddingHorizontal: Spacing.xxl,
+  },
+  switchRowTextBlock: {
+    flex: 1,
+    minWidth: 0,
+    gap: Spacing.xxs,
+  },
+  selectionCounter: {
+    color: Colors.accent,
+    fontSize: FontSize.lg,
+    fontWeight: '700',
+  },
+});

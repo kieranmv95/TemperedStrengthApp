@@ -24,6 +24,12 @@ import {
   pushDirtyWorkoutLogs,
   WORKOUT_LOG_SETS_TABLE,
 } from './domains/workoutLogs';
+import {
+  CHECKIN_BEHAVIOUR_ENTRIES_TABLE,
+  CHECKIN_SETTINGS_TABLE,
+  pullCheckinChanges,
+  pushDirtyCheckin,
+} from './domains/checkin';
 import { shouldSync, SYNCED_KEYS } from './syncedKeys';
 
 const EPOCH = '1970-01-01T00:00:00.000Z';
@@ -273,6 +279,7 @@ export async function syncNow(userId: string): Promise<void> {
       () => ensureWorkoutLogsCloudMigrated(userId),
       () => pushDirtyPersonalBests(userId),
       () => pushDirtyWorkoutLogs(userId),
+      () => pushDirtyCheckin(userId),
     ]) {
       try {
         await step();
@@ -288,6 +295,7 @@ export async function syncNow(userId: string): Promise<void> {
     for (const step of [
       () => pullPersonalBestChanges(userId),
       () => pullWorkoutLogChanges(userId),
+      () => pullCheckinChanges(userId),
     ]) {
       try {
         await step();
@@ -339,7 +347,27 @@ export async function remoteDataExists(userId: string): Promise<boolean> {
     .eq('user_id', userId)
     .limit(1);
   if (wlError) throw wlError;
-  return (wlRows?.length ?? 0) > 0;
+  if ((wlRows?.length ?? 0) > 0) {
+    return true;
+  }
+
+  const { data: checkinRows, error: checkinError } = await client
+    .from(CHECKIN_SETTINGS_TABLE)
+    .select('user_id')
+    .eq('user_id', userId)
+    .limit(1);
+  if (checkinError) throw checkinError;
+  if ((checkinRows?.length ?? 0) > 0) {
+    return true;
+  }
+
+  const { data: checkinEntryRows, error: checkinEntryError } = await client
+    .from(CHECKIN_BEHAVIOUR_ENTRIES_TABLE)
+    .select('id')
+    .eq('user_id', userId)
+    .limit(1);
+  if (checkinEntryError) throw checkinEntryError;
+  return (checkinEntryRows?.length ?? 0) > 0;
 }
 
 export async function migrateLocalDataToSupabase(

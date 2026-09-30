@@ -1,10 +1,13 @@
 import { SmallChevron } from '@/src/components/ds/SmallChevron';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
+  getCheckinSettings,
   getWeightUnit,
   setWeightUnit,
+  updateCheckinSettings,
   type WeightUnit,
 } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,7 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import {
   AppSafeAreaView,
   AppScrollView,
@@ -20,8 +23,14 @@ import {
 
 export default function AccountGeneralSettingsScreen() {
   const posthog = usePostHog();
+  const { user } = useSyncManager();
   const [weightUnit, setWeightUnitState] = useState<WeightUnit>('kg');
   const [weightUnitLoading, setWeightUnitLoading] = useState<boolean>(true);
+  const [womensHealthVisible, setWomensHealthVisible] =
+    useState<boolean>(true);
+  const [healthSyncOptIn, setHealthSyncOptIn] = useState<boolean>(false);
+  const [checkinSettingsLoading, setCheckinSettingsLoading] =
+    useState<boolean>(true);
 
   const loadWeightUnit = async () => {
     try {
@@ -32,6 +41,46 @@ export default function AccountGeneralSettingsScreen() {
       setWeightUnitState('kg');
     } finally {
       setWeightUnitLoading(false);
+    }
+  };
+
+  const loadCheckinSettings = async () => {
+    try {
+      const settings = await getCheckinSettings();
+      setWomensHealthVisible(settings.womensHealthVisible);
+      setHealthSyncOptIn(settings.healthSyncOptIn);
+    } catch (error) {
+      console.error('Error loading check-in settings:', error);
+    } finally {
+      setCheckinSettingsLoading(false);
+    }
+  };
+
+  const persistWomensHealthVisible = async (enabled: boolean) => {
+    setWomensHealthVisible(enabled);
+    try {
+      await updateCheckinSettings({ womensHealthVisible: enabled });
+      posthog.capture(posthogEventsNames.app.settingChanged, {
+        setting_name: 'checkin_womens_health_visible',
+        new_value: enabled,
+      });
+    } catch (error) {
+      console.error('Error saving women’s health visibility:', error);
+      setWomensHealthVisible(!enabled);
+    }
+  };
+
+  const persistHealthSyncOptIn = async (enabled: boolean) => {
+    setHealthSyncOptIn(enabled);
+    try {
+      await updateCheckinSettings({ healthSyncOptIn: enabled });
+      posthog.capture(posthogEventsNames.app.settingChanged, {
+        setting_name: 'checkin_health_sync_opt_in',
+        new_value: enabled,
+      });
+    } catch (error) {
+      console.error('Error saving women’s health sync opt-in:', error);
+      setHealthSyncOptIn(!enabled);
     }
   };
 
@@ -53,6 +102,7 @@ export default function AccountGeneralSettingsScreen() {
   useFocusEffect(
     React.useCallback(() => {
       loadWeightUnit();
+      void loadCheckinSettings();
     }, [])
   );
 
@@ -161,6 +211,56 @@ export default function AccountGeneralSettingsScreen() {
             </View>
             <SmallChevron />
           </TouchableOpacity>
+        </View>
+
+        <View style={styles.settingsSection}>
+          <Text style={styles.settingsSectionTitle}>Daily check-in</Text>
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Women’s health module</Text>
+              <Text style={styles.settingDescription}>
+                Show cycle, symptom, and contraception behaviours in your
+                check-in.
+              </Text>
+            </View>
+            <Switch
+              value={womensHealthVisible}
+              onValueChange={(enabled) => {
+                void persistWomensHealthVisible(enabled);
+              }}
+              disabled={checkinSettingsLoading}
+              accessibilityLabel="Women’s health module"
+            />
+          </View>
+
+          <View
+            style={[styles.settingItem, !user && styles.settingItemDisabled]}
+          >
+            <View style={styles.settingContent}>
+              <Text
+                style={[
+                  styles.settingTitle,
+                  !user && styles.settingTitleDisabled,
+                ]}
+              >
+                Sync women’s health
+              </Text>
+              <Text style={styles.settingDescription}>
+                {user
+                  ? 'Back up women’s health entries to your account. This is a separate choice from the general account backup — leave it off to keep them on this device only.'
+                  : 'Create an account first. Women’s health entries are never backed up without this separate opt-in.'}
+              </Text>
+            </View>
+            <Switch
+              value={healthSyncOptIn}
+              onValueChange={(enabled) => {
+                void persistHealthSyncOptIn(enabled);
+              }}
+              disabled={checkinSettingsLoading || !user}
+              accessibilityLabel="Sync women’s health"
+            />
+          </View>
         </View>
       </AppScrollView>
     </AppSafeAreaView>

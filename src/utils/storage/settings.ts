@@ -6,6 +6,7 @@ import {
   AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY,
   AUTO_REST_TIMERS_ENABLED_KEY,
   DEV_PRO_OVERRIDE_ENABLED_KEY,
+  LAST_KNOWN_PRO_KEY,
   ONBOARDED_KEY,
   ONBOARDING_PROFILE_KEY,
   PROGRAM_COOLDOWN_MODULE_ENABLED_KEY,
@@ -354,5 +355,25 @@ export const setProgramCooldownModuleEnabled = async (
   } catch (error) {
     console.error('Error setting program cooldown module enabled:', error);
     throw error;
+  }
+};
+
+/** Device-only — never sync. Used so Pro users offline keep access. */
+export const getLastKnownPro = async (): Promise<boolean | null> => {
+  try {
+    const raw = await AsyncStorage.getItem(LAST_KNOWN_PRO_KEY);
+    if (raw === null) return null;
+    return raw === 'true';
+  } catch (error) {
+    console.error('Error getting last known Pro:', error);
+    return null;
+  }
+};
+
+export const setLastKnownPro = async (isPro: boolean): Promise<void> => {
+  try {
+    await AsyncStorage.setItem(LAST_KNOWN_PRO_KEY, isPro ? 'true' : 'false');
+  } catch (error) {
+    console.error('Error setting last known Pro:', error);
   }
 };

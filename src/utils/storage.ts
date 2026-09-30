@@ -12,6 +12,7 @@ export * from './storage/favorites';
 export * from './storage/standaloneLogs';
 export * from './storage/personalBests';
 export * from './storage/trainingMaxes';
+export * from './storage/checkin';
 export {
   runStorageMigrations,
   LATEST_SCHEMA_VERSION,

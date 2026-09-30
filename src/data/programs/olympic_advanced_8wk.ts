@@ -1,15 +1,26 @@
 import type { Exercise, Program, Warmup } from '@/src/types/program';
 
-export const standard_warmup: Warmup = {
+export const snatch_warmup: Warmup = {
   type: 'warmup',
-  title: 'Olympic Performance Warm-Up',
+  title: 'Snatch Warm-Up',
   additionalDescription:
     'A complete warm-up earns the heavy work. 8 weeks of heavy snatching demands properly prepared wrists, shoulders, and ankles - do not cut this short.',
   description: [
     '5-minute cardio of choice (rower or bike preferred). Get the heart rate up, not winded.',
     '90s each: wrist circles, ankle rocks, thoracic spine openers, hip flexor stretch, deep squat hold with prying.',
+  ],
+  videoUrl: 'C0JJX91N-v0',
+};
+
+export const clean_warmup: Warmup = {
+  type: 'warmup',
+  title: 'Clean & Jerk Warm-Up',
+  additionalDescription:
+    'A complete warm-up earns the heavy work. 8 weeks of heavy clean & jerks demands properly prepared wrists, shoulders, and ankles - do not cut this short.',
+  description: [
+    '5-minute cardio of choice (rower or bike preferred). Get the heart rate up, not winded.',
+    '90s each: wrist circles, ankle rocks, thoracic spine openers, hip flexor stretch, deep squat hold with prying.',
     '3 sets of 5 muscle cleans + 5 front squats + 5 overhead squats with the empty bar. Deliberate and slow.',
-    "Ramp the day's main lift through 4-5 progressive singles from empty bar to your first working weight.",
   ],
 };
 
@@ -911,7 +922,7 @@ export const olympic_advanced_8wk: Program = {
     // in W1-3, Full in W4-7) → Snatch High Pull → Face Pulls.
     // ─────────────────────────────────────────────
     const day1Exercises = [
-      standard_warmup,
+      snatch_warmup,
       buildExercise(61, overheadSquatLoad(week)),
       buildExercise(60, snatchBalanceLoad(week)),
       buildExercise(day1Snatch.id, day1Snatch.spec),
@@ -933,7 +944,7 @@ export const olympic_advanced_8wk: Program = {
     // DAY 2 - Clean & Jerk + Front Squat
     // ─────────────────────────────────────────────
     const day2Exercises = [
-      standard_warmup,
+      clean_warmup,
       buildExercise(63, day2CleanJerk(week)),
       buildExercise(68, frontSquatLoad(week)),
       buildExercise(69, cleanHighPullLoad(week)),
@@ -971,7 +982,7 @@ export const olympic_advanced_8wk: Program = {
     // ─────────────────────────────────────────────
     const day3Exercises: (Exercise | Warmup)[] = isTestWeek
       ? [
-          standard_warmup,
+          snatch_warmup,
           {
             type: 'exercise' as const,
             id: 57,
@@ -996,7 +1007,7 @@ export const olympic_advanced_8wk: Program = {
           },
         ]
       : ([
-          standard_warmup,
+          snatch_warmup,
           buildExercise(57, day3SnatchLoad(week)),
           buildExercise(63, day3CleanJerkLoad(week)),
           buildExercise(6, bulgarianSplitSquatLoad(week)),

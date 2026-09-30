@@ -34,6 +34,8 @@ export const DEV_PRO_OVERRIDE_ENABLED_KEY = 'dev_pro_override_enabled';
 export const PROMO_PRO_GRANT_KEY = 'promo_pro_grant';
 export const ONBOARDED_KEY = 'onboarded';
 export const ONBOARDING_PROFILE_KEY = 'onboarding_profile';
+/** Device-only cache of last-known Pro entitlement for offline gating. */
+export const LAST_KNOWN_PRO_KEY = 'last_known_pro_v1';
 
 /**
  * Per-device schema version used by the migration runner. This must never sync

@@ -1,4 +1,5 @@
 import { Card, SmallChevron } from '@/src/components/ds';
+import { HomeCheckinCard } from '@/src/components/home/HomeCheckinCard';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
 import { SponsorAdsCarousel } from '@/src/components/home/SponsorAdsCarousel';
@@ -22,6 +23,10 @@ import {
   type StreakSnapshot,
 } from '@/src/services/streakService';
 import type { PersonalBestsStore } from '@/src/types/personalBests';
+import {
+  loadHomeCheckinSummary,
+  type HomeCheckinSummary,
+} from '@/src/utils/homeCheckinSummary';
 import {
   formatHomeProgramSessionMeta,
   loadHomeProgramSummary,
@@ -116,6 +121,8 @@ export default function HomeTabScreen() {
   const [streakSnapshot, setStreakSnapshot] = useState<StreakSnapshot | null>(
     null
   );
+  const [checkinSummary, setCheckinSummary] =
+    useState<HomeCheckinSummary | null>(null);
   const hasCompletedInitialLoad = useRef(false);
 
   const loadHome = useCallback(async () => {
@@ -124,17 +131,19 @@ export default function HomeTabScreen() {
       setLoading(true);
     }
     try {
-      const [profile, summary, store, streak] = await Promise.all([
+      const [profile, summary, store, streak, checkin] = await Promise.all([
         getOnboardingProfile(),
         loadHomeProgramSummary(),
         getPersonalBestsStore(),
         applyDailyStreakCheckIn(),
+        loadHomeCheckinSummary(),
       ]);
       const trimmed = profile?.name?.trim();
       setDisplayName(trimmed && trimmed.length > 0 ? trimmed : null);
       setProgramSummary(summary);
       setPbStore(store);
       setStreakSnapshot(streak);
+      setCheckinSummary(checkin);
     } catch (error) {
       console.error('Error loading home screen data:', error);
       setDisplayName(null);
@@ -143,6 +152,7 @@ export default function HomeTabScreen() {
       setStreakSnapshot(
         buildSnapshot(parseStreakState(null), formatLocalYMD(new Date()))
       );
+      setCheckinSummary(null);
     } finally {
       setLoading(false);
       hasCompletedInitialLoad.current = true;
@@ -418,6 +428,20 @@ export default function HomeTabScreen() {
               </Card>
             )}
           </View>
+
+          {checkinSummary ? (
+            <HomeCheckinCard
+              loggedCount={checkinSummary.loggedCount}
+              totalCount={checkinSummary.totalCount}
+              supplementsDue={checkinSummary.supplementsDue}
+              supplementsTotal={checkinSummary.supplementsTotal}
+              onPress={() =>
+                trackHomeLink('daily_checkin_card', '/checkin', () =>
+                  router.push('/checkin')
+                )
+              }
+            />
+          ) : null}
 
           <HubPromoCard
             icon="barbell-outline"

@@ -2,18 +2,36 @@ export type ToolId =
   | 'one-rep-max'
   | 'one-rep-max-breakdown'
   | 'creatine'
-  | 'water-intake';
+  | 'water-intake'
+  | 'checkin';
+
+/** Not every tool lives under `/tools` — check-in is a full feature area. */
+export type ToolRoute =
+  | '/tools/one-rep-max'
+  | '/tools/one-rep-max-breakdown'
+  | '/tools/creatine'
+  | '/tools/water-intake'
+  | '/checkin';
 
 export type ToolDefinition = {
   id: ToolId;
   title: string;
   pillLabel: string;
   description: string;
-  route: `/tools/${ToolId}`;
+  route: ToolRoute;
   icon: string;
 };
 
 export const TOOLS: ToolDefinition[] = [
+  {
+    id: 'checkin',
+    title: 'Daily Check-in',
+    pillLabel: 'Check-in',
+    description:
+      'Track daily habits and supplements, and see your consistency over time.',
+    route: '/checkin',
+    icon: 'checkbox-outline',
+  },
   {
     id: 'one-rep-max',
     title: 'One Rep Max Estimator',

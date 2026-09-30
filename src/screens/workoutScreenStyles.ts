@@ -217,6 +217,9 @@ export const workoutScreenStyles = StyleSheet.create({
   warmupList: {
     gap: Spacing.md,
   },
+  warmupVideo: {
+    marginTop: Spacing.xl,
+  },
   warmupItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
