@@ -99,6 +99,10 @@ export function useExerciseCardState({
   const [numberOfSets, setNumberOfSets] = useState(defaultNumberOfSets);
   const restTimeSeconds = programExercise?.restTimeSeconds;
 
+  const lowerWeightIsBetter =
+    exerciseId != null &&
+    getExerciseById(exerciseId)?.lowerWeightIsBetter === true;
+
   // Training max drives per-set target weights for `setScheme` lifts (e.g. 5/3/1).
   const [trainingMaxKg, setTrainingMaxKg] = useState<number | null>(null);
 
@@ -363,7 +367,12 @@ export function useExerciseCardState({
         }
         try {
           const current = await getPersonalBestsForExercise(exerciseId);
-          const { isPR, newRecords } = previewPersonalBestLog(current, tier, w);
+          const { isPR, newRecords } = previewPersonalBestLog(
+            current,
+            tier,
+            w,
+            lowerWeightIsBetter
+          );
           if (!isPR || newRecords.length === 0) {
             return;
           }
@@ -379,7 +388,13 @@ export function useExerciseCardState({
         }
       }, 250);
     },
-    [exerciseId, exerciseLoggingType, clearPbDebounce, dayIndex]
+    [
+      exerciseId,
+      exerciseLoggingType,
+      clearPbDebounce,
+      dayIndex,
+      lowerWeightIsBetter,
+    ]
   );
 
   const dismissPbPrompt = useCallback(() => {
@@ -423,9 +438,10 @@ export function useExerciseCardState({
       formatExercisePbChip(
         pbLedger ?? undefined,
         programExercise?.repRange,
-        weightUnit
+        weightUnit,
+        lowerWeightIsBetter
       ),
-    [pbLedger, programExercise?.repRange, weightUnit]
+    [pbLedger, programExercise?.repRange, weightUnit, lowerWeightIsBetter]
   );
 
   /** null = clear; undefined = invalid / incomplete — preserve existing on save. */

@@ -364,9 +364,9 @@ export default function RepMaxHistoryScreen() {
                 New {formatRepMaxLabel(tier)}
               </Text>
               <Text style={localStyles.modalHint}>
-                Every save is added to history. If this is a personal best for
-                this rep max, lower rep maxes update too when the weight beats
-                them.
+                {exercise.lowerWeightIsBetter
+                  ? 'Every save is added to history. If this is a personal best for this rep max, lower rep maxes update too when a lighter assistance beats them.'
+                  : 'Every save is added to history. If this is a personal best for this rep max, lower rep maxes update too when the weight beats them.'}
               </Text>
               <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
               <TextInput

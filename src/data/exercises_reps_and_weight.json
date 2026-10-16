@@ -32,6 +32,7 @@
     "equipment": "Machine",
     "id": 84,
     "logging_type": "reps_and_weight",
+    "lowerWeightIsBetter": true,
     "muscle": "Back",
     "name": "Assisted Pull-up Machine",
     "pattern": "Vertical Pull",
@@ -809,5 +810,14 @@
     "name": "DB Renegade Row",
     "pattern": "Horizontal Pull",
     "youtube_id": "-V2YLzGaQMU"
+  },
+  {
+    "description": "Lie flat with a dumbbell in each hand above your chest, lower them out to the sides in a wide arc with a slight bend in your elbows, then bring them back together.",
+    "equipment": "Dumbbell",
+    "id": 113,
+    "logging_type": "reps_and_weight",
+    "muscle": "Chest",
+    "name": "Dumbbell Flyes",
+    "pattern": "Horizontal Push"
   }
 ]

@@ -54,6 +54,8 @@ export default function ExercisePersonalBestsScreen() {
     return getExerciseById(exerciseId);
   }, [exerciseId]);
 
+  const lowerWeightIsBetter = exercise?.lowerWeightIsBetter === true;
+
   const [pbs, setPbs] = useState<Awaited<
     ReturnType<typeof getPersonalBestsForExercise>
   > | null>(null);
@@ -223,7 +225,11 @@ export default function ExercisePersonalBestsScreen() {
         ) : (
           <View style={localStyles.tierList}>
             {REP_MAX_ORDER.map((tier) => {
-              const best = getCurrentBestForTier(pbs, tier);
+              const best = getCurrentBestForTier(
+                pbs,
+                tier,
+                lowerWeightIsBetter
+              );
               const latest = getLatestEntryForTier(pbs, tier);
               const count = pbs[tier]?.length ?? 0;
               const showLatest =

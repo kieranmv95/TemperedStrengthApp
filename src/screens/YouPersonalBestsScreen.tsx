@@ -77,7 +77,8 @@ export function YouPersonalBestsScreen() {
     ({ item }: { item: Exercise }) => {
       const pbLines = listPersonalBestSummaryLines(
         pbStore?.[item.id] ?? {},
-        weightUnit
+        weightUnit,
+        item.lowerWeightIsBetter === true
       );
       return (
         <Card

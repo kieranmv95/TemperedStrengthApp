@@ -39,16 +39,26 @@ function sortRepMaxAscending(tiers: RepMax[]): RepMax[] {
   );
 }
 
+/** True when `candidate` beats `current` for this exercise's weight direction. */
+export function isBetterWeight(
+  candidate: number,
+  current: number,
+  lowerWeightIsBetter: boolean = false
+): boolean {
+  return lowerWeightIsBetter ? candidate < current : candidate > current;
+}
+
 /**
  * After the primary rep tier is already updated, append the same weight to lower
- * rep tiers where it beats the current max (used when editing a tier max upward).
+ * rep tiers where it beats the current best (used when editing a tier best).
  */
 export function appendCascadeToLowerTiersOnly(
   ledger: ExercisePersonalBestsLedger,
   primaryTier: RepMax,
   weight: number,
   achievedAt: string,
-  createId: () => string = newPbEntryId
+  createId: () => string = newPbEntryId,
+  lowerWeightIsBetter: boolean = false
 ): { updated: ExercisePersonalBestsLedger; appendedTiers: RepMax[] } {
   if (!Number.isFinite(weight) || weight <= 0) {
     return { updated: cloneLedger(ledger), appendedTiers: [] };
@@ -58,8 +68,11 @@ export function appendCascadeToLowerTiersOnly(
   const appendedTiers: RepMax[] = [];
 
   for (const t of tiersStrictlyBelow(primaryTier)) {
-    const tierMax = currentMaxWeight(updated, t);
-    if (tierMax === undefined || weight > tierMax) {
+    const tierBest = currentMaxWeight(updated, t, lowerWeightIsBetter);
+    if (
+      tierBest === undefined ||
+      isBetterWeight(weight, tierBest, lowerWeightIsBetter)
+    ) {
       const row: PersonalBestHistoryEntry = {
         id: createId(),
         weight,
@@ -102,20 +115,27 @@ export function getLatestEntryForTier(
 export function previewPersonalBestLog(
   ledger: ExercisePersonalBestsLedger,
   primaryTier: RepMax,
-  weight: number
+  weight: number,
+  lowerWeightIsBetter: boolean = false
 ): { isPR: boolean; newRecords: RepMax[] } {
   if (!Number.isFinite(weight) || weight <= 0) {
     return { isPR: false, newRecords: [] };
   }
-  const prevPrimary = currentMaxWeight(ledger, primaryTier);
-  const isPR = prevPrimary === undefined || weight > prevPrimary;
+  const prevPrimary = currentMaxWeight(
+    ledger,
+    primaryTier,
+    lowerWeightIsBetter
+  );
+  const isPR =
+    prevPrimary === undefined ||
+    isBetterWeight(weight, prevPrimary, lowerWeightIsBetter);
   if (!isPR) {
     return { isPR: false, newRecords: [] };
   }
   const tiers: RepMax[] = [primaryTier];
   for (const t of tiersStrictlyBelow(primaryTier)) {
-    const m = currentMaxWeight(ledger, t);
-    if (m === undefined || weight > m) {
+    const m = currentMaxWeight(ledger, t, lowerWeightIsBetter);
+    if (m === undefined || isBetterWeight(weight, m, lowerWeightIsBetter)) {
       tiers.push(t);
     }
   }
@@ -124,14 +144,15 @@ export function previewPersonalBestLog(
 
 /**
  * Append one log line to the primary tier. If it is a PR for that tier, cascade down
- * to strictly lower rep maxes where the weight also beats the current max.
+ * to strictly lower rep maxes where the weight also beats the current best.
  */
 export function logPersonalBestIntoLedger(
   ledger: ExercisePersonalBestsLedger,
   primaryTier: RepMax,
   weight: number,
   achievedAt: string,
-  createId: () => string = newPbEntryId
+  createId: () => string = newPbEntryId,
+  lowerWeightIsBetter: boolean = false
 ): {
   updated: ExercisePersonalBestsLedger;
   isPR: boolean;
@@ -142,8 +163,14 @@ export function logPersonalBestIntoLedger(
   }
 
   let updated = cloneLedger(ledger);
-  const prevPrimary = currentMaxWeight(ledger, primaryTier);
-  const isPR = prevPrimary === undefined || weight > prevPrimary;
+  const prevPrimary = currentMaxWeight(
+    ledger,
+    primaryTier,
+    lowerWeightIsBetter
+  );
+  const isPR =
+    prevPrimary === undefined ||
+    isBetterWeight(weight, prevPrimary, lowerWeightIsBetter);
 
   const row: PersonalBestHistoryEntry = {
     id: createId(),
@@ -160,7 +187,8 @@ export function logPersonalBestIntoLedger(
         primaryTier,
         weight,
         achievedAt,
-        createId
+        createId,
+        lowerWeightIsBetter
       );
     updated = afterCascade;
     tiersWithNewRows.push(...appendedTiers);
@@ -169,24 +197,30 @@ export function logPersonalBestIntoLedger(
   return { updated, isPR, tiersWithNewRows };
 }
 
-/** Max weight recorded for this tier (any history row). */
+/**
+ * Best weight recorded for this tier (any history row).
+ * Highest by default; when `lowerWeightIsBetter`, the lightest wins.
+ */
 export function currentMaxWeight(
   ledger: ExercisePersonalBestsLedger,
-  tier: RepMax
+  tier: RepMax,
+  lowerWeightIsBetter: boolean = false
 ): number | undefined {
   const rows = ledger[tier];
   if (!rows?.length) {
     return undefined;
   }
-  return Math.max(...rows.map((r) => r.weight));
+  const weights = rows.map((r) => r.weight);
+  return lowerWeightIsBetter ? Math.min(...weights) : Math.max(...weights);
 }
 
 /**
- * Best row for UI: highest weight; if tied, latest achievedAt.
+ * Best row for UI: best weight for the exercise direction; if tied, latest achievedAt.
  */
 export function getCurrentBestForTier(
   ledger: ExercisePersonalBestsLedger,
-  tier: RepMax
+  tier: RepMax,
+  lowerWeightIsBetter: boolean = false
 ): PersonalBestEntry | undefined {
   const rows = ledger[tier];
   if (!rows?.length) {
@@ -194,7 +228,7 @@ export function getCurrentBestForTier(
   }
   let best = rows[0];
   for (const r of rows) {
-    if (r.weight > best.weight) {
+    if (isBetterWeight(r.weight, best.weight, lowerWeightIsBetter)) {
       best = r;
     } else if (
       r.weight === best.weight &&
@@ -240,11 +274,12 @@ export type PersonalBestSummaryLine = { tier: RepMax; label: string };
 /** Ordered PB lines for UI chips (same order and copy as {@link summarizePersonalBests}). */
 export function listPersonalBestSummaryLines(
   ledger: ExercisePersonalBestsLedger,
-  unit: WeightUnit = 'kg'
+  unit: WeightUnit = 'kg',
+  lowerWeightIsBetter: boolean = false
 ): PersonalBestSummaryLine[] {
   const lines: PersonalBestSummaryLine[] = [];
   for (const tier of REP_MAX_ORDER) {
-    const best = getCurrentBestForTier(ledger, tier);
+    const best = getCurrentBestForTier(ledger, tier, lowerWeightIsBetter);
     if (best) {
       lines.push({
         tier,
@@ -257,9 +292,14 @@ export function listPersonalBestSummaryLines(
 
 export function summarizePersonalBests(
   ledger: ExercisePersonalBestsLedger,
-  unit: WeightUnit = 'kg'
+  unit: WeightUnit = 'kg',
+  lowerWeightIsBetter: boolean = false
 ): string {
-  const lines = listPersonalBestSummaryLines(ledger, unit);
+  const lines = listPersonalBestSummaryLines(
+    ledger,
+    unit,
+    lowerWeightIsBetter
+  );
   return lines.length > 0
     ? lines.map((l) => l.label).join(' | ')
     : 'No PBs logged';
@@ -291,7 +331,8 @@ export function distanceToRepRange(
  */
 export function findNearestRepMaxTier(
   ledger: ExercisePersonalBestsLedger,
-  repRange: [number, number]
+  repRange: [number, number],
+  lowerWeightIsBetter: boolean = false
 ): RepMax | null {
   const [min, max] = repRange;
   const midpoint = (min + max) / 2;
@@ -301,7 +342,7 @@ export function findNearestRepMaxTier(
   let bestMidpointDistance = Infinity;
 
   for (const tier of REP_MAX_ORDER) {
-    if (getCurrentBestForTier(ledger, tier) === undefined) {
+    if (getCurrentBestForTier(ledger, tier, lowerWeightIsBetter) === undefined) {
       continue;
     }
     const distance = distanceToRepRange(tier, repRange);
@@ -329,16 +370,17 @@ export function findNearestRepMaxTier(
 export function formatExercisePbChip(
   ledger: ExercisePersonalBestsLedger | null | undefined,
   repRange: [number, number] | null | undefined,
-  unit: WeightUnit = 'kg'
+  unit: WeightUnit = 'kg',
+  lowerWeightIsBetter: boolean = false
 ): string | null {
   if (!ledger || !repRange) {
     return null;
   }
-  const tier = findNearestRepMaxTier(ledger, repRange);
+  const tier = findNearestRepMaxTier(ledger, repRange, lowerWeightIsBetter);
   if (tier === null) {
     return null;
   }
-  const best = getCurrentBestForTier(ledger, tier);
+  const best = getCurrentBestForTier(ledger, tier, lowerWeightIsBetter);
   if (!best) {
     return null;
   }
