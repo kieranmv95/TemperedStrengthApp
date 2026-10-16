@@ -246,10 +246,10 @@ export const workoutsListStyles = StyleSheet.create({
     textAlign: 'center',
   },
   disciplineImage: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
   },
   disciplineGoldOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: Colors.overlay,
     opacity: 0.1,
   },

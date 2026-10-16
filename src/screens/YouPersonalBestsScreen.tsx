@@ -6,8 +6,7 @@ import type { Exercise } from '@/src/types/exercise';
 import { listPersonalBestSummaryLines } from '@/src/utils/personalBests';
 import { getPersonalBestsStore } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,

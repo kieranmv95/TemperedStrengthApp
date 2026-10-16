@@ -11,6 +11,13 @@ jest.mock('../hooks/useTimerNotification', () => ({
   }),
 }));
 
+jest.mock('../services/restTimerSurface', () => ({
+  startRestTimerSurface: jest.fn(),
+  updateRestTimerSurface: jest.fn(),
+  endRestTimerSurface: jest.fn(),
+  syncRestTimerSurface: jest.fn(),
+}));
+
 jest.mock('../hooks/useWeightUnit', () => ({
   useWeightUnit: () => ({ unit: 'kg' }),
 }));
@@ -19,7 +26,7 @@ jest.mock('posthog-react-native', () => ({
   usePostHog: () => ({ capture: jest.fn() }),
 }));
 
-jest.mock('@react-navigation/native', () => ({
+jest.mock('expo-router', () => ({
   useFocusEffect: (cb: () => void) => {
     cb();
   },
@@ -113,7 +120,7 @@ describe('useWorkoutScreenController (session shifts rehydrate)', () => {
     await AsyncStorage.setItem('program_warmup_module_enabled', 'false');
     await AsyncStorage.setItem('program_cooldown_module_enabled', 'false');
 
-    const { getByText } = render(<Harness />);
+    const { getByText } = await render(<Harness />);
 
     await waitFor(() => {
       expect(getByText('Pull')).toBeTruthy();

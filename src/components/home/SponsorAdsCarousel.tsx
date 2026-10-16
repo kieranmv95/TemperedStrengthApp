@@ -15,8 +15,14 @@ import {
   View,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
-  type ViewToken,
 } from 'react-native';
+
+type ViewToken = {
+  item: HomeSponsorAd;
+  key: string;
+  index: number | null;
+  isViewable: boolean;
+};
 
 type SponsorAdsCarouselProps = {
   ads: HomeSponsorAd[];
@@ -60,8 +66,14 @@ export function SponsorAdsCarousel({
   );
 
   const onViewableItemsChanged = useRef(
-    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      const primary = viewableItems.find((item) => item.isViewable);
+    ({
+      viewableItems,
+    }: {
+      viewableItems: ArrayLike<ViewToken>;
+      changed: ArrayLike<ViewToken>;
+    }) => {
+      const items = Array.from(viewableItems);
+      const primary = items.find((item) => item.isViewable);
       if (primary?.index != null && primary.item) {
         const index = primary.index;
         activeIndexRef.current = index;
@@ -140,7 +152,7 @@ export function SponsorAdsCarousel({
         getItemLayout={getItemLayout}
         onScrollBeginDrag={onScrollBeginDrag}
         onMomentumScrollEnd={onMomentumScrollEnd}
-        onViewableItemsChanged={onViewableItemsChanged}
+        onViewableItemsChanged={onViewableItemsChanged as never}
         viewabilityConfig={viewabilityConfig}
         onScrollToIndexFailed={(info) => {
           listRef.current?.scrollToOffset({

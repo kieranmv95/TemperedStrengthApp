@@ -41,9 +41,8 @@ import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionR
 import { COACH_ROLE } from '@/src/utils/workoutAccess';
 import { formatWeightFromKg } from '@/src/utils/weightUnits';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
-import { router, type Href } from 'expo-router';
+import { useFocusEffect, router, type Href } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, {
   useCallback,

@@ -14,8 +14,7 @@ import {
 } from '@/src/utils/storage';
 import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { router, type Href } from 'expo-router';
+import { useFocusEffect, router, type Href } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Switch, Text, TouchableOpacity, View } from 'react-native';
 
@@ -45,21 +44,21 @@ export function YouAccountSettingsScreen() {
   const promoExpiryLabel =
     isPromoPro && promoProGrant
       ? new Date(promoProGrant.expiresAt).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      })
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        })
       : null;
 
   const promoDaysRemaining =
     isPromoPro && promoProGrant
       ? Math.max(
-        0,
-        Math.ceil(
-          (Date.parse(promoProGrant.expiresAt) - Date.now()) /
-          (24 * 60 * 60 * 1000)
+          0,
+          Math.ceil(
+            (Date.parse(promoProGrant.expiresAt) - Date.now()) /
+              (24 * 60 * 60 * 1000)
+          )
         )
-      )
       : null;
 
   const promoRemainingLabel =
@@ -222,9 +221,8 @@ export function YouAccountSettingsScreen() {
   const handleDevDumpPersonalBestsSqlite = () => {
     void (async () => {
       try {
-        const { logPersonalBestsSqliteDebug } = await import(
-          '@/src/db/domains/personalBests/debug'
-        );
+        const { logPersonalBestsSqliteDebug } =
+          await import('@/src/db/domains/personalBests/debug');
         const summary = await logPersonalBestsSqliteDebug('dev settings dump');
         Alert.alert(
           'SQLite personal bests',
@@ -245,9 +243,8 @@ export function YouAccountSettingsScreen() {
   const handleDevDumpWorkoutLogSetsSqlite = () => {
     void (async () => {
       try {
-        const { logWorkoutLogSetsSqliteDebug } = await import(
-          '@/src/db/domains/workoutLogs/debug'
-        );
+        const { logWorkoutLogSetsSqliteDebug } =
+          await import('@/src/db/domains/workoutLogs/debug');
         const summary = await logWorkoutLogSetsSqliteDebug('dev settings dump');
         Alert.alert(
           'SQLite workout log sets',
@@ -277,9 +274,8 @@ export function YouAccountSettingsScreen() {
           onPress: () => {
             void (async () => {
               try {
-                const { purgeStructuredDataLocalAndRemote } = await import(
-                  '@/src/db/devPurgeStructuredData'
-                );
+                const { purgeStructuredDataLocalAndRemote } =
+                  await import('@/src/db/devPurgeStructuredData');
                 const result = await purgeStructuredDataLocalAndRemote();
                 const localLine = result.localCleared
                   ? 'Local SQLite: cleared (PBs + workout logs + check-in + domain meta).'
@@ -287,7 +283,10 @@ export function YouAccountSettingsScreen() {
                 const remoteLine = result.remoteCleared
                   ? `Remote: deleted ${result.remotePersonalBestDeleted ?? 0} PB rows, ${result.remoteWorkoutLogDeleted ?? 0} set log rows, ${result.remoteCheckinDeleted ?? 0} check-in rows.`
                   : `Remote: skipped/failed — ${result.remoteSkippedReason ?? 'unknown'}`;
-                Alert.alert('Structured data purged', `${localLine}\n\n${remoteLine}`);
+                Alert.alert(
+                  'Structured data purged',
+                  `${localLine}\n\n${remoteLine}`
+                );
               } catch (error) {
                 console.error('Dev structured purge failed:', error);
                 Alert.alert(
@@ -324,10 +323,7 @@ export function YouAccountSettingsScreen() {
         );
       } catch (error) {
         console.error('Dev Sanity refresh failed:', error);
-        Alert.alert(
-          'Error',
-          'Could not refresh Sanity content. Try again.'
-        );
+        Alert.alert('Error', 'Could not refresh Sanity content. Try again.');
       } finally {
         setIsRefreshingSanityHome(false);
       }
@@ -563,8 +559,8 @@ export function YouAccountSettingsScreen() {
                 </Text>
                 <Text style={styles.settingDescription}>
                   An Apple purchase renews through Apple. A Google Play purchase
-                  renews through Google. You still get Pro on both platforms when
-                  signed in.
+                  renews through Google. You still get Pro on both platforms
+                  when signed in.
                 </Text>
               </View>
             </View>
@@ -575,8 +571,8 @@ export function YouAccountSettingsScreen() {
                 </Text>
                 <Text style={styles.settingDescription}>
                   Restore on Android only restores Google Play purchases. For an
-                  Apple subscription on Android, sign into your Tempered Strength
-                  account instead.
+                  Apple subscription on Android, sign into your Tempered
+                  Strength account instead.
                 </Text>
               </View>
             </View>
@@ -586,9 +582,9 @@ export function YouAccountSettingsScreen() {
                   Bought Pro before creating an account?
                 </Text>
                 <Text style={styles.settingDescription}>
-                  Open the app on the device you purchased on, sign in once, then
-                  sign into the same account on your other device. That links Pro
-                  to your account.
+                  Open the app on the device you purchased on, sign in once,
+                  then sign into the same account on your other device. That
+                  links Pro to your account.
                 </Text>
               </View>
             </View>
@@ -685,8 +681,8 @@ export function YouAccountSettingsScreen() {
                     Dump personal bests SQLite
                   </Text>
                   <Text style={styles.settingDescription}>
-                    Log every personal_best_entries row to Metro and show counts.
-                    Use after logging a PB.
+                    Log every personal_best_entries row to Metro and show
+                    counts. Use after logging a PB.
                   </Text>
                 </View>
                 <SmallChevron />
@@ -701,8 +697,8 @@ export function YouAccountSettingsScreen() {
                     Dump workout log sets SQLite
                   </Text>
                   <Text style={styles.settingDescription}>
-                    Log every workout_log_sets row to Metro and show dirty counts.
-                    Use after logging a set.
+                    Log every workout_log_sets row to Metro and show dirty
+                    counts. Use after logging a set.
                   </Text>
                 </View>
                 <SmallChevron />

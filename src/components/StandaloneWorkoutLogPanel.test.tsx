@@ -59,7 +59,7 @@ describe('StandaloneWorkoutLogPanel', () => {
   });
 
   it('loads logs for the workout id and shows empty state', async () => {
-    const { getByText } = render(
+    const { getByText } = await render(
       <StandaloneWorkoutLogPanel workout={sampleWorkout} />
     );
 
@@ -76,7 +76,7 @@ describe('StandaloneWorkoutLogPanel', () => {
   it('opens the log modal when Log result is pressed', async () => {
     const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
 
-    const { getByText } = render(
+    const { getByText } = await render(
       <StandaloneWorkoutLogPanel workout={sampleWorkout} />
     );
 
@@ -94,7 +94,7 @@ describe('StandaloneWorkoutLogPanel', () => {
   it('calls upsert when saving a valid notes-only log', async () => {
     mockUpsert.mockResolvedValue(undefined);
 
-    const { getByText, getByPlaceholderText } = render(
+    const { getByText, getByPlaceholderText } = await render(
       <StandaloneWorkoutLogPanel workout={sampleWorkout} />
     );
 

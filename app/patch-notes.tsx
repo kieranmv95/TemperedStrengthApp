@@ -1,7 +1,4 @@
-import {
-  AppSafeAreaView,
-  AppScrollView,
-} from '@/src/components/ds';
+import { AppSafeAreaView, AppScrollView } from '@/src/components/ds';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -30,7 +27,12 @@ const PATCH_NOTES: PatchNote[] = [
   {
     version: '3.1.0',
     dateLabel: '31st August 2026',
-    notes: ['skills section', 'new collab workouts added', 'Program rest days', 'UI fixes'],
+    notes: [
+      'skills section',
+      'new collab workouts added',
+      'Program rest days',
+      'UI fixes',
+    ],
   },
   {
     version: '3.0.0',

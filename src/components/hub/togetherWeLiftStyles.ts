@@ -50,7 +50,7 @@ export const togetherWeLiftStyles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheetBackdrop: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: Colors.overlayMedium,
   },
   sheet: {

@@ -12,9 +12,8 @@ import {
   setAutoRestTimersEnabled,
 } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
 import { cancelTimerFinishedNotifications } from '@/src/services/localNotifications';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
 import {

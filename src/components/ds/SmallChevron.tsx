@@ -27,7 +27,7 @@ export const SmallChevron = ({
       {!useDefaultWash ? (
         <View
           style={[
-            StyleSheet.absoluteFillObject,
+            StyleSheet.absoluteFill,
             styles.cardChevronWash,
             {
               backgroundColor: backgroundColor ?? color,

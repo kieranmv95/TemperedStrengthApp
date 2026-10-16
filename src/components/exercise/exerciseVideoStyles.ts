@@ -7,7 +7,7 @@ export const exerciseVideoStyles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheetBackdrop: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: Colors.overlayMedium,
   },
   sheet: {

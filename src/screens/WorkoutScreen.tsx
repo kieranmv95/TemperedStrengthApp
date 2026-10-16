@@ -15,8 +15,8 @@ import { useWorkoutScreenController } from '@/src/hooks/useWorkoutScreenControll
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
 import { cancelTimerFinishedNotifications } from '@/src/services/localNotifications';
 import { clearProgramData } from '@/src/utils/storage';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { router } from 'expo-router';
+import { useBottomTabBarHeight } from 'expo-router/tabs';
 import React from 'react';
 import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import { getEffectiveBottomInset } from '@/src/utils/platform';

@@ -5,7 +5,13 @@ import {
 import { DaySelectorDayChip } from '@/src/components/DaySelectorDayChip';
 import { daySelectorStyles as styles } from '@/src/components/daySelectorStyles';
 import type { ProgramSessionStatus } from '@/src/types/storage';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentRef,
+} from 'react';
 import {
   Dimensions,
   LayoutChangeEvent,
@@ -32,7 +38,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   sessionStatuses,
   onDaySelect,
 }) => {
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<ComponentRef<typeof ScrollView>>(null);
   const lastStartDateRef = useRef<string>(startDate);
   const [isTodayVisible, setIsTodayVisible] = useState(true);
   const chipLayoutsRef = useRef<Map<number, { x: number; width: number }>>(

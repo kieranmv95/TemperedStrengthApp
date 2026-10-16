@@ -42,7 +42,7 @@ export default function TabLayout() {
           borderTopColor: Colors.backgroundElevated,
         },
         headerShown: false,
-        tabBarButton: HapticTab,
+        tabBarButton: HapticTab as never,
       }}
     >
       <Tabs.Screen
@@ -53,7 +53,7 @@ export default function TabLayout() {
             <IconSymbol
               size={28}
               name="book"
-              color={focused ? Colors.accent : color}
+              color={focused ? Colors.accent : String(color)}
             />
           ),
         }}
@@ -66,7 +66,7 @@ export default function TabLayout() {
             <IconSymbol
               size={28}
               name="dumbbell"
-              color={focused ? Colors.accent : color}
+              color={focused ? Colors.accent : String(color)}
             />
           ),
         }}
@@ -79,7 +79,7 @@ export default function TabLayout() {
             <IconSymbol
               size={28}
               name="house"
-              color={focused ? Colors.accent : color}
+              color={focused ? Colors.accent : String(color)}
             />
           ),
         }}
@@ -92,7 +92,7 @@ export default function TabLayout() {
             <IconSymbol
               size={28}
               name="globe"
-              color={focused ? Colors.accent : color}
+              color={focused ? Colors.accent : String(color)}
             />
           ),
         }}
@@ -105,7 +105,7 @@ export default function TabLayout() {
             <IconSymbol
               size={24}
               name="person"
-              color={focused ? Colors.accent : color}
+              color={focused ? Colors.accent : String(color)}
             />
           ),
         }}

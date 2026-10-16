@@ -15,9 +15,9 @@ import {
 } from '@/src/utils/oneRepMax';
 import type { WeightUnit } from '@/src/utils/storage';
 import { getWeightUnit } from '@/src/utils/storage';
-import { useFocusEffect } from '@react-navigation/native';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 import {
   Keyboard,
   Text,

@@ -4,8 +4,8 @@ import {
   type LoadSkillsOptions,
 } from '@/src/services/sanitySkills';
 import type { Skill, SkillSummary } from '@/src/types/skills';
-import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 /**
  * Loads Sanity-driven Skills & Cues summaries when the screen is focused.

@@ -16,7 +16,7 @@ import type {
   ProgramSessionStatus,
 } from '@/src/types/storage';
 import { formatVolumeFromKg } from '@/src/utils/weightUnits';
-import React from 'react';
+import React, { type ComponentRef } from 'react';
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -52,8 +52,8 @@ type WorkoutScreenBodyProps = {
   activeSession: ActiveSession | null;
   notes: string;
   isNotesExpanded: boolean;
-  scrollViewRef: React.RefObject<ScrollView | null>;
-  notesInputRef: React.RefObject<TextInput | null>;
+  scrollViewRef: React.RefObject<ComponentRef<typeof ScrollView> | null>;
+  notesInputRef: React.RefObject<ComponentRef<typeof TextInput> | null>;
   tabBarHeight: number;
   bottomInset: number;
   onIntensityInfoPress: () => void;

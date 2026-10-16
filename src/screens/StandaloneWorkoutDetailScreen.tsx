@@ -11,8 +11,7 @@ import {
 } from '@/src/utils/storage';
 import { isWorkoutLocked } from '@/src/utils/workoutAccess';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
@@ -107,8 +106,7 @@ export default function StandaloneWorkoutDetailScreen() {
     );
   }
 
-  const isLocked =
-    !accessLoading && isWorkoutLocked(workout, { isPro, roles });
+  const isLocked = !accessLoading && isWorkoutLocked(workout, { isPro, roles });
   const isFavorite = favorites.includes(workout.id);
 
   return (

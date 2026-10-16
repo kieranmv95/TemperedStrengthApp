@@ -7,12 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "temperedstrengthapp",
     "userInterfaceStyle": "dark",
-    "androidNavigationBar": {
-      "backgroundColor": "#121212",
-      "barStyle": "light-content",
-      "enforceContrast": false
-    },
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.kieranvenison.temperedstrengthapp",
@@ -65,8 +59,17 @@
         "expo-navigation-bar",
         {
           "backgroundColor": "#121212",
-          "barStyle": "light",
+          "style": "light",
           "enforceContrast": false
+        }
+      ],
+      [
+        "expo-widgets",
+        {
+          "bundleIdentifier": "com.kieranvenison.temperedstrengthapp.ExpoWidgetsTarget",
+          "groupIdentifier": "group.com.kieranvenison.temperedstrengthapp",
+          "enablePushNotifications": false,
+          "frequentUpdates": false
         }
       ]
     ],

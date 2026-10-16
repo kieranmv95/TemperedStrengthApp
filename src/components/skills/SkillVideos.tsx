@@ -41,8 +41,7 @@ export function SkillVideos({ videos }: SkillVideosProps) {
 
   const activeVideo = activeIndex != null ? videos[activeIndex] : null;
   const canGoPrev = activeIndex != null && activeIndex > 0;
-  const canGoNext =
-    activeIndex != null && activeIndex < videos.length - 1;
+  const canGoNext = activeIndex != null && activeIndex < videos.length - 1;
 
   const closeViewer = () => {
     setActiveIndex(null);
@@ -234,7 +233,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   playOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.35)',
@@ -269,7 +268,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheetBackdrop: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: Colors.overlay,
   },
   sheet: {

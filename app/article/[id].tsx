@@ -6,8 +6,7 @@ import { fetchArticleBySlug } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
 import type { Article } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {

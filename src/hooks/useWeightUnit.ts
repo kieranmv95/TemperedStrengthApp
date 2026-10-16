@@ -1,8 +1,8 @@
 import type { WeightUnit } from '@/src/utils/storage';
 import { getWeightUnit, setWeightUnit } from '@/src/utils/storage';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
-import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 export function useWeightUnit(): {
   unit: WeightUnit;

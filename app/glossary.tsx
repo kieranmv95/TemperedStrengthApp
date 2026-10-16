@@ -5,8 +5,7 @@ import { fetchGlossary } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
 import type { GlossaryTerm } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,

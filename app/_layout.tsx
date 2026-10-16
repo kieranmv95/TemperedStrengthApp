@@ -96,6 +96,11 @@ export default function RootLayout() {
     <PostHogProvider
       apiKey="phc_qNQGZv7zvPaZr9GwisqwcJfgkVauS9QmVZEC3Dko6Sbj"
       debug={__DEV__}
+      // React Navigation v7 / Expo Router: automatic screen capture uses
+      // navigation hooks outside a screen context and throws.
+      autocapture={{
+        captureScreens: false,
+      }}
       options={{
         // If your PostHog project is EU-hosted, this must be "https://eu.i.posthog.com"
         host: 'https://us.i.posthog.com',

@@ -10,8 +10,7 @@ import {
   type HomeSponsorAd,
 } from '@/src/services/sanitySponsorAds';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {

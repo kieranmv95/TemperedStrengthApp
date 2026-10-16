@@ -3,8 +3,7 @@ import { Pill, StandardLayout } from '@/src/components/ds';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getAll } from '@/src/data/awards';
 import { useSubscription } from '@/src/hooks/use-subscription';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 

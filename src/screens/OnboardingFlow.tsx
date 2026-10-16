@@ -643,7 +643,7 @@ function OnboardingFlow() {
           <View style={{ flex: 1 }}>
             <VideoView
               player={introVideoPlayer}
-              style={StyleSheet.absoluteFillObject}
+              style={StyleSheet.absoluteFill}
               contentFit="cover"
               nativeControls={false}
               accessibilityLabel="Onboarding intro video"

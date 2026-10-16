@@ -8,10 +8,15 @@ import { useRoles } from '@/src/hooks/useRoles';
 import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
 import { COACH_ROLE } from '@/src/utils/workoutAccess';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import React from 'react';
-import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 const COACH_INSTAGRAM_URL = 'https://www.instagram.com/temperedstrength/';
 const COACH_INSTAGRAM_HANDLE = '@temperedstrength';
@@ -39,10 +44,7 @@ export function YouHubScreen() {
   };
 
   return (
-    <StandardLayout
-      title="You"
-      subtitle="Records, trophies, and account"
-    >
+    <StandardLayout title="You" subtitle="Records, trophies, and account">
       <StandardLayout.Body>
         <View style={styles.list}>
           <Text style={styles.hiText}>

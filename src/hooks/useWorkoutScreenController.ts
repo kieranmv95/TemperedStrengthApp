@@ -9,6 +9,12 @@ import type {
   WorkoutSlot,
 } from '@/src/screens/workoutScreenConstants';
 import { increment } from '@/src/services/metricService';
+import {
+  endRestTimerSurface,
+  startRestTimerSurface,
+  syncRestTimerSurface,
+  updateRestTimerSurface,
+} from '@/src/services/restTimerSurface';
 import type { Workout, WorkoutV1 } from '@/src/types/program';
 import type {
   ActiveSession,
@@ -19,6 +25,7 @@ import type {
   RestTimerState,
 } from '@/src/types/storage';
 import { getProgramById } from '@/src/utils/program';
+import { buildRestTimerSurfacePayload } from '@/src/utils/restTimerSurfacePayload';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import {
   getShiftedWorkoutForDaySinceStart,
@@ -57,9 +64,15 @@ import {
 } from '@/src/utils/storage';
 import { buildWorkoutExportText } from '@/src/utils/workoutExport';
 import { usePostHog } from 'posthog-react-native';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { ScrollView, TextInput } from 'react-native';
-import { Alert, Keyboard, Share } from 'react-native';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentRef,
+} from 'react';
+import { Alert, Keyboard, ScrollView, Share, TextInput } from 'react-native';
 import {
   analyticsWeekDayFromDayIndex,
   posthogEventsNames,
@@ -156,8 +169,8 @@ export function useWorkoutScreenController() {
     useTimerNotification();
   const { unit: weightUnit } = useWeightUnit();
   const notesDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const scrollViewRef = useRef<ScrollView>(null);
-  const notesInputRef = useRef<TextInput>(null);
+  const scrollViewRef = useRef<ComponentRef<typeof ScrollView>>(null);
+  const notesInputRef = useRef<ComponentRef<typeof TextInput>>(null);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [notesActive, setNotesActive] = useState(false);
   const notesBlurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -493,6 +506,7 @@ export function useWorkoutScreenController() {
       const timer = await getRestTimer();
       if (!timer) {
         setRestTimer(null);
+        await syncRestTimerSurface(null);
         return;
       }
 
@@ -505,13 +519,18 @@ export function useWorkoutScreenController() {
         };
         setRestTimer(completedTimer);
         await saveRestTimer(completedTimer);
+        await syncRestTimerSurface(
+          buildRestTimerSurfacePayload(completedTimer, 'complete')
+        );
         return;
       }
 
       setRestTimer(timer);
+      await syncRestTimerSurface(buildRestTimerSurfacePayload(timer));
     } catch (error) {
       console.error('Error loading rest timer:', error);
       setRestTimer(null);
+      await syncRestTimerSurface(null);
     }
   }, []);
 
@@ -828,6 +847,7 @@ export function useWorkoutScreenController() {
         setRestTimer(newTimer);
         await scheduleTimerNotification(payload.restTimeSeconds);
         await saveRestTimer(newTimer);
+        await startRestTimerSurface(buildRestTimerSurfacePayload(newTimer));
       } catch (error) {
         console.error('Error starting rest timer:', error);
       }
@@ -852,6 +872,11 @@ export function useWorkoutScreenController() {
         await increment('rest_timers_skipped');
       }
       await cancelTimerNotification();
+      await endRestTimerSurface(
+        restTimer
+          ? buildRestTimerSurfacePayload(restTimer, 'complete')
+          : undefined
+      );
       setRestTimer(null);
       await clearRestTimer();
     } catch (error) {
@@ -869,6 +894,9 @@ export function useWorkoutScreenController() {
       };
       setRestTimer(completedTimer);
       await saveRestTimer(completedTimer);
+      await endRestTimerSurface(
+        buildRestTimerSurfacePayload(completedTimer, 'complete')
+      );
     } catch (error) {
       console.error('Error completing rest timer:', error);
     }
@@ -909,6 +937,9 @@ export function useWorkoutScreenController() {
           };
           setRestTimer(completedTimer);
           await saveRestTimer(completedTimer);
+          await endRestTimerSurface(
+            buildRestTimerSurfacePayload(completedTimer, 'complete')
+          );
           return;
         }
 
@@ -926,6 +957,9 @@ export function useWorkoutScreenController() {
         setRestTimer(updatedTimer);
         await scheduleTimerNotification(nextRemainingSeconds);
         await saveRestTimer(updatedTimer);
+        await updateRestTimerSurface(
+          buildRestTimerSurfacePayload(updatedTimer)
+        );
         if (deltaSeconds > 0) {
           posthog.capture(posthogEventsNames.timer.incremented, {
             increment_secs: deltaSeconds,

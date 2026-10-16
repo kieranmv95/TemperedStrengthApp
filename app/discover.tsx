@@ -9,8 +9,7 @@ import type { PartnerListing } from '@/src/types/partner';
 import { partnerFavoriteKey } from '@/src/types/partner';
 import { getFavoritePartners, setFavoritePartners } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {

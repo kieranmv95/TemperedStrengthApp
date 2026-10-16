@@ -16,8 +16,7 @@ import {
   toggleFavoriteWorkout,
 } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
@@ -192,7 +191,7 @@ export default function WorkoutsByTagScreen() {
                   </View>
                 )}
               </TouchableOpacity>
-            ) : null
+            ) : undefined
           }
           renderItem={({ item }) => (
             <WorkoutCard

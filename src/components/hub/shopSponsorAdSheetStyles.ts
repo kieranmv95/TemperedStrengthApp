@@ -10,7 +10,7 @@ export const shopSponsorAdSheetStyles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   backdrop: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: Colors.overlayMedium,
   },
   sheet: {

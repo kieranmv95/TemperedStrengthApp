@@ -14,8 +14,7 @@ import type { PartnerKind, PartnerListing } from '@/src/types/partner';
 import { partnerFavoriteKey } from '@/src/types/partner';
 import { getFavoritePartners, setFavoritePartners } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useRef, useState } from 'react';
 import {

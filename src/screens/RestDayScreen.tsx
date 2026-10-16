@@ -7,10 +7,12 @@ import { useRoles } from '@/src/hooks/useRoles';
 import type { Program } from '@/src/types/program';
 import type { SingleWorkout } from '@/src/types/workouts';
 import { getRestDaySuggestionsForDay } from '@/src/utils/restDaySuggestions';
-import { getFavoriteWorkouts, toggleFavoriteWorkout } from '@/src/utils/storage';
+import {
+  getFavoriteWorkouts,
+  toggleFavoriteWorkout,
+} from '@/src/utils/storage';
 import { COACH_ROLE } from '@/src/utils/workoutAccess';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   ScrollView,
@@ -93,8 +95,7 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
         <Text style={styles.description}>
           Take this time to stretch, foam roll, or simply take a day off.{' '}
           <Text style={styles.descriptionEmphasis}>
-            The suggestions below are optional. Skip them if you need full
-            rest.
+            The suggestions below are optional. Skip them if you need full rest.
           </Text>
         </Text>
       </View>

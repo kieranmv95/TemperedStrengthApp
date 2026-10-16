@@ -16,8 +16,7 @@ import {
   getSupplementLogsInRange,
   getSupplements,
 } from '@/src/utils/storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 

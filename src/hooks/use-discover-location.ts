@@ -2,8 +2,8 @@ import {
   resolveDiscoverLocation,
   type UserCoords,
 } from '@/src/services/discoverLocationService';
-import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 export function useDiscoverLocation() {
   const [userCoords, setUserCoords] = useState<UserCoords | null>(null);

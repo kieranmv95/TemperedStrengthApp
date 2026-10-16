@@ -5,7 +5,12 @@ import { useRoles } from '@/src/hooks/useRoles';
 import type { Recovery } from '@/src/types/recovery';
 import { router } from 'expo-router';
 import React, { useMemo } from 'react';
-import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 
 const COACH_ROLE = 'coach';
 
@@ -19,8 +24,7 @@ export function SkillMobilityFlows({
   const { width: windowWidth } = useWindowDimensions();
   const cardWidth = windowWidth * 0.6;
   const { isPro, roles, isLoading: accessLoading } = useRoles();
-  const hasAccess =
-    isPro || roles.includes(COACH_ROLE) || accessLoading;
+  const hasAccess = isPro || roles.includes(COACH_ROLE) || accessLoading;
 
   const flows = useMemo(() => {
     const resolved: Recovery[] = [];

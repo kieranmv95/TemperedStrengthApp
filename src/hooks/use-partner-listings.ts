@@ -4,9 +4,9 @@ import type {
   PublicCoachListing,
   PublicGymListing,
 } from '@/src/types/partner';
-import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
+import { useFocusEffect } from 'expo-router';
 
 export function usePartnerListings() {
   const [gyms, setGyms] = useState<PublicGymListing[]>([]);

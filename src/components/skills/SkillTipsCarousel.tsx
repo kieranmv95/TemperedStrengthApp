@@ -37,7 +37,10 @@ export function SkillTipsCarousel({ tips }: SkillTipsCarouselProps) {
 
   return (
     <View style={styles.card}>
-      <Text style={styles.progress} accessibilityLabel={`Tip ${index + 1} of ${tips.length}`}>
+      <Text
+        style={styles.progress}
+        accessibilityLabel={`Tip ${index + 1} of ${tips.length}`}
+      >
         ({index + 1}/{tips.length})
       </Text>
 

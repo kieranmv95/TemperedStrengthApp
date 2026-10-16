@@ -8,11 +8,15 @@ import {
   getFavoriteWorkouts,
   toggleFavoriteWorkout,
 } from '@/src/utils/storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 
 type SkillWorkoutsProps = {
   workoutsIds: string[];

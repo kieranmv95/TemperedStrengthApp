@@ -97,7 +97,7 @@ export const logFormModalStyles = StyleSheet.create({
     color: Colors.accent,
   },
   whenPickerOverlayAbsolute: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: Colors.overlayLight,
     justifyContent: 'flex-end',
     zIndex: 1000,

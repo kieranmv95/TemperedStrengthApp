@@ -3,12 +3,8 @@ import { Colors, Spacing } from '@/src/constants/theme';
 import { fetchArticles } from '@/src/services/briefApiService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { ArticleListItem } from '@/src/types/brief';
-import {
-  getFavoriteArticles,
-  setFavoriteArticles,
-} from '@/src/utils/storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { getFavoriteArticles, setFavoriteArticles } from '@/src/utils/storage';
+import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
@@ -149,7 +145,10 @@ export function SkillArticles({ articleSlugs }: SkillArticlesProps) {
       contentContainerStyle={styles.list}
     >
       {resolvedArticles.map((article, index) => (
-        <View key={`${article.slug}-${index}`} style={{ width: multiCardWidth }}>
+        <View
+          key={`${article.slug}-${index}`}
+          style={{ width: multiCardWidth }}
+        >
           <ArticleCard
             article={article}
             onPress={handlePress}

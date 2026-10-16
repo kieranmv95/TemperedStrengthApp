@@ -88,11 +88,7 @@ export function AccountVerifyOtpScreen() {
       // Mid-onboarding create still resumes that flow via accountCreated.
       const isOnboardingReturn = returnTo.startsWith('/onboarding');
       let destination: string = '/';
-      if (
-        !result.restored &&
-        intent === 'create' &&
-        isOnboardingReturn
-      ) {
+      if (!result.restored && intent === 'create' && isOnboardingReturn) {
         const separator = returnTo.includes('?') ? '&' : '?';
         destination = `${returnTo}${separator}accountCreated=1`;
       }

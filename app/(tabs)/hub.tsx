@@ -17,8 +17,7 @@ import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { ArticleCategory, ArticleListItem } from '@/src/types/brief';
 import { getFavoriteArticles, setFavoriteArticles } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
@@ -326,7 +325,7 @@ export default function HubScreen() {
       contentContainerStyle={styles.listContent}
       ListHeaderComponent={listHeader}
       ListEmptyComponent={
-        networkUnavailable || articlesLoading ? null : (
+        networkUnavailable || articlesLoading ? undefined : (
           <View style={styles.emptyState}>
             <Ionicons
               name={showFavoritesOnly ? 'bookmark-outline' : 'document-text'}

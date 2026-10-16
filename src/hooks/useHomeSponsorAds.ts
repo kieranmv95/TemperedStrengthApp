@@ -2,8 +2,8 @@ import {
   loadHomeSponsorAds,
   type HomeSponsorAd,
 } from '@/src/services/sanitySponsorAds';
-import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 /**
  * Loads Sanity-driven home sponsor ads when the screen is focused. See

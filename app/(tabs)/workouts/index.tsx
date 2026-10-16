@@ -43,8 +43,7 @@ import {
   type WorkoutTimeBucket,
 } from '@/src/utils/workoutFilters';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, {
   useCallback,
@@ -359,7 +358,9 @@ export default function WorkoutsScreen() {
               captureFilter('format', tag);
             }}
             onRemoveTimeBucket={(bucket) => {
-              setSelectedTimeBuckets((prev) => prev.filter((b) => b !== bucket));
+              setSelectedTimeBuckets((prev) =>
+                prev.filter((b) => b !== bucket)
+              );
               captureFilter('time', bucket);
             }}
           />

@@ -10,8 +10,7 @@ import {
   type WeightUnit,
 } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
 import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
@@ -26,8 +25,7 @@ export default function AccountGeneralSettingsScreen() {
   const { user } = useSyncManager();
   const [weightUnit, setWeightUnitState] = useState<WeightUnit>('kg');
   const [weightUnitLoading, setWeightUnitLoading] = useState<boolean>(true);
-  const [womensHealthVisible, setWomensHealthVisible] =
-    useState<boolean>(true);
+  const [womensHealthVisible, setWomensHealthVisible] = useState<boolean>(true);
   const [healthSyncOptIn, setHealthSyncOptIn] = useState<boolean>(false);
   const [checkinSettingsLoading, setCheckinSettingsLoading] =
     useState<boolean>(true);
