@@ -4,7 +4,7 @@ import { useSubscription } from '@/src/hooks/use-subscription';
 import { useExerciseCardState } from '@/src/hooks/useExerciseCardState';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/theme';
 import { getExerciseById } from '../data/exercises';
@@ -31,6 +31,7 @@ type ExerciseCardProps = {
   onSwap: () => void;
   onRestStart: (payload: RestTimerStartPayload) => void;
   onRestDismiss: () => void;
+  onSetReorderDragChange?: (dragging: boolean) => void;
 };
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
@@ -42,14 +43,17 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   onSwap,
   onRestStart,
   onRestDismiss,
+  onSetReorderDragChange,
 }) => {
   const { isPro } = useSubscription();
   const { unit: weightUnit } = useWeightUnit();
   const exercise = exerciseId ? getExerciseById(exerciseId) : null;
+  const rowHeightsRef = useRef<Record<number, number>>({});
 
   const {
     weights,
     reps,
+    rpes,
     setStates,
     loading,
     remainingSwaps,
@@ -57,7 +61,9 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     restTimeSeconds,
     handleWeightChange,
     handleRepsChange,
+    handleRpeChange,
     handleToggleSetState,
+    handleReorderSets,
     decrementSets,
     incrementSets,
     pbPrompt,
@@ -79,6 +85,38 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     exerciseId !== null &&
     programExercise !== null &&
     exerciseId !== programExercise.id;
+
+  const handleRowLayout = useCallback((setIndex: number, height: number) => {
+    if (height > 0) {
+      rowHeightsRef.current[setIndex] = height;
+    }
+  }, []);
+
+  const handleDragStart = useCallback(
+    (_setIndex: number) => {
+      onSetReorderDragChange?.(true);
+    },
+    [onSetReorderDragChange]
+  );
+
+  const handleDragEnd = useCallback(
+    (fromIndex: number, translationY: number) => {
+      onSetReorderDragChange?.(false);
+      if (numberOfSets <= 1) {
+        return;
+      }
+      const rowHeight = rowHeightsRef.current[fromIndex] ?? 64;
+      const delta = Math.round(translationY / rowHeight);
+      const toIndex = Math.max(
+        0,
+        Math.min(numberOfSets - 1, fromIndex + delta)
+      );
+      if (toIndex !== fromIndex) {
+        void handleReorderSets(fromIndex, toIndex);
+      }
+    },
+    [handleReorderSets, numberOfSets, onSetReorderDragChange]
+  );
 
   if (!exercise) {
     return (
@@ -214,11 +252,14 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             weightUnit={weightUnit}
             weightValue={weights[setIndex] || ''}
             repsValue={reps[setIndex] || ''}
+            rpeValue={rpes[setIndex] || ''}
             setState={setState}
             loading={loading}
             canLog={canLog}
+            canReorder={numberOfSets > 1}
             onWeightChange={handleWeightChange}
             onRepsChange={handleRepsChange}
+            onRpeChange={handleRpeChange}
             onToggleSetState={async (idx) => {
               const nextState = await handleToggleSetState(idx);
               if (nextState !== 'completed') return;
@@ -240,6 +281,9 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                 restTimeSeconds,
               });
             }}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onRowLayout={handleRowLayout}
           />
         );
       })}

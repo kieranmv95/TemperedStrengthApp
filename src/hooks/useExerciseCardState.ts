@@ -14,6 +14,7 @@ import {
   repCountToTier,
 } from '@/src/utils/personalBests';
 import type { WeightUnit } from '@/src/utils/storage';
+import type { ReorderLoggedSetPayload } from '@/src/utils/storage';
 import {
   clearLoggedSet,
   getAutoPbDetectionInProgramsEnabled,
@@ -22,6 +23,7 @@ import {
   getPersonalBestsForExercise,
   getRemainingSwapCount,
   getTrainingMax,
+  reorderLoggedSets,
   saveCustomSetCount,
   saveLoggedSet,
   savePersonalBest,
@@ -67,6 +69,7 @@ export function useExerciseCardState({
   const posthog = usePostHog();
   const [weights, setWeights] = useState<string[]>([]);
   const [reps, setReps] = useState<string[]>([]);
+  const [rpes, setRpes] = useState<string[]>([]);
   const [setStates, setSetStates] = useState<
     Map<number, 'completed' | 'failed'>
   >(new Map());
@@ -85,10 +88,12 @@ export function useExerciseCardState({
   const setStatesRef = useRef(setStates);
   const weightsRef = useRef(weights);
   const repsRef = useRef(reps);
+  const rpesRef = useRef(rpes);
 
   setStatesRef.current = setStates;
   weightsRef.current = weights;
   repsRef.current = reps;
+  rpesRef.current = rpes;
 
   const setScheme = programExercise?.setScheme ?? null;
   const defaultNumberOfSets = setScheme?.length ?? programExercise?.sets ?? 1;
@@ -235,6 +240,7 @@ export function useExerciseCardState({
 
           const initialWeights: string[] = [];
           const initialReps: string[] = [];
+          const initialRpes: string[] = [];
           const initialSetStates: Map<number, 'completed' | 'failed'> =
             new Map();
 
@@ -246,6 +252,8 @@ export function useExerciseCardState({
                   ? ''
                   : formatWeightValueFromKg(savedSet.weight, weightUnit);
               initialReps[i] = savedSet.reps.toString();
+              initialRpes[i] =
+                typeof savedSet.rpe === 'number' ? String(savedSet.rpe) : '';
               if (savedSet.state && savedSet.state !== null) {
                 const state = savedSet.state;
                 if (state === 'completed' || state === 'failed') {
@@ -255,17 +263,20 @@ export function useExerciseCardState({
             } else {
               initialWeights[i] = getPrefilledWeightForSet(i);
               initialReps[i] = getDefaultRepForSet(i);
+              initialRpes[i] = '';
             }
           }
 
           setWeights(initialWeights);
           setReps(initialReps);
+          setRpes(initialRpes);
           setSetStates(initialSetStates);
         } catch (error) {
           console.error('Error loading data:', error);
           const defaultRepValue = getDefaultRepValue();
           setWeights(Array(defaultNumberOfSets).fill(''));
           setReps(Array(defaultNumberOfSets).fill(defaultRepValue));
+          setRpes(Array(defaultNumberOfSets).fill(''));
           setNumberOfSets(defaultNumberOfSets);
         }
       } else {
@@ -279,6 +290,7 @@ export function useExerciseCardState({
             getDefaultRepForSet(i)
           )
         );
+        setRpes(Array(defaultNumberOfSets).fill(''));
         setSetStates(new Map());
         setNumberOfSets(defaultNumberOfSets);
       }
@@ -417,10 +429,27 @@ export function useExerciseCardState({
     [pbLedger, weightUnit]
   );
 
+  /** null = clear; undefined = invalid / incomplete — preserve existing on save. */
+  const parseRpeInput = (value: string): number | null | undefined => {
+    const trimmed = value.trim();
+    if (trimmed === '') {
+      return null;
+    }
+    if (!/^\d{1,2}$/.test(trimmed)) {
+      return undefined;
+    }
+    const n = parseInt(trimmed, 10);
+    if (!Number.isInteger(n) || n < 1 || n > 10) {
+      return undefined;
+    }
+    return n;
+  };
+
   const autoSaveSet = async (
     setIndex: number,
     weightStr: string,
-    repsStr: string
+    repsStr: string,
+    rpeStr?: string
   ) => {
     if (!exerciseId || dayIndex === null || !repsStr) {
       return;
@@ -437,14 +466,18 @@ export function useExerciseCardState({
     }
 
     try {
-      const currentState = setStates.get(setIndex);
+      const currentState = setStatesRef.current.get(setIndex);
+      const parsedRpe = parseRpeInput(
+        rpeStr ?? rpesRef.current[setIndex] ?? ''
+      );
       await saveLoggedSet(
         dayIndex,
         slotIndex,
         setIndex,
         weightKg,
         repsNum,
-        currentState
+        currentState,
+        parsedRpe
       );
     } catch (error) {
       console.error('Error auto-saving set:', error);
@@ -461,7 +494,12 @@ export function useExerciseCardState({
     }
 
     saveTimersRef.current[setIndex] = setTimeout(() => {
-      autoSaveSet(setIndex, value, reps[setIndex] || '');
+      autoSaveSet(
+        setIndex,
+        value,
+        repsRef.current[setIndex] || '',
+        rpesRef.current[setIndex] || ''
+      );
     }, 500);
   };
 
@@ -475,7 +513,31 @@ export function useExerciseCardState({
     }
 
     saveTimersRef.current[setIndex] = setTimeout(() => {
-      autoSaveSet(setIndex, weights[setIndex] || '', value);
+      autoSaveSet(
+        setIndex,
+        weightsRef.current[setIndex] || '',
+        value,
+        rpesRef.current[setIndex] || ''
+      );
+    }, 500);
+  };
+
+  const handleRpeChange = (setIndex: number, value: string) => {
+    const newRpes = [...rpes];
+    newRpes[setIndex] = value;
+    setRpes(newRpes);
+
+    if (saveTimersRef.current[setIndex]) {
+      clearTimeout(saveTimersRef.current[setIndex]);
+    }
+
+    saveTimersRef.current[setIndex] = setTimeout(() => {
+      autoSaveSet(
+        setIndex,
+        weightsRef.current[setIndex] || '',
+        repsRef.current[setIndex] || '',
+        value
+      );
     }, 500);
   };
 
@@ -506,6 +568,8 @@ export function useExerciseCardState({
       const currentState = setStates.get(setIndex);
       const newSetStates = new Map(setStates);
 
+      const parsedRpe = parseRpeInput(rpesRef.current[setIndex] ?? '');
+
       if (currentState === undefined) {
         newSetStates.set(setIndex, 'completed');
         nextState = 'completed';
@@ -516,7 +580,8 @@ export function useExerciseCardState({
           setIndex,
           weightKg,
           repsNum,
-          'completed'
+          'completed',
+          parsedRpe
         );
         if (
           exerciseLoggingType === 'reps_and_weight' &&
@@ -536,7 +601,8 @@ export function useExerciseCardState({
           setIndex,
           weightKg,
           repsNum,
-          'failed'
+          'failed',
+          parsedRpe
         );
       } else if (currentState === 'failed') {
         clearPbDebounce(setIndex);
@@ -548,7 +614,8 @@ export function useExerciseCardState({
           setIndex,
           weightKg,
           repsNum,
-          null
+          null,
+          parsedRpe
         );
       }
 
@@ -568,6 +635,7 @@ export function useExerciseCardState({
       setNumberOfSets(newCount);
       setWeights((prev) => prev.slice(0, newCount));
       setReps((prev) => prev.slice(0, newCount));
+      setRpes((prev) => prev.slice(0, newCount));
 
       const newSetStates = new Map(setStates);
       for (let i = newCount; i < numberOfSets; i++) {
@@ -595,14 +663,104 @@ export function useExerciseCardState({
       setNumberOfSets(newCount);
       setWeights((prev) => [...prev, getPrefilledWeightForSet(newSetIndex)]);
       setReps((prev) => [...prev, getDefaultRepForSet(newSetIndex)]);
+      setRpes((prev) => [...prev, '']);
 
       await saveCustomSetCount(dayIndex, slotIndex, newCount);
+    }
+  };
+
+  const flushPendingSaves = async () => {
+    const pendingIndexes = Object.keys(saveTimersRef.current).map((key) =>
+      Number(key)
+    );
+    for (const setIndex of pendingIndexes) {
+      const timer = saveTimersRef.current[setIndex];
+      if (timer) {
+        clearTimeout(timer);
+      }
+      delete saveTimersRef.current[setIndex];
+      await autoSaveSet(
+        setIndex,
+        weightsRef.current[setIndex] || '',
+        repsRef.current[setIndex] || '',
+        rpesRef.current[setIndex] || ''
+      );
+    }
+  };
+
+  const handleReorderSets = async (fromIndex: number, toIndex: number) => {
+    if (
+      dayIndex === null ||
+      fromIndex === toIndex ||
+      fromIndex < 0 ||
+      toIndex < 0 ||
+      fromIndex >= numberOfSets ||
+      toIndex >= numberOfSets
+    ) {
+      return;
+    }
+
+    await flushPendingSaves();
+
+    const moveItem = <T,>(items: T[]): T[] => {
+      const next = [...items];
+      const [item] = next.splice(fromIndex, 1);
+      next.splice(toIndex, 0, item);
+      return next;
+    };
+
+    const nextWeights = moveItem(weightsRef.current);
+    const nextReps = moveItem(repsRef.current);
+    const nextRpes = moveItem(rpesRef.current);
+    const stateList = Array.from(
+      { length: numberOfSets },
+      (_, i) => setStatesRef.current.get(i)
+    );
+    const nextStateList = moveItem(stateList);
+    const nextSetStates = new Map<number, 'completed' | 'failed'>();
+    nextStateList.forEach((state, i) => {
+      if (state === 'completed' || state === 'failed') {
+        nextSetStates.set(i, state);
+      }
+    });
+
+    setWeights(nextWeights);
+    setReps(nextReps);
+    setRpes(nextRpes);
+    setSetStates(nextSetStates);
+
+    const ordered: ReorderLoggedSetPayload[] = [];
+    for (let i = 0; i < numberOfSets; i++) {
+      const repsNum = parseInt(nextReps[i] || '', 10);
+      const hasReps = !isNaN(repsNum) && repsNum > 0;
+      const weightKg = parseUserWeightInputToKg(
+        nextWeights[i] || '',
+        weightUnit
+      );
+      const parsedRpe = parseRpeInput(nextRpes[i] || '');
+      const state = nextSetStates.get(i) ?? null;
+      ordered.push({
+        weight:
+          weightKg !== null && Number.isFinite(weightKg) && weightKg >= 0
+            ? weightKg
+            : null,
+        reps: hasReps ? repsNum : null,
+        state,
+        rpe: parsedRpe === undefined ? null : parsedRpe,
+      });
+    }
+
+    try {
+      await reorderLoggedSets(dayIndex, slotIndex, ordered);
+    } catch (error) {
+      console.error('Error reordering sets:', error);
     }
   };
 
   return {
     weights,
     reps,
+    rpes,
     setStates,
     loading,
     remainingSwaps,
@@ -612,7 +770,9 @@ export function useExerciseCardState({
     getDefaultRepValue,
     handleWeightChange,
     handleRepsChange,
+    handleRpeChange,
     handleToggleSetState,
+    handleReorderSets,
     decrementSets,
     incrementSets,
     pbPrompt,

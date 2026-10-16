@@ -4,6 +4,7 @@ import {
   type LocalWorkoutLogSetRow,
   type RemoteWorkoutLogSetRow,
   type SetState,
+  normalizeRpe,
   rowToLoggedSet,
   workoutLogSetId,
 } from './types';
@@ -16,6 +17,7 @@ type SqliteWlRow = {
   weight: number | null;
   reps: number;
   state: string | null;
+  rpe: number | null;
   updated_at: string;
   deleted_at: string | null;
   dirty: number;
@@ -34,11 +36,15 @@ function mapRow(row: SqliteWlRow): LocalWorkoutLogSetRow {
     weight: row.weight,
     reps: row.reps,
     state,
+    rpe: normalizeRpe(row.rpe),
     updated_at: row.updated_at,
     deleted_at: row.deleted_at,
     dirty: row.dirty ? 1 : 0,
   };
 }
+
+const SELECT_COLUMNS =
+  'id, day_index, slot_index, set_index, weight, reps, state, rpe, updated_at, deleted_at, dirty';
 
 export async function upsertLocalWorkoutLogSetRow(
   row: Omit<LocalWorkoutLogSetRow, 'dirty'> & { dirty?: 0 | 1 }
@@ -46,8 +52,8 @@ export async function upsertLocalWorkoutLogSetRow(
   const dirty = row.dirty ?? 1;
   await getDatabase().runAsync(
     `INSERT INTO workout_log_sets (
-       id, day_index, slot_index, set_index, weight, reps, state, updated_at, deleted_at, dirty
-     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+       id, day_index, slot_index, set_index, weight, reps, state, rpe, updated_at, deleted_at, dirty
+     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
      ON CONFLICT(id) DO UPDATE SET
        day_index = excluded.day_index,
        slot_index = excluded.slot_index,
@@ -55,6 +61,7 @@ export async function upsertLocalWorkoutLogSetRow(
        weight = excluded.weight,
        reps = excluded.reps,
        state = excluded.state,
+       rpe = excluded.rpe,
        updated_at = excluded.updated_at,
        deleted_at = excluded.deleted_at,
        dirty = excluded.dirty`,
@@ -65,6 +72,7 @@ export async function upsertLocalWorkoutLogSetRow(
     row.weight,
     row.reps,
     row.state,
+    row.rpe,
     row.updated_at,
     row.deleted_at,
     dirty
@@ -90,7 +98,7 @@ export async function getLoggedSetsForSlotFromDb(
   slotIndex: number
 ): Promise<{ [setIndex: number]: LoggedSet }> {
   const rows = await getDatabase().getAllAsync<SqliteWlRow>(
-    `SELECT id, day_index, slot_index, set_index, weight, reps, state, updated_at, deleted_at, dirty
+    `SELECT ${SELECT_COLUMNS}
      FROM workout_log_sets
      WHERE day_index = ? AND slot_index = ? AND deleted_at IS NULL`,
     dayIndex,
@@ -107,7 +115,7 @@ export async function getWorkoutLogsForDayFromDb(
   dayIndex: number
 ): Promise<{ [slotIndex: number]: { [setIndex: number]: LoggedSet } }> {
   const rows = await getDatabase().getAllAsync<SqliteWlRow>(
-    `SELECT id, day_index, slot_index, set_index, weight, reps, state, updated_at, deleted_at, dirty
+    `SELECT ${SELECT_COLUMNS}
      FROM workout_log_sets
      WHERE day_index = ? AND deleted_at IS NULL
      ORDER BY slot_index ASC, set_index ASC`,
@@ -127,7 +135,7 @@ export async function listDirtyWorkoutLogSetRows(): Promise<
   LocalWorkoutLogSetRow[]
 > {
   const rows = await getDatabase().getAllAsync<SqliteWlRow>(
-    `SELECT id, day_index, slot_index, set_index, weight, reps, state, updated_at, deleted_at, dirty
+    `SELECT ${SELECT_COLUMNS}
      FROM workout_log_sets
      WHERE dirty = 1`
   );
@@ -228,7 +236,7 @@ export async function moveWorkoutLogDay(
   }
   const db = getDatabase();
   const source = await db.getAllAsync<SqliteWlRow>(
-    `SELECT id, day_index, slot_index, set_index, weight, reps, state, updated_at, deleted_at, dirty
+    `SELECT ${SELECT_COLUMNS}
      FROM workout_log_sets
      WHERE day_index = ? AND deleted_at IS NULL`,
     fromDayIndex
@@ -250,6 +258,7 @@ export async function moveWorkoutLogDay(
           row.state === 'completed' || row.state === 'failed' || row.state === null
             ? row.state
             : null,
+        rpe: normalizeRpe(row.rpe),
         updated_at: movedAt,
         deleted_at: null,
         dirty: 1,
@@ -304,6 +313,7 @@ export async function applyRemoteWorkoutLogSetRow(
     weight: remote.weight,
     reps: remote.reps,
     state,
+    rpe: normalizeRpe(remote.rpe),
     updated_at: remote.updated_at,
     deleted_at: remote.deleted_at,
     dirty: 0,

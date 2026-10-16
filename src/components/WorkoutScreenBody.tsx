@@ -16,7 +16,7 @@ import type {
   ProgramSessionStatus,
 } from '@/src/types/storage';
 import { formatVolumeFromKg } from '@/src/utils/weightUnits';
-import React, { type ComponentRef } from 'react';
+import React, { useCallback, useState, type ComponentRef } from 'react';
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -111,6 +111,11 @@ export function WorkoutScreenBody({
   exerciseCardKeySuffix = '',
 }: WorkoutScreenBodyProps) {
   const { unit: weightUnit } = useWeightUnit();
+  const [scrollEnabled, setScrollEnabled] = useState(true);
+  const handleSetReorderDragChange = useCallback((dragging: boolean) => {
+    setScrollEnabled(!dragging);
+  }, []);
+
   if (showProgramCompleted) {
     return <ProgramCompletedScreen onViewAllPrograms={onViewAllPrograms} />;
   }
@@ -153,6 +158,7 @@ export function WorkoutScreenBody({
           { paddingBottom: Spacing.xxl + tabBarHeight + bottomInset },
         ]}
         keyboardShouldPersistTaps="always"
+        scrollEnabled={scrollEnabled}
       >
         <View style={styles.header}>
           <View style={styles.headerTop}>
@@ -305,6 +311,7 @@ export function WorkoutScreenBody({
                   onSwap={() => handleSwapClick(currentExerciseIndex)}
                   onRestStart={handleRestStart}
                   onRestDismiss={handleRestDismiss}
+                  onSetReorderDragChange={handleSetReorderDragChange}
                 />
               );
             }

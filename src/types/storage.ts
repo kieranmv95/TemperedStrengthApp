@@ -15,8 +15,9 @@ export type LoggedSet = {
   weight: number | null;
   reps: number;
   state?: 'completed' | 'failed' | null;
+  /** Optional Rate of Perceived Exertion, whole number 1–10. */
+  rpe?: number | null;
 };
-
 export type WorkoutLogs = {
   [dayIndex: number]: {
     [slotIndex: number]: {
