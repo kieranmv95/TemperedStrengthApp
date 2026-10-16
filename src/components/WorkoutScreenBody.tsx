@@ -27,6 +27,7 @@ import {
 } from 'react-native';
 import type { RestTimerStartPayload } from './ExerciseCard';
 import { ExerciseCard } from './ExerciseCard';
+import { CollapsibleWarmupSection } from './CollapsibleWarmupSection';
 import { ConditioningWorkoutBody } from './conditioning/ConditioningWorkoutBody';
 import { YoutubeEmbed } from './exercise/YoutubeEmbed';
 import { ProgramSessionStatusControls } from './ProgramSessionStatusControls';
@@ -270,10 +271,12 @@ export function WorkoutScreenBody({
           return slots.map((slot, index) => {
             if (slot.type === 'warmup') {
               return (
-                <View key={`warmup-${index}`} style={styles.warmupCard}>
-                  <Text style={styles.warmupTitle}>
-                    {slot.warmup.title ?? 'Warm-Up'}
-                  </Text>
+                <CollapsibleWarmupSection
+                  key={`warmup-${selectedDayIndex}-${index}`}
+                  title={slot.warmup.title ?? 'Warm-Up'}
+                  containerStyle={styles.warmupCard}
+                  titleStyle={styles.warmupTitle}
+                >
                   {slot.warmup.additionalDescription && (
                     <Text style={styles.warmupDescription}>
                       {slot.warmup.additionalDescription}
@@ -295,7 +298,7 @@ export function WorkoutScreenBody({
                       />
                     </View>
                   ) : null}
-                </View>
+                </CollapsibleWarmupSection>
               );
             } else {
               const currentExerciseIndex = exerciseSlotIndex;

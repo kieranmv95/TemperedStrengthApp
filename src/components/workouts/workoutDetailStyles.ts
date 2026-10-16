@@ -144,6 +144,10 @@ export const workoutDetailStyles = StyleSheet.create({
     borderColor: Colors.backgroundElevated,
     gap: Spacing.md,
   },
+  /** CollapsibleWarmupSection owns header/body spacing. */
+  collapsibleWarmupContainer: {
+    gap: 0,
+  },
   blockName: {
     color: Colors.accent,
     fontSize: FontSize.displaySm,

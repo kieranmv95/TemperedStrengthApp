@@ -1,3 +1,4 @@
+import { CollapsibleWarmupSection } from '@/src/components/CollapsibleWarmupSection';
 import { Pill } from '@/src/components/ds';
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
 import { Colors } from '@/src/constants/theme';
@@ -70,6 +71,80 @@ function renderMovementRow(movement: WorkoutMovement, movementIndex: number) {
     <View key={movementIndex} style={styles.movementItem}>
       <Text style={styles.movementBullet}>•</Text>
       <Text style={styles.movementText}>{movementText}</Text>
+    </View>
+  );
+}
+
+/** Matches Warmup / Warm-Up / Warm Up (any casing). */
+function isWarmupBlockName(name: string): boolean {
+  return (
+    name
+      .trim()
+      .toLowerCase()
+      .replace(/[\s-]+/g, '') === 'warmup'
+  );
+}
+
+function renderBlockBody(block: WorkoutBlockBase) {
+  return (
+    <>
+      {block.mobilityFlow && (
+        <TouchableOpacity
+          onPress={() => {
+            router.push({
+              pathname: '/recovery/[id]',
+              params: { id: block.mobilityFlow as string },
+            });
+          }}
+          style={styles.startFlowButton}
+        >
+          <Text style={styles.startFlowText}>
+            {block.mobilityFlowCopy
+              ? block.mobilityFlowCopy
+              : 'Start Mobility Flow'}
+          </Text>
+        </TouchableOpacity>
+      )}
+      {block.instructions && (
+        <Text style={styles.blockInstructions}>{block.instructions}</Text>
+      )}
+      {block.highlightInstructions && (
+        <Text style={styles.blockHighlightInstructions}>
+          {block.highlightInstructions}
+        </Text>
+      )}
+      {block.movements && (
+        <View style={styles.movementsList}>
+          {block.movements.map((movement, movementIndex) =>
+            renderMovementRow(movement, movementIndex)
+          )}
+        </View>
+      )}
+    </>
+  );
+}
+
+function renderWorkoutBlock(block: WorkoutBlockBase, key: string) {
+  if (isWarmupBlockName(block.name)) {
+    return (
+      <CollapsibleWarmupSection
+        key={key}
+        title={block.name}
+        containerStyle={[
+          styles.blockContainer,
+          styles.collapsibleWarmupContainer,
+        ]}
+        titleStyle={styles.blockName}
+      >
+        {renderBlockBody(block)}
+      </CollapsibleWarmupSection>
+    );
+  }
+
+  return (
+    <View key={key} style={styles.blockContainer}>
+      <Text style={styles.blockName}>{block.name}</Text>
+      {renderBlockBody(block)}
     </View>
   );
 }
@@ -263,84 +338,17 @@ export function WorkoutDetailScrollContent({
             ))}
           </ScrollView>
 
-          {scaledBlocks.selected.blocks.map((block, blockIndex) => (
-            <View key={blockIndex} style={styles.blockContainer}>
-              <Text style={styles.blockName}>{block.name}</Text>
-              {block.mobilityFlow && (
-                <TouchableOpacity
-                  onPress={() => {
-                    router.push({
-                      pathname: '/recovery/[id]',
-                      params: { id: block.mobilityFlow as string },
-                    });
-                  }}
-                  style={styles.startFlowButton}
-                >
-                  <Text style={styles.startFlowText}>
-                    {block.mobilityFlowCopy
-                      ? block.mobilityFlowCopy
-                      : 'Start Mobility Flow'}
-                  </Text>
-                </TouchableOpacity>
-              )}
-              {block.instructions && (
-                <Text style={styles.blockInstructions}>
-                  {block.instructions}
-                </Text>
-              )}
-              {block.highlightInstructions && (
-                <Text style={styles.blockHighlightInstructions}>
-                  {block.highlightInstructions}
-                </Text>
-              )}
-              {block.movements && (
-                <View style={styles.movementsList}>
-                  {block.movements.map((movement, movementIndex) =>
-                    renderMovementRow(movement, movementIndex)
-                  )}
-                </View>
-              )}
-            </View>
-          ))}
+          {scaledBlocks.selected.blocks.map((block, blockIndex) =>
+            renderWorkoutBlock(
+              block,
+              `${workout.id}-scale-${scaledBlocks.safeIndex}-block-${blockIndex}`
+            )
+          )}
         </>
       ) : flatBlocks ? (
-        flatBlocks.map((block, blockIndex) => (
-          <View key={blockIndex} style={styles.blockContainer}>
-            <Text style={styles.blockName}>{block.name}</Text>
-            {block.mobilityFlow && (
-              <TouchableOpacity
-                onPress={() => {
-                  router.push({
-                    pathname: '/recovery/[id]',
-                    params: { id: block.mobilityFlow as string },
-                  });
-                }}
-                style={styles.startFlowButton}
-              >
-                <Text style={styles.startFlowText}>
-                  {block.mobilityFlowCopy
-                    ? block.mobilityFlowCopy
-                    : 'Start Mobility Flow'}
-                </Text>
-              </TouchableOpacity>
-            )}
-            {block.instructions && (
-              <Text style={styles.blockInstructions}>{block.instructions}</Text>
-            )}
-            {block.highlightInstructions && (
-              <Text style={styles.blockHighlightInstructions}>
-                {block.highlightInstructions}
-              </Text>
-            )}
-            {block.movements && (
-              <View style={styles.movementsList}>
-                {block.movements.map((movement, movementIndex) =>
-                  renderMovementRow(movement, movementIndex)
-                )}
-              </View>
-            )}
-          </View>
-        ))
+        flatBlocks.map((block, blockIndex) =>
+          renderWorkoutBlock(block, `${workout.id}-block-${blockIndex}`)
+        )
       ) : null}
 
       <StandaloneWorkoutLogPanel workout={workout} />

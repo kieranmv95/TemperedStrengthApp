@@ -82,6 +82,17 @@ export function ConditioningWorkoutBody({
 
       {blocks.map((block) => {
         const isCompleted = !!logs[block.id]?.completed;
+        if (block.type === 'warmup') {
+          return (
+            <ConditioningWarmupBlock
+              key={`${dayIndex}-${block.id}`}
+              block={block}
+              isCompleted={isCompleted}
+              onToggleComplete={() => handleToggle(block.id)}
+            />
+          );
+        }
+
         return (
           <View
             key={block.id}
@@ -130,7 +141,7 @@ export function ConditioningWorkoutBody({
               <Text style={styles.blockInstructions}>{block.instructions}</Text>
             ) : null}
 
-            {block.type === 'warmup' || block.type === 'cooldown' ? (
+            {block.type === 'cooldown' ? (
               <View style={styles.warmupList}>
                 {block.description.map((item, idx) => (
                   <View key={idx} style={styles.warmupItem}>
@@ -168,6 +179,88 @@ export function ConditioningWorkoutBody({
           </View>
         );
       })}
+    </View>
+  );
+}
+
+type ConditioningWarmupBlockProps = {
+  block: Extract<WorkoutBlock, { type: 'warmup' }>;
+  isCompleted: boolean;
+  onToggleComplete: () => void;
+};
+
+function ConditioningWarmupBlock({
+  block,
+  isCompleted,
+  onToggleComplete,
+}: ConditioningWarmupBlockProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <View style={[styles.blockCard, isCompleted && styles.blockCardCompleted]}>
+      <View style={styles.blockHeader}>
+        <View style={styles.blockHeaderLeft}>
+          <View style={styles.blockTitleRow}>
+            <Text style={[styles.blockTitle, styles.warmupTitleFlex]}>
+              {block.title}
+            </Text>
+            <View style={styles.blockTypeBadge}>
+              <Text style={styles.blockTypeBadgeText}>WARMUP</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.expandToggle}
+              onPress={() => setIsExpanded((prev) => !prev)}
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel={isExpanded ? 'Hide warm-up' : 'Show warm-up'}
+            >
+              <Text style={styles.expandToggleText}>
+                {isExpanded ? 'HIDE' : 'SHOW'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
+        </View>
+      </View>
+
+      <TouchableOpacity
+        onPress={onToggleComplete}
+        activeOpacity={0.7}
+        style={[
+          styles.completeButton,
+          isCompleted && styles.completeButtonActive,
+        ]}
+      >
+        <Ionicons
+          name={isCompleted ? 'checkmark-circle' : 'ellipse-outline'}
+          size={18}
+          color={isCompleted ? Colors.textOnAccent : Colors.textMuted}
+        />
+        <Text
+          style={[
+            styles.completeButtonText,
+            isCompleted && styles.completeButtonTextActive,
+          ]}
+        >
+          {isCompleted ? 'Completed' : 'Mark complete'}
+        </Text>
+      </TouchableOpacity>
+
+      {isExpanded ? (
+        <>
+          {block.instructions ? (
+            <Text style={styles.blockInstructions}>{block.instructions}</Text>
+          ) : null}
+          <View style={styles.warmupList}>
+            {block.description.map((item, idx) => (
+              <View key={idx} style={styles.warmupItem}>
+                <Text style={styles.warmupBullet}>•</Text>
+                <Text style={styles.warmupText}>{item}</Text>
+              </View>
+            ))}
+          </View>
+        </>
+      ) : null}
     </View>
   );
 }
@@ -256,6 +349,26 @@ const styles = StyleSheet.create({
   },
   blockTypeBadgeText: {
     color: Colors.textMuted,
+    fontSize: FontSize.sm,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  warmupTitleFlex: {
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
+  },
+  expandToggle: {
+    flexShrink: 0,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    borderColor: Colors.backgroundSubtle,
+    backgroundColor: Colors.backgroundElevated,
+  },
+  expandToggleText: {
+    color: Colors.accent,
     fontSize: FontSize.sm,
     fontWeight: '700',
     letterSpacing: 0.5,

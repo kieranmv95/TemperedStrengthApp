@@ -205,7 +205,6 @@ export const workoutScreenStyles = StyleSheet.create({
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    marginBottom: Spacing.md,
   },
   warmupDescription: {
     color: Colors.textMuted,

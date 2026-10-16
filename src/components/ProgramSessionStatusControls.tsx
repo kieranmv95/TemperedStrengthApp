@@ -1,3 +1,4 @@
+import { CollapsibleWarmupSection } from '@/src/components/CollapsibleWarmupSection';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import type { ProgramSessionStatus } from '@/src/types/storage';
 import React from 'react';
@@ -17,10 +18,13 @@ export function ProgramSessionStatusControls({
   onSkip,
 }: ProgramSessionStatusControlsProps) {
   return (
-    <View style={styles.container}>
-      <View style={styles.headingRow}>
-        <Text style={styles.title}>Session status</Text>
-        {status ? (
+    <CollapsibleWarmupSection
+      title="Session Actions"
+      contentName="session actions"
+      containerStyle={styles.container}
+      titleStyle={styles.title}
+      headerAccessory={
+        status ? (
           <Text
             style={[
               styles.status,
@@ -31,8 +35,9 @@ export function ProgramSessionStatusControls({
           >
             {status === 'completed' ? 'Completed' : 'Skipped'}
           </Text>
-        ) : null}
-      </View>
+        ) : null
+      }
+    >
       {onMove ? (
         <TouchableOpacity
           style={styles.moveAction}
@@ -83,7 +88,7 @@ export function ProgramSessionStatusControls({
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </CollapsibleWarmupSection>
   );
 }
 
@@ -96,18 +101,15 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xxl,
     padding: Spacing.xxl,
   },
-  headingRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: Spacing.lg,
-  },
   title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
+    color: Colors.accent,
+    fontSize: FontSize.xxl,
     fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   status: {
+    flexShrink: 0,
     fontSize: FontSize.md,
     fontWeight: '700',
     textTransform: 'uppercase',
@@ -127,7 +129,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.backgroundBorder,
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
-    marginBottom: Spacing.md,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.lg,
   },
