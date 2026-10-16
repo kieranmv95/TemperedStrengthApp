@@ -69,8 +69,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     pbPrompt,
     dismissPbPrompt,
     confirmPbPrompt,
-    exercisePbSubtitle,
-    exercisePbSubtitleHeader,
+    exercisePbChip,
   } = useExerciseCardState({
     isPro,
     exerciseId,
@@ -157,7 +156,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           <Text style={styles.exerciseName}>{exercise.name}</Text>
           {exerciseHasVideo(exercise) ||
           (!isSwapped && programExercise?.additionalHeader) ||
-          exercisePbSubtitle ||
+          exercisePbChip ||
           repRangeText ? (
             <View style={styles.headerMetaRow}>
               <ExerciseVideoPlayButton exerciseId={exercise.id} />
@@ -168,12 +167,10 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                   </Text>
                 </View>
               ) : null}
-              {exercisePbSubtitle ? (
+              {exercisePbChip ? (
                 <View style={styles.metaChip}>
                   <Text style={styles.metaChipText} numberOfLines={1}>
-                    {exercisePbSubtitleHeader
-                      ? `${exercisePbSubtitleHeader.replace(/:?\s*$/, '')} · ${exercisePbSubtitle}`
-                      : exercisePbSubtitle}
+                    {exercisePbChip}
                   </Text>
                 </View>
               ) : null}

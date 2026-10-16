@@ -265,48 +265,84 @@ export function summarizePersonalBests(
     : 'No PBs logged';
 }
 
-/** 1RM tier only — used for exercise card Best / Latest line. */
-const EXERCISE_CARD_PB_TIER: RepMax = 1;
+/**
+ * Distance from a rep-max tier to a prescribed rep range.
+ * Tiers inside the range score 0; outside score distance to the nearer edge.
+ */
+export function distanceToRepRange(
+  tier: RepMax,
+  repRange: [number, number]
+): number {
+  const [min, max] = repRange;
+  const lo = Math.min(min, max);
+  const hi = Math.max(min, max);
+  if (tier >= lo && tier <= hi) {
+    return 0;
+  }
+  if (tier < lo) {
+    return lo - tier;
+  }
+  return tier - hi;
+}
 
 /**
- * One-line copy for workout cards: 1RM best vs most recent 1RM log.
- * Ignores other rep-max tiers. When the latest 1RM entry matches peak weight, only Best is shown.
+ * Among tiers that have a current best, pick the one nearest the prescribed
+ * rep range. Ties: closer to the range midpoint, then lower tier.
  */
-export function formatExercisePbSubtitle(
+export function findNearestRepMaxTier(
+  ledger: ExercisePersonalBestsLedger,
+  repRange: [number, number]
+): RepMax | null {
+  const [min, max] = repRange;
+  const midpoint = (min + max) / 2;
+
+  let bestTier: RepMax | null = null;
+  let bestDistance = Infinity;
+  let bestMidpointDistance = Infinity;
+
+  for (const tier of REP_MAX_ORDER) {
+    if (getCurrentBestForTier(ledger, tier) === undefined) {
+      continue;
+    }
+    const distance = distanceToRepRange(tier, repRange);
+    const midpointDistance = Math.abs(tier - midpoint);
+    if (
+      distance < bestDistance ||
+      (distance === bestDistance && midpointDistance < bestMidpointDistance) ||
+      (distance === bestDistance &&
+        midpointDistance === bestMidpointDistance &&
+        (bestTier === null || tier < bestTier))
+    ) {
+      bestTier = tier;
+      bestDistance = distance;
+      bestMidpointDistance = midpointDistance;
+    }
+  }
+
+  return bestTier;
+}
+
+/**
+ * Exercise-card chip: nearest stored rep-max to the prescribed range.
+ * e.g. "3RM - 100kg". Null when the ledger has no PBs.
+ */
+export function formatExercisePbChip(
   ledger: ExercisePersonalBestsLedger | null | undefined,
+  repRange: [number, number] | null | undefined,
   unit: WeightUnit = 'kg'
 ): string | null {
-  if (!ledger) {
+  if (!ledger || !repRange) {
     return null;
   }
-  const best = getCurrentBestForTier(ledger, EXERCISE_CARD_PB_TIER);
-  const latest = getLatestEntryForTier(ledger, EXERCISE_CARD_PB_TIER);
-  if (!best || !latest) {
+  const tier = findNearestRepMaxTier(ledger, repRange);
+  if (tier === null) {
+    return null;
+  }
+  const best = getCurrentBestForTier(ledger, tier);
+  if (!best) {
     return null;
   }
   const unitSuffix = unit === 'lb' ? 'lb' : 'kg';
-  const bestText = `${formatWeightValueFromKg(best.weight, unit)}${unitSuffix}`;
-  const latestText = `${formatWeightValueFromKg(latest.weight, unit)}${unitSuffix}`;
-  if (latest.weight !== best.weight) {
-    return `${bestText} / ${latestText}`;
-  }
-  return bestText;
-}
-
-export function formatExercisePbSubtitleHeader(
-  ledger: ExercisePersonalBestsLedger | null | undefined,
-  unit: WeightUnit = 'kg'
-): string | null {
-  if (!ledger) {
-    return null;
-  }
-  const best = getCurrentBestForTier(ledger, EXERCISE_CARD_PB_TIER);
-  const latest = getLatestEntryForTier(ledger, EXERCISE_CARD_PB_TIER);
-  if (!best || !latest) {
-    return null;
-  }
-  if (latest.weight !== best.weight) {
-    return `Best Single / Latest Single:`;
-  }
-  return `Best Single:`;
+  const weightText = `${formatWeightValueFromKg(best.weight, unit)}${unitSuffix}`;
+  return `${formatRepMaxLabel(tier)} - ${weightText}`;
 }

@@ -8,8 +8,7 @@ import type {
 } from '@/src/types/personalBests';
 import type { Exercise as ProgramExercise } from '@/src/types/program';
 import {
-  formatExercisePbSubtitle,
-  formatExercisePbSubtitleHeader,
+  formatExercisePbChip,
   previewPersonalBestLog,
   repCountToTier,
 } from '@/src/utils/personalBests';
@@ -419,14 +418,14 @@ export function useExerciseCardState({
     }
   }, [pbPrompt, loadPbLedger, posthog]);
 
-  const exercisePbSubtitle = useMemo(
-    () => formatExercisePbSubtitle(pbLedger ?? undefined, weightUnit),
-    [pbLedger, weightUnit]
-  );
-
-  const exercisePbSubtitleHeader = useMemo(
-    () => formatExercisePbSubtitleHeader(pbLedger ?? undefined, weightUnit),
-    [pbLedger, weightUnit]
+  const exercisePbChip = useMemo(
+    () =>
+      formatExercisePbChip(
+        pbLedger ?? undefined,
+        programExercise?.repRange,
+        weightUnit
+      ),
+    [pbLedger, programExercise?.repRange, weightUnit]
   );
 
   /** null = clear; undefined = invalid / incomplete — preserve existing on save. */
@@ -778,7 +777,6 @@ export function useExerciseCardState({
     pbPrompt,
     dismissPbPrompt,
     confirmPbPrompt,
-    exercisePbSubtitle,
-    exercisePbSubtitleHeader,
+    exercisePbChip,
   };
 }
