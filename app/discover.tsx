@@ -1,4 +1,4 @@
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView } from '@/src/components/ds';
 import { DiscoverPartnersContent } from '@/src/components/partners/DiscoverPartnersContent';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useDiscoverLocation } from '@/src/hooks/use-discover-location';

@@ -1,4 +1,4 @@
-import { Pill } from '@/src/components/pill';
+import { Pill } from '@/src/components/ds';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import type { UserCoords } from '@/src/services/discoverLocationService';
 import type { PartnerListing } from '@/src/types/partner';

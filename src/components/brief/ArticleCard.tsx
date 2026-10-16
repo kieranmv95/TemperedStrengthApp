@@ -1,4 +1,4 @@
-import { Colors } from '@/src/constants/theme';
+import { Colors, Spacing } from '@/src/constants/theme';
 import type { ArticleListItem } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
@@ -62,7 +62,9 @@ export function ArticleCard({
           <Text style={styles.compactMetaText}>{article.readTime} min</Text>
         </View>
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+      <View
+        style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.xl }}
+      >
         {canFavorite && (
           <TouchableOpacity
             onPress={handleToggleFavorite}

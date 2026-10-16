@@ -1,4 +1,4 @@
-import { Pill } from '@/src/components/pill';
+import { Pill } from '@/src/components/ds';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import type { LiveCompetition } from '@/src/types/live-competition';
 import {

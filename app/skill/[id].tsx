@@ -7,7 +7,7 @@ import { SkillSectionHeader } from '@/src/components/skills/SkillSectionHeader';
 import { SkillTipsCarousel } from '@/src/components/skills/SkillTipsCarousel';
 import { SkillVideos } from '@/src/components/skills/SkillVideos';
 import { SkillWorkouts } from '@/src/components/skills/SkillWorkouts';
-import { StandardLayout } from '@/src/components/StandardLayout';
+import { StandardLayout } from '@/src/components/ds';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useRoles } from '@/src/hooks/useRoles';
 import { useSkill } from '@/src/hooks/useSkills';

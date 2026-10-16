@@ -1,4 +1,4 @@
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView } from '@/src/components/ds';
 import { Colors } from '@/src/constants/theme';
 import { useLiveCompetition } from '@/src/hooks/useLiveCompetition';
 import { LiveCompetitionScreen } from '@/src/screens/LiveCompetitionScreen';

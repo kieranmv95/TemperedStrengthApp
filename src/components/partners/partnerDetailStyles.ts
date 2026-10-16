@@ -199,7 +199,7 @@ export const partnerDetailStyles = StyleSheet.create({
   },
   statusBadgeClosed: {
     backgroundColor: Colors.destructiveWashFill,
-    borderColor: 'rgba(255, 107, 107, 0.25)',
+    borderColor: Colors.destructiveWashBorder,
   },
   statusBadgeText: {
     fontSize: FontSize.lg,

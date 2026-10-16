@@ -1,7 +1,6 @@
-import { Card, SmallChevron } from '@/src/components/ds';
+import { Card, SmallChevron, StandardLayout } from '@/src/components/ds';
 import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
 import { settingsScreenStyles as settingsStyles } from '@/src/components/settings/settingsScreenStyles';
-import { StandardLayout } from '@/src/components/StandardLayout';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useOnboardingProfile } from '@/src/hooks/useOnboardingProfile';
@@ -158,7 +157,7 @@ const styles = StyleSheet.create({
   accountIconWrap: {
     width: 36,
     height: 36,
-    borderRadius: 10,
+    borderRadius: BorderRadius.xl,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.backgroundElevated,

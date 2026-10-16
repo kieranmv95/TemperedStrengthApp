@@ -2,7 +2,7 @@ import {
   ToolScreenShell,
   toolFormStyles as styles,
 } from '@/src/components/tools/ToolScreenShell';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getToolById } from '@/src/data/tools';
 import { increment } from '@/src/services/metricService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -221,7 +221,7 @@ const localStyles = StyleSheet.create({
     fontSize: FontSize.lg,
     lineHeight: 20,
     backgroundColor: Colors.accentWashFill,
-    borderRadius: 12,
+    borderRadius: BorderRadius.xxl,
     borderWidth: 1,
     borderColor: Colors.accentWashBorder,
     padding: Spacing.xl,

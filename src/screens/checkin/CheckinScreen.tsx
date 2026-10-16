@@ -4,7 +4,7 @@ import {
 } from '@/src/components/checkin/CheckinDayList';
 import { CheckinHistoryCalendar } from '@/src/components/checkin/CheckinHistoryCalendar';
 import { CheckinLogModal } from '@/src/components/checkin/CheckinLogModal';
-import { StandardLayout } from '@/src/components/StandardLayout';
+import { StandardLayout } from '@/src/components/ds';
 import { Colors } from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';

@@ -1,5 +1,4 @@
-import { StandardLayout } from '@/src/components/StandardLayout';
-import { SmallChevron } from '@/src/components/ds/SmallChevron';
+import { SmallChevron, StandardLayout } from '@/src/components/ds';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { useSubscription } from '@/src/hooks/use-subscription';

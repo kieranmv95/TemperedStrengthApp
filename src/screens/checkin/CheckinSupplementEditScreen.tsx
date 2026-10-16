@@ -1,9 +1,9 @@
 import {
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
   IosKeyboardDoneAccessory,
-} from '@/src/components/forms/IosKeyboardDoneAccessory';
+  StandardLayout,
+} from '@/src/components/ds';
 import { settingsScreenStyles } from '@/src/components/settings/settingsScreenStyles';
-import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors } from '@/src/constants/theme';
 import { SUPPLEMENT_SEEDS } from '@/src/data/checkin/supplementSeeds';
 import { newCheckinId } from '@/src/db/domains/checkin/types';

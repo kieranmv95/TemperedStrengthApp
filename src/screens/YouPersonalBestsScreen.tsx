@@ -1,7 +1,5 @@
-import { Card, SmallChevron } from '@/src/components/ds';
-import { Pill } from '@/src/components/pill';
-import { StandardLayout } from '@/src/components/StandardLayout';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { Card, Pill, SmallChevron, StandardLayout } from '@/src/components/ds';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getAllExercises } from '@/src/data/exercises';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import type { Exercise } from '@/src/types/exercise';
@@ -205,7 +203,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.backgroundCard,
-    borderRadius: 10,
+    borderRadius: BorderRadius.xl,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,
     paddingHorizontal: Spacing.xl,

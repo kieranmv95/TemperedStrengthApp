@@ -1,9 +1,10 @@
-import { Card, SmallChevron } from '@/src/components/ds';
-import { ExerciseVideoPlayButton } from '@/src/components/exercise/ExerciseVideoPlayButton';
 import {
+  Card,
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
   IosKeyboardDoneAccessory,
-} from '@/src/components/forms/IosKeyboardDoneAccessory';
+  SmallChevron,
+} from '@/src/components/ds';
+import { ExerciseVideoPlayButton } from '@/src/components/exercise/ExerciseVideoPlayButton';
 import { PbModalDateTimeField } from '@/src/components/PbModalDateTimeField';
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
@@ -509,7 +510,7 @@ const localStyles = StyleSheet.create({
     backgroundColor: Colors.backgroundElevated,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,
-    borderRadius: 8,
+    borderRadius: BorderRadius.lg,
     padding: Spacing.xxl,
     color: Colors.textPrimary,
     fontSize: FontSize.xxl,
@@ -523,7 +524,7 @@ const localStyles = StyleSheet.create({
     flex: 1,
     paddingVertical: Spacing.xxl,
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: BorderRadius.lg,
     backgroundColor: Colors.backgroundElevated,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,
@@ -537,7 +538,7 @@ const localStyles = StyleSheet.create({
     flex: 1,
     paddingVertical: Spacing.xxl,
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: BorderRadius.lg,
     backgroundColor: Colors.accent,
   },
   modalSaveText: {

@@ -1,4 +1,4 @@
-import { Pill } from '@/src/components/pill';
+import { Pill } from '@/src/components/ds';
 import {
   categoryFilterDisplayLabel,
   type CategoryFilter,
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.sm,
     paddingVertical: Spacing.md,
-    paddingHorizontal: 14,
+    paddingHorizontal: Spacing.control,
     borderRadius: BorderRadius.pill,
     backgroundColor: Colors.backgroundCard,
     borderWidth: 1,

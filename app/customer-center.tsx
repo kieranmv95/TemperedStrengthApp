@@ -1,7 +1,7 @@
 import { Colors } from '@/src/constants/theme';
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView } from '@/src/components/ds';
 import RevenueCatUI from 'react-native-purchases-ui';
 
 export default function CustomerCenterScreen() {

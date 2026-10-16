@@ -1,4 +1,4 @@
-import { Pill } from '@/src/components/pill';
+import { Pill } from '@/src/components/ds';
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
 import { Colors } from '@/src/constants/theme';
 import type {

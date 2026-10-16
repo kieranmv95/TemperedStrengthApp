@@ -1,4 +1,4 @@
-import { Pill } from '@/src/components/pill';
+import { Pill } from '@/src/components/ds';
 import { RecoveryBlockTimer } from '@/src/components/recovery/RecoveryBlockTimer';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import type { Recovery, RecoveryBlock } from '@/src/types/recovery';

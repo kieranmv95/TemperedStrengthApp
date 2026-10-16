@@ -1,7 +1,7 @@
 import {
   AppSafeAreaView,
   AppScrollView,
-} from '@/src/components/AppSafeAreaView';
+} from '@/src/components/ds';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';

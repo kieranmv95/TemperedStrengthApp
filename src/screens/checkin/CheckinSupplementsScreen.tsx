@@ -1,6 +1,5 @@
-import { SmallChevron } from '@/src/components/ds';
+import { SmallChevron, StandardLayout } from '@/src/components/ds';
 import { settingsScreenStyles } from '@/src/components/settings/settingsScreenStyles';
-import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors } from '@/src/constants/theme';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { checkinScreenStyles as styles } from '@/src/screens/checkin/checkinScreenStyles';

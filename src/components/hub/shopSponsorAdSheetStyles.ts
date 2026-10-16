@@ -1,4 +1,4 @@
-import { BorderRadius, FontSize, Spacing } from '@/src/constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { StyleSheet } from 'react-native';
 
 export const SHOP_DETAIL_LOGO_MAX_WIDTH = 200;
@@ -11,7 +11,7 @@ export const shopSponsorAdSheetStyles = StyleSheet.create({
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: Colors.overlayMedium,
   },
   sheet: {
     borderTopLeftRadius: BorderRadius.pill,

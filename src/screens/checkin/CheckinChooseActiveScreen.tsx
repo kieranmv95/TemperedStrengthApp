@@ -1,4 +1,4 @@
-import { StandardLayout } from '@/src/components/StandardLayout';
+import { StandardLayout } from '@/src/components/ds';
 import { Colors } from '@/src/constants/theme';
 import { checkinScreenStyles as styles } from '@/src/screens/checkin/checkinScreenStyles';
 import type { CatalogueBehaviour } from '@/src/types/checkin';

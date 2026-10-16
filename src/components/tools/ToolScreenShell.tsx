@@ -3,10 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import {
-  AppSafeAreaView,
-  AppScrollView,
-} from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView, AppScrollView } from '@/src/components/ds';
 
 type ToolScreenShellProps = {
   title: string;

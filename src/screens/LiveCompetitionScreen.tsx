@@ -1,4 +1,4 @@
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView } from '@/src/components/ds';
 import { LiveCompetitionCard } from '@/src/components/LiveCompetitionCard';
 import { LiveCompetitionLeaderboard } from '@/src/components/LiveCompetitionLeaderboard';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';

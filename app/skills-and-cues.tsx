@@ -1,5 +1,5 @@
 import { SkillCard } from '@/src/components/skills/SkillCard';
-import { StandardLayout } from '@/src/components/StandardLayout';
+import { StandardLayout } from '@/src/components/ds';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useSkills } from '@/src/hooks/useSkills';
 import type { SkillSummary } from '@/src/types/skills';
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
-    paddingHorizontal: 14,
+    paddingHorizontal: Spacing.control,
     paddingVertical: Spacing.xl,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,

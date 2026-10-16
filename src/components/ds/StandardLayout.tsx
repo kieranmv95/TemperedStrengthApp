@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Colors, FontSize, Spacing } from '../constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 
 type StandardLayoutSectionProps = {
   children?: React.ReactNode;
@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
     paddingVertical: Spacing.sm,
     paddingHorizontal: Spacing.md,
-    borderRadius: 12,
+    borderRadius: BorderRadius.xxl,
     backgroundColor: Colors.backgroundCard,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,

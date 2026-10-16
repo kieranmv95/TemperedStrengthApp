@@ -1,6 +1,5 @@
 import Award from '@/src/components/Award';
-import { Pill } from '@/src/components/pill';
-import { StandardLayout } from '@/src/components/StandardLayout';
+import { Pill, StandardLayout } from '@/src/components/ds';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getAll } from '@/src/data/awards';
 import { useSubscription } from '@/src/hooks/use-subscription';

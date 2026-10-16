@@ -1,10 +1,13 @@
 import { ArticleCard } from '@/src/components/brief/ArticleCard';
-import { Card, CuratedSection } from '@/src/components/ds';
+import {
+  Card,
+  CuratedSection,
+  Pill,
+  StandardLayout,
+} from '@/src/components/ds';
 import { HubPromoRow } from '@/src/components/hub/HubPromoRow';
 import { SkillsAndCuesCard } from '@/src/components/hub/SkillsAndCuesCard';
 import { TogetherWeLiftBanner } from '@/src/components/hub/TogetherWeLiftBanner';
-import { Pill } from '@/src/components/pill';
-import { StandardLayout } from '@/src/components/StandardLayout';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { TOOLS, type ToolRoute } from '@/src/data/tools';
 import { useTogetherWeLift } from '@/src/hooks/use-together-we-lift';
@@ -445,7 +448,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 48,
+    paddingHorizontal: Spacing.emptyState,
     paddingTop: Spacing.xxl,
   },
   emptyTitle: {

@@ -1,5 +1,4 @@
 import { GlossaryItem } from '@/src/components/brief/GlossaryItem';
-import { Pill } from '@/src/components/pill';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { getGlossaryByCategory, searchGlossary } from '@/src/data/brief';
 import { fetchGlossary } from '@/src/services/briefApiService';
@@ -18,7 +17,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AppSafeAreaView, AppFlatList } from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView, AppFlatList, Pill } from '@/src/components/ds';
 
 type CategoryFilter = 'All' | GlossaryTerm['category'];
 
@@ -254,7 +253,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.backgroundCard,
     borderRadius: BorderRadius.xxl,
-    paddingHorizontal: 14,
+    paddingHorizontal: Spacing.control,
     paddingVertical: Spacing.xl,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,
@@ -287,14 +286,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 48,
+    paddingHorizontal: Spacing.emptyState,
     gap: Spacing.xxl,
   },
   emptyState: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 48,
+    paddingHorizontal: Spacing.emptyState,
   },
   emptyTitle: {
     color: Colors.textPrimary,

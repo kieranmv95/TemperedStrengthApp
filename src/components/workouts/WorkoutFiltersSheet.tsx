@@ -1,4 +1,4 @@
-import { Pill } from '@/src/components/pill';
+import { Pill } from '@/src/components/ds';
 import { workoutFiltersSheetStyles as styles } from '@/src/components/workouts/workoutFiltersSheetStyles';
 import {
   DISCIPLINE_CATEGORY_FILTERS,

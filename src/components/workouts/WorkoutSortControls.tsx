@@ -1,5 +1,5 @@
-import { Pill } from '@/src/components/pill';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { Pill } from '@/src/components/ds';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import {
   WORKOUT_SORT_BY_OPTIONS,
   WORKOUT_SORT_DIRECTION_OPTIONS,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
     paddingVertical: Spacing.sm,
     paddingHorizontal: Spacing.md,
-    borderRadius: 12,
+    borderRadius: BorderRadius.xxl,
     backgroundColor: Colors.backgroundCard,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   filterBadge: {
     minWidth: 20,
     height: 20,
-    borderRadius: 10,
+    borderRadius: BorderRadius.xl,
     backgroundColor: Colors.accent,
     alignItems: 'center',
     justifyContent: 'center',

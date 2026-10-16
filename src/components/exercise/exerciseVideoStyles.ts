@@ -8,7 +8,7 @@ export const exerciseVideoStyles = StyleSheet.create({
   },
   sheetBackdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: Colors.overlayMedium,
   },
   sheet: {
     backgroundColor: Colors.backgroundCard,

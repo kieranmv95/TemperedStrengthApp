@@ -1,7 +1,4 @@
-import {
-  AppSafeAreaView,
-  AppScrollView,
-} from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView, AppScrollView } from '@/src/components/ds';
 import { PartnerDetailBody } from '@/src/components/partners/PartnerDetailBody';
 import { partnerDetailStyles as styles } from '@/src/components/partners/partnerDetailStyles';
 import { Colors } from '@/src/constants/theme';

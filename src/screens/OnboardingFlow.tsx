@@ -1,8 +1,8 @@
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView } from '@/src/components/ds';
 import { OnboardingOptionCard } from '@/src/components/onboarding/OnboardingOptionCard';
 import { OnboardingProgressBar } from '@/src/components/onboarding/OnboardingProgressBar';
 import { onboardingStyles as styles } from '@/src/components/onboarding/onboardingStyles';
-import { Colors } from '@/src/constants/theme';
+import { Colors, Spacing } from '@/src/constants/theme';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
@@ -671,7 +671,7 @@ function OnboardingFlow() {
                 </TouchableOpacity>
               </View>
 
-              <View style={{ gap: 12 }} />
+              <View style={{ gap: Spacing.xl }} />
             </View>
           </View>
         ) : showAccountChoice ? (

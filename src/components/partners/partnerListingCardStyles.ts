@@ -88,7 +88,7 @@ export const partnerListingCardStyles = StyleSheet.create({
   statusBadgeClosed: {
     backgroundColor: Colors.destructiveWashFill,
     borderWidth: 1,
-    borderColor: 'rgba(255, 107, 107, 0.25)',
+    borderColor: Colors.destructiveWashBorder,
   },
   statusBadgeText: {
     fontSize: FontSize.sm,
@@ -119,11 +119,11 @@ export const partnerListingCardStyles = StyleSheet.create({
     color: Colors.destructive,
     backgroundColor: Colors.destructiveWashFill,
     borderWidth: 1,
-    borderColor: 'rgba(255, 107, 107, 0.25)',
+    borderColor: Colors.destructiveWashBorder,
   },
   actions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: Spacing.xl,
   },
 });

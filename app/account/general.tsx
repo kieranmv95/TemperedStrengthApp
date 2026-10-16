@@ -1,4 +1,3 @@
-import { SmallChevron } from '@/src/components/ds/SmallChevron';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
@@ -19,7 +18,8 @@ import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import {
   AppSafeAreaView,
   AppScrollView,
-} from '@/src/components/AppSafeAreaView';
+  SmallChevron,
+} from '@/src/components/ds';
 
 export default function AccountGeneralSettingsScreen() {
   const posthog = usePostHog();

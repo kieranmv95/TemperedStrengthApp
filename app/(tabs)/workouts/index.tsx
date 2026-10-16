@@ -1,5 +1,9 @@
-import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
-import { StandardLayout } from '@/src/components/StandardLayout';
+import {
+  Card,
+  CuratedSection,
+  SmallChevron,
+  StandardLayout,
+} from '@/src/components/ds';
 import { WorkoutActiveFiltersBar } from '@/src/components/workouts/WorkoutActiveFiltersBar';
 import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
 import {

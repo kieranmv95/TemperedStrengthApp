@@ -1,4 +1,4 @@
-import { Pill } from '@/src/components/pill';
+import { Pill } from '@/src/components/ds';
 import {
   ToolScreenShell,
   toolFormStyles as styles,

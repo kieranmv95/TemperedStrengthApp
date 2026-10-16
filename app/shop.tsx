@@ -1,7 +1,6 @@
-import { AppFlatList, AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+import { AppFlatList, AppSafeAreaView, Pill } from '@/src/components/ds';
 import { ShopAdListItem } from '@/src/components/hub/ShopAdListItem';
 import { ShopSponsorAdSheet } from '@/src/components/hub/ShopSponsorAdSheet';
-import { Pill } from '@/src/components/pill';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {

@@ -12,6 +12,8 @@ export const Colors = {
 
   // Overlays
   overlay: 'rgba(0, 0, 0, 0.8)',
+  /** Bottom sheet backdrops */
+  overlayMedium: 'rgba(0, 0, 0, 0.65)',
   overlayLight: 'rgba(0,0,0,0.45)',
 
   // Text
@@ -46,6 +48,7 @@ export const Colors = {
   // Semantic
   destructive: '#FF6B6B',
   destructiveWashFill: 'rgba(255, 107, 107, 0.12)',
+  destructiveWashBorder: 'rgba(255, 107, 107, 0.25)',
 
   // Tab bar
   tabIconDefault: '#9BA1A6',
@@ -117,6 +120,10 @@ export const Spacing = {
   xxl: 16,
   xxxl: 20,
   section: 24,
+  /** Horizontal padding inside pills and search fields */
+  control: 14,
+  /** Horizontal gutter for empty, locked, and centered states */
+  emptyState: 48,
 };
 
 export const BorderRadius = {

@@ -34,7 +34,7 @@ export const workoutDetailStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 48,
+    paddingHorizontal: Spacing.emptyState,
     gap: Spacing.xl,
   },
   lockedTitle: {
@@ -185,7 +185,7 @@ export const workoutDetailStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 48,
+    paddingHorizontal: Spacing.emptyState,
   },
   emptyTitle: {
     color: Colors.textPrimary,

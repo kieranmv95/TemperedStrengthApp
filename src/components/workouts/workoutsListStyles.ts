@@ -122,7 +122,7 @@ export const workoutsListStyles = StyleSheet.create({
   categoryIcon: {
     width: 24,
     height: 24,
-    borderRadius: 12,
+    borderRadius: BorderRadius.xxl,
     backgroundColor: Colors.backgroundElevated,
     alignItems: 'center',
     justifyContent: 'center',
@@ -215,7 +215,7 @@ export const workoutsListStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 48,
+    paddingHorizontal: Spacing.emptyState,
   },
   emptyTitle: {
     color: Colors.textPrimary,

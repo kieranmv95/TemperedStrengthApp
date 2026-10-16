@@ -1,6 +1,6 @@
 import { GymLeadMedia } from '@/src/components/partners/GymLeadMedia';
 import { partnerDetailStyles as styles } from '@/src/components/partners/partnerDetailStyles';
-import { Pill } from '@/src/components/pill';
+import { Pill } from '@/src/components/ds';
 import { Colors } from '@/src/constants/theme';
 import {
   formatAddressMultiLine,

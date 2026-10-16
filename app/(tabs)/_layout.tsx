@@ -3,8 +3,7 @@ import React, { useEffect } from 'react';
 import { AppState } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { HapticTab } from '@/src/components/haptic-tab';
-import { IconSymbol } from '@/src/components/ui/icon-symbol';
+import { HapticTab, IconSymbol } from '@/src/components/ds';
 import { Colors } from '@/src/constants/theme';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { applyDailyStreakCheckIn } from '@/src/services/streakService';

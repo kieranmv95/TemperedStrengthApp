@@ -18,10 +18,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {
-  AppSafeAreaView,
-  AppScrollView,
-} from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView, AppScrollView } from '@/src/components/ds';
 
 export default function ArticleScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

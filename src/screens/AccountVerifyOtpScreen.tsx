@@ -1,5 +1,5 @@
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { AppSafeAreaView } from '@/src/components/ds';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import {
   AccountRestoreEmptyError,
   useSyncManager,
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.backgroundElevated,
     borderColor: Colors.backgroundSubtle,
     borderWidth: 1,
-    borderRadius: 16,
+    borderRadius: BorderRadius.full,
     color: Colors.textPrimary,
     fontSize: FontSize.displayLg,
     // Do not set letterSpacing on TextInput — RN can leak it into other
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     backgroundColor: Colors.accent,
-    borderRadius: 16,
+    borderRadius: BorderRadius.full,
     paddingVertical: Spacing.xl,
     alignItems: 'center',
   },

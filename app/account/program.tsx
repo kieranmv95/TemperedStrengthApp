@@ -1,4 +1,3 @@
-import { SmallChevron } from '@/src/components/ds/SmallChevron';
 import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
 import { Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -29,7 +28,8 @@ import {
 import {
   AppSafeAreaView,
   AppScrollView,
-} from '@/src/components/AppSafeAreaView';
+  SmallChevron,
+} from '@/src/components/ds';
 
 export default function AccountProgramSettingsScreen() {
   const posthog = usePostHog();

@@ -1,4 +1,4 @@
-import { BorderRadius, FontSize, Spacing } from '@/src/constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { StyleSheet } from 'react-native';
 
 export const TOGETHER_WE_LIFT_LOGO_SIZE = 25;
@@ -51,7 +51,7 @@ export const togetherWeLiftStyles = StyleSheet.create({
   },
   sheetBackdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: Colors.overlayMedium,
   },
   sheet: {
     borderTopLeftRadius: BorderRadius.pill,

@@ -8,7 +8,7 @@ import { SessionTimer } from '@/src/components/SessionTimer';
 import { SwapModal } from '@/src/components/SwapModal';
 import { TrainingMaxesCard } from '@/src/components/TrainingMaxesCard';
 import { WorkoutScreenBody } from '@/src/components/WorkoutScreenBody';
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView, StandardLayout } from '@/src/components/ds';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { useWorkoutScreenController } from '@/src/hooks/useWorkoutScreenController';
@@ -21,8 +21,6 @@ import React from 'react';
 import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import { getEffectiveBottomInset } from '@/src/utils/platform';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { StandardLayout } from '../components/StandardLayout';
-
 type WorkoutScreenProps = {
   onProgramReset?: () => void;
 };

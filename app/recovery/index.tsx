@@ -1,8 +1,7 @@
-import { Pill } from '@/src/components/pill';
 import { RecoveryCard } from '@/src/components/recovery/RecoveryCard';
 import { workoutDetailStyles as headerStyles } from '@/src/components/workouts/workoutDetailStyles';
 import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { recoveries } from '@/src/data/recovery';
 import { useRoles } from '@/src/hooks/useRoles';
 import {
@@ -23,7 +22,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView, Pill } from '@/src/components/ds';
 
 const COACH_ROLE = 'coach';
 
@@ -462,7 +461,7 @@ const recoveryStyles = StyleSheet.create({
     gap: Spacing.sm,
     paddingVertical: Spacing.sm,
     paddingHorizontal: Spacing.md,
-    borderRadius: 12,
+    borderRadius: BorderRadius.xxl,
     backgroundColor: Colors.backgroundCard,
     borderWidth: 1,
     borderColor: Colors.backgroundElevated,

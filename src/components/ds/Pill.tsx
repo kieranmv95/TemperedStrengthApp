@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   filterTab: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 14,
+    paddingHorizontal: Spacing.control,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.pill,
     backgroundColor: Colors.backgroundCard,
