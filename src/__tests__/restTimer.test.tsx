@@ -1,5 +1,6 @@
 import { act, render, screen } from '@testing-library/react-native';
 import React from 'react';
+import { AccessibilityInfo } from 'react-native';
 import { RestTimer } from '../components/RestTimer';
 
 jest.mock('@expo/vector-icons', () => ({
@@ -8,6 +9,7 @@ jest.mock('@expo/vector-icons', () => ({
 
 describe('RestTimer', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
     jest.useFakeTimers();
   });
 
@@ -78,5 +80,62 @@ describe('RestTimer', () => {
 
     expect(screen.getByText('Rest Complete')).toBeTruthy();
     expect(screen.getByTestId('rest-timer-dismiss')).toBeTruthy();
+  });
+
+  it('announces a freshly started timer and its completion', async () => {
+    const announce = jest.spyOn(AccessibilityInfo, 'announceForAccessibility');
+    const startTime = new Date('2025-01-01T00:00:00Z');
+    jest.setSystemTime(startTime);
+
+    await act(async () => {
+      await render(
+        <RestTimer
+          timer={{
+            dayIndex: 1,
+            slotIndex: 0,
+            exerciseId: 10,
+            restTimeSeconds: 3,
+            startedAt: startTime.getTime(),
+            status: 'running',
+          }}
+          onDismiss={jest.fn()}
+          onComplete={jest.fn()}
+          onRestart={jest.fn()}
+          onAdjust={jest.fn()}
+        />
+      );
+    });
+    expect(announce).toHaveBeenCalledWith('Rest timer started, 3 seconds');
+
+    await act(async () => {
+      jest.advanceTimersByTime(3000);
+    });
+    expect(announce).toHaveBeenCalledWith('Rest complete');
+  });
+
+  it('does not re-announce a timer restored after leaving the screen', async () => {
+    const announce = jest.spyOn(AccessibilityInfo, 'announceForAccessibility');
+    jest.setSystemTime(new Date('2025-01-01T00:00:30Z'));
+
+    await act(async () => {
+      await render(
+        <RestTimer
+          timer={{
+            dayIndex: 1,
+            slotIndex: 0,
+            exerciseId: 10,
+            restTimeSeconds: 90,
+            startedAt: new Date('2025-01-01T00:00:00Z').getTime(),
+            status: 'running',
+          }}
+          onDismiss={jest.fn()}
+          onComplete={jest.fn()}
+          onRestart={jest.fn()}
+          onAdjust={jest.fn()}
+        />
+      );
+    });
+
+    expect(announce).not.toHaveBeenCalled();
   });
 });

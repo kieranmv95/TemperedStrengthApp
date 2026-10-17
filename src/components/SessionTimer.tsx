@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { workoutTimerBarStyles } from './workoutTimerBarStyles';
+import { Pressable, Text, View } from 'react-native';
+import { workoutTimerBarStyles as styles } from './workoutTimerBarStyles';
 
 type SessionTimerProps = {
   startedAt: number;
@@ -36,20 +36,27 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
   }, [startedAt]);
 
   return (
-    <View style={workoutTimerBarStyles.bar}>
-      <View style={workoutTimerBarStyles.timerSection}>
-        <View style={workoutTimerBarStyles.dot} />
-        <Text style={workoutTimerBarStyles.timerText}>
-          {formatElapsed(elapsed)}
-        </Text>
-      </View>
-      <TouchableOpacity
-        style={workoutTimerBarStyles.finishButton}
-        onPress={onFinish}
-        activeOpacity={0.7}
+    <View style={styles.bar}>
+      <View
+        style={styles.timerSection}
+        accessible
+        accessibilityLabel={`Session time ${formatElapsed(elapsed)}`}
       >
-        <Text style={workoutTimerBarStyles.finishButtonText}>Finish</Text>
-      </TouchableOpacity>
+        <View style={styles.dot} />
+        <Text style={styles.timerText}>Session</Text>
+        <Text style={styles.timerValue}>{formatElapsed(elapsed)}</Text>
+      </View>
+      <Pressable
+        style={({ pressed }) => [
+          styles.finishButton,
+          pressed && styles.finishButtonPressed,
+        ]}
+        onPress={onFinish}
+        accessibilityRole="button"
+        accessibilityLabel="Finish session"
+      >
+        <Text style={styles.finishButtonText}>Finish</Text>
+      </Pressable>
     </View>
   );
 };

@@ -1,80 +1,85 @@
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
-import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
+
+export const TIMER_RING_SIZE = 36;
+
+const DOT_SIZE = 8;
 
 export const workoutTimerBarStyles = StyleSheet.create({
   bar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.timerBarBackground,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.xl,
+    gap: space.sm,
+    backgroundColor: color.surface1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: color.borderSubtle,
+    paddingHorizontal: space.md,
+    paddingVertical: space.xs,
   },
   timerSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: space.sm,
     flex: 1,
     minWidth: 0,
   },
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.accent,
+    width: DOT_SIZE,
+    height: DOT_SIZE,
+    borderRadius: DOT_SIZE / 2,
+    backgroundColor: color.gold,
   },
   timerText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-    fontVariant: ['tabular-nums'],
+    ...typography.callout,
+    color: color.textSecondary,
+  },
+  timerTextComplete: {
+    ...typography.calloutStrong,
+    color: color.success,
+  },
+  timerValue: {
+    ...typography.numericMedium,
+    color: color.textPrimary,
   },
   finishButton: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.lg,
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.md,
+    minHeight: MIN_TARGET_SIZE,
+    justifyContent: 'center',
+    backgroundColor: color.gold,
+    borderRadius: radius.pill,
+    paddingHorizontal: space.lg,
+  },
+  finishButtonPressed: {
+    backgroundColor: color.goldStrong,
   },
   finishButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
   iconButtonGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
+    gap: space.xxs,
   },
   iconButton: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.lg,
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
+    backgroundColor: color.surface2,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  adjustButton: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.lg,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    alignItems: 'center',
-    justifyContent: 'center',
+  iconButtonPressed: {
+    backgroundColor: color.surface3,
   },
   adjustButtonText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.md,
-    fontWeight: '800',
-    fontVariant: ['tabular-nums'],
-    letterSpacing: 0.2,
-  },
-  buttonSize: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 42,
-    height: 42,
+    ...typography.numericSmall,
+    color: color.textPrimary,
   },
 });
