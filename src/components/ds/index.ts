@@ -5,7 +5,6 @@ import { Card } from './Card';
 import { ActionChip, Badge, FilterChip, Tag } from './Chip';
 import { Collapsible } from './Collapsible';
 import { CuratedSection } from './CuratedSection';
-import { HapticTab } from './HapticTab';
 import { IconSymbol } from './IconSymbol';
 import {
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
@@ -37,7 +36,6 @@ export {
   Collapsible,
   CuratedSection,
   FilterChip,
-  HapticTab,
   IconSymbol,
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
   IosKeyboardDoneAccessory,

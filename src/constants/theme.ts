@@ -57,9 +57,6 @@ export const Colors = {
   destructiveWashFill: color.dangerTint,
   destructiveWashBorder: 'rgba(255, 122, 112, 0.25)',
 
-  // Tab bar
-  tabIconDefault: color.textSecondary,
-
   // Remote notification banner (Sanity schema defaults; CMS may override)
   remoteNotificationBorder: '#2a3142',
   remoteNotificationBackground: '#1a1f2b',

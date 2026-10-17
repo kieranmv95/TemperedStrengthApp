@@ -3,8 +3,7 @@ import React, { useEffect } from 'react';
 import { AppState } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { HapticTab, IconSymbol } from '@/src/components/ds';
-import { Colors } from '@/src/constants/theme';
+import { IconSymbol, TabBar } from '@/src/components/ds';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { applyDailyStreakCheckIn } from '@/src/services/streakService';
 import { getEffectiveBottomInset } from '@/src/utils/platform';
@@ -34,27 +33,15 @@ export default function TabLayout() {
   return (
     <Tabs
       safeAreaInsets={{ ...insets, bottom: bottomInset }}
-      screenOptions={{
-        tabBarActiveTintColor: Colors.textPrimary,
-        tabBarInactiveTintColor: Colors.tabIconDefault,
-        tabBarStyle: {
-          backgroundColor: Colors.backgroundScreen,
-          borderTopColor: Colors.backgroundElevated,
-        },
-        headerShown: false,
-        tabBarButton: HapticTab as never,
-      }}
+      tabBar={(props) => <TabBar {...props} />}
+      screenOptions={{ headerShown: false }}
     >
       <Tabs.Screen
         name="program"
         options={{
           title: 'Program',
-          tabBarIcon: ({ color, focused }) => (
-            <IconSymbol
-              size={28}
-              name="book"
-              color={focused ? Colors.accent : String(color)}
-            />
+          tabBarIcon: ({ color, size }) => (
+            <IconSymbol size={size} name="book" color={String(color)} />
           ),
         }}
       />
@@ -62,12 +49,8 @@ export default function TabLayout() {
         name="workouts"
         options={{
           title: 'Workouts',
-          tabBarIcon: ({ color, focused }) => (
-            <IconSymbol
-              size={28}
-              name="dumbbell"
-              color={focused ? Colors.accent : String(color)}
-            />
+          tabBarIcon: ({ color, size }) => (
+            <IconSymbol size={size} name="dumbbell" color={String(color)} />
           ),
         }}
       />
@@ -75,12 +58,8 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <IconSymbol
-              size={28}
-              name="house"
-              color={focused ? Colors.accent : String(color)}
-            />
+          tabBarIcon: ({ color, size }) => (
+            <IconSymbol size={size} name="house" color={String(color)} />
           ),
         }}
       />
@@ -88,12 +67,8 @@ export default function TabLayout() {
         name="hub"
         options={{
           title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <IconSymbol
-              size={28}
-              name="globe"
-              color={focused ? Colors.accent : String(color)}
-            />
+          tabBarIcon: ({ color, size }) => (
+            <IconSymbol size={size} name="globe" color={String(color)} />
           ),
         }}
       />
@@ -101,12 +76,8 @@ export default function TabLayout() {
         name="records"
         options={{
           title: 'You',
-          tabBarIcon: ({ color, focused }) => (
-            <IconSymbol
-              size={24}
-              name="person"
-              color={focused ? Colors.accent : String(color)}
-            />
+          tabBarIcon: ({ color, size }) => (
+            <IconSymbol size={size} name="person" color={String(color)} />
           ),
         }}
       />
