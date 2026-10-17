@@ -17,6 +17,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "check:contrast": "jest src/__tests__/contrast.test.ts src/utils/contrast.test.ts",
     "update:production": "eas update --channel production",
     "update:preview": "eas update --channel preview",
     "bump-version": "node ./scripts/bump-version.js"
