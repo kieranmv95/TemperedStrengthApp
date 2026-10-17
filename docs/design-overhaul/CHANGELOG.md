@@ -1,5 +1,41 @@
 # Design overhaul changelog
 
+## Phase 3: Program screen
+
+- **Tab bar:** the new `TabBar` replaces the default bar and `HapticTab` across the app.
+- **Timer bars:**
+  - Tabular Barlow numerals, 44pt buttons and a gold "Finish" pill.
+  - The rest timer shows a depleting ring.
+  - It announces "Rest timer started, N seconds" (only for a fresh start) and "Rest complete".
+- **Date strip:**
+  - A gold-tint pill slides to the selected day, and today reads "Today".
+  - Completed, skipped and scheduled days show a check, cross or dot, and each is spoken in full.
+  - "Jump to today" fades in only when you're away from today.
+- **Session body:**
+  - A `title1` heading with a "Week N" tag.
+  - Session actions and warm-ups are `Collapsible`s that remember their state per day.
+  - The intensity bar has a spoken value.
+  - Notes become a `Collapsible` with a bordered input.
+  - Content crossfades when the day changes.
+- **Exercise card:**
+  - One meta line, a blue "How to perform" chip, and clamped coaching notes.
+  - Labelled set-count, rest and reorder buttons.
+- **Set logging:**
+  - `NumberField` and `SetCheckButton` rows with real labels, and no fake "0".
+  - The next set to log expands with steppers.
+  - A "Set logged" toast offers Undo.
+  - A new PR pops a "PR" badge with a heavy haptic.
+  - Drag handles appear only in reorder mode.
+- **Session complete:** a bottom sheet whose numbers count up, with one gold burst (none under Reduce Motion).
+- **PB dialog and training maxes:** restyled with header semantics and labelled buttons.
+- **Logic change:** `useExerciseCardState.handleClearSetState` was added for Undo.
+  - The existing toggle reads set state from its render closure, so an undo created before logging would have logged the set again.
+  - The new handler reuses the existing "not logged" save.
+- **Not done:**
+  - **Swiping between days on the session content.** It would conflict with set-reorder drags and the number inputs; the date strip still scrolls.
+  - **Auto-scrolling the next set into view.**
+  - **Before and after screenshots.** These need a manual pass, because deep links don't navigate in Expo Go and automation has no accessibility access.
+
 ## Phase 2: Core components
 
 All components are in `src/components/ds/`, have tests, and can be tried in the dev-only preview at `/dev/components` (You → Settings → Dev settings).

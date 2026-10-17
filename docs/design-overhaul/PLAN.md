@@ -1,6 +1,6 @@
 # Tempered Strength: "Forged" design overhaul plan
 
-Status: **Phase 2 (core components) complete. Waiting at the Phase 2 checkpoint for approval before Phase 3.** See `CHANGELOG.md`.
+Status: **Phase 3 in progress. Program screen done; Home, Workouts and Explore are next.** See `CHANGELOG.md` and `A11Y-CHECKLIST.md`.
 
 ## Phase 2 findings
 
