@@ -375,7 +375,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           {canReorder ? 'Move' : 'Set'}
         </Text>
         <Text style={[styles.columnLabel, styles.columnFlex]}>
-          {weightLabel}
+          {`Weight (${weightUnit})`}
         </Text>
         <Text style={[styles.columnLabel, styles.columnReps]}>{repsLabel}</Text>
         <Text style={[styles.columnLabel, styles.columnRpe]}>RPE</Text>

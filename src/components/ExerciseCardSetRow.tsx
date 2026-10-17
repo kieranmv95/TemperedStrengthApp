@@ -173,7 +173,7 @@ export function ExerciseCardSetRow({
       accessibilityRole="button"
       accessibilityLabel={`Add weight to ${context}`}
     >
-      <Text style={styles.addWeightText}>Add weight</Text>
+      <Text style={styles.addWeightText}>Add</Text>
     </Pressable>
   );
 
