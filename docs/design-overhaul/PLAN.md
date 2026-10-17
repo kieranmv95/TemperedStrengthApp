@@ -1,6 +1,14 @@
 # Tempered Strength: "Forged" design overhaul plan
 
-Status: **Phase 0 (audit) complete and approved. Phase 1 (tokens) in progress.**
+Status: **Phase 1 (tokens) complete. Waiting at the Phase 1 checkpoint for approval before Phase 2.** See `CHANGELOG.md`.
+
+## Phase 1 findings
+
+- **Barlow Condensed tabular figures are confirmed.** Both weights include the OpenType `tnum` feature, so the `numeric*` styles use it. This still needs an on-device visual check through the token preview.
+- **Jest can't render Reanimated 4.7 components yet.** The Reanimated and Worklets mocks, and the Worklets Jest resolver, each hit another native-only code path. Phase 2 must add a working Jest setup before component tests (risk 8). Until then, the token preview has to be checked on a device or simulator.
+- **Three test suites already fail on the base commit** (`workoutLogsCodec`, `storageRaces`, `StandaloneWorkoutLogPanel`). This work didn't cause them, but CI on pull requests will fail until they're fixed.
+- **Deep links to non-tab routes don't navigate in Expo Go.** `exp://…/--/dev/tokens` reaches the app but stays on Home. This is probably the boot gate in `app/_layout.tsx`, and predates the overhaul. The preview is reachable from You → Settings → Dev settings.
+- **The shell's default Node is 16.** Expo CLI needs the `.nvmrc` version (24). Run `nvm use` first.
 
 ## Decisions
 
