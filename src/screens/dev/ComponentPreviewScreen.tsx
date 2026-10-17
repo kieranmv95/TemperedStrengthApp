@@ -2,12 +2,17 @@ import { PreviewHeader } from '@/src/components/dev/PreviewHeader';
 import { PreviewSection } from '@/src/components/dev/PreviewSection';
 import {
   ActionChip,
+  AnimatedNumber,
   AppSafeAreaView,
   AppScrollView,
   Badge,
+  Collapsible,
   FilterChip,
   PressableCard,
+  ProgressBar,
+  ProgressRing,
   SectionHeader,
+  Skeleton,
   Tag,
 } from '@/src/components/ds';
 import { color, space, typography } from '@/src/constants/tokens';
@@ -24,11 +29,29 @@ const DEMO_FILTERS = [
 /** Partner colour from the CMS; decorative edge only. */
 const DEMO_PARTNER_ACCENT = '#7EC8E3';
 
+const DEMO_TOTAL_SESSIONS = 16;
+
+function formatKilograms(value: number): string {
+  return `${value.toLocaleString('en-GB')} kg`;
+}
+
 export function ComponentPreviewScreen() {
   const [lastAction, setLastAction] = useState('Nothing yet');
   const [selectedFilters, setSelectedFilters] = useState<string[]>([
     'Strength',
   ]);
+  const [warmupExpanded, setWarmupExpanded] = useState(false);
+  const [sessionsComplete, setSessionsComplete] = useState(6);
+  const [volume, setVolume] = useState(12340);
+  const [showSkeletons, setShowSkeletons] = useState(true);
+
+  const sessionsLeft = DEMO_TOTAL_SESSIONS - sessionsComplete;
+
+  const changeSessions = (delta: number) => {
+    setSessionsComplete((prev) =>
+      Math.min(DEMO_TOTAL_SESSIONS, Math.max(0, prev + delta))
+    );
+  };
 
   const toggleFilter = (label: string) => {
     setSelectedFilters((prev) =>
@@ -130,6 +153,104 @@ export function ComponentPreviewScreen() {
           </View>
         </PreviewSection>
 
+        <PreviewSection title="Collapsible">
+          <Collapsible
+            title="Clean & jerk warm-up"
+            expanded={warmupExpanded}
+            onToggle={() => setWarmupExpanded((prev) => !prev)}
+            accessory={<Badge label="3 drills" tone="neutral" />}
+            accessibilityLabel="Clean and jerk warm-up, 3 drills"
+          >
+            <Text style={styles.cardBody}>Empty bar × 10 tall cleans</Text>
+            <Text style={styles.cardBody}>Muscle clean × 5</Text>
+            <Text style={styles.cardBody}>Push press × 5</Text>
+          </Collapsible>
+        </PreviewSection>
+
+        <PreviewSection title="Progress and numbers">
+          <ProgressBar
+            progress={sessionsComplete / DEMO_TOTAL_SESSIONS}
+            accessibilityLabel="Program progress"
+            accessibilityValueText={`${sessionsComplete} of ${DEMO_TOTAL_SESSIONS} sessions complete`}
+          />
+          <View style={styles.numberRow}>
+            <ProgressRing
+              progress={sessionsComplete / DEMO_TOTAL_SESSIONS}
+              size={88}
+              accessibilityLabel="Program progress"
+              accessibilityValueText={`${sessionsComplete} of ${DEMO_TOTAL_SESSIONS} sessions complete`}
+            >
+              <AnimatedNumber
+                value={sessionsComplete}
+                style={styles.ringNumber}
+              />
+            </ProgressRing>
+            <View style={styles.numberColumn}>
+              <AnimatedNumber
+                value={sessionsLeft}
+                style={styles.bigNumber}
+                accessibilityLabel={`${sessionsLeft} sessions left`}
+              />
+              <Text style={styles.cardBody}>sessions left</Text>
+              <AnimatedNumber
+                value={volume}
+                format={formatKilograms}
+                style={styles.mediumNumber}
+                animateOnMount
+              />
+            </View>
+          </View>
+          <View style={styles.chipRow}>
+            <ActionChip
+              label="Session −1"
+              icon="remove"
+              tone="neutral"
+              onPress={() => changeSessions(-1)}
+              accessibilityLabel="One fewer session complete"
+            />
+            <ActionChip
+              label="Session +1"
+              icon="add"
+              tone="neutral"
+              onPress={() => changeSessions(1)}
+              accessibilityLabel="One more session complete"
+            />
+            <ActionChip
+              label="Volume +250"
+              icon="barbell-outline"
+              tone="gold"
+              onPress={() => setVolume((prev) => prev + 250)}
+            />
+          </View>
+        </PreviewSection>
+
+        <PreviewSection title="Skeleton">
+          {showSkeletons ? (
+            <View style={styles.skeletonGroup}>
+              <Skeleton
+                width="100%"
+                height={96}
+                radius="md"
+                accessibilityLabel="Loading skills"
+              />
+              <View style={styles.skeletonRow}>
+                <Skeleton width={72} height={72} />
+                <Skeleton width={72} height={72} />
+                <Skeleton width={72} height={72} />
+              </View>
+              <Skeleton width="60%" height={16} />
+            </View>
+          ) : (
+            <Text style={styles.cardBody}>Content loaded.</Text>
+          )}
+          <ActionChip
+            label={showSkeletons ? 'Finish loading' : 'Show skeletons'}
+            icon="refresh"
+            tone="neutral"
+            onPress={() => setShowSkeletons((prev) => !prev)}
+          />
+        </PreviewSection>
+
         <PreviewSection title="SectionHeader">
           <SectionHeader title="Session actions" />
           <SectionHeader
@@ -171,5 +292,33 @@ const styles = StyleSheet.create({
     ...typography.callout,
     color: color.textSecondary,
     marginTop: space.xxs,
+  },
+  numberRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.lg,
+  },
+  numberColumn: {
+    flex: 1,
+  },
+  ringNumber: {
+    ...typography.numericMedium,
+    color: color.textPrimary,
+  },
+  bigNumber: {
+    ...typography.numericLarge,
+    color: color.textPrimary,
+  },
+  mediumNumber: {
+    ...typography.numericMedium,
+    color: color.gold,
+    marginTop: space.xs,
+  },
+  skeletonGroup: {
+    gap: space.sm,
+  },
+  skeletonRow: {
+    flexDirection: 'row',
+    gap: space.xs,
   },
 });
