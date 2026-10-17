@@ -1,3 +1,4 @@
+import { DemoSetLogger } from '@/src/components/dev/DemoSetLogger';
 import { PreviewHeader } from '@/src/components/dev/PreviewHeader';
 import { PreviewSection } from '@/src/components/dev/PreviewSection';
 import {
@@ -222,6 +223,14 @@ export function ComponentPreviewScreen() {
               onPress={() => setVolume((prev) => prev + 250)}
             />
           </View>
+        </PreviewSection>
+
+        <PreviewSection title="Set logging">
+          <Text style={styles.cardBody}>
+            The next set to log expands with steppers. Long-press −/+ to repeat.
+            The check needs reps first.
+          </Text>
+          <DemoSetLogger />
         </PreviewSection>
 
         <PreviewSection title="Skeleton">

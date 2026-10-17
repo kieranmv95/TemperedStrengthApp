@@ -66,4 +66,28 @@ describe('dev preview screens', () => {
       screen.getAllByRole('progressbar', { name: 'Program progress' })[0]
     ).toHaveAccessibilityValue({ text: '7 of 16 sessions complete' });
   });
+
+  it('logs a demo set and moves the steppers to the next set', async () => {
+    await renderScreen(<ComponentPreviewScreen />);
+
+    expect(
+      screen.getByRole('button', { name: 'Increase Set 2 Weight (kg)' })
+    ).toBeOnTheScreen();
+    await fireEvent.press(
+      screen.getByRole('checkbox', { name: 'Set 2, not logged' })
+    );
+
+    expect(
+      screen.getByRole('checkbox', { name: 'Set 2, completed' })
+    ).toBeChecked();
+    expect(
+      screen.queryByRole('button', { name: 'Increase Set 2 Weight (kg)' })
+    ).not.toBeOnTheScreen();
+    expect(
+      screen.getByRole('button', { name: 'Increase Set 3 Weight (kg)' })
+    ).toBeOnTheScreen();
+    expect(
+      screen.getByRole('checkbox', { name: 'Set 3, not logged' })
+    ).toBeDisabled();
+  });
 });
