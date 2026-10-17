@@ -102,6 +102,30 @@ function useDerivedValue<T>(updater: () => T): MockSharedValue<T> {
 /** Launch-time Reduce Motion value; set per test via jest/mockReduceMotion. */
 const useReducedMotion = jest.fn((): boolean => false);
 
+/* Used by react-native-gesture-handler's Reanimated integration. */
+function useEvent<T>(handler: T): T {
+  return handler;
+}
+
+function useHandler() {
+  return { context: {}, doDependenciesDiffer: false };
+}
+
+function useComposedEventHandler() {
+  return () => {};
+}
+
+function isSharedValue(value: unknown): boolean {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'get' in value &&
+    'set' in value
+  );
+}
+
+function setGestureState(): void {}
+
 function runOnJS<Args extends unknown[], R>(
   fn: (...args: Args) => R
 ): (...args: Args) => R {
@@ -192,13 +216,18 @@ export {
   FadeOutDown,
   interpolate,
   interpolateColor,
+  isSharedValue,
   LinearTransition,
   makeMutable,
   ReduceMotion,
   runOnJS,
+  setGestureState,
   useAnimatedProps,
   useAnimatedStyle,
+  useComposedEventHandler,
   useDerivedValue,
+  useEvent,
+  useHandler,
   useReducedMotion,
   useSharedValue,
   withDelay,
