@@ -56,7 +56,7 @@ export function SkillTipsCarousel({ tips }: SkillTipsCarouselProps) {
         <Ionicons
           name="bulb-outline"
           size={20}
-          color={color.textSecondary}
+          color={color.gold}
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
         />

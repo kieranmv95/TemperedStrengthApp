@@ -33,7 +33,7 @@ function PagerButton({ icon, label, disabled, onPress }: PagerButtonProps) {
       <Ionicons
         name={icon}
         size={20}
-        color={disabled ? color.textDisabled : color.textPrimary}
+        color={disabled ? color.textDisabled : color.gold}
       />
     </Pressable>
   );
@@ -98,14 +98,16 @@ const styles = StyleSheet.create({
     height: MIN_TARGET_SIZE,
     borderRadius: radius.pill,
     borderWidth: 1,
-    borderColor: color.borderStrong,
+    borderColor: color.gold,
+    backgroundColor: color.goldTint,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonDisabled: {
     borderColor: color.borderSubtle,
+    backgroundColor: 'transparent',
   },
   buttonPressed: {
-    backgroundColor: color.surface3,
+    backgroundColor: color.goldTintStrong,
   },
 });

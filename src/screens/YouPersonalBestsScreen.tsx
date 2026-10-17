@@ -110,6 +110,13 @@ export function YouPersonalBestsScreen() {
               <Text style={styles.pbRowEmpty}>No PBs logged</Text>
             ) : (
               <View style={styles.pbRowValues}>
+                <Ionicons
+                  name="trophy"
+                  size={16}
+                  color={color.gold}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                />
                 {pbLines.map((line) => (
                   <View key={`${item.id}-${line.tier}`} style={styles.pbValue}>
                     <Text style={styles.pbValueText}>{line.label}</Text>
@@ -269,6 +276,7 @@ const styles = StyleSheet.create({
   pbRowValues: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignItems: 'center',
     gap: space.xs,
     marginTop: space.xxs,
   },
@@ -276,11 +284,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.xs,
     paddingVertical: space.xxs,
     borderRadius: radius.sm,
-    backgroundColor: color.surface2,
+    backgroundColor: color.goldTint,
   },
   pbValueText: {
     ...typography.numericSmall,
-    color: color.textPrimary,
+    color: color.gold,
   },
   pbRowEmpty: {
     ...typography.caption,

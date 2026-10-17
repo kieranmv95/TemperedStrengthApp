@@ -26,6 +26,7 @@ type SkillDetailSection = {
   key: string;
   title: string;
   subtitle?: string;
+  icon: keyof typeof Ionicons.glyphMap;
   resourceLabel: string;
   count: number;
 };
@@ -41,6 +42,7 @@ function getSkillDetailSections(
   const sections: SkillDetailSection[] = [
     {
       key: 'videos',
+      icon: 'videocam-outline',
       title: 'Videos',
       subtitle: isLocked ? undefined : 'Tap a video to open and watch.',
       resourceLabel: pluralize(skill.videoCount, 'video', 'videos'),
@@ -48,6 +50,7 @@ function getSkillDetailSections(
     },
     {
       key: 'cues',
+      icon: 'list-outline',
       title: 'Cues',
       subtitle: isLocked ? undefined : 'Tap a cue to view it fullscreen.',
       resourceLabel: pluralize(skill.cueCount, 'cue', 'cues'),
@@ -55,18 +58,21 @@ function getSkillDetailSections(
     },
     {
       key: 'tips',
+      icon: 'bulb-outline',
       title: 'Tips',
       resourceLabel: pluralize(skill.tipCount, 'tip', 'tips'),
       count: skill.tipCount,
     },
     {
       key: 'articles',
+      icon: 'newspaper-outline',
       title: 'Articles',
       resourceLabel: pluralize(skill.articleCount, 'article', 'articles'),
       count: skill.articleCount,
     },
     {
       key: 'mobility',
+      icon: 'body-outline',
       title: 'Mobility flows',
       resourceLabel: pluralize(
         skill.recoveryFlowCount,
@@ -77,6 +83,7 @@ function getSkillDetailSections(
     },
     {
       key: 'workouts',
+      icon: 'barbell-outline',
       title: 'Workouts',
       resourceLabel: pluralize(skill.workoutCount, 'workout', 'workouts'),
       count: skill.workoutCount,
@@ -121,6 +128,7 @@ function renderSkillSections(
             <SkillSectionHeader
               title={section.title}
               subtitle={section.subtitle}
+              icon={section.icon}
             />
             {isLocked ? (
               <SkillLockedTeaser

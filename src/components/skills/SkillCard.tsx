@@ -110,11 +110,7 @@ export function SkillCard({ skill, onPress }: SkillCardProps) {
           <View style={styles.metaRow}>
             {metaItems.map((item) => (
               <View key={item.key} style={styles.metaItem}>
-                <Ionicons
-                  name={item.icon}
-                  size={14}
-                  color={color.textSecondary}
-                />
+                <Ionicons name={item.icon} size={14} color={color.gold} />
                 <Text style={styles.metaText}>{item.label}</Text>
               </View>
             ))}

@@ -34,7 +34,7 @@ export const articleCardStyles = StyleSheet.create({
   },
   compactCategory: {
     ...typography.overline,
-    color: color.textTertiary,
+    color: color.gold,
   },
   compactTitle: {
     ...typography.headline,
