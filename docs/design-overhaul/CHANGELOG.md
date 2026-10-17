@@ -1,5 +1,51 @@
 # Design overhaul changelog
 
+## Phase 2: Core components
+
+All components are in `src/components/ds/`, have tests, and can be tried in the dev-only preview at `/dev/components` (You → Settings → Dev settings).
+
+- **`PressableCard`:** the whole card is the tap target.
+  - Press feedback is a scale to 0.98 plus a one-tone surface step, with a light haptic.
+  - Variants: `default`, `hero` (gold gradient top edge) and `promo` (partner accent edge).
+  - It reads as one button with a combined label.
+- **Chip family:**
+  - `FilterChip` shows selection with a check icon and a gold edge, as well as the fill, and announces "selected".
+  - `ActionChip` (icon plus label), `Tag` (read-only) and `Badge` (filled).
+  - Chips look 36pt tall and reach 44pt/48dp through `hitSlop`.
+- **`SectionHeader`:** a sentence-case header with an optional action.
+- **`Collapsible`:**
+  - The header row is the button and announces its expanded state.
+  - A rotating chevron and an animated height reveal.
+  - Content mounts on first expand and is hidden from screen readers while collapsed.
+- **`ProgressBar` and `ProgressRing`:** animate from their previous value and speak a value such as "6 of 16 sessions complete".
+- **`AnimatedNumber`:** digits roll using transforms only, and it's read as one value.
+- **`Skeleton`:** a gentle pulse, static under Reduce Motion, and hidden unless labelled as the busy element.
+- **`NumberField`:**
+  - Tabular numerals, a numeric keypad, and −/+ steppers that repeat on long-press with a haptic tick.
+  - A unit or suggested placeholder instead of a fake "0".
+  - Accessible names include set context, and errors are shown in text.
+- **`SetCheckButton`:**
+  - A checkbox that fills gold and draws its check on completion.
+  - A success haptic only on the change to completed.
+  - Failed sets are described in text.
+- **`BottomSheet`:**
+  - Springs up (crossfades under Reduce Motion).
+  - Dismisses by dragging the header, the scrim, the close button, Android back or the iOS escape gesture.
+  - Moves focus to the title on open and back to the trigger on close, with a pinned footer.
+- **`Toast` and `ToastProvider`** (mounted at the root):
+  - One toast at a time, announced to screen readers, including its action.
+  - The duration follows the OS accessibility timeout setting.
+- **`TabBar` and `TabBarView`:**
+  - A sliding gold-tint indicator, an icon bounce on selection, always-visible labels and a selection haptic.
+  - Not wired into the app until Phase 3.
+- **`useMotion()`** gains `pulse` (skeletons only) and `bounce` (tab icons).
+- **Tokens:**
+  - `MIN_TARGET_SIZE` is now 44 on iOS and 48 on Android.
+  - New `infoTintStrong` and `motion.skeletonCycle` tokens.
+- **Testing:**
+  - The Reanimated mock, Gesture Handler's Jest setup, an `expo-haptics` mock and loaded icon fonts.
+  - Expo Router's `standard-navigation` package is now transformed.
+
 ## Phase 1: Tokens
 
 - **Added** `src/constants/tokens.ts` with the "Forged" colour, typography, spacing (4pt grid), radius, elevation and motion tokens.

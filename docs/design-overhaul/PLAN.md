@@ -1,6 +1,15 @@
 # Tempered Strength: "Forged" design overhaul plan
 
-Status: **Phase 1 (tokens) complete. Waiting at the Phase 1 checkpoint for approval before Phase 2.** See `CHANGELOG.md`.
+Status: **Phase 2 (core components) complete. Waiting at the Phase 2 checkpoint for approval before Phase 3.** See `CHANGELOG.md`.
+
+## Phase 2 findings
+
+- **Reanimated 4.7.1's own Jest support doesn't work with Worklets 0.13.** No newer release exists. Tests use a small project-owned mock (`jest/reanimatedMock.tsx`), as approved. It verifies accessibility contracts and which animation was requested, but not animation feel. That has to be checked on a device through `/dev/components`.
+- **Sheets need their own `GestureHandlerRootView`.** `Modal` content renders in a separate native window, and without it drag-to-dismiss silently fails on Android. `BottomSheet` handles this, but any future modal with gestures must do the same.
+- **Expo Router 58 bundles its own copy of React Navigation's bottom tabs.** A custom tab bar must import types and `BottomTabBarHeightCallbackContext` from `expo-router/tabs`, not `@react-navigation/bottom-tabs`, or `useBottomTabBarHeight` on the Program screen breaks.
+- **Set logging layout decision.** Three fields, each with 44pt steppers, don't fit in one phone-width row. The plan for Program is compact rows, with the **next set to log** expanded to show steppers. `/dev/components` → "Set logging" sketches it.
+- **The tab bar is built but not wired in.** Swapping it in changes every screen, so it lands with Phase 3.
+- **RNTL 14's `render`, `renderHook` and `fireEvent` are all async.** New tests `await` them.
 
 ## Phase 1 findings
 
