@@ -41,13 +41,13 @@ describe('RestTimer', () => {
       );
     });
 
-    expect(screen.getByText('Rest: 00:05')).toBeTruthy();
+    expect(screen.getByText('00:05')).toBeTruthy();
 
     await act(async () => {
       jest.advanceTimersByTime(4000);
     });
 
-    expect(screen.getByText('Rest: 00:01')).toBeTruthy();
+    expect(screen.getByText('00:01')).toBeTruthy();
     expect(onComplete).not.toHaveBeenCalled();
 
     await act(async () => {

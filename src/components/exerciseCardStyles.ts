@@ -130,11 +130,6 @@ export const exerciseCardStyles = StyleSheet.create({
     padding: space.xxs,
     borderRadius: radius.sm,
   },
-  setRowActive: {
-    alignItems: 'flex-start',
-    backgroundColor: color.surface2,
-    paddingVertical: space.xs,
-  },
   setNumberColumn: {
     width: SET_NUMBER_WIDTH,
     minHeight: MIN_TARGET_SIZE,
@@ -160,9 +155,6 @@ export const exerciseCardStyles = StyleSheet.create({
     flexDirection: 'row',
     gap: space.xs,
   },
-  fieldsActive: {
-    flexDirection: 'column',
-  },
   fieldFlex: {
     flex: 1,
   },
@@ -171,9 +163,6 @@ export const exerciseCardStyles = StyleSheet.create({
   },
   fieldRpe: {
     width: RPE_FIELD_WIDTH,
-  },
-  fieldRpeActive: {
-    width: RPE_FIELD_WIDTH * 1.5,
   },
   weightWithRemove: {
     flexDirection: 'row',

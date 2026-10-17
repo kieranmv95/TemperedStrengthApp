@@ -43,8 +43,6 @@ type ExerciseCardProps = {
 /** Coaching notes longer than this are clamped behind "Show more". */
 const LONG_NOTES_LENGTH = 180;
 const CLAMPED_NOTES_LINES = 3;
-const WEIGHT_STEP_KG = 2.5;
-const WEIGHT_STEP_LB = 5;
 
 function formatRestTime(seconds: number): string {
   if (seconds < 60) {
@@ -53,19 +51,6 @@ function formatRestTime(seconds: number): string {
   const minutes = Math.floor(seconds / 60);
   const remainder = seconds % 60;
   return `${minutes}:${remainder.toString().padStart(2, '0')}`;
-}
-
-function findSuggestedWeight(
-  weights: string[],
-  setIndex: number
-): number | undefined {
-  for (let i = setIndex - 1; i >= 0; i--) {
-    const value = Number(weights[i]);
-    if ((weights[i] ?? '').trim() !== '' && Number.isFinite(value)) {
-      return value;
-    }
-  }
-  return undefined;
 }
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
@@ -193,7 +178,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
   let repRangeText: string | null = null;
   let repsPlaceholder: string | undefined;
-  let suggestedReps: number | undefined;
 
   // `setScheme` lifts (e.g. 5/3/1) vary reps per set, so the single header chip
   // would be misleading - each set row shows its own target instead.
@@ -207,7 +191,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
       const range = min === max ? `${min}` : `${min}–${max}`;
       repRangeText = `${range} ${unit}`;
       repsPlaceholder = range;
-      suggestedReps = min;
     }
   }
 
@@ -424,15 +407,12 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             loggingType={exercise.logging_type}
             weightLabel={weightLabel}
             weightUnitLabel={weightUnit}
-            weightStep={weightUnit === 'lb' ? WEIGHT_STEP_LB : WEIGHT_STEP_KG}
             weightValue={weights[setIndex] || ''}
             repsValue={reps[setIndex] || ''}
             rpeValue={rpes[setIndex] || ''}
             setState={setState}
             isActive={!canReorder && setIndex === firstUnloggedSet}
             isPr={prSetIndices.includes(setIndex)}
-            suggestedWeight={findSuggestedWeight(weights, setIndex)}
-            suggestedReps={suggestedReps}
             repsPlaceholder={repsPlaceholder}
             loading={loading}
             canLog={!!reps[setIndex] && !loading}

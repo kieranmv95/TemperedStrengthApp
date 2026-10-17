@@ -87,12 +87,10 @@ describe('dev preview screens', () => {
     expect(screen.getByRole('button', { name: 'Reset filters' })).toBeEnabled();
   });
 
-  it('logs a demo set and moves the steppers to the next set', async () => {
+  it('logs a demo set inline', async () => {
     await renderScreen(<ComponentPreviewScreen />);
 
-    expect(
-      screen.getByRole('button', { name: 'Increase Set 2 Weight (kg)' })
-    ).toBeOnTheScreen();
+    expect(screen.getByLabelText('Set 2 Weight (kg)')).toBeOnTheScreen();
     await fireEvent.press(
       screen.getByRole('checkbox', { name: 'Set 2, not logged' })
     );
@@ -100,12 +98,6 @@ describe('dev preview screens', () => {
     expect(
       screen.getByRole('checkbox', { name: 'Set 2, completed' })
     ).toBeChecked();
-    expect(
-      screen.queryByRole('button', { name: 'Increase Set 2 Weight (kg)' })
-    ).not.toBeOnTheScreen();
-    expect(
-      screen.getByRole('button', { name: 'Increase Set 3 Weight (kg)' })
-    ).toBeOnTheScreen();
     expect(
       screen.getByRole('checkbox', { name: 'Set 3, not logged' })
     ).toBeDisabled();

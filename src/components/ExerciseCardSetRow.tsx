@@ -23,17 +23,14 @@ type ExerciseCardSetRowProps = {
   /** Visible label for the weight field, e.g. "Weight (kg)". */
   weightLabel: string;
   weightUnitLabel: string;
-  weightStep: number;
   weightValue: string;
   repsValue: string;
   rpeValue: string;
   setState: 'completed' | 'failed' | undefined;
-  /** The next set to log: expanded with steppers. */
+  /** The next set to log: its set number is highlighted. */
   isActive: boolean;
   /** A new personal best was detected on this set. */
   isPr: boolean;
-  suggestedWeight?: number;
-  suggestedReps?: number;
   repsPlaceholder?: string;
   loading: boolean;
   canLog: boolean;
@@ -75,15 +72,12 @@ export function ExerciseCardSetRow({
   loggingType,
   weightLabel,
   weightUnitLabel,
-  weightStep,
   weightValue,
   repsValue,
   rpeValue,
   setState,
   isActive,
   isPr,
-  suggestedWeight,
-  suggestedReps,
   repsPlaceholder,
   loading,
   canLog,
@@ -191,11 +185,8 @@ export function ExerciseCardSetRow({
           value={weightValue}
           onChangeText={(value) => onWeightChange(setIndex, value)}
           placeholder={weightUnitLabel}
-          suggestedValue={suggestedWeight}
-          step={weightStep}
           allowDecimal
-          showSteppers={isActive}
-          showLabel={isActive}
+          showLabel={false}
           state={fieldState}
           editable={!loading}
         />
@@ -215,7 +206,7 @@ export function ExerciseCardSetRow({
 
   return (
     <Animated.View
-      style={[styles.setRow, isActive && styles.setRowActive, animatedStyle]}
+      style={[styles.setRow, animatedStyle]}
       onLayout={(event) => {
         onRowLayout(setIndex, event.nativeEvent.layout.height);
       }}
@@ -248,24 +239,21 @@ export function ExerciseCardSetRow({
         </View>
       )}
 
-      <View style={[styles.fields, isActive && styles.fieldsActive]}>
+      <View style={styles.fields}>
         <View style={styles.fieldFlex}>{weightField}</View>
-        <View style={isActive ? null : styles.fieldReps}>
+        <View style={styles.fieldReps}>
           <NumberField
             label={isTime ? 'Time (s)' : 'Reps'}
             accessibilityContext={context}
             value={repsValue}
             onChangeText={(value) => onRepsChange(setIndex, value)}
             placeholder={repsPlaceholder}
-            suggestedValue={suggestedReps}
-            step={isTime ? 5 : 1}
-            showSteppers={isActive}
-            showLabel={isActive}
+            showLabel={false}
             state={fieldState}
             editable={!loading}
           />
         </View>
-        <View style={isActive ? styles.fieldRpeActive : styles.fieldRpe}>
+        <View style={styles.fieldRpe}>
           <NumberField
             label="RPE"
             accessibilityContext={context}
@@ -274,7 +262,7 @@ export function ExerciseCardSetRow({
             placeholder="1–10"
             min={1}
             max={10}
-            showLabel={isActive}
+            showLabel={false}
             hint="Rate of perceived exertion, 1 to 10. Optional."
             state={fieldState}
             editable={!loading}

@@ -109,12 +109,12 @@ export const RestTimer: React.FC<RestTimerProps> = ({
           }
         />
         {isRunning ? (
-          <Text style={styles.timerText}>
-            Rest:{' '}
+          <View style={styles.timerStack}>
+            <Text style={styles.timerCaption}>Rest</Text>
             <Text style={styles.timerValue}>
               {formatDuration(remainingSeconds)}
             </Text>
-          </Text>
+          </View>
         ) : (
           <Text style={[styles.timerText, styles.timerTextComplete]}>
             Rest Complete

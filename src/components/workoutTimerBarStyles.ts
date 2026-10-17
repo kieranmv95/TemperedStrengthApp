@@ -26,9 +26,16 @@ export const workoutTimerBarStyles = StyleSheet.create({
   timerSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: space.sm,
+    gap: space.xs,
     flex: 1,
     minWidth: 0,
+  },
+  timerStack: {
+    flexShrink: 0,
+  },
+  timerCaption: {
+    ...typography.caption,
+    color: color.textSecondary,
   },
   dot: {
     width: DOT_SIZE,

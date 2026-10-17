@@ -10,7 +10,6 @@ type DemoSet = {
   completed: boolean;
 };
 
-const SUGGESTED_WEIGHT = 110;
 const RPE_HINT = 'Rate of perceived exertion, 1 to 10';
 
 const INITIAL_SETS: DemoSet[] = [
@@ -22,66 +21,55 @@ const INITIAL_SETS: DemoSet[] = [
 type DemoSetRowProps = {
   index: number;
   set: DemoSet;
-  active: boolean;
+  isNext: boolean;
   onChange: (index: number, next: Partial<DemoSet>) => void;
 };
 
-function DemoSetRow({ index, set, active, onChange }: DemoSetRowProps) {
+function DemoSetRow({ index, set, isNext, onChange }: DemoSetRowProps) {
   const setLabel = `Set ${index + 1}`;
   const canLog = set.reps.trim().length > 0;
+  const fieldState = set.completed ? 'completed' : 'default';
 
   return (
-    <View
-      style={[
-        styles.row,
-        active && styles.rowActive,
-        set.completed && styles.rowCompleted,
-      ]}
-    >
-      <Text style={styles.setNumber}>{index + 1}</Text>
-      <View style={[styles.fields, active && styles.fieldsActive]}>
-        <View style={styles.field}>
-          <NumberField
-            label="Weight (kg)"
-            accessibilityContext={setLabel}
-            value={set.weight}
-            onChangeText={(weight) => onChange(index, { weight })}
-            placeholder={String(SUGGESTED_WEIGHT)}
-            suggestedValue={SUGGESTED_WEIGHT}
-            step={2.5}
-            allowDecimal
-            showSteppers={active}
-            showLabel={active}
-            state={set.completed ? 'completed' : 'default'}
-          />
-        </View>
-        <View style={styles.field}>
-          <NumberField
-            label="Reps"
-            accessibilityContext={setLabel}
-            value={set.reps}
-            onChangeText={(reps) => onChange(index, { reps })}
-            placeholder="2"
-            suggestedValue={2}
-            showSteppers={active}
-            showLabel={active}
-            state={set.completed ? 'completed' : 'default'}
-          />
-        </View>
-        {!active ? (
-          <View style={styles.rpeField}>
-            <NumberField
-              label="RPE"
-              accessibilityContext={setLabel}
-              value={set.rpe}
-              onChangeText={(rpe) => onChange(index, { rpe })}
-              placeholder="1–10"
-              max={10}
-              showLabel={false}
-              hint={RPE_HINT}
-            />
-          </View>
-        ) : null}
+    <View style={styles.row}>
+      <Text style={[styles.setNumber, isNext && styles.setNumberNext]}>
+        {index + 1}
+      </Text>
+      <View style={styles.field}>
+        <NumberField
+          label="Weight (kg)"
+          accessibilityContext={setLabel}
+          value={set.weight}
+          onChangeText={(weight) => onChange(index, { weight })}
+          placeholder="kg"
+          allowDecimal
+          showLabel={false}
+          state={fieldState}
+        />
+      </View>
+      <View style={styles.smallField}>
+        <NumberField
+          label="Reps"
+          accessibilityContext={setLabel}
+          value={set.reps}
+          onChangeText={(reps) => onChange(index, { reps })}
+          placeholder="2"
+          showLabel={false}
+          state={fieldState}
+        />
+      </View>
+      <View style={styles.smallField}>
+        <NumberField
+          label="RPE"
+          accessibilityContext={setLabel}
+          value={set.rpe}
+          onChangeText={(rpe) => onChange(index, { rpe })}
+          placeholder="1–10"
+          max={10}
+          showLabel={false}
+          hint={RPE_HINT}
+          state={fieldState}
+        />
       </View>
       <SetCheckButton
         state={set.completed ? 'completed' : 'pending'}
@@ -94,13 +82,10 @@ function DemoSetRow({ index, set, active, onChange }: DemoSetRowProps) {
   );
 }
 
-/**
- * Dev-only sketch of the set logger: compact rows, with the next set to log
- * expanded to show steppers. The real SetRow lands with the Program screen.
- */
+/** Dev-only sketch of inline set logging; the next set to log has a gold number. */
 export function DemoSetLogger() {
   const [sets, setSets] = useState(INITIAL_SETS);
-  const activeIndex = sets.findIndex((set) => !set.completed);
+  const nextIndex = sets.findIndex((set) => !set.completed);
 
   const handleChange = (index: number, next: Partial<DemoSet>) => {
     setSets((prev) =>
@@ -111,21 +96,22 @@ export function DemoSetLogger() {
   return (
     <View style={styles.container}>
       <View
-        style={styles.headerRow}
+        style={styles.row}
         importantForAccessibility="no-hide-descendants"
         accessibilityElementsHidden
       >
-        <Text style={[styles.columnLabel, styles.columnSet]}>Set</Text>
-        <Text style={[styles.columnLabel, styles.columnFields]}>
-          Weight (kg) · Reps · RPE
-        </Text>
+        <Text style={[styles.columnLabel, styles.setNumber]}>Set</Text>
+        <Text style={[styles.columnLabel, styles.field]}>Weight (kg)</Text>
+        <Text style={[styles.columnLabel, styles.smallField]}>Reps</Text>
+        <Text style={[styles.columnLabel, styles.smallField]}>RPE</Text>
+        <View style={styles.checkSpacer} />
       </View>
       {sets.map((set, index) => (
         <DemoSetRow
           key={index}
           index={index}
           set={set}
-          active={index === activeIndex}
+          isNext={index === nextIndex}
           onChange={handleChange}
         />
       ))}
@@ -134,7 +120,8 @@ export function DemoSetLogger() {
 }
 
 const SET_NUMBER_WIDTH = 24;
-const RPE_FIELD_WIDTH = 64;
+const SMALL_FIELD_WIDTH = 64;
+const CHECK_WIDTH = 44;
 
 const styles = StyleSheet.create({
   container: {
@@ -143,33 +130,14 @@ const styles = StyleSheet.create({
     padding: space.sm,
     gap: space.xs,
   },
-  headerRow: {
+  row: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: space.xs,
   },
   columnLabel: {
     ...typography.captionStrong,
     color: color.textTertiary,
-  },
-  columnSet: {
-    width: SET_NUMBER_WIDTH,
-  },
-  columnFields: {
-    flex: 1,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.xs,
-    padding: space.xxs,
-    borderRadius: radius.sm,
-  },
-  rowActive: {
-    backgroundColor: color.surface2,
-    padding: space.xs,
-  },
-  rowCompleted: {
-    opacity: 0.8,
   },
   setNumber: {
     ...typography.numericSmall,
@@ -177,18 +145,16 @@ const styles = StyleSheet.create({
     width: SET_NUMBER_WIDTH,
     textAlign: 'center',
   },
-  fields: {
-    flex: 1,
-    flexDirection: 'row',
-    gap: space.xs,
-  },
-  fieldsActive: {
-    flexDirection: 'column',
+  setNumberNext: {
+    color: color.gold,
   },
   field: {
     flex: 1,
   },
-  rpeField: {
-    width: RPE_FIELD_WIDTH,
+  smallField: {
+    width: SMALL_FIELD_WIDTH,
+  },
+  checkSpacer: {
+    width: CHECK_WIDTH,
   },
 });

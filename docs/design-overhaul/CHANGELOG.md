@@ -22,7 +22,7 @@
   - Labelled set-count, rest and reorder buttons.
 - **Set logging:**
   - `NumberField` and `SetCheckButton` rows with real labels, and no fake "0".
-  - The next set to log expands with steppers.
+  - Every set stays on one inline row, with no steppers (a large weight range made stepping tedious). The next set to log has a gold number.
   - A "Set logged" toast offers Undo.
   - A new PR pops a "PR" badge with a heavy haptic.
   - Drag handles appear only in reorder mode.

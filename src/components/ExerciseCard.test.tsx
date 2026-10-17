@@ -104,14 +104,12 @@ describe('ExerciseCard', () => {
     ).toBeEnabled();
   });
 
-  it('expands only the next set to log with steppers', async () => {
+  it('keeps every set on one inline row without steppers', async () => {
     await renderCard();
 
+    expect(screen.getByLabelText(`${name} set 2 Reps`)).toBeOnTheScreen();
     expect(
-      screen.getByRole('button', { name: `Increase ${name} set 1 Reps` })
-    ).toBeOnTheScreen();
-    expect(
-      screen.queryByRole('button', { name: `Increase ${name} set 2 Reps` })
+      screen.queryByRole('button', { name: /^Increase / })
     ).not.toBeOnTheScreen();
   });
 
@@ -132,10 +130,6 @@ describe('ExerciseCard', () => {
     expect(
       screen.getByRole('checkbox', { name: `${name} set 1, completed` })
     ).toBeChecked();
-    expect(
-      screen.getByRole('button', { name: `Increase ${name} set 2 Reps` })
-    ).toBeOnTheScreen();
-
     await fireEvent.press(screen.getByRole('button', { name: 'Undo' }));
 
     await waitFor(() =>

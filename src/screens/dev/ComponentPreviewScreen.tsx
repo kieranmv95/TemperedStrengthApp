@@ -229,8 +229,8 @@ export function ComponentPreviewScreen() {
 
         <PreviewSection title="Set logging">
           <Text style={styles.cardBody}>
-            The next set to log expands with steppers. Long-press −/+ to repeat.
-            The check needs reps first.
+            Inline rows; the next set to log has a gold number. The check needs
+            reps first.
           </Text>
           <DemoSetLogger />
         </PreviewSection>
