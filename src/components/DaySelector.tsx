@@ -121,8 +121,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
     ];
 
     return {
-      weekday: WEEKDAYS_SHORT[date.getDay()] ?? '',
-      dayOfMonth: day,
+      label: `${WEEKDAYS_SHORT[date.getDay()] ?? ''} ${day}${suffix}`,
       accessibleDate: `${WEEKDAYS_LONG[date.getDay()] ?? ''} ${day}${suffix}`,
     };
   };
@@ -317,8 +316,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
           return (
             <DaySelectorDayChip
               key={dayIndex}
-              weekday={parts.weekday}
-              dayOfMonth={parts.dayOfMonth}
+              label={parts.label}
               accessibleDate={parts.accessibleDate}
               isSelected={isSelected}
               isToday={dayIsToday}

@@ -4,7 +4,13 @@ import {
   ITEM_PADDING_H,
   SCROLL_PADDING_H,
 } from '@/src/components/daySelectorConstants';
-import { color, radius, space, typography } from '@/src/constants/tokens';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
 
 export const STATUS_ICON_SIZE = 14;
@@ -15,8 +21,7 @@ export const daySelectorStyles = StyleSheet.create({
     backgroundColor: color.bg,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: color.borderSubtle,
-    paddingTop: space.xs,
-    paddingBottom: space.xs,
+    paddingVertical: space.xxs,
   },
   scrollView: {
     flexGrow: 0,
@@ -36,34 +41,24 @@ export const daySelectorStyles = StyleSheet.create({
     backgroundColor: color.goldTint,
   },
   dayItem: {
-    alignItems: 'center',
-    paddingHorizontal: ITEM_PADDING_H,
-    paddingVertical: space.xs,
-    minWidth: ITEM_MIN_WIDTH,
-    borderRadius: radius.sm,
-    gap: space.xxs,
-  },
-  weekday: {
-    ...typography.captionStrong,
-    color: color.textTertiary,
-  },
-  weekdayToday: {
-    color: color.gold,
-  },
-  weekdaySelected: {
-    color: color.textPrimary,
-  },
-  dayOfMonth: {
-    ...typography.numericSmall,
-    color: color.textSecondary,
-  },
-  dayOfMonthSelected: {
-    color: color.textPrimary,
-  },
-  statusSlot: {
-    height: STATUS_ICON_SIZE,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: space.xxs,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: ITEM_PADDING_H,
+    minWidth: ITEM_MIN_WIDTH,
+    borderRadius: radius.sm,
+  },
+  label: {
+    ...typography.calloutStrong,
+    color: color.textSecondary,
+  },
+  labelToday: {
+    color: color.gold,
+  },
+  labelSelected: {
+    color: color.textPrimary,
   },
   scheduledDot: {
     width: SCHEDULED_DOT_SIZE,

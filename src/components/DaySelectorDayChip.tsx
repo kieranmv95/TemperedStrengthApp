@@ -11,9 +11,8 @@ import {
 export type DotKind = 'completed' | 'skipped' | 'workout' | 'none';
 
 type DaySelectorDayChipProps = {
-  /** Short weekday, e.g. "Mon". Replaced by "Today" on the current day. */
-  weekday: string;
-  dayOfMonth: number;
+  /** Short date, e.g. "Fri 16th". Replaced by "Today" on the current day. */
+  label: string;
   /** Spoken date, e.g. "Monday 6th". */
   accessibleDate: string;
   isSelected: boolean;
@@ -52,8 +51,7 @@ function StatusMark({ dotKind }: { dotKind: DotKind }) {
 }
 
 export function DaySelectorDayChip({
-  weekday,
-  dayOfMonth,
+  label,
   accessibleDate,
   isSelected,
   isToday,
@@ -74,21 +72,15 @@ export function DaySelectorDayChip({
     >
       <Text
         style={[
-          styles.weekday,
-          isToday && styles.weekdayToday,
-          isSelected && !isToday && styles.weekdaySelected,
+          styles.label,
+          isToday && styles.labelToday,
+          isSelected && !isToday && styles.labelSelected,
         ]}
+        numberOfLines={1}
       >
-        {isToday ? 'Today' : weekday}
+        {isToday ? 'Today' : label}
       </Text>
-      <Text
-        style={[styles.dayOfMonth, isSelected && styles.dayOfMonthSelected]}
-      >
-        {dayOfMonth}
-      </Text>
-      <View style={styles.statusSlot}>
-        <StatusMark dotKind={dotKind} />
-      </View>
+      <StatusMark dotKind={dotKind} />
     </Pressable>
   );
 }
