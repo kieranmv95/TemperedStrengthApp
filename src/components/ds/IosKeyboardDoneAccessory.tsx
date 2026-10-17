@@ -1,11 +1,16 @@
-import { Colors, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import React from 'react';
 import {
   InputAccessoryView,
   Keyboard,
+  Pressable,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -16,15 +21,17 @@ export function IosKeyboardDoneAccessory() {
     <InputAccessoryView nativeID={IOS_KEYBOARD_DONE_ACCESSORY_ID}>
       <View style={styles.container}>
         <View style={styles.spacer} />
-        <TouchableOpacity
+        <Pressable
           onPress={() => Keyboard.dismiss()}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          style={styles.doneButton}
+          style={({ pressed }) => [
+            styles.doneButton,
+            pressed && styles.doneButtonPressed,
+          ]}
           accessibilityRole="button"
           accessibilityLabel="Dismiss keyboard"
         >
           <Text style={styles.doneText}>Done</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </InputAccessoryView>
   );
@@ -34,23 +41,26 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.md,
-    backgroundColor: Colors.backgroundElevated,
+    paddingHorizontal: space.md,
+    backgroundColor: color.surface2,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: Colors.backgroundElevated,
+    borderTopColor: color.borderSubtle,
   },
   spacer: {
     flex: 1,
   },
   doneButton: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    minHeight: 44,
+    minHeight: MIN_TARGET_SIZE,
+    minWidth: MIN_TARGET_SIZE,
+    paddingHorizontal: space.sm,
+    alignItems: 'center',
     justifyContent: 'center',
   },
+  doneButtonPressed: {
+    opacity: 0.6,
+  },
   doneText: {
-    color: Colors.accent,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.gold,
   },
 });

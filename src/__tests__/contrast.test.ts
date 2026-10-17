@@ -1,4 +1,3 @@
-import { Colors } from '@/src/constants/theme';
 import { color } from '@/src/constants/tokens';
 import { TOGETHER_WE_LIFT } from '@/src/data/togetherWeLift';
 import {
@@ -317,38 +316,6 @@ const PAIRS: ContrastPair[] = [
     foreground: TOGETHER_WE_LIFT.colors.title,
     background: TOGETHER_WE_LIFT.colors.background,
     kind: 'nonText',
-  },
-
-  // Legacy `Colors` pairs still used by screens outside the overhaul
-  {
-    name: 'legacy textMuted on backgroundCard',
-    foreground: Colors.textMuted,
-    background: Colors.backgroundCard,
-    kind: 'text',
-  },
-  {
-    name: 'legacy textPlaceholder on backgroundElevated',
-    foreground: Colors.textPlaceholder,
-    background: Colors.backgroundElevated,
-    kind: 'text',
-  },
-  {
-    name: 'legacy textOnAccent on accent',
-    foreground: Colors.textOnAccent,
-    background: Colors.accent,
-    kind: 'text',
-  },
-  {
-    name: 'legacy textBlack on recommended (programme badge)',
-    foreground: Colors.textBlack,
-    background: Colors.recommended,
-    kind: 'text',
-  },
-  {
-    name: 'legacy destructive on backgroundCard',
-    foreground: Colors.destructive,
-    background: Colors.backgroundCard,
-    kind: 'text',
   },
 ];
 

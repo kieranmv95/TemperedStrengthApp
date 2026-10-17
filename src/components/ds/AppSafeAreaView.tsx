@@ -1,4 +1,4 @@
-import { Spacing } from '@/src/constants/theme';
+import { space } from '@/src/constants/tokens';
 import { getEffectiveBottomInset } from '@/src/utils/platform';
 import React, { createContext, useContext } from 'react';
 import {
@@ -96,9 +96,7 @@ export function AppSafeAreaView({
     extraBottom > 0 ? { paddingBottom: extraBottom } : undefined;
 
   const scrollContentPaddingBottom =
-    Platform.OS === 'ios' && !bottomEdgeIncluded
-      ? insets.bottom + Spacing.section
-      : 0;
+    Platform.OS === 'ios' && !bottomEdgeIncluded ? insets.bottom + space.xl : 0;
 
   return (
     <AppSafeAreaContext.Provider value={{ scrollContentPaddingBottom }}>
