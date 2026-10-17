@@ -1,6 +1,19 @@
-import React from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
+import { AnimatedNumber, BottomSheet } from '@/src/components/ds';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
+import { useMotion } from '@/src/hooks/useMotion';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 import type { WeightUnit } from '../utils/storage';
 import { formatVolumeFromKg } from '../utils/weightUnits';
 
@@ -14,8 +27,10 @@ type SessionSummaryModalProps = {
   onDismiss: () => void;
 };
 
-const formatDuration = (ms: number): string => {
-  const totalSeconds = Math.floor(ms / 1000);
+const BADGE_SIZE = 64;
+const BURST_END_SCALE = 1.6;
+
+const formatDuration = (totalSeconds: number): string => {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
@@ -29,6 +44,54 @@ const formatDuration = (ms: number): string => {
   return `${seconds}s`;
 };
 
+/** A single gold ring that expands and fades once. Not rendered under Reduce Motion. */
+function CelebrationBurst() {
+  const motionHelpers = useMotion();
+  const progress = useSharedValue(0);
+
+  useEffect(() => {
+    progress.set(motionHelpers.timing(1, 'celebrate', 'standard'));
+  }, [progress, motionHelpers]);
+
+  const burstStyle = useAnimatedStyle(() => ({
+    opacity: 0.6 * (1 - progress.get()),
+    transform: [{ scale: 1 + (BURST_END_SCALE - 1) * progress.get() }],
+  }));
+
+  return (
+    <Animated.View
+      style={[styles.burst, burstStyle]}
+      pointerEvents="none"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+    />
+  );
+}
+
+type StatProps = {
+  label: string;
+  value: number;
+  format: (value: number) => string;
+};
+
+function Stat({ label, value, format }: StatProps) {
+  return (
+    <View
+      style={styles.stat}
+      accessible
+      accessibilityLabel={`${label}, ${format(value)}`}
+    >
+      <AnimatedNumber
+        value={value}
+        format={format}
+        style={styles.statValue}
+        animateOnMount
+      />
+      <Text style={styles.statLabel}>{label}</Text>
+    </View>
+  );
+}
+
 export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
   visible,
   duration,
@@ -38,115 +101,121 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
   weightUnit,
   onDismiss,
 }) => {
+  const { reduceMotion } = useMotion();
+  const durationSeconds = Math.floor(duration / 1000);
+
   return (
-    <Modal
+    <BottomSheet
       visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={onDismiss}
+      onClose={onDismiss}
+      title="Session complete"
+      footer={
+        <Pressable
+          style={({ pressed }) => [
+            styles.doneButton,
+            pressed && styles.doneButtonPressed,
+          ]}
+          onPress={onDismiss}
+          accessibilityRole="button"
+        >
+          <Text style={styles.doneButtonText}>Done</Text>
+        </Pressable>
+      }
     >
-      <View style={styles.overlay}>
-        <View style={styles.content}>
-          <Text style={styles.title}>Session Complete</Text>
-          <Text style={styles.subtitle}>
-            Great work. Here&apos;s your summary.
-          </Text>
-
-          <View style={styles.statsContainer}>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{formatDuration(duration)}</Text>
-              <Text style={styles.statLabel}>Duration</Text>
-            </View>
-
-            {showStrengthStats && (
-              <>
-                <View style={styles.statCard}>
-                  <Text style={styles.statValue}>
-                    {formatVolumeFromKg(totalVolume, weightUnit).toUpperCase()}
-                  </Text>
-                  <Text style={styles.statLabel}>Total Volume</Text>
-                </View>
-
-                <View style={styles.statCard}>
-                  <Text style={styles.statValue}>{setsCompleted}</Text>
-                  <Text style={styles.statLabel}>Sets Completed</Text>
-                </View>
-              </>
-            )}
+      <View style={styles.hero}>
+        <View style={styles.badgeFrame}>
+          {visible && !reduceMotion ? <CelebrationBurst /> : null}
+          <View style={styles.badge}>
+            <Ionicons name="trophy" size={28} color={color.onGold} />
           </View>
-
-          <TouchableOpacity
-            style={styles.doneButton}
-            onPress={onDismiss}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.doneButtonText}>Done</Text>
-          </TouchableOpacity>
         </View>
+        <Text style={styles.subtitle}>Great work. Here’s your summary.</Text>
       </View>
-    </Modal>
+
+      <View style={styles.stats}>
+        <Stat
+          label="Duration"
+          value={durationSeconds}
+          format={formatDuration}
+        />
+        {showStrengthStats ? (
+          <>
+            <Stat
+              label="Total volume"
+              value={totalVolume}
+              format={(value) => formatVolumeFromKg(value, weightUnit)}
+            />
+            <Stat
+              label="Sets completed"
+              value={setsCompleted}
+              format={String}
+            />
+          </>
+        ) : null}
+      </View>
+    </BottomSheet>
   );
 };
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: Colors.overlay,
+  hero: {
+    alignItems: 'center',
+    gap: space.sm,
+  },
+  badgeFrame: {
+    width: BADGE_SIZE,
+    height: BADGE_SIZE,
+    alignItems: 'center',
     justifyContent: 'center',
-    padding: Spacing.xxl,
   },
-  content: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.section,
+  burst: {
+    ...StyleSheet.absoluteFill,
+    borderRadius: BADGE_SIZE / 2,
+    borderWidth: 2,
+    borderColor: color.gold,
   },
-  title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXXl,
-    fontWeight: '800',
-    textAlign: 'center',
-    marginBottom: Spacing.xs,
+  badge: {
+    width: BADGE_SIZE,
+    height: BADGE_SIZE,
+    borderRadius: BADGE_SIZE / 2,
+    backgroundColor: color.gold,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   subtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
+    ...typography.callout,
+    color: color.textSecondary,
     textAlign: 'center',
-    marginBottom: Spacing.section,
   },
-  statsContainer: {
-    gap: Spacing.xl,
-    marginBottom: Spacing.section,
+  stats: {
+    gap: space.xs,
   },
-  statCard: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.xl,
-    padding: Spacing.xxl,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+  stat: {
+    backgroundColor: color.surface2,
+    borderRadius: radius.md,
+    padding: space.md,
+    gap: space.xxs,
   },
   statValue: {
-    color: Colors.accent,
-    fontSize: FontSize.displayXXl,
-    fontWeight: '800',
-    marginBottom: Spacing.xs,
+    ...typography.numericLarge,
+    color: color.gold,
   },
   statLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
+    ...typography.caption,
+    color: color.textSecondary,
   },
   doneButton: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.lg,
-    paddingVertical: Spacing.xl,
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  doneButtonPressed: {
+    backgroundColor: color.goldStrong,
   },
   doneButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
 });

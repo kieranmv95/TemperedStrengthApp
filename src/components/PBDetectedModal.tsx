@@ -1,8 +1,16 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import type { RepMax } from '@/src/types/personalBests';
 import { formatRepMaxLabel } from '@/src/utils/personalBests';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 export type PBDetectedModalProps = {
   visible: boolean;
@@ -31,13 +39,24 @@ export function PBDetectedModal({
       visible={visible}
       transparent
       animationType="fade"
+      statusBarTranslucent
       onRequestClose={onDismiss}
     >
       <View style={styles.overlay}>
-        <View style={styles.card}>
-          <Text style={styles.title}>New personal best</Text>
+        <View
+          style={[styles.card, elevation.overlay]}
+          accessibilityViewIsModal
+          onAccessibilityEscape={onDismiss}
+        >
+          <View style={styles.titleRow}>
+            <Ionicons name="trophy" size={22} color={color.gold} />
+            <Text style={styles.title} accessibilityRole="header">
+              New personal best
+            </Text>
+          </View>
           <Text style={styles.body}>
-            Update your {primaryLabel} for {exerciseName} to {weightText}?
+            Update your {primaryLabel} for {exerciseName} to{' '}
+            <Text style={styles.weight}>{weightText}</Text>?
           </Text>
           {cascadeTiers.length > 0 ? (
             <Text style={styles.cascade}>
@@ -46,18 +65,30 @@ export function PBDetectedModal({
             </Text>
           ) : null}
           <View style={styles.actions}>
-            <TouchableOpacity
-              style={[styles.button, styles.buttonSecondary]}
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                styles.buttonSecondary,
+                pressed && styles.buttonSecondaryPressed,
+              ]}
               onPress={onDismiss}
+              accessibilityRole="button"
+              accessibilityLabel="Dismiss, keep current personal best"
             >
               <Text style={styles.buttonSecondaryText}>Dismiss</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, styles.buttonPrimary]}
+            </Pressable>
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                styles.buttonPrimary,
+                pressed && styles.buttonPrimaryPressed,
+              ]}
               onPress={onUpdate}
+              accessibilityRole="button"
+              accessibilityLabel={`Update ${primaryLabel} to ${weightText}`}
             >
               <Text style={styles.buttonPrimaryText}>Update</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
       </View>
@@ -68,61 +99,72 @@ export function PBDetectedModal({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: Colors.overlay,
+    backgroundColor: color.scrim,
     justifyContent: 'center',
-    paddingHorizontal: Spacing.xxl,
+    paddingHorizontal: space.md,
   },
   card: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: 12,
-    padding: Spacing.section,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    backgroundColor: color.surface2,
+    borderRadius: radius.lg,
+    padding: space.xl,
+    gap: space.sm,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs,
   },
   title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-    marginBottom: Spacing.md,
+    ...typography.title2,
+    color: color.textPrimary,
+    flex: 1,
   },
   body: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    lineHeight: 22,
+    ...typography.body,
+    color: color.textSecondary,
+  },
+  weight: {
+    ...typography.headline,
+    fontVariant: ['tabular-nums'],
+    color: color.gold,
   },
   cascade: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    marginTop: Spacing.md,
-    lineHeight: 20,
+    ...typography.callout,
+    color: color.textSecondary,
   },
   actions: {
     flexDirection: 'row',
-    gap: Spacing.md,
-    marginTop: Spacing.section,
+    flexWrap: 'wrap',
+    gap: space.xs,
+    marginTop: space.sm,
   },
   button: {
-    flex: 1,
-    paddingVertical: Spacing.xxl,
-    borderRadius: 8,
+    flexGrow: 1,
+    flexBasis: 120,
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonPrimary: {
-    backgroundColor: Colors.accent,
+    backgroundColor: color.gold,
+  },
+  buttonPrimaryPressed: {
+    backgroundColor: color.goldStrong,
   },
   buttonPrimaryText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
   buttonSecondary: {
-    backgroundColor: Colors.backgroundElevated,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    borderColor: color.borderStrong,
+  },
+  buttonSecondaryPressed: {
+    backgroundColor: color.surface3,
   },
   buttonSecondaryText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
 });
