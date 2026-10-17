@@ -1,37 +1,31 @@
-import { color, radius, space, typography } from '@/src/constants/tokens';
+import { radius, space, typography } from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
 
-const ICON_WELL_SIZE = 40;
-
 export const shopAdListItemStyles = StyleSheet.create({
-  content: {
-    gap: space.xs,
-  },
-  overline: {
-    ...typography.overline,
-    color: color.textTertiary,
-  },
-  imagePanel: {
+  card: {
     width: '100%',
     aspectRatio: 1,
+    borderRadius: radius.md,
+    borderWidth: 1.5,
     padding: space.sm,
-    borderRadius: radius.sm,
-    backgroundColor: color.textPrimary,
-  },
-  image: {
-    flex: 1,
-    backgroundColor: color.textPrimary,
-  },
-  iconWell: {
-    width: ICON_WELL_SIZE,
-    height: ICON_WELL_SIZE,
-    borderRadius: radius.sm,
-    backgroundColor: color.surface2,
-    alignItems: 'center',
+    overflow: 'hidden',
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardPressed: {
+    opacity: 0.85,
   },
   title: {
-    ...typography.headline,
-    color: color.textPrimary,
+    ...typography.captionStrong,
+    position: 'absolute',
+    top: space.sm,
+    left: space.sm,
+    right: space.sm,
+    zIndex: 1,
+    textAlign: 'center',
+  },
+  image: {
+    width: '70%',
+    height: '70%',
   },
 });

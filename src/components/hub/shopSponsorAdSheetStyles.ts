@@ -34,13 +34,11 @@ export const shopSponsorAdSheetStyles = StyleSheet.create({
     justifyContent: 'center',
     padding: space.sm,
     borderRadius: radius.md,
-    backgroundColor: color.textPrimary,
   },
   logo: {
     width: SHOP_DETAIL_LOGO_MAX_WIDTH,
     maxWidth: '100%',
     height: SHOP_DETAIL_LOGO_MAX_HEIGHT,
-    backgroundColor: color.textPrimary,
   },
   description: {
     ...typography.body,

@@ -95,10 +95,15 @@ export function ShopSponsorAdSheet({
         <View style={styles.identityContent}>
           <Text style={styles.overline}>Partner</Text>
           {logoUrl ? (
-            <View style={styles.logoPanel}>
+            <View
+              style={[
+                styles.logoPanel,
+                { backgroundColor: displayedAd.bgColor },
+              ]}
+            >
               <LoadingImage
                 source={{ uri: logoUrl }}
-                style={styles.logo}
+                style={[styles.logo, { backgroundColor: displayedAd.bgColor }]}
                 resizeMode="contain"
                 accessibilityLabel={`${displayTitle} logo`}
               />
