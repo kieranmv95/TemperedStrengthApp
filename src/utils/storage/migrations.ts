@@ -132,10 +132,19 @@ async function removeICloudSettings(): Promise<void> {
   }
 }
 
+/** v4: Drop saved gym, club, and coach listings from the removed Discover search. */
+async function removeFavoritePartners(): Promise<void> {
+  await AsyncStorage.multiRemove([
+    'favorite_partners',
+    '__sync_ts__:favorite_partners',
+  ]);
+}
+
 const MIGRATIONS: Migration[] = [
   { version: 1, run: normalizeWorkoutNotes },
   { version: 2, run: foldSwapCountState },
   { version: 3, run: removeICloudSettings },
+  { version: 4, run: removeFavoritePartners },
 ];
 
 export const LATEST_SCHEMA_VERSION = MIGRATIONS.reduce(

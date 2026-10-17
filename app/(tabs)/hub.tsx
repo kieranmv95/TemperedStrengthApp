@@ -147,10 +147,6 @@ export default function HubScreen() {
     router.push('/shop');
   };
 
-  const handleOpenDiscover = () => {
-    router.push('/discover');
-  };
-
   const handleOpenSkillsAndCues = () => {
     router.push('/skills-and-cues');
   };
@@ -191,7 +187,6 @@ export default function HubScreen() {
         <SkillsAndCuesCard onPress={handleOpenSkillsAndCues} />
         <HubPromoRow
           onPressShop={handleOpenShop}
-          onPressDiscover={handleOpenDiscover}
           shopUnavailable={networkUnavailable}
         />
       </View>

@@ -1,5 +1,10 @@
 # Design overhaul changelog
 
+## Discover search removed
+
+- Explore no longer shows "Explore near you". The shop card is full width, and stays hidden when offline.
+- Removed the discover and partner detail screens, the location permission, the listings client, and saved gym, club, and coach favorites.
+
 ## Phase 3: Every remaining screen
 
 Every screen now uses `tokens.ts` and the shared ds components. `theme.ts` keeps only the Award icon artwork colours and the remote-notification CMS defaults. The rules screens followed are in `MIGRATION-GUIDE.md`.

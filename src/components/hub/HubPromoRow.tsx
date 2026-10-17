@@ -1,13 +1,8 @@
 import { PressableCard, Skeleton } from '@/src/components/ds';
 import { color, radius, space, typography } from '@/src/constants/tokens';
-import { useLargeText } from '@/src/hooks/useLargeText';
-import { usePartnerListings } from '@/src/hooks/use-partner-listings';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-
-/** Discover ("Explore near you") isn't ready to ship yet — flip to true to re-enable. */
-const DISCOVER_ENABLED = true;
 
 const ICON_WELL_SIZE = 40;
 const TILE_MIN_HEIGHT = 148;
@@ -74,96 +69,33 @@ export function HubPromoCard({
   );
 }
 
-type HubPromoOfflineSlotProps = {
-  label: string;
-};
-
-function HubPromoOfflineSlot({ label }: HubPromoOfflineSlotProps) {
-  return (
-    <View
-      style={[styles.tileSlot, styles.offlineSlot]}
-      accessible
-      accessibilityLabel={`${label} unavailable, no connection`}
-    >
-      <Ionicons
-        name="cloud-offline-outline"
-        size={22}
-        color={color.textSecondary}
-      />
-      <Text style={styles.offlineTitle}>No connection</Text>
-      <Text style={styles.offlineLabel}>{label}</Text>
-    </View>
-  );
-}
-
 type HubPromoRowProps = {
   onPressShop: () => void;
-  onPressDiscover: () => void;
   shopUnavailable?: boolean;
 };
 
-/** Two-up row: partner shop and Discover. */
+/** Partner shop entry on Explore. Hidden when the network is down. */
 export function HubPromoRow({
   onPressShop,
-  onPressDiscover,
   shopUnavailable = false,
 }: HubPromoRowProps) {
-  const {
-    gyms,
-    clubs,
-    coaches,
-    isLoading: isDiscoverLoading,
-  } = usePartnerListings();
-  const largeText = useLargeText();
-  const hasDiscoverListings =
-    gyms.length > 0 || clubs.length > 0 || coaches.length > 0;
-  const showDiscoverCard =
-    DISCOVER_ENABLED && (isDiscoverLoading || hasDiscoverListings);
-
-  if (shopUnavailable && !showDiscoverCard) {
+  if (shopUnavailable) {
     return null;
   }
 
   return (
-    <View style={[styles.row, largeText && styles.rowStacked]}>
-      {shopUnavailable ? (
-        <HubPromoOfflineSlot label="Shop" />
-      ) : (
-        <HubPromoCard
-          layout={largeText ? 'row' : 'tile'}
-          icon="cart-outline"
-          eyebrow="Partner picks"
-          title="Browse the shop"
-          description="The best gear at exclusive prices."
-          onPress={onPressShop}
-          accessibilityLabel="Browse partner products"
-        />
-      )}
-      {showDiscoverCard ? (
-        <HubPromoCard
-          layout={largeText ? 'row' : 'tile'}
-          icon="compass-outline"
-          eyebrow="Discover"
-          title="Explore near you"
-          description="Find your next gym, club or PT in one place."
-          onPress={onPressDiscover}
-          accessibilityLabel="Browse gyms, clubs, and coaches"
-          isLoading={isDiscoverLoading}
-        />
-      ) : null}
-    </View>
+    <HubPromoCard
+      icon="cart-outline"
+      eyebrow="Partner picks"
+      title="Browse the shop"
+      description="The best gear at exclusive prices."
+      onPress={onPressShop}
+      accessibilityLabel="Browse partner products"
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    gap: space.sm,
-  },
-  /** Large text: tiles stack instead of sharing a row. */
-  rowStacked: {
-    flexDirection: 'column',
-  },
   tileSlot: {
     flex: 1,
   },
@@ -200,24 +132,5 @@ const styles = StyleSheet.create({
   description: {
     ...typography.callout,
     color: color.textSecondary,
-  },
-  offlineSlot: {
-    minHeight: TILE_MIN_HEIGHT,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: space.xxs,
-    padding: space.md,
-    borderRadius: radius.md,
-    backgroundColor: color.surface1,
-  },
-  offlineTitle: {
-    ...typography.calloutStrong,
-    color: color.textPrimary,
-    textAlign: 'center',
-  },
-  offlineLabel: {
-    ...typography.caption,
-    color: color.textSecondary,
-    textAlign: 'center',
   },
 });

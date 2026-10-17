@@ -165,10 +165,6 @@ export default function RootLayout() {
                         options={{ headerShown: false }}
                       />
                       <Stack.Screen
-                        name="discover"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
                         name="skills-and-cues"
                         options={{ headerShown: false }}
                       />
@@ -186,10 +182,6 @@ export default function RootLayout() {
                       />
                       <Stack.Screen
                         name="recovery"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="partner/[kind]/[id]"
                         options={{ headerShown: false }}
                       />
                       <Stack.Screen

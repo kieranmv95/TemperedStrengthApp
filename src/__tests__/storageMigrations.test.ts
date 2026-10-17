@@ -17,7 +17,7 @@ describe('storage migrations', () => {
   it('records the latest schema version after running', async () => {
     await runStorageMigrations();
     const version = await AsyncStorage.getItem(SCHEMA_VERSION_KEY);
-    expect(Number(version)).toBeGreaterThanOrEqual(3);
+    expect(Number(version)).toBeGreaterThanOrEqual(4);
   });
 
   it('is idempotent across repeated runs', async () => {
@@ -124,5 +124,19 @@ describe('storage migrations', () => {
     ).resolves.toBeNull();
     const profile = await AsyncStorage.getItem(ONBOARDING_PROFILE_KEY);
     expect(JSON.parse(profile as string)).toEqual({ name: 'Sam' });
+  });
+
+  it('removes saved gym, club, and coach favorites', async () => {
+    await AsyncStorage.multiSet([
+      ['favorite_partners', JSON.stringify(['partner:gym:1'])],
+      ['__sync_ts__:favorite_partners', '2026-01-01T00:00:00.000Z'],
+    ]);
+
+    await runStorageMigrations();
+
+    await expect(AsyncStorage.getItem('favorite_partners')).resolves.toBeNull();
+    await expect(
+      AsyncStorage.getItem('__sync_ts__:favorite_partners')
+    ).resolves.toBeNull();
   });
 });

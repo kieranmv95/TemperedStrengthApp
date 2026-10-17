@@ -104,10 +104,9 @@ At large text (OS font scale 1.3 or more), expect these reflows:
 | Awards read "Achieved", "Not achieved" or "PRO" as text.                            | Pending   | Pending  | Pending      | n/a           |
 | Email, OTP and redeem-code inputs have visible labels; redeem errors are announced. | Pending   | Pending  | Pending      | n/a           |
 
-## Shop, partners and competition
+## Shop and competition
 
-| Check                                                                                                       | VoiceOver | TalkBack | Largest text | Reduce Motion                            |
-| ----------------------------------------------------------------------------------------------------------- | --------- | -------- | ------------ | ---------------------------------------- |
-| Shop tiles read "Partner" and their name; the sheet CTA is a link.                                          | Pending   | Pending  | Pending      | Pending (sheet fades instead of sliding) |
-| Discover and partner detail tabs read as selected chips; the save button is separate from the listing card. | Pending   | Pending  | Pending      | n/a                                      |
-| A leaderboard row reads as one element with its rank.                                                       | Pending   | Pending  | Pending      | n/a                                      |
+| Check                                                              | VoiceOver | TalkBack | Largest text | Reduce Motion                            |
+| ------------------------------------------------------------------ | --------- | -------- | ------------ | ---------------------------------------- |
+| Shop tiles read "Partner" and their name; the sheet CTA is a link. | Pending   | Pending  | Pending      | Pending (sheet fades instead of sliding) |
+| A leaderboard row reads as one element with its rank.              | Pending   | Pending  | Pending      | n/a                                      |
