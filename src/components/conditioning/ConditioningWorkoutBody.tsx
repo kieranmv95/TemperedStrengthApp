@@ -198,7 +198,15 @@ function ConditioningWarmupBlock({
 
   return (
     <View style={[styles.blockCard, isCompleted && styles.blockCardCompleted]}>
-      <View style={styles.blockHeader}>
+      <TouchableOpacity
+        style={styles.blockHeader}
+        onPress={() => setIsExpanded(true)}
+        disabled={isExpanded}
+        activeOpacity={0.7}
+        accessible={!isExpanded}
+        accessibilityRole="button"
+        accessibilityLabel="Show warm-up"
+      >
         <View style={styles.blockHeaderLeft}>
           <View style={styles.blockTitleRow}>
             <Text style={[styles.blockTitle, styles.warmupTitleFlex]}>
@@ -221,7 +229,7 @@ function ConditioningWarmupBlock({
           </View>
           <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
 
       <TouchableOpacity
         onPress={onToggleComplete}

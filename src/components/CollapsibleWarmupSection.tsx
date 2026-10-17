@@ -33,7 +33,15 @@ export function CollapsibleWarmupSection({
 
   return (
     <View style={containerStyle}>
-      <View style={styles.header}>
+      <TouchableOpacity
+        style={styles.header}
+        onPress={() => setIsExpanded(true)}
+        disabled={isExpanded}
+        activeOpacity={0.7}
+        accessible={!isExpanded}
+        accessibilityRole="button"
+        accessibilityLabel={`Show ${contentName}`}
+      >
         <Text
           style={[
             styles.title,
@@ -56,7 +64,7 @@ export function CollapsibleWarmupSection({
         >
           <Text style={styles.toggleText}>{isExpanded ? 'HIDE' : 'SHOW'}</Text>
         </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
       {isExpanded ? <View style={styles.body}>{children}</View> : null}
     </View>
   );

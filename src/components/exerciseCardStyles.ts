@@ -108,14 +108,20 @@ export const exerciseCardStyles = StyleSheet.create({
   setContainer: {
     marginBottom: Spacing.xl,
   },
+  setColumnHeaders: {
+    flexDirection: 'row',
+    gap: Spacing.lg,
+  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     gap: Spacing.lg,
     marginBottom: 0,
   },
+  dragHandleColumn: {
+    width: 24,
+  },
   dragHandle: {
-    width: 22,
     height: 48,
     alignItems: 'center',
     justifyContent: 'center',
@@ -204,6 +210,9 @@ export const exerciseCardStyles = StyleSheet.create({
   inputFailed: {
     borderColor: Colors.destructive,
     borderWidth: 1,
+  },
+  checkmarkColumn: {
+    width: 32,
   },
   checkmarkButton: {
     height: 48,

@@ -1,6 +1,5 @@
 import { Colors } from '@/src/constants/theme';
 import type { Exercise } from '@/src/types/exercise';
-import type { WeightUnit } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useMemo, useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -14,9 +13,7 @@ import { exerciseCardStyles as styles } from './exerciseCardStyles';
 
 type ExerciseCardSetRowProps = {
   setIndex: number;
-  isFirstSet: boolean;
   loggingType: Exercise['logging_type'];
-  weightUnit: WeightUnit;
   weightValue: string;
   repsValue: string;
   rpeValue: string;
@@ -35,9 +32,7 @@ type ExerciseCardSetRowProps = {
 
 export function ExerciseCardSetRow({
   setIndex,
-  isFirstSet,
   loggingType,
-  weightUnit,
   weightValue,
   repsValue,
   rpeValue,
@@ -125,6 +120,7 @@ export function ExerciseCardSetRow({
         <GestureDetector gesture={panGesture}>
           <View
             style={[
+              styles.dragHandleColumn,
               styles.dragHandle,
               (!canReorder || loading) && styles.dragHandleDisabled,
             ]}
@@ -133,20 +129,15 @@ export function ExerciseCardSetRow({
             accessibilityHint="Long press and drag to reorder"
           >
             <Ionicons
-              name="ellipsis-vertical"
-              size={18}
-              color={Colors.textMuted}
+              name="reorder-three"
+              size={22}
+              color={Colors.textSecondary}
             />
           </View>
         </GestureDetector>
 
         {showWeight ? (
           <View style={styles.inputGroup}>
-            {isFirstSet && (
-              <Text style={styles.inputLabel}>
-                {isRepsOnly ? 'Added weight' : 'Weight'} ({weightUnit})
-              </Text>
-            )}
             <View
               style={
                 showOptionalWeightReset
@@ -194,7 +185,6 @@ export function ExerciseCardSetRow({
           </View>
         ) : (
           <View style={styles.inputGroup}>
-            {isFirstSet && <Text style={styles.inputLabel}>Weight</Text>}
             <TouchableOpacity
               onPress={() => setShowWeight(true)}
               disabled={loading}
@@ -211,11 +201,6 @@ export function ExerciseCardSetRow({
         )}
 
         <View style={styles.inputGroupRepsOrTime}>
-          {isFirstSet && (
-            <Text style={styles.inputLabel}>
-              {loggingType === 'time' ? 'Time' : 'Reps'}
-            </Text>
-          )}
           <TextInput
             style={[
               styles.input,
@@ -234,7 +219,6 @@ export function ExerciseCardSetRow({
         </View>
 
         <View style={styles.inputGroupRpe}>
-          {isFirstSet && <Text style={styles.inputLabel}>RPE</Text>}
           <TextInput
             style={[
               styles.input,
@@ -255,6 +239,7 @@ export function ExerciseCardSetRow({
 
         <TouchableOpacity
           style={[
+            styles.checkmarkColumn,
             styles.checkmarkButton,
             !canLog && styles.checkmarkButtonDisabled,
           ]}

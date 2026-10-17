@@ -130,6 +130,10 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     );
   }
 
+  const weightColumnLabel = `${
+    exercise.logging_type === 'reps' ? 'Added weight' : 'Weight'
+  } (${weightUnit})`;
+
   let repRangeText: string | null = null;
 
   // `setScheme` lifts (e.g. 5/3/1) vary reps per set, so the single header chip
@@ -235,18 +239,27 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         </View>
       </View>
 
+      <View style={styles.setColumnHeaders}>
+        <View style={styles.dragHandleColumn} />
+        <Text style={[styles.inputGroup, styles.inputLabel]}>
+          {weightColumnLabel}
+        </Text>
+        <Text style={[styles.inputGroupRepsOrTime, styles.inputLabel]}>
+          {exercise.logging_type === 'time' ? 'Time' : 'Reps'}
+        </Text>
+        <Text style={[styles.inputGroupRpe, styles.inputLabel]}>RPE</Text>
+        <View style={styles.checkmarkColumn} />
+      </View>
+
       {Array.from({ length: numberOfSets }).map((_, setIndex) => {
         const setState = setStates.get(setIndex);
         const canLog = !!reps[setIndex] && !loading;
-        const isFirstSet = setIndex === 0;
 
         return (
           <ExerciseCardSetRow
             key={setIndex}
             setIndex={setIndex}
-            isFirstSet={isFirstSet}
             loggingType={exercise.logging_type}
-            weightUnit={weightUnit}
             weightValue={weights[setIndex] || ''}
             repsValue={reps[setIndex] || ''}
             rpeValue={rpes[setIndex] || ''}
