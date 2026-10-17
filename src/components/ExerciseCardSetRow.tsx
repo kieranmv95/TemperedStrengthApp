@@ -1,6 +1,5 @@
-import { Badge, NumberField, SetCheckButton } from '@/src/components/ds';
+import { NumberField, SetCheckButton } from '@/src/components/ds';
 import { color } from '@/src/constants/tokens';
-import { useMotion } from '@/src/hooks/useMotion';
 import type { Exercise } from '@/src/types/exercise';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useMemo, useState } from 'react';
@@ -12,8 +11,6 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { exerciseCardStyles as styles } from './exerciseCardStyles';
-
-const PR_POP_START_SCALE = 0.6;
 
 type ExerciseCardSetRowProps = {
   setIndex: number;
@@ -29,8 +26,6 @@ type ExerciseCardSetRowProps = {
   setState: 'completed' | 'failed' | undefined;
   /** The next set to log: its set number is highlighted. */
   isActive: boolean;
-  /** A new personal best was detected on this set. */
-  isPr: boolean;
   repsPlaceholder?: string;
   loading: boolean;
   canLog: boolean;
@@ -45,27 +40,6 @@ type ExerciseCardSetRowProps = {
   onRowLayout: (setIndex: number, height: number) => void;
 };
 
-function PrBadge() {
-  const motionHelpers = useMotion();
-  const scale = useSharedValue(
-    motionHelpers.reduceMotion ? 1 : PR_POP_START_SCALE
-  );
-
-  useEffect(() => {
-    scale.set(motionHelpers.spring(1, 'snappy'));
-  }, [scale, motionHelpers]);
-
-  const popStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.get() }],
-  }));
-
-  return (
-    <Animated.View style={popStyle}>
-      <Badge label="PR" accessibilityLabel="Personal best" />
-    </Animated.View>
-  );
-}
-
 export function ExerciseCardSetRow({
   setIndex,
   exerciseName,
@@ -77,7 +51,6 @@ export function ExerciseCardSetRow({
   rpeValue,
   setState,
   isActive,
-  isPr,
   repsPlaceholder,
   loading,
   canLog,
@@ -235,7 +208,6 @@ export function ExerciseCardSetRow({
           >
             {setNumber}
           </Text>
-          {isPr ? <PrBadge /> : null}
         </View>
       )}
 

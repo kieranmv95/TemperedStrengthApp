@@ -24,7 +24,7 @@
   - `NumberField` and `SetCheckButton` rows with real labels, and no fake "0".
   - Every set stays on one inline row, with no steppers (a large weight range made stepping tedious). The next set to log has a gold number.
   - A "Set logged" toast offers Undo.
-  - A new PR pops a "PR" badge with a heavy haptic.
+  - A new PR gives a heavy haptic alongside the existing PB dialog. The per-set "PR" badge was removed after review.
   - Drag handles appear only in reorder mode.
 - **Session complete:** a bottom sheet whose numbers count up, with one gold burst (none under Reduce Motion).
 - **PB dialog and training maxes:** restyled with header semantics and labelled buttons.

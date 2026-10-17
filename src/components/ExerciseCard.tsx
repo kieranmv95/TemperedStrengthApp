@@ -4,10 +4,7 @@ import { PBDetectedModal } from '@/src/components/PBDetectedModal';
 import { color } from '@/src/constants/tokens';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useToast } from '@/src/hooks/toast-context';
-import {
-  useExerciseCardState,
-  type ExerciseCardPbPrompt,
-} from '@/src/hooks/useExerciseCardState';
+import { useExerciseCardState } from '@/src/hooks/useExerciseCardState';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -71,10 +68,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   const rowHeightsRef = useRef<Record<number, number>>({});
   const [reorderMode, setReorderMode] = useState(false);
   const [notesExpanded, setNotesExpanded] = useState(false);
-  const [prSetIndices, setPrSetIndices] = useState<number[]>([]);
-  const [seenPbPrompt, setSeenPbPrompt] = useState<ExerciseCardPbPrompt | null>(
-    null
-  );
 
   const {
     weights,
@@ -106,13 +99,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     exerciseLoggingType: exercise?.logging_type ?? 'reps_and_weight',
     weightUnit,
   });
-
-  if (pbPrompt && pbPrompt !== seenPbPrompt) {
-    setSeenPbPrompt(pbPrompt);
-    setPrSetIndices((prev) =>
-      prev.includes(pbPrompt.setIndex) ? prev : [...prev, pbPrompt.setIndex]
-    );
-  }
 
   useEffect(() => {
     if (pbPrompt) {
@@ -412,7 +398,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             rpeValue={rpes[setIndex] || ''}
             setState={setState}
             isActive={!canReorder && setIndex === firstUnloggedSet}
-            isPr={prSetIndices.includes(setIndex)}
             repsPlaceholder={repsPlaceholder}
             loading={loading}
             canLog={!!reps[setIndex] && !loading}
