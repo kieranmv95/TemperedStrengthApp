@@ -1,5 +1,11 @@
 import { GlossaryItem } from '@/src/components/brief/GlossaryItem';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { getGlossaryByCategory, searchGlossary } from '@/src/data/brief';
 import { fetchGlossary } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
@@ -8,15 +14,19 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, router } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
-  FlatList,
+  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import { AppSafeAreaView, AppFlatList, Pill } from '@/src/components/ds';
+import {
+  AppFlatList,
+  FilterChip,
+  Skeleton,
+  StandardLayout,
+} from '@/src/components/ds';
 
 type CategoryFilter = 'All' | GlossaryTerm['category'];
 
@@ -28,6 +38,9 @@ const CATEGORY_FILTERS: CategoryFilter[] = [
   'Equipment',
   'General',
 ];
+
+const TERM_PLACEHOLDER_HEIGHT = 56;
+const TERM_PLACEHOLDER_COUNT = 6;
 
 export default function GlossaryScreen() {
   const [terms, setTerms] = useState<GlossaryTerm[]>([]);
@@ -78,8 +91,16 @@ export default function GlossaryScreen() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <View style={styles.centeredState}>
-          <ActivityIndicator size="large" color={Colors.accent} />
+        <View style={styles.loadingState}>
+          {Array.from({ length: TERM_PLACEHOLDER_COUNT }, (_, index) => (
+            <Skeleton
+              key={index}
+              width="100%"
+              height={TERM_PLACEHOLDER_HEIGHT}
+              radius="md"
+              accessibilityLabel={index === 0 ? 'Loading terms' : undefined}
+            />
+          ))}
         </View>
       );
     }
@@ -88,11 +109,11 @@ export default function GlossaryScreen() {
       return (
         <View style={styles.centeredState}>
           <Ionicons
-            name="wifi-outline"
-            size={64}
-            color={Colors.backgroundSubtle}
+            name="cloud-offline-outline"
+            size={48}
+            color={color.textTertiary}
           />
-          <Text style={styles.emptyTitle}>
+          <Text style={styles.emptyTitle} accessibilityRole="header">
             Connect to the internet to see this
           </Text>
           <Text style={styles.emptyDescription}>
@@ -104,13 +125,15 @@ export default function GlossaryScreen() {
 
     if (filteredTerms.length === 0) {
       return (
-        <View style={styles.emptyState}>
+        <View style={styles.centeredState}>
           <Ionicons
             name="search-outline"
-            size={64}
-            color={Colors.backgroundSubtle}
+            size={48}
+            color={color.textTertiary}
           />
-          <Text style={styles.emptyTitle}>No Terms Found</Text>
+          <Text style={styles.emptyTitle} accessibilityRole="header">
+            No terms found
+          </Text>
           <Text style={styles.emptyDescription}>
             Try adjusting your search or filter.
           </Text>
@@ -136,175 +159,136 @@ export default function GlossaryScreen() {
   };
 
   return (
-    <AppSafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.headerBackButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Terminology</Text>
-        <View style={styles.headerSpacer} />
-      </View>
-
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchInputContainer}>
-          <Ionicons name="search" size={20} color={Colors.textPlaceholder} />
+    <StandardLayout
+      title="Glossary"
+      subtitle="Tap into the glossary any time. No judgement, just clarity."
+      onBackPress={() => router.back()}
+      disableScroll
+    >
+      <StandardLayout.Filters>
+        <View style={styles.search}>
+          <Ionicons name="search" size={18} color={color.textSecondary} />
           <TextInput
             style={styles.searchInput}
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder="Search terms..."
-            placeholderTextColor={Colors.textPlaceholder}
+            placeholder="Search terms"
+            placeholderTextColor={color.textTertiary}
             autoCapitalize="none"
             autoCorrect={false}
+            returnKeyType="search"
+            accessibilityLabel="Search terms"
           />
-          {searchQuery.length > 0 && (
-            <TouchableOpacity onPress={() => setSearchQuery('')}>
+          {searchQuery.length > 0 ? (
+            <Pressable
+              onPress={() => setSearchQuery('')}
+              style={styles.clearSearch}
+              accessibilityRole="button"
+              accessibilityLabel="Clear search"
+            >
               <Ionicons
                 name="close-circle"
                 size={20}
-                color={Colors.textPlaceholder}
+                color={color.textSecondary}
               />
-            </TouchableOpacity>
-          )}
+            </Pressable>
+          ) : null}
         </View>
-      </View>
-
-      {/* Category Filters */}
-      <View style={styles.filterContainer}>
-        <FlatList
+        <ScrollView
           horizontal
-          data={CATEGORY_FILTERS}
-          keyExtractor={(item) => item ?? 'All'}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.filterList}
-          renderItem={({ item }) => {
-            const normalizedCategory: CategoryFilter = item ?? 'All';
-            const isActive = activeCategory === normalizedCategory;
+          style={styles.chipScroll}
+          contentContainerStyle={styles.chipRow}
+        >
+          {CATEGORY_FILTERS.map((item) => {
+            const normalizedCategory = item ?? 'All';
             const count =
               normalizedCategory === 'All'
                 ? terms.length
                 : terms.filter((t) => t.category === normalizedCategory).length;
 
             return (
-              <Pill
-                onPress={() => setActiveCategory(normalizedCategory)}
-                isActive={isActive}
+              <FilterChip
+                key={normalizedCategory}
                 label={normalizedCategory}
+                selected={activeCategory === normalizedCategory}
+                onPress={() => setActiveCategory(normalizedCategory)}
                 count={count}
+                accessibilityLabel={`${normalizedCategory}, ${count} ${
+                  count === 1 ? 'term' : 'terms'
+                }`}
               />
             );
-          }}
-        />
-        <Text style={styles.searchDescription}>
-          Tap into the glossary any time, no judgement, just clarity.
-        </Text>
-      </View>
-
-      {renderContent()}
-    </AppSafeAreaView>
+          })}
+        </ScrollView>
+      </StandardLayout.Filters>
+      <StandardLayout.Body>{renderContent()}</StandardLayout.Body>
+    </StandardLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  searchDescription: {
-    paddingHorizontal: Spacing.xxl,
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
-    lineHeight: 20,
-    marginBottom: Spacing.xl,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundScreen,
-  },
-  header: {
+  search: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.xl,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
-  },
-  headerBackButton: {
-    padding: Spacing.xs,
-  },
-  headerTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-  },
-  headerSpacer: {
-    width: 32,
-  },
-  searchContainer: {
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.xl,
-  },
-  searchInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    paddingHorizontal: Spacing.control,
-    paddingVertical: Spacing.xl,
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE + space.xxs,
+    paddingLeft: space.sm,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    gap: Spacing.lg,
+    borderColor: color.borderStrong,
+    backgroundColor: color.surface2,
   },
   searchInput: {
+    ...typography.body,
     flex: 1,
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
+    color: color.textPrimary,
+    paddingVertical: space.xs,
   },
-  filterContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
+  clearSearch: {
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  filterList: {
-    paddingHorizontal: Spacing.xxl,
-    paddingBottom: Spacing.xl,
-    gap: Spacing.md,
+  chipScroll: {
+    marginHorizontal: -space.md,
+    flexGrow: 0,
+  },
+  chipRow: {
+    gap: space.xs,
+    paddingHorizontal: space.md,
+    paddingVertical: space.xxs,
   },
   listContent: {
-    padding: Spacing.xxl,
+    paddingTop: space.md,
+    paddingBottom: space.xxl,
   },
   resultsCount: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.base,
-    fontWeight: '500',
-    marginBottom: Spacing.xl,
+    ...typography.caption,
+    fontVariant: ['tabular-nums'],
+    color: color.textTertiary,
+    marginBottom: space.sm,
+  },
+  loadingState: {
+    paddingTop: space.md,
+    gap: space.sm,
   },
   centeredState: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: Spacing.emptyState,
-    gap: Spacing.xxl,
-  },
-  emptyState: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: Spacing.emptyState,
+    paddingHorizontal: space.xxl,
+    gap: space.xs,
   },
   emptyTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
-    fontWeight: '700',
-    marginTop: Spacing.xxl,
-    marginBottom: Spacing.md,
+    ...typography.title2,
+    color: color.textPrimary,
     textAlign: 'center',
   },
   emptyDescription: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
+    ...typography.callout,
+    color: color.textSecondary,
     textAlign: 'center',
   },
 });

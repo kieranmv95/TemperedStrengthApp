@@ -1,5 +1,5 @@
 import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
-import { Spacing } from '@/src/constants/theme';
+import { space } from '@/src/constants/tokens';
 import { getStandaloneWorkoutById } from '@/src/data/workouts';
 import { useRoles } from '@/src/hooks/useRoles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -125,11 +125,11 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
 
 const styles = StyleSheet.create({
   scrollBleed: {
-    marginHorizontal: -Spacing.xxl,
+    marginHorizontal: -space.md,
   },
   list: {
-    gap: Spacing.md,
-    paddingHorizontal: Spacing.xxl,
+    gap: space.sm,
+    paddingHorizontal: space.md,
     alignItems: 'stretch',
   },
   cardSlot: {

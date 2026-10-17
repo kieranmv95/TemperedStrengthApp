@@ -1,45 +1,62 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
+
+const THUMBNAIL_SIZE = 72;
 
 export const articleCardStyles = StyleSheet.create({
   card: {
-    marginBottom: Spacing.lg,
+    marginBottom: space.sm,
   },
-  compactImage: {
-    width: 72,
-    height: 72,
-    borderRadius: BorderRadius.lg,
-    backgroundColor: Colors.backgroundElevated,
-  },
-  compactContent: {
-    flex: 1,
-    marginLeft: Spacing.xl,
-    gap: Spacing.xs,
-  },
-  compactCategoryRow: {
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: space.sm,
+  },
+  rowWithFavourite: {
+    paddingRight: MIN_TARGET_SIZE - space.xs,
+  },
+  compactImage: {
+    width: THUMBNAIL_SIZE,
+    height: THUMBNAIL_SIZE,
+    borderRadius: radius.sm,
+  },
+  compactContent: {
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
+    gap: space.xxs,
   },
   compactCategory: {
-    color: Colors.accent,
-    fontSize: FontSize.sm,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    ...typography.overline,
+    color: color.textTertiary,
   },
   compactTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '600',
-    lineHeight: 20,
+    ...typography.headline,
+    color: color.textPrimary,
   },
   compactMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xs,
+    gap: space.xxs,
   },
   compactMetaText: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.md,
+    ...typography.caption,
+    fontVariant: ['tabular-nums'],
+    color: color.textSecondary,
+  },
+  favouriteButton: {
+    position: 'absolute',
+    top: space.xxs,
+    right: space.xxs,
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

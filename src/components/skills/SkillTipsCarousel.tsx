@@ -1,7 +1,14 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { SkillPager } from '@/src/components/skills/SkillPager';
+import {
+  color,
+  elevation,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AccessibilityInfo, StyleSheet, Text, View } from 'react-native';
 
 type SkillTipsCarouselProps = {
   tips: string[];
@@ -21,10 +28,17 @@ export function SkillTipsCarousel({ tips }: SkillTipsCarouselProps) {
   const canGoPrev = index > 0;
   const canGoNext = index < tips.length - 1;
 
+  const announceTip = (nextIndex: number) => {
+    AccessibilityInfo.announceForAccessibility(
+      `Tip ${nextIndex + 1} of ${tips.length}. ${tips[nextIndex]}`
+    );
+  };
+
   const handlePrev = () => {
     if (!canGoPrev) {
       return;
     }
+    announceTip(index - 1);
     setIndex((current) => current - 1);
   };
 
@@ -32,84 +46,53 @@ export function SkillTipsCarousel({ tips }: SkillTipsCarouselProps) {
     if (!canGoNext) {
       return;
     }
+    announceTip(index + 1);
     setIndex((current) => current + 1);
   };
 
   return (
-    <View style={styles.card}>
-      <Text
-        style={styles.progress}
-        accessibilityLabel={`Tip ${index + 1} of ${tips.length}`}
-      >
-        ({index + 1}/{tips.length})
-      </Text>
-
-      <View style={styles.contentRow}>
-        <TouchableOpacity
-          style={[styles.navButton, !canGoPrev && styles.navButtonDisabled]}
-          onPress={handlePrev}
-          disabled={!canGoPrev}
-          accessibilityRole="button"
-          accessibilityLabel="Previous tip"
-        >
-          <Ionicons name="chevron-back" size={20} color={Colors.accent} />
-        </TouchableOpacity>
-
+    <View style={[styles.card, elevation.raised]}>
+      <View style={styles.tipRow}>
+        <Ionicons
+          name="bulb-outline"
+          size={20}
+          color={color.textSecondary}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+        />
         <Text style={styles.tipText}>{tips[index]}</Text>
-
-        <TouchableOpacity
-          style={[styles.navButton, !canGoNext && styles.navButtonDisabled]}
-          onPress={handleNext}
-          disabled={!canGoNext}
-          accessibilityRole="button"
-          accessibilityLabel="Next tip"
-        >
-          <Ionicons name="chevron-forward" size={20} color={Colors.accent} />
-        </TouchableOpacity>
       </View>
+
+      {tips.length > 1 ? (
+        <SkillPager
+          positionLabel={`Tip ${index + 1} of ${tips.length}`}
+          previousLabel="Previous tip"
+          nextLabel="Next tip"
+          canGoPrevious={canGoPrev}
+          canGoNext={canGoNext}
+          onPrevious={handlePrev}
+          onNext={handleNext}
+        />
+      ) : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    gap: Spacing.xl,
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.accentWashOutline,
-    paddingVertical: Spacing.xxl,
-    paddingHorizontal: Spacing.xl,
-    minHeight: 120,
+    gap: space.md,
+    backgroundColor: color.surface1,
+    borderRadius: radius.md,
+    padding: space.md,
   },
-  progress: {
-    color: Colors.accent,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  contentRow: {
+  tipRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.xl,
-  },
-  navButton: {
-    width: 36,
-    height: 36,
-    borderRadius: BorderRadius.xxl,
-    backgroundColor: Colors.accentWashFill,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  navButtonDisabled: {
-    opacity: 0.35,
+    alignItems: 'flex-start',
+    gap: space.sm,
   },
   tipText: {
+    ...typography.body,
+    color: color.textPrimary,
     flex: 1,
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    lineHeight: 22,
-    textAlign: 'center',
   },
 });

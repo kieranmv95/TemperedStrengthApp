@@ -1,4 +1,11 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { LoadingImage } from '@/src/components/ds';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import type { SkillCue } from '@/src/types/skills';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -10,7 +17,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   useWindowDimensions,
   View,
   type LayoutChangeEvent,
@@ -21,6 +27,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 /** Cue stills ship at 1080×1350. */
 const CUE_ASPECT_RATIO = 1080 / 1350;
+
+/** Cue stills are images of text, so they're read out from their title and description. */
+function cueAccessibilityLabel(cue: SkillCue, index: number): string {
+  return [cue.title ?? `Cue ${index + 1}`, cue.description]
+    .filter((part): part is string => !!part)
+    .join('. ');
+}
 
 type SkillCuesProps = {
   cues: SkillCue[];
@@ -81,7 +94,7 @@ export function SkillCues({ cues }: SkillCuesProps) {
   }
 
   const activeCue = cues[activeIndex];
-  const imageMaxWidth = windowWidth - Spacing.xxl * 2;
+  const imageMaxWidth = windowWidth - space.md * 2;
   const fittedWidth =
     viewerAreaHeight > 0
       ? Math.min(imageMaxWidth, viewerAreaHeight * CUE_ASPECT_RATIO)
@@ -101,17 +114,15 @@ export function SkillCues({ cues }: SkillCuesProps) {
             key={`${index}-${cue.title ?? 'cue'}`}
             onPress={() => setViewerIndex(index)}
             accessibilityRole="button"
-            accessibilityLabel={
-              cue.title ? `Open cue: ${cue.title}` : `Open cue ${index + 1}`
-            }
-            style={[styles.tile, { width: tileWidth }]}
+            accessibilityLabel={cueAccessibilityLabel(cue, index)}
+            accessibilityHint="Opens the cue fullscreen"
+            style={({ pressed }) => [
+              styles.tile,
+              { width: tileWidth },
+              pressed && styles.tilePressed,
+            ]}
           >
-            <Image
-              source={cue.imagePath}
-              style={styles.tileImage}
-              resizeMode="cover"
-              accessibilityIgnoresInvertColors
-            />
+            <LoadingImage source={cue.imagePath} style={styles.tileImage} />
           </Pressable>
         ))}
       </ScrollView>
@@ -124,14 +135,17 @@ export function SkillCues({ cues }: SkillCuesProps) {
       >
         <View style={[styles.viewer, { paddingTop: insets.top }]}>
           <View style={styles.viewerHeader}>
-            <TouchableOpacity
-              style={styles.closeButton}
+            <Pressable
+              style={({ pressed }) => [
+                styles.closeButton,
+                pressed && styles.closeButtonPressed,
+              ]}
               onPress={closeViewer}
               accessibilityRole="button"
               accessibilityLabel="Close cue"
             >
-              <Ionicons name="close" size={28} color={Colors.textPrimary} />
-            </TouchableOpacity>
+              <Ionicons name="close" size={24} color={color.textPrimary} />
+            </Pressable>
           </View>
 
           <View style={styles.viewerListWrap} onLayout={handleViewerAreaLayout}>
@@ -152,7 +166,7 @@ export function SkillCues({ cues }: SkillCuesProps) {
                     animated: false,
                   });
                 }}
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                   <View
                     style={[
                       styles.viewerPage,
@@ -161,8 +175,14 @@ export function SkillCues({ cues }: SkillCuesProps) {
                   >
                     <Image
                       source={item.imagePath}
-                      style={{ width: fittedWidth, height: fittedHeight }}
+                      style={[
+                        styles.viewerImage,
+                        { width: fittedWidth, height: fittedHeight },
+                      ]}
                       resizeMode="contain"
+                      accessible
+                      accessibilityRole="image"
+                      accessibilityLabel={cueAccessibilityLabel(item, index)}
                       accessibilityIgnoresInvertColors
                     />
                   </View>
@@ -174,11 +194,14 @@ export function SkillCues({ cues }: SkillCuesProps) {
           <View
             style={[
               styles.viewerCaption,
-              { paddingBottom: Math.max(insets.bottom, Spacing.xxl) },
+              { paddingBottom: Math.max(insets.bottom, space.xl) },
             ]}
+            accessibilityLiveRegion="polite"
           >
             {activeCue?.title ? (
-              <Text style={styles.viewerTitle}>{activeCue.title}</Text>
+              <Text style={styles.viewerTitle} accessibilityRole="header">
+                {activeCue.title}
+              </Text>
             ) : null}
             {activeCue?.description ? (
               <Text style={styles.viewerDescription}>
@@ -187,7 +210,7 @@ export function SkillCues({ cues }: SkillCuesProps) {
             ) : null}
             {cues.length > 1 ? (
               <Text style={styles.viewerProgress}>
-                ({activeIndex + 1}/{cues.length})
+                Cue {activeIndex + 1} of {cues.length}
               </Text>
             ) : null}
           </View>
@@ -199,17 +222,20 @@ export function SkillCues({ cues }: SkillCuesProps) {
 
 const styles = StyleSheet.create({
   scrollBleed: {
-    marginHorizontal: -Spacing.xxl,
+    marginHorizontal: -space.md,
   },
   list: {
-    gap: Spacing.md,
-    paddingHorizontal: Spacing.xxl,
+    gap: space.sm,
+    paddingHorizontal: space.md,
   },
   tile: {
     aspectRatio: CUE_ASPECT_RATIO,
-    borderRadius: BorderRadius.lg,
+    borderRadius: radius.md,
     overflow: 'hidden',
-    backgroundColor: Colors.backgroundElevated,
+    backgroundColor: color.surface2,
+  },
+  tilePressed: {
+    opacity: 0.85,
   },
   tileImage: {
     width: '100%',
@@ -217,16 +243,24 @@ const styles = StyleSheet.create({
   },
   viewer: {
     flex: 1,
-    backgroundColor: Colors.textBlack,
+    backgroundColor: color.bg,
   },
   viewerHeader: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    paddingHorizontal: Spacing.xxl,
-    paddingBottom: Spacing.md,
+    paddingHorizontal: space.md,
+    paddingBottom: space.xs,
   },
   closeButton: {
-    padding: Spacing.sm,
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: color.surface2,
+  },
+  closeButtonPressed: {
+    backgroundColor: color.surface3,
   },
   viewerListWrap: {
     flex: 1,
@@ -234,26 +268,27 @@ const styles = StyleSheet.create({
   viewerPage: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: Spacing.xxl,
+    paddingHorizontal: space.md,
+  },
+  viewerImage: {
+    borderRadius: radius.md,
   },
   viewerCaption: {
-    paddingHorizontal: Spacing.xxl,
-    gap: Spacing.sm,
+    paddingHorizontal: space.md,
+    paddingTop: space.md,
+    gap: space.xs,
   },
   viewerTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    ...typography.title2,
+    color: color.textPrimary,
   },
   viewerDescription: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    lineHeight: 22,
+    ...typography.body,
+    color: color.textSecondary,
   },
   viewerProgress: {
-    color: Colors.accent,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    marginTop: Spacing.xs,
+    ...typography.captionStrong,
+    fontVariant: ['tabular-nums'],
+    color: color.textSecondary,
   },
 });

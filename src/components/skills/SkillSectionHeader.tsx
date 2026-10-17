@@ -1,4 +1,5 @@
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { SectionHeader } from '@/src/components/ds';
+import { color, space, typography } from '@/src/constants/tokens';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -13,7 +14,7 @@ export function SkillSectionHeader({
 }: SkillSectionHeaderProps) {
   return (
     <View style={styles.header}>
-      <Text style={styles.title}>{title}</Text>
+      <SectionHeader title={title} />
       {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
     </View>
   );
@@ -21,16 +22,10 @@ export function SkillSectionHeader({
 
 const styles = StyleSheet.create({
   header: {
-    gap: Spacing.xs,
-  },
-  title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayLg,
-    fontWeight: '800',
+    gap: space.xxs,
   },
   subtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
+    ...typography.callout,
+    color: color.textSecondary,
   },
 });

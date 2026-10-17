@@ -33,14 +33,14 @@ export function ArticleMarkdownContent({
 
     if (line.startsWith('## ')) {
       return (
-        <Text key={index} style={styles.heading2}>
+        <Text key={index} style={styles.heading2} accessibilityRole="header">
           {line.replace('## ', '')}
         </Text>
       );
     }
     if (line.startsWith('### ')) {
       return (
-        <Text key={index} style={styles.heading3}>
+        <Text key={index} style={styles.heading3} accessibilityRole="header">
           {line.replace('### ', '')}
         </Text>
       );
@@ -49,7 +49,13 @@ export function ArticleMarkdownContent({
       const listContent = line.replace('- ', '');
       return (
         <View key={index} style={styles.listItem}>
-          <Text style={styles.bullet}>•</Text>
+          <Text
+            style={styles.bullet}
+            accessibilityElementsHidden
+            importantForAccessibility="no"
+          >
+            •
+          </Text>
           <Text style={styles.listText}>
             {renderInlineFormatting(listContent, styles.listText)}
           </Text>

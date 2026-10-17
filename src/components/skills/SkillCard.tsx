@@ -1,9 +1,12 @@
-import { Card, SmallChevron } from '@/src/components/ds';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { LoadingImage, PressableCard } from '@/src/components/ds';
+import { color, radius, space, typography } from '@/src/constants/tokens';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import type { SkillSummary } from '@/src/types/skills';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+
+const THUMBNAIL_SIZE = 72;
 
 type SkillMetaItem = {
   key: string;
@@ -22,7 +25,7 @@ function getSkillMetaItems(skill: SkillSummary): SkillMetaItem[] {
     items.push({
       key: 'articles',
       icon: 'newspaper-outline',
-      label: pluralize(skill.articleCount, 'Article', 'Articles'),
+      label: pluralize(skill.articleCount, 'article', 'articles'),
     });
   }
 
@@ -30,7 +33,7 @@ function getSkillMetaItems(skill: SkillSummary): SkillMetaItem[] {
     items.push({
       key: 'videos',
       icon: 'videocam-outline',
-      label: pluralize(skill.videoCount, 'Video', 'Videos'),
+      label: pluralize(skill.videoCount, 'video', 'videos'),
     });
   }
 
@@ -38,7 +41,7 @@ function getSkillMetaItems(skill: SkillSummary): SkillMetaItem[] {
     items.push({
       key: 'tips',
       icon: 'bulb-outline',
-      label: pluralize(skill.tipCount, 'Tip', 'Tips'),
+      label: pluralize(skill.tipCount, 'tip', 'tips'),
     });
   }
 
@@ -48,8 +51,8 @@ function getSkillMetaItems(skill: SkillSummary): SkillMetaItem[] {
       icon: 'body-outline',
       label: pluralize(
         skill.recoveryFlowCount,
-        'Mobility Flow',
-        'Mobility Flows'
+        'mobility flow',
+        'mobility flows'
       ),
     });
   }
@@ -58,7 +61,7 @@ function getSkillMetaItems(skill: SkillSummary): SkillMetaItem[] {
     items.push({
       key: 'cues',
       icon: 'list-outline',
-      label: pluralize(skill.cueCount, 'Cue', 'Cues'),
+      label: pluralize(skill.cueCount, 'cue', 'cues'),
     });
   }
 
@@ -66,7 +69,7 @@ function getSkillMetaItems(skill: SkillSummary): SkillMetaItem[] {
     items.push({
       key: 'workouts',
       icon: 'barbell-outline',
-      label: pluralize(skill.workoutCount, 'Workout', 'Workouts'),
+      label: pluralize(skill.workoutCount, 'workout', 'workouts'),
     });
   }
 
@@ -79,105 +82,94 @@ type SkillCardProps = {
 };
 
 export function SkillCard({ skill, onPress }: SkillCardProps) {
+  const largeText = useLargeText();
   const metaItems = getSkillMetaItems(skill);
+  const accessibilityLabel = [
+    skill.name,
+    ...metaItems.map((item) => item.label),
+  ].join(', ');
 
   return (
-    <Card
+    <PressableCard
       onPress={() => onPress(skill)}
-      accessibilityLabel={`Open ${skill.name}`}
-      style={styles.card}
+      accessibilityLabel={accessibilityLabel}
     >
-      <View style={styles.topRow}>
-        <View style={styles.thumbnailWrap}>
-          <Image
-            source={skill.thumbnailPath}
-            style={styles.thumbnail}
-            resizeMode="cover"
-            accessibilityIgnoresInvertColors
-          />
+      <View style={styles.content}>
+        <View style={largeText ? styles.topRowStacked : styles.topRow}>
+          <LoadingImage source={skill.thumbnailPath} style={styles.thumbnail} />
+
+          <View style={styles.textColumn}>
+            <Text style={styles.title}>{skill.name}</Text>
+            <Text style={styles.description} numberOfLines={2}>
+              {skill.description}
+            </Text>
+          </View>
         </View>
 
-        <View style={styles.textColumn}>
-          <Text style={styles.title} numberOfLines={2}>
-            {skill.name}
-          </Text>
-          <Text style={styles.description} numberOfLines={2}>
-            {skill.description}
-          </Text>
-        </View>
-
-        <SmallChevron />
+        {metaItems.length > 0 ? (
+          <View style={styles.metaRow}>
+            {metaItems.map((item) => (
+              <View key={item.key} style={styles.metaItem}>
+                <Ionicons
+                  name={item.icon}
+                  size={14}
+                  color={color.textSecondary}
+                />
+                <Text style={styles.metaText}>{item.label}</Text>
+              </View>
+            ))}
+          </View>
+        ) : null}
       </View>
-
-      {metaItems.length > 0 ? (
-        <View style={styles.metaRow}>
-          {metaItems.map((item) => (
-            <View key={item.key} style={styles.metaItem}>
-              <Ionicons name={item.icon} size={14} color={Colors.accent} />
-              <Text style={styles.metaText}>{item.label}</Text>
-            </View>
-          ))}
-        </View>
-      ) : null}
-    </Card>
+    </PressableCard>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    flexDirection: 'column',
-    alignItems: 'stretch',
-    gap: Spacing.xl,
-    backgroundColor: Colors.backgroundCard,
-    borderColor: Colors.accentWashOutline,
-    borderWidth: 1,
+  content: {
+    gap: space.sm,
   },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xl,
+    gap: space.sm,
   },
-  thumbnailWrap: {
-    width: 72,
-    height: 72,
-    borderRadius: BorderRadius.lg,
-    overflow: 'hidden',
-    backgroundColor: Colors.backgroundElevated,
-    flexShrink: 0,
+  topRowStacked: {
+    gap: space.sm,
   },
   thumbnail: {
-    width: '100%',
-    height: '100%',
+    width: THUMBNAIL_SIZE,
+    height: THUMBNAIL_SIZE,
+    borderRadius: radius.sm,
   },
   textColumn: {
-    flex: 1,
+    flexGrow: 1,
+    flexShrink: 1,
     minWidth: 0,
-    gap: Spacing.xs,
+    gap: space.xxs,
   },
   title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
   },
   description: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
+    ...typography.callout,
+    color: color.textSecondary,
   },
   metaRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    columnGap: Spacing.xl,
-    rowGap: Spacing.md,
+    columnGap: space.sm,
+    rowGap: space.xs,
   },
   metaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
+    gap: space.xxs,
   },
   metaText: {
-    color: Colors.accent,
-    fontSize: FontSize.md,
-    fontWeight: '600',
+    ...typography.captionStrong,
+    fontVariant: ['tabular-nums'],
+    color: color.textSecondary,
   },
 });
