@@ -1,6 +1,15 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { Pressable, StyleSheet, Text } from 'react-native';
+import { FilterChip } from './Chip';
 
 type PillVariant = 'filter' | 'card';
 
@@ -12,10 +21,14 @@ type PillProps = {
   count?: number;
   /** When true, the pill is non-interactive (no press feedback / action). */
   disabled?: boolean;
-  /** `card` matches home quick-link buttons; `filter` is the compact chip style. */
+  /** `card` is a small tappable tile; `filter` is a toggleable chip. */
   variant?: PillVariant;
 };
 
+/**
+ * Legacy API kept for existing screens. `filter` renders a FilterChip; new
+ * code should use FilterChip or ActionChip directly.
+ */
 export const Pill = ({
   onPress,
   isActive,
@@ -25,101 +38,58 @@ export const Pill = ({
   disabled = false,
   variant = 'filter',
 }: PillProps) => {
-  const isCard = variant === 'card';
+  const iconName = icon as keyof typeof Ionicons.glyphMap | undefined;
+
+  if (variant === 'filter') {
+    return (
+      <FilterChip
+        label={label}
+        selected={isActive}
+        onPress={onPress}
+        icon={iconName}
+        count={count}
+        disabled={disabled}
+      />
+    );
+  }
 
   return (
-    <TouchableOpacity
-      style={[
-        isCard ? styles.cardTab : styles.filterTab,
-        isActive && (isCard ? styles.cardTabActive : styles.filterTabActive),
+    <Pressable
+      style={({ pressed }) => [
+        styles.card,
+        elevation.raised,
+        (isActive || pressed) && styles.cardActive,
       ]}
       onPress={onPress}
       disabled={disabled}
-      activeOpacity={disabled ? 1 : undefined}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ disabled, selected: isActive }}
     >
-      {icon && (
-        <Ionicons
-          name={icon as any}
-          size={isCard ? 22 : 14}
-          color={
-            isCard ? Colors.accent : isActive ? Colors.accent : Colors.textMuted
-          }
-          style={!isCard ? styles.filterIcon : undefined}
-        />
-      )}
-      <Text
-        style={[
-          isCard ? styles.cardTabText : styles.filterTabText,
-          !isCard && isActive && styles.filterTabTextActive,
-        ]}
-      >
-        {label}
-      </Text>
-      {typeof count === 'number' && (
-        <Text
-          style={[styles.filterCount, isActive && styles.filterCountActive]}
-        >
-          {count}
-        </Text>
-      )}
-    </TouchableOpacity>
+      {iconName ? (
+        <Ionicons name={iconName} size={20} color={color.gold} />
+      ) : null}
+      <Text style={styles.cardText}>{label}</Text>
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
-  filterTab: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.control,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundCard,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-  },
-  filterTabActive: {
-    backgroundColor: Colors.accentWashFill,
-    borderColor: Colors.accentWashBorder,
-  },
-  filterIcon: {
-    marginRight: Spacing.xs,
-  },
-  filterTabText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
-  },
-  filterTabTextActive: {
-    color: Colors.accent,
-  },
-  filterCount: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    marginLeft: Spacing.sm,
-  },
-  filterCountActive: {
-    color: Colors.accent,
-    opacity: 0.7,
-  },
-  cardTab: {
+  card: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.xl,
-    borderRadius: BorderRadius.xxl,
-    backgroundColor: Colors.backgroundCard,
-    borderWidth: 1,
-    borderColor: Colors.accentWashBorder,
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.sm,
+    borderRadius: radius.md,
+    backgroundColor: color.surface1,
   },
-  cardTabActive: {
-    backgroundColor: Colors.accentWashFill,
+  cardActive: {
+    backgroundColor: color.surface2,
   },
-  cardTabText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
+  cardText: {
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
 });

@@ -213,11 +213,7 @@ export default function HomeTabScreen() {
 
   if (loading) {
     return (
-      <StandardLayout
-        variant="forged"
-        title={greetingTitle}
-        subtitle={formatTodayDate()}
-      >
+      <StandardLayout title={greetingTitle} subtitle={formatTodayDate()}>
         <StandardLayout.Body>
           <View style={styles.skeletons}>
             <Skeleton
@@ -243,7 +239,6 @@ export default function HomeTabScreen() {
 
   return (
     <StandardLayout
-      variant="forged"
       title={greetingTitle}
       subtitle={formatTodayDate()}
       titleAccessory={titleAccessory}

@@ -265,7 +265,6 @@ export default function WorkoutsScreen() {
 
   return (
     <StandardLayout
-      variant="forged"
       title="Workouts"
       subtitle="Log your workouts and track your progress."
       disableScroll

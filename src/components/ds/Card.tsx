@@ -1,8 +1,9 @@
-import { BorderRadius, Colors, Spacing } from '@/src/constants/theme';
+import { color, elevation, radius, space } from '@/src/constants/tokens';
+import React from 'react';
 import {
+  Pressable,
   StyleProp,
   StyleSheet,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
@@ -12,42 +13,51 @@ type CardProps = {
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  /** Kept for existing callers; press feedback is now a surface step. */
   activeOpacity?: number;
 };
 
+/**
+ * Surface for grouped content. Prefer PressableCard for new tappable cards;
+ * Card remains for existing screens that lay out their own content and chevron.
+ */
 export const Card = ({
   children,
   onPress,
   style,
   accessibilityLabel,
-  activeOpacity,
 }: CardProps) => {
   if (onPress) {
     return (
-      <TouchableOpacity
+      <Pressable
         accessibilityRole="button"
-        style={[styles.card, style]}
+        style={({ pressed }) => [
+          styles.card,
+          elevation.raised,
+          style,
+          pressed && styles.pressed,
+        ]}
         onPress={onPress}
         accessibilityLabel={accessibilityLabel}
-        activeOpacity={activeOpacity || 0.7}
       >
         {children}
-      </TouchableOpacity>
+      </Pressable>
     );
   }
 
-  return <View style={[styles.card, style]}>{children}</View>;
+  return <View style={[styles.card, elevation.raised, style]}>{children}</View>;
 };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    padding: Spacing.xxl,
+    backgroundColor: color.surface1,
+    borderRadius: radius.md,
+    padding: space.md,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: space.xs,
+  },
+  pressed: {
+    backgroundColor: color.surface2,
   },
 });

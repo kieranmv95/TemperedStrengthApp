@@ -1,17 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ActionChip } from './Chip';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
-import { color, space, typography } from '@/src/constants/tokens';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 
 type StandardLayoutSectionProps = {
   children?: React.ReactNode;
@@ -54,8 +52,6 @@ type StandardLayoutProps = {
   filterBarButtons?: React.ReactNode;
   /** Content below the filter bar buttons (e.g. expanded sort panel). */
   filterBarBelowButtons?: React.ReactNode;
-  /** `forged` opts a screen into the redesigned header; other screens are unchanged. */
-  variant?: 'legacy' | 'forged';
   /** Shown beside the title, e.g. an account badge. */
   titleAccessory?: React.ReactNode;
   children?: React.ReactNode;
@@ -77,11 +73,9 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
   filterBarOnly = false,
   filterBarButtons,
   filterBarBelowButtons,
-  variant = 'legacy',
   titleAccessory,
   children,
 }) => {
-  const forged = variant === 'forged';
   const insets = useSafeAreaInsets();
   const [filtersExpanded, setFiltersExpanded] = React.useState(false);
 
@@ -145,34 +139,19 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
         },
       ]}
     >
-      <View
-        style={[
-          styles.headerContainer,
-          onBackPress ? styles.headerContainerWithBack : null,
-          forged ? styles.headerContainerForged : null,
-        ]}
-      >
+      <View style={styles.header}>
         {onBackPress ? (
           <View style={styles.headerRow}>
-            <TouchableOpacity
+            <Pressable
               style={styles.backButton}
               onPress={onBackPress}
               accessibilityRole="button"
               accessibilityLabel="Back"
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <Ionicons
-                name="arrow-back"
-                size={24}
-                color={Colors.textPrimary}
-              />
-            </TouchableOpacity>
+              <Ionicons name="arrow-back" size={24} color={color.textPrimary} />
+            </Pressable>
             <Text
-              style={[
-                styles.title,
-                styles.titleInRow,
-                forged ? styles.titleForged : null,
-              ]}
+              style={[styles.title, styles.titleInRow]}
               numberOfLines={2}
               accessibilityRole="header"
             >
@@ -185,7 +164,6 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
             <Text
               style={[
                 styles.title,
-                forged ? styles.titleForged : null,
                 titleAccessory ? styles.titleBesideAccessory : null,
               ]}
               accessibilityRole="header"
@@ -195,17 +173,7 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
             {titleAccessory}
           </View>
         )}
-        {subtitle ? (
-          <Text
-            style={[
-              styles.subtitle,
-              onBackPress ? styles.subtitleWithBack : null,
-              forged ? styles.subtitleForged : null,
-            ]}
-          >
-            {subtitle}
-          </Text>
-        ) : null}
+        {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
         {headerActions ? (
           <View style={styles.headerActions}>{headerActions}</View>
         ) : null}
@@ -214,61 +182,36 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
             <StandardLayoutFilters>{filters}</StandardLayoutFilters>
           </View>
         ) : null}
-        <View>
-          {showFilterBar ? (
-            <View style={styles.advancedFiltersContainer}>
-              <View style={styles.advancedFiltersButtons}>
-                {hasAdvancedFilters ? (
-                  <TouchableOpacity
-                    style={styles.filtersToggle}
-                    onPress={() => setFiltersExpanded((v) => !v)}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={styles.filtersToggleText}>
-                      {filtersExpanded ? 'Hide filters' : 'Show filters'}
-                    </Text>
-                    <Ionicons
-                      name="filter"
-                      size={16}
-                      color={Colors.textMuted}
-                    />
-                  </TouchableOpacity>
-                ) : null}
-                {forged ? (
-                  <ActionChip
-                    label="Glossary"
-                    icon="book-outline"
-                    tone="neutral"
-                    onPress={() => router.push('/glossary')}
-                    accessibilityLabel="Open the glossary"
-                  />
-                ) : (
-                  <TouchableOpacity
-                    style={styles.filtersToggle}
-                    onPress={() => router.push('/glossary')}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={styles.filtersToggleText}>Glossary</Text>
-                    <Ionicons name="book" size={16} color={Colors.textMuted} />
-                  </TouchableOpacity>
-                )}
-                {filterBarButtons}
-              </View>
-              {filterBarBelowButtons ? (
-                <View style={styles.filterBarBelowButtons}>
-                  {filterBarBelowButtons}
-                </View>
+        {showFilterBar ? (
+          <View style={styles.filterBar}>
+            <View style={styles.filterBarButtons}>
+              {hasAdvancedFilters ? (
+                <ActionChip
+                  label={filtersExpanded ? 'Hide filters' : 'Show filters'}
+                  icon="options-outline"
+                  tone={filtersExpanded ? 'gold' : 'neutral'}
+                  onPress={() => setFiltersExpanded((v) => !v)}
+                  accessibilityLabel="Filters"
+                  accessibilityState={{ expanded: filtersExpanded }}
+                />
               ) : null}
-              {hasAdvancedFilters && filtersExpanded ? (
-                <View style={styles.advancedFiltersContent}>
-                  <StandardLayoutAdvancedFilters>
-                    {advancedFilters}
-                  </StandardLayoutAdvancedFilters>
-                </View>
-              ) : null}
+              <ActionChip
+                label="Glossary"
+                icon="book-outline"
+                tone="neutral"
+                onPress={() => router.push('/glossary')}
+                accessibilityLabel="Open the glossary"
+              />
+              {filterBarButtons}
             </View>
-          ) : null}
-        </View>
+            {filterBarBelowButtons}
+            {hasAdvancedFilters && filtersExpanded ? (
+              <StandardLayoutAdvancedFilters>
+                {advancedFilters}
+              </StandardLayoutAdvancedFilters>
+            ) : null}
+          </View>
+        ) : null}
       </View>
       {disableScroll ? (
         <View
@@ -287,7 +230,7 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
           contentContainerStyle={[
             styles.scrollContent,
             edgeToEdgeBody ? styles.edgeToEdgeBody : null,
-            { paddingBottom: insets.bottom + Spacing.section },
+            { paddingBottom: insets.bottom + space.xl },
           ]}
         >
           {body ? <StandardLayoutBody>{body}</StandardLayoutBody> : null}
@@ -310,42 +253,32 @@ export const StandardLayout: StandardLayoutCompound = Object.assign(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.backgroundScreen,
+    backgroundColor: color.bg,
+  },
+  header: {
+    paddingHorizontal: space.md,
+    paddingTop: space.md,
+    paddingBottom: space.sm,
+    gap: space.xxs,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xxs,
+  },
+  backButton: {
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    justifyContent: 'center',
+    marginLeft: -space.xs,
   },
   title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXXXl,
-    fontWeight: '800',
-    letterSpacing: -0.5,
-  },
-  subtitle: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
-  },
-  headerContainer: {
-    paddingHorizontal: Spacing.xxl,
-    paddingTop: Spacing.xxl,
-    paddingBottom: Spacing.xxl,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
-  },
-  headerContainerWithBack: {
-    paddingTop: Spacing.md,
-  },
-  headerContainerForged: {
-    paddingBottom: space.sm,
-    borderBottomWidth: 0,
-  },
-  titleForged: {
     ...typography.title1,
-    letterSpacing: 0,
-    fontWeight: undefined,
+    color: color.textPrimary,
   },
-  subtitleForged: {
-    ...typography.callout,
-    color: color.textSecondary,
-    marginTop: space.xxs,
+  titleInRow: {
+    flex: 1,
+    minWidth: 0,
   },
   titleBesideAccessory: {
     flexShrink: 1,
@@ -358,87 +291,48 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
     gap: space.xs,
   },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-  },
-  backButton: {
-    padding: Spacing.md,
-    marginLeft: -Spacing.md,
-  },
-  titleInRow: {
-    flex: 1,
-    minWidth: 0,
+  subtitle: {
+    ...typography.callout,
+    color: color.textSecondary,
   },
   headerActions: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    gap: Spacing.sm,
-    marginTop: Spacing.lg,
-  },
-  subtitleWithBack: {
-    marginTop: Spacing.xs,
+    gap: space.xs,
+    marginTop: space.xs,
   },
   filtersContainer: {
-    marginTop: Spacing.xl,
-    gap: Spacing.md,
+    marginTop: space.sm,
+    gap: space.xs,
   },
-  advancedFiltersContainer: {
-    marginTop: Spacing.xl,
+  filterBar: {
+    marginTop: space.sm,
+    gap: space.xs,
   },
-  filtersToggle: {
-    alignSelf: 'flex-start',
+  filterBarButtons: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    gap: Spacing.sm,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
-    borderRadius: BorderRadius.xxl,
-    backgroundColor: Colors.backgroundCard,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-  },
-  filtersToggleText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.base,
-    fontWeight: '700',
-  },
-  filtersContent: {
-    paddingTop: Spacing.sm,
-  },
-  advancedFiltersContent: {
-    paddingTop: 0,
-  },
-  advancedFiltersButtons: {
-    flexDirection: 'row',
-    alignItems: 'center',
     flexWrap: 'wrap',
-    gap: Spacing.md,
-  },
-  filterBarBelowButtons: {
-    marginTop: 0,
+    alignItems: 'center',
+    gap: space.xs,
   },
   scrollView: {
     flex: 1,
-    backgroundColor: Colors.backgroundScreen,
+    backgroundColor: color.bg,
   },
   content: {
-    paddingHorizontal: Spacing.xxl,
-    paddingTop: Spacing.xxl,
+    paddingHorizontal: space.md,
+    paddingTop: space.md,
     flexGrow: 1,
   },
   scrollContent: {
-    paddingHorizontal: Spacing.xxl,
-    paddingTop: Spacing.xxl,
-    paddingBottom: Spacing.md,
+    paddingHorizontal: space.md,
+    paddingTop: space.md,
     flexGrow: 1,
   },
   nonScrollContent: {
     paddingTop: 0,
-    paddingHorizontal: Spacing.xxl,
+    paddingHorizontal: space.md,
     flex: 1,
   },
   edgeToEdgeBody: {

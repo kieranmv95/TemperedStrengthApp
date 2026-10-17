@@ -336,7 +336,6 @@ export default function HubScreen() {
 
   return (
     <StandardLayout
-      variant="forged"
       title="Explore"
       subtitle="Tools, products and articles to help you train."
       disableScroll
