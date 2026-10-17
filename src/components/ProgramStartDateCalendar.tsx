@@ -1,13 +1,22 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import {
   normalizeToLocalMidnight,
   programSplitKeyToJsDay,
 } from '@/src/utils/programStartWeekday';
+import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 const WEEKDAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+const DAY_CELL_GUTTER = 2;
+const MONTH_NAV_ICON_SIZE = 22;
 
 type ProgramStartDateCalendarProps = {
   value: Date;
@@ -89,28 +98,53 @@ export const ProgramStartDateCalendar: React.FC<
   return (
     <View style={styles.root}>
       <View style={styles.monthRow}>
-        <TouchableOpacity
+        <Pressable
           onPress={goPrevMonth}
-          style={[styles.monthNavHit, !canGoPrev && styles.monthNavDisabled]}
+          style={({ pressed }) => [
+            styles.monthNavHit,
+            pressed && styles.monthNavPressed,
+            !canGoPrev && styles.monthNavDisabled,
+          ]}
           accessibilityRole="button"
           accessibilityLabel="Previous month"
           accessibilityState={{ disabled: !canGoPrev }}
           disabled={!canGoPrev}
         >
-          <Text style={styles.monthNavText}>‹</Text>
-        </TouchableOpacity>
-        <Text style={styles.monthTitle}>{monthTitle}</Text>
-        <TouchableOpacity
+          <Ionicons
+            name="chevron-back"
+            size={MONTH_NAV_ICON_SIZE}
+            color={color.textPrimary}
+          />
+        </Pressable>
+        <Text
+          style={styles.monthTitle}
+          accessibilityRole="header"
+          accessibilityLiveRegion="polite"
+        >
+          {monthTitle}
+        </Text>
+        <Pressable
           onPress={goNextMonth}
-          style={styles.monthNavHit}
+          style={({ pressed }) => [
+            styles.monthNavHit,
+            pressed && styles.monthNavPressed,
+          ]}
           accessibilityRole="button"
           accessibilityLabel="Next month"
         >
-          <Text style={styles.monthNavText}>›</Text>
-        </TouchableOpacity>
+          <Ionicons
+            name="chevron-forward"
+            size={MONTH_NAV_ICON_SIZE}
+            color={color.textPrimary}
+          />
+        </Pressable>
       </View>
 
-      <View style={styles.weekdayRow}>
+      <View
+        style={styles.weekdayRow}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
         {WEEKDAY_LABELS.map((label, i) => (
           <View key={i} style={styles.weekdayCell}>
             <Text style={styles.weekdayText}>{label}</Text>
@@ -129,11 +163,21 @@ export const ProgramStartDateCalendar: React.FC<
           const isAllowed =
             allowedJsDays.size > 0 && allowedJsDays.has(cellDate.getDay());
           const selected = sameLocalCalendarDay(cellDate, normalizedValue);
+          const dateLabel = cellDate.toLocaleDateString(undefined, {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+          });
 
           if (!isAllowed) {
             return (
               <View key={`d-${cell.day}`} style={styles.dayCell}>
-                <View style={[styles.dayInner, styles.dayInnerDisabled]}>
+                <View
+                  style={styles.dayInner}
+                  accessible
+                  accessibilityLabel={`${dateLabel}, not available`}
+                  accessibilityState={{ disabled: true }}
+                >
                   <Text style={styles.dayTextDisabled}>{cell.day}</Text>
                 </View>
               </View>
@@ -142,19 +186,23 @@ export const ProgramStartDateCalendar: React.FC<
 
           return (
             <View key={`d-${cell.day}`} style={styles.dayCell}>
-              <TouchableOpacity
+              <Pressable
                 onPress={() => onChange(cellDate)}
-                style={[styles.dayInner, selected && styles.dayInnerSelected]}
+                style={({ pressed }) => [
+                  styles.dayInner,
+                  pressed && styles.dayInnerPressed,
+                  selected && styles.dayInnerSelected,
+                ]}
                 accessibilityRole="button"
                 accessibilityState={{ selected }}
-                accessibilityLabel={`${cell.day}, select program start date`}
+                accessibilityLabel={`${dateLabel}, select program start date`}
               >
                 <Text
                   style={[styles.dayText, selected && styles.dayTextSelected]}
                 >
                   {cell.day}
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           );
         })}
@@ -166,46 +214,43 @@ export const ProgramStartDateCalendar: React.FC<
 const styles = StyleSheet.create({
   root: {
     width: '100%',
-    paddingHorizontal: Spacing.md,
-    paddingBottom: Spacing.lg,
   },
   monthRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: Spacing.xxl,
+    marginBottom: space.sm,
   },
   monthNavHit: {
-    minWidth: 44,
-    minHeight: 44,
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  monthNavDisabled: {
-    opacity: 0.35,
+  monthNavPressed: {
+    backgroundColor: color.surface3,
   },
-  monthNavText: {
-    color: Colors.accent,
-    fontSize: FontSize.displayLg,
-    fontWeight: '600',
+  monthNavDisabled: {
+    opacity: 0.6,
   },
   monthTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
+    flex: 1,
+    textAlign: 'center',
   },
   weekdayRow: {
     flexDirection: 'row',
-    marginBottom: Spacing.sm,
+    marginBottom: space.xxs,
   },
   weekdayCell: {
     flex: 1,
     alignItems: 'center',
   },
   weekdayText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.sm,
-    fontWeight: '600',
+    ...typography.captionStrong,
+    color: color.textTertiary,
   },
   grid: {
     flexDirection: 'row',
@@ -213,32 +258,30 @@ const styles = StyleSheet.create({
   },
   dayCell: {
     width: '14.28%',
-    padding: 2,
-    minHeight: 40,
+    padding: DAY_CELL_GUTTER,
+    minHeight: MIN_TARGET_SIZE + DAY_CELL_GUTTER * 2,
   },
   dayInner: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: BorderRadius.lg,
+    borderRadius: radius.pill,
   },
-  dayInnerDisabled: {
-    opacity: 0.35,
+  dayInnerPressed: {
+    backgroundColor: color.surface3,
   },
   dayInnerSelected: {
-    backgroundColor: Colors.accent,
+    backgroundColor: color.gold,
   },
   dayText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.numericSmall,
+    color: color.textPrimary,
   },
   dayTextDisabled: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.numericSmall,
+    color: color.textDisabled,
   },
   dayTextSelected: {
-    color: Colors.textOnAccent,
+    color: color.onGold,
   },
 });

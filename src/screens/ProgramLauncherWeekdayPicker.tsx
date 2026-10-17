@@ -1,12 +1,17 @@
+import { color } from '@/src/constants/tokens';
 import {
   CAL_DAY_LABELS,
   weekKeysStartingFrom,
 } from '@/src/screens/programLauncherConstants';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import { programAnchorFullWeekdayName } from '@/src/utils/programStartWeekday';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { programLauncherStyles as styles } from './programLauncherStyles';
+import { Pressable, Text, View } from 'react-native';
+import {
+  DAY_ITEM_ICON_SIZE,
+  programLauncherStyles as styles,
+} from './programLauncherStyles';
 
 type ProgramLauncherWeekdayPickerProps = {
   sessionsRequired: number;
@@ -29,35 +34,43 @@ export function ProgramLauncherWeekdayPicker({
     weekdayOrder ?? weekKeysStartingFrom(lockedWeekday ?? 'mon');
 
   return (
-    <View>
-      <View style={styles.workoutDaysTitleBlock}>
-        <Text style={styles.workoutTitle}>Workout Days (tap to change)</Text>
-        <Text style={styles.workoutDaysHint}>
-          You need exactly {sessionsRequired} training days before you can
-          start. Days are ordered from your program start day
-          {lockedWeekday
-            ? ` (${programAnchorFullWeekdayName(lockedWeekday)})`
-            : ''}
-          .
-        </Text>
-      </View>
+    <View style={styles.weekdayPicker}>
+      <Text style={styles.workoutDaysHint}>
+        Tap a day to change it. You need exactly {sessionsRequired} training
+        days before you can start. Days are ordered from your program start day
+        {lockedWeekday
+          ? ` (${programAnchorFullWeekdayName(lockedWeekday)})`
+          : ''}
+        .
+      </Text>
       {!weekdaySelectionReady && (
-        <Text style={styles.weekdaySelectionHint}>
-          Select exactly {sessionsRequired} days ({selectedWeekdays.length}{' '}
-          selected).
-        </Text>
+        <View
+          style={styles.weekdaySelectionHintRow}
+          accessible
+          accessibilityLiveRegion="polite"
+        >
+          <Ionicons
+            name="alert-circle-outline"
+            size={18}
+            color={color.warning}
+          />
+          <Text style={styles.weekdaySelectionHint}>
+            Select exactly {sessionsRequired} days ({selectedWeekdays.length}{' '}
+            selected).
+          </Text>
+        </View>
       )}
       <View style={styles.daysSplitContainer}>
         {orderedKeys.map((key) => {
           const selected = selectedWeekdays.includes(key);
           const locked = lockedWeekday === key;
           return (
-            <TouchableOpacity
+            <Pressable
               key={key}
-              style={[
+              style={({ pressed }) => [
                 styles.dayItem,
+                pressed && styles.dayItemPressed,
                 selected && styles.dayItemSelected,
-                locked && styles.dayItemLocked,
               ]}
               onPress={() => {
                 if (locked) return;
@@ -73,7 +86,22 @@ export function ProgramLauncherWeekdayPicker({
               >
                 {CAL_DAY_LABELS[key]}
               </Text>
-            </TouchableOpacity>
+              <View style={styles.dayIconSlot}>
+                {locked ? (
+                  <Ionicons
+                    name="lock-closed"
+                    size={DAY_ITEM_ICON_SIZE}
+                    color={color.gold}
+                  />
+                ) : selected ? (
+                  <Ionicons
+                    name="checkmark"
+                    size={DAY_ITEM_ICON_SIZE}
+                    color={color.gold}
+                  />
+                ) : null}
+              </View>
+            </Pressable>
           );
         })}
       </View>

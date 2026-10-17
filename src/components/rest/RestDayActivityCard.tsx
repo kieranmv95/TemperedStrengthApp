@@ -1,5 +1,5 @@
 import { Card } from '@/src/components/ds';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { color, radius, space, typography } from '@/src/constants/tokens';
 import type { RestDayActivitySuggestion } from '@/src/types/restDaySuggestions';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
@@ -10,15 +10,30 @@ type RestDayActivityCardProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export function RestDayActivityCard({ activity, style }: RestDayActivityCardProps) {
+const ICON_TILE_SIZE = 44;
+
+export function RestDayActivityCard({
+  activity,
+  style,
+}: RestDayActivityCardProps) {
   return (
     <Card style={[styles.card, style]}>
-      <View style={styles.visualTile}>
-        <Ionicons name={activity.icon} size={22} color={Colors.accent} />
-      </View>
-      <View style={styles.textBlock}>
-        <Text style={styles.title}>{activity.title}</Text>
-        <Text style={styles.description}>{activity.description}</Text>
+      <View
+        style={styles.row}
+        accessible
+        accessibilityLabel={`${activity.title}, ${activity.description}`}
+      >
+        <View style={styles.visualTile}>
+          <Ionicons
+            name={activity.icon}
+            size={22}
+            color={color.textSecondary}
+          />
+        </View>
+        <View style={styles.textBlock}>
+          <Text style={styles.title}>{activity.title}</Text>
+          <Text style={styles.description}>{activity.description}</Text>
+        </View>
       </View>
     </Card>
   );
@@ -26,23 +41,19 @@ export function RestDayActivityCard({ activity, style }: RestDayActivityCardProp
 
 const styles = StyleSheet.create({
   card: {
+    alignItems: 'stretch',
+  },
+  row: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.backgroundCard,
-    borderColor: Colors.backgroundElevated,
-    borderWidth: 1,
-    paddingVertical: Spacing.xl,
-    paddingHorizontal: Spacing.xxl,
-    gap: Spacing.xl,
-    marginBottom: Spacing.md,
+    gap: space.sm,
   },
   visualTile: {
-    width: 44,
-    height: 44,
-    borderRadius: BorderRadius.xl,
-    backgroundColor: Colors.accentWashFill,
-    borderWidth: 1,
-    borderColor: Colors.accentWashOutline,
+    width: ICON_TILE_SIZE,
+    height: ICON_TILE_SIZE,
+    borderRadius: radius.sm,
+    backgroundColor: color.surface2,
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -50,17 +61,14 @@ const styles = StyleSheet.create({
   textBlock: {
     flex: 1,
     minWidth: 0,
-    gap: Spacing.xs,
+    gap: space.xxs,
   },
   title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '800',
-    lineHeight: 20,
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
   description: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.md,
-    lineHeight: 18,
+    ...typography.caption,
+    color: color.textSecondary,
   },
 });

@@ -2,7 +2,13 @@ import { CuratedSection } from '@/src/components/ds';
 import { RestDayActivityCarousel } from '@/src/components/rest/RestDayActivityCarousel';
 import { RestDayMobilityCarousel } from '@/src/components/rest/RestDayMobilityCarousel';
 import { RestDayWorkoutCarousel } from '@/src/components/rest/RestDayWorkoutCarousel';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { useRoles } from '@/src/hooks/useRoles';
 import type { Program } from '@/src/types/program';
 import type { SingleWorkout } from '@/src/types/workouts';
@@ -14,13 +20,7 @@ import {
 import { COACH_ROLE } from '@/src/utils/workoutAccess';
 import { useFocusEffect, router } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 type RestDayScreenProps = {
   programId: string | null;
@@ -88,7 +88,9 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.header} accessibilityRole="summary">
-        <Text style={styles.title}>Rest Day</Text>
+        <Text style={styles.title} accessibilityRole="header">
+          Rest day
+        </Text>
         <Text style={styles.subtitle}>
           Your body needs recovery to grow stronger.
         </Text>
@@ -120,7 +122,7 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
         <View style={styles.section}>
           <CuratedSection
             title="If you still want to train"
-            description="Proper workouts that shouldn't wreck tomorrow, only if you feel fresh."
+            description="Proper workouts that shouldn’t wreck tomorrow, only if you feel fresh."
             size="medium"
             style={styles.sectionHeader}
           />
@@ -150,7 +152,7 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
       {showSkillLabs ? (
         <View style={styles.section}>
           <CuratedSection
-            title="Fancy trying something new"
+            title="Fancy trying something new?"
             description="Skill labs to explore on your own time. Curiosity, not homework."
             size="medium"
             style={styles.sectionHeader}
@@ -167,26 +169,30 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
       ) : null}
 
       <View style={styles.actions}>
-        <TouchableOpacity
+        <Pressable
           onPress={() => router.push('/workouts')}
-          activeOpacity={0.8}
-          style={styles.secondaryButton}
+          style={({ pressed }) => [
+            styles.secondaryButton,
+            pressed && styles.secondaryButtonPressed,
+          ]}
           accessibilityRole="button"
-          accessibilityLabel="Browse workouts"
+          accessibilityLabel="Browse all workouts"
         >
           <Text style={styles.secondaryButtonText}>Browse all workouts</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </Pressable>
+        <Pressable
           onPress={() => router.push('/recovery')}
-          activeOpacity={0.8}
-          style={styles.secondaryButton}
+          style={({ pressed }) => [
+            styles.secondaryButton,
+            pressed && styles.secondaryButtonPressed,
+          ]}
           accessibilityRole="button"
-          accessibilityLabel="Browse mobility and flows"
+          accessibilityLabel="Browse all mobility and flows"
         >
           <Text style={styles.secondaryButtonText}>
             Browse all mobility & flows
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </ScrollView>
   );
@@ -197,56 +203,54 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: Spacing.xxl,
-    paddingBottom: Spacing.section,
+    padding: space.md,
+    paddingBottom: space.xl,
   },
   header: {
-    marginBottom: Spacing.section,
-    paddingTop: Spacing.xxl,
+    marginBottom: space.xl,
+    paddingTop: space.md,
+    gap: space.xs,
   },
   title: {
-    color: Colors.accent,
-    fontSize: FontSize.displayXXl,
-    fontWeight: '800',
-    marginBottom: Spacing.md,
-    letterSpacing: -0.5,
+    ...typography.title1,
+    color: color.textPrimary,
   },
   subtitle: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.xxl,
-    lineHeight: 24,
-    marginBottom: Spacing.md,
+    ...typography.body,
+    color: color.textSecondary,
   },
   description: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 22,
+    ...typography.callout,
+    color: color.textSecondary,
   },
   descriptionEmphasis: {
-    fontWeight: '700',
-    color: Colors.textMuted,
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
   section: {
-    marginBottom: Spacing.section,
+    marginBottom: space.xl,
   },
   sectionHeader: {
-    marginBottom: Spacing.md,
-    gap: Spacing.xs,
+    marginBottom: space.sm,
   },
   actions: {
-    gap: Spacing.md,
-    marginTop: Spacing.md,
+    gap: space.sm,
+    marginTop: space.xs,
   },
   secondaryButton: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.pill,
-    paddingVertical: Spacing.xxl,
-    paddingHorizontal: Spacing.section,
+    minHeight: MIN_TARGET_SIZE,
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: space.lg,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: color.borderStrong,
+  },
+  secondaryButtonPressed: {
+    backgroundColor: color.surface3,
   },
   secondaryButtonText: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '800',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
 });

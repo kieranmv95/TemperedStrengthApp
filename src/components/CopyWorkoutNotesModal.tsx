@@ -1,4 +1,5 @@
-import { Colors, Spacing } from '@/src/constants/theme';
+import { ActionChip, Skeleton } from '@/src/components/ds';
+import { color } from '@/src/constants/tokens';
 import type { Program } from '@/src/types/program';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import {
@@ -13,16 +14,11 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Alert, FlatList, Modal, Pressable, Text, View } from 'react-native';
 import {
-  ActivityIndicator,
-  Alert,
-  FlatList,
-  Modal,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { copyWorkoutNotesModalStyles as styles } from './copyWorkoutNotesModalStyles';
+  COPY_NOTES_SKELETON_ROW_HEIGHT,
+  copyWorkoutNotesModalStyles as styles,
+} from './copyWorkoutNotesModalStyles';
 
 type CopyWorkoutNotesModalProps = {
   visible: boolean;
@@ -217,24 +213,46 @@ export function CopyWorkoutNotesModal({
       visible={visible}
       transparent
       animationType="slide"
+      statusBarTranslucent
       onRequestClose={onClose}
     >
       <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
+        <View
+          style={styles.modalContent}
+          accessibilityViewIsModal
+          onAccessibilityEscape={onClose}
+        >
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>
+            <Text style={styles.modalTitle} accessibilityRole="header">
               Copy notes from another workout
             </Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>✕</Text>
-            </TouchableOpacity>
+            <Pressable
+              onPress={onClose}
+              style={({ pressed }) => [
+                styles.closeButton,
+                pressed && styles.closeButtonPressed,
+              ]}
+              accessibilityRole="button"
+              accessibilityLabel="Close copy notes"
+            >
+              <Ionicons name="close" size={24} color={color.textPrimary} />
+            </Pressable>
           </View>
 
           {loading ? (
-            <ActivityIndicator
-              color={Colors.accent}
-              style={{ marginVertical: Spacing.xxl }}
-            />
+            <View style={styles.skeletons}>
+              <Skeleton
+                width="100%"
+                height={COPY_NOTES_SKELETON_ROW_HEIGHT}
+                radius="md"
+                accessibilityLabel="Loading notes"
+              />
+              <Skeleton
+                width="100%"
+                height={COPY_NOTES_SKELETON_ROW_HEIGHT}
+                radius="md"
+              />
+            </View>
           ) : rows.length === 0 ? (
             <Text style={styles.emptyText}>{emptyMessage}</Text>
           ) : (
@@ -243,6 +261,7 @@ export function CopyWorkoutNotesModal({
               data={rows}
               keyExtractor={(item) => String(item.dayIndex)}
               keyboardShouldPersistTaps="handled"
+              contentContainerStyle={styles.listContent}
               renderItem={({ item }) => (
                 <View style={styles.row}>
                   <View style={styles.rowTextBlock}>
@@ -253,18 +272,13 @@ export function CopyWorkoutNotesModal({
                       </Text>
                     ) : null}
                   </View>
-                  <TouchableOpacity
-                    style={styles.copyHit}
+                  <ActionChip
+                    label="Copy"
+                    icon="copy-outline"
+                    tone="gold"
                     onPress={() => handleCopyPress(item)}
-                    accessibilityRole="button"
                     accessibilityLabel={`Copy notes from ${item.label}`}
-                  >
-                    <Ionicons
-                      name="copy-outline"
-                      size={24}
-                      color={Colors.accent}
-                    />
-                  </TouchableOpacity>
+                  />
                 </View>
               )}
             />

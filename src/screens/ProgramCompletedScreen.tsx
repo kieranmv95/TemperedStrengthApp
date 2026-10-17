@@ -1,11 +1,20 @@
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '../constants/tokens';
 
 type ProgramCompletedScreenProps = {
   onViewAllPrograms: () => void | Promise<void>;
 };
+
+const TROPHY_SIZE = 48;
 
 export const ProgramCompletedScreen: React.FC<ProgramCompletedScreenProps> = ({
   onViewAllPrograms,
@@ -14,32 +23,45 @@ export const ProgramCompletedScreen: React.FC<ProgramCompletedScreenProps> = ({
     <View style={styles.container}>
       <View style={styles.content} accessibilityRole="summary">
         <View style={styles.card}>
-          <Text style={styles.title}>Congratulations</Text>
+          <Ionicons
+            name="trophy"
+            size={TROPHY_SIZE}
+            color={color.gold}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          />
+          <Text style={styles.title} accessibilityRole="header">
+            Congratulations
+          </Text>
           <Text style={styles.subtitle}>
             You’ve completed your program. Incredible work, time to choose
             what’s next.
           </Text>
 
           <View style={styles.actions}>
-            <TouchableOpacity
+            <Pressable
               onPress={onViewAllPrograms}
-              activeOpacity={0.8}
-              style={styles.primaryButton}
+              style={({ pressed }) => [
+                styles.primaryButton,
+                pressed && styles.primaryButtonPressed,
+              ]}
               accessibilityRole="button"
               accessibilityLabel="View all programs"
             >
               <Text style={styles.primaryButtonText}>View all programs</Text>
-            </TouchableOpacity>
+            </Pressable>
 
-            <TouchableOpacity
+            <Pressable
               onPress={() => router.push('/workouts')}
-              activeOpacity={0.8}
-              style={styles.secondaryButton}
+              style={({ pressed }) => [
+                styles.secondaryButton,
+                pressed && styles.secondaryButtonPressed,
+              ]}
               accessibilityRole="button"
               accessibilityLabel="Browse workouts"
             >
               <Text style={styles.secondaryButtonText}>Browse workouts</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
       </View>
@@ -55,51 +77,57 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.section,
+    padding: space.xl,
   },
   card: {
     width: '100%',
+    alignItems: 'center',
+    gap: space.sm,
   },
   title: {
-    color: Colors.accent,
-    fontSize: FontSize.displayXXl,
-    fontWeight: '800',
-    marginBottom: Spacing.md,
+    ...typography.display,
+    color: color.textPrimary,
     textAlign: 'center',
   },
   subtitle: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.xxl,
-    lineHeight: 24,
+    ...typography.body,
+    color: color.textSecondary,
     textAlign: 'center',
-    paddingHorizontal: Spacing.xxl,
-    marginBottom: Spacing.section,
   },
   actions: {
-    gap: Spacing.md,
+    alignSelf: 'stretch',
+    gap: space.sm,
+    marginTop: space.md,
   },
   primaryButton: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.pill,
-    paddingVertical: Spacing.xxl,
-    paddingHorizontal: Spacing.section,
+    minHeight: MIN_TARGET_SIZE,
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: space.lg,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
+  },
+  primaryButtonPressed: {
+    backgroundColor: color.goldStrong,
   },
   primaryButtonText: {
-    color: Colors.backgroundScreen,
-    fontSize: FontSize.displaySm,
-    fontWeight: '600',
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
   secondaryButton: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.pill,
-    paddingVertical: Spacing.xxl,
-    paddingHorizontal: Spacing.section,
+    minHeight: MIN_TARGET_SIZE,
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: space.lg,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: color.borderStrong,
+  },
+  secondaryButtonPressed: {
+    backgroundColor: color.surface3,
   },
   secondaryButtonText: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '600',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
 });

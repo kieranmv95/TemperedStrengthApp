@@ -1,19 +1,15 @@
+import { color } from '@/src/constants/tokens';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useSwapModalActions } from '@/src/hooks/useSwapModalActions';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import {
-  Alert,
-  Modal,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { getAllExercises, getExerciseById } from '../data/exercises';
 import {
   findAlternatives,
   type ExerciseAlternative,
 } from '../utils/pivotEngine';
+import { ActionChip, BottomSheet, FilterChip, SectionHeader } from './ds';
 import { SwapModalAlternativeRow } from './SwapModalAlternativeRow';
 import { swapModalStyles as styles } from './swapModalStyles';
 
@@ -97,133 +93,110 @@ export const SwapModal: React.FC<SwapModalProps> = ({
   };
 
   return (
-    <Modal
+    <BottomSheet
       visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={onClose}
+      onClose={onClose}
+      title={
+        currentExercise ? `Swap ${currentExercise.name}` : 'Select exercise'
+      }
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <View style={styles.modalHeader}>
-            <View style={styles.modalTitleRow}>
-              <Text style={styles.modalTitle}>
-                {currentExercise
-                  ? `Swap ${currentExercise.name}`
-                  : 'Select Exercise'}
-              </Text>
-            </View>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>✕</Text>
-            </TouchableOpacity>
-          </View>
+      <Text style={styles.modalSubtitle}>
+        {currentExercise
+          ? `Alternatives for ${currentExercise.pattern}`
+          : 'Choose an exercise'}
+      </Text>
 
-          <Text style={styles.modalSubtitle}>
-            {currentExercise
-              ? `Alternatives for ${currentExercise.pattern}`
-              : 'Choose an exercise'}
+      <FilterChip
+        label="No equipment (bodyweight only)"
+        selected={noEquipmentOnly}
+        onPress={() => setNoEquipmentOnly((prev) => !prev)}
+      />
+
+      <Text style={styles.deviationTitle}>
+        Deviating from too many exercises could reduce the effectiveness of the
+        overall program.
+      </Text>
+
+      {!isPro && (
+        <View style={styles.disclaimer} accessible>
+          <Ionicons
+            name="information-circle-outline"
+            size={18}
+            color={color.textSecondary}
+          />
+          <Text style={styles.disclaimerText}>
+            Swapping an exercise uses one of your free swaps. You get 10 per
+            month, resetting on the 1st of each month. Upgrade to Pro in your
+            account to get unlimited swaps.
           </Text>
-
-          <TouchableOpacity
-            style={[
-              styles.equipmentToggle,
-              noEquipmentOnly && styles.equipmentToggleActive,
-            ]}
-            onPress={() => setNoEquipmentOnly((prev) => !prev)}
-            activeOpacity={0.7}
-          >
-            <Text
-              style={[
-                styles.equipmentToggleText,
-                noEquipmentOnly && styles.equipmentToggleTextActive,
-              ]}
-            >
-              No equipment (bodyweight only)
-            </Text>
-          </TouchableOpacity>
-
-          <Text style={styles.deviationTitle}>
-            Deviating from too many exercises could reduce the effectiveness of
-            the overall program.
-          </Text>
-
-          {!isPro && (
-            <Text style={styles.disclaimer}>
-              Swapping an exercise will use one of your free swaps, you get 10
-              per month, resetting on the 1st of each month. Upgrade to PRO in
-              the account to get unlimited swaps.
-            </Text>
-          )}
-
-          {isSwapped && originalExercise && (
-            <TouchableOpacity
-              style={styles.resetButton}
-              onPress={handleResetPress}
-            >
-              <Text style={styles.resetButtonText}>
-                Reset to {originalExercise.name}
-              </Text>
-            </TouchableOpacity>
-          )}
-
-          <ScrollView style={styles.alternativesList}>
-            {filteredAlternatives.length === 0 && currentExerciseId && (
-              <Text style={styles.noAlternatives}>
-                No matches found with this filter.
-              </Text>
-            )}
-            {currentExerciseId ? (
-              <>
-                {bestMatches.length > 0 && (
-                  <>
-                    <Text style={styles.sectionTitle}>Best matches (100%)</Text>
-                    {bestMatches.map((a) => (
-                      <SwapModalAlternativeRow
-                        key={a.exercise.id}
-                        name={a.exercise.name}
-                        equipment={a.exercise.equipment}
-                        muscle={a.exercise.muscle}
-                        matchScore={a.matchScore}
-                        onPress={() => confirmSelectExercise(a.exercise.id)}
-                      />
-                    ))}
-                  </>
-                )}
-
-                {otherMatches.length > 0 && (
-                  <>
-                    <Text style={styles.sectionTitle}>Other options (50%)</Text>
-                    <Text style={styles.sectionHelperText}>
-                      These keep the muscle group but may use a different
-                      movement pattern.
-                    </Text>
-                    {otherMatches.map((a) => (
-                      <SwapModalAlternativeRow
-                        key={a.exercise.id}
-                        name={a.exercise.name}
-                        equipment={a.exercise.equipment}
-                        muscle={a.exercise.muscle}
-                        matchScore={a.matchScore}
-                        onPress={() => confirmSelectExercise(a.exercise.id)}
-                      />
-                    ))}
-                  </>
-                )}
-              </>
-            ) : (
-              allExercisesForEmptySlot.map((exercise) => (
-                <SwapModalAlternativeRow
-                  key={exercise.id}
-                  name={exercise.name}
-                  equipment={exercise.equipment}
-                  muscle={exercise.muscle}
-                  onPress={() => confirmSelectExercise(exercise.id)}
-                />
-              ))
-            )}
-          </ScrollView>
         </View>
-      </View>
-    </Modal>
+      )}
+
+      {isSwapped && originalExercise && (
+        <ActionChip
+          label={`Reset to ${originalExercise.name}`}
+          icon="refresh"
+          tone="neutral"
+          onPress={handleResetPress}
+        />
+      )}
+
+      {filteredAlternatives.length === 0 && currentExerciseId && (
+        <Text style={styles.noAlternatives}>
+          No matches found with this filter.
+        </Text>
+      )}
+      {currentExerciseId ? (
+        <>
+          {bestMatches.length > 0 && (
+            <View style={styles.section}>
+              <SectionHeader title="Best matches (100%)" />
+              {bestMatches.map((a) => (
+                <SwapModalAlternativeRow
+                  key={a.exercise.id}
+                  name={a.exercise.name}
+                  equipment={a.exercise.equipment}
+                  muscle={a.exercise.muscle}
+                  matchScore={a.matchScore}
+                  onPress={() => confirmSelectExercise(a.exercise.id)}
+                />
+              ))}
+            </View>
+          )}
+
+          {otherMatches.length > 0 && (
+            <View style={styles.section}>
+              <SectionHeader title="Other options (50%)" />
+              <Text style={styles.sectionHelperText}>
+                These keep the muscle group but may use a different movement
+                pattern.
+              </Text>
+              {otherMatches.map((a) => (
+                <SwapModalAlternativeRow
+                  key={a.exercise.id}
+                  name={a.exercise.name}
+                  equipment={a.exercise.equipment}
+                  muscle={a.exercise.muscle}
+                  matchScore={a.matchScore}
+                  onPress={() => confirmSelectExercise(a.exercise.id)}
+                />
+              ))}
+            </View>
+          )}
+        </>
+      ) : (
+        <View style={styles.section}>
+          {allExercisesForEmptySlot.map((exercise) => (
+            <SwapModalAlternativeRow
+              key={exercise.id}
+              name={exercise.name}
+              equipment={exercise.equipment}
+              muscle={exercise.muscle}
+              onPress={() => confirmSelectExercise(exercise.id)}
+            />
+          ))}
+        </View>
+      )}
+    </BottomSheet>
   );
 };

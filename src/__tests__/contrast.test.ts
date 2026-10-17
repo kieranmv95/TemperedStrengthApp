@@ -78,6 +78,19 @@ const PAIRS: ContrastPair[] = [
   },
 
   {
+    name: 'textPrimary on goldTint over surface1 (selected onboarding option)',
+    foreground: color.textPrimary,
+    background: selectedChipSurface1,
+    kind: 'text',
+  },
+  {
+    name: 'textPrimary on scrim over a bright video frame (onboarding intro skip)',
+    foreground: color.textPrimary,
+    background: flattenToHex(color.scrim, color.textPrimary),
+    kind: 'text',
+  },
+
+  {
     name: 'textSecondary on goldTint over bg (welcome strip)',
     foreground: color.textSecondary,
     background: flattenToHex(color.goldTint, color.bg),
@@ -119,6 +132,12 @@ const PAIRS: ContrastPair[] = [
     name: 'success on successTint over surface1 (completed badge)',
     foreground: color.success,
     background: flattenToHex(color.successTint, color.surface1),
+    kind: 'text',
+  },
+  {
+    name: 'success on successTint over surface2 (recommended badge on pressed card)',
+    foreground: color.success,
+    background: flattenToHex(color.successTint, color.surface2),
     kind: 'text',
   },
   {

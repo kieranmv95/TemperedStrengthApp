@@ -1,13 +1,13 @@
-import { Spacing } from '@/src/constants/theme';
+import { space } from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
 
 export const restDayCarouselStyles = StyleSheet.create({
   scrollBleed: {
-    marginHorizontal: -Spacing.xxl,
+    marginHorizontal: -space.md,
   },
   list: {
-    gap: Spacing.md,
-    paddingHorizontal: Spacing.xxl,
+    gap: space.sm,
+    paddingHorizontal: space.md,
     alignItems: 'flex-start',
   },
   card: {

@@ -1,14 +1,20 @@
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useOnboardingProfile } from '@/src/hooks/useOnboardingProfile';
 import { increment } from '@/src/services/metricService';
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getEffectiveBottomInset } from '@/src/utils/platform';
-import { homeScreenStyles } from '../components/home/homeScreenStyles';
-import { Pill, StandardLayout } from '../components/ds';
-import { Colors, FontSize, Spacing } from '../constants/theme';
+import { FilterChip, StandardLayout } from '../components/ds';
+import {
+  color,
+  elevation,
+  radius,
+  space,
+  typography,
+} from '../constants/tokens';
 import type { Program } from '../types/program';
 import { programs } from '../utils/program';
 import { sortProgramsByRecommendation } from '../utils/programRecommendation';
@@ -38,6 +44,7 @@ import type { TrainingMaxesStore } from '../types/trainingMaxes';
 import { TrainingMaxModal } from '../components/TrainingMaxModal';
 import {
   CALENDAR_DAY_KEYS,
+  sentenceCaseLabel,
   weekKeysStartingFrom,
 } from './programLauncherConstants';
 import { ProgramLauncherDatePickerModal } from './ProgramLauncherDatePickerModal';
@@ -50,6 +57,32 @@ type ProgramLauncherProps = {
   resetExistingProgramData?: boolean;
   onClose?: () => void;
 };
+
+function programsLabel(count: number): string {
+  return `${count} program${count === 1 ? '' : 's'}`;
+}
+
+type FilterRowProps = {
+  title: string;
+  children: React.ReactNode;
+};
+
+function FilterRow({ title, children }: FilterRowProps) {
+  return (
+    <View style={styles.filtersRow}>
+      <Text style={styles.filtersLabel} accessibilityRole="header">
+        {title}
+      </Text>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.pillsScrollContent}
+      >
+        {children}
+      </ScrollView>
+    </View>
+  );
+}
 
 export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   onProgramSelected,
@@ -230,8 +263,6 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     return map;
   }, [selectedCategory, selectedDifficulty]);
 
-  const titleCase = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
   useEffect(() => {
     if (!showDatePicker || !selectedProgram) return;
     setStartDate(
@@ -253,7 +284,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
         [
           { text: 'Cancel', style: 'cancel' },
           {
-            text: 'Select Date',
+            text: 'Select date',
             style: 'default',
             onPress: () => setStartDate(chosen),
           },
@@ -298,7 +329,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     }
     if (selectedProgram?.isPro && !isPro) {
       Alert.alert(
-        'Pro Required',
+        'Pro required',
         'This program requires Tempered Strength Pro. Please upgrade to continue.',
         [
           {
@@ -321,7 +352,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 
     if (resetExistingProgramData) {
       Alert.alert(
-        'Change Program',
+        'Change program',
         'Changing your program will lose all progress on your current program, including your workout logs and exercise swaps.\n\nFinishing a program to completion is the best approach for achieving your fitness goals.\n\nAre you sure you want to change programs?',
         [
           {
@@ -329,7 +360,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
             style: 'cancel',
           },
           {
-            text: 'Change Program',
+            text: 'Change program',
             style: 'destructive',
             onPress: () => {
               setShowProgramDetails(false);
@@ -451,6 +482,31 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     }
   };
 
+  const allCategoriesCount =
+    selectedDifficulty === 'all'
+      ? programs.length
+      : programs.filter((p) => p.difficulty === selectedDifficulty).length;
+  const allDifficultiesCount =
+    selectedCategory === 'all'
+      ? programs.length
+      : programs.filter((p) => p.categories.includes(selectedCategory)).length;
+  const allGoalsCount =
+    selectedCategory === 'all' && selectedDifficulty === 'all'
+      ? programs.length
+      : programs.filter((p) => {
+          if (
+            selectedCategory !== 'all' &&
+            !p.categories.includes(selectedCategory)
+          )
+            return false;
+          if (
+            selectedDifficulty !== 'all' &&
+            p.difficulty !== selectedDifficulty
+          )
+            return false;
+          return true;
+        }).length;
+
   return (
     <StandardLayout
       title="Programs"
@@ -458,136 +514,102 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     >
       <StandardLayout.AdvancedFilters>
         <View style={styles.filtersWrap}>
-          <View style={styles.filtersRow}>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.pillsScrollContent}
-            >
-              <Text style={styles.filtersLabel}>Category</Text>
-              <Pill
-                label="All"
-                isActive={selectedCategory === 'all'}
-                onPress={() => setSelectedCategory('all')}
-                count={
-                  selectedDifficulty === 'all'
-                    ? programs.length
-                    : programs.filter(
-                        (p) => p.difficulty === selectedDifficulty
-                      ).length
-                }
-              />
-              {availableCategories.map((category) => {
-                const count = categoryCount.get(category) ?? 0;
-                return (
-                  <Pill
-                    key={category}
-                    label={category}
-                    isActive={selectedCategory === category}
-                    onPress={() => setSelectedCategory(category)}
-                    count={count}
-                  />
-                );
-              })}
-            </ScrollView>
-          </View>
-
-          <View style={styles.filtersRow}>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.pillsScrollContent}
-            >
-              <Text style={styles.filtersLabel}>Difficulty</Text>
-              <Pill
-                label="All"
-                isActive={selectedDifficulty === 'all'}
-                onPress={() => setSelectedDifficulty('all')}
-                count={
-                  selectedCategory === 'all'
-                    ? programs.length
-                    : programs.filter((p) =>
-                        p.categories.includes(selectedCategory)
-                      ).length
-                }
-              />
-              {availableDifficulties.map((difficulty) => (
-                <Pill
-                  key={difficulty}
-                  label={titleCase(difficulty)}
-                  isActive={selectedDifficulty === difficulty}
-                  onPress={() => setSelectedDifficulty(difficulty)}
-                  count={difficultyCount.get(difficulty) ?? 0}
+          <FilterRow title="Category">
+            <FilterChip
+              label="All"
+              selected={selectedCategory === 'all'}
+              onPress={() => setSelectedCategory('all')}
+              count={allCategoriesCount}
+              accessibilityLabel={`All categories, ${programsLabel(allCategoriesCount)}`}
+            />
+            {availableCategories.map((category) => {
+              const count = categoryCount.get(category) ?? 0;
+              const label = sentenceCaseLabel(category);
+              return (
+                <FilterChip
+                  key={category}
+                  label={label}
+                  selected={selectedCategory === category}
+                  onPress={() => setSelectedCategory(category)}
+                  count={count}
+                  accessibilityLabel={`${label}, ${programsLabel(count)}`}
                 />
-              ))}
-            </ScrollView>
-          </View>
+              );
+            })}
+          </FilterRow>
 
-          <View style={styles.filtersRow}>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.pillsScrollContent}
-            >
-              <Text style={styles.filtersLabel}>Goals</Text>
-              <Pill
-                label="All"
-                isActive={selectedGoal === 'all'}
-                onPress={() => setSelectedGoal('all')}
-                count={
-                  selectedCategory === 'all' && selectedDifficulty === 'all'
-                    ? programs.length
-                    : programs.filter((p) => {
-                        if (
-                          selectedCategory !== 'all' &&
-                          !p.categories.includes(selectedCategory)
-                        )
-                          return false;
-                        if (
-                          selectedDifficulty !== 'all' &&
-                          p.difficulty !== selectedDifficulty
-                        )
-                          return false;
-                        return true;
-                      }).length
-                }
-              />
-              {availableGoals.map((goal) => {
-                const count = goalCount.get(goal) ?? 0;
-                return (
-                  <Pill
-                    key={goal}
-                    label={titleCase(goal)}
-                    isActive={selectedGoal === goal}
-                    onPress={() => setSelectedGoal(goal)}
-                    count={count}
-                  />
-                );
-              })}
-            </ScrollView>
-          </View>
+          <FilterRow title="Difficulty">
+            <FilterChip
+              label="All"
+              selected={selectedDifficulty === 'all'}
+              onPress={() => setSelectedDifficulty('all')}
+              count={allDifficultiesCount}
+              accessibilityLabel={`All difficulties, ${programsLabel(allDifficultiesCount)}`}
+            />
+            {availableDifficulties.map((difficulty) => {
+              const count = difficultyCount.get(difficulty) ?? 0;
+              const label = sentenceCaseLabel(difficulty);
+              return (
+                <FilterChip
+                  key={difficulty}
+                  label={label}
+                  selected={selectedDifficulty === difficulty}
+                  onPress={() => setSelectedDifficulty(difficulty)}
+                  count={count}
+                  accessibilityLabel={`${label}, ${programsLabel(count)}`}
+                />
+              );
+            })}
+          </FilterRow>
+
+          <FilterRow title="Goals">
+            <FilterChip
+              label="All"
+              selected={selectedGoal === 'all'}
+              onPress={() => setSelectedGoal('all')}
+              count={allGoalsCount}
+              accessibilityLabel={`All goals, ${programsLabel(allGoalsCount)}`}
+            />
+            {availableGoals.map((goal) => {
+              const count = goalCount.get(goal) ?? 0;
+              const label = sentenceCaseLabel(goal);
+              return (
+                <FilterChip
+                  key={goal}
+                  label={label}
+                  selected={selectedGoal === goal}
+                  onPress={() => setSelectedGoal(goal)}
+                  count={count}
+                  accessibilityLabel={`${label}, ${programsLabel(count)}`}
+                />
+              );
+            })}
+          </FilterRow>
         </View>
       </StandardLayout.AdvancedFilters>
       <StandardLayout.Body>
-        <View
-          style={[homeScreenStyles.welcomeStrip, { marginBottom: Spacing.xxl }]}
-          accessibilityRole="text"
-          accessibilityLabel="What are programs. Programs are structured blocks that usually last from 1-6 months, you can only be on one program at a time, so choose wisely. you can still do any of our workouts when on a program!"
-        >
-          <Text style={homeScreenStyles.welcomeBody}>
-            Programs are structured training blocks (1-4 months). You&apos;ll
-            follow one at a time, with full access to all workouts throughout.
-          </Text>
+        <View style={styles.programList}>
+          <View style={styles.infoStrip} accessible>
+            <Ionicons
+              name="information-circle-outline"
+              size={20}
+              color={color.textSecondary}
+            />
+            <Text style={styles.infoText}>
+              Programs are structured training blocks (1–4 months). You’ll
+              follow one at a time, with full access to all workouts throughout.
+            </Text>
+          </View>
+          {filteredPrograms.map(({ program, isRecommended }) => (
+            <ProgramLauncherProgramCard
+              key={program.id}
+              program={program}
+              isLocked={program.isPro && !subscriptionLoading && !isPro}
+              isRecommended={isRecommended}
+              onSelect={handleSelectProgram}
+            />
+          ))}
         </View>
-        {filteredPrograms.map(({ program, isRecommended }) => (
-          <ProgramLauncherProgramCard
-            key={program.id}
-            program={program}
-            isLocked={program.isPro && !subscriptionLoading && !isPro}
-            isRecommended={isRecommended}
-            onSelect={handleSelectProgram}
-          />
-        ))}
 
         <ProgramLauncherDetailsModal
           visible={showProgramDetails}
@@ -651,28 +673,38 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
 
 const styles = StyleSheet.create({
   filtersWrap: {
-    marginTop: Spacing.xxl,
-    gap: Spacing.xl,
+    marginTop: space.xs,
+    gap: space.sm,
   },
   filtersRow: {
-    gap: Spacing.md,
+    gap: space.xxs,
   },
   filtersLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
+    ...typography.captionStrong,
+    color: color.textSecondary,
   },
   pillsScrollContent: {
-    paddingRight: Spacing.xxl,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: space.xs,
+    paddingVertical: space.xxs,
+    paddingRight: space.md,
   },
-  pillsWrap: {
+  programList: {
+    gap: space.sm,
+  },
+  infoStrip: {
+    ...elevation.raised,
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.md,
+    alignItems: 'flex-start',
+    gap: space.xs,
+    padding: space.md,
+    borderRadius: radius.md,
+    backgroundColor: color.surface1,
+  },
+  infoText: {
+    ...typography.callout,
+    color: color.textSecondary,
+    flex: 1,
   },
 });

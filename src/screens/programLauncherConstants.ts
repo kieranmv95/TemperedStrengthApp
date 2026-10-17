@@ -20,6 +20,11 @@ export const CAL_DAY_LABELS: Record<ProgramDaySplitKey, string> = {
   sun: 'S',
 };
 
+/** Sentence-case display label for a lowercase data value, e.g. "beginner" → "Beginner". */
+export function sentenceCaseLabel(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
 /** Weekday strip ordered from `startKey` (e.g. Tue → T W T F S S M). */
 export function weekKeysStartingFrom(
   startKey: ProgramDaySplitKey

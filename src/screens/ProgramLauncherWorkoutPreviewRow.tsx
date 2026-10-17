@@ -29,7 +29,9 @@ export function ProgramLauncherWorkoutPreviewRow({
 
   return (
     <View style={styles.workoutItem}>
-      <Text style={styles.workoutLabel}>{workout.label}</Text>
+      <Text style={styles.workoutLabel} accessibilityRole="header">
+        {workout.label}
+      </Text>
       {workout.description && (
         <Text style={styles.workoutDescription}>{workout.description}</Text>
       )}
@@ -39,7 +41,7 @@ export function ProgramLauncherWorkoutPreviewRow({
         </Text>
       ) : blockTitles.length > 0 ? (
         <Text style={styles.workoutExercisesList}>
-          {blockTitles.join(' • ')}
+          {blockTitles.join(' · ')}
         </Text>
       ) : null}
       <View style={styles.workoutMeta}>
@@ -49,8 +51,12 @@ export function ProgramLauncherWorkoutPreviewRow({
             : `${workout.exercises.length} exercises`}
         </Text>
         {showIntensity ? (
-          <View style={styles.workoutIntensity}>
-            <Text style={styles.workoutIntensityLabel}>Intensity:</Text>
+          <View
+            style={styles.workoutIntensity}
+            accessible
+            accessibilityLabel={`Intensity ${workout.intensity} out of 10`}
+          >
+            <Text style={styles.workoutIntensityLabel}>Intensity</Text>
             <View style={styles.workoutIntensityBar}>
               {Array.from({ length: 10 }).map((_, i) => (
                 <View
