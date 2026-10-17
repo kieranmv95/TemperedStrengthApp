@@ -1,22 +1,15 @@
-import { Card, SmallChevron, StandardLayout } from '@/src/components/ds';
+import { Badge, PressableCard, StandardLayout } from '@/src/components/ds';
 import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
 import { settingsScreenStyles as settingsStyles } from '@/src/components/settings/settingsScreenStyles';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { color, space, typography } from '@/src/constants/tokens';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useOnboardingProfile } from '@/src/hooks/useOnboardingProfile';
 import { useRoles } from '@/src/hooks/useRoles';
 import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
 import { COACH_ROLE } from '@/src/utils/workoutAccess';
-import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, router } from 'expo-router';
 import React from 'react';
-import {
-  Linking,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Linking, StyleSheet, Text, View } from 'react-native';
 
 const COACH_INSTAGRAM_URL = 'https://www.instagram.com/temperedstrength/';
 const COACH_INSTAGRAM_HANDLE = '@temperedstrength';
@@ -57,29 +50,32 @@ export function YouHubScreen() {
                 : 'Hi there!'}
           </Text>
           {!accessLoading && !isPro ? (
-            <TouchableOpacity
-              style={settingsStyles.upgradePrompt}
+            <PressableCard
               onPress={() => router.push('/paywall')}
-              activeOpacity={0.85}
-              accessibilityRole="button"
-              accessibilityLabel="Upgrade to Tempered Strength Pro. Opens subscription plans"
+              accessibilityLabel="Upgrade to Tempered Strength Pro, free tier"
+              accessibilityHint="Opens subscription plans"
             >
-              <Text style={settingsStyles.upgradePromptTitle}>
-                Upgrade to Pro
-              </Text>
-              <Text style={settingsStyles.upgradePromptBody}>
-                Go Pro to unlock. All workouts, programs, recovery flows,
-                awards, unlimited exercise swaps and more.
-              </Text>
-              <Text style={settingsStyles.upgradePromptCta}>See plans →</Text>
-            </TouchableOpacity>
+              <View style={styles.upgradeContent}>
+                <View style={styles.upgradeTitleRow}>
+                  <Text style={settingsStyles.upgradePromptTitle}>
+                    Upgrade to Pro
+                  </Text>
+                  <Badge label="Free tier" tone="neutral" />
+                </View>
+                <Text style={settingsStyles.upgradePromptBody}>
+                  Go Pro to unlock all workouts, programs, recovery flows,
+                  awards, unlimited exercise swaps and more.
+                </Text>
+                <Text style={settingsStyles.upgradePromptCta}>See plans</Text>
+              </View>
+            </PressableCard>
           ) : null}
 
           <View style={styles.promoStack}>
             <HubPromoCard
               icon="barbell-outline"
               eyebrow="Records"
-              title="Personal Bests"
+              title="Personal bests"
               description="View and manage your personal records by exercise."
               onPress={() => router.push('/records/personal-bests')}
               accessibilityLabel="Open personal bests"
@@ -92,51 +88,41 @@ export function YouHubScreen() {
               onPress={() => router.push('/records/trophies')}
               accessibilityLabel="Open trophies"
             />
+            <HubPromoCard
+              icon="person-outline"
+              eyebrow="Account"
+              title="Account & settings"
+              description="Weight units, program preferences, and patch notes."
+              onPress={() => router.push('/records/account')}
+              accessibilityLabel="Open account and settings"
+            />
           </View>
 
-          <Card
-            onPress={() => router.push('/records/account')}
-            accessibilityLabel="Open account and settings"
-          >
-            <View style={styles.accountIconWrap}>
-              <Ionicons
-                name="person-outline"
-                size={18}
-                color={Colors.textMuted}
-              />
-            </View>
-            <View style={styles.cardContent}>
-              <Text style={styles.accountTitle}>Account & Settings</Text>
-              <Text style={styles.cardDescription}>
-                Weight units, program preferences, and patch notes.
-              </Text>
-            </View>
-            <SmallChevron />
-          </Card>
-
           {!accessLoading && !isCoach ? (
-            <TouchableOpacity
-              style={styles.coachPrompt}
+            <PressableCard
               onPress={handleCoachPress}
-              activeOpacity={0.85}
-              accessibilityRole="button"
               accessibilityLabel={`Are you a coach? Message ${COACH_INSTAGRAM_HANDLE} on Instagram for free coach mode`}
+              accessibilityHint="Opens Instagram"
             >
-              <Text style={styles.coachEyebrow}>For coaches</Text>
-              <Text style={styles.coachTitle}>Are you a coach?</Text>
-              <Text style={styles.coachBody}>
-                Reach out to Tempered Strength on Instagram{' '}
-                <Text style={styles.coachHandle}>{COACH_INSTAGRAM_HANDLE}</Text>{' '}
-                and we will upgrade you to coach mode for free.
-              </Text>
-              <Text style={styles.coachPerks}>
-                Coach unlocks all Skill discipline workouts, the Skills & Cues
-                explore section, and all mobility flows.
-              </Text>
-              <Text style={styles.coachCta}>
-                Message {COACH_INSTAGRAM_HANDLE} →
-              </Text>
-            </TouchableOpacity>
+              <View style={styles.coachContent}>
+                <Text style={styles.coachEyebrow}>For coaches</Text>
+                <Text style={styles.coachTitle}>Are you a coach?</Text>
+                <Text style={styles.coachBody}>
+                  Reach out to Tempered Strength on Instagram{' '}
+                  <Text style={styles.coachHandle}>
+                    {COACH_INSTAGRAM_HANDLE}
+                  </Text>{' '}
+                  and we will upgrade you to coach mode for free.
+                </Text>
+                <Text style={styles.coachPerks}>
+                  Coach unlocks all Skill discipline workouts, the Skills & Cues
+                  explore section, and all mobility flows.
+                </Text>
+                <Text style={styles.coachCta}>
+                  Message {COACH_INSTAGRAM_HANDLE}
+                </Text>
+              </View>
+            </PressableCard>
           ) : null}
         </View>
       </StandardLayout.Body>
@@ -146,79 +132,51 @@ export function YouHubScreen() {
 
 const styles = StyleSheet.create({
   list: {
-    gap: Spacing.xxl,
+    gap: space.lg,
   },
   hiText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXl,
-    fontWeight: '700',
+    ...typography.title2,
+    color: color.textPrimary,
+  },
+  upgradeContent: {
+    gap: space.xs,
+  },
+  upgradeTitleRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: space.xs,
   },
   promoStack: {
-    gap: Spacing.md,
+    gap: space.sm,
   },
-  accountIconWrap: {
-    width: 36,
-    height: 36,
-    borderRadius: BorderRadius.xl,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Colors.backgroundElevated,
-  },
-  cardContent: {
-    flex: 1,
-    paddingRight: Spacing.xl,
-    gap: Spacing.xs,
-  },
-  accountTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-  },
-  cardDescription: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-  },
-  coachPrompt: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.accentWashOutline,
-    padding: Spacing.xxl,
-    gap: Spacing.sm,
+  coachContent: {
+    gap: space.xs,
   },
   coachEyebrow: {
-    color: Colors.accent,
-    fontSize: FontSize.sm,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
+    ...typography.overline,
+    color: color.textTertiary,
   },
   coachTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxxl,
-    fontWeight: '800',
+    ...typography.headline,
+    color: color.textPrimary,
   },
   coachBody: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-    fontWeight: '500',
+    ...typography.callout,
+    color: color.textSecondary,
   },
   coachHandle: {
-    color: Colors.accent,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
   coachPerks: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-    marginTop: Spacing.xs,
+    ...typography.callout,
+    color: color.textTertiary,
   },
   coachCta: {
-    color: Colors.accent,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-    marginTop: Spacing.lg,
+    ...typography.calloutStrong,
+    color: color.gold,
+    marginTop: space.xxs,
   },
 });

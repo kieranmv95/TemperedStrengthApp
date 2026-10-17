@@ -1,5 +1,11 @@
 import { AppSafeAreaView } from '@/src/components/ds';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import {
   type AccountIntent,
   useSyncManager,
@@ -10,10 +16,10 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -79,7 +85,7 @@ export function AccountEmailScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <View style={styles.header}>
-          <Text style={styles.title}>
+          <Text style={styles.title} accessibilityRole="header">
             {intent === 'restore' ? 'Welcome back' : 'Create your account'}
           </Text>
           <Text style={styles.subtitle}>
@@ -89,38 +95,63 @@ export function AccountEmailScreen() {
           </Text>
         </View>
 
-        <TextInput
-          value={email}
-          onChangeText={setEmail}
-          placeholder="you@example.com"
-          placeholderTextColor={Colors.textPlaceholder}
-          style={styles.input}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-          autoComplete="email"
-          returnKeyType="send"
-          onSubmitEditing={() => void submit()}
-          editable={!sending}
-          accessibilityLabel="Email address"
-        />
-
-        <TouchableOpacity
-          style={[styles.primaryButton, sending && styles.disabled]}
-          onPress={() => void submit()}
-          disabled={sending}
-        >
-          <Text style={styles.primaryButtonText}>
-            {sending ? 'Sending…' : 'Send code'}
+        <View style={styles.field}>
+          <Text
+            style={styles.fieldLabel}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          >
+            Email address
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.secondaryButton}
-          onPress={() => router.back()}
-          disabled={sending}
-        >
-          <Text style={styles.secondaryButtonText}>Back</Text>
-        </TouchableOpacity>
+          <TextInput
+            value={email}
+            onChangeText={setEmail}
+            placeholder="you@example.com"
+            placeholderTextColor={color.textTertiary}
+            style={styles.input}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="email"
+            returnKeyType="send"
+            onSubmitEditing={() => void submit()}
+            editable={!sending}
+            accessibilityLabel="Email address"
+            accessibilityState={{ disabled: sending }}
+          />
+        </View>
+
+        <View style={styles.actions}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.primaryButton,
+              pressed && styles.primaryButtonPressed,
+              sending && styles.disabled,
+            ]}
+            onPress={() => void submit()}
+            disabled={sending}
+            accessibilityRole="button"
+            accessibilityLabel={sending ? 'Sending code' : 'Send code'}
+            accessibilityState={{ disabled: sending, busy: sending }}
+          >
+            <Text style={styles.primaryButtonText}>
+              {sending ? 'Sending…' : 'Send code'}
+            </Text>
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              styles.secondaryButton,
+              pressed && styles.secondaryButtonPressed,
+            ]}
+            onPress={() => router.back()}
+            disabled={sending}
+            accessibilityRole="button"
+            accessibilityLabel="Back"
+            accessibilityState={{ disabled: sending }}
+          >
+            <Text style={styles.secondaryButtonText}>Back</Text>
+          </Pressable>
+        </View>
       </KeyboardAvoidingView>
     </AppSafeAreaView>
   );
@@ -129,58 +160,78 @@ export function AccountEmailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.backgroundScreen,
+    backgroundColor: color.bg,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    padding: Spacing.xxl,
-    gap: Spacing.xl,
+    padding: space.md,
+    gap: space.xl,
   },
   header: {
-    gap: Spacing.md,
+    gap: space.xs,
   },
   title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXl,
-    fontWeight: '700',
+    ...typography.title1,
+    color: color.textPrimary,
   },
   subtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.xl,
-    lineHeight: 24,
+    ...typography.body,
+    color: color.textSecondary,
+  },
+  field: {
+    gap: space.xxs,
+  },
+  fieldLabel: {
+    ...typography.captionStrong,
+    color: color.textSecondary,
   },
   input: {
-    backgroundColor: Colors.backgroundElevated,
-    borderColor: Colors.backgroundSubtle,
+    ...typography.body,
+    minHeight: MIN_TARGET_SIZE + space.xxs,
+    paddingHorizontal: space.sm,
+    paddingVertical: space.xs,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderRadius: BorderRadius.full,
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.xl,
+    borderColor: color.borderStrong,
+    backgroundColor: color.surface2,
+    color: color.textPrimary,
+  },
+  actions: {
+    gap: space.xs,
   },
   primaryButton: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.full,
-    paddingVertical: Spacing.xl,
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: space.lg,
+    backgroundColor: color.gold,
+  },
+  primaryButtonPressed: {
+    backgroundColor: color.goldStrong,
   },
   primaryButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
   secondaryButton: {
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
     alignItems: 'center',
-    paddingVertical: Spacing.md,
+    justifyContent: 'center',
+    paddingHorizontal: space.lg,
+    borderWidth: 1,
+    borderColor: color.borderStrong,
+  },
+  secondaryButtonPressed: {
+    backgroundColor: color.surface3,
   },
   secondaryButtonText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
   disabled: {
-    opacity: 0.5,
+    opacity: 0.6,
   },
 });

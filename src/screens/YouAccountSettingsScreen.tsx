@@ -1,7 +1,17 @@
-import { SmallChevron, StandardLayout } from '@/src/components/ds';
-import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
+import {
+  Badge,
+  PressableCard,
+  SectionHeader,
+  StandardLayout,
+} from '@/src/components/ds';
+import {
+  settingsScreenStyles as styles,
+  settingsSwitchColors,
+} from '@/src/components/settings/settingsScreenStyles';
+import { color } from '@/src/constants/tokens';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { refreshSanityHomeContent } from '@/src/services/sanityHomeContent';
 import type { OnboardingProfile } from '@/src/types/onboarding';
 import type { Program } from '@/src/types/program';
@@ -13,12 +23,70 @@ import {
   getOnboardingProfile,
 } from '@/src/utils/storage';
 import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
+import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, router, type Href } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Switch, Text, View } from 'react-native';
+
+const PRO_FEATURES = [
+  'All programs access',
+  'All workout access',
+  'Unlimited exercise swaps',
+  'All recovery flows access',
+  'All awards unlocked',
+];
+
+type SettingTextProps = {
+  title: string;
+  description: string;
+  danger?: boolean;
+};
+
+function SettingText({ title, description, danger = false }: SettingTextProps) {
+  return (
+    <View style={styles.settingContent}>
+      <Text style={[styles.settingTitle, danger && styles.dangerText]}>
+        {title}
+      </Text>
+      <Text style={styles.settingDescription}>{description}</Text>
+    </View>
+  );
+}
+
+type ProStatusContentProps = {
+  description: string;
+};
+
+function ProStatusContent({ description }: ProStatusContentProps) {
+  return (
+    <View style={styles.settingContent}>
+      <View style={styles.settingTitleRow}>
+        <Text style={styles.settingTitle}>Tempered Strength Pro</Text>
+        <Badge label="Active" tone="success" />
+      </View>
+      <Text style={styles.settingDescription}>{description}</Text>
+      <View style={styles.proFeaturesList}>
+        <Text style={styles.proTitle}>Your Pro features include:</Text>
+        {PRO_FEATURES.map((feature) => (
+          <View key={feature} style={styles.proFeatureRow}>
+            <Ionicons
+              name="checkmark"
+              size={18}
+              color={color.gold}
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            />
+            <Text style={styles.proFeatureItem}>{feature}</Text>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
 
 export function YouAccountSettingsScreen() {
+  const largeText = useLargeText();
   const [, setHasProgram] = useState<boolean>(false);
   const [, setActiveProgram] = useState<Program | null>(null);
   const [onboardedState, setOnboardedState] = useState<boolean>(false);
@@ -193,7 +261,7 @@ export function YouAccountSettingsScreen() {
 
   const handleResetOnboarding = () => {
     Alert.alert(
-      'Reset Onboarding',
+      'Reset onboarding',
       'This clears the onboarded flag and the stored onboarding profile.',
       [
         { text: 'Cancel', style: 'cancel' },
@@ -347,7 +415,7 @@ export function YouAccountSettingsScreen() {
 
   const handleClearAllData = () => {
     Alert.alert(
-      'Clear All Data',
+      'Clear all data',
       'This will permanently delete ALL stored data including:\n\n• Program progress\n• Exercise swaps\n• Custom set counts\n• Exercise cache\n\nThis action cannot be undone.\n\nAre you sure you want to clear all data?',
       [
         {
@@ -355,7 +423,7 @@ export function YouAccountSettingsScreen() {
           style: 'cancel',
         },
         {
-          text: 'Clear All Data',
+          text: 'Clear all data',
           style: 'destructive',
           onPress: async () => {
             try {
@@ -378,168 +446,160 @@ export function YouAccountSettingsScreen() {
     );
   };
 
+  const signedInDescription = user
+    ? `${user.email ?? 'Your account'} · ${
+        syncError
+          ? `Backup needs attention: ${syncError}`
+          : 'Data backup is active. Tap to sign out.'
+      }`
+    : '';
+  const loginDescription = isConfigured
+    ? 'Create or sign in to an account. Your data is not currently backed up.'
+    : 'Account backup is not configured in this build.';
+  const proAccessibilityLabel = `Tempered Strength Pro, active. ${proBannerDescription}. Your Pro features include: ${PRO_FEATURES.join(', ')}`;
+  const redeemDescription = promoRemainingLabel
+    ? `${promoRemainingLabel}. Redeem another code once this expires.`
+    : 'Unlock Pro with a promo code.';
+  const deleteAccountDescription = isDeletingAccount
+    ? 'Deleting account and cloud backup…'
+    : 'Permanently delete your account and cloud backup. Local data stays on this device.';
+  const sanityRefreshDescription = isRefreshingSanityHome
+    ? 'Fetching notification, shop ads, and skills from Sanity…'
+    : 'Clear cached Sanity content (home + skills) and refetch. Open Home, Hub, or Skills & Cues to preview.';
+
   return (
     <StandardLayout
-      title="Account & Settings"
+      title="Account & settings"
       subtitle="Manage your account"
       onBackPress={() => router.back()}
     >
       <StandardLayout.Body>
         <View style={styles.settingsList}>
-          {user ? (
-            <>
-              <TouchableOpacity
-                style={styles.settingItem}
+          <View style={styles.settingsSection}>
+            <SectionHeader title="Account" />
+            {user ? (
+              <PressableCard
                 onPress={handleSignOut}
+                accessibilityLabel={`Signed in, ${signedInDescription}`}
+                accessibilityHint="Asks to confirm signing out"
               >
-                <View style={styles.settingContent}>
-                  <Text style={styles.settingTitle}>Signed in</Text>
-                  <Text style={styles.settingDescription}>
-                    {user.email ?? 'Your account'} ·{' '}
-                    {syncError
-                      ? `Backup needs attention: ${syncError}`
-                      : 'Data backup is active. Tap to sign out.'}
-                  </Text>
-                </View>
-                <SmallChevron />
-              </TouchableOpacity>
-            </>
-          ) : (
-            <TouchableOpacity
-              style={styles.settingItem}
-              onPress={() =>
-                router.push({
-                  pathname: '/account/create-account',
-                  params: {
-                    intent: 'create',
-                    returnTo: '/records/account',
-                  },
-                } as unknown as Href)
-              }
-              disabled={!isConfigured}
-            >
-              <View style={styles.settingContent}>
-                <Text style={styles.settingTitle}>Login / Sign up</Text>
-                <Text style={styles.settingDescription}>
-                  {isConfigured
-                    ? 'Create or sign in to an account. Your data is not currently backed up.'
-                    : 'Account backup is not configured in this build.'}
-                </Text>
+                <SettingText
+                  title="Signed in"
+                  description={signedInDescription}
+                />
+              </PressableCard>
+            ) : isConfigured ? (
+              <PressableCard
+                onPress={() =>
+                  router.push({
+                    pathname: '/account/create-account',
+                    params: {
+                      intent: 'create',
+                      returnTo: '/records/account',
+                    },
+                  } as unknown as Href)
+                }
+                accessibilityLabel={`Log in or sign up, ${loginDescription}`}
+              >
+                <SettingText
+                  title="Log in or sign up"
+                  description={loginDescription}
+                />
+              </PressableCard>
+            ) : (
+              <View
+                style={styles.settingItem}
+                accessible
+                accessibilityLabel={`Log in or sign up, ${loginDescription}`}
+              >
+                <SettingText
+                  title="Log in or sign up"
+                  description={loginDescription}
+                />
               </View>
-              {isConfigured ? <SmallChevron /> : null}
-            </TouchableOpacity>
-          )}
+            )}
 
-          {isPro ? (
-            <TouchableOpacity
-              style={[styles.settingItem, styles.proItem]}
-              onPress={isRevenueCatPro ? handleSubscriptionPress : undefined}
-              disabled={subscriptionLoading || !isRevenueCatPro}
-              activeOpacity={isRevenueCatPro ? 0.2 : 1}
-            >
-              <View style={styles.settingContent}>
-                <View style={styles.settingTitleRow}>
-                  <Text style={styles.settingTitle}>Tempered Strength Pro</Text>
-                  <View style={styles.proBadge}>
-                    <Text style={styles.proBadgeText}>ACTIVE</Text>
-                  </View>
+            {isPro ? (
+              isRevenueCatPro ? (
+                <PressableCard
+                  onPress={handleSubscriptionPress}
+                  disabled={subscriptionLoading}
+                  accessibilityLabel={proAccessibilityLabel}
+                  accessibilityHint="Opens subscription management"
+                >
+                  <ProStatusContent description={proBannerDescription} />
+                </PressableCard>
+              ) : (
+                <View
+                  style={styles.settingItem}
+                  accessible
+                  accessibilityLabel={proAccessibilityLabel}
+                >
+                  <ProStatusContent description={proBannerDescription} />
                 </View>
-                <Text style={styles.settingDescription}>
-                  {proBannerDescription}
-                </Text>
-                <View style={styles.proFeaturesList}>
-                  <Text style={styles.proTitle}>
-                    Your Pro features include:
-                  </Text>
-                  <Text style={styles.proFeatureItem}>
-                    - All programs access
-                  </Text>
-                  <Text style={styles.proFeatureItem}>
-                    - All workout access
-                  </Text>
-                  <Text style={styles.proFeatureItem}>
-                    - Unlimited exercise swaps
-                  </Text>
-                  <Text style={styles.proFeatureItem}>
-                    - All recovery flows access
-                  </Text>
-                  <Text style={styles.proFeatureItem}>
-                    - All awards unlocked
-                  </Text>
-                </View>
+              )
+            ) : null}
+
+            {isPromoPro ? (
+              <View
+                style={styles.settingItem}
+                accessible
+                accessibilityLabel={`Redeem Pro code, ${redeemDescription}`}
+              >
+                <SettingText
+                  title="Redeem Pro code"
+                  description={redeemDescription}
+                />
               </View>
-              {isRevenueCatPro ? <SmallChevron /> : null}
-            </TouchableOpacity>
-          ) : null}
-
-          <TouchableOpacity
-            style={[
-              styles.settingItem,
-              isPromoPro && styles.settingItemDisabled,
-            ]}
-            onPress={
-              isPromoPro
-                ? undefined
-                : () => router.push('/account/redeem-promo')
-            }
-            disabled={isPromoPro}
-            activeOpacity={isPromoPro ? 1 : 0.2}
-          >
-            <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Redeem Pro code</Text>
-              <Text style={styles.settingDescription}>
-                {promoRemainingLabel
-                  ? `${promoRemainingLabel}. Redeem another code once this expires.`
-                  : 'Unlock Pro with a promo code.'}
-              </Text>
-            </View>
-            {isPromoPro ? null : <SmallChevron />}
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.settingItem}
-            onPress={() => router.push('/account/general')}
-          >
-            <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>General settings</Text>
-              <Text style={styles.settingDescription}>
-                Weight units and onboarding preferences.
-              </Text>
-            </View>
-            <SmallChevron />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => router.push('/account/program')}
-            style={styles.settingItem}
-          >
-            <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Program settings</Text>
-              <Text style={styles.settingDescription}>
-                Auto timers, PB detection, end current program.
-              </Text>
-            </View>
-            <SmallChevron />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.settingItem}
-            onPress={() => router.push('/patch-notes')}
-          >
-            <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Patch Notes</Text>
-              <Text style={styles.settingDescription}>
-                See what’s new in the latest versions.
-              </Text>
-            </View>
-            <SmallChevron />
-          </TouchableOpacity>
+            ) : (
+              <PressableCard
+                onPress={() => router.push('/account/redeem-promo')}
+                accessibilityLabel={`Redeem Pro code, ${redeemDescription}`}
+              >
+                <SettingText
+                  title="Redeem Pro code"
+                  description={redeemDescription}
+                />
+              </PressableCard>
+            )}
+          </View>
 
           <View style={styles.settingsSection}>
-            <Text style={styles.settingsSectionTitle}>
-              Pro across devices FAQ
-            </Text>
-            <View style={styles.settingItem}>
+            <SectionHeader title="Settings" />
+            <PressableCard
+              onPress={() => router.push('/account/general')}
+              accessibilityLabel="General settings, weight units and onboarding preferences"
+            >
+              <SettingText
+                title="General settings"
+                description="Weight units and onboarding preferences."
+              />
+            </PressableCard>
+
+            <PressableCard
+              onPress={() => router.push('/account/program')}
+              accessibilityLabel="Program settings, auto timers, PB detection, end current program"
+            >
+              <SettingText
+                title="Program settings"
+                description="Auto timers, PB detection, end current program."
+              />
+            </PressableCard>
+
+            <PressableCard
+              onPress={() => router.push('/patch-notes')}
+              accessibilityLabel="Patch notes, see what’s new in the latest versions"
+            >
+              <SettingText
+                title="Patch notes"
+                description="See what’s new in the latest versions."
+              />
+            </PressableCard>
+          </View>
+
+          <View style={styles.settingsSection}>
+            <SectionHeader title="Pro across devices FAQ" />
+            <View style={styles.settingItem} accessible>
               <View style={styles.settingContent}>
                 <Text style={styles.settingTitle}>
                   Use the same account on every device
@@ -551,7 +611,7 @@ export function YouAccountSettingsScreen() {
                 </Text>
               </View>
             </View>
-            <View style={styles.settingItem}>
+            <View style={styles.settingItem} accessible>
               <View style={styles.settingContent}>
                 <Text style={styles.settingTitle}>
                   Billing stays with the store you bought from
@@ -563,7 +623,7 @@ export function YouAccountSettingsScreen() {
                 </Text>
               </View>
             </View>
-            <View style={styles.settingItem}>
+            <View style={styles.settingItem} accessible>
               <View style={styles.settingContent}>
                 <Text style={styles.settingTitle}>
                   “Restore purchases” is store-specific
@@ -575,7 +635,7 @@ export function YouAccountSettingsScreen() {
                 </Text>
               </View>
             </View>
-            <View style={styles.settingItem}>
+            <View style={styles.settingItem} accessible>
               <View style={styles.settingContent}>
                 <Text style={styles.settingTitle}>
                   Bought Pro before creating an account?
@@ -590,8 +650,8 @@ export function YouAccountSettingsScreen() {
           </View>
 
           <View style={styles.settingsSection}>
-            <Text style={styles.settingsSectionTitle}>Legal</Text>
-            <View style={styles.settingItem}>
+            <SectionHeader title="Legal" />
+            <View style={styles.settingItem} accessible>
               <View style={styles.settingContent}>
                 <Text style={styles.settingTitle}>Trademarks</Text>
                 <Text style={styles.settingDescription}>
@@ -601,7 +661,7 @@ export function YouAccountSettingsScreen() {
                 </Text>
               </View>
             </View>
-            <View style={styles.settingItem}>
+            <View style={styles.settingItem} accessible>
               <View style={styles.settingContent}>
                 <Text style={styles.settingTitle}>Partner offers</Text>
                 <Text style={styles.settingDescription}>
@@ -615,161 +675,122 @@ export function YouAccountSettingsScreen() {
           </View>
 
           {user ? (
-            <TouchableOpacity
-              style={[styles.settingItem, styles.dangerItem]}
+            <PressableCard
               onPress={handleDeleteAccount}
               disabled={isDeletingAccount}
+              accessibilityLabel={`Delete account, ${deleteAccountDescription}`}
+              accessibilityHint="Asks to confirm before deleting"
             >
-              <View style={styles.settingContent}>
-                <Text style={[styles.settingTitle, styles.dangerText]}>
-                  Delete account
-                </Text>
-                <Text style={styles.settingDescription}>
-                  {isDeletingAccount
-                    ? 'Deleting account and cloud backup…'
-                    : 'Permanently delete your account and cloud backup. Local data stays on this device.'}
-                </Text>
-              </View>
-              <SmallChevron />
-            </TouchableOpacity>
+              <SettingText
+                title="Delete account"
+                description={deleteAccountDescription}
+                danger
+              />
+            </PressableCard>
           ) : null}
 
           {__DEV__ && (
             <View style={styles.settingsSection}>
-              <Text style={styles.settingsSectionTitle}>Dev settings</Text>
+              <SectionHeader title="Dev settings" />
 
-              <TouchableOpacity
-                style={styles.settingItem}
+              <PressableCard
                 onPress={() => router.push('/dev/tokens')}
-                accessibilityRole="button"
+                accessibilityLabel="Design tokens preview"
               >
-                <View style={styles.settingContent}>
-                  <Text style={styles.settingTitle}>Design tokens preview</Text>
-                  <Text style={styles.settingDescription}>
-                    Every colour, type style, spacing, radius, elevation and
-                    motion token, with contrast ratios.
-                  </Text>
-                </View>
-                <SmallChevron />
-              </TouchableOpacity>
+                <SettingText
+                  title="Design tokens preview"
+                  description="Every colour, type style, spacing, radius, elevation and motion token, with contrast ratios."
+                />
+              </PressableCard>
 
-              <TouchableOpacity
-                style={styles.settingItem}
+              <PressableCard
                 onPress={() => router.push('/dev/components')}
-                accessibilityRole="button"
+                accessibilityLabel="Design components preview"
               >
-                <View style={styles.settingContent}>
-                  <Text style={styles.settingTitle}>
-                    Design components preview
-                  </Text>
-                  <Text style={styles.settingDescription}>
-                    The new shared components in isolation, with press,
-                    selection and Reduce Motion behaviour.
-                  </Text>
-                </View>
-                <SmallChevron />
-              </TouchableOpacity>
+                <SettingText
+                  title="Design components preview"
+                  description="The new shared components in isolation, with press, selection and Reduce Motion behaviour."
+                />
+              </PressableCard>
 
-              <View style={styles.settingItem}>
-                <View style={styles.settingContent}>
-                  <Text style={styles.settingTitle}>Force Pro mode</Text>
-                  <Text style={styles.settingDescription}>
-                    Treat this device as Pro for local testing. RevenueCat is
-                    not changed.
-                  </Text>
-                </View>
+              <View
+                style={[
+                  styles.settingItem,
+                  largeText && styles.settingItemStacked,
+                ]}
+              >
+                <SettingText
+                  title="Force Pro mode"
+                  description="Treat this device as Pro for local testing. RevenueCat is not changed."
+                />
                 <Switch
+                  {...settingsSwitchColors}
                   value={isDeveloperProOverrideEnabled}
                   onValueChange={(enabled) => {
                     void handleDevProOverrideChange(enabled);
                   }}
                   disabled={isUpdatingDevProOverride}
                   accessibilityLabel="Force Pro mode"
+                  accessibilityHint="Treat this device as Pro for local testing"
                 />
               </View>
 
-              <TouchableOpacity
-                style={[styles.settingItem, styles.dangerItem]}
+              <PressableCard
                 onPress={handleClearAllData}
+                accessibilityLabel="Clear all data, permanently delete all stored data"
+                accessibilityHint="Asks to confirm before deleting"
               >
-                <View style={styles.settingContent}>
-                  <Text style={[styles.settingTitle, styles.dangerText]}>
-                    Clear All Data
-                  </Text>
-                  <Text style={styles.settingDescription}>
-                    Permanently delete all stored data
-                  </Text>
-                </View>
-                <SmallChevron />
-              </TouchableOpacity>
+                <SettingText
+                  title="Clear all data"
+                  description="Permanently delete all stored data."
+                  danger
+                />
+              </PressableCard>
 
-              <TouchableOpacity
-                style={styles.settingItem}
+              <PressableCard
                 onPress={handleDevDumpPersonalBestsSqlite}
+                accessibilityLabel="Dump personal bests SQLite"
               >
-                <View style={styles.settingContent}>
-                  <Text style={styles.settingTitle}>
-                    Dump personal bests SQLite
-                  </Text>
-                  <Text style={styles.settingDescription}>
-                    Log every personal_best_entries row to Metro and show
-                    counts. Use after logging a PB.
-                  </Text>
-                </View>
-                <SmallChevron />
-              </TouchableOpacity>
+                <SettingText
+                  title="Dump personal bests SQLite"
+                  description="Log every personal_best_entries row to Metro and show counts. Use after logging a PB."
+                />
+              </PressableCard>
 
-              <TouchableOpacity
-                style={styles.settingItem}
+              <PressableCard
                 onPress={handleDevDumpWorkoutLogSetsSqlite}
+                accessibilityLabel="Dump workout log sets SQLite"
               >
-                <View style={styles.settingContent}>
-                  <Text style={styles.settingTitle}>
-                    Dump workout log sets SQLite
-                  </Text>
-                  <Text style={styles.settingDescription}>
-                    Log every workout_log_sets row to Metro and show dirty
-                    counts. Use after logging a set.
-                  </Text>
-                </View>
-                <SmallChevron />
-              </TouchableOpacity>
+                <SettingText
+                  title="Dump workout log sets SQLite"
+                  description="Log every workout_log_sets row to Metro and show dirty counts. Use after logging a set."
+                />
+              </PressableCard>
 
-              <TouchableOpacity
-                style={[styles.settingItem, styles.dangerItem]}
+              <PressableCard
                 onPress={handleDevPurgeStructuredData}
+                accessibilityLabel="Purge SQLite and cloud structured data"
+                accessibilityHint="Asks to confirm before deleting"
               >
-                <View style={styles.settingContent}>
-                  <Text style={[styles.settingTitle, styles.dangerText]}>
-                    Purge SQLite + cloud structured data
-                  </Text>
-                  <Text style={styles.settingDescription}>
-                    Delete personal bests and workout_log_sets from this device
-                    and from Supabase (when signed in). Dev only.
-                  </Text>
-                </View>
-                <SmallChevron />
-              </TouchableOpacity>
+                <SettingText
+                  title="Purge SQLite + cloud structured data"
+                  description="Delete personal bests and workout_log_sets from this device and from Supabase (when signed in). Dev only."
+                  danger
+                />
+              </PressableCard>
 
-              <TouchableOpacity
-                style={styles.settingItem}
+              <PressableCard
                 onPress={handleDevRefreshSanityHomeContent}
                 disabled={isRefreshingSanityHome}
+                accessibilityLabel={`Clear Sanity cache and refresh, ${sanityRefreshDescription}`}
               >
-                <View style={styles.settingContent}>
-                  <Text style={styles.settingTitle}>
-                    Clear Sanity cache & refresh
-                  </Text>
-                  <Text style={styles.settingDescription}>
-                    {isRefreshingSanityHome
-                      ? 'Fetching notification, shop ads, and skills from Sanity…'
-                      : 'Clear cached Sanity content (home + skills) and refetch. Open Home, Hub, or Skills & Cues to preview.'}
-                  </Text>
-                </View>
-                <SmallChevron />
-              </TouchableOpacity>
+                <SettingText
+                  title="Clear Sanity cache & refresh"
+                  description={sanityRefreshDescription}
+                />
+              </PressableCard>
 
-              <View style={styles.settingItem}>
+              <View style={styles.settingItem} accessible>
                 <View style={styles.settingContent}>
                   <Text style={styles.settingTitle}>
                     Developer · Onboarding
@@ -786,20 +807,17 @@ export function YouAccountSettingsScreen() {
                 </View>
               </View>
 
-              <TouchableOpacity
-                style={[styles.settingItem, styles.dangerItem]}
+              <PressableCard
                 onPress={handleResetOnboarding}
+                accessibilityLabel="Reset onboarding, clear onboarded flag and stored profile for testing"
+                accessibilityHint="Asks to confirm before resetting"
               >
-                <View style={styles.settingContent}>
-                  <Text style={[styles.settingTitle, styles.dangerText]}>
-                    Reset Onboarding
-                  </Text>
-                  <Text style={styles.settingDescription}>
-                    Clear onboarded flag and stored profile for testing
-                  </Text>
-                </View>
-                <SmallChevron />
-              </TouchableOpacity>
+                <SettingText
+                  title="Reset onboarding"
+                  description="Clear onboarded flag and stored profile for testing."
+                  danger
+                />
+              </PressableCard>
             </View>
           )}
         </View>

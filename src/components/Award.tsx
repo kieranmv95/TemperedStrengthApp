@@ -1,8 +1,15 @@
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  elevation,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AwardIcon, { AwardIconVariant } from './AwardIcon';
-import { Card } from './ds';
+import { Badge } from './ds';
 
 type AwardProps = {
   badgeTitle: string;
@@ -25,61 +32,86 @@ export default function Award({
   fontSize,
   granted,
 }: AwardProps) {
+  const largeText = useLargeText();
   const isProGateLocked = awardPro && !isUserPro;
+  const isDimmed = !granted || isProGateLocked;
+  const shownTitle = isProGateLocked ? 'Locked award' : title;
+  const shownDescription = isProGateLocked
+    ? 'This award is locked because you do not have Pro.'
+    : description;
+  const statusLabel = isProGateLocked
+    ? 'Requires Pro'
+    : granted
+      ? 'Achieved'
+      : 'Not achieved';
 
   return (
-    <Card>
-      <View style={styles.icon}>
-        <View style={(!granted || isProGateLocked) && styles.locked}>
-          <AwardIcon
-            variant={variant}
-            text={isProGateLocked ? 'Locked' : badgeTitle}
-            size={80}
-            fontSize={fontSize}
-          />
-        </View>
-      </View>
+    <View
+      style={[styles.card, largeText && styles.cardStacked]}
+      accessible
+      accessibilityLabel={`${shownTitle}, ${statusLabel}. ${shownDescription}`}
+    >
       <View
-        style={[styles.content, (!granted || isProGateLocked) && styles.locked]}
+        style={isDimmed && styles.iconDimmed}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
       >
-        <Text style={styles.title}>
-          {isProGateLocked ? 'Locked Award' : title}
-        </Text>
-        <Text style={styles.description}>
-          {isProGateLocked
-            ? 'This award is locked because you do not have Pro.'
-            : description}
-        </Text>
+        <AwardIcon
+          variant={variant}
+          text={isProGateLocked ? 'Locked' : badgeTitle}
+          size={80}
+          fontSize={fontSize}
+        />
       </View>
-    </Card>
+      <View style={styles.content}>
+        {isProGateLocked ? (
+          <Badge label="PRO" accessibilityLabel="Requires Pro" />
+        ) : granted ? (
+          <Badge label="Achieved" tone="success" />
+        ) : (
+          <Badge label="Not achieved" tone="neutral" />
+        )}
+        <Text style={[styles.title, isDimmed && styles.titleDimmed]}>
+          {shownTitle}
+        </Text>
+        <Text style={styles.description}>{shownDescription}</Text>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  locked: {
-    opacity: 0.4,
-  },
-  icon: {
+  card: {
+    ...elevation.raised,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    gap: space.md,
+    padding: space.md,
+    borderRadius: radius.md,
+    backgroundColor: color.surface1,
+  },
+  /** Large text: the shield sits above the text instead of squeezing it. */
+  cardStacked: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  iconDimmed: {
+    opacity: 0.4,
   },
   content: {
     flex: 1,
     minWidth: 0,
-    flexShrink: 1,
-    justifyContent: 'center',
-    gap: Spacing.xs,
+    gap: space.xxs,
   },
   title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-    flexShrink: 1,
+    ...typography.headline,
+    color: color.textPrimary,
+  },
+  titleDimmed: {
+    color: color.textSecondary,
   },
   description: {
-    color: Colors.accent,
-    fontSize: FontSize.md,
-    fontWeight: '500',
-    flexShrink: 1,
+    ...typography.callout,
+    color: color.textSecondary,
   },
 });

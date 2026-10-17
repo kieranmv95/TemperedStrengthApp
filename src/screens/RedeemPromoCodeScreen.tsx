@@ -1,5 +1,11 @@
 import { AppSafeAreaView, AppScrollView } from '@/src/components/ds';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import {
   isValidPromoCodeFormat,
@@ -16,10 +22,10 @@ import {
   ActivityIndicator,
   Alert,
   Keyboard,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -157,16 +163,22 @@ export function RedeemPromoCodeScreen() {
   return (
     <AppSafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.headerBackButton}
-          onPress={() => router.back()}
-          accessibilityRole="button"
-          accessibilityLabel="Back"
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Redeem Pro code</Text>
-        <View style={styles.headerSpacer} />
+        <View style={styles.headerRow}>
+          <Pressable
+            style={styles.headerBackButton}
+            onPress={() => router.back()}
+            accessibilityRole="button"
+            accessibilityLabel="Back"
+          >
+            <Ionicons name="arrow-back" size={24} color={color.textPrimary} />
+          </Pressable>
+          <Text style={styles.headerTitle} accessibilityRole="header">
+            Redeem Pro code
+          </Text>
+        </View>
+        <Text style={styles.subtitle}>
+          Enter a promo code to unlock Tempered Strength Pro on this device.
+        </Text>
       </View>
 
       <AppScrollView
@@ -175,10 +187,6 @@ export function RedeemPromoCodeScreen() {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.subtitle}>
-          Enter a promo code to unlock Tempered Strength Pro on this device.
-        </Text>
-
         {daysGranted !== null ? (
           <Text style={styles.daysHint}>
             This code grants {daysGranted} day{daysGranted === 1 ? '' : 's'} of
@@ -188,16 +196,22 @@ export function RedeemPromoCodeScreen() {
 
         {step === 'code' ? (
           <View style={styles.fieldBlock}>
-            <Text style={styles.fieldLabel}>Code</Text>
+            <Text
+              style={styles.fieldLabel}
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            >
+              Code
+            </Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input, error ? styles.inputError : null]}
               value={code}
               onChangeText={(next) => {
                 setCode(next.toUpperCase());
                 setError(null);
               }}
               placeholder="PROMOCODE"
-              placeholderTextColor={Colors.textPlaceholder}
+              placeholderTextColor={color.textTertiary}
               autoCapitalize="characters"
               autoCorrect={false}
               autoComplete="off"
@@ -205,6 +219,8 @@ export function RedeemPromoCodeScreen() {
               editable={!isSubmitting}
               onSubmitEditing={handlePrimaryPress}
               accessibilityLabel="Promo code"
+              accessibilityHint={error ?? undefined}
+              accessibilityState={{ disabled: isSubmitting }}
               maxLength={32}
             />
           </View>
@@ -212,16 +228,22 @@ export function RedeemPromoCodeScreen() {
 
         {step === 'password' ? (
           <View style={styles.fieldBlock}>
-            <Text style={styles.fieldLabel}>Password</Text>
+            <Text
+              style={styles.fieldLabel}
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            >
+              Password
+            </Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input, error ? styles.inputError : null]}
               value={password}
               onChangeText={(next) => {
                 setPassword(next);
                 setError(null);
               }}
               placeholder="Password"
-              placeholderTextColor={Colors.textPlaceholder}
+              placeholderTextColor={color.textTertiary}
               secureTextEntry
               autoCapitalize="none"
               autoCorrect={false}
@@ -229,25 +251,37 @@ export function RedeemPromoCodeScreen() {
               editable={!isSubmitting}
               onSubmitEditing={handlePrimaryPress}
               accessibilityLabel="Promo code password"
+              accessibilityHint={error ?? undefined}
+              accessibilityState={{ disabled: isSubmitting }}
             />
           </View>
         ) : null}
 
         {step === 'email' ? (
           <View style={styles.fieldBlock}>
-            <Text style={styles.fieldLabel}>Email</Text>
-            <Text style={styles.fieldHint}>
+            <Text
+              style={styles.fieldLabel}
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            >
+              Email
+            </Text>
+            <Text
+              style={styles.fieldHint}
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            >
               Used for redemption records only. This does not create an account.
             </Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input, error ? styles.inputError : null]}
               value={email}
               onChangeText={(next) => {
                 setEmail(next);
                 setError(null);
               }}
               placeholder="you@example.com"
-              placeholderTextColor={Colors.textPlaceholder}
+              placeholderTextColor={color.textTertiary}
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
@@ -256,50 +290,74 @@ export function RedeemPromoCodeScreen() {
               editable={!isSubmitting}
               onSubmitEditing={handlePrimaryPress}
               accessibilityLabel="Email for redemption"
+              accessibilityHint={
+                error ??
+                'Used for redemption records only. This does not create an account.'
+              }
+              accessibilityState={{ disabled: isSubmitting }}
             />
           </View>
         ) : null}
 
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {error ? (
+          <View
+            style={styles.errorRow}
+            accessible
+            accessibilityRole="alert"
+            accessibilityLiveRegion="polite"
+            accessibilityLabel={error}
+          >
+            <Ionicons name="alert-circle" size={18} color={color.danger} />
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
+        ) : null}
 
-        <TouchableOpacity
-          style={[
-            styles.primaryButton,
-            isSubmitting && styles.primaryButtonDisabled,
-          ]}
-          onPress={handlePrimaryPress}
-          disabled={isSubmitting}
-          accessibilityRole="button"
-          accessibilityLabel={primaryLabel}
-        >
-          {isSubmitting ? (
-            <ActivityIndicator color={Colors.textOnAccent} />
-          ) : (
-            <Text style={styles.primaryButtonText}>{primaryLabel}</Text>
-          )}
-        </TouchableOpacity>
-
-        {step !== 'code' ? (
-          <TouchableOpacity
-            style={styles.secondaryButton}
-            onPress={() => {
-              setError(null);
-              if (step === 'email' && requiresPassword) {
-                setStep('password');
-                return;
-              }
-              setStep('code');
-              setRequiresPassword(false);
-              setDaysGranted(null);
-              setPassword('');
-            }}
+        <View style={styles.actions}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.primaryButton,
+              pressed && styles.primaryButtonPressed,
+              isSubmitting && styles.primaryButtonDisabled,
+            ]}
+            onPress={handlePrimaryPress}
             disabled={isSubmitting}
             accessibilityRole="button"
-            accessibilityLabel="Back to previous step"
+            accessibilityLabel={primaryLabel}
+            accessibilityState={{ disabled: isSubmitting, busy: isSubmitting }}
           >
-            <Text style={styles.secondaryButtonText}>Back</Text>
-          </TouchableOpacity>
-        ) : null}
+            {isSubmitting ? (
+              <ActivityIndicator color={color.onGold} />
+            ) : (
+              <Text style={styles.primaryButtonText}>{primaryLabel}</Text>
+            )}
+          </Pressable>
+
+          {step !== 'code' ? (
+            <Pressable
+              style={({ pressed }) => [
+                styles.secondaryButton,
+                pressed && styles.secondaryButtonPressed,
+              ]}
+              onPress={() => {
+                setError(null);
+                if (step === 'email' && requiresPassword) {
+                  setStep('password');
+                  return;
+                }
+                setStep('code');
+                setRequiresPassword(false);
+                setDaysGranted(null);
+                setPassword('');
+              }}
+              disabled={isSubmitting}
+              accessibilityRole="button"
+              accessibilityLabel="Back to previous step"
+              accessibilityState={{ disabled: isSubmitting }}
+            >
+              <Text style={styles.secondaryButtonText}>Back</Text>
+            </Pressable>
+          ) : null}
+        </View>
       </AppScrollView>
     </AppSafeAreaView>
   );
@@ -308,98 +366,118 @@ export function RedeemPromoCodeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.backgroundScreen,
+    backgroundColor: color.bg,
   },
   header: {
+    paddingHorizontal: space.md,
+    paddingTop: space.md,
+    paddingBottom: space.sm,
+    gap: space.xxs,
+  },
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.xl,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
+    gap: space.xxs,
   },
   headerBackButton: {
-    padding: Spacing.xs,
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    justifyContent: 'center',
+    marginLeft: -space.xs,
   },
   headerTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    ...typography.title1,
+    color: color.textPrimary,
+    flex: 1,
+    minWidth: 0,
   },
-  headerSpacer: {
-    width: 32,
+  subtitle: {
+    ...typography.callout,
+    color: color.textSecondary,
   },
   scroll: {
     flex: 1,
   },
   content: {
-    padding: Spacing.xxl,
-    paddingBottom: Spacing.section,
-    gap: Spacing.xl,
-  },
-  subtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
-    lineHeight: 22,
+    padding: space.md,
+    paddingBottom: space.xxl,
+    gap: space.lg,
   },
   daysHint: {
-    color: Colors.accent,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    fontVariant: ['tabular-nums'],
+    color: color.textPrimary,
   },
   fieldBlock: {
-    gap: Spacing.sm,
+    gap: space.xxs,
   },
   fieldLabel: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
+    ...typography.captionStrong,
+    color: color.textSecondary,
   },
   fieldHint: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    lineHeight: 18,
+    ...typography.caption,
+    color: color.textTertiary,
   },
   input: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.xxl,
+    ...typography.body,
+    minHeight: MIN_TARGET_SIZE + space.xxs,
+    paddingHorizontal: space.sm,
+    paddingVertical: space.xs,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: Colors.backgroundSubtle,
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.lg,
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
+    borderColor: color.borderStrong,
+    backgroundColor: color.surface2,
+    color: color.textPrimary,
+  },
+  inputError: {
+    borderColor: color.danger,
+  },
+  errorRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: space.xs,
   },
   errorText: {
-    color: Colors.destructive,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
+    ...typography.callout,
+    color: color.danger,
+    flex: 1,
+  },
+  actions: {
+    gap: space.xs,
   },
   primaryButton: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.xxl,
-    paddingVertical: Spacing.xl,
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 52,
+    paddingHorizontal: space.lg,
+    backgroundColor: color.gold,
+  },
+  primaryButtonPressed: {
+    backgroundColor: color.goldStrong,
   },
   primaryButtonDisabled: {
     opacity: 0.6,
   },
   primaryButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
   secondaryButton: {
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
     alignItems: 'center',
-    paddingVertical: Spacing.md,
+    justifyContent: 'center',
+    paddingHorizontal: space.lg,
+    borderWidth: 1,
+    borderColor: color.borderStrong,
+  },
+  secondaryButtonPressed: {
+    backgroundColor: color.surface3,
   },
   secondaryButtonText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
 });

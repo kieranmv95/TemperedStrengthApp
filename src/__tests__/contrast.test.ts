@@ -164,6 +164,24 @@ const PAIRS: ContrastPair[] = [
     kind: 'text',
   },
   {
+    name: 'gold on goldTint over bg (header action chip)',
+    foreground: color.gold,
+    background: flattenToHex(color.goldTint, color.bg),
+    kind: 'text',
+  },
+  {
+    name: 'gold on goldTintStrong over bg (pressed header action chip)',
+    foreground: color.gold,
+    background: flattenToHex(color.goldTintStrong, color.bg),
+    kind: 'text',
+  },
+  {
+    name: 'danger on bg (form error text)',
+    foreground: color.danger,
+    background: color.bg,
+    kind: 'text',
+  },
+  {
     name: 'danger on dangerTint over bg (check-in error)',
     foreground: color.danger,
     background: flattenToHex(color.dangerTint, color.bg),
@@ -235,6 +253,18 @@ const PAIRS: ContrastPair[] = [
     name: 'gold switch on track vs surface1',
     foreground: color.gold,
     background: color.surface1,
+    kind: 'nonText',
+  },
+  {
+    name: 'gold switch track (on) vs surface1',
+    foreground: color.gold,
+    background: color.surface1,
+    kind: 'nonText',
+  },
+  {
+    name: 'textPrimary switch thumb vs borderStrong track (off)',
+    foreground: color.textPrimary,
+    background: color.borderStrong,
     kind: 'nonText',
   },
   {

@@ -1,6 +1,15 @@
-import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  PressableCard,
+  SectionHeader,
+  StandardLayout,
+} from '@/src/components/ds';
+import {
+  settingsScreenStyles as styles,
+  settingsSwitchColors,
+} from '@/src/components/settings/settingsScreenStyles';
+import { color } from '@/src/constants/tokens';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
   getCheckinSettings,
@@ -13,15 +22,50 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
-import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
-import {
-  AppSafeAreaView,
-  AppScrollView,
-  SmallChevron,
-} from '@/src/components/ds';
+import { Pressable, Switch, Text, View } from 'react-native';
+
+type UnitOptionProps = {
+  unit: WeightUnit;
+  selected: boolean;
+  disabled: boolean;
+  onPress: () => void;
+};
+
+function UnitOption({ unit, selected, disabled, onPress }: UnitOptionProps) {
+  return (
+    <Pressable
+      style={({ pressed }) => [
+        styles.unitToggleOption,
+        selected && styles.unitToggleOptionActive,
+        pressed && !selected && styles.unitToggleOptionPressed,
+      ]}
+      onPress={onPress}
+      disabled={disabled}
+      accessibilityRole="radio"
+      accessibilityLabel={unit === 'kg' ? 'Kilograms' : 'Pounds'}
+      accessibilityState={{ selected, disabled }}
+    >
+      {selected ? (
+        <Ionicons
+          name="checkmark"
+          size={16}
+          color={color.gold}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+        />
+      ) : null}
+      <Text
+        style={[styles.unitToggleText, selected && styles.unitToggleTextActive]}
+      >
+        {unit}
+      </Text>
+    </Pressable>
+  );
+}
 
 export default function AccountGeneralSettingsScreen() {
   const posthog = usePostHog();
+  const largeText = useLargeText();
   const { user } = useSyncManager();
   const [weightUnit, setWeightUnitState] = useState<WeightUnit>('kg');
   const [weightUnitLoading, setWeightUnitLoading] = useState<boolean>(true);
@@ -111,196 +155,130 @@ export default function AccountGeneralSettingsScreen() {
     router.push('/onboarding?mode=edit');
   };
 
+  const healthSyncDescription = user
+    ? 'Back up women’s health entries to your account. This is a separate choice from the general account backup — leave it off to keep them on this device only.'
+    : 'Create an account first. Women’s health entries are never backed up without this separate opt-in.';
+
   return (
-    <AppSafeAreaView style={pageStyles.container}>
-      <View style={pageStyles.header}>
-        <TouchableOpacity
-          style={pageStyles.headerBackButton}
-          onPress={() => router.back()}
-          accessibilityRole="button"
-          accessibilityLabel="Back"
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={pageStyles.headerTitle}>General settings</Text>
-        <View style={pageStyles.headerSpacer} />
-      </View>
-
-      <AppScrollView
-        style={pageStyles.scroll}
-        contentContainerStyle={pageStyles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text style={pageStyles.subtitle}>App-wide preferences.</Text>
-
+    <StandardLayout
+      title="General settings"
+      subtitle="App-wide preferences."
+      onBackPress={() => router.back()}
+    >
+      <StandardLayout.Body>
         <View style={styles.settingsList}>
-          <View style={styles.settingItem}>
-            <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Weight units</Text>
-              <Text style={styles.settingDescription}>
-                Show and enter weights in {weightUnit === 'lb' ? 'lbs' : 'kg'}.
-              </Text>
-            </View>
+          <View style={styles.settingsSection}>
             <View
               style={[
-                styles.unitToggle,
-                weightUnitLoading && styles.unitToggleDisabled,
+                styles.settingItem,
+                largeText && styles.settingItemStacked,
               ]}
-              accessibilityRole="radiogroup"
-              accessibilityLabel="Weight units"
             >
-              <TouchableOpacity
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>Weight units</Text>
+                <Text style={styles.settingDescription}>
+                  Show and enter weights in {weightUnit === 'lb' ? 'lbs' : 'kg'}
+                  .
+                </Text>
+              </View>
+              <View
                 style={[
-                  styles.unitToggleOption,
-                  weightUnit === 'kg' && styles.unitToggleOptionActive,
+                  styles.unitToggle,
+                  weightUnitLoading && styles.unitToggleDisabled,
                 ]}
-                onPress={() => persistWeightUnit('kg')}
-                disabled={weightUnitLoading}
-                accessibilityRole="radio"
-                accessibilityState={{
-                  selected: weightUnit === 'kg',
-                  disabled: weightUnitLoading,
-                }}
+                accessibilityRole="radiogroup"
+                accessibilityLabel="Weight units"
               >
+                <UnitOption
+                  unit="kg"
+                  selected={weightUnit === 'kg'}
+                  disabled={weightUnitLoading}
+                  onPress={() => persistWeightUnit('kg')}
+                />
+                <UnitOption
+                  unit="lb"
+                  selected={weightUnit === 'lb'}
+                  disabled={weightUnitLoading}
+                  onPress={() => persistWeightUnit('lb')}
+                />
+              </View>
+            </View>
+
+            <PressableCard
+              onPress={handleUpdatePreferences}
+              accessibilityLabel="Update preferences, replay onboarding to update your name, gender, interests, and experience level"
+            >
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>Update preferences</Text>
+                <Text style={styles.settingDescription}>
+                  Replay onboarding to update your name, gender, interests, and
+                  experience level.
+                </Text>
+              </View>
+            </PressableCard>
+          </View>
+
+          <View style={styles.settingsSection}>
+            <SectionHeader title="Daily check-in" />
+
+            <View
+              style={[
+                styles.settingItem,
+                largeText && styles.settingItemStacked,
+              ]}
+            >
+              <View style={styles.settingContent}>
+                <Text style={styles.settingTitle}>Women’s health module</Text>
+                <Text style={styles.settingDescription}>
+                  Show cycle, symptom, and contraception behaviours in your
+                  check-in.
+                </Text>
+              </View>
+              <Switch
+                {...settingsSwitchColors}
+                value={womensHealthVisible}
+                onValueChange={(enabled) => {
+                  void persistWomensHealthVisible(enabled);
+                }}
+                disabled={checkinSettingsLoading}
+                accessibilityLabel="Women’s health module"
+                accessibilityHint="Shows cycle, symptom, and contraception behaviours in your check-in"
+              />
+            </View>
+
+            <View
+              style={[
+                styles.settingItem,
+                largeText && styles.settingItemStacked,
+              ]}
+            >
+              <View style={styles.settingContent}>
                 <Text
                   style={[
-                    styles.unitToggleText,
-                    weightUnit === 'kg' && styles.unitToggleTextActive,
+                    styles.settingTitle,
+                    !user && styles.settingTitleDisabled,
                   ]}
                 >
-                  kg
+                  Sync women’s health
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.unitToggleOption,
-                  weightUnit === 'lb' && styles.unitToggleOptionActive,
-                ]}
-                onPress={() => persistWeightUnit('lb')}
-                disabled={weightUnitLoading}
-                accessibilityRole="radio"
-                accessibilityState={{
-                  selected: weightUnit === 'lb',
-                  disabled: weightUnitLoading,
+                <Text style={styles.settingDescription}>
+                  {healthSyncDescription}
+                </Text>
+              </View>
+              <Switch
+                {...settingsSwitchColors}
+                value={healthSyncOptIn}
+                onValueChange={(enabled) => {
+                  void persistHealthSyncOptIn(enabled);
                 }}
-              >
-                <Text
-                  style={[
-                    styles.unitToggleText,
-                    weightUnit === 'lb' && styles.unitToggleTextActive,
-                  ]}
-                >
-                  lb
-                </Text>
-              </TouchableOpacity>
+                disabled={checkinSettingsLoading || !user}
+                accessibilityLabel="Sync women’s health"
+                accessibilityHint={healthSyncDescription}
+              />
             </View>
-          </View>
-
-          <TouchableOpacity
-            style={styles.settingItem}
-            onPress={handleUpdatePreferences}
-          >
-            <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Update Preferences</Text>
-              <Text style={styles.settingDescription}>
-                Replay onboarding to update your name, gender, interests, and
-                experience level.
-              </Text>
-            </View>
-            <SmallChevron />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.settingsSection}>
-          <Text style={styles.settingsSectionTitle}>Daily check-in</Text>
-
-          <View style={styles.settingItem}>
-            <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Women’s health module</Text>
-              <Text style={styles.settingDescription}>
-                Show cycle, symptom, and contraception behaviours in your
-                check-in.
-              </Text>
-            </View>
-            <Switch
-              value={womensHealthVisible}
-              onValueChange={(enabled) => {
-                void persistWomensHealthVisible(enabled);
-              }}
-              disabled={checkinSettingsLoading}
-              accessibilityLabel="Women’s health module"
-            />
-          </View>
-
-          <View
-            style={[styles.settingItem, !user && styles.settingItemDisabled]}
-          >
-            <View style={styles.settingContent}>
-              <Text
-                style={[
-                  styles.settingTitle,
-                  !user && styles.settingTitleDisabled,
-                ]}
-              >
-                Sync women’s health
-              </Text>
-              <Text style={styles.settingDescription}>
-                {user
-                  ? 'Back up women’s health entries to your account. This is a separate choice from the general account backup — leave it off to keep them on this device only.'
-                  : 'Create an account first. Women’s health entries are never backed up without this separate opt-in.'}
-              </Text>
-            </View>
-            <Switch
-              value={healthSyncOptIn}
-              onValueChange={(enabled) => {
-                void persistHealthSyncOptIn(enabled);
-              }}
-              disabled={checkinSettingsLoading || !user}
-              accessibilityLabel="Sync women’s health"
-            />
           </View>
         </View>
-      </AppScrollView>
-    </AppSafeAreaView>
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 }
-
-const pageStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundScreen,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.xl,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
-  },
-  headerBackButton: {
-    padding: Spacing.xs,
-  },
-  headerTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-  },
-  headerSpacer: {
-    width: 32,
-  },
-  scroll: {
-    flex: 1,
-  },
-  content: {
-    padding: Spacing.xxl,
-    paddingBottom: Spacing.section,
-    gap: Spacing.xl,
-  },
-  subtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
-  },
-});

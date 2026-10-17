@@ -1,7 +1,14 @@
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
+import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 type PbModalDateTimeFieldProps = {
   value: Date;
@@ -23,15 +30,46 @@ export function PbModalDateTimeField({
     setPickerVisible((v) => !v);
   }, []);
 
+  const formattedValue = value.toLocaleString();
+
   return (
-    <View>
-      <Text style={styles.modalLabel}>{label}</Text>
-      <TouchableOpacity style={styles.dateButton} onPress={togglePicker}>
-        <Text style={styles.dateButtonText}>{value.toLocaleString()}</Text>
-        <Text style={styles.modalHint}>
-          Tap to {pickerVisible ? 'hide' : 'show'} picker
-        </Text>
-      </TouchableOpacity>
+    <View style={styles.container}>
+      <Text
+        style={styles.label}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
+        {label}
+      </Text>
+      <Pressable
+        style={({ pressed }) => [
+          styles.field,
+          pickerVisible && styles.fieldOpen,
+          pressed && styles.fieldPressed,
+        ]}
+        onPress={togglePicker}
+        accessibilityRole="button"
+        accessibilityLabel={`${label}, ${formattedValue}`}
+        accessibilityHint={
+          pickerVisible ? 'Hides the picker' : 'Shows the picker'
+        }
+        accessibilityState={{ expanded: pickerVisible }}
+      >
+        <Ionicons
+          name="calendar-outline"
+          size={20}
+          color={color.textSecondary}
+        />
+        <Text style={styles.value}>{formattedValue}</Text>
+        <Ionicons
+          name={pickerVisible ? 'chevron-up' : 'chevron-down'}
+          size={18}
+          color={color.textTertiary}
+        />
+      </Pressable>
+      <Text style={styles.hint}>
+        Tap to {pickerVisible ? 'hide' : 'show'} picker
+      </Text>
       {pickerVisible ? (
         <DateTimePicker
           value={value}
@@ -46,23 +84,39 @@ export function PbModalDateTimeField({
 }
 
 const styles = StyleSheet.create({
-  modalLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    marginBottom: Spacing.sm,
+  container: {
+    gap: space.xxs,
   },
-  dateButton: {
-    marginBottom: Spacing.xxl,
+  label: {
+    ...typography.captionStrong,
+    color: color.textSecondary,
   },
-  dateButtonText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+  field: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE + space.xxs,
+    paddingHorizontal: space.sm,
+    paddingVertical: space.xs,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    borderColor: color.borderStrong,
+    backgroundColor: color.surface2,
   },
-  modalHint: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    marginTop: Spacing.xs,
-    lineHeight: 20,
+  fieldOpen: {
+    borderColor: color.gold,
+  },
+  fieldPressed: {
+    backgroundColor: color.surface3,
+  },
+  value: {
+    ...typography.body,
+    fontVariant: ['tabular-nums'],
+    color: color.textPrimary,
+    flex: 1,
+  },
+  hint: {
+    ...typography.caption,
+    color: color.textTertiary,
   },
 });

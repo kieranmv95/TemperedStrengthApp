@@ -1,5 +1,16 @@
-import { Card, Pill, SmallChevron, StandardLayout } from '@/src/components/ds';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  FilterChip,
+  PressableCard,
+  Skeleton,
+  StandardLayout,
+} from '@/src/components/ds';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { getAllExercises } from '@/src/data/exercises';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import type { Exercise } from '@/src/types/exercise';
@@ -9,15 +20,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, router } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
+
+const ROW_SKELETON_HEIGHT = 96;
+const ROW_SKELETON_COUNT = 4;
 
 export function YouPersonalBestsScreen() {
   const { unit: weightUnit } = useWeightUnit();
@@ -80,34 +93,32 @@ export function YouPersonalBestsScreen() {
         weightUnit,
         item.lowerWeightIsBetter === true
       );
+      const pbSummary =
+        pbLines.length === 0
+          ? 'No PBs logged'
+          : pbLines.map((line) => line.label).join(', ');
       return (
-        <Card
+        <PressableCard
           onPress={() => router.push(`/records/${item.id}`)}
-          accessibilityLabel={`Open personal bests for ${item.name}`}
+          accessibilityLabel={`${item.name}, ${item.muscle}, ${pbSummary}`}
+          accessibilityHint="Opens personal bests for this exercise"
         >
           <View style={styles.pbRowText}>
             <Text style={styles.pbRowTitle}>{item.name}</Text>
             <Text style={styles.pbRowMeta}>{item.muscle}</Text>
             {pbLines.length === 0 ? (
-              <Text style={[styles.pbRowSummary, styles.pbRowSummaryEmpty]}>
-                No PBs logged
-              </Text>
+              <Text style={styles.pbRowEmpty}>No PBs logged</Text>
             ) : (
-              <View style={styles.pbRowPills}>
+              <View style={styles.pbRowValues}>
                 {pbLines.map((line) => (
-                  <Pill
-                    key={`${item.id}-${line.tier}`}
-                    label={line.label}
-                    isActive={true}
-                    onPress={() => {}}
-                    disabled
-                  />
+                  <View key={`${item.id}-${line.tier}`} style={styles.pbValue}>
+                    <Text style={styles.pbValueText}>{line.label}</Text>
+                  </View>
                 ))}
               </View>
             )}
           </View>
-          <SmallChevron />
-        </Card>
+        </PressableCard>
       );
     },
     [pbStore, weightUnit]
@@ -115,66 +126,79 @@ export function YouPersonalBestsScreen() {
 
   return (
     <StandardLayout
-      title="Personal Bests"
+      title="Personal bests"
       subtitle="Your personal records by exercise"
       disableScroll
       onBackPress={() => router.back()}
     >
       <StandardLayout.Filters>
-        <View style={styles.searchContainer}>
+        <View style={styles.search}>
           <Ionicons
             name="search"
             size={18}
-            color={Colors.textPlaceholder}
-            style={styles.searchIcon}
+            color={color.textSecondary}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
           />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search exercises..."
-            placeholderTextColor={Colors.textPlaceholder}
+            placeholder="Search exercises"
+            placeholderTextColor={color.textTertiary}
             value={searchQuery}
             onChangeText={setSearchQuery}
             returnKeyType="search"
             autoCorrect={false}
             autoCapitalize="none"
+            accessibilityLabel="Search exercises"
           />
           {searchQuery.length > 0 && (
-            <TouchableOpacity
+            <Pressable
               onPress={() => setSearchQuery('')}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              style={styles.clearSearch}
+              accessibilityRole="button"
               accessibilityLabel="Clear search"
             >
               <Ionicons
                 name="close-circle"
-                size={18}
-                color={Colors.textPlaceholder}
+                size={20}
+                color={color.textSecondary}
               />
-            </TouchableOpacity>
+            </Pressable>
           )}
         </View>
       </StandardLayout.Filters>
       <StandardLayout.AdvancedFilters>
-        <View style={styles.pbFilters}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.muscleScroll}
-          >
-            {muscleOptions.map((m) => (
-              <Pill
-                key={m}
-                label={m}
-                isActive={muscleFilter === m}
-                onPress={() => setMuscleFilter(m)}
-              />
-            ))}
-          </ScrollView>
-        </View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.muscleScroll}
+        >
+          {muscleOptions.map((m) => (
+            <FilterChip
+              key={m}
+              label={m}
+              selected={muscleFilter === m}
+              onPress={() => setMuscleFilter(m)}
+            />
+          ))}
+        </ScrollView>
       </StandardLayout.AdvancedFilters>
 
       <StandardLayout.Body>
         {pbStore === null ? (
-          <ActivityIndicator color={Colors.textMuted} />
+          <View style={styles.skeletons}>
+            {Array.from({ length: ROW_SKELETON_COUNT }, (_, index) => (
+              <Skeleton
+                key={index}
+                width="100%"
+                height={ROW_SKELETON_HEIGHT}
+                radius="md"
+                accessibilityLabel={
+                  index === 0 ? 'Loading personal bests' : undefined
+                }
+              />
+            ))}
+          </View>
         ) : (
           <FlatList
             data={filteredPbExercises}
@@ -195,73 +219,78 @@ export function YouPersonalBestsScreen() {
 }
 
 const styles = StyleSheet.create({
-  pbFilters: {
-    marginTop: Spacing.lg,
-    gap: Spacing.md,
-  },
-  searchContainer: {
+  search: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xl,
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE + space.xxs,
+    paddingLeft: space.sm,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
-    marginTop: Spacing.lg,
-  },
-  searchIcon: {
-    marginRight: Spacing.sm,
+    borderColor: color.borderStrong,
+    backgroundColor: color.surface2,
   },
   searchInput: {
+    ...typography.body,
     flex: 1,
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    paddingVertical: Spacing.xs,
+    color: color.textPrimary,
+    paddingVertical: space.xs,
+  },
+  clearSearch: {
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   muscleScroll: {
-    gap: Spacing.sm,
-    paddingBottom: Spacing.xs,
+    gap: space.xs,
+    paddingVertical: space.xxs,
+  },
+  skeletons: {
+    gap: space.sm,
+    paddingTop: space.xs,
   },
   pbListContent: {
-    paddingTop: Spacing.xl,
-    paddingBottom: Spacing.md,
-    gap: Spacing.xl,
+    paddingTop: space.xs,
+    paddingBottom: space.xxl,
+    gap: space.sm,
   },
   pbRowText: {
-    flex: 1,
-    gap: Spacing.xs,
+    gap: space.xxs,
   },
   pbRowTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
   },
   pbRowMeta: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
+    ...typography.caption,
+    color: color.textSecondary,
   },
-  pbRowPills: {
+  pbRowValues: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: Spacing.sm,
-    marginTop: Spacing.xs,
+    gap: space.xs,
+    marginTop: space.xxs,
   },
-  pbRowSummary: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    marginTop: Spacing.xs,
-    lineHeight: 20,
+  pbValue: {
+    paddingHorizontal: space.xs,
+    paddingVertical: space.xxs,
+    borderRadius: radius.sm,
+    backgroundColor: color.surface2,
   },
-  pbRowSummaryEmpty: {
-    color: Colors.textPlaceholder,
-    fontStyle: 'italic',
+  pbValueText: {
+    ...typography.numericSmall,
+    color: color.textPrimary,
+  },
+  pbRowEmpty: {
+    ...typography.caption,
+    color: color.textTertiary,
+    marginTop: space.xxs,
   },
   emptyStateText: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
+    ...typography.callout,
+    color: color.textTertiary,
     textAlign: 'center',
-    marginTop: Spacing.xxl,
+    marginTop: space.xxl,
   },
 });
