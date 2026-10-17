@@ -2,7 +2,6 @@ import { RecoveryCard } from '@/src/components/recovery/RecoveryCard';
 import { restDayCarouselStyles as styles } from '@/src/components/rest/restDayCarouselStyles';
 import { getRecoveryById } from '@/src/data/recovery';
 import type { Recovery } from '@/src/types/recovery';
-import { COACH_ROLE } from '@/src/utils/workoutAccess';
 import { router } from 'expo-router';
 import React, { useMemo } from 'react';
 import { ScrollView, useWindowDimensions, View } from 'react-native';
@@ -60,6 +59,7 @@ export function RestDayMobilityCarousel({
             style={styles.card}
             hidePills
             hideProBadge
+            fill
           />
         </View>
       ))}

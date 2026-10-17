@@ -64,6 +64,7 @@ export function RestDayWorkoutCarousel({
             onLockedPress={onLockedPress}
             style={styles.card}
             hideTags
+            fill
           />
         </View>
       ))}

@@ -42,6 +42,8 @@ type WorkoutCardProps = {
   style?: StyleProp<ViewStyle>;
   /** Hide tag pills (compact carousel cards). */
   hideTags?: boolean;
+  /** Stretch to the parent's height, e.g. to match siblings in a carousel row. */
+  fill?: boolean;
 };
 
 const CATEGORY_ICON_SIZE = 14;
@@ -106,6 +108,7 @@ export function WorkoutCard({
   onLockedPress,
   style,
   hideTags = false,
+  fill = false,
 }: WorkoutCardProps) {
   const isLocked = isWorkoutLocked(workout, { isPro, roles });
   const premiumBadge = premiumAccessBadgeLabel(workout.allowedRoles);
@@ -131,10 +134,11 @@ export function WorkoutCard({
     .join(', ');
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, fill && styles.fill, style]}>
       <PressableCard
         onPress={handlePress}
         showChevron={false}
+        fill={fill}
         accessibilityLabel={accessibilityLabel}
         accessibilityHint={
           isLocked ? 'Opens the You tab to unlock this workout' : undefined
@@ -158,7 +162,9 @@ export function WorkoutCard({
               color={color.gold}
             />
           )}
-          <Text style={styles.category}>{categoryLabel}</Text>
+          <Text style={styles.category} numberOfLines={1}>
+            {categoryLabel}
+          </Text>
           {workout.isPremium ? <Badge label={premiumBadge} /> : null}
         </View>
 
@@ -208,11 +214,15 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: space.xs,
   },
+  fill: {
+    flex: 1,
+  },
   card: {
     flex: 1,
   },
   header: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
     gap: space.xs,
     minHeight: MIN_TARGET_SIZE - space.md,
@@ -225,7 +235,6 @@ const styles = StyleSheet.create({
   category: {
     ...typography.overline,
     color: color.textTertiary,
-    flexShrink: 1,
   },
   title: {
     ...typography.headline,

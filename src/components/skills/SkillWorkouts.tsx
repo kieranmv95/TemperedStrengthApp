@@ -10,7 +10,7 @@ import {
 } from '@/src/utils/storage';
 import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -28,7 +28,6 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
   const cardWidth = windowWidth * 0.6;
   const { isPro, roles, isLoading: accessLoading } = useRoles();
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [rowHeight, setRowHeight] = useState<number | undefined>();
 
   const workouts = useMemo(() => {
     const resolved: SingleWorkout[] = [];
@@ -39,10 +38,6 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
       }
     }
     return resolved;
-  }, [workoutsIds]);
-
-  useEffect(() => {
-    setRowHeight(undefined);
   }, [workoutsIds]);
 
   useFocusEffect(
@@ -92,20 +87,7 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
       contentContainerStyle={styles.list}
     >
       {workouts.map((workout) => (
-        <View
-          key={workout.id}
-          style={[
-            styles.cardSlot,
-            { width: cardWidth },
-            rowHeight != null ? { height: rowHeight } : null,
-          ]}
-          onLayout={(event) => {
-            const nextHeight = Math.ceil(event.nativeEvent.layout.height);
-            setRowHeight((current) =>
-              current == null || nextHeight > current ? nextHeight : current
-            );
-          }}
-        >
+        <View key={workout.id} style={{ width: cardWidth }}>
           <WorkoutCard
             workout={workout}
             isFavorite={favorites.includes(workout.id)}
@@ -116,6 +98,7 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
             onLockedPress={handleLockedPress}
             style={styles.card}
             hideTags
+            fill
           />
         </View>
       ))}
@@ -132,13 +115,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.md,
     alignItems: 'stretch',
   },
-  cardSlot: {
-    alignSelf: 'stretch',
-  },
   card: {
-    marginBottom: 0,
     flex: 1,
-    height: '100%',
-    alignItems: 'stretch',
+    marginBottom: 0,
   },
 });

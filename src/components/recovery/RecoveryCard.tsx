@@ -23,6 +23,8 @@ type RecoveryCardProps = {
   hidePills?: boolean;
   /** Hide the PRO badge, e.g. in compact carousels. */
   hideProBadge?: boolean;
+  /** Stretch to the parent's height, e.g. to match siblings in a carousel row. */
+  fill?: boolean;
 };
 
 export function RecoveryCard({
@@ -33,6 +35,7 @@ export function RecoveryCard({
   style,
   hidePills = false,
   hideProBadge = false,
+  fill = false,
 }: RecoveryCardProps) {
   const isLocked = recovery.isPremium && !isPro;
   const showProBadge = recovery.isPremium && !hideProBadge;
@@ -62,6 +65,7 @@ export function RecoveryCard({
     <PressableCard
       onPress={handlePress}
       showChevron={false}
+      fill={fill}
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={
         isLocked ? 'Opens the You tab to unlock this flow' : undefined

@@ -8,13 +8,10 @@ export const restDayCarouselStyles = StyleSheet.create({
   list: {
     gap: space.sm,
     paddingHorizontal: space.md,
-    alignItems: 'flex-start',
+    alignItems: 'stretch',
   },
   card: {
-    marginBottom: 0,
-  },
-  cardFill: {
     flex: 1,
-    alignSelf: 'stretch',
+    marginBottom: 0,
   },
 });
