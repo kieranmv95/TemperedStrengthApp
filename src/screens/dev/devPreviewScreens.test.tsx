@@ -1,4 +1,5 @@
 import { mockReduceMotion } from '@/jest/mockReduceMotion';
+import { ToastProvider } from '@/src/hooks/toast-context';
 import { ComponentPreviewScreen } from '@/src/screens/dev/ComponentPreviewScreen';
 import { TokenPreviewScreen } from '@/src/screens/dev/TokenPreviewScreen';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
@@ -14,7 +15,7 @@ const SAFE_AREA_METRICS = {
 async function renderScreen(element: React.ReactElement) {
   await render(
     <SafeAreaProvider initialMetrics={SAFE_AREA_METRICS}>
-      {element}
+      <ToastProvider>{element}</ToastProvider>
     </SafeAreaProvider>
   );
   await act(async () => {});
@@ -65,6 +66,25 @@ describe('dev preview screens', () => {
     expect(
       screen.getAllByRole('progressbar', { name: 'Program progress' })[0]
     ).toHaveAccessibilityValue({ text: '7 of 16 sessions complete' });
+  });
+
+  it('opens the demo filters sheet and updates the result count', async () => {
+    await renderScreen(<ComponentPreviewScreen />);
+
+    await fireEvent.press(
+      screen.getByRole('button', { name: 'Open filters sheet' })
+    );
+    expect(
+      screen.getByRole('button', { name: 'Reset filters' })
+    ).toBeDisabled();
+
+    await fireEvent.press(
+      screen.getAllByRole('button', { name: 'Hyrox, 9 workouts' })[1]
+    );
+    expect(
+      screen.getByRole('button', { name: 'Show 9 workouts' })
+    ).toBeOnTheScreen();
+    expect(screen.getByRole('button', { name: 'Reset filters' })).toBeEnabled();
   });
 
   it('logs a demo set and moves the steppers to the next set', async () => {

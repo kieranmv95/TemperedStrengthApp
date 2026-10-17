@@ -1,3 +1,4 @@
+import { DemoOverlays } from '@/src/components/dev/DemoOverlays';
 import { DemoSetLogger } from '@/src/components/dev/DemoSetLogger';
 import { PreviewHeader } from '@/src/components/dev/PreviewHeader';
 import { PreviewSection } from '@/src/components/dev/PreviewSection';
@@ -231,6 +232,10 @@ export function ComponentPreviewScreen() {
             The check needs reps first.
           </Text>
           <DemoSetLogger />
+        </PreviewSection>
+
+        <PreviewSection title="BottomSheet and Toast">
+          <DemoOverlays />
         </PreviewSection>
 
         <PreviewSection title="Skeleton">
