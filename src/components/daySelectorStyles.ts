@@ -4,103 +4,75 @@ import {
   ITEM_PADDING_H,
   SCROLL_PADDING_H,
 } from '@/src/components/daySelectorConstants';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { color, radius, space, typography } from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
+
+export const STATUS_ICON_SIZE = 14;
+const SCHEDULED_DOT_SIZE = 6;
 
 export const daySelectorStyles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.backgroundCard,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
-    paddingTop: Spacing.xl,
-    paddingBottom: Spacing.md,
+    backgroundColor: color.bg,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: color.borderSubtle,
+    paddingTop: space.xs,
+    paddingBottom: space.xs,
   },
   scrollView: {
     flexGrow: 0,
   },
   scrollContent: {
     paddingHorizontal: SCROLL_PADDING_H,
-    alignItems: 'center',
+    alignItems: 'stretch',
     gap: GAP,
+  },
+  indicator: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    borderColor: color.gold,
+    backgroundColor: color.goldTint,
   },
   dayItem: {
     alignItems: 'center',
     paddingHorizontal: ITEM_PADDING_H,
-    paddingVertical: Spacing.md,
+    paddingVertical: space.xs,
     minWidth: ITEM_MIN_WIDTH,
-    borderWidth: 1,
-    borderColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.lg,
+    borderRadius: radius.sm,
+    gap: space.xxs,
   },
-  dayItemSelected: {
-    backgroundColor: Colors.accentWashFill,
-    borderWidth: 1,
+  weekday: {
+    ...typography.captionStrong,
+    color: color.textTertiary,
   },
-  dayItemToday: {
-    borderColor: Colors.accentWashBorder,
+  weekdayToday: {
+    color: color.gold,
   },
-  dayLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+  weekdaySelected: {
+    color: color.textPrimary,
   },
-  dayLabelSelected: {
-    color: Colors.textPrimary,
+  dayOfMonth: {
+    ...typography.numericSmall,
+    color: color.textSecondary,
   },
-  dayLabelOnToday: {
-    color: Colors.textPrimary,
+  dayOfMonthSelected: {
+    color: color.textPrimary,
   },
-  daySubLabel: {
-    marginTop: 2,
-    marginBottom: Spacing.xs,
-    color: Colors.textMuted,
-    fontSize: FontSize.sm,
-    fontWeight: '700',
-    letterSpacing: 0.5,
+  statusSlot: {
+    height: STATUS_ICON_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  daySubLabelSelected: {
-    color: Colors.textPrimary,
-  },
-  daySubLabelOnToday: {
-    color: Colors.textOnAccent,
-  },
-  dot: {
-    width: 12,
-    height: 3,
-    borderRadius: BorderRadius.xs,
-    marginTop: 2,
-  },
-  dotPlaceholder: {
-    opacity: 0,
-  },
-  dotWorkoutToday: {
-    backgroundColor: Colors.accent,
-  },
-  dotWorkoutOnDarkSurface: {
-    backgroundColor: Colors.textMuted,
-  },
-  dotCompleted: {
-    backgroundColor: Colors.recommended,
-  },
-  dotSkipped: {
-    backgroundColor: Colors.destructive,
-  },
-  jumpToTodayButton: {
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.full,
-    borderWidth: 1,
-    borderColor: Colors.accent,
-  },
-  jumpToTodayText: {
-    color: Colors.accent,
-    fontSize: FontSize.md,
-    fontWeight: '600',
+  scheduledDot: {
+    width: SCHEDULED_DOT_SIZE,
+    height: SCHEDULED_DOT_SIZE,
+    borderRadius: SCHEDULED_DOT_SIZE / 2,
+    backgroundColor: color.textTertiary,
   },
   timelineActionRow: {
     alignSelf: 'center',
-    marginTop: Spacing.md,
-    flexDirection: 'row',
-    gap: Spacing.md,
+    marginTop: space.xs,
   },
 });

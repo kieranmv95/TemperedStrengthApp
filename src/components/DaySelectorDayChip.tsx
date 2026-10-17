@@ -1,24 +1,60 @@
+import { color } from '@/src/constants/tokens';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import type { LayoutChangeEvent } from 'react-native';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { daySelectorStyles as styles } from './daySelectorStyles';
+import { Pressable, Text, View } from 'react-native';
+import {
+  STATUS_ICON_SIZE,
+  daySelectorStyles as styles,
+} from './daySelectorStyles';
 
-type DotKind = 'completed' | 'skipped' | 'workout' | 'none';
+export type DotKind = 'completed' | 'skipped' | 'workout' | 'none';
 
 type DaySelectorDayChipProps = {
-  label: string;
-  subLabel?: string;
+  /** Short weekday, e.g. "Mon". Replaced by "Today" on the current day. */
+  weekday: string;
+  dayOfMonth: number;
+  /** Spoken date, e.g. "Monday 6th". */
+  accessibleDate: string;
   isSelected: boolean;
-  /** Calendar “today”: gold chip background; session dot is black on gold (WCAG). */
   isToday: boolean;
   dotKind: DotKind;
   onPress: () => void;
   onLayout?: (event: LayoutChangeEvent) => void;
 };
 
+const STATUS_DESCRIPTION: Record<DotKind, string> = {
+  completed: ', completed',
+  skipped: ', skipped',
+  workout: ', session scheduled',
+  none: ', rest day',
+};
+
+function StatusMark({ dotKind }: { dotKind: DotKind }) {
+  if (dotKind === 'completed') {
+    return (
+      <Ionicons
+        name="checkmark"
+        size={STATUS_ICON_SIZE}
+        color={color.success}
+      />
+    );
+  }
+  if (dotKind === 'skipped') {
+    return (
+      <Ionicons name="close" size={STATUS_ICON_SIZE} color={color.danger} />
+    );
+  }
+  if (dotKind === 'workout') {
+    return <View style={styles.scheduledDot} />;
+  }
+  return null;
+}
+
 export function DaySelectorDayChip({
-  label,
-  subLabel,
+  weekday,
+  dayOfMonth,
+  accessibleDate,
   isSelected,
   isToday,
   dotKind,
@@ -26,57 +62,33 @@ export function DaySelectorDayChip({
   onLayout,
 }: DaySelectorDayChipProps) {
   return (
-    <TouchableOpacity
-      style={[
-        styles.dayItem,
-        isSelected && styles.dayItemSelected,
-        isToday && styles.dayItemToday,
-      ]}
+    <Pressable
+      style={styles.dayItem}
       onPress={onPress}
       onLayout={onLayout}
       accessibilityRole="button"
-      accessibilityLabel={`${label}${
-        dotKind === 'completed'
-          ? ', completed'
-          : dotKind === 'skipped'
-            ? ', skipped'
-            : ''
+      accessibilityLabel={`${accessibleDate}${isToday ? ', today' : ''}${
+        STATUS_DESCRIPTION[dotKind]
       }`}
+      accessibilityState={{ selected: isSelected }}
     >
       <Text
         style={[
-          styles.dayLabel,
-          isSelected && !isToday && styles.dayLabelSelected,
-          isToday && styles.dayLabelOnToday,
+          styles.weekday,
+          isToday && styles.weekdayToday,
+          isSelected && !isToday && styles.weekdaySelected,
         ]}
       >
-        {label}
+        {isToday ? 'Today' : weekday}
       </Text>
-      {!!subLabel && (
-        <Text
-          style={[
-            styles.daySubLabel,
-            isSelected && !isToday && styles.daySubLabelSelected,
-            isToday && styles.daySubLabelOnToday,
-          ]}
-        >
-          {subLabel}
-        </Text>
-      )}
-      <View
-        style={[
-          styles.dot,
-          dotKind === 'completed'
-            ? styles.dotCompleted
-            : dotKind === 'skipped'
-              ? styles.dotSkipped
-              : dotKind === 'workout'
-                ? isToday
-                  ? styles.dotWorkoutToday
-                  : styles.dotWorkoutOnDarkSurface
-                : styles.dotPlaceholder,
-        ]}
-      />
-    </TouchableOpacity>
+      <Text
+        style={[styles.dayOfMonth, isSelected && styles.dayOfMonthSelected]}
+      >
+        {dayOfMonth}
+      </Text>
+      <View style={styles.statusSlot}>
+        <StatusMark dotKind={dotKind} />
+      </View>
+    </Pressable>
   );
 }

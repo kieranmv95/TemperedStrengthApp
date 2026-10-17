@@ -4,6 +4,8 @@ import {
 } from '@/src/components/daySelectorConstants';
 import { DaySelectorDayChip } from '@/src/components/DaySelectorDayChip';
 import { daySelectorStyles as styles } from '@/src/components/daySelectorStyles';
+import { ActionChip } from '@/src/components/ds';
+import { useMotion } from '@/src/hooks/useMotion';
 import type { ProgramSessionStatus } from '@/src/types/storage';
 import React, {
   useCallback,
@@ -18,10 +20,47 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   ScrollView,
-  Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
+
+const WEEKDAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const WEEKDAYS_LONG = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
+
+type ChipLayout = { x: number; width: number; height: number };
+
+function JumpToTodayButton({ onPress }: { onPress: () => void }) {
+  const motionHelpers = useMotion();
+  const opacity = useSharedValue(0);
+
+  useEffect(() => {
+    opacity.set(motionHelpers.fade(1, 'fast'));
+  }, [opacity, motionHelpers]);
+
+  const fadeStyle = useAnimatedStyle(() => ({ opacity: opacity.get() }));
+
+  return (
+    <Animated.View style={[styles.timelineActionRow, fadeStyle]}>
+      <ActionChip
+        label="Jump to today"
+        icon="today-outline"
+        tone="gold"
+        onPress={onPress}
+      />
+    </Animated.View>
+  );
+}
 
 type DaySelectorProps = {
   startDate: string;
@@ -38,12 +77,14 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
   sessionStatuses,
   onDaySelect,
 }) => {
+  const motionHelpers = useMotion();
   const scrollViewRef = useRef<ComponentRef<typeof ScrollView>>(null);
   const lastStartDateRef = useRef<string>(startDate);
   const [isTodayVisible, setIsTodayVisible] = useState(true);
-  const chipLayoutsRef = useRef<Map<number, { x: number; width: number }>>(
-    new Map()
-  );
+  const chipLayoutsRef = useRef<Map<number, ChipLayout>>(new Map());
+  const indicatorX = useSharedValue(0);
+  const indicatorWidth = useSharedValue(0);
+  const indicatorHeight = useSharedValue(0);
 
   const start = new Date(startDate);
   start.setHours(0, 0, 0, 0);
@@ -70,18 +111,20 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
 
   const isTodaySelected = currentDayIndex === todayDayIndex;
 
-  const getDayLabel = (dayIndex: number): string => {
+  const getDayParts = (dayIndex: number) => {
     const date = new Date(start);
     date.setDate(date.getDate() + dayIndex);
     const day = date.getDate();
-    const weekdayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const weekday = weekdayLabels[date.getDay()] ?? '';
 
     const suffix = ['th', 'st', 'nd', 'rd'][
       day % 10 > 3 || Math.floor((day % 100) / 10) === 1 ? 0 : day % 10
     ];
 
-    return `${weekday} ${day}${suffix}`;
+    return {
+      weekday: WEEKDAYS_SHORT[date.getDay()] ?? '',
+      dayOfMonth: day,
+      accessibleDate: `${WEEKDAYS_LONG[date.getDay()] ?? ''} ${day}${suffix}`,
+    };
   };
 
   const isToday = (dayIndex: number): boolean => {
@@ -213,6 +256,37 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
     scrollToDayCentered,
   ]);
 
+  useEffect(() => {
+    const layout = chipLayoutsRef.current.get(currentDayIndex);
+    if (!layout) return;
+    indicatorX.set(motionHelpers.spring(layout.x, 'gentle'));
+    indicatorWidth.set(motionHelpers.spring(layout.width, 'gentle'));
+    indicatorHeight.set(layout.height);
+  }, [
+    currentDayIndex,
+    indicatorX,
+    indicatorWidth,
+    indicatorHeight,
+    motionHelpers,
+  ]);
+
+  const handleChipLayout = (dayIndex: number, event: LayoutChangeEvent) => {
+    const { x, width, height } = event.nativeEvent.layout;
+    chipLayoutsRef.current.set(dayIndex, { x, width, height });
+    if (dayIndex === currentDayIndex) {
+      indicatorX.set(x);
+      indicatorWidth.set(width);
+      indicatorHeight.set(height);
+    }
+  };
+
+  const indicatorStyle = useAnimatedStyle(() => ({
+    opacity: indicatorWidth.get() > 0 ? 1 : 0,
+    width: indicatorWidth.get(),
+    height: indicatorHeight.get(),
+    transform: [{ translateX: indicatorX.get() }],
+  }));
+
   const showJumpToToday =
     isTodayInRange && (!isTodayVisible || !isTodaySelected);
 
@@ -227,6 +301,10 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
         onScroll={handleScroll}
         scrollEventThrottle={16}
       >
+        <Animated.View
+          style={[styles.indicator, indicatorStyle]}
+          pointerEvents="none"
+        />
         {days.map((dayIndex) => {
           const dayHasWorkout = hasWorkout(dayIndex);
           const dayIsToday = isToday(dayIndex);
@@ -234,38 +312,26 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
           const sessionStatus = sessionStatuses[dayIndex];
 
           const dotKind = sessionStatus ?? (dayHasWorkout ? 'workout' : 'none');
+          const parts = getDayParts(dayIndex);
 
           return (
             <DaySelectorDayChip
               key={dayIndex}
-              label={getDayLabel(dayIndex)}
+              weekday={parts.weekday}
+              dayOfMonth={parts.dayOfMonth}
+              accessibleDate={parts.accessibleDate}
               isSelected={isSelected}
               isToday={dayIsToday}
               dotKind={dotKind}
               onPress={() => onDaySelect(dayIndex)}
-              onLayout={(e: LayoutChangeEvent) => {
-                chipLayoutsRef.current.set(dayIndex, {
-                  x: e.nativeEvent.layout.x,
-                  width: e.nativeEvent.layout.width,
-                });
-              }}
+              onLayout={(e) => handleChipLayout(dayIndex, e)}
             />
           );
         })}
       </ScrollView>
-      {showJumpToToday && (
-        <View style={styles.timelineActionRow}>
-          {showJumpToToday && (
-            <TouchableOpacity
-              style={styles.jumpToTodayButton}
-              onPress={handleJumpToToday}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.jumpToTodayText}>Jump to Today</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      )}
+      {showJumpToToday ? (
+        <JumpToTodayButton onPress={handleJumpToToday} />
+      ) : null}
     </View>
   );
 };
