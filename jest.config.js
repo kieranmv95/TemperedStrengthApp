@@ -2,7 +2,11 @@ const expoPreset = require('jest-expo/jest-preset');
 
 module.exports = {
   ...expoPreset,
-  setupFiles: ['<rootDir>/jest.polyfills.js', ...(expoPreset.setupFiles || [])],
+  setupFiles: [
+    '<rootDir>/jest.polyfills.js',
+    ...(expoPreset.setupFiles || []),
+    'react-native-gesture-handler/jestSetup',
+  ],
   setupFilesAfterEnv: [
     ...(expoPreset.setupFilesAfterEnv || []),
     '<rootDir>/jest.setup.ts',
