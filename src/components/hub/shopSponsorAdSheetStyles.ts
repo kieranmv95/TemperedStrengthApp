@@ -10,25 +10,7 @@ import { StyleSheet } from 'react-native';
 export const SHOP_DETAIL_LOGO_MAX_WIDTH = 200;
 export const SHOP_DETAIL_LOGO_MAX_HEIGHT = 80;
 
-const ACCENT_EDGE_WIDTH = 4;
-
 export const shopSponsorAdSheetStyles = StyleSheet.create({
-  identity: {
-    flexDirection: 'row',
-    gap: space.sm,
-  },
-  accentEdge: {
-    width: ACCENT_EDGE_WIDTH,
-    borderRadius: radius.pill,
-  },
-  identityContent: {
-    flex: 1,
-    gap: space.xs,
-  },
-  overline: {
-    ...typography.overline,
-    color: color.textTertiary,
-  },
   logoPanel: {
     alignItems: 'center',
     justifyContent: 'center',

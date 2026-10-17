@@ -86,31 +86,18 @@ export function ShopSponsorAdSheet({
         </Pressable>
       }
     >
-      <View style={styles.identity}>
+      {logoUrl ? (
         <View
-          style={[styles.accentEdge, { backgroundColor: displayedAd.bgColor }]}
-          accessibilityElementsHidden
-          importantForAccessibility="no-hide-descendants"
-        />
-        <View style={styles.identityContent}>
-          <Text style={styles.overline}>Partner</Text>
-          {logoUrl ? (
-            <View
-              style={[
-                styles.logoPanel,
-                { backgroundColor: displayedAd.bgColor },
-              ]}
-            >
-              <LoadingImage
-                source={{ uri: logoUrl }}
-                style={[styles.logo, { backgroundColor: displayedAd.bgColor }]}
-                resizeMode="contain"
-                accessibilityLabel={`${displayTitle} logo`}
-              />
-            </View>
-          ) : null}
+          style={[styles.logoPanel, { backgroundColor: displayedAd.bgColor }]}
+        >
+          <LoadingImage
+            source={{ uri: logoUrl }}
+            style={[styles.logo, { backgroundColor: displayedAd.bgColor }]}
+            resizeMode="contain"
+            accessibilityLabel={`${displayTitle} logo`}
+          />
         </View>
-      </View>
+      ) : null}
 
       <Text style={styles.description}>{displayedAd.description}</Text>
 
