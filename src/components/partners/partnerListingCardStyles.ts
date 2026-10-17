@@ -1,129 +1,96 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
 
+const THUMB_SIZE = 64;
+
 export const partnerListingCardStyles = StyleSheet.create({
-  card: {
-    marginBottom: Spacing.lg,
+  container: {
+    marginBottom: space.sm,
   },
-  cardCompact: {
+  containerCompact: {
     marginBottom: 0,
-    paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.xl,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: space.sm,
+  },
+  rowWithFavorite: {
+    paddingRight: MIN_TARGET_SIZE - space.xs,
+  },
+  thumb: {
+    width: THUMB_SIZE,
+    height: THUMB_SIZE,
+    borderRadius: radius.pill,
   },
   iconTile: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: Colors.backgroundElevated,
-    borderWidth: 1,
-    borderColor: Colors.backgroundSubtle,
+    width: THUMB_SIZE,
+    height: THUMB_SIZE,
+    borderRadius: radius.pill,
+    backgroundColor: color.surface2,
     alignItems: 'center',
     justifyContent: 'center',
-    overflow: 'hidden',
-  },
-  avatarImage: {
-    width: '100%',
-    height: '100%',
   },
   content: {
     flex: 1,
-    marginLeft: Spacing.xl,
-    gap: Spacing.xs,
-  },
-  contentCompact: {
-    marginLeft: 0,
-    gap: 2,
+    minWidth: 0,
+    gap: space.xxs,
   },
   kindLabel: {
-    color: Colors.accent,
-    fontSize: FontSize.sm,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    ...typography.overline,
+    color: color.textTertiary,
   },
   title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '600',
-    lineHeight: 20,
+    ...typography.headline,
+    color: color.textPrimary,
   },
-  locationRow: {
+  metaRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    columnGap: space.xs,
+    rowGap: space.xxs,
+  },
+  locationItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xs,
+    gap: space.xxs,
+    flexShrink: 1,
   },
   locationText: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.md,
-    flex: 1,
+    ...typography.caption,
+    color: color.textSecondary,
+    flexShrink: 1,
   },
   distanceText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '500',
-    flexShrink: 0,
+    ...typography.captionStrong,
+    fontVariant: ['tabular-nums'],
+    color: color.textSecondary,
   },
   specialtiesText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    lineHeight: 18,
+    ...typography.caption,
+    color: color.textSecondary,
   },
   description: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    lineHeight: 18,
+    ...typography.callout,
+    color: color.textSecondary,
   },
-  statusBadge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
-    marginTop: Spacing.xs,
+  statusRow: {
+    marginTop: space.xxs,
   },
-  statusBadgeOpen: {
-    backgroundColor: Colors.recommendedWashFill,
-    borderWidth: 1,
-    borderColor: Colors.recommendedWashBorder,
-  },
-  statusBadgeClosed: {
-    backgroundColor: Colors.destructiveWashFill,
-    borderWidth: 1,
-    borderColor: Colors.destructiveWashBorder,
-  },
-  statusBadgeText: {
-    fontSize: FontSize.sm,
-    fontWeight: '600',
-  },
-  statusBadgeTextOpen: {
-    color: Colors.recommended,
-  },
-  statusBadgeTextClosed: {
-    color: Colors.destructive,
-  },
-  compactStatus: {
-    fontSize: FontSize.sm,
-    fontWeight: '600',
-    marginLeft: Spacing.sm,
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
-    overflow: 'hidden',
-  },
-  compactStatusOpen: {
-    color: Colors.recommended,
-    backgroundColor: Colors.recommendedWashFill,
-    borderWidth: 1,
-    borderColor: Colors.recommendedWashBorder,
-  },
-  compactStatusClosed: {
-    color: Colors.destructive,
-    backgroundColor: Colors.destructiveWashFill,
-    borderWidth: 1,
-    borderColor: Colors.destructiveWashBorder,
-  },
-  actions: {
-    flexDirection: 'row',
+  favoriteButton: {
+    position: 'absolute',
+    top: space.xxs,
+    right: space.xxs,
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
     alignItems: 'center',
-    gap: Spacing.xl,
+    justifyContent: 'center',
   },
 });

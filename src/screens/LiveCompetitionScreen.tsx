@@ -1,16 +1,20 @@
-import { AppSafeAreaView } from '@/src/components/ds';
+import { StandardLayout } from '@/src/components/ds';
 import { LiveCompetitionCard } from '@/src/components/LiveCompetitionCard';
 import { LiveCompetitionLeaderboard } from '@/src/components/LiveCompetitionLeaderboard';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import type { LiveCompetition } from '@/src/types/live-competition';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import {
   ActivityIndicator,
-  ScrollView,
+  Pressable,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -20,98 +24,72 @@ type LiveCompetitionScreenProps = {
   onRefresh: () => void;
 };
 
+type RefreshButtonProps = {
+  isRefetching: boolean;
+  onRefresh: () => void;
+};
+
+function RefreshButton({ isRefetching, onRefresh }: RefreshButtonProps) {
+  return (
+    <Pressable
+      style={styles.refreshButton}
+      onPress={onRefresh}
+      disabled={isRefetching}
+      accessibilityRole="button"
+      accessibilityLabel="Refresh leaderboard"
+      accessibilityState={{ disabled: isRefetching, busy: isRefetching }}
+    >
+      {isRefetching ? (
+        <ActivityIndicator size="small" color={color.gold} />
+      ) : (
+        <Ionicons name="refresh" size={24} color={color.textPrimary} />
+      )}
+    </Pressable>
+  );
+}
+
 export function LiveCompetitionScreen({
   competition,
   isRefetching,
   onRefresh,
 }: LiveCompetitionScreenProps) {
   return (
-    <AppSafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.headerBackButton}
-          onPress={() => router.back()}
-          accessibilityRole="button"
-          accessibilityLabel="Go back"
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Competition</Text>
-        <TouchableOpacity
-          style={styles.headerRefreshButton}
-          onPress={onRefresh}
-          disabled={isRefetching}
-          accessibilityRole="button"
-          accessibilityLabel="Refresh leaderboard"
-        >
-          {isRefetching ? (
-            <ActivityIndicator size="small" color={Colors.accent} />
-          ) : (
-            <Ionicons name="refresh" size={24} color={Colors.accent} />
-          )}
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        <LiveCompetitionCard competition={competition}>
-          <Text
-            style={[
-              styles.additionalInfo,
-              { color: competition.theme.copyColor },
-            ]}
-          >
-            {competition.additionalInfo}
-          </Text>
-        </LiveCompetitionCard>
-        <LiveCompetitionLeaderboard competition={competition} />
-      </ScrollView>
-    </AppSafeAreaView>
+    <StandardLayout
+      title="Competition"
+      onBackPress={() => router.back()}
+      titleAccessory={
+        <RefreshButton isRefetching={isRefetching} onRefresh={onRefresh} />
+      }
+    >
+      <StandardLayout.Body>
+        <View style={styles.content}>
+          <LiveCompetitionCard competition={competition}>
+            {competition.additionalInfo ? (
+              <Text style={styles.additionalInfo}>
+                {competition.additionalInfo}
+              </Text>
+            ) : null}
+          </LiveCompetitionCard>
+          <LiveCompetitionLeaderboard competition={competition} />
+        </View>
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundScreen,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
-  },
-  headerBackButton: {
-    padding: Spacing.sm,
-    marginLeft: -Spacing.sm,
-  },
-  headerTitle: {
-    flex: 1,
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginHorizontal: Spacing.md,
-  },
-  headerRefreshButton: {
-    width: 40,
-    height: 40,
+  refreshButton: {
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: -Spacing.sm,
+    marginRight: -space.xs,
   },
   content: {
-    paddingHorizontal: Spacing.section,
-    paddingTop: Spacing.xl,
-    paddingBottom: Spacing.section,
-    gap: Spacing.xl,
+    gap: space.lg,
   },
   additionalInfo: {
-    fontSize: FontSize.base,
-    marginBottom: Spacing.lg,
+    ...typography.callout,
+    color: color.textSecondary,
   },
 });

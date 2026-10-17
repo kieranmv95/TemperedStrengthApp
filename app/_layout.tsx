@@ -6,8 +6,7 @@ import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
 import { ToastProvider } from '@/src/hooks/toast-context';
 import { TogetherWeLiftProvider } from '@/src/hooks/together-we-lift-context';
-import { Colors } from '@/src/constants/theme';
-import { fontFamily } from '@/src/constants/tokens';
+import { color, fontFamily } from '@/src/constants/tokens';
 import { initializeRevenueCat } from '@/src/services/revenueCatService';
 import { openAppDatabase } from '@/src/db/database';
 import { getOnboarded, runStorageMigrations } from '@/src/utils/storage';
@@ -43,7 +42,7 @@ export default function RootLayout() {
       return;
     }
     NavigationBar.setStyle('dark');
-    void SystemUI.setBackgroundColorAsync(Colors.backgroundScreen);
+    void SystemUI.setBackgroundColorAsync(color.bg);
   }, []);
 
   useEffect(() => {

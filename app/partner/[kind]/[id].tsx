@@ -1,7 +1,7 @@
-import { AppSafeAreaView, AppScrollView } from '@/src/components/ds';
+import { AppSafeAreaView, AppScrollView, Skeleton } from '@/src/components/ds';
 import { PartnerDetailBody } from '@/src/components/partners/PartnerDetailBody';
 import { partnerDetailStyles as styles } from '@/src/components/partners/partnerDetailStyles';
-import { Colors } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import {
   buildPartnerMapsUrl,
   fetchAllPartnerListings,
@@ -17,22 +17,49 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useRef, useState } from 'react';
-import {
-  ActivityIndicator,
-  Linking,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-
-const KIND_LABELS: Record<PartnerKind, string> = {
-  gym: 'Gym',
-  club: 'Club',
-  coach: 'Coach',
-};
+import { Linking, Pressable, Text, View } from 'react-native';
 
 function isPartnerKind(value: string | undefined): value is PartnerKind {
   return value === 'gym' || value === 'club' || value === 'coach';
+}
+
+type PartnerDetailHeaderProps = {
+  /** Omit to hide the save button, e.g. while loading. */
+  save?: {
+    listingLabel: string;
+    isFavorite: boolean;
+    onToggle: () => void;
+  };
+};
+
+function PartnerDetailHeader({ save }: PartnerDetailHeaderProps) {
+  return (
+    <View style={styles.header}>
+      <Pressable
+        style={styles.headerButton}
+        onPress={() => router.back()}
+        accessibilityRole="button"
+        accessibilityLabel="Back"
+      >
+        <Ionicons name="arrow-back" size={24} color={color.textPrimary} />
+      </Pressable>
+      {save ? (
+        <Pressable
+          style={styles.headerButton}
+          onPress={save.onToggle}
+          accessibilityRole="button"
+          accessibilityLabel={`Save ${save.listingLabel}`}
+          accessibilityState={{ selected: save.isFavorite }}
+        >
+          <Ionicons
+            name={save.isFavorite ? 'bookmark' : 'bookmark-outline'}
+            size={24}
+            color={save.isFavorite ? color.gold : color.textPrimary}
+          />
+        </Pressable>
+      ) : null}
+    </View>
+  );
 }
 
 export default function PartnerDetailScreen() {
@@ -182,17 +209,16 @@ export default function PartnerDetailScreen() {
   if (isLoading) {
     return (
       <AppSafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.headerBackButton}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-          </TouchableOpacity>
-          <View style={styles.headerSpacer} />
-        </View>
-        <View style={styles.errorContainer}>
-          <ActivityIndicator size="large" color={Colors.accent} />
+        <PartnerDetailHeader />
+        <View style={styles.loading}>
+          <Skeleton
+            width="40%"
+            height={16}
+            accessibilityLabel="Loading listing"
+          />
+          <Skeleton width="80%" height={32} />
+          <Skeleton width="100%" height={160} radius="md" />
+          <Skeleton width="100%" height={96} radius="md" />
         </View>
       </AppSafeAreaView>
     );
@@ -201,28 +227,27 @@ export default function PartnerDetailScreen() {
   if (!listing || !isPartnerKind(kind)) {
     return (
       <AppSafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.headerBackButton}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-          </TouchableOpacity>
-          <View style={styles.headerSpacer} />
-        </View>
+        <PartnerDetailHeader />
         <View style={styles.errorContainer}>
           <Ionicons
             name="business-outline"
-            size={64}
-            color={Colors.backgroundSubtle}
+            size={48}
+            color={color.textTertiary}
           />
-          <Text style={styles.errorText}>Listing not found</Text>
-          <TouchableOpacity
-            style={styles.backButton}
+          <Text style={styles.errorTitle} accessibilityRole="header">
+            Listing not found
+          </Text>
+          <Pressable
+            style={({ pressed }) => [
+              styles.backButton,
+              pressed && styles.backButtonPressed,
+            ]}
             onPress={() => router.back()}
+            accessibilityRole="button"
+            accessibilityLabel="Go back"
           >
-            <Text style={styles.backButtonText}>Go Back</Text>
-          </TouchableOpacity>
+            <Text style={styles.backButtonText}>Go back</Text>
+          </Pressable>
         </View>
       </AppSafeAreaView>
     );
@@ -230,28 +255,13 @@ export default function PartnerDetailScreen() {
 
   return (
     <AppSafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.headerBackButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle} numberOfLines={1}>
-          {KIND_LABELS[listing.kind]}
-        </Text>
-        <TouchableOpacity
-          style={styles.favoriteButton}
-          onPress={handleToggleFavorite}
-          accessibilityLabel={isFavorite ? 'Remove from saved' : 'Save listing'}
-        >
-          <Ionicons
-            name={isFavorite ? 'bookmark' : 'bookmark-outline'}
-            size={24}
-            color={isFavorite ? Colors.accent : Colors.textPrimary}
-          />
-        </TouchableOpacity>
-      </View>
+      <PartnerDetailHeader
+        save={{
+          listingLabel: listing.name,
+          isFavorite,
+          onToggle: handleToggleFavorite,
+        }}
+      />
 
       <AppScrollView
         style={styles.scrollView}

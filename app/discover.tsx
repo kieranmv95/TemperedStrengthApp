@@ -1,6 +1,6 @@
-import { AppSafeAreaView } from '@/src/components/ds';
+import { Skeleton, StandardLayout } from '@/src/components/ds';
 import { DiscoverPartnersContent } from '@/src/components/partners/DiscoverPartnersContent';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { color, space, typography } from '@/src/constants/tokens';
 import { useDiscoverLocation } from '@/src/hooks/use-discover-location';
 import { usePartnerListings } from '@/src/hooks/use-partner-listings';
 import { sortPartnerListingsByDistance } from '@/src/services/partnerApiService';
@@ -12,13 +12,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+
+const SKELETON_CARD_HEIGHT = 112;
 
 function sortListingsByDistance<T extends PartnerListing>(
   listings: T[],
@@ -143,98 +139,77 @@ export default function DiscoverScreen() {
   }, []);
 
   return (
-    <AppSafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.headerBackButton}
-          onPress={() => router.back()}
-          accessibilityRole="button"
-          accessibilityLabel="Go back"
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Discover</Text>
-        <View style={styles.headerSpacer} />
-      </View>
-
-      {isLoadingFavorites && !hasListings ? (
-        <View style={styles.centeredState}>
-          <ActivityIndicator size="large" color={Colors.accent} />
-        </View>
-      ) : !hasListings ? (
-        <View style={styles.centeredState}>
-          <Ionicons
-            name="compass-outline"
-            size={64}
-            color={Colors.backgroundSubtle}
+    <StandardLayout
+      title="Discover"
+      onBackPress={() => router.back()}
+      disableScroll
+      edgeToEdgeBody
+    >
+      <StandardLayout.Body>
+        {isLoadingFavorites && !hasListings ? (
+          <View style={styles.loading}>
+            <Skeleton
+              width="100%"
+              height={SKELETON_CARD_HEIGHT}
+              radius="md"
+              accessibilityLabel="Loading listings"
+            />
+            <Skeleton width="100%" height={SKELETON_CARD_HEIGHT} radius="md" />
+            <Skeleton width="100%" height={SKELETON_CARD_HEIGHT} radius="md" />
+          </View>
+        ) : !hasListings ? (
+          <View style={styles.centeredState}>
+            <Ionicons
+              name="compass-outline"
+              size={48}
+              color={color.textTertiary}
+            />
+            <Text style={styles.emptyTitle} accessibilityRole="header">
+              Nothing to discover yet
+            </Text>
+            <Text style={styles.emptyDescription}>
+              Approved gyms, clubs, and coaches will appear here when they join
+              the network.
+            </Text>
+          </View>
+        ) : (
+          <DiscoverPartnersContent
+            gymListings={gymListings}
+            clubListings={clubListings}
+            coachListings={coachListings}
+            savedListings={savedPartnerListings}
+            favoriteKeys={partnerFavorites}
+            userCoords={userCoords}
+            onPressListing={handlePartnerPress}
+            onToggleFavorite={handleTogglePartnerFavorite}
           />
-          <Text style={styles.emptyTitle}>Nothing to discover yet</Text>
-          <Text style={styles.emptyDescription}>
-            Approved gyms, clubs, and coaches will appear here when they join
-            the network.
-          </Text>
-        </View>
-      ) : (
-        <DiscoverPartnersContent
-          gymListings={gymListings}
-          clubListings={clubListings}
-          coachListings={coachListings}
-          savedListings={savedPartnerListings}
-          favoriteKeys={partnerFavorites}
-          userCoords={userCoords}
-          onPressListing={handlePartnerPress}
-          onToggleFavorite={handleTogglePartnerFavorite}
-        />
-      )}
-    </AppSafeAreaView>
+        )}
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundScreen,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
-  },
-  headerBackButton: {
-    padding: Spacing.sm,
-    marginLeft: -Spacing.sm,
-  },
-  headerTitle: {
-    flex: 1,
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginHorizontal: Spacing.md,
-  },
-  headerSpacer: {
-    width: 40,
+  loading: {
+    gap: space.sm,
+    paddingHorizontal: space.md,
+    paddingTop: space.sm,
   },
   centeredState: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: Spacing.section,
-    gap: Spacing.lg,
+    paddingHorizontal: space.xxl,
+    gap: space.xs,
   },
   emptyTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    ...typography.title2,
+    color: color.textPrimary,
     textAlign: 'center',
   },
   emptyDescription: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 22,
+    ...typography.callout,
+    color: color.textSecondary,
     textAlign: 'center',
   },
 });

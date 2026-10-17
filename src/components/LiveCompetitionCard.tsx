@@ -1,5 +1,11 @@
 import { SmallChevron } from '@/src/components/ds';
-import { BorderRadius, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  elevation,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import type { LiveCompetition } from '@/src/types/live-competition';
 import type { ReactNode } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -7,10 +13,15 @@ import { StyleSheet, Text, View } from 'react-native';
 type LiveCompetitionCardProps = {
   competition: LiveCompetition;
   children?: ReactNode;
-  /** Right-side chevron using the competition theme colours. */
   showChevron?: boolean;
 };
 
+const ACCENT_EDGE_WIDTH = 4;
+
+/**
+ * Competition summary in the dark theme. The CMS theme background is used only
+ * as a narrow accent edge; text uses tokens so contrast always passes.
+ */
 export function LiveCompetitionCard({
   competition,
   children,
@@ -19,51 +30,54 @@ export function LiveCompetitionCard({
   const { title, description, theme } = competition;
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: theme.bgColor, borderColor: theme.borderColor },
-      ]}
-    >
-      <View style={styles.body}>
-        <Text style={[styles.title, { color: theme.copyColor }]}>{title}</Text>
-        <Text
-          style={[
-            styles.description,
-            { color: theme.copyColor },
-            children ? styles.descriptionWithAction : null,
-          ]}
-        >
-          {description}
-        </Text>
-        {children}
+    <View style={[styles.container, elevation.raised]}>
+      <View
+        style={[styles.accentEdge, { backgroundColor: theme.bgColor }]}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      />
+      <View style={styles.row}>
+        <View style={styles.body}>
+          <Text style={styles.title} accessibilityRole="header">
+            {title}
+          </Text>
+          <Text style={styles.description}>{description}</Text>
+          {children}
+        </View>
+        {showChevron ? <SmallChevron /> : null}
       </View>
-      {showChevron ? <SmallChevron color={theme.linkColor} /> : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: Spacing.xl,
-    paddingHorizontal: Spacing.xxl,
-    borderWidth: 1,
-    borderRadius: BorderRadius.lg,
+    flexDirection: 'row',
+    borderRadius: radius.md,
+    backgroundColor: color.surface1,
+    overflow: 'hidden',
+  },
+  accentEdge: {
+    width: ACCENT_EDGE_WIDTH,
+  },
+  row: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: space.sm,
+    padding: space.md,
   },
   body: {
     flex: 1,
-    gap: Spacing.md,
     minWidth: 0,
+    gap: space.xs,
   },
   title: {
-    fontSize: FontSize.displayMd,
-    fontWeight: '700',
+    ...typography.title2,
+    color: color.textPrimary,
   },
   description: {
-    fontSize: FontSize.base,
+    ...typography.callout,
+    color: color.textSecondary,
   },
-  descriptionWithAction: {},
 });

@@ -1,5 +1,6 @@
 import { Colors } from '@/src/constants/theme';
 import { color } from '@/src/constants/tokens';
+import { TOGETHER_WE_LIFT } from '@/src/data/togetherWeLift';
 import {
   CONTRAST_MINIMUMS,
   contrastRatio,
@@ -127,6 +128,18 @@ const PAIRS: ContrastPair[] = [
     kind: 'text',
   },
   {
+    name: 'success on successTint over surface2 (open badge on pressed card)',
+    foreground: color.success,
+    background: flattenToHex(color.successTint, color.surface2),
+    kind: 'text',
+  },
+  {
+    name: 'danger on dangerTint over surface2 (closed badge on pressed card)',
+    foreground: color.danger,
+    background: flattenToHex(color.dangerTint, color.surface2),
+    kind: 'text',
+  },
+  {
     name: 'info on infoTint over surface1 (media action chip)',
     foreground: color.info,
     background: flattenToHex(color.infoTint, color.surface1),
@@ -148,6 +161,24 @@ const PAIRS: ContrastPair[] = [
     name: 'gold on goldTintStrong over surface1 (pressed gold action chip)',
     foreground: color.gold,
     background: flattenToHex(color.goldTintStrong, color.surface1),
+    kind: 'text',
+  },
+  {
+    name: 'danger on dangerTint over bg (check-in error)',
+    foreground: color.danger,
+    background: flattenToHex(color.dangerTint, color.bg),
+    kind: 'text',
+  },
+  {
+    name: 'danger on bg (destructive outline button)',
+    foreground: color.danger,
+    background: color.bg,
+    kind: 'text',
+  },
+  {
+    name: 'textPrimary on warningTint over surface1 (creatine loading warning)',
+    foreground: color.textPrimary,
+    background: flattenToHex(color.warningTint, color.surface1),
     kind: 'text',
   },
 
@@ -189,6 +220,24 @@ const PAIRS: ContrastPair[] = [
     kind: 'nonText',
   },
   {
+    name: 'success flow-complete icon vs bg',
+    foreground: color.success,
+    background: color.bg,
+    kind: 'nonText',
+  },
+  {
+    name: 'warning icon vs warningTint over surface1 (creatine loading warning)',
+    foreground: color.warning,
+    background: flattenToHex(color.warningTint, color.surface1),
+    kind: 'nonText',
+  },
+  {
+    name: 'gold switch on track vs surface1',
+    foreground: color.gold,
+    background: color.surface1,
+    kind: 'nonText',
+  },
+  {
     name: 'textSecondary inactive tab icon vs bg',
     foreground: color.textSecondary,
     background: color.bg,
@@ -198,6 +247,26 @@ const PAIRS: ContrastPair[] = [
     name: 'gold active tab icon and indicator vs bg',
     foreground: color.gold,
     background: color.bg,
+    kind: 'nonText',
+  },
+
+  // Together We Lift banner keeps the charity's brand background
+  {
+    name: 'Together We Lift title on brand background (banner)',
+    foreground: TOGETHER_WE_LIFT.colors.title,
+    background: TOGETHER_WE_LIFT.colors.background,
+    kind: 'text',
+  },
+  {
+    name: 'Together We Lift description on brand background (banner)',
+    foreground: TOGETHER_WE_LIFT.colors.description,
+    background: TOGETHER_WE_LIFT.colors.background,
+    kind: 'text',
+  },
+  {
+    name: 'Together We Lift chevron on brand background (banner)',
+    foreground: TOGETHER_WE_LIFT.colors.title,
+    background: TOGETHER_WE_LIFT.colors.background,
     kind: 'nonText',
   },
 

@@ -1,7 +1,7 @@
-import { Colors } from '@/src/constants/theme';
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import { AppSafeAreaView } from '@/src/components/ds';
+import { color } from '@/src/constants/tokens';
 import RevenueCatUI from 'react-native-purchases-ui';
 
 export default function CustomerCenterScreen() {
@@ -21,7 +21,7 @@ export default function CustomerCenterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.backgroundScreen,
+    backgroundColor: color.bg,
   },
   content: {
     flex: 1,

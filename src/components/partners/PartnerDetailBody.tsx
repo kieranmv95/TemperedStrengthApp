@@ -1,7 +1,7 @@
+import { Badge, FilterChip, Tag } from '@/src/components/ds';
 import { GymLeadMedia } from '@/src/components/partners/GymLeadMedia';
 import { partnerDetailStyles as styles } from '@/src/components/partners/partnerDetailStyles';
-import { Pill } from '@/src/components/ds';
-import { Colors } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import {
   formatAddressMultiLine,
   formatServiceRadius,
@@ -26,7 +26,7 @@ import {
 } from '@/src/types/partner';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 const KIND_LABELS: Record<PartnerKind, string> = {
   gym: 'Gym',
@@ -43,6 +43,19 @@ type PartnerDetailBodyProps = {
   onOpenPhone: (phone: string) => void;
   onOpenInMaps: () => void;
 };
+
+type OpenStatusBadgeProps = {
+  isOpen: boolean;
+};
+
+function OpenStatusBadge({ isOpen }: OpenStatusBadgeProps) {
+  return (
+    <Badge
+      label={isOpen ? 'Open now' : 'Closed'}
+      tone={isOpen ? 'success' : 'danger'}
+    />
+  );
+}
 
 export function PartnerDetailBody({
   listing,
@@ -87,33 +100,27 @@ export function PartnerDetailBody({
 
   return (
     <>
-      <Text style={styles.kindBadge}>{KIND_LABELS[listing.kind]}</Text>
-      <View style={styles.titleRow}>
+      <View style={styles.heading}>
+        <Text style={styles.kindLabel}>{KIND_LABELS[listing.kind]}</Text>
+        <Text style={styles.title} accessibilityRole="header">
+          {listing.name}
+        </Text>
         {openStatus !== null ? (
-          <View
-            style={[
-              styles.openStatusDot,
-              openStatus
-                ? styles.openStatusDotOpen
-                : styles.openStatusDotClosed,
-            ]}
-            accessibilityLabel={openStatus ? 'Open now' : 'Closed'}
-          />
+          <View style={styles.statusRow}>
+            <OpenStatusBadge isOpen={openStatus} />
+          </View>
         ) : null}
-        <Text style={styles.title}>{listing.name}</Text>
       </View>
 
       {tabs.length > 1 ? (
         <View style={styles.tabRow}>
           {tabs.map((tab) => (
-            <View key={tab.key} style={styles.tabRowItem}>
-              <Pill
-                variant="card"
-                onPress={() => setActiveTab(tab.key)}
-                isActive={effectiveTab === tab.key}
-                label={tab.label}
-              />
-            </View>
+            <FilterChip
+              key={tab.key}
+              onPress={() => setActiveTab(tab.key)}
+              selected={effectiveTab === tab.key}
+              label={tab.label}
+            />
           ))}
         </View>
       ) : null}
@@ -170,38 +177,39 @@ function PartnerAboutPanel({
   return (
     <View style={styles.tabPanel}>
       {listing.kind === 'gym' && gymHasLeadMedia(listing) ? (
-        <View style={styles.videoSection}>
-          <GymLeadMedia gym={listing} />
-        </View>
+        <GymLeadMedia gym={listing} />
       ) : null}
 
       {focusItems.length > 0 ? (
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.focusAreasScroll}
-          contentContainerStyle={styles.focusAreasRow}
-        >
+        <View style={styles.tagsRow}>
           {focusItems.map((item) => (
-            <View key={item} style={styles.focusAreaPill}>
-              <Text style={styles.focusAreaPillText}>{item}</Text>
-            </View>
+            <Tag key={item} label={item} />
           ))}
-        </ScrollView>
+        </View>
       ) : null}
 
       {listing.links.length > 0 ? (
-        <View style={styles.contentBlock}>
-          {listing.links.map((link) => (
-            <TouchableOpacity
+        <View style={styles.linkList}>
+          {listing.links.map((link, index) => (
+            <Pressable
               key={`${link.label}-${link.url}`}
-              style={styles.textLinkRow}
+              style={({ pressed }) => [
+                styles.linkRow,
+                index > 0 && styles.linkRowDivider,
+                pressed && styles.linkRowPressed,
+              ]}
               onPress={() => onOpenLink(link.url, link.label)}
-              accessibilityLabel={`Open ${link.label}`}
+              accessibilityRole="link"
+              accessibilityLabel={link.label}
+              accessibilityHint="Opens in your browser"
             >
-              <Text style={styles.textLink}>{link.label}</Text>
-              <Ionicons name="open-outline" size={16} color={Colors.accent} />
-            </TouchableOpacity>
+              <Text style={styles.linkText}>{link.label}</Text>
+              <Ionicons
+                name="open-outline"
+                size={18}
+                color={color.textSecondary}
+              />
+            </Pressable>
           ))}
         </View>
       ) : null}
@@ -238,38 +246,46 @@ function PartnerContactBlock({
 
   return (
     <View style={styles.contentBlock}>
-      <Text style={styles.sectionTitle}>Contact</Text>
+      <Text style={styles.sectionTitle} accessibilityRole="header">
+        Contact
+      </Text>
       {listing.email ? (
-        <TouchableOpacity
-          style={styles.contactRow}
+        <Pressable
+          style={({ pressed }) => [
+            styles.contactRow,
+            pressed && styles.contactRowPressed,
+          ]}
           onPress={() => {
             const email = listing.email;
             if (email) {
               onOpenEmail(email);
             }
           }}
-          accessibilityLabel={`Email ${listing.name}`}
+          accessibilityLabel={`Email ${listing.name}, ${listing.email}`}
           accessibilityRole="link"
         >
-          <Ionicons name="mail-outline" size={18} color={Colors.accent} />
+          <Ionicons name="mail-outline" size={18} color={color.textSecondary} />
           <Text style={styles.contactValue}>{listing.email}</Text>
-        </TouchableOpacity>
+        </Pressable>
       ) : null}
       {listing.phone ? (
-        <TouchableOpacity
-          style={styles.contactRow}
+        <Pressable
+          style={({ pressed }) => [
+            styles.contactRow,
+            pressed && styles.contactRowPressed,
+          ]}
           onPress={() => {
             const phone = listing.phone;
             if (phone) {
               onOpenPhone(phone);
             }
           }}
-          accessibilityLabel={`Call ${listing.name}`}
+          accessibilityLabel={`Call ${listing.name}, ${listing.phone}`}
           accessibilityRole="link"
         >
-          <Ionicons name="call-outline" size={18} color={Colors.accent} />
+          <Ionicons name="call-outline" size={18} color={color.textSecondary} />
           <Text style={styles.contactValue}>{listing.phone}</Text>
-        </TouchableOpacity>
+        </Pressable>
       ) : null}
     </View>
   );
@@ -296,51 +312,42 @@ function PartnerVisitPanel({
     <View style={styles.tabPanel}>
       {hidesLocation ? (
         <View style={styles.contentBlock}>
-          {openStatus !== null ? (
-            <Text
-              style={[
-                styles.visitStatusLine,
-                openStatus ? styles.visitStatusOpen : styles.visitStatusClosed,
-              ]}
-            >
-              {openStatus ? 'Open now' : 'Closed'}
-            </Text>
-          ) : null}
-          <Text style={styles.description}>
+          {openStatus !== null ? <OpenStatusBadge isOpen={openStatus} /> : null}
+          <Text style={styles.sectionBody}>
             Exact address not listed publicly.
           </Text>
           {listing.kind === 'coach' && listing.radiusServedKm != null ? (
-            <Text style={styles.description}>
+            <Text style={styles.sectionBody}>
               {formatServiceRadius(listing.radiusServedKm)}
             </Text>
           ) : null}
         </View>
       ) : (
-        <View style={styles.addressBlock}>
-          {openStatus !== null ? (
-            <Text
-              style={[
-                styles.visitStatusLine,
-                openStatus ? styles.visitStatusOpen : styles.visitStatusClosed,
-              ]}
-            >
-              {openStatus ? 'Open now' : 'Closed'}
-            </Text>
-          ) : null}
-          <Text style={styles.sectionTitle}>Address</Text>
+        <View style={styles.contentBlock}>
+          {openStatus !== null ? <OpenStatusBadge isOpen={openStatus} /> : null}
+          <Text style={styles.sectionTitle} accessibilityRole="header">
+            Address
+          </Text>
           <Text style={styles.addressBody}>
             {formatAddressMultiLine(listing.address)}
           </Text>
           {mapCoords ? (
-            <TouchableOpacity
-              style={styles.contactRow}
+            <Pressable
+              style={({ pressed }) => [
+                styles.contactRow,
+                pressed && styles.contactRowPressed,
+              ]}
               onPress={onOpenInMaps}
               accessibilityRole="link"
               accessibilityLabel={`Open ${listing.name} in Maps`}
             >
-              <Ionicons name="map-outline" size={18} color={Colors.accent} />
+              <Ionicons
+                name="map-outline"
+                size={18}
+                color={color.textSecondary}
+              />
               <Text style={styles.contactValue}>Open in Maps</Text>
-            </TouchableOpacity>
+            </Pressable>
           ) : null}
           {listing.kind === 'coach' && listing.radiusServedKm != null ? (
             <Text style={styles.sectionBody}>
@@ -352,9 +359,16 @@ function PartnerVisitPanel({
 
       {openingHours ? (
         <View style={styles.contentBlock}>
-          <Text style={styles.sectionTitle}>Opening hours</Text>
+          <Text style={styles.sectionTitle} accessibilityRole="header">
+            Opening hours
+          </Text>
           {orderedOpeningHours(openingHours).map((row) => (
-            <View key={row.day} style={styles.hoursRow}>
+            <View
+              key={row.day}
+              style={styles.hoursRow}
+              accessible
+              accessibilityLabel={`${row.label}, ${row.hours}`}
+            >
               <Text style={styles.hoursDay}>{row.label}</Text>
               <Text style={styles.hoursValue}>{row.hours}</Text>
             </View>

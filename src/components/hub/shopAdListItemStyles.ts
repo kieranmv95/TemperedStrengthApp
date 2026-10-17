@@ -1,37 +1,37 @@
-import { BorderRadius, FontSize, Spacing } from '@/src/constants/theme';
+import { color, radius, space, typography } from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
 
+const ICON_WELL_SIZE = 40;
+
 export const shopAdListItemStyles = StyleSheet.create({
-  card: {
+  content: {
+    gap: space.xs,
+  },
+  overline: {
+    ...typography.overline,
+    color: color.textTertiary,
+  },
+  imagePanel: {
     width: '100%',
     aspectRatio: 1,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1.5,
-    padding: Spacing.lg,
-    overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    position: 'absolute',
-    top: Spacing.lg,
-    left: Spacing.lg,
-    right: Spacing.lg,
-    zIndex: 1,
-    fontSize: FontSize.md,
-    fontWeight: '800',
-    letterSpacing: -0.2,
-    textAlign: 'center',
-    opacity: 0.75,
-  },
-  thumbWrap: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: space.sm,
+    borderRadius: radius.sm,
+    backgroundColor: color.textPrimary,
   },
   image: {
-    width: '70%',
-    height: '70%',
+    flex: 1,
+    backgroundColor: color.textPrimary,
+  },
+  iconWell: {
+    width: ICON_WELL_SIZE,
+    height: ICON_WELL_SIZE,
+    borderRadius: radius.sm,
+    backgroundColor: color.surface2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    ...typography.headline,
+    color: color.textPrimary,
   },
 });

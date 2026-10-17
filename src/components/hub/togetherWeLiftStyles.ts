@@ -1,13 +1,33 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
 
-export const TOGETHER_WE_LIFT_LOGO_SIZE = 25;
+export const TOGETHER_WE_LIFT_LOGO_SIZE = 28;
+const SHEET_LOGO_SIZE = 72;
 
 export const togetherWeLiftStyles = StyleSheet.create({
   bannerCard: {
     alignSelf: 'stretch',
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+    padding: space.md,
+    borderRadius: radius.md,
+    ...elevation.raised,
+  },
+  bannerCardPressed: {
+    opacity: 0.88,
+  },
+  logoPanel: {
+    padding: space.xxs,
+    borderRadius: radius.sm,
+    backgroundColor: color.textPrimary,
   },
   logoImage: {
     width: TOGETHER_WE_LIFT_LOGO_SIZE,
@@ -16,140 +36,90 @@ export const togetherWeLiftStyles = StyleSheet.create({
   bannerContent: {
     flex: 1,
     minWidth: 0,
-    justifyContent: 'center',
-    gap: Spacing.md,
+    gap: space.xs,
   },
   bannerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
+    gap: space.sm,
   },
   bannerTitle: {
-    fontSize: FontSize.xl,
-    fontWeight: '800',
-    letterSpacing: -0.2,
+    ...typography.headline,
+    flexShrink: 1,
   },
   bannerDescription: {
-    fontSize: FontSize.base,
-    lineHeight: 20,
-    fontWeight: '500',
-  },
-  bannerCta: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.pill,
-  },
-  bannerCtaText: {
-    fontSize: FontSize.md,
-    fontWeight: '700',
+    ...typography.callout,
   },
 
-  sheetOverlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  sheetBackdrop: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: Colors.overlayMedium,
-  },
-  sheet: {
-    borderTopLeftRadius: BorderRadius.pill,
-    borderTopRightRadius: BorderRadius.pill,
-    paddingTop: Spacing.xl,
-    paddingHorizontal: Spacing.section,
-    maxHeight: '88%',
-  },
-  sheetCloseButton: {
-    position: 'absolute',
-    top: Spacing.lg,
-    right: Spacing.lg,
-    zIndex: 1,
-    padding: Spacing.xs,
-  },
-  sheetContent: {
-    alignItems: 'center',
-    gap: Spacing.lg,
-    paddingTop: Spacing.sm,
-    paddingBottom: Spacing.sm,
-  },
-  sheetLogoWrap: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 88,
-    height: 88,
+  sheetLogoPanel: {
+    alignSelf: 'center',
+    padding: space.xs,
+    borderRadius: radius.md,
+    backgroundColor: color.textPrimary,
   },
   sheetLogo: {
-    width: 88,
-    height: 88,
-  },
-  sheetTitle: {
-    fontSize: FontSize.displayMd,
-    fontWeight: '800',
-    letterSpacing: -0.3,
-    textAlign: 'center',
-  },
-  sheetAboutBlock: {
-    alignSelf: 'stretch',
-    gap: Spacing.md,
-    paddingHorizontal: Spacing.xs,
+    width: SHEET_LOGO_SIZE,
+    height: SHEET_LOGO_SIZE,
   },
   sheetAbout: {
-    fontSize: FontSize.lg,
-    lineHeight: 22,
-    fontWeight: '500',
-    textAlign: 'center',
+    ...typography.body,
+    color: color.textSecondary,
   },
   temperedAside: {
-    alignSelf: 'stretch',
-    paddingVertical: Spacing.md,
-    paddingLeft: Spacing.lg,
-    borderLeftWidth: 4,
-    gap: Spacing.sm,
+    gap: space.xs,
+    padding: space.md,
+    borderRadius: radius.md,
+    backgroundColor: color.surface2,
   },
   temperedAsideHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
+    gap: space.xs,
   },
   temperedAsideLabel: {
-    fontSize: FontSize.sm,
-    fontWeight: '800',
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
+    ...typography.captionStrong,
+    color: color.textPrimary,
   },
   temperedAsideText: {
-    fontSize: FontSize.lg,
-    lineHeight: 22,
-    fontWeight: '500',
-    fontStyle: 'italic',
+    ...typography.callout,
+    color: color.textPrimary,
   },
   sheetActions: {
-    alignSelf: 'stretch',
-    gap: Spacing.md,
-    marginTop: Spacing.sm,
+    flexDirection: 'row',
+    gap: space.sm,
   },
-  linkButton: {
+  sheetActionsStacked: {
+    flexDirection: 'column-reverse',
+  },
+  actionButton: {
+    flexGrow: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
-    paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.section,
-    borderRadius: BorderRadius.pill,
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.md,
+    borderRadius: radius.pill,
   },
-  linkButtonPrimary: {
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.section,
-    borderRadius: BorderRadius.pill,
-    alignItems: 'center',
+  secondaryButton: {
+    borderWidth: 1,
+    borderColor: color.borderStrong,
   },
-  linkButtonText: {
-    fontSize: FontSize.lg,
-    fontWeight: '700',
+  secondaryButtonPressed: {
+    backgroundColor: color.surface3,
   },
-  linkButtonTextSecondary: {
-    fontSize: FontSize.base,
-    fontWeight: '700',
+  secondaryButtonText: {
+    ...typography.calloutStrong,
+    color: color.textPrimary,
+  },
+  primaryButton: {
+    backgroundColor: color.gold,
+  },
+  primaryButtonPressed: {
+    backgroundColor: color.goldStrong,
+  },
+  primaryButtonText: {
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
 });

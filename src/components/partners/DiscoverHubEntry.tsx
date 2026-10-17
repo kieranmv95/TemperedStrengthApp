@@ -1,9 +1,11 @@
-import { Card, CuratedSection, SmallChevron } from '@/src/components/ds';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { CuratedSection, PressableCard } from '@/src/components/ds';
+import { color, radius, space, typography } from '@/src/constants/tokens';
 import { usePartnerListings } from '@/src/hooks/use-partner-listings';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
+const ICON_WELL_SIZE = 40;
 
 type DiscoverHubEntryProps = {
   onPress: () => void;
@@ -23,69 +25,64 @@ export function DiscoverHubEntry({ onPress }: DiscoverHubEntryProps) {
         icon="compass-outline"
         iconSizeOverride={18}
         title="Discover"
-        description="Find local gyms, PT's and coaches near you"
+        description="Find local gyms, PTs and coaches near you."
         size="large"
       />
 
-      <Card
+      <PressableCard
         onPress={onPress}
-        accessibilityLabel="Browse gyms, clubs, and coaches"
-        style={styles.discoverCard}
+        accessibilityLabel="Browse the network, gyms, clubs, and coaches approved by Tempered Strength"
+        accessibilityHint="Browse gyms, clubs, and coaches"
       >
-        <View style={styles.visualTile}>
-          <Ionicons name="compass-outline" size={30} color={Colors.accent} />
+        <View style={styles.row}>
+          <View style={styles.iconWell}>
+            <Ionicons name="compass-outline" size={22} color={color.gold} />
+          </View>
+          <View style={styles.textColumn}>
+            <Text style={styles.eyebrow}>Discover</Text>
+            <Text style={styles.title}>Browse the network</Text>
+            <Text style={styles.description}>
+              Gyms, clubs, and coaches approved by Tempered Strength.
+            </Text>
+          </View>
         </View>
-        <View style={styles.textColumn}>
-          <Text style={styles.eyebrow}>Discover</Text>
-          <Text style={styles.title}>Browse the network</Text>
-          <Text style={styles.description}>
-            Gyms, clubs, and coaches approved by Tempered Strength.
-          </Text>
-        </View>
-        <SmallChevron />
-      </Card>
+      </PressableCard>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   subSection: {
-    gap: Spacing.md,
+    gap: space.sm,
   },
-  discoverCard: {
-    backgroundColor: Colors.accentWashFill,
-    borderColor: Colors.accentWashBorder,
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
   },
-  visualTile: {
-    width: 72,
-    height: 72,
-    borderRadius: BorderRadius.lg,
-    backgroundColor: Colors.backgroundElevated,
-    borderWidth: 1,
-    borderColor: Colors.accentWashOutline,
+  iconWell: {
+    width: ICON_WELL_SIZE,
+    height: ICON_WELL_SIZE,
+    borderRadius: radius.sm,
+    backgroundColor: color.goldTint,
     alignItems: 'center',
     justifyContent: 'center',
   },
   textColumn: {
     flex: 1,
-    marginLeft: Spacing.xl,
-    gap: Spacing.xs,
+    minWidth: 0,
+    gap: space.xxs,
   },
   eyebrow: {
-    color: Colors.accent,
-    fontSize: FontSize.sm,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
+    ...typography.overline,
+    color: color.textTertiary,
   },
   title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
   },
   description: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
+    ...typography.callout,
+    color: color.textSecondary,
   },
 });

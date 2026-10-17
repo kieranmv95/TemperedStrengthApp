@@ -1,5 +1,5 @@
-import { Pill } from '@/src/components/ds';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { FilterChip } from '@/src/components/ds';
+import { color, radius, space, typography } from '@/src/constants/tokens';
 import type { LiveCompetition } from '@/src/types/live-competition';
 import {
   formatLiveCompetitionScore,
@@ -10,6 +10,9 @@ import {
 } from '@/src/utils/liveCompetition';
 import { useEffect, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+
+const RANK_COLUMN_WIDTH = 32;
+const SCORE_COLUMN_MIN_WIDTH = 72;
 
 type LiveCompetitionLeaderboardProps = {
   competition: LiveCompetition;
@@ -51,22 +54,27 @@ export function LiveCompetitionLeaderboard({
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.categoryPills}
+        style={styles.categoryScroll}
+        contentContainerStyle={styles.categoryChips}
       >
         {categories.map((category) => (
-          <Pill
+          <FilterChip
             key={category}
             label={category}
-            isActive={category === activeCategory}
+            selected={category === activeCategory}
             onPress={() => setActiveCategory(category)}
           />
         ))}
       </ScrollView>
 
-      <View style={styles.tableHeader}>
-        <Text style={[styles.headerCell, styles.rankHeader]}>#</Text>
-        <Text style={[styles.headerCell, styles.nameHeader]}>Name</Text>
-        <Text style={[styles.headerCell, styles.scoreHeader]}>
+      <View
+        style={styles.tableHeader}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
+        <Text style={[styles.headerCell, styles.rankColumn]}>#</Text>
+        <Text style={[styles.headerCell, styles.nameColumn]}>Name</Text>
+        <Text style={[styles.headerCell, styles.scoreColumn]}>
           {scoreLabel}
         </Text>
       </View>
@@ -75,23 +83,30 @@ export function LiveCompetitionLeaderboard({
         <Text style={styles.emptyState}>No results for this category yet.</Text>
       ) : (
         <View style={styles.tableBody}>
-          {rankedEntries.map((item, index) => (
-            <View key={`${item.name}-${item.category}-${item.score}`}>
-              {index > 0 ? <View style={styles.rowSeparator} /> : null}
-              <View style={styles.row}>
-                <Text style={[styles.cell, styles.rankCell]}>{index + 1}</Text>
-                <Text style={[styles.cell, styles.nameCell]} numberOfLines={1}>
+          {rankedEntries.map((item, index) => {
+            const formattedScore = formatLiveCompetitionScore(
+              item.score,
+              competition.metricType
+            );
+            return (
+              <View
+                key={`${item.name}-${item.category}-${item.score}`}
+                style={styles.row}
+                accessible
+                accessibilityLabel={`Rank ${index + 1}, ${item.name}, ${formattedScore}`}
+              >
+                <Text style={[styles.rankCell, styles.rankColumn]}>
+                  {index + 1}
+                </Text>
+                <Text style={[styles.nameCell, styles.nameColumn]}>
                   {item.name}
                 </Text>
-                <Text style={[styles.cell, styles.scoreCell]}>
-                  {formatLiveCompetitionScore(
-                    item.score,
-                    competition.metricType
-                  )}
+                <Text style={[styles.scoreCell, styles.scoreColumn]}>
+                  {formattedScore}
                 </Text>
               </View>
-            </View>
-          ))}
+            );
+          })}
         </View>
       )}
     </View>
@@ -100,77 +115,64 @@ export function LiveCompetitionLeaderboard({
 
 const styles = StyleSheet.create({
   container: {
-    gap: Spacing.lg,
+    gap: space.sm,
   },
-  categoryPills: {
-    flexDirection: 'row',
-    gap: Spacing.sm,
-    paddingRight: Spacing.section,
+  categoryScroll: {
+    marginHorizontal: -space.md,
+  },
+  categoryChips: {
+    gap: space.xs,
+    paddingHorizontal: space.md,
+    paddingVertical: space.xxs,
   },
   tableHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: Spacing.md,
-    paddingBottom: Spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
+    paddingHorizontal: space.md,
+    paddingTop: space.xs,
   },
   headerCell: {
-    color: Colors.textMuted,
-    fontSize: FontSize.sm,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    ...typography.overline,
+    color: color.textTertiary,
   },
-  rankHeader: {
-    width: 32,
+  rankColumn: {
+    width: RANK_COLUMN_WIDTH,
   },
-  nameHeader: {
+  nameColumn: {
     flex: 1,
+    paddingRight: space.sm,
   },
-  scoreHeader: {
-    minWidth: 72,
+  scoreColumn: {
+    minWidth: SCORE_COLUMN_MIN_WIDTH,
     textAlign: 'right',
   },
   tableBody: {
-    gap: 0,
+    gap: space.xs,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.md,
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.md,
-  },
-  rowSeparator: {
-    height: Spacing.sm,
-  },
-  cell: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
+    paddingHorizontal: space.md,
+    paddingVertical: space.sm,
+    backgroundColor: color.surface1,
+    borderRadius: radius.md,
   },
   rankCell: {
-    width: 32,
-    color: Colors.textMuted,
-    fontWeight: '700',
+    ...typography.numericSmall,
+    color: color.textSecondary,
   },
   nameCell: {
-    flex: 1,
-    fontWeight: '600',
-    paddingRight: Spacing.md,
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
   scoreCell: {
-    minWidth: 72,
-    textAlign: 'right',
-    fontWeight: '700',
-    color: Colors.accent,
+    ...typography.numericSmall,
+    color: color.textPrimary,
   },
   emptyState: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 24,
+    ...typography.callout,
+    color: color.textSecondary,
     textAlign: 'center',
-    paddingVertical: Spacing.xl,
+    paddingVertical: space.lg,
   },
 });

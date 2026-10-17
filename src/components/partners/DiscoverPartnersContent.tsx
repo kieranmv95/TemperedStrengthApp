@@ -1,10 +1,12 @@
-import { Pill } from '@/src/components/ds';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { FilterChip } from '@/src/components/ds';
+import { color, space, typography } from '@/src/constants/tokens';
 import type { UserCoords } from '@/src/services/discoverLocationService';
 import type { PartnerListing } from '@/src/types/partner';
 import { partnerFavoriteKey } from '@/src/types/partner';
+import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PartnerListingCard } from './PartnerListingCard';
 
 type DiscoverTab = 'saved' | 'gym' | 'club' | 'coach';
@@ -20,6 +22,10 @@ type DiscoverPartnersContentProps = {
   onToggleFavorite: (listing: PartnerListing) => void;
 };
 
+function listingsLabel(count: number): string {
+  return `${count} listing${count === 1 ? '' : 's'}`;
+}
+
 export function DiscoverPartnersContent({
   gymListings,
   clubListings,
@@ -30,11 +36,12 @@ export function DiscoverPartnersContent({
   onPressListing,
   onToggleFavorite,
 }: DiscoverPartnersContentProps) {
+  const insets = useSafeAreaInsets();
   const tabs = useMemo(() => {
     const items: {
       key: DiscoverTab;
       label: string;
-      icon?: string;
+      icon?: keyof typeof Ionicons.glyphMap;
       listings: PartnerListing[];
     }[] = [];
 
@@ -85,21 +92,23 @@ export function DiscoverPartnersContent({
   const listHeader = (
     <View style={styles.headerContent}>
       <Text style={styles.description}>
-        Find local gyms, PT&apos;s and coaches near you
+        Find local gyms, PTs and coaches near you.
       </Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        style={styles.tabScroll}
         contentContainerStyle={styles.tabScrollContent}
       >
         {tabs.map((tab) => (
-          <Pill
+          <FilterChip
             key={tab.key}
             onPress={() => setActiveTab(tab.key)}
-            isActive={activeTab === tab.key}
+            selected={activeTab === tab.key}
             label={tab.label}
             icon={tab.icon}
             count={tab.listings.length}
+            accessibilityLabel={`${tab.label}, ${listingsLabel(tab.listings.length)}`}
           />
         ))}
       </ScrollView>
@@ -112,7 +121,10 @@ export function DiscoverPartnersContent({
       keyExtractor={(item) => partnerFavoriteKey(item.kind, item.id)}
       extraData={{ favoriteKeys, userCoords }}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.listContent}
+      contentContainerStyle={[
+        styles.listContent,
+        { paddingBottom: insets.bottom + space.xl },
+      ]}
       ListHeaderComponent={listHeader}
       renderItem={({ item }) => (
         <PartnerListingCard
@@ -125,30 +137,28 @@ export function DiscoverPartnersContent({
           onToggleFavorite={onToggleFavorite}
         />
       )}
-      ItemSeparatorComponent={() => <View style={styles.separator} />}
     />
   );
 }
 
 const styles = StyleSheet.create({
   headerContent: {
-    gap: Spacing.lg,
-    paddingBottom: Spacing.xl,
+    gap: space.sm,
+    paddingBottom: space.md,
   },
   description: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
+    ...typography.callout,
+    color: color.textSecondary,
+  },
+  tabScroll: {
+    marginHorizontal: -space.md,
   },
   tabScrollContent: {
-    gap: Spacing.md,
+    gap: space.xs,
+    paddingHorizontal: space.md,
+    paddingVertical: space.xxs,
   },
   listContent: {
-    paddingHorizontal: Spacing.xxl,
-    paddingTop: Spacing.xxl,
-    paddingBottom: Spacing.section,
-  },
-  separator: {
-    height: Spacing.sm,
+    paddingHorizontal: space.md,
   },
 });

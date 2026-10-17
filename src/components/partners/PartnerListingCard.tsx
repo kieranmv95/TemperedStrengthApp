@@ -1,5 +1,5 @@
-import { Card, SmallChevron } from '@/src/components/ds';
-import { Colors } from '@/src/constants/theme';
+import { Badge, LoadingImage, PressableCard } from '@/src/components/ds';
+import { color } from '@/src/constants/tokens';
 import {
   formatLocationSubtitle,
   formatPartnerDistanceKm,
@@ -14,9 +14,8 @@ import {
   type PartnerListing,
 } from '@/src/types/partner';
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { partnerListingCardStyles as styles } from './partnerListingCardStyles';
 
 const KIND_LABELS: Record<PartnerKind, string> = {
@@ -38,14 +37,7 @@ type PartnerListingLeadMediaProps = {
 function PartnerListingLeadMedia({ listing }: PartnerListingLeadMediaProps) {
   if (listing.imageUrl) {
     return (
-      <View style={styles.iconTile}>
-        <Image
-          source={{ uri: listing.imageUrl }}
-          style={styles.avatarImage}
-          contentFit="cover"
-          accessibilityLabel={`${listing.name} cover`}
-        />
-      </View>
+      <LoadingImage source={{ uri: listing.imageUrl }} style={styles.thumb} />
     );
   }
 
@@ -53,10 +45,23 @@ function PartnerListingLeadMedia({ listing }: PartnerListingLeadMediaProps) {
     <View style={styles.iconTile}>
       <Ionicons
         name={KIND_ICONS[listing.kind]}
-        size={28}
-        color={Colors.accent}
+        size={26}
+        color={color.textSecondary}
       />
     </View>
+  );
+}
+
+type OpenStatusBadgeProps = {
+  isOpen: boolean;
+};
+
+function OpenStatusBadge({ isOpen }: OpenStatusBadgeProps) {
+  return (
+    <Badge
+      label={isOpen ? 'Open now' : 'Closed'}
+      tone={isOpen ? 'success' : 'danger'}
+    />
   );
 }
 
@@ -96,113 +101,90 @@ export function PartnerListingCard({
     : null;
   const distanceLabel =
     distanceKm != null ? formatPartnerDistanceKm(distanceKm) : null;
+  const showMetaRow =
+    !!locationSubtitle || !!distanceLabel || (isCompact && openStatus !== null);
 
-  const stopPropagation = (event: { stopPropagation: () => void }) => {
-    event.stopPropagation();
-  };
-
-  const handleToggleFavorite = (event: { stopPropagation: () => void }) => {
-    event.stopPropagation();
-    onToggleFavorite?.(listing);
-  };
+  const accessibilityLabel = [
+    listing.name,
+    KIND_LABELS[listing.kind],
+    locationSubtitle,
+    distanceLabel ? `${distanceLabel} away` : null,
+    openStatus === null ? null : openStatus ? 'Open now' : 'Closed',
+    tagsSubtitle,
+  ]
+    .filter((part): part is string => !!part)
+    .join(', ');
 
   return (
-    <Card
-      onPress={() => onPress(listing)}
-      accessibilityLabel={`Open ${listing.name}`}
-      style={[styles.card, isCompact && styles.cardCompact]}
-    >
-      {!isCompact ? <PartnerListingLeadMedia listing={listing} /> : null}
-      <View style={[styles.content, isCompact && styles.contentCompact]}>
-        {!isCompact ? (
-          <Text style={styles.kindLabel}>{KIND_LABELS[listing.kind]}</Text>
-        ) : null}
-        <Text style={styles.title} numberOfLines={isCompact ? 1 : 2}>
-          {listing.name}
-        </Text>
-        {locationSubtitle ||
-        distanceLabel ||
-        (isCompact && openStatus !== null) ? (
-          <View style={styles.locationRow}>
-            {locationSubtitle || distanceLabel ? (
-              <>
-                <Ionicons
-                  name="location-outline"
-                  size={12}
-                  color={Colors.textPlaceholder}
-                />
-                {locationSubtitle ? (
-                  <Text style={styles.locationText} numberOfLines={1}>
-                    {locationSubtitle}
-                  </Text>
+    <View style={[styles.container, isCompact && styles.containerCompact]}>
+      <PressableCard
+        onPress={() => onPress(listing)}
+        showChevron={!canFavorite}
+        accessibilityLabel={accessibilityLabel}
+        accessibilityHint="Opens the listing"
+      >
+        <View style={[styles.row, canFavorite && styles.rowWithFavorite]}>
+          {!isCompact ? <PartnerListingLeadMedia listing={listing} /> : null}
+          <View style={styles.content}>
+            {!isCompact ? (
+              <Text style={styles.kindLabel}>{KIND_LABELS[listing.kind]}</Text>
+            ) : null}
+            <Text style={styles.title}>{listing.name}</Text>
+            {showMetaRow ? (
+              <View style={styles.metaRow}>
+                {locationSubtitle || distanceLabel ? (
+                  <View style={styles.locationItem}>
+                    <Ionicons
+                      name="location-outline"
+                      size={14}
+                      color={color.textSecondary}
+                    />
+                    {locationSubtitle ? (
+                      <Text style={styles.locationText}>
+                        {locationSubtitle}
+                      </Text>
+                    ) : null}
+                  </View>
                 ) : null}
                 {distanceLabel ? (
-                  <Text style={styles.distanceText} numberOfLines={1}>
-                    {distanceLabel}
-                  </Text>
+                  <Text style={styles.distanceText}>{distanceLabel}</Text>
                 ) : null}
-              </>
+                {isCompact && openStatus !== null ? (
+                  <OpenStatusBadge isOpen={openStatus} />
+                ) : null}
+              </View>
             ) : null}
-            {isCompact && openStatus !== null ? (
-              <Text
-                style={[
-                  styles.compactStatus,
-                  openStatus
-                    ? styles.compactStatusOpen
-                    : styles.compactStatusClosed,
-                ]}
-              >
-                {openStatus ? 'Open now' : 'Closed'}
+            {tagsSubtitle ? (
+              <Text style={styles.specialtiesText}>{tagsSubtitle}</Text>
+            ) : null}
+            {!isCompact && listing.description ? (
+              <Text style={styles.description} numberOfLines={2}>
+                {listing.description}
               </Text>
             ) : null}
+            {!isCompact && openStatus !== null ? (
+              <View style={styles.statusRow}>
+                <OpenStatusBadge isOpen={openStatus} />
+              </View>
+            ) : null}
           </View>
-        ) : null}
-        {tagsSubtitle ? (
-          <Text style={styles.specialtiesText} numberOfLines={1}>
-            {tagsSubtitle}
-          </Text>
-        ) : null}
-        {!isCompact && listing.description ? (
-          <Text style={styles.description} numberOfLines={2}>
-            {listing.description}
-          </Text>
-        ) : null}
-        {!isCompact && openStatus !== null ? (
-          <View
-            style={[
-              styles.statusBadge,
-              openStatus ? styles.statusBadgeOpen : styles.statusBadgeClosed,
-            ]}
-          >
-            <Text
-              style={[
-                styles.statusBadgeText,
-                openStatus
-                  ? styles.statusBadgeTextOpen
-                  : styles.statusBadgeTextClosed,
-              ]}
-            >
-              {openStatus ? 'Open now' : 'Closed'}
-            </Text>
-          </View>
-        ) : null}
-      </View>
-      <View style={styles.actions}>
-        {canFavorite ? (
-          <TouchableOpacity
-            onPress={handleToggleFavorite}
-            onPressIn={stopPropagation}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Ionicons
-              name={isFavorite ? 'bookmark' : 'bookmark-outline'}
-              size={22}
-              color={isFavorite ? Colors.accent : Colors.textPlaceholder}
-            />
-          </TouchableOpacity>
-        ) : null}
-        <SmallChevron />
-      </View>
-    </Card>
+        </View>
+      </PressableCard>
+      {canFavorite ? (
+        <Pressable
+          onPress={() => onToggleFavorite?.(listing)}
+          style={styles.favoriteButton}
+          accessibilityRole="button"
+          accessibilityLabel={`Save ${listing.name}`}
+          accessibilityState={{ selected: isFavorite }}
+        >
+          <Ionicons
+            name={isFavorite ? 'bookmark' : 'bookmark-outline'}
+            size={22}
+            color={isFavorite ? color.gold : color.textSecondary}
+          />
+        </Pressable>
+      ) : null}
+    </View>
   );
 }

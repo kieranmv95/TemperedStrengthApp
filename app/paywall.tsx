@@ -1,4 +1,4 @@
-import { Colors } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { getOfferings } from '@/src/services/revenueCatService';
 import { router } from 'expo-router';
@@ -40,13 +40,13 @@ export default function PaywallScreen() {
             'No offerings available. Check RevenueCat dashboard configuration.'
           );
           Alert.alert(
-            'Paywall Configuration Error',
+            'Paywall configuration error',
             'No subscription packages are available. Please ensure:\n\n' +
               '1. Products are configured in RevenueCat dashboard\n' +
               '2. An offering is created and set as current\n' +
               '3. Products match your App Store Connect product IDs\n' +
               "4. Products are in 'Ready to Submit' or 'Approved' state\n\n" +
-              'Error Code: Configuration Error (No Offerings)',
+              'Error code: Configuration error (no offerings)',
             [
               {
                 text: 'OK',
@@ -85,7 +85,7 @@ export default function PaywallScreen() {
         } else if (result === RevenueCatUI.PAYWALL_RESULT.NOT_PRESENTED) {
           // Paywall wasn't presented (e.g., no internet, no offerings)
           Alert.alert(
-            'Unable to Load Paywall',
+            'Unable to load paywall',
             'The paywall could not be displayed. Please check your internet connection and try again.',
             [
               {
@@ -148,8 +148,8 @@ export default function PaywallScreen() {
         });
 
         Alert.alert(
-          'Paywall Error',
-          `${errorMessage}\n\nError Code: ${errorCode}`,
+          'Paywall error',
+          `${errorMessage}\n\nError code: ${errorCode}`,
           [
             {
               text: 'OK',
@@ -165,8 +165,13 @@ export default function PaywallScreen() {
 
   // Show loading indicator while presenting paywall
   return (
-    <View style={styles.container}>
-      <ActivityIndicator size="large" color={Colors.accent} />
+    <View
+      style={styles.container}
+      accessible
+      accessibilityLabel="Loading subscription options"
+      accessibilityState={{ busy: true }}
+    >
+      <ActivityIndicator size="large" color={color.gold} />
     </View>
   );
 }
@@ -174,7 +179,7 @@ export default function PaywallScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.backgroundScreen,
+    backgroundColor: color.bg,
     alignItems: 'center',
     justifyContent: 'center',
   },

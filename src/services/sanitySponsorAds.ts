@@ -313,7 +313,7 @@ function mapSponsorAd(raw: SanitySponsorAdDoc): HomeSponsorAd | null {
     description,
     layout: layoutRaw,
     affiliateUrl,
-    ctaLabel: ctaLabel.length > 0 ? ctaLabel : 'Visit Website',
+    ctaLabel: ctaLabel.length > 0 ? ctaLabel : 'Visit website',
     bgColor: themeColor(
       theme,
       'backgroundColor',
