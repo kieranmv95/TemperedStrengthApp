@@ -1,4 +1,4 @@
-import type { TextStyle, ViewStyle } from 'react-native';
+import { Platform, type TextStyle, type ViewStyle } from 'react-native';
 
 /**
  * "Forged" design tokens. Single source of truth for colour, type, spacing,
@@ -41,6 +41,7 @@ export const color = {
   dangerTint: 'rgba(255, 122, 112, 0.12)',
   info: '#6CB4EE',
   infoTint: 'rgba(108, 180, 238, 0.12)',
+  infoTintStrong: 'rgba(108, 180, 238, 0.24)',
 
   scrim: 'rgba(0, 0, 0, 0.6)',
 } as const;
@@ -153,7 +154,10 @@ export const space = {
 
 export type SpaceToken = keyof typeof space;
 
-/** One radius per component type: chips sm, cards md, sheets lg, pills pill. */
+/**
+ * One radius per component type: tags and badges sm, cards md, sheets lg,
+ * interactive chips and buttons pill. The shape difference signals what's tappable.
+ */
 export const radius = {
   sm: 10,
   md: 16,
@@ -163,8 +167,8 @@ export const radius = {
 
 export type RadiusToken = keyof typeof radius;
 
-/** Minimum interactive target (iOS 44pt; Android 48dp is applied per platform by callers). */
-export const MIN_TARGET_SIZE = 44;
+/** Minimum interactive target: 44pt (Apple HIG) on iOS, 48dp (Material) on Android. */
+export const MIN_TARGET_SIZE = Platform.OS === 'android' ? 48 : 44;
 
 /**
  * Depth on dark UI comes from surface tone plus a soft shadow and a 1px top

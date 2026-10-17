@@ -1,28 +1,8 @@
+import { mockReduceMotion } from '@/jest/mockReduceMotion';
 import { motion } from '@/src/constants/tokens';
 import { useMotion } from '@/src/hooks/useMotion';
 import { act, renderHook } from '@testing-library/react-native';
-import { AccessibilityInfo } from 'react-native';
 import { withSpring, withTiming } from 'react-native-reanimated';
-
-type ReduceMotionListener = (enabled: boolean) => void;
-
-function mockReduceMotion(enabled: boolean) {
-  let listener: ReduceMotionListener | null = null;
-  jest
-    .spyOn(AccessibilityInfo, 'isReduceMotionEnabled')
-    .mockResolvedValue(enabled);
-  jest
-    .spyOn(AccessibilityInfo, 'addEventListener')
-    .mockImplementation((_event, handler) => {
-      listener = handler as ReduceMotionListener;
-      return { remove: jest.fn() } as unknown as ReturnType<
-        typeof AccessibilityInfo.addEventListener
-      >;
-    });
-  return {
-    change: (next: boolean) => listener?.(next),
-  };
-}
 
 async function renderMotion() {
   const hook = await renderHook(() => useMotion());

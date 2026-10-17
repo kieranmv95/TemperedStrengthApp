@@ -125,6 +125,24 @@ const PAIRS: ContrastPair[] = [
     background: flattenToHex(color.infoTint, color.surface1),
     kind: 'text',
   },
+  {
+    name: 'info on infoTintStrong over surface1 (pressed action chip)',
+    foreground: color.info,
+    background: flattenToHex(color.infoTintStrong, color.surface1),
+    kind: 'text',
+  },
+  {
+    name: 'info on infoTint over surface2 (action chip on hero card)',
+    foreground: color.info,
+    background: flattenToHex(color.infoTint, color.surface2),
+    kind: 'text',
+  },
+  {
+    name: 'gold on goldTintStrong over surface1 (pressed gold action chip)',
+    foreground: color.gold,
+    background: flattenToHex(color.goldTintStrong, color.surface1),
+    kind: 'text',
+  },
 
   // Non-text UI (SC 1.4.11)
   {
