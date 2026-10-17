@@ -201,6 +201,10 @@ export default function RootLayout() {
                       options={{ headerShown: false }}
                     />
                     <Stack.Screen
+                      name="dev/components"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
                       name="account/general"
                       options={{ headerShown: false }}
                     />

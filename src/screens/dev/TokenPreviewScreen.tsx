@@ -1,10 +1,11 @@
 import { MotionTokenPreview } from '@/src/components/dev/MotionTokenPreview';
+import { PreviewHeader } from '@/src/components/dev/PreviewHeader';
+import { PreviewSection } from '@/src/components/dev/PreviewSection';
 import { AppSafeAreaView, AppScrollView } from '@/src/components/ds';
 import {
   color,
   elevation,
   fontFamily,
-  MIN_TARGET_SIZE,
   radius,
   space,
   typography,
@@ -15,17 +16,9 @@ import {
   type TypographyToken,
 } from '@/src/constants/tokens';
 import { contrastRatio } from '@/src/utils/contrast';
-import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
-import { router } from 'expo-router';
 import React from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 const COLOR_TOKENS = Object.keys(color) as ColorToken[];
 const TYPOGRAPHY_TOKENS = Object.keys(typography) as TypographyToken[];
@@ -38,22 +31,6 @@ const NUMERIC_TOKENS: TypographyToken[] = [
   'numericMedium',
   'numericSmall',
 ];
-
-type SectionProps = {
-  title: string;
-  children: React.ReactNode;
-};
-
-function Section({ title, children }: SectionProps) {
-  return (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle} accessibilityRole="header">
-        {title}
-      </Text>
-      {children}
-    </View>
-  );
-}
 
 type ColorRowProps = {
   token: ColorToken;
@@ -110,38 +87,26 @@ export function TokenPreviewScreen() {
   return (
     <AppSafeAreaView style={styles.screen}>
       <AppScrollView contentContainerStyle={styles.content}>
-        <Pressable
-          style={styles.backButton}
-          onPress={() => router.back()}
-          accessibilityRole="button"
-          accessibilityLabel="Back"
-        >
-          <Ionicons name="arrow-back" size={24} color={color.textPrimary} />
-        </Pressable>
+        <PreviewHeader
+          title="Design tokens"
+          subtitle={`Font scale ${fontScale.toFixed(2)} · Barlow Condensed ${
+            displayFontLoaded ? 'loaded' : 'not loaded (system fallback)'
+          }`}
+        />
 
-        <View style={styles.header}>
-          <Text style={styles.title} accessibilityRole="header">
-            Design tokens
-          </Text>
-          <Text style={styles.subtitle}>
-            Font scale {fontScale.toFixed(2)} · Barlow Condensed{' '}
-            {displayFontLoaded ? 'loaded' : 'not loaded (system fallback)'}
-          </Text>
-        </View>
-
-        <Section title="Colour">
+        <PreviewSection title="Colour">
           {COLOR_TOKENS.map((token) => (
             <ColorRow key={token} token={token} />
           ))}
-        </Section>
+        </PreviewSection>
 
-        <Section title="Typography">
+        <PreviewSection title="Typography">
           {TYPOGRAPHY_TOKENS.map((token) => (
             <TypographyRow key={token} token={token} />
           ))}
-        </Section>
+        </PreviewSection>
 
-        <Section title="Spacing">
+        <PreviewSection title="Spacing">
           {SPACE_TOKENS.map((token) => (
             <View key={token} style={styles.spaceRow}>
               <Text style={styles.spaceLabel}>
@@ -150,9 +115,9 @@ export function TokenPreviewScreen() {
               <View style={[styles.spaceBar, { width: space[token] }]} />
             </View>
           ))}
-        </Section>
+        </PreviewSection>
 
-        <Section title="Radius">
+        <PreviewSection title="Radius">
           <View style={styles.radiusRow}>
             {RADIUS_TOKENS.map((token) => (
               <View key={token} style={styles.radiusItem}>
@@ -165,20 +130,20 @@ export function TokenPreviewScreen() {
               </View>
             ))}
           </View>
-        </Section>
+        </PreviewSection>
 
-        <Section title="Elevation">
+        <PreviewSection title="Elevation">
           {ELEVATION_TOKENS.map((token) => (
             <View key={token} style={[styles.elevationCard, elevation[token]]}>
               <Text style={styles.tokenName}>{token}</Text>
               <Text style={styles.tokenMeta}>surface1</Text>
             </View>
           ))}
-        </Section>
+        </PreviewSection>
 
-        <Section title="Motion">
+        <PreviewSection title="Motion">
           <MotionTokenPreview />
-        </Section>
+        </PreviewSection>
       </AppScrollView>
     </AppSafeAreaView>
   );
@@ -195,30 +160,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.md,
     paddingBottom: space.jumbo,
     gap: space.xxl,
-  },
-  backButton: {
-    width: MIN_TARGET_SIZE,
-    height: MIN_TARGET_SIZE,
-    justifyContent: 'center',
-    marginLeft: -space.xs,
-  },
-  header: {
-    gap: space.xxs,
-  },
-  title: {
-    ...typography.display,
-    color: color.textPrimary,
-  },
-  subtitle: {
-    ...typography.callout,
-    color: color.textSecondary,
-  },
-  section: {
-    gap: space.sm,
-  },
-  sectionTitle: {
-    ...typography.title2,
-    color: color.textPrimary,
   },
   colorRow: {
     flexDirection: 'row',

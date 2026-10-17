@@ -654,6 +654,23 @@ export function YouAccountSettingsScreen() {
                 <SmallChevron />
               </TouchableOpacity>
 
+              <TouchableOpacity
+                style={styles.settingItem}
+                onPress={() => router.push('/dev/components')}
+                accessibilityRole="button"
+              >
+                <View style={styles.settingContent}>
+                  <Text style={styles.settingTitle}>
+                    Design components preview
+                  </Text>
+                  <Text style={styles.settingDescription}>
+                    The new shared components in isolation, with press,
+                    selection and Reduce Motion behaviour.
+                  </Text>
+                </View>
+                <SmallChevron />
+              </TouchableOpacity>
+
               <View style={styles.settingItem}>
                 <View style={styles.settingContent}>
                   <Text style={styles.settingTitle}>Force Pro mode</Text>
