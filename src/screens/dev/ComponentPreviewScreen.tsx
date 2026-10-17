@@ -1,5 +1,6 @@
 import { DemoOverlays } from '@/src/components/dev/DemoOverlays';
 import { DemoSetLogger } from '@/src/components/dev/DemoSetLogger';
+import { DemoTabBar } from '@/src/components/dev/DemoTabBar';
 import { PreviewHeader } from '@/src/components/dev/PreviewHeader';
 import { PreviewSection } from '@/src/components/dev/PreviewSection';
 import {
@@ -236,6 +237,13 @@ export function ComponentPreviewScreen() {
 
         <PreviewSection title="BottomSheet and Toast">
           <DemoOverlays />
+        </PreviewSection>
+
+        <PreviewSection title="TabBar">
+          <Text style={styles.cardBody}>
+            Not wired into the app yet; that happens with the screen phase.
+          </Text>
+          <DemoTabBar />
         </PreviewSection>
 
         <PreviewSection title="Skeleton">
