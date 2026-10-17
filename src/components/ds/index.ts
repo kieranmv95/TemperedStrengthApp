@@ -11,6 +11,7 @@ import {
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
   IosKeyboardDoneAccessory,
 } from './IosKeyboardDoneAccessory';
+import { LoadingImage } from './LoadingImage';
 import { NumberField } from './NumberField';
 import { Pill } from './Pill';
 import { PressableCard } from './PressableCard';
@@ -41,6 +42,7 @@ export {
   IconSymbol,
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
   IosKeyboardDoneAccessory,
+  LoadingImage,
   NumberField,
   Pill,
   PressableCard,
