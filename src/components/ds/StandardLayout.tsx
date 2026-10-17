@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ActionChip } from './Chip';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
 import { color, space, typography } from '@/src/constants/tokens';
 
@@ -233,14 +234,24 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
                     />
                   </TouchableOpacity>
                 ) : null}
-                <TouchableOpacity
-                  style={styles.filtersToggle}
-                  onPress={() => router.push('/glossary')}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.filtersToggleText}>Glossary</Text>
-                  <Ionicons name="book" size={16} color={Colors.textMuted} />
-                </TouchableOpacity>
+                {forged ? (
+                  <ActionChip
+                    label="Glossary"
+                    icon="book-outline"
+                    tone="neutral"
+                    onPress={() => router.push('/glossary')}
+                    accessibilityLabel="Open the glossary"
+                  />
+                ) : (
+                  <TouchableOpacity
+                    style={styles.filtersToggle}
+                    onPress={() => router.push('/glossary')}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.filtersToggleText}>Glossary</Text>
+                    <Ionicons name="book" size={16} color={Colors.textMuted} />
+                  </TouchableOpacity>
+                )}
                 {filterBarButtons}
               </View>
               {filterBarBelowButtons ? (

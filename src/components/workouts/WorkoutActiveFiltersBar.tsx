@@ -1,9 +1,10 @@
-import { Pill } from '@/src/components/ds';
+import { ActionChip } from '@/src/components/ds';
 import {
   categoryFilterDisplayLabel,
+  focusTagDisplayLabel,
   type CategoryFilter,
 } from '@/src/components/workouts/workoutsScreenConstants';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { space } from '@/src/constants/tokens';
 import type {
   WorkoutEquipment,
   WorkoutFocusTag,
@@ -14,15 +15,8 @@ import {
   equipmentFilterLabel,
   type WorkoutTimeBucket,
 } from '@/src/utils/workoutFilters';
-import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 const SEARCH_LABEL_MAX = 28;
 
@@ -102,78 +96,61 @@ export function WorkoutActiveFiltersBar({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        <TouchableOpacity
-          style={styles.resetButton}
+        <ActionChip
+          label="Reset all"
+          icon="refresh"
+          tone="neutral"
           onPress={onResetAll}
-          activeOpacity={0.8}
-          accessibilityRole="button"
           accessibilityLabel="Reset all filters"
-        >
-          <Ionicons name="close-circle" size={16} color={Colors.textMuted} />
-          <Text style={styles.resetButtonText}>Reset all</Text>
-        </TouchableOpacity>
+        />
 
         {trimmedSearch.length > 0 ? (
-          <Pill
+          <RemovableFilter
             label={`Search: ${searchLabel}`}
-            isActive
-            onPress={onClearSearch}
-            icon="search"
+            onRemove={onClearSearch}
           />
         ) : null}
 
         {activeCategoryFilter !== 'All' ? (
-          <Pill
+          <RemovableFilter
             label={categoryFilterDisplayLabel(activeCategoryFilter)}
-            isActive
-            onPress={onClearCategory}
-            icon={
-              activeCategoryFilter === 'Favorites'
-                ? 'heart'
-                : activeCategoryFilter === 'Pro'
-                  ? 'star'
-                  : undefined
-            }
+            onRemove={onClearCategory}
           />
         ) : null}
 
         {selectedFocus.map((tag) => (
-          <Pill
+          <RemovableFilter
             key={`focus-${tag}`}
-            label={tag}
-            isActive
-            onPress={() => onRemoveFocus(tag)}
+            label={focusTagDisplayLabel(tag)}
+            onRemove={() => onRemoveFocus(tag)}
           />
         ))}
 
         {selectedFormat.map((tag) => (
-          <Pill
+          <RemovableFilter
             key={`format-${tag}`}
             label={tag}
-            isActive
-            onPress={() => onRemoveFormat(tag)}
+            onRemove={() => onRemoveFormat(tag)}
           />
         ))}
 
         {selectedTimeBuckets.map((bucket) => (
-          <Pill
+          <RemovableFilter
             key={`time-${bucket}`}
             label={timeBucketLabel(bucket)}
-            isActive
-            onPress={() => onRemoveTimeBucket(bucket)}
+            onRemove={() => onRemoveTimeBucket(bucket)}
           />
         ))}
 
         {noEquipmentOnly ? (
-          <Pill label="No equipment" isActive onPress={onClearNoEquipment} />
+          <RemovableFilter label="No equipment" onRemove={onClearNoEquipment} />
         ) : null}
 
         {selectedEquipment.map((eq) => (
-          <Pill
+          <RemovableFilter
             key={eq}
             label={equipmentFilterLabel(eq)}
-            isActive
-            onPress={() => onRemoveEquipment(eq)}
+            onRemove={() => onRemoveEquipment(eq)}
           />
         ))}
       </ScrollView>
@@ -181,31 +158,32 @@ export function WorkoutActiveFiltersBar({
   );
 }
 
+type RemovableFilterProps = {
+  label: string;
+  onRemove: () => void;
+};
+
+function RemovableFilter({ label, onRemove }: RemovableFilterProps) {
+  return (
+    <ActionChip
+      label={label}
+      icon="close"
+      tone="gold"
+      onPress={onRemove}
+      accessibilityLabel={`Remove ${label} filter`}
+    />
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
-    paddingTop: Spacing.xl,
-    paddingBottom: Spacing.md,
+    paddingTop: space.sm,
+    paddingBottom: space.xs,
   },
   scrollContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
-    paddingRight: Spacing.xxl,
-  },
-  resetButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.control,
-    borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundCard,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-  },
-  resetButtonText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
+    gap: space.xs,
+    paddingRight: space.md,
   },
 });

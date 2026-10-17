@@ -166,6 +166,9 @@ type ActionChipProps = {
   /** e.g. "How to perform, Snatch". Defaults to the visible label. */
   accessibilityLabel?: string;
   accessibilityHint?: string;
+  accessibilityState?: { expanded?: boolean; selected?: boolean };
+  /** Shown after the label, e.g. a count badge. */
+  trailing?: React.ReactNode;
 };
 
 /** Icon + label button for inline actions such as "How to perform". */
@@ -176,6 +179,8 @@ export function ActionChip({
   tone = 'info',
   accessibilityLabel,
   accessibilityHint,
+  accessibilityState,
+  trailing,
 }: ActionChipProps) {
   const tones = ACTION_TONES[tone];
 
@@ -186,6 +191,7 @@ export function ActionChip({
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? label}
       accessibilityHint={accessibilityHint}
+      accessibilityState={accessibilityState}
       style={({ pressed }) => [
         styles.chip,
         { backgroundColor: pressed ? tones.pressedFill : tones.fill },
@@ -193,6 +199,7 @@ export function ActionChip({
     >
       <Ionicons name={icon} size={CHIP_ICON_SIZE} color={tones.foreground} />
       <Text style={[styles.label, { color: tones.foreground }]}>{label}</Text>
+      {trailing}
     </Pressable>
   );
 }

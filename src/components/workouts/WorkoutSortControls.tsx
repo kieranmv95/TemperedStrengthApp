@@ -1,15 +1,22 @@
-import { Pill } from '@/src/components/ds';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { ActionChip, AnimatedNumber, FilterChip } from '@/src/components/ds';
 import {
   WORKOUT_SORT_BY_OPTIONS,
   WORKOUT_SORT_DIRECTION_OPTIONS,
   type WorkoutSortBy,
   type WorkoutSortDirection,
 } from '@/src/components/workouts/workoutsScreenConstants';
+import { color, radius, space, typography } from '@/src/constants/tokens';
+import { useMotion } from '@/src/hooks/useMotion';
 import type { SingleWorkout } from '@/src/types/workouts';
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
+
+const BADGE_MIN_SIZE = 20;
+const BADGE_POP_PEAK = 1.2;
 
 type WorkoutSortBarButtonProps = {
   expanded: boolean;
@@ -21,17 +28,37 @@ export function WorkoutSortBarButton({
   onPress,
 }: WorkoutSortBarButtonProps) {
   return (
-    <TouchableOpacity
-      style={styles.filterBarButton}
+    <ActionChip
+      label="Sort by"
+      icon="swap-vertical"
+      tone="neutral"
       onPress={onPress}
-      activeOpacity={0.8}
-      accessibilityRole="button"
       accessibilityLabel="Sort workouts"
       accessibilityState={{ expanded }}
-    >
-      <Text style={styles.filterBarButtonText}>Sort by</Text>
-      <Ionicons name="swap-vertical" size={16} color={Colors.textMuted} />
-    </TouchableOpacity>
+    />
+  );
+}
+
+function FilterCountBadge({ count }: { count: number }) {
+  const motionHelpers = useMotion();
+  const scale = useSharedValue(1);
+  const previousCount = useRef(count);
+
+  useEffect(() => {
+    if (count !== previousCount.current) {
+      scale.set(motionHelpers.bounce(BADGE_POP_PEAK));
+    }
+    previousCount.current = count;
+  }, [count, scale, motionHelpers]);
+
+  const popStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.get() }],
+  }));
+
+  return (
+    <Animated.View style={[styles.badge, popStyle]}>
+      <AnimatedNumber value={count} style={styles.badgeText} />
+    </Animated.View>
   );
 }
 
@@ -45,21 +72,20 @@ export function WorkoutFiltersBarButton({
   onPress,
 }: WorkoutFiltersBarButtonProps) {
   return (
-    <TouchableOpacity
-      style={styles.filterBarButton}
+    <ActionChip
+      label="Filters"
+      icon="options-outline"
+      tone={activeCount > 0 ? 'gold' : 'neutral'}
       onPress={onPress}
-      activeOpacity={0.8}
-      accessibilityRole="button"
-      accessibilityLabel="Filter workouts"
-    >
-      <Text style={styles.filterBarButtonText}>Filters</Text>
-      <Ionicons name="options-outline" size={16} color={Colors.textMuted} />
-      {activeCount > 0 ? (
-        <View style={styles.filterBadge}>
-          <Text style={styles.filterBadgeText}>{activeCount}</Text>
-        </View>
-      ) : null}
-    </TouchableOpacity>
+      accessibilityLabel={
+        activeCount > 0
+          ? `Filter workouts, ${activeCount} active`
+          : 'Filter workouts'
+      }
+      trailing={
+        activeCount > 0 ? <FilterCountBadge count={activeCount} /> : null
+      }
+    />
   );
 }
 
@@ -79,26 +105,31 @@ export function WorkoutSortPanel({
   return (
     <View style={styles.sortPanel}>
       <View style={styles.sortRow}>
-        <Text style={styles.sortLabel}>Sort by</Text>
-        <View style={styles.sortPills}>
+        <Text style={styles.sortLabel} accessibilityRole="header">
+          Sort by
+        </Text>
+        <View style={styles.sortChips}>
           {WORKOUT_SORT_BY_OPTIONS.map((option) => (
-            <Pill
+            <FilterChip
               key={option.value}
               label={option.label}
-              isActive={sortBy === option.value}
+              selected={sortBy === option.value}
               onPress={() => onChangeSortBy(option.value)}
+              accessibilityLabel={`Sort by ${option.label}`}
             />
           ))}
         </View>
       </View>
       <View style={styles.sortRow}>
-        <Text style={styles.sortLabel}>Order</Text>
-        <View style={styles.sortPills}>
+        <Text style={styles.sortLabel} accessibilityRole="header">
+          Order
+        </Text>
+        <View style={styles.sortChips}>
           {WORKOUT_SORT_DIRECTION_OPTIONS.map((option) => (
-            <Pill
+            <FilterChip
               key={option.value}
               label={option.label}
-              isActive={sortDirection === option.value}
+              selected={sortDirection === option.value}
               onPress={() => onChangeSortDirection(option.value)}
             />
           ))}
@@ -124,55 +155,35 @@ export function compareWorkouts(
 }
 
 const styles = StyleSheet.create({
-  filterBarButton: {
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    gap: Spacing.sm,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
-    borderRadius: BorderRadius.xxl,
-    backgroundColor: Colors.backgroundCard,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-  },
-  filterBarButtonText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.base,
-    fontWeight: '700',
-  },
-  filterBadge: {
-    minWidth: 20,
-    height: 20,
-    borderRadius: BorderRadius.xl,
-    backgroundColor: Colors.accent,
+  badge: {
+    minWidth: BADGE_MIN_SIZE,
+    height: BADGE_MIN_SIZE,
+    paddingHorizontal: space.xxs,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 6,
+    overflow: 'hidden',
   },
-  filterBadgeText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.sm,
-    fontWeight: '700',
+  badgeText: {
+    ...typography.captionStrong,
+    fontVariant: ['tabular-nums'],
+    color: color.onGold,
   },
   sortPanel: {
-    paddingTop: Spacing.md,
-    gap: Spacing.lg,
+    paddingTop: space.sm,
+    gap: space.sm,
   },
   sortRow: {
-    gap: Spacing.md,
+    gap: space.xs,
   },
   sortLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
+    ...typography.captionStrong,
+    color: color.textSecondary,
   },
-  sortPills: {
+  sortChips: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: Spacing.md,
+    gap: space.xs,
   },
 });

@@ -1,16 +1,15 @@
+import { SectionHeader, StandardLayout } from '@/src/components/ds';
+import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
 import {
-  Card,
-  CuratedSection,
-  SmallChevron,
-  StandardLayout,
-} from '@/src/components/ds';
+  DISCIPLINE_TILE_SIZE,
+  DisciplineTile,
+} from '@/src/components/workouts/DisciplineTile';
 import { WorkoutActiveFiltersBar } from '@/src/components/workouts/WorkoutActiveFiltersBar';
 import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
 import {
   WorkoutFiltersSheet,
   type WorkoutFiltersDraft,
 } from '@/src/components/workouts/WorkoutFiltersSheet';
-import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
 import {
   compareWorkouts,
   WorkoutFiltersBarButton,
@@ -22,7 +21,7 @@ import {
   type WorkoutSortBy,
   type WorkoutSortDirection,
 } from '@/src/components/workouts/workoutsScreenConstants';
-import { Colors } from '@/src/constants/theme';
+import { color, space, typography } from '@/src/constants/tokens';
 import { visibleDisciplines } from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useRoles } from '@/src/hooks/useRoles';
@@ -52,14 +51,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {
-  FlatList,
-  ImageBackground,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function WorkoutsScreen() {
   const { isPro, roles, isLoading: accessLoading } = useRoles();
@@ -273,6 +265,7 @@ export default function WorkoutsScreen() {
 
   return (
     <StandardLayout
+      variant="forged"
       title="Workouts"
       subtitle="Log your workouts and track your progress."
       disableScroll
@@ -371,82 +364,65 @@ export default function WorkoutsScreen() {
               name={
                 activeCategoryFilter === 'Favorites'
                   ? 'heart-outline'
-                  : 'barbell'
+                  : 'barbell-outline'
               }
-              size={64}
-              color={Colors.backgroundSubtle}
+              size={48}
+              color={color.textTertiary}
             />
-            <Text style={styles.emptyTitle}>
+            <Text style={styles.emptyTitle} accessibilityRole="header">
               {activeCategoryFilter === 'Favorites'
-                ? 'No Favorites Yet'
-                : 'No Workouts Found'}
+                ? 'No favourites yet'
+                : 'No workouts found'}
             </Text>
             <Text style={styles.emptyDescription}>
               {activeCategoryFilter === 'Favorites'
-                ? 'Tap the heart icon on any workout to save it here.'
+                ? 'Tap the heart on any workout to save it here.'
                 : searchQuery.trim()
                   ? 'No workouts match your search.'
-                  : 'Try selecting a different filter.'}
+                  : 'Try a different filter.'}
             </Text>
           </View>
         ) : (
           <FlatList
             data={sortedWorkouts}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={[
-              styles.listContent,
-              hasActiveFilters && styles.listContentWithActiveFilters,
-            ]}
+            contentContainerStyle={styles.listContent}
             ListHeaderComponent={
-              <View style={styles.curatedSectionList}>
+              <View style={styles.listHeader}>
                 {hasActiveFilters ? (
-                  <Text style={[styles.sectionsHiddenNote, styles.pageGutter]}>
-                    Mobility &amp; flows and Disciplines hidden due to filters
+                  <Text style={[styles.hiddenNote, styles.pageGutter]}>
+                    Mobility &amp; flows and Disciplines are hidden while
+                    filters are on.
                   </Text>
                 ) : (
-                  <View>
+                  <View style={styles.listHeader}>
                     <View style={styles.pageGutter}>
-                      <Card
+                      <HubPromoCard
+                        icon="body-outline"
+                        eyebrow="Move & restore"
+                        title="Mobility & flows"
+                        description="Guided flows to help you recover and move better."
                         onPress={handleOpenRecovery}
-                        accessibilityLabel="Browse recovery flows"
-                        style={styles.recoveryCard}
-                      >
-                        <View style={styles.recoveryVisualTile}>
-                          <Ionicons
-                            name="body"
-                            size={30}
-                            color={Colors.accent}
-                          />
-                        </View>
-                        <View style={styles.recoveryCtaTextColumn}>
-                          <Text style={styles.shopEyebrow}>
-                            Move &amp; restore
-                          </Text>
-                          <Text style={styles.hubCtaTitle}>
-                            Mobility &amp; flows
-                          </Text>
-                          <Text style={styles.hubCtaDescription}>
-                            Guided flows to help you recover and move better.
-                          </Text>
-                        </View>
-                        <SmallChevron />
-                      </Card>
-                      <CuratedSection
-                        title="Disciplines"
-                        description="get started with what you already know"
-                        size="large"
-                        style={styles.titleSpace}
+                        accessibilityLabel="Opens mobility and recovery flows"
                       />
+                    </View>
+                    <View style={[styles.sectionHeading, styles.pageGutter]}>
+                      <SectionHeader title="Disciplines" />
+                      <Text style={styles.sectionDescription}>
+                        Get started with what you already know.
+                      </Text>
                     </View>
                     <ScrollView
                       horizontal
                       showsHorizontalScrollIndicator={false}
-                      contentContainerStyle={styles.curatedScrollContent}
+                      contentContainerStyle={styles.disciplineRow}
+                      snapToInterval={DISCIPLINE_TILE_SIZE + space.sm}
+                      decelerationRate="fast"
                     >
                       {visibleDisciplines.map((discipline) => (
-                        <TouchableOpacity
-                          style={styles.disciplineSection}
+                        <DisciplineTile
                           key={discipline.tag}
+                          discipline={discipline}
                           onPress={() => {
                             posthog.capture(
                               posthogEventsNames.workout.filtersApplied,
@@ -459,40 +435,25 @@ export default function WorkoutsScreen() {
                               `/workouts/tag/${encodeURIComponent(discipline.tag)}`
                             );
                           }}
-                        >
-                          <ImageBackground
-                            source={discipline.image}
-                            style={styles.disciplineImage}
-                            imageStyle={styles.disciplineImageStyle}
-                          />
-                          <View
-                            pointerEvents="none"
-                            style={styles.disciplineGoldOverlay}
-                          />
-                          {discipline.showTitle && (
-                            <Text style={styles.disciplineSectionTitle}>
-                              {discipline.title}
-                            </Text>
-                          )}
-                        </TouchableOpacity>
+                        />
                       ))}
                     </ScrollView>
                   </View>
                 )}
 
-                <View style={styles.pageGutter}>
-                  <CuratedSection
+                <View style={[styles.sectionHeading, styles.pageGutter]}>
+                  <SectionHeader
                     title={
-                      hasActiveFilters ? 'Filtered Workouts' : 'All Workouts'
+                      hasActiveFilters ? 'Filtered workouts' : 'All workouts'
                     }
-                    description={
-                      hasActiveFilters
-                        ? `${sortedWorkouts.length} Results Found`
-                        : `All our workouts, over ${allStandaloneWorkouts.length}+ workouts.`
-                    }
-                    size="large"
-                    style={styles.titleSpace}
                   />
+                  <Text style={styles.sectionDescription}>
+                    {hasActiveFilters
+                      ? `${sortedWorkouts.length} workout${
+                          sortedWorkouts.length === 1 ? '' : 's'
+                        } match`
+                      : `${allStandaloneWorkouts.length}+ workouts`}
+                  </Text>
                 </View>
               </View>
             }
@@ -516,3 +477,48 @@ export default function WorkoutsScreen() {
     </StandardLayout>
   );
 }
+
+const styles = StyleSheet.create({
+  pageGutter: {
+    paddingHorizontal: space.md,
+  },
+  listContent: {
+    paddingBottom: space.xxl,
+  },
+  listHeader: {
+    gap: space.md,
+    paddingBottom: space.sm,
+  },
+  sectionHeading: {
+    gap: space.xxs,
+  },
+  sectionDescription: {
+    ...typography.callout,
+    color: color.textSecondary,
+  },
+  hiddenNote: {
+    ...typography.callout,
+    color: color.textSecondary,
+  },
+  disciplineRow: {
+    gap: space.sm,
+    paddingHorizontal: space.md,
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: space.xs,
+    paddingHorizontal: space.xxl,
+  },
+  emptyTitle: {
+    ...typography.title2,
+    color: color.textPrimary,
+    textAlign: 'center',
+  },
+  emptyDescription: {
+    ...typography.callout,
+    color: color.textSecondary,
+    textAlign: 'center',
+  },
+});

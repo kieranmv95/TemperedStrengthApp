@@ -2,6 +2,7 @@ import type {
   SingleWorkout,
   WorkoutCategory,
   WorkoutEquipment,
+  WorkoutFocusTag,
 } from '@/src/types/workouts';
 
 export type CategoryFilter = 'All' | WorkoutCategory | 'Favorites' | 'Pro';
@@ -28,6 +29,15 @@ export const WORKOUT_SORT_DIRECTION_OPTIONS: {
 export function categoryFilterDisplayLabel(filter: CategoryFilter): string {
   if (filter === 'WOD') return 'CrossFit';
   return filter;
+}
+
+/**
+ * Focus tags shown in filters. "Strength" is also a Discipline (a workout
+ * category), so the focus tag is labelled differently to tell them apart.
+ */
+export function focusTagDisplayLabel(tag: WorkoutFocusTag): string {
+  if (tag === 'Strength') return 'Strength focus';
+  return tag;
 }
 
 export const CATEGORY_FILTERS: CategoryFilter[] = [
