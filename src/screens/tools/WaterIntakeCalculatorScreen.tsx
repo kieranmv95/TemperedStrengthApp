@@ -1,10 +1,11 @@
-import { Pill } from '@/src/components/ds';
+import { FilterChip, NumberField } from '@/src/components/ds';
 import {
   ToolScreenShell,
   toolFormStyles as styles,
 } from '@/src/components/tools/ToolScreenShell';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { color, space, typography } from '@/src/constants/tokens';
 import { getToolById } from '@/src/data/tools';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { increment } from '@/src/services/metricService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
@@ -22,20 +23,22 @@ import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
 import {
+  AccessibilityInfo,
   Keyboard,
-  ScrollView,
+  Pressable,
   StyleSheet,
   Switch,
   Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
 const TOOL = getToolById('water-intake')!;
 
+const SWITCH_TRACK_COLORS = { false: color.borderStrong, true: color.gold };
+
 export function WaterIntakeCalculatorScreen() {
   const posthog = usePostHog();
+  const largeText = useLargeText();
   const [weightUnit, setWeightUnit] = useState<WeightUnit>('kg');
   const [bodyweightInput, setBodyweightInput] = useState('80');
   const [activityLevel, setActivityLevel] = useState<WaterActivityLevel>(1);
@@ -77,6 +80,9 @@ export function WaterIntakeCalculatorScreen() {
 
     setValidationError(null);
     setResult(intake);
+    AccessibilityInfo.announceForAccessibility(
+      `Daily target ${formatWaterMl(intake.totalMl)}`
+    );
     posthog.capture(posthogEventsNames.content.toolCalculate, {
       tool_id: TOOL.id,
       unit: weightUnit,
@@ -88,64 +94,45 @@ export function WaterIntakeCalculatorScreen() {
   return (
     <ToolScreenShell title={TOOL.title}>
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>{TOOL.title}</Text>
         <Text style={styles.cardDescription}>{TOOL.description}</Text>
 
-        <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Weight</Text>
-          <TextInput
-            style={styles.fieldInput}
-            value={bodyweightInput}
-            onChangeText={setBodyweightInput}
-            placeholder="0"
-            placeholderTextColor={Colors.textPlaceholder}
-            keyboardType="decimal-pad"
-            accessibilityLabel="Bodyweight"
-          />
+        <View style={[styles.fieldRow, largeText && styles.fieldRowStacked]}>
+          <View style={styles.fieldInput}>
+            <NumberField
+              label={`Bodyweight (${weightUnit})`}
+              value={bodyweightInput}
+              onChangeText={setBodyweightInput}
+              placeholder={weightUnit}
+              allowDecimal
+            />
+          </View>
           <View style={styles.unitToggle}>
-            {(['kg', 'lb'] as const).map((unit) => {
-              const isActive = weightUnit === unit;
-              return (
-                <TouchableOpacity
-                  key={unit}
-                  style={[
-                    styles.unitOption,
-                    isActive && styles.unitOptionActive,
-                  ]}
-                  onPress={() => setWeightUnit(unit)}
-                  accessibilityLabel={`Use ${unit}`}
-                >
-                  <Text
-                    style={[
-                      styles.unitOptionText,
-                      isActive && styles.unitOptionTextActive,
-                    ]}
-                  >
-                    {unit}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+            {(['kg', 'lb'] as const).map((unit) => (
+              <FilterChip
+                key={unit}
+                label={unit}
+                selected={weightUnit === unit}
+                onPress={() => setWeightUnit(unit)}
+                accessibilityLabel={`Use ${unit}`}
+              />
+            ))}
           </View>
         </View>
 
         <View style={localStyles.section}>
-          <Text style={localStyles.sectionLabel}>Activity level</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={localStyles.activityScroll}
-          >
+          <Text style={styles.sectionLabel}>Activity level</Text>
+          <View style={localStyles.chipRow}>
             {WATER_ACTIVITY_OPTIONS.map((option) => (
-              <Pill
+              <FilterChip
                 key={option.level}
-                onPress={() => setActivityLevel(option.level)}
-                isActive={activityLevel === option.level}
                 label={option.shortLabel}
+                selected={activityLevel === option.level}
+                onPress={() => setActivityLevel(option.level)}
+                accessibilityLabel={`Activity level ${option.label}, ${option.description}`}
               />
             ))}
-          </ScrollView>
-          <Text style={localStyles.activityHint}>
+          </View>
+          <Text style={localStyles.hint}>
             {WATER_ACTIVITY_OPTIONS[activityLevel].description}
           </Text>
         </View>
@@ -153,48 +140,81 @@ export function WaterIntakeCalculatorScreen() {
         <View style={localStyles.creatineRow}>
           <View style={localStyles.creatineText}>
             <Text style={localStyles.creatineLabel}>Taking creatine?</Text>
-            <Text style={localStyles.creatineHint}>
+            <Text style={localStyles.hint}>
               Adds ~3 ml per kg for extra fluid needs
             </Text>
           </View>
           <Switch
             value={takingCreatine}
             onValueChange={setTakingCreatine}
+            trackColor={SWITCH_TRACK_COLORS}
+            ios_backgroundColor={color.borderStrong}
             accessibilityLabel="Taking creatine"
+            accessibilityHint="Adds about 3 ml per kg for extra fluid needs"
           />
         </View>
 
         {validationError ? (
-          <Text style={styles.errorText}>{validationError}</Text>
+          <Text
+            style={styles.errorText}
+            accessibilityRole="alert"
+            accessibilityLiveRegion="polite"
+          >
+            {validationError}
+          </Text>
         ) : null}
 
-        <TouchableOpacity
-          style={styles.primaryButton}
+        <Pressable
+          style={({ pressed }) => [
+            styles.primaryButton,
+            pressed && styles.primaryButtonPressed,
+          ]}
           onPress={handleCalculate}
+          accessibilityRole="button"
           accessibilityLabel="Calculate daily water intake"
         >
           <Text style={styles.primaryButtonText}>Calculate intake</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {result !== null ? (
         <View style={styles.card}>
-          <Text style={styles.resultHeading}>
-            Daily target: {formatWaterMl(result.totalMl)}
-          </Text>
-          <Text style={localStyles.resultSubtext}>
+          <View
+            accessible
+            accessibilityLabel={`Daily target, ${formatWaterMl(result.totalMl)}`}
+          >
+            <Text style={styles.resultLabel} accessibilityRole="header">
+              Daily target
+            </Text>
+            <Text style={styles.resultValue}>
+              {formatWaterMl(result.totalMl)}
+            </Text>
+          </View>
+          <Text style={styles.resultBody}>
             Spread across the day. Drink more around training and in hot
             weather.
           </Text>
 
-          <View style={localStyles.breakdown}>
-            <View style={localStyles.breakdownRow}>
+          <View style={styles.divider}>
+            <View
+              style={localStyles.breakdownRow}
+              accessible
+              accessibilityLabel={`Base hydration, ${formatWaterBreakdownMl(
+                result.baseMl
+              )}`}
+            >
               <Text style={localStyles.breakdownLabel}>Base hydration</Text>
               <Text style={localStyles.breakdownValue}>
                 {formatWaterBreakdownMl(result.baseMl)}
               </Text>
             </View>
-            <View style={localStyles.breakdownRow}>
+            <View
+              style={localStyles.breakdownRow}
+              accessible
+              accessibilityLabel={`Activity, ${
+                result.activityLabel
+              }, plus ${formatWaterBreakdownMl(result.activityMl)}`}
+            >
               <Text style={localStyles.breakdownLabel}>
                 Activity ({result.activityLabel})
               </Text>
@@ -203,7 +223,13 @@ export function WaterIntakeCalculatorScreen() {
               </Text>
             </View>
             {result.creatineMl > 0 ? (
-              <View style={localStyles.breakdownRow}>
+              <View
+                style={localStyles.breakdownRow}
+                accessible
+                accessibilityLabel={`Creatine, plus ${formatWaterBreakdownMl(
+                  result.creatineMl
+                )}`}
+              >
                 <Text style={localStyles.breakdownLabel}>Creatine</Text>
                 <Text style={localStyles.breakdownValue}>
                   +{formatWaterBreakdownMl(result.creatineMl)}
@@ -219,72 +245,44 @@ export function WaterIntakeCalculatorScreen() {
 
 const localStyles = StyleSheet.create({
   section: {
-    gap: Spacing.md,
+    gap: space.xs,
   },
-  sectionLabel: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+  chipRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: space.xs,
   },
-  activityScroll: {
-    gap: Spacing.md,
-  },
-  activityHint: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    lineHeight: 18,
+  hint: {
+    ...typography.caption,
+    color: color.textSecondary,
   },
   creatineRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: Spacing.xl,
-    backgroundColor: Colors.backgroundScreen,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    padding: Spacing.xl,
+    gap: space.md,
   },
   creatineText: {
     flex: 1,
-    gap: Spacing.xs,
+    gap: space.xxs,
   },
   creatineLabel: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
-  },
-  creatineHint: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    lineHeight: 18,
-  },
-  resultSubtext: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-  },
-  breakdown: {
-    marginTop: Spacing.xl,
-    paddingTop: Spacing.xl,
-    borderTopWidth: 1,
-    borderTopColor: Colors.backgroundElevated,
-    gap: Spacing.lg,
+    ...typography.headline,
+    color: color.textPrimary,
   },
   breakdownRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: space.sm,
   },
   breakdownLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
+    ...typography.callout,
+    color: color.textSecondary,
     flex: 1,
   },
   breakdownValue: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.numericSmall,
+    color: color.textPrimary,
   },
 });

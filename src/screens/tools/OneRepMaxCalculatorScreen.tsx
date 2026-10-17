@@ -1,9 +1,10 @@
+import { FilterChip, NumberField } from '@/src/components/ds';
 import {
   ToolScreenShell,
   toolFormStyles as styles,
 } from '@/src/components/tools/ToolScreenShell';
-import { Colors } from '@/src/constants/theme';
 import { getToolById } from '@/src/data/tools';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { increment } from '@/src/services/metricService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
@@ -19,10 +20,10 @@ import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
 import {
+  AccessibilityInfo,
   Keyboard,
+  Pressable,
   Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -30,6 +31,7 @@ const TOOL = getToolById('one-rep-max')!;
 
 export function OneRepMaxCalculatorScreen() {
   const posthog = usePostHog();
+  const largeText = useLargeText();
   const [weightUnit, setWeightUnit] = useState<WeightUnit>('kg');
   const [liftInput, setLiftInput] = useState('100');
   const [repsInput, setRepsInput] = useState('1');
@@ -78,6 +80,12 @@ export function OneRepMaxCalculatorScreen() {
       setValidationError(null);
       setResultOneRmKg(oneRmKg);
       if (trackEvent) {
+        AccessibilityInfo.announceForAccessibility(
+          `Your one-rep max is ${formatDisplayWeight(
+            oneRepMaxKgToDisplay(oneRmKg, weightUnit),
+            weightUnit
+          )}`
+        );
         posthog.capture(posthogEventsNames.content.toolCalculate, {
           tool_id: TOOL.id,
           reps,
@@ -109,87 +117,99 @@ export function OneRepMaxCalculatorScreen() {
   return (
     <ToolScreenShell title={TOOL.title}>
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>{TOOL.title}</Text>
         <Text style={styles.cardDescription}>{TOOL.description}</Text>
 
-        <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Lift</Text>
-          <TextInput
-            style={styles.fieldInput}
-            value={liftInput}
-            onChangeText={setLiftInput}
-            placeholder="0"
-            placeholderTextColor={Colors.textPlaceholder}
-            keyboardType="decimal-pad"
-            accessibilityLabel="Lift weight"
-          />
+        <View style={[styles.fieldRow, largeText && styles.fieldRowStacked]}>
+          <View style={styles.fieldInput}>
+            <NumberField
+              label={`Lift weight (${weightUnit})`}
+              value={liftInput}
+              onChangeText={setLiftInput}
+              placeholder={weightUnit}
+              allowDecimal
+            />
+          </View>
           <View style={styles.unitToggle}>
-            {(['kg', 'lb'] as const).map((unit) => {
-              const isActive = weightUnit === unit;
-              return (
-                <TouchableOpacity
-                  key={unit}
-                  style={[
-                    styles.unitOption,
-                    isActive && styles.unitOptionActive,
-                  ]}
-                  onPress={() => setWeightUnit(unit)}
-                  accessibilityLabel={`Use ${unit}`}
-                >
-                  <Text
-                    style={[
-                      styles.unitOptionText,
-                      isActive && styles.unitOptionTextActive,
-                    ]}
-                  >
-                    {unit}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+            {(['kg', 'lb'] as const).map((unit) => (
+              <FilterChip
+                key={unit}
+                label={unit}
+                selected={weightUnit === unit}
+                onPress={() => setWeightUnit(unit)}
+                accessibilityLabel={`Use ${unit}`}
+              />
+            ))}
           </View>
         </View>
 
-        <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Reps</Text>
-          <TextInput
-            style={styles.fieldInput}
-            value={repsInput}
-            onChangeText={setRepsInput}
-            placeholder="1"
-            placeholderTextColor={Colors.textPlaceholder}
-            keyboardType="number-pad"
-            accessibilityLabel="Repetitions"
-          />
-        </View>
+        <NumberField
+          label="Reps"
+          value={repsInput}
+          onChangeText={setRepsInput}
+          placeholder="1"
+          hint="Whole number from 1 to 20"
+        />
 
         {validationError ? (
-          <Text style={styles.errorText}>{validationError}</Text>
+          <Text
+            style={styles.errorText}
+            accessibilityRole="alert"
+            accessibilityLiveRegion="polite"
+          >
+            {validationError}
+          </Text>
         ) : null}
 
-        <TouchableOpacity
-          style={styles.primaryButton}
+        <Pressable
+          style={({ pressed }) => [
+            styles.primaryButton,
+            pressed && styles.primaryButtonPressed,
+          ]}
           onPress={handleCalculate}
-          accessibilityLabel="Calculate one rep max"
+          accessibilityRole="button"
+          accessibilityLabel="Calculate one-rep max"
         >
-          <Text style={styles.primaryButtonText}>Calculate One Rep Max</Text>
-        </TouchableOpacity>
+          <Text style={styles.primaryButtonText}>Calculate one-rep max</Text>
+        </Pressable>
       </View>
 
       {displayOneRm !== null ? (
         <View style={styles.card}>
-          <Text style={styles.resultHeading}>
-            Your one rep max is {formatDisplayWeight(displayOneRm, weightUnit)}
-          </Text>
+          <View
+            accessible
+            accessibilityLabel={`Your one-rep max is ${formatDisplayWeight(
+              displayOneRm,
+              weightUnit
+            )}`}
+          >
+            <Text style={styles.resultLabel} accessibilityRole="header">
+              Your one-rep max
+            </Text>
+            <Text style={styles.resultValue}>
+              {formatDisplayWeight(displayOneRm, weightUnit)}
+            </Text>
+          </View>
 
           <View>
-            <View style={styles.tableHeader}>
+            <View
+              style={styles.tableHeader}
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            >
               <Text style={styles.tableHeaderCell}>% of 1RM</Text>
               <Text style={styles.tableHeaderCell}>Lift weight</Text>
               <Text style={styles.tableHeaderCell}>Reps</Text>
             </View>
             {percentageTable.map((row) => (
-              <View key={row.percent} style={styles.tableRow}>
+              <View
+                key={row.percent}
+                style={styles.tableRow}
+                accessible
+                accessibilityLabel={`${row.percent}% of one-rep max, ${formatDisplayWeight(
+                  row.weight,
+                  weightUnit
+                )}, ${row.reps} reps`}
+              >
                 <Text style={styles.tableCell}>{row.percent}%</Text>
                 <Text style={styles.tableCell}>
                   {formatDisplayWeight(row.weight, weightUnit)}

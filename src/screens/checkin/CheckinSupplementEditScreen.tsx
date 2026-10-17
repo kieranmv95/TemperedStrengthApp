@@ -1,13 +1,16 @@
+import { CheckinListSkeleton } from '@/src/components/checkin/CheckinListSkeleton';
 import {
+  FilterChip,
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
   IosKeyboardDoneAccessory,
+  NumberField,
   StandardLayout,
 } from '@/src/components/ds';
-import { settingsScreenStyles } from '@/src/components/settings/settingsScreenStyles';
-import { Colors } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import { SUPPLEMENT_SEEDS } from '@/src/data/checkin/supplementSeeds';
 import { newCheckinId } from '@/src/db/domains/checkin/types';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { checkinScreenStyles as styles } from '@/src/screens/checkin/checkinScreenStyles';
 import {
   ISO_WEEKDAYS,
@@ -44,13 +47,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
   Alert,
+  Pressable,
   ScrollView,
   Switch,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -62,6 +64,17 @@ const FORMS: SupplementForm[] = [
   'gummy',
   'other',
 ];
+
+const FORM_LABELS: Record<SupplementForm, string> = {
+  capsule: 'Capsule',
+  tablet: 'Tablet',
+  powder: 'Powder',
+  liquid: 'Liquid',
+  gummy: 'Gummy',
+  other: 'Other',
+};
+
+const SWITCH_TRACK_COLORS = { false: color.borderStrong, true: color.gold };
 
 const DOSE_UNITS: SupplementDoseUnit[] = [
   'g',
@@ -96,6 +109,7 @@ export function CheckinSupplementEditScreen({
   supplementId,
 }: CheckinSupplementEditScreenProps) {
   const { isPro, isLoading: subscriptionLoading } = useSubscription();
+  const largeText = useLargeText();
   const isEditing = supplementId !== undefined;
 
   const [loading, setLoading] = useState(isEditing);
@@ -355,23 +369,28 @@ export function CheckinSupplementEditScreen({
           value={seedQuery}
           onChangeText={setSeedQuery}
           placeholder="Search creatine, magnesium…"
-          placeholderTextColor={Colors.textPlaceholder}
+          placeholderTextColor={color.textTertiary}
           autoCorrect={false}
           inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+          accessibilityLabel="Start from a common supplement"
+          accessibilityHint="Search, then pick a match to fill in the name and dose"
         />
         {matches.map((seed) => (
-          <TouchableOpacity
+          <Pressable
             key={seed.name}
-            style={styles.seedRow}
+            style={({ pressed }) => [
+              styles.seedRow,
+              pressed && styles.seedRowPressed,
+            ]}
             onPress={() => applySeed(seed)}
             accessibilityRole="button"
-            accessibilityLabel={`Use ${seed.name}`}
+            accessibilityLabel={`Use ${seed.name}, ${seed.doseAmount} ${seed.doseUnit}`}
           >
             <Text style={styles.seedName}>{seed.name}</Text>
             <Text style={styles.seedDose}>
               {seed.doseAmount} {seed.doseUnit}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         ))}
         <Text style={styles.fieldHint}>
           Or just type your own name and dose below.
@@ -387,26 +406,50 @@ export function CheckinSupplementEditScreen({
     minimum: number
   ) => (
     <View style={styles.fieldGroup}>
-      <Text style={styles.fieldLabel}>{label}</Text>
+      <Text
+        style={styles.fieldLabel}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
+        {label}
+      </Text>
       <View style={styles.numberStepperRow}>
-        <TouchableOpacity
-          style={styles.numberStepperButton}
+        <Pressable
+          style={({ pressed }) => [
+            styles.numberStepperButton,
+            pressed && value > minimum && styles.numberStepperButtonPressed,
+            value <= minimum && styles.numberStepperButtonDisabled,
+          ]}
           onPress={() => onChange(Math.max(minimum, value - 1))}
           disabled={value <= minimum}
           accessibilityRole="button"
           accessibilityLabel={`Decrease ${label}`}
+          accessibilityState={{ disabled: value <= minimum }}
         >
-          <Ionicons name="remove" size={20} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.numberStepperValue}>{value}</Text>
-        <TouchableOpacity
-          style={styles.numberStepperButton}
+          <Ionicons
+            name="remove"
+            size={20}
+            color={value <= minimum ? color.textDisabled : color.textPrimary}
+          />
+        </Pressable>
+        <Text
+          style={styles.numberStepperValue}
+          accessibilityLabel={`${label}, ${value}`}
+          accessibilityLiveRegion="polite"
+        >
+          {value}
+        </Text>
+        <Pressable
+          style={({ pressed }) => [
+            styles.numberStepperButton,
+            pressed && styles.numberStepperButtonPressed,
+          ]}
           onPress={() => onChange(value + 1)}
           accessibilityRole="button"
           accessibilityLabel={`Increase ${label}`}
         >
-          <Ionicons name="add" size={20} color={Colors.textPrimary} />
-        </TouchableOpacity>
+          <Ionicons name="add" size={20} color={color.textPrimary} />
+        </Pressable>
       </View>
     </View>
   );
@@ -417,25 +460,14 @@ export function CheckinSupplementEditScreen({
         <View style={styles.fieldGroup}>
           <Text style={styles.fieldLabel}>Days of the week</Text>
           <View style={styles.chipRow}>
-            {ISO_WEEKDAYS.map((day) => {
-              const isActive = daysOfWeek.includes(day.value);
-              return (
-                <TouchableOpacity
-                  key={day.value}
-                  style={[styles.chip, isActive && styles.chipActive]}
-                  onPress={() => toggleWeekday(day.value)}
-                  accessibilityRole="checkbox"
-                  accessibilityLabel={day.label}
-                  accessibilityState={{ checked: isActive }}
-                >
-                  <Text
-                    style={[styles.chipText, isActive && styles.chipTextActive]}
-                  >
-                    {day.label}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+            {ISO_WEEKDAYS.map((day) => (
+              <FilterChip
+                key={day.value}
+                label={day.label}
+                selected={daysOfWeek.includes(day.value)}
+                onPress={() => toggleWeekday(day.value)}
+              />
+            ))}
           </View>
         </View>
       );
@@ -450,7 +482,12 @@ export function CheckinSupplementEditScreen({
     }
     if (scheduleType === 'cycle') {
       return (
-        <View style={styles.inlineFieldRow}>
+        <View
+          style={[
+            styles.inlineFieldRow,
+            largeText && styles.inlineFieldStacked,
+          ]}
+        >
           <View style={styles.inlineField}>
             {renderNumberStepper('Days on', cycleOnDays, setCycleOnDays, 1)}
           </View>
@@ -464,23 +501,25 @@ export function CheckinSupplementEditScreen({
   };
 
   const renderCapUpsell = () => (
-    <View style={settingsScreenStyles.upgradePrompt}>
-      <Text style={settingsScreenStyles.upgradePromptTitle}>
+    <View style={styles.upsellCard}>
+      <Text style={styles.upsellTitle} accessibilityRole="header">
         Free tracks {FREE_SUPPLEMENT_CAP} active supplement
       </Text>
-      <Text style={settingsScreenStyles.upgradePromptBody}>
+      <Text style={styles.upsellBody}>
         Save this one as paused, or upgrade to Pro to keep more than one active
         at a time.
       </Text>
-      <TouchableOpacity
+      <Pressable
+        style={({ pressed }) => [
+          styles.primaryButton,
+          pressed && styles.primaryButtonPressed,
+        ]}
         onPress={() => router.push('/paywall')}
         accessibilityRole="button"
         accessibilityLabel="Upgrade to Pro"
       >
-        <Text style={settingsScreenStyles.upgradePromptCta}>
-          Upgrade to Pro
-        </Text>
-      </TouchableOpacity>
+        <Text style={styles.primaryButtonText}>Upgrade to Pro</Text>
+      </Pressable>
     </View>
   );
 
@@ -491,12 +530,18 @@ export function CheckinSupplementEditScreen({
     >
       <StandardLayout.Body>
         {loading || subscriptionLoading ? (
-          <View style={styles.loadingBox}>
-            <ActivityIndicator color={Colors.accent} />
-          </View>
+          <CheckinListSkeleton accessibilityLabel="Loading supplement" />
         ) : (
           <View style={styles.page}>
-            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            {error ? (
+              <Text
+                style={styles.errorText}
+                accessibilityRole="alert"
+                accessibilityLiveRegion="polite"
+              >
+                {error}
+              </Text>
+            ) : null}
             {showCapUpsell ? renderCapUpsell() : null}
 
             {!isEditing ? renderSeedPicker() : null}
@@ -508,8 +553,9 @@ export function CheckinSupplementEditScreen({
                 value={name}
                 onChangeText={setName}
                 placeholder="Creatine monohydrate"
-                placeholderTextColor={Colors.textPlaceholder}
+                placeholderTextColor={color.textTertiary}
                 inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+                accessibilityLabel="Name"
               />
             </View>
 
@@ -520,8 +566,9 @@ export function CheckinSupplementEditScreen({
                 value={brand}
                 onChangeText={setBrand}
                 placeholder="Any brand"
-                placeholderTextColor={Colors.textPlaceholder}
+                placeholderTextColor={color.textTertiary}
                 inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+                accessibilityLabel="Brand, optional"
               />
             </View>
 
@@ -534,40 +581,25 @@ export function CheckinSupplementEditScreen({
                 style={styles.chipScroll}
                 contentContainerStyle={styles.chipScrollContent}
               >
-                {FORMS.map((option) => {
-                  const isActive = form === option;
-                  return (
-                    <TouchableOpacity
-                      key={option}
-                      style={[styles.chip, isActive && styles.chipActive]}
-                      onPress={() => setForm(option)}
-                      accessibilityRole="radio"
-                      accessibilityLabel={option}
-                      accessibilityState={{ selected: isActive }}
-                    >
-                      <Text
-                        style={[
-                          styles.chipText,
-                          isActive && styles.chipTextActive,
-                        ]}
-                      >
-                        {option}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
+                {FORMS.map((option) => (
+                  <FilterChip
+                    key={option}
+                    label={FORM_LABELS[option]}
+                    selected={form === option}
+                    onPress={() => setForm(option)}
+                    accessibilityLabel={`Form, ${FORM_LABELS[option]}`}
+                  />
+                ))}
               </ScrollView>
             </View>
 
             <View style={styles.fieldGroup}>
-              <Text style={styles.fieldLabel}>Dose</Text>
-              <TextInput
-                style={styles.textInput}
+              <NumberField
+                label="Dose"
                 value={doseAmountText}
                 onChangeText={setDoseAmountText}
-                keyboardType="decimal-pad"
                 placeholder="5"
-                placeholderTextColor={Colors.textPlaceholder}
+                allowDecimal
                 inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
               />
               <ScrollView
@@ -577,28 +609,15 @@ export function CheckinSupplementEditScreen({
                 style={styles.chipScroll}
                 contentContainerStyle={styles.chipScrollContent}
               >
-                {DOSE_UNITS.map((option) => {
-                  const isActive = doseUnit === option;
-                  return (
-                    <TouchableOpacity
-                      key={option}
-                      style={[styles.chip, isActive && styles.chipActive]}
-                      onPress={() => setDoseUnit(option)}
-                      accessibilityRole="radio"
-                      accessibilityLabel={option}
-                      accessibilityState={{ selected: isActive }}
-                    >
-                      <Text
-                        style={[
-                          styles.chipText,
-                          isActive && styles.chipTextActive,
-                        ]}
-                      >
-                        {option}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
+                {DOSE_UNITS.map((option) => (
+                  <FilterChip
+                    key={option}
+                    label={option}
+                    selected={doseUnit === option}
+                    onPress={() => setDoseUnit(option)}
+                    accessibilityLabel={`Dose unit, ${option}`}
+                  />
+                ))}
               </ScrollView>
             </View>
 
@@ -611,28 +630,15 @@ export function CheckinSupplementEditScreen({
                 style={styles.chipScroll}
                 contentContainerStyle={styles.chipScrollContent}
               >
-                {SCHEDULE_TYPES.map((option) => {
-                  const isActive = scheduleType === option;
-                  return (
-                    <TouchableOpacity
-                      key={option}
-                      style={[styles.chip, isActive && styles.chipActive]}
-                      onPress={() => setScheduleType(option)}
-                      accessibilityRole="radio"
-                      accessibilityLabel={SCHEDULE_TYPE_LABELS[option]}
-                      accessibilityState={{ selected: isActive }}
-                    >
-                      <Text
-                        style={[
-                          styles.chipText,
-                          isActive && styles.chipTextActive,
-                        ]}
-                      >
-                        {SCHEDULE_TYPE_LABELS[option]}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
+                {SCHEDULE_TYPES.map((option) => (
+                  <FilterChip
+                    key={option}
+                    label={SCHEDULE_TYPE_LABELS[option]}
+                    selected={scheduleType === option}
+                    onPress={() => setScheduleType(option)}
+                    accessibilityLabel={`Schedule, ${SCHEDULE_TYPE_LABELS[option]}`}
+                  />
+                ))}
               </ScrollView>
             </View>
 
@@ -643,7 +649,8 @@ export function CheckinSupplementEditScreen({
               {times.map((time) => (
                 <View key={time} style={styles.timeRow}>
                   <Text style={styles.timeText}>{time}</Text>
-                  <TouchableOpacity
+                  <Pressable
+                    style={styles.iconButton}
                     onPress={() =>
                       setTimes(times.filter((item) => item !== time))
                     }
@@ -653,9 +660,9 @@ export function CheckinSupplementEditScreen({
                     <Ionicons
                       name="close-circle"
                       size={22}
-                      color={Colors.textMuted}
+                      color={color.textSecondary}
                     />
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
               ))}
               <View style={styles.addTimeRow}>
@@ -664,25 +671,35 @@ export function CheckinSupplementEditScreen({
                   value={newTime}
                   onChangeText={setNewTime}
                   placeholder="20:00"
-                  placeholderTextColor={Colors.textPlaceholder}
+                  placeholderTextColor={color.textTertiary}
                   keyboardType="numbers-and-punctuation"
                   inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+                  accessibilityLabel="New time of day"
+                  accessibilityHint="24-hour time, for example 20:00"
                 />
-                <TouchableOpacity
-                  style={styles.numberStepperButton}
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.numberStepperButton,
+                    pressed && styles.numberStepperButtonPressed,
+                  ]}
                   onPress={handleAddTime}
                   accessibilityRole="button"
                   accessibilityLabel="Add time"
                 >
-                  <Ionicons name="add" size={20} color={Colors.textPrimary} />
-                </TouchableOpacity>
+                  <Ionicons name="add" size={20} color={color.textPrimary} />
+                </Pressable>
               </View>
               <Text style={styles.fieldHint}>
                 24-hour times, e.g. 08:00 and 20:00.
               </Text>
             </View>
 
-            <View style={styles.inlineFieldRow}>
+            <View
+              style={[
+                styles.inlineFieldRow,
+                largeText && styles.inlineFieldStacked,
+              ]}
+            >
               <View style={styles.inlineField}>
                 <Text style={styles.fieldLabel}>Start date</Text>
                 <TextInput
@@ -690,9 +707,11 @@ export function CheckinSupplementEditScreen({
                   value={startDate}
                   onChangeText={setStartDate}
                   placeholder="2026-09-14"
-                  placeholderTextColor={Colors.textPlaceholder}
+                  placeholderTextColor={color.textTertiary}
                   autoCorrect={false}
                   inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+                  accessibilityLabel="Start date"
+                  accessibilityHint="Year, month and day, for example 2026-09-14"
                 />
               </View>
               <View style={styles.inlineField}>
@@ -702,16 +721,18 @@ export function CheckinSupplementEditScreen({
                   value={endDate}
                   onChangeText={setEndDate}
                   placeholder="Optional"
-                  placeholderTextColor={Colors.textPlaceholder}
+                  placeholderTextColor={color.textTertiary}
                   autoCorrect={false}
                   inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+                  accessibilityLabel="End date, optional"
+                  accessibilityHint="Year, month and day, for example 2026-09-14"
                 />
               </View>
             </View>
 
             <View style={styles.switchRow}>
               <View style={styles.switchRowTextBlock}>
-                <Text style={styles.fieldLabel}>Dose reminders</Text>
+                <Text style={styles.fieldTitle}>Dose reminders</Text>
                 <Text style={styles.fieldHint}>
                   Local reminders only. If permission is denied, you can still
                   tick doses manually.
@@ -729,35 +750,25 @@ export function CheckinSupplementEditScreen({
                     setRemindersEnabled(granted);
                   })();
                 }}
+                trackColor={SWITCH_TRACK_COLORS}
+                ios_backgroundColor={color.borderStrong}
                 accessibilityLabel="Dose reminders"
+                accessibilityHint="Local reminders only. If permission is denied, you can still tick doses manually."
               />
             </View>
 
             <View style={styles.fieldGroup}>
               <Text style={styles.fieldLabel}>Status</Text>
               <View style={styles.chipRow}>
-                {STATUSES.map((option) => {
-                  const isActive = status === option;
-                  return (
-                    <TouchableOpacity
-                      key={option}
-                      style={[styles.chip, isActive && styles.chipActive]}
-                      onPress={() => setStatus(option)}
-                      accessibilityRole="radio"
-                      accessibilityLabel={STATUS_LABELS[option]}
-                      accessibilityState={{ selected: isActive }}
-                    >
-                      <Text
-                        style={[
-                          styles.chipText,
-                          isActive && styles.chipTextActive,
-                        ]}
-                      >
-                        {STATUS_LABELS[option]}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
+                {STATUSES.map((option) => (
+                  <FilterChip
+                    key={option}
+                    label={STATUS_LABELS[option]}
+                    selected={status === option}
+                    onPress={() => setStatus(option)}
+                    accessibilityLabel={`Status, ${STATUS_LABELS[option]}`}
+                  />
+                ))}
               </View>
               <Text style={styles.fieldHint}>
                 Paused and archived supplements stop producing daily doses.
@@ -772,43 +783,64 @@ export function CheckinSupplementEditScreen({
                 value={notes}
                 onChangeText={setNotes}
                 placeholder="With food, half a scoop pre-workout…"
-                placeholderTextColor={Colors.textPlaceholder}
+                placeholderTextColor={color.textTertiary}
                 multiline
                 inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+                accessibilityLabel="Notes, optional"
               />
             </View>
 
-            <TouchableOpacity
-              style={[
+            <Pressable
+              style={({ pressed }) => [
                 styles.primaryButton,
+                pressed && styles.primaryButtonPressed,
                 (saving || deleting) && styles.primaryButtonDisabled,
               ]}
               onPress={() => void handleSave()}
               disabled={saving || deleting}
               accessibilityRole="button"
               accessibilityLabel="Save supplement"
+              accessibilityState={{
+                disabled: saving || deleting,
+                busy: saving,
+              }}
             >
-              <Text style={styles.primaryButtonText}>
+              <Text
+                style={[
+                  styles.primaryButtonText,
+                  (saving || deleting) && styles.primaryButtonTextDisabled,
+                ]}
+              >
                 {saving ? 'Saving…' : 'Save supplement'}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
 
             {isEditing ? (
               <View style={styles.fieldGroup}>
-                <TouchableOpacity
-                  style={[
+                <Pressable
+                  style={({ pressed }) => [
                     styles.destructiveButton,
-                    (saving || deleting) && styles.primaryButtonDisabled,
+                    pressed && styles.destructiveButtonPressed,
+                    (saving || deleting) && styles.destructiveButtonDisabled,
                   ]}
                   onPress={handleDeletePress}
                   disabled={saving || deleting}
                   accessibilityRole="button"
                   accessibilityLabel="Delete supplement"
+                  accessibilityState={{
+                    disabled: saving || deleting,
+                    busy: deleting,
+                  }}
                 >
-                  <Text style={styles.destructiveButtonText}>
+                  <Text
+                    style={[
+                      styles.destructiveButtonText,
+                      (saving || deleting) && styles.buttonTextDisabled,
+                    ]}
+                  >
                     {deleting ? 'Deleting…' : 'Delete supplement'}
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
                 <Text style={styles.fieldHint}>
                   Permanently removes this supplement and its dose history. Use
                   this for anything you do not want kept on this device or in

@@ -1,5 +1,6 @@
+import { CheckinListSkeleton } from '@/src/components/checkin/CheckinListSkeleton';
 import { StandardLayout } from '@/src/components/ds';
-import { Colors } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import { checkinScreenStyles as styles } from '@/src/screens/checkin/checkinScreenStyles';
 import type { CatalogueBehaviour } from '@/src/types/checkin';
 import type { Supplement } from '@/src/types/supplements';
@@ -17,7 +18,7 @@ import { rebuildSupplementReminders } from '@/src/services/supplementReminders';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 export function CheckinChooseActiveScreen() {
   const [loading, setLoading] = useState(true);
@@ -110,12 +111,18 @@ export function CheckinChooseActiveScreen() {
     >
       <StandardLayout.Body>
         {loading ? (
-          <View style={styles.loadingBox}>
-            <ActivityIndicator color={Colors.accent} />
-          </View>
+          <CheckinListSkeleton accessibilityLabel="Loading behaviours" />
         ) : (
           <View style={styles.page}>
-            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            {error ? (
+              <Text
+                style={styles.errorText}
+                accessibilityRole="alert"
+                accessibilityLiveRegion="polite"
+              >
+                {error}
+              </Text>
+            ) : null}
 
             <Text style={styles.sectionNote}>
               Everything you have logged stays exactly as it is. The behaviours
@@ -125,8 +132,13 @@ export function CheckinChooseActiveScreen() {
 
             <View style={styles.section}>
               <View style={styles.categoryHeader}>
-                <Text style={styles.categoryTitle}>Behaviours</Text>
-                <Text style={styles.selectionCounter}>
+                <Text style={styles.categoryTitle} accessibilityRole="header">
+                  Behaviours
+                </Text>
+                <Text
+                  style={styles.selectionCounter}
+                  accessibilityLabel={`${selectedBehaviourIds.length} of ${FREE_BEHAVIOUR_CAP} selected`}
+                >
                   {selectedBehaviourIds.length} / {FREE_BEHAVIOUR_CAP}
                 </Text>
               </View>
@@ -136,9 +148,12 @@ export function CheckinChooseActiveScreen() {
                     behaviour.id
                   );
                   return (
-                    <TouchableOpacity
+                    <Pressable
                       key={behaviour.id}
-                      style={styles.trackedRow}
+                      style={({ pressed }) => [
+                        styles.trackedRow,
+                        pressed && styles.trackedRowPressed,
+                      ]}
                       onPress={() => toggleBehaviour(behaviour.id)}
                       accessibilityRole="checkbox"
                       accessibilityLabel={behaviour.label}
@@ -152,11 +167,9 @@ export function CheckinChooseActiveScreen() {
                       <Ionicons
                         name={isSelected ? 'checkbox' : 'square-outline'}
                         size={24}
-                        color={
-                          isSelected ? Colors.accent : Colors.backgroundBorder
-                        }
+                        color={isSelected ? color.gold : color.borderStrong}
                       />
-                    </TouchableOpacity>
+                    </Pressable>
                   );
                 })}
               </View>
@@ -165,8 +178,15 @@ export function CheckinChooseActiveScreen() {
             {activeSupplements.length > 0 ? (
               <View style={styles.section}>
                 <View style={styles.categoryHeader}>
-                  <Text style={styles.categoryTitle}>Supplement</Text>
-                  <Text style={styles.selectionCounter}>
+                  <Text style={styles.categoryTitle} accessibilityRole="header">
+                    Supplement
+                  </Text>
+                  <Text
+                    style={styles.selectionCounter}
+                    accessibilityLabel={`${
+                      selectedSupplementId === null ? 0 : 1
+                    } of ${FREE_SUPPLEMENT_CAP} selected`}
+                  >
                     {selectedSupplementId === null ? 0 : 1} /{' '}
                     {FREE_SUPPLEMENT_CAP}
                   </Text>
@@ -175,17 +195,20 @@ export function CheckinChooseActiveScreen() {
                   {activeSupplements.map((supplement) => {
                     const isSelected = selectedSupplementId === supplement.id;
                     return (
-                      <TouchableOpacity
+                      <Pressable
                         key={supplement.id}
-                        style={styles.trackedRow}
+                        style={({ pressed }) => [
+                          styles.trackedRow,
+                          pressed && styles.trackedRowPressed,
+                        ]}
                         onPress={() =>
                           setSelectedSupplementId(
                             isSelected ? null : supplement.id
                           )
                         }
                         accessibilityRole="radio"
-                        accessibilityLabel={supplement.name}
-                        accessibilityState={{ selected: isSelected }}
+                        accessibilityLabel={`${supplement.name}, ${supplement.doseAmount} ${supplement.doseUnit}`}
+                        accessibilityState={{ checked: isSelected }}
                       >
                         <View style={styles.trackedRowTextBlock}>
                           <Text style={styles.trackedRowTitle}>
@@ -200,34 +223,45 @@ export function CheckinChooseActiveScreen() {
                             isSelected ? 'radio-button-on' : 'radio-button-off'
                           }
                           size={24}
-                          color={
-                            isSelected ? Colors.accent : Colors.backgroundBorder
-                          }
+                          color={isSelected ? color.gold : color.borderStrong}
                         />
-                      </TouchableOpacity>
+                      </Pressable>
                     );
                   })}
                 </View>
               </View>
             ) : null}
 
-            <TouchableOpacity
-              style={[
+            <Pressable
+              style={({ pressed }) => [
                 styles.primaryButton,
+                pressed && styles.primaryButtonPressed,
                 (!canSave || saving) && styles.primaryButtonDisabled,
               ]}
               onPress={() => void handleSave()}
               disabled={!canSave || saving}
               accessibilityRole="button"
               accessibilityLabel="Save selection"
+              accessibilityState={{
+                disabled: !canSave || saving,
+                busy: saving,
+              }}
             >
-              <Text style={styles.primaryButtonText}>
+              <Text
+                style={[
+                  styles.primaryButtonText,
+                  (!canSave || saving) && styles.primaryButtonTextDisabled,
+                ]}
+              >
                 {saving ? 'Saving…' : 'Save and continue'}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
 
-            <TouchableOpacity
-              style={styles.secondaryButton}
+            <Pressable
+              style={({ pressed }) => [
+                styles.secondaryButton,
+                pressed && styles.secondaryButtonPressed,
+              ]}
               onPress={() => router.push('/paywall')}
               accessibilityRole="button"
               accessibilityLabel="Upgrade to Pro"
@@ -235,7 +269,7 @@ export function CheckinChooseActiveScreen() {
               <Text style={styles.secondaryButtonText}>
                 Upgrade to Pro instead
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         )}
       </StandardLayout.Body>

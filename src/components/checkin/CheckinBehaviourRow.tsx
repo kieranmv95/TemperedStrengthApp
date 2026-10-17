@@ -1,10 +1,10 @@
 import { checkinStyles as styles } from '@/src/components/checkin/checkinStyles';
-import { SmallChevron } from '@/src/components/ds';
-import { Colors } from '@/src/constants/theme';
+import { PressableCard } from '@/src/components/ds';
+import { color } from '@/src/constants/tokens';
 import type { BehaviourEntry, CatalogueBehaviour } from '@/src/types/checkin';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 type CheckinBehaviourRowProps = {
   behaviour: CatalogueBehaviour;
@@ -41,39 +41,43 @@ export function CheckinBehaviourRow({
   onPress,
 }: CheckinBehaviourRowProps) {
   const isLogged = entry !== undefined;
+  const emptyLabel = editable ? 'Tap to log' : 'Read only on Free';
 
   return (
-    <TouchableOpacity
-      style={[styles.row, !editable && styles.rowLocked]}
+    <PressableCard
       onPress={onPress}
       disabled={!editable}
-      activeOpacity={0.7}
-      accessibilityRole="button"
+      showChevron={editable}
       accessibilityLabel={`${behaviour.label}, ${
         isLogged ? formatValue(behaviour, entry.value) : 'not logged'
-      }`}
-      accessibilityState={{ disabled: !editable }}
+      }${editable ? '' : ', read only on Free'}`}
     >
-      <View style={styles.rowStatusIcon}>
+      <View style={styles.rowContent}>
         <Ionicons
           name={isLogged ? 'checkmark-circle' : 'ellipse-outline'}
-          size={22}
-          color={isLogged ? Colors.accent : Colors.backgroundBorder}
+          size={24}
+          color={isLogged ? color.gold : color.borderStrong}
         />
+        <View style={styles.rowTextBlock}>
+          <Text style={styles.rowTitle}>{behaviour.label}</Text>
+          <View style={styles.rowStatusLine}>
+            {editable ? null : (
+              <Ionicons
+                name="lock-closed-outline"
+                size={14}
+                color={color.textTertiary}
+              />
+            )}
+            {isLogged ? (
+              <Text style={styles.rowValue}>
+                {formatValue(behaviour, entry.value)}
+              </Text>
+            ) : (
+              <Text style={styles.rowValueEmpty}>{emptyLabel}</Text>
+            )}
+          </View>
+        </View>
       </View>
-      <View style={styles.rowTextBlock}>
-        <Text style={styles.rowTitle}>{behaviour.label}</Text>
-        {isLogged ? (
-          <Text style={styles.rowValue}>
-            {formatValue(behaviour, entry.value)}
-          </Text>
-        ) : (
-          <Text style={styles.rowValueEmpty}>
-            {editable ? 'Tap to log' : 'Read only on Free'}
-          </Text>
-        )}
-      </View>
-      {editable ? <SmallChevron /> : null}
-    </TouchableOpacity>
+    </PressableCard>
   );
 }

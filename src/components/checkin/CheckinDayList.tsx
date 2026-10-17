@@ -1,6 +1,7 @@
 import { CheckinBehaviourRow } from '@/src/components/checkin/CheckinBehaviourRow';
 import { CheckinDoseRow } from '@/src/components/checkin/CheckinDoseRow';
 import { checkinStyles as styles } from '@/src/components/checkin/checkinStyles';
+import { SectionHeader } from '@/src/components/ds';
 import type {
   BehaviourEntry,
   CatalogueBehaviour,
@@ -17,7 +18,7 @@ import {
   isSupplementEditable,
 } from '@/src/utils/checkin/caps';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 type CheckinDayListProps = {
   tracked: readonly TrackedBehaviour[];
@@ -71,7 +72,7 @@ export function CheckinDayList({
     <View style={styles.section}>
       {behaviours.length > 0 ? (
         <View style={styles.listSection}>
-          <Text style={styles.listSectionTitle}>Behaviours</Text>
+          <SectionHeader title="Behaviours" />
           {behaviours.map((behaviour) => (
             <CheckinBehaviourRow
               key={behaviour.id}
@@ -92,7 +93,7 @@ export function CheckinDayList({
 
       {doses.length > 0 ? (
         <View style={styles.listSection}>
-          <Text style={styles.listSectionTitle}>Supplements</Text>
+          <SectionHeader title="Supplements" />
           {doses.map((dose) => {
             const supplement = supplements.find(
               (s) => s.id === dose.supplementId

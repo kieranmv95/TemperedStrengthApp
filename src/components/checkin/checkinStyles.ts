@@ -1,355 +1,274 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
 
-/** Shared styles for the check-in rows, log modal, and history calendar. */
+const SCALE_DOT_MAX_SIZE = 56;
+const QUANTITY_STEPPER_SIZE = 52;
+/** Icon under a calendar day that has a check-in. */
+export const CALENDAR_MARK_SIZE = 12;
+
+/** Shared styles for the check-in rows, log sheet, and history calendar. */
 export const checkinStyles = StyleSheet.create({
+  rowContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xl,
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    paddingVertical: Spacing.xl,
-    paddingHorizontal: Spacing.xxl,
+    gap: space.sm,
+    backgroundColor: color.surface1,
+    borderRadius: radius.md,
+    padding: space.md,
+    ...elevation.raised,
+  },
+  /** Large text: dose actions wrap below the dose details. */
+  rowStacked: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
   },
   rowLocked: {
-    opacity: 0.45,
+    opacity: 0.6,
   },
   rowTextBlock: {
     flex: 1,
     minWidth: 0,
-    gap: Spacing.xxs,
+    gap: space.xxs,
   },
   rowTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
   },
   rowDescription: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    lineHeight: 16,
+    ...typography.callout,
+    color: color.textSecondary,
+  },
+  rowStatusLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xxs,
   },
   rowValue: {
-    color: Colors.accent,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
   rowValueEmpty: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
-  },
-  rowStatusIcon: {
-    width: 28,
-    alignItems: 'center',
+    ...typography.callout,
+    color: color.textTertiary,
   },
   doseActions: {
     flexDirection: 'row',
-    gap: Spacing.md,
-    flexShrink: 0,
-  },
-  doseButton: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundScreen,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-  },
-  doseButtonTaken: {
-    backgroundColor: Colors.accentWashFill,
-    borderColor: Colors.accentWashBorder,
-  },
-  doseButtonSkipped: {
-    backgroundColor: Colors.backgroundSubtle,
-    borderColor: Colors.backgroundBorder,
-  },
-  doseButtonText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '700',
-  },
-  doseButtonTextTaken: {
-    color: Colors.accent,
-  },
-  doseButtonTextSkipped: {
-    color: Colors.textPrimary,
-  },
-  doseMissed: {
-    color: Colors.destructive,
-    fontSize: FontSize.md,
-    fontWeight: '700',
+    flexWrap: 'wrap',
+    gap: space.xs,
   },
 
   section: {
-    gap: Spacing.xl,
+    gap: space.xl,
   },
   listSection: {
-    gap: Spacing.md,
+    gap: space.sm,
   },
-  listSectionTitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
-    paddingHorizontal: Spacing.sm,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: Colors.overlay,
-    justifyContent: 'flex-end',
-  },
-  modalDismissArea: {
-    flex: 1,
-  },
-  modalContent: {
-    backgroundColor: Colors.backgroundCard,
-    borderTopLeftRadius: BorderRadius.full,
-    borderTopRightRadius: BorderRadius.full,
-    paddingHorizontal: Spacing.xxl,
-    paddingTop: Spacing.lg,
-    gap: Spacing.xxl,
-  },
-  modalGrabber: {
-    alignSelf: 'center',
-    width: 40,
-    height: 4,
-    borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundBorder,
-    marginBottom: Spacing.sm,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: Spacing.xl,
-  },
-  modalHeaderText: {
-    flex: 1,
-    minWidth: 0,
-    gap: Spacing.xxs,
-  },
-  modalTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
-    fontWeight: '700',
-  },
+
   modalSubtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-  },
-  modalCloseButton: {
-    padding: Spacing.xs,
+    ...typography.callout,
+    color: color.textSecondary,
   },
   booleanRow: {
     flexDirection: 'row',
-    gap: Spacing.md,
+    gap: space.sm,
   },
   booleanButton: {
     flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: Spacing.xxl,
-    borderRadius: BorderRadius.xxl,
-    backgroundColor: Colors.backgroundScreen,
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE + space.xl,
+    borderRadius: radius.md,
+    backgroundColor: color.surface2,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    borderColor: color.borderStrong,
+  },
+  booleanButtonPressed: {
+    backgroundColor: color.surface3,
   },
   booleanButtonActive: {
-    backgroundColor: Colors.accentWashFill,
-    borderColor: Colors.accentWashBorder,
+    backgroundColor: color.goldTint,
+    borderColor: color.gold,
   },
   booleanButtonText: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
   },
   booleanButtonTextActive: {
-    color: Colors.accent,
+    color: color.gold,
   },
   optionRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: Spacing.md,
-  },
-  optionChip: {
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.xl,
-    borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundScreen,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-  },
-  optionChipActive: {
-    backgroundColor: Colors.accentWashFill,
-    borderColor: Colors.accentWashBorder,
-  },
-  optionChipText: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-  },
-  optionChipTextActive: {
-    color: Colors.accent,
+    gap: space.xs,
   },
   scaleSection: {
-    gap: Spacing.xl,
+    gap: space.md,
+    alignItems: 'center',
+  },
+  scaleSelected: {
     alignItems: 'center',
   },
   scaleSelectedNumber: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXXXl,
-    fontWeight: '800',
-    letterSpacing: -1,
+    ...typography.numericLarge,
+    color: color.textPrimary,
   },
   scaleSelectedLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.xl,
-    fontWeight: '600',
-    marginTop: -Spacing.sm,
+    ...typography.callout,
+    color: color.textSecondary,
   },
   scaleTrack: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     alignSelf: 'stretch',
-    gap: Spacing.md,
-    marginTop: Spacing.md,
+    gap: space.xs,
   },
   scaleDot: {
     flex: 1,
     aspectRatio: 1,
-    maxWidth: 56,
-    borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundScreen,
+    minHeight: MIN_TARGET_SIZE,
+    maxWidth: SCALE_DOT_MAX_SIZE,
+    borderRadius: radius.pill,
+    backgroundColor: color.surface2,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    borderColor: color.borderStrong,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  scaleDotPressed: {
+    backgroundColor: color.surface3,
+  },
   scaleDotActive: {
-    backgroundColor: Colors.accent,
-    borderColor: Colors.accent,
+    backgroundColor: color.gold,
+    borderColor: color.gold,
   },
   scaleDotText: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
+    ...typography.numericSmall,
+    color: color.textPrimary,
   },
   scaleDotTextActive: {
-    color: Colors.textOnAccent,
+    color: color.onGold,
   },
   scaleLabelRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignSelf: 'stretch',
-    paddingHorizontal: Spacing.xs,
+    gap: space.sm,
   },
   scaleLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '600',
+    ...typography.caption,
+    color: color.textSecondary,
   },
   stepperRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: Spacing.xl,
+    gap: space.md,
   },
   stepperButton: {
-    width: 52,
-    height: 52,
-    borderRadius: BorderRadius.pill,
-    backgroundColor: Colors.backgroundScreen,
+    width: QUANTITY_STEPPER_SIZE,
+    height: QUANTITY_STEPPER_SIZE,
+    borderRadius: radius.pill,
+    backgroundColor: color.surface2,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    borderColor: color.borderStrong,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  stepperButtonPressed: {
+    backgroundColor: color.surface3,
+  },
   stepperButtonDisabled: {
-    opacity: 0.4,
+    borderColor: color.surface3,
   },
   stepperValueBlock: {
     flex: 1,
     alignItems: 'center',
-    gap: Spacing.xxs,
   },
   stepperValue: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXXl,
-    fontWeight: '800',
+    ...typography.numericLarge,
+    color: color.textPrimary,
   },
   stepperUnit: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.callout,
+    color: color.textSecondary,
   },
-  modalPrimaryButton: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.pill,
-    paddingVertical: Spacing.xxl,
-    alignItems: 'center',
+  primaryButton: {
     alignSelf: 'stretch',
-  },
-  modalPrimaryButtonDisabled: {
-    opacity: 0.5,
-  },
-  modalPrimaryButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-  },
-  modalClearButton: {
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.lg,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
     alignItems: 'center',
-    paddingVertical: Spacing.md,
+    justifyContent: 'center',
   },
-  modalClearButtonText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+  primaryButtonPressed: {
+    backgroundColor: color.goldStrong,
+  },
+  primaryButtonDisabled: {
+    backgroundColor: color.surface3,
+  },
+  primaryButtonText: {
+    ...typography.headline,
+    color: color.onGold,
+  },
+  primaryButtonTextDisabled: {
+    color: color.textDisabled,
   },
 
   calendar: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    padding: Spacing.xl,
+    backgroundColor: color.surface1,
+    borderRadius: radius.md,
+    padding: space.sm,
+    ...elevation.raised,
   },
   calendarMonthRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: Spacing.xl,
+    marginBottom: space.xs,
   },
   calendarMonthNav: {
-    minWidth: 44,
-    minHeight: 44,
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  calendarMonthNavDisabled: {
-    opacity: 0.35,
+  calendarMonthNavPressed: {
+    backgroundColor: color.surface2,
   },
   calendarMonthTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
+    flexShrink: 1,
+    textAlign: 'center',
   },
   calendarWeekdayRow: {
     flexDirection: 'row',
-    marginBottom: Spacing.sm,
+    marginBottom: space.xxs,
   },
   calendarWeekdayCell: {
     flex: 1,
     alignItems: 'center',
   },
   calendarWeekdayText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.sm,
-    fontWeight: '600',
+    ...typography.captionStrong,
+    color: color.textTertiary,
   },
   calendarGrid: {
     flexDirection: 'row',
@@ -358,44 +277,35 @@ export const checkinStyles = StyleSheet.create({
   calendarDayCell: {
     width: '14.28%',
     padding: 2,
-    minHeight: 44,
+    minHeight: MIN_TARGET_SIZE + space.xs,
   },
   calendarDayInner: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 2,
-    borderRadius: BorderRadius.lg,
+    borderRadius: radius.sm,
+  },
+  calendarDayInnerPressed: {
+    backgroundColor: color.surface2,
   },
   calendarDayInnerToday: {
     borderWidth: 1,
-    borderColor: Colors.accentWashOutline,
+    borderColor: color.borderStrong,
   },
   calendarDayInnerSelected: {
-    backgroundColor: Colors.accent,
+    backgroundColor: color.gold,
   },
   calendarDayText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.numericSmall,
+    color: color.textPrimary,
   },
   calendarDayTextMuted: {
-    color: Colors.textPlaceholder,
+    color: color.textDisabled,
   },
   calendarDayTextSelected: {
-    color: Colors.textOnAccent,
+    color: color.onGold,
   },
-  calendarDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
-    backgroundColor: Colors.accent,
-  },
-  calendarDotSelected: {
-    backgroundColor: Colors.textOnAccent,
-  },
-  calendarDotSpacer: {
-    width: 5,
-    height: 5,
+  calendarMarkSpacer: {
+    height: CALENDAR_MARK_SIZE,
   },
 });

@@ -1,8 +1,11 @@
-import { checkinStyles as styles } from '@/src/components/checkin/checkinStyles';
-import { Colors } from '@/src/constants/theme';
+import {
+  CALENDAR_MARK_SIZE,
+  checkinStyles as styles,
+} from '@/src/components/checkin/checkinStyles';
+import { color } from '@/src/constants/tokens';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 /** Indexed by `Date.getDay()` (0 = Sunday). */
 const WEEKDAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -21,8 +24,7 @@ type CheckinHistoryCalendarProps = {
 };
 
 type CalendarCell =
-  | { kind: 'pad' }
-  | { kind: 'day'; day: number; date: string };
+  { kind: 'pad' } | { kind: 'day'; day: number; date: string };
 
 function parseMonth(month: string): { year: number; monthIndex: number } {
   const [ys, ms] = month.split('-');
@@ -59,6 +61,26 @@ function buildCells(
     cells.push({ kind: 'pad' });
   }
   return cells;
+}
+
+function dayAccessibilityLabel(input: {
+  year: number;
+  monthIndex: number;
+  day: number;
+  isToday: boolean;
+  hasData: boolean;
+}): string {
+  const parts = [
+    new Date(input.year, input.monthIndex, input.day).toLocaleDateString(
+      undefined,
+      { weekday: 'long', day: 'numeric', month: 'long' }
+    ),
+  ];
+  if (input.isToday) {
+    parts.push('today');
+  }
+  parts.push(input.hasData ? 'has check-in' : 'no check-in');
+  return parts.join(', ');
 }
 
 export function CheckinHistoryCalendar({
@@ -101,19 +123,24 @@ export function CheckinHistoryCalendar({
   return (
     <View style={styles.calendar}>
       <View style={styles.calendarMonthRow}>
-        <TouchableOpacity
-          style={styles.calendarMonthNav}
+        <Pressable
+          style={({ pressed }) => [
+            styles.calendarMonthNav,
+            pressed && styles.calendarMonthNavPressed,
+          ]}
           onPress={goPrevMonth}
           accessibilityRole="button"
           accessibilityLabel="Previous month"
         >
-          <Ionicons name="chevron-back" size={22} color={Colors.accent} />
-        </TouchableOpacity>
-        <Text style={styles.calendarMonthTitle}>{monthTitle}</Text>
-        <TouchableOpacity
-          style={[
+          <Ionicons name="chevron-back" size={22} color={color.textPrimary} />
+        </Pressable>
+        <Text style={styles.calendarMonthTitle} accessibilityRole="header">
+          {monthTitle}
+        </Text>
+        <Pressable
+          style={({ pressed }) => [
             styles.calendarMonthNav,
-            !canGoNext && styles.calendarMonthNavDisabled,
+            pressed && canGoNext && styles.calendarMonthNavPressed,
           ]}
           onPress={goNextMonth}
           disabled={!canGoNext}
@@ -121,11 +148,19 @@ export function CheckinHistoryCalendar({
           accessibilityLabel="Next month"
           accessibilityState={{ disabled: !canGoNext }}
         >
-          <Ionicons name="chevron-forward" size={22} color={Colors.accent} />
-        </TouchableOpacity>
+          <Ionicons
+            name="chevron-forward"
+            size={22}
+            color={canGoNext ? color.textPrimary : color.textDisabled}
+          />
+        </Pressable>
       </View>
 
-      <View style={styles.calendarWeekdayRow}>
+      <View
+        style={styles.calendarWeekdayRow}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
         {WEEKDAY_LABELS.map((_, index) => (
           <View key={index} style={styles.calendarWeekdayCell}>
             <Text style={styles.calendarWeekdayText}>
@@ -148,16 +183,23 @@ export function CheckinHistoryCalendar({
 
           return (
             <View key={cell.date} style={styles.calendarDayCell}>
-              <TouchableOpacity
-                style={[
+              <Pressable
+                style={({ pressed }) => [
                   styles.calendarDayInner,
+                  pressed && !isSelected && styles.calendarDayInnerPressed,
                   isToday && !isSelected && styles.calendarDayInnerToday,
                   isSelected && styles.calendarDayInnerSelected,
                 ]}
                 onPress={() => onSelectDate(cell.date)}
                 disabled={isFuture}
                 accessibilityRole="button"
-                accessibilityLabel={`${cell.date}${hasData ? ', has check-in' : ''}`}
+                accessibilityLabel={dayAccessibilityLabel({
+                  year,
+                  monthIndex,
+                  day: cell.day,
+                  isToday,
+                  hasData,
+                })}
                 accessibilityState={{
                   selected: isSelected,
                   disabled: isFuture,
@@ -173,16 +215,15 @@ export function CheckinHistoryCalendar({
                   {cell.day}
                 </Text>
                 {hasData ? (
-                  <View
-                    style={[
-                      styles.calendarDot,
-                      isSelected && styles.calendarDotSelected,
-                    ]}
+                  <Ionicons
+                    name="checkmark"
+                    size={CALENDAR_MARK_SIZE}
+                    color={isSelected ? color.onGold : color.gold}
                   />
                 ) : (
-                  <View style={styles.calendarDotSpacer} />
+                  <View style={styles.calendarMarkSpacer} />
                 )}
-              </TouchableOpacity>
+              </Pressable>
             </View>
           );
         })}

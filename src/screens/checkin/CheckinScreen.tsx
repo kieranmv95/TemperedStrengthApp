@@ -3,10 +3,11 @@ import {
   visibleTrackedBehaviours,
 } from '@/src/components/checkin/CheckinDayList';
 import { CheckinHistoryCalendar } from '@/src/components/checkin/CheckinHistoryCalendar';
+import { CheckinListSkeleton } from '@/src/components/checkin/CheckinListSkeleton';
 import { CheckinLogModal } from '@/src/components/checkin/CheckinLogModal';
-import { StandardLayout } from '@/src/components/ds';
-import { Colors } from '@/src/constants/theme';
+import { ActionChip, SectionHeader, StandardLayout } from '@/src/components/ds';
 import { useSubscription } from '@/src/hooks/use-subscription';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { checkinScreenStyles as styles } from '@/src/screens/checkin/checkinScreenStyles';
 import { formatLocalYMD } from '@/src/services/streakService';
@@ -48,16 +49,9 @@ import {
   upsertBehaviourEntry,
   upsertSupplementLog,
 } from '@/src/utils/storage';
-import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, router } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  AppState,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { AppState, Pressable, Text, View } from 'react-native';
 
 type CheckinSegment = 'today' | 'history';
 
@@ -92,6 +86,7 @@ function formatDayLabel(date: string, today: string): string {
 export function CheckinScreen() {
   const { isPro, isLoading: subscriptionLoading } = useSubscription();
   const { dataRevision } = useSyncManager();
+  const largeText = useLargeText();
 
   const [segment, setSegment] = useState<CheckinSegment>('today');
   const [today, setToday] = useState(() => formatLocalYMD(new Date()));
@@ -367,24 +362,20 @@ export function CheckinScreen() {
 
   const renderHeaderActions = () => (
     <>
-      <TouchableOpacity
-        style={styles.headerAction}
+      <ActionChip
+        label="Behaviours"
+        icon="add"
+        tone="neutral"
         onPress={() => router.push('/checkin/settings')}
-        accessibilityRole="button"
         accessibilityLabel="Add behaviours"
-      >
-        <Ionicons name="add" size={16} color={Colors.accent} />
-        <Text style={styles.headerActionText}>Behaviours</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.headerAction}
+      />
+      <ActionChip
+        label="Supplements"
+        icon="add"
+        tone="neutral"
         onPress={() => router.push('/checkin/supplements')}
-        accessibilityRole="button"
         accessibilityLabel="Add supplements"
-      >
-        <Ionicons name="add" size={16} color={Colors.accent} />
-        <Text style={styles.headerActionText}>Supplements</Text>
-      </TouchableOpacity>
+      />
     </>
   );
 
@@ -398,41 +389,55 @@ export function CheckinScreen() {
       ).map((option) => {
         const isActive = segment === option.key;
         return (
-          <TouchableOpacity
+          <Pressable
             key={option.key}
-            style={[
+            style={({ pressed }) => [
               styles.segmentOption,
+              pressed && !isActive && styles.segmentOptionPressed,
               isActive && styles.segmentOptionActive,
             ]}
             onPress={() => setSegment(option.key)}
             accessibilityRole="radio"
-            accessibilityState={{ selected: isActive }}
+            accessibilityLabel={option.label}
+            accessibilityState={{ checked: isActive }}
           >
             <Text
               style={[styles.segmentText, isActive && styles.segmentTextActive]}
             >
               {option.label}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         );
       })}
     </View>
   );
 
   const renderStats = () => (
-    <View>
-      <View style={styles.statsRow}>
-        <View style={styles.statCard}>
+    <View style={styles.section}>
+      <View style={[styles.statsRow, largeText && styles.statsStacked]}>
+        <View
+          style={styles.statCard}
+          accessible
+          accessibilityLabel={`${stats.currentStreak} day streak`}
+        >
           <Text style={styles.statValue}>{stats.currentStreak}</Text>
-          <Text style={styles.statLabel}>day streak</Text>
+          <Text style={styles.statLabel}>Day streak</Text>
         </View>
-        <View style={styles.statCard}>
+        <View
+          style={styles.statCard}
+          accessible
+          accessibilityLabel={`${stats.completion7}% complete, last 7 days`}
+        >
           <Text style={styles.statValue}>{stats.completion7}%</Text>
-          <Text style={styles.statLabel}>last 7 days</Text>
+          <Text style={styles.statLabel}>Last 7 days</Text>
         </View>
-        <View style={styles.statCard}>
+        <View
+          style={styles.statCard}
+          accessible
+          accessibilityLabel={`${stats.completion30}% complete, last 30 days`}
+        >
           <Text style={styles.statValue}>{stats.completion30}%</Text>
-          <Text style={styles.statLabel}>last 30 days</Text>
+          <Text style={styles.statLabel}>Last 30 days</Text>
         </View>
       </View>
       {cyclePhaseText ? (
@@ -443,27 +448,35 @@ export function CheckinScreen() {
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <Text style={styles.emptyTitle}>Nothing to check in yet</Text>
+      <Text style={styles.emptyTitle} accessibilityRole="header">
+        Nothing to check in yet
+      </Text>
       <Text style={styles.emptyBody}>
         Pick the daily behaviours you want to track, and add any supplements you
         take.
       </Text>
-      <TouchableOpacity
-        style={styles.primaryButton}
+      <Pressable
+        style={({ pressed }) => [
+          styles.primaryButton,
+          pressed && styles.primaryButtonPressed,
+        ]}
         onPress={() => router.push('/checkin/settings')}
         accessibilityRole="button"
         accessibilityLabel="Choose behaviours"
       >
         <Text style={styles.primaryButtonText}>Choose behaviours</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.secondaryButton}
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.secondaryButton,
+          pressed && styles.secondaryButtonPressed,
+        ]}
         onPress={() => router.push('/checkin/supplements')}
         accessibilityRole="button"
         accessibilityLabel="Add supplements"
       >
         <Text style={styles.secondaryButtonText}>Add supplements</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 
@@ -537,14 +550,10 @@ export function CheckinScreen() {
             Pick a day to see and edit what you logged.
           </Text>
         ) : historyDayLoading ? (
-          <View style={styles.loadingBox}>
-            <ActivityIndicator color={Colors.accent} />
-          </View>
+          <CheckinListSkeleton accessibilityLabel="Loading day" />
         ) : (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>
-              {formatDayLabel(historyDate, today)}
-            </Text>
+            <SectionHeader title={formatDayLabel(historyDate, today)} />
             <CheckinDayList
               tracked={tracked}
               behavioursById={behavioursById}
@@ -583,11 +592,17 @@ export function CheckinScreen() {
       <StandardLayout.Body>
         <View style={styles.page}>
           {renderSegments()}
-          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+          {error ? (
+            <Text
+              style={styles.errorText}
+              accessibilityRole="alert"
+              accessibilityLiveRegion="polite"
+            >
+              {error}
+            </Text>
+          ) : null}
           {loading ? (
-            <View style={styles.loadingBox}>
-              <ActivityIndicator color={Colors.accent} />
-            </View>
+            <CheckinListSkeleton accessibilityLabel="Loading check-in" />
           ) : segment === 'today' ? (
             renderToday()
           ) : (

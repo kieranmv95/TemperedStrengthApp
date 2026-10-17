@@ -1,9 +1,11 @@
+import { FilterChip, NumberField } from '@/src/components/ds';
 import {
   ToolScreenShell,
   toolFormStyles as styles,
 } from '@/src/components/tools/ToolScreenShell';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { color, radius, space, typography } from '@/src/constants/tokens';
 import { getToolById } from '@/src/data/tools';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { increment } from '@/src/services/metricService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
@@ -15,15 +17,16 @@ import {
 } from '@/src/utils/creatine';
 import type { WeightUnit } from '@/src/utils/storage';
 import { getWeightUnit } from '@/src/utils/storage';
+import { Ionicons } from '@expo/vector-icons';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
 import {
+  AccessibilityInfo,
   Keyboard,
+  Pressable,
   StyleSheet,
   Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -31,6 +34,7 @@ const TOOL = getToolById('creatine')!;
 
 export function CreatineCalculatorScreen() {
   const posthog = usePostHog();
+  const largeText = useLargeText();
   const [weightUnit, setWeightUnit] = useState<WeightUnit>('kg');
   const [bodyweightInput, setBodyweightInput] = useState('80');
   const [doses, setDoses] = useState<CreatineDoseResult | null>(null);
@@ -66,6 +70,9 @@ export function CreatineCalculatorScreen() {
 
     setValidationError(null);
     setDoses(result);
+    AccessibilityInfo.announceForAccessibility(
+      `Maintenance dose ${formatCreatineGrams(result.maintenanceGrams)} per day`
+    );
     posthog.capture(posthogEventsNames.content.toolCalculate, {
       tool_id: TOOL.id,
       unit: weightUnit,
@@ -75,97 +82,112 @@ export function CreatineCalculatorScreen() {
   return (
     <ToolScreenShell title={TOOL.title}>
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>{TOOL.title}</Text>
         <Text style={styles.cardDescription}>{TOOL.description}</Text>
 
-        <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Weight</Text>
-          <TextInput
-            style={styles.fieldInput}
-            value={bodyweightInput}
-            onChangeText={setBodyweightInput}
-            placeholder="0"
-            placeholderTextColor={Colors.textPlaceholder}
-            keyboardType="decimal-pad"
-            accessibilityLabel="Bodyweight"
-          />
+        <View style={[styles.fieldRow, largeText && styles.fieldRowStacked]}>
+          <View style={styles.fieldInput}>
+            <NumberField
+              label={`Bodyweight (${weightUnit})`}
+              value={bodyweightInput}
+              onChangeText={setBodyweightInput}
+              placeholder={weightUnit}
+              allowDecimal
+            />
+          </View>
           <View style={styles.unitToggle}>
-            {(['kg', 'lb'] as const).map((unit) => {
-              const isActive = weightUnit === unit;
-              return (
-                <TouchableOpacity
-                  key={unit}
-                  style={[
-                    styles.unitOption,
-                    isActive && styles.unitOptionActive,
-                  ]}
-                  onPress={() => setWeightUnit(unit)}
-                  accessibilityLabel={`Use ${unit}`}
-                >
-                  <Text
-                    style={[
-                      styles.unitOptionText,
-                      isActive && styles.unitOptionTextActive,
-                    ]}
-                  >
-                    {unit}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+            {(['kg', 'lb'] as const).map((unit) => (
+              <FilterChip
+                key={unit}
+                label={unit}
+                selected={weightUnit === unit}
+                onPress={() => setWeightUnit(unit)}
+                accessibilityLabel={`Use ${unit}`}
+              />
+            ))}
           </View>
         </View>
 
         {validationError ? (
-          <Text style={styles.errorText}>{validationError}</Text>
+          <Text
+            style={styles.errorText}
+            accessibilityRole="alert"
+            accessibilityLiveRegion="polite"
+          >
+            {validationError}
+          </Text>
         ) : null}
 
-        <TouchableOpacity
-          style={styles.primaryButton}
+        <Pressable
+          style={({ pressed }) => [
+            styles.primaryButton,
+            pressed && styles.primaryButtonPressed,
+          ]}
           onPress={handleCalculate}
+          accessibilityRole="button"
           accessibilityLabel="Calculate creatine dose"
         >
           <Text style={styles.primaryButtonText}>Calculate dose</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {doses !== null ? (
         <View style={styles.card}>
-          <Text style={styles.resultHeading}>
-            Maintenance dose: {formatCreatineGrams(doses.maintenanceGrams)}
-          </Text>
-          <Text style={localStyles.resultSubtext}>
+          <View
+            accessible
+            accessibilityLabel={`Maintenance dose, ${formatCreatineGrams(
+              doses.maintenanceGrams
+            )} per day`}
+          >
+            <Text style={styles.resultLabel} accessibilityRole="header">
+              Maintenance dose
+            </Text>
+            <Text style={styles.resultValue}>
+              {formatCreatineGrams(doses.maintenanceGrams)}
+            </Text>
+          </View>
+          <Text style={styles.resultBody}>
             Take this amount daily to support muscle creatine stores and
             training performance. Based on ~0.03 g per kg bodyweight, within the
             usual 3-5 g/day range used in research.
           </Text>
 
-          <View style={localStyles.sizeBlock}>
-            <Text style={localStyles.sizeTitle}>Size-focused (higher end)</Text>
-            <Text style={localStyles.sizeDose}>
+          <View style={styles.divider}>
+            <Text style={styles.resultLabel} accessibilityRole="header">
+              Size-focused (higher end)
+            </Text>
+            <Text style={localStyles.secondaryDose}>
               {formatCreatineGrams(doses.sizeFocusedGrams)} per day
             </Text>
-            <Text style={localStyles.resultSubtext}>
+            <Text style={styles.resultBody}>
               If you want a simple “push it for size” target, this biases toward
               the upper end of common practice while staying practical.
             </Text>
           </View>
 
-          <View style={localStyles.loadingBlock}>
-            <Text style={localStyles.loadingTitle}>Optional loading phase</Text>
-            <Text style={localStyles.loadingDose}>
+          <View style={styles.divider}>
+            <Text style={styles.resultLabel} accessibilityRole="header">
+              Optional loading phase
+            </Text>
+            <Text style={localStyles.secondaryDose}>
               {formatCreatineGrams(doses.loadingGrams)} per day
             </Text>
             {doses.loadingGrams > CREATINE_LOADING_GI_WARNING_THRESHOLD_G ? (
-              <Text style={localStyles.loadingWarning}>
-                Warning: Loading above{' '}
-                {formatCreatineGrams(CREATINE_LOADING_GI_WARNING_THRESHOLD_G)}{' '}
-                per day can cause stomach / GI distress for some people. If you
-                load, split the total into 3-4 smaller doses with meals - or
-                skip loading and stick to daily dosing.
-              </Text>
+              <View style={localStyles.warning}>
+                <Ionicons
+                  name="warning-outline"
+                  size={20}
+                  color={color.warning}
+                />
+                <Text style={localStyles.warningText}>
+                  Warning: Loading above{' '}
+                  {formatCreatineGrams(CREATINE_LOADING_GI_WARNING_THRESHOLD_G)}{' '}
+                  per day can cause stomach / GI distress for some people. If
+                  you load, split the total into 3-4 smaller doses with meals -
+                  or skip loading and stick to daily dosing.
+                </Text>
+              </View>
             ) : null}
-            <Text style={localStyles.resultSubtext}>
+            <Text style={styles.resultBody}>
               For 5-7 days only (~0.2 g per kg), then switch to the maintenance
               dose above. Loading is optional; maintenance alone works fine.
             </Text>
@@ -177,54 +199,21 @@ export function CreatineCalculatorScreen() {
 }
 
 const localStyles = StyleSheet.create({
-  resultSubtext: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
+  secondaryDose: {
+    ...typography.numericMedium,
+    color: color.textPrimary,
   },
-  loadingBlock: {
-    marginTop: Spacing.xl,
-    paddingTop: Spacing.xl,
-    borderTopWidth: 1,
-    borderTopColor: Colors.backgroundElevated,
-    gap: Spacing.sm,
+  warning: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: space.xs,
+    backgroundColor: color.warningTint,
+    borderRadius: radius.sm,
+    padding: space.sm,
   },
-  sizeBlock: {
-    marginTop: Spacing.xl,
-    paddingTop: Spacing.xl,
-    borderTopWidth: 1,
-    borderTopColor: Colors.backgroundElevated,
-    gap: Spacing.sm,
-  },
-  sizeTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '600',
-  },
-  sizeDose: {
-    color: Colors.accent,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-  },
-  loadingTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '600',
-  },
-  loadingDose: {
-    color: Colors.accent,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-  },
-  loadingWarning: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-    backgroundColor: Colors.accentWashFill,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.accentWashBorder,
-    padding: Spacing.xl,
-    marginTop: Spacing.sm,
+  warningText: {
+    ...typography.callout,
+    color: color.textPrimary,
+    flex: 1,
   },
 });
