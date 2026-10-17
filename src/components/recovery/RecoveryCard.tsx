@@ -1,12 +1,17 @@
-import { Colors } from '@/src/constants/theme';
-import type { Recovery } from '@/src/types/recovery';
+import { Badge, PressableCard, Tag } from '@/src/components/ds';
+import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
+import { color } from '@/src/constants/tokens';
+import type { Recovery, RecoveryEquipment } from '@/src/types/recovery';
 import { COACH_ROLE, premiumAccessBadgeLabel } from '@/src/utils/workoutAccess';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
-import { Card } from '../ds';
-import { DIFFICULTY_COLORS } from '../workouts/workoutUiConstants';
-import { workoutsListStyles as styles } from '../workouts/workoutsListStyles';
+
+const MAX_TAGS = 3;
+
+function equipmentLabel(equipment: RecoveryEquipment): string {
+  return equipment.charAt(0).toUpperCase() + equipment.slice(1);
+}
 
 type RecoveryCardProps = {
   recovery: Recovery;
@@ -16,7 +21,7 @@ type RecoveryCardProps = {
   style?: StyleProp<ViewStyle>;
   /** Hide equipment/tag pills under the meta row. */
   hidePills?: boolean;
-  /** Hide the PRO pill; premium flows use a gold border instead. */
+  /** Hide the PRO badge, e.g. in compact carousels. */
   hideProBadge?: boolean;
 };
 
@@ -31,9 +36,9 @@ export function RecoveryCard({
 }: RecoveryCardProps) {
   const isLocked = recovery.isPremium && !isPro;
   const showProBadge = recovery.isPremium && !hideProBadge;
-  const usePremiumBorder = recovery.isPremium && hideProBadge;
   // All premium mobility flows unlock for coaches.
   const premiumBadge = premiumAccessBadgeLabel([COACH_ROLE]);
+  const hasPills = recovery.equipment.length > 0 || recovery.tags.length > 0;
 
   const handlePress = () => {
     if (isLocked) {
@@ -43,75 +48,61 @@ export function RecoveryCard({
     onPress(recovery);
   };
 
+  const accessibilityLabel = [
+    recovery.title,
+    `${recovery.estimatedTime} minutes`,
+    recovery.difficulty,
+    recovery.isPremium ? premiumBadge : null,
+    isLocked ? 'locked' : null,
+  ]
+    .filter((part): part is string => !!part)
+    .join(', ');
+
   return (
-    <Card
-      style={[
-        styles.workoutCard,
-        isLocked && styles.workoutCardLocked,
-        usePremiumBorder && styles.workoutCardLocked,
-        style,
-      ]}
+    <PressableCard
       onPress={handlePress}
-      activeOpacity={0.7}
-      accessibilityLabel="Open recovery flow"
+      showChevron={false}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={
+        isLocked ? 'Opens the You tab to unlock this flow' : undefined
+      }
+      style={[styles.recoveryCard, style]}
     >
-      <View>
-        {showProBadge ? (
-          <View style={styles.cardHeader}>
-            <View style={styles.cardTitleRow}>
-              <View style={styles.premiumBadge}>
-                <Text style={styles.premiumBadgeText}>{premiumBadge}</Text>
-              </View>
-            </View>
+      {showProBadge ? (
+        <View style={styles.cardHeader}>
+          <Badge label={premiumBadge} />
+        </View>
+      ) : null}
+
+      <Text style={styles.cardTitle}>{recovery.title}</Text>
+      <Text style={styles.cardDescription} numberOfLines={1}>
+        {recovery.description}
+      </Text>
+
+      <View style={styles.cardMeta}>
+        <View style={styles.metaItem}>
+          <Ionicons name="time-outline" size={16} color={color.textSecondary} />
+          <Text style={styles.metaTimeText}>{recovery.estimatedTime} min</Text>
+        </View>
+        <Badge label={recovery.difficulty} tone="neutral" />
+        {isLocked ? (
+          <View style={styles.metaItem}>
+            <Ionicons name="lock-closed" size={14} color={color.gold} />
+            <Text style={styles.lockedText}>Unlock with Pro</Text>
           </View>
         ) : null}
-
-        <Text style={styles.cardTitle}>{recovery.title}</Text>
-        <Text style={styles.cardDescription} numberOfLines={1}>
-          {recovery.description}
-        </Text>
-
-        <View style={styles.cardMeta}>
-          <View style={styles.metaItem}>
-            <Ionicons name="time-outline" size={14} color={Colors.accent} />
-            <Text style={styles.metaTimeText}>
-              {recovery.estimatedTime} min
-            </Text>
-          </View>
-          <View
-            style={[
-              styles.difficultyBadge,
-              { borderColor: DIFFICULTY_COLORS[recovery.difficulty] },
-            ]}
-          >
-            <Text
-              style={[
-                styles.difficultyText,
-                { color: DIFFICULTY_COLORS[recovery.difficulty] },
-              ]}
-            >
-              {recovery.difficulty}
-            </Text>
-          </View>
-        </View>
-
-        {hidePills ? null : (
-          <View style={styles.tagsContainer}>
-            {recovery.equipment.map((equipment, index) => (
-              <View key={index} style={[styles.tag, styles.tagGold]}>
-                <Text style={[styles.tagText, styles.tagGoldText]}>
-                  {equipment}
-                </Text>
-              </View>
-            ))}
-            {recovery.tags.slice(0, 3).map((tag, index) => (
-              <View key={index} style={styles.tag}>
-                <Text style={styles.tagText}>{tag}</Text>
-              </View>
-            ))}
-          </View>
-        )}
       </View>
-    </Card>
+
+      {hidePills || !hasPills ? null : (
+        <View style={styles.tagsContainer}>
+          {recovery.equipment.map((equipment, index) => (
+            <Tag key={`equipment-${index}`} label={equipmentLabel(equipment)} />
+          ))}
+          {recovery.tags.slice(0, MAX_TAGS).map((tag, index) => (
+            <Tag key={`tag-${index}`} label={tag} />
+          ))}
+        </View>
+      )}
+    </PressableCard>
   );
 }

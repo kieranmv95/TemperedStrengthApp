@@ -1,6 +1,7 @@
+import { StandardLayout } from '@/src/components/ds';
 import { RecoveryFlowContent } from '@/src/components/recovery/RecoveryFlowContent';
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
-import { Colors } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import { getRecoveryById } from '@/src/data/recovery';
 import { useRoles } from '@/src/hooks/useRoles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -9,10 +10,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { AppSafeAreaView } from '@/src/components/ds';
+import { Pressable, Text, View } from 'react-native';
 
 const COACH_ROLE = 'coach';
+const STATE_ICON_SIZE = 48;
 
 export default function RecoveryDetailScreen() {
   const { id: idParam } = useLocalSearchParams<{ id?: string }>();
@@ -44,70 +45,71 @@ export default function RecoveryDetailScreen() {
 
   if (!recoveryId || !recovery) {
     return (
-      <AppSafeAreaView style={styles.container}>
-        <View style={styles.detailHeader}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-          </TouchableOpacity>
-          <Text style={styles.detailTitle} numberOfLines={1}>
-            Recovery
-          </Text>
-          <View style={styles.headerRightSpacer} />
-        </View>
-
-        <View style={styles.emptyState}>
-          <Ionicons name="leaf" size={64} color={Colors.backgroundSubtle} />
-          <Text style={styles.emptyTitle}>Flow not found</Text>
-          <Text style={styles.emptyDescription}>
-            This recovery flow may have been removed or the link is invalid.
-          </Text>
-        </View>
-      </AppSafeAreaView>
+      <StandardLayout
+        title="Recovery"
+        onBackPress={() => router.back()}
+        disableScroll
+      >
+        <StandardLayout.Body>
+          <View style={styles.emptyState}>
+            <Ionicons
+              name="leaf-outline"
+              size={STATE_ICON_SIZE}
+              color={color.textTertiary}
+            />
+            <Text style={styles.emptyTitle} accessibilityRole="header">
+              Flow not found
+            </Text>
+            <Text style={styles.emptyDescription}>
+              This recovery flow may have been removed or the link is invalid.
+            </Text>
+          </View>
+        </StandardLayout.Body>
+      </StandardLayout>
     );
   }
 
   const isLocked = recovery.isPremium && !accessLoading && !hasAccess;
 
   return (
-    <AppSafeAreaView style={styles.container}>
-      <View style={styles.detailHeader}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.detailTitle} numberOfLines={1}>
-          {recovery.title}
-        </Text>
-        <View style={styles.headerRightSpacer} />
-      </View>
-
-      {isLocked ? (
-        <View style={styles.lockedState}>
-          <Ionicons name="lock-closed" size={44} color={Colors.accent} />
-          <Text style={styles.lockedTitle}>Pro flow</Text>
-          <Text style={styles.lockedDescription}>
-            Upgrade to Pro to unlock this recovery flow.
-          </Text>
-          <TouchableOpacity
-            style={styles.lockedCta}
-            onPress={handleLockedPress}
-          >
-            <Text style={styles.lockedCtaText}>Go to Account</Text>
+    <StandardLayout
+      title={recovery.title}
+      onBackPress={() => router.back()}
+      disableScroll
+      edgeToEdgeBody
+    >
+      <StandardLayout.Body>
+        {isLocked ? (
+          <View style={styles.lockedState}>
             <Ionicons
-              name="chevron-forward"
-              size={18}
-              color={Colors.textOnAccent}
+              name="lock-closed"
+              size={STATE_ICON_SIZE}
+              color={color.textSecondary}
             />
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <RecoveryFlowContent recovery={recovery} />
-      )}
-    </AppSafeAreaView>
+            <Text style={styles.lockedTitle} accessibilityRole="header">
+              Pro flow
+            </Text>
+            <Text style={styles.lockedDescription}>
+              Upgrade to Pro to unlock this recovery flow.
+            </Text>
+            <Pressable
+              style={({ pressed }) => [
+                styles.lockedCta,
+                pressed && styles.lockedCtaPressed,
+              ]}
+              onPress={handleLockedPress}
+              accessibilityRole="button"
+              accessibilityLabel="Unlock with Pro"
+              accessibilityHint="Opens the You tab"
+            >
+              <Text style={styles.lockedCtaText}>Unlock with Pro</Text>
+              <Ionicons name="chevron-forward" size={18} color={color.onGold} />
+            </Pressable>
+          </View>
+        ) : (
+          <RecoveryFlowContent recovery={recovery} />
+        )}
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 }

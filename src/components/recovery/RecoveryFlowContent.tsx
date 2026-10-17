@@ -1,24 +1,33 @@
-import { Pill } from '@/src/components/ds';
+import { Badge, ProgressBar, Tag } from '@/src/components/ds';
 import { RecoveryBlockTimer } from '@/src/components/recovery/RecoveryBlockTimer';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import type { Recovery, RecoveryBlock } from '@/src/types/recovery';
 import { getRecoveryDoseSteps } from '@/src/utils/recoveryDoseFormat';
 import { isTimeBasedRecoveryDose } from '@/src/utils/recoveryTimer';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  AccessibilityInfo,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import { getEffectiveBottomInset } from '@/src/utils/platform';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { YoutubeEmbed } from '../exercise/YoutubeEmbed';
 import { workoutDetailStyles as styles } from '../workouts/workoutDetailStyles';
-import { DIFFICULTY_COLORS } from '../workouts/workoutUiConstants';
+
+const COMPLETE_ICON_SIZE = 56;
 
 type RecoveryFlowContentProps = {
   recovery: Recovery;
@@ -38,6 +47,10 @@ function doseIconName(
   return 'time-outline';
 }
 
+function blockPositionText(blockIndex: number, totalBlocks: number): string {
+  return `Block ${blockIndex + 1} of ${totalBlocks}`;
+}
+
 function BlockCard({
   block,
   blockIndex,
@@ -48,6 +61,7 @@ function BlockCard({
   totalBlocks: number;
 }) {
   const iconName = doseIconName(block.dose);
+  const positionText = blockPositionText(blockIndex, totalBlocks);
 
   return (
     <>
@@ -60,36 +74,37 @@ function BlockCard({
           />
         </View>
       ) : null}
-      <Text style={flowStyles.progress}>
-        {blockIndex + 1} / {totalBlocks} blocks
-      </Text>
+      <View style={flowStyles.progress}>
+        <Text style={flowStyles.progressText}>{positionText}</Text>
+        <ProgressBar
+          progress={(blockIndex + 1) / totalBlocks}
+          accessibilityLabel="Flow progress"
+          accessibilityValueText={positionText}
+        />
+      </View>
       <View style={flowStyles.blockCard}>
-        <View style={flowStyles.blockCardContent}>
-          <Text style={flowStyles.blockTitle}>{block.name}</Text>
-          <View style={flowStyles.doseLines}>
-            {getRecoveryDoseSteps(block.dose).map((step, index) => (
-              <View key={index} style={flowStyles.doseRow}>
-                <Ionicons name={iconName} size={18} color={Colors.accent} />
-                <Text style={flowStyles.doseText}>
-                  {step.label ? (
-                    <Text style={flowStyles.doseStepLabel}>
-                      {step.label} ·{' '}
-                    </Text>
-                  ) : null}
-                  {step.text}
-                </Text>
-              </View>
-            ))}
-          </View>
-          {isTimeBasedRecoveryDose(block.dose) ? (
-            <RecoveryBlockTimer dose={block.dose} />
-          ) : null}
-          {block.instructions ? (
-            <Text style={flowStyles.blockInstructions}>
-              {block.instructions}
-            </Text>
-          ) : null}
+        <Text style={flowStyles.blockTitle} accessibilityRole="header">
+          {block.name}
+        </Text>
+        <View style={flowStyles.doseLines}>
+          {getRecoveryDoseSteps(block.dose).map((step, index) => (
+            <View key={index} style={flowStyles.doseRow}>
+              <Ionicons name={iconName} size={18} color={color.textSecondary} />
+              <Text style={flowStyles.doseText}>
+                {step.label ? (
+                  <Text style={flowStyles.doseStepLabel}>{step.label} · </Text>
+                ) : null}
+                {step.text}
+              </Text>
+            </View>
+          ))}
         </View>
+        {isTimeBasedRecoveryDose(block.dose) ? (
+          <RecoveryBlockTimer dose={block.dose} />
+        ) : null}
+        {block.instructions ? (
+          <Text style={flowStyles.blockInstructions}>{block.instructions}</Text>
+        ) : null}
       </View>
     </>
   );
@@ -111,15 +126,30 @@ export function RecoveryFlowContent({ recovery }: RecoveryFlowContentProps) {
 
   const showBackButton = phase === 'block' && blockIndex > 0;
 
+  const announceBlock = (index: number) => {
+    const block = blocks[index];
+    if (!block) return;
+    AccessibilityInfo.announceForAccessibility(
+      `${blockPositionText(index, totalBlocks)}, ${block.name}`
+    );
+  };
+
   const handleGoBack = () => {
     if (phase === 'block' && blockIndex > 0) {
+      announceBlock(blockIndex - 1);
       setBlockIndex((index) => index - 1);
     }
   };
 
-  const cta = useMemo(() => {
+  const getCta = (): { label: string; onPress: () => void } => {
     if (phase === 'intro') {
-      return { label: 'Start', onPress: () => setPhase('block') };
+      return {
+        label: 'Start',
+        onPress: () => {
+          announceBlock(0);
+          setPhase('block');
+        },
+      };
     }
     if (phase === 'complete') {
       return { label: 'Done', onPress: () => router.back() };
@@ -129,13 +159,16 @@ export function RecoveryFlowContent({ recovery }: RecoveryFlowContentProps) {
       label: isLastBlock ? 'Finish' : 'Next',
       onPress: () => {
         if (isLastBlock) {
+          AccessibilityInfo.announceForAccessibility('Flow complete');
           setPhase('complete');
           return;
         }
+        announceBlock(blockIndex + 1);
         setBlockIndex((index) => index + 1);
       },
     };
-  }, [phase, blockIndex, totalBlocks]);
+  };
+  const cta = getCta();
 
   return (
     <View style={flowStyles.container}>
@@ -146,32 +179,22 @@ export function RecoveryFlowContent({ recovery }: RecoveryFlowContentProps) {
       >
         {phase === 'intro' ? (
           <View style={flowStyles.introContent}>
-            <View style={[styles.detailMetaRow, flowStyles.introMetaRow]}>
-              <View style={styles.detailMetaItem}>
+            <View style={styles.detailMetaRow}>
+              <View
+                style={styles.detailMetaItem}
+                accessible
+                accessibilityLabel={`${recovery.estimatedTime} minutes`}
+              >
                 <Ionicons
                   name="time-outline"
                   size={16}
-                  color={Colors.textMuted}
+                  color={color.textSecondary}
                 />
                 <Text style={styles.detailMetaText}>
                   {recovery.estimatedTime} min
                 </Text>
               </View>
-              <View
-                style={[
-                  styles.difficultyBadge,
-                  { borderColor: DIFFICULTY_COLORS[recovery.difficulty] },
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.difficultyText,
-                    { color: DIFFICULTY_COLORS[recovery.difficulty] },
-                  ]}
-                >
-                  {recovery.difficulty}
-                </Text>
-              </View>
+              <Badge label={recovery.difficulty} tone="neutral" />
             </View>
 
             <Text style={flowStyles.introDescription}>
@@ -181,13 +204,7 @@ export function RecoveryFlowContent({ recovery }: RecoveryFlowContentProps) {
             {recovery.tags.length > 0 ? (
               <View style={flowStyles.tagsRow}>
                 {recovery.tags.map((tag, index) => (
-                  <Pill
-                    key={`${index}-${tag}`}
-                    label={tag}
-                    isActive={false}
-                    disabled
-                    onPress={() => {}}
-                  />
+                  <Tag key={`${index}-${tag}`} label={tag} />
                 ))}
               </View>
             ) : null}
@@ -209,8 +226,14 @@ export function RecoveryFlowContent({ recovery }: RecoveryFlowContentProps) {
 
         {phase === 'complete' ? (
           <View style={flowStyles.completeState}>
-            <Ionicons name="checkmark-circle" size={64} color={Colors.accent} />
-            <Text style={flowStyles.completeTitle}>Flow complete</Text>
+            <Ionicons
+              name="checkmark-circle"
+              size={COMPLETE_ICON_SIZE}
+              color={color.success}
+            />
+            <Text style={flowStyles.completeTitle} accessibilityRole="header">
+              Flow complete
+            </Text>
             <Text style={flowStyles.completeText}>
               Nice work. Take a moment to notice how your body feels before
               moving on.
@@ -225,44 +248,44 @@ export function RecoveryFlowContent({ recovery }: RecoveryFlowContentProps) {
           {
             paddingBottom: Math.max(
               getEffectiveBottomInset(insets.bottom),
-              Spacing.lg
+              space.sm
             ),
           },
         ]}
       >
         <View style={flowStyles.footerActions}>
           {showBackButton ? (
-            <TouchableOpacity
-              style={flowStyles.backButton}
+            <Pressable
+              style={({ pressed }) => [
+                flowStyles.backButton,
+                pressed && flowStyles.backButtonPressed,
+              ]}
               onPress={handleGoBack}
-              activeOpacity={0.85}
               accessibilityRole="button"
               accessibilityLabel="Previous block"
             >
               <Ionicons
                 name="chevron-back"
                 size={20}
-                color={Colors.textPrimary}
+                color={color.textPrimary}
               />
               <Text style={flowStyles.backButtonText}>Back</Text>
-            </TouchableOpacity>
+            </Pressable>
           ) : null}
-          <TouchableOpacity
-            style={flowStyles.primaryButton}
+          <Pressable
+            style={({ pressed }) => [
+              flowStyles.primaryButton,
+              pressed && flowStyles.primaryButtonPressed,
+            ]}
             onPress={cta.onPress}
-            activeOpacity={0.85}
             accessibilityRole="button"
             accessibilityLabel={cta.label}
           >
             <Text style={flowStyles.primaryButtonText}>{cta.label}</Text>
             {phase === 'block' && blockIndex < totalBlocks - 1 ? (
-              <Ionicons
-                name="chevron-forward"
-                size={20}
-                color={Colors.textOnAccent}
-              />
+              <Ionicons name="chevron-forward" size={20} color={color.onGold} />
             ) : null}
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </View>
@@ -277,145 +300,132 @@ const flowStyles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    padding: Spacing.xxxl,
-    paddingBottom: Spacing.xxl,
+    paddingHorizontal: space.md,
+    paddingTop: space.xs,
+    paddingBottom: space.xl,
+    gap: space.md,
   },
   introContent: {
-    gap: Spacing.lg,
-  },
-  introMetaRow: {
-    marginBottom: 0,
+    gap: space.md,
   },
   introDescription: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.xxl,
-    lineHeight: 24,
+    ...typography.body,
+    color: color.textSecondary,
   },
   tagsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: Spacing.md,
+    gap: space.xs,
   },
   introHint: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 22,
+    ...typography.callout,
+    color: color.textTertiary,
   },
   progress: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-    marginTop: Spacing.sm,
-    marginBottom: Spacing.xxl,
+    gap: space.xs,
+  },
+  progressText: {
+    ...typography.captionStrong,
+    fontVariant: ['tabular-nums'],
+    color: color.textSecondary,
   },
   blockCard: {
-    backgroundColor: Colors.backgroundCard,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.xxl,
-  },
-  blockCardContent: {
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxxl,
+    ...elevation.raised,
+    backgroundColor: color.surface1,
+    borderRadius: radius.md,
+    padding: space.md,
+    gap: space.md,
   },
   blockTitle: {
-    color: Colors.accent,
-    fontSize: FontSize.displayMd,
-    fontWeight: '800',
-    marginBottom: Spacing.lg,
+    ...typography.title2,
+    color: color.textPrimary,
   },
   doseLines: {
-    gap: Spacing.sm,
-    marginBottom: Spacing.xxl,
+    gap: space.xs,
   },
   doseRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
+    gap: space.xs,
   },
   doseText: {
-    color: Colors.accent,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
+    flexShrink: 1,
   },
   doseStepLabel: {
-    color: Colors.textMuted,
-    fontWeight: '600',
+    ...typography.callout,
+    color: color.textSecondary,
   },
   blockVideo: {
-    marginBottom: Spacing.lg,
-    marginLeft: -Spacing.xxxl,
-    marginRight: -Spacing.xxxl,
-    marginTop: -Spacing.xxxl,
+    marginHorizontal: -space.md,
   },
   blockInstructions: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.xxl,
-    lineHeight: 26,
+    ...typography.body,
+    color: color.textSecondary,
   },
   completeState: {
     alignItems: 'center',
-    paddingHorizontal: Spacing.xxl,
-    paddingTop: Spacing.section,
-    gap: Spacing.lg,
+    paddingHorizontal: space.xl,
+    paddingTop: space.xxxl,
+    gap: space.sm,
   },
   completeTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
-    fontWeight: '800',
+    ...typography.title2,
+    color: color.textPrimary,
     textAlign: 'center',
   },
   completeText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 22,
+    ...typography.callout,
+    color: color.textSecondary,
     textAlign: 'center',
   },
   footer: {
-    paddingHorizontal: Spacing.xxxl,
-    paddingTop: Spacing.lg,
-    borderTopWidth: 1,
-    borderTopColor: Colors.backgroundElevated,
-    backgroundColor: Colors.backgroundScreen,
+    paddingHorizontal: space.md,
+    paddingTop: space.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: color.borderSubtle,
+    backgroundColor: color.bg,
   },
   footerActions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: space.sm,
   },
   backButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.xs,
-    paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.xl,
-    borderRadius: BorderRadius.full,
-    backgroundColor: Colors.backgroundCard,
+    gap: space.xxs,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.md,
+    borderRadius: radius.pill,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    borderColor: color.borderStrong,
+  },
+  backButtonPressed: {
+    backgroundColor: color.surface3,
   },
   backButtonText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.base,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
   primaryButton: {
     flex: 1,
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.full,
-    paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.xxl,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.xl,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
+  },
+  primaryButtonPressed: {
+    backgroundColor: color.goldStrong,
   },
   primaryButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.base,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
 });

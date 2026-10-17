@@ -1,7 +1,7 @@
 import type { FormState } from '@/src/utils/standaloneWorkoutLogForm';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { logFormModalStyles as styles } from './logFormModalStyles';
 
@@ -24,22 +24,27 @@ export function LogFormModalWhenPickers({
 
   return (
     <View style={styles.whenPickerOverlayAbsolute}>
-      <TouchableOpacity
+      <Pressable
         style={StyleSheet.absoluteFill}
-        activeOpacity={1}
         onPress={() => setWhenPickerVisible(false)}
+        accessibilityRole="button"
         accessibilityLabel="Dismiss date picker"
       />
-      <SafeAreaView edges={['bottom']} style={styles.whenPickerSheet}>
+      <SafeAreaView
+        edges={['bottom']}
+        style={styles.whenPickerSheet}
+        accessibilityViewIsModal
+        onAccessibilityEscape={() => setWhenPickerVisible(false)}
+      >
         <View style={styles.whenPickerToolbar}>
-          <TouchableOpacity
+          <Pressable
             onPress={() => setWhenPickerVisible(false)}
-            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+            style={styles.whenPickerDoneBtn}
             accessibilityRole="button"
-            accessibilityLabel="Done"
+            accessibilityLabel="Done choosing date and time"
           >
             <Text style={styles.whenPickerDone}>Done</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
         <DateTimePicker
           value={new Date(form.loggedAtMs)}

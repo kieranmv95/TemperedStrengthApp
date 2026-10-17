@@ -1,4 +1,6 @@
-import { Colors } from '@/src/constants/theme';
+import { SectionHeader, Skeleton } from '@/src/components/ds';
+import { color } from '@/src/constants/tokens';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type {
   StandaloneLogPayload,
@@ -21,17 +23,14 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, Pressable, Text, View } from 'react-native';
 import { increment } from '../services/metricService';
 import { BestLine } from './standaloneWorkoutLog/BestLine';
 import { LogFormModal } from './standaloneWorkoutLog/LogFormModal';
-import { standaloneWorkoutLogPanelStyles as styles } from './standaloneWorkoutLog/standaloneWorkoutLogPanelStyles';
+import {
+  LOG_CARD_SKELETON_HEIGHT,
+  standaloneWorkoutLogPanelStyles as styles,
+} from './standaloneWorkoutLog/standaloneWorkoutLogPanelStyles';
 
 function newStandaloneLogId(): string {
   return `swl_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 12)}`;
@@ -85,6 +84,7 @@ export function StandaloneWorkoutLogPanel({
   workout,
 }: StandaloneWorkoutLogPanelProps) {
   const posthog = usePostHog();
+  const largeText = useLargeText();
   const [logs, setLogs] = useState<StandaloneWorkoutLogEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
@@ -209,27 +209,30 @@ export function StandaloneWorkoutLogPanel({
 
   return (
     <View style={styles.panel}>
-      <Text style={styles.sectionTitle}>Your logs</Text>
+      <SectionHeader title="Your logs" />
       <BestLine workout={workout} logs={logs} />
 
-      <TouchableOpacity
-        style={styles.addButton}
+      <Pressable
+        style={({ pressed }) => [
+          styles.addButton,
+          pressed && styles.addButtonPressed,
+        ]}
         onPress={openNew}
-        activeOpacity={0.85}
+        accessibilityRole="button"
       >
-        <Ionicons
-          name={'add'}
-          size={22}
-          color={Colors.textOnAccent}
-          style={styles.addButtonIcon}
-        />
+        <Ionicons name="add" size={22} color={color.onGold} />
         <Text style={styles.addButtonText}>
           {logs.length === 0 ? 'Log result' : 'Add another log'}
         </Text>
-      </TouchableOpacity>
+      </Pressable>
 
       {loading ? (
-        <ActivityIndicator color={Colors.accent} style={styles.loader} />
+        <Skeleton
+          width="100%"
+          height={LOG_CARD_SKELETON_HEIGHT}
+          radius="md"
+          accessibilityLabel="Loading logs"
+        />
       ) : logs.length === 0 ? (
         <Text style={styles.emptyText}>
           No logs yet. Use the button above to add one.
@@ -237,20 +240,30 @@ export function StandaloneWorkoutLogPanel({
       ) : (
         logs.map((entry) => {
           const logStamp = formatStandaloneLogCardTimestamp(entry.loggedAt);
+          const summary = logListPrimarySummary(entry, workout.logSchema);
+          const showNotes =
+            !!entry.notes && entry.payload.kind !== 'notes_only';
+          const whenText = logStamp ? `Logged ${logStamp}` : entry.loggedAt;
           return (
             <View key={entry.id} style={styles.logCard}>
-              <View style={styles.logRow}>
-                <View style={styles.logRowMain}>
-                  <Text style={styles.logSummary}>
-                    {logListPrimarySummary(entry, workout.logSchema)}
-                  </Text>
+              <View style={[styles.logRow, largeText && styles.logRowStacked]}>
+                <View
+                  style={[
+                    styles.logRowMain,
+                    largeText && styles.logRowMainStacked,
+                  ]}
+                  accessible
+                  accessibilityLabel={[
+                    summary,
+                    whenText,
+                    showNotes ? entry.notes : null,
+                  ]
+                    .filter((part): part is string => !!part)
+                    .join(', ')}
+                >
+                  <Text style={styles.logSummary}>{summary}</Text>
                   {logStamp ? (
-                    <Text
-                      style={styles.logTimestampLine}
-                      accessibilityLabel={`Logged ${logStamp}`}
-                    >
-                      {logStamp}
-                    </Text>
+                    <Text style={styles.logTimestampLine}>{logStamp}</Text>
                   ) : (
                     <Text
                       style={[
@@ -261,37 +274,46 @@ export function StandaloneWorkoutLogPanel({
                       {entry.loggedAt}
                     </Text>
                   )}
-                  {entry.notes && entry.payload.kind !== 'notes_only' ? (
+                  {showNotes ? (
                     <Text style={styles.logNotes}>{entry.notes}</Text>
                   ) : null}
                 </View>
-                <View style={styles.logRowActions}>
-                  <TouchableOpacity
-                    style={styles.iconActionBtn}
+                <View
+                  style={[
+                    styles.logRowActions,
+                    largeText && styles.logRowActionsStacked,
+                  ]}
+                >
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.iconActionBtn,
+                      pressed && styles.iconActionBtnPressed,
+                    ]}
                     onPress={() => openEdit(entry)}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                     accessibilityRole="button"
-                    accessibilityLabel="Edit log"
+                    accessibilityLabel={`Edit log, ${logStamp ?? entry.loggedAt}`}
                   >
                     <Ionicons
                       name="create-outline"
                       size={20}
-                      color={Colors.accent}
+                      color={color.textSecondary}
                     />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.iconActionBtn}
+                  </Pressable>
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.iconActionBtn,
+                      pressed && styles.iconActionBtnPressed,
+                    ]}
                     onPress={() => confirmDelete(entry)}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                     accessibilityRole="button"
-                    accessibilityLabel="Delete log"
+                    accessibilityLabel={`Delete log, ${logStamp ?? entry.loggedAt}`}
                   >
                     <Ionicons
                       name="trash-outline"
                       size={20}
-                      color={Colors.destructive}
+                      color={color.danger}
                     />
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
               </View>
             </View>

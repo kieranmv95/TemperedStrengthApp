@@ -1,4 +1,3 @@
-import { Colors } from '@/src/constants/theme';
 import type { WorkoutCategory } from '@/src/types/workouts';
 
 export const CATEGORY_ICONS: Record<WorkoutCategory, string> = {
@@ -10,11 +9,4 @@ export const CATEGORY_ICONS: Record<WorkoutCategory, string> = {
   Pilates: 'body-outline',
   Rainhill: 'rainhill',
   'Girl Games': 'trophy-outline',
-};
-
-export const DIFFICULTY_COLORS: Record<string, string> = {
-  Beginner: Colors.accent,
-  Intermediate: Colors.accent,
-  Advanced: Colors.accent,
-  'Multiple Difficulties': Colors.accent,
 };
