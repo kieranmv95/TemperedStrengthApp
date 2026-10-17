@@ -23,11 +23,11 @@ export type RestTimerLiveActivityProps = {
 const RestTimerLiveActivityLayout = (props: RestTimerLiveActivityProps) => {
   'widget';
 
-  // Brand tokens mirrored from Colors (widget runtime cannot import app modules).
-  const accent = '#C9B072';
-  const background = '#121212';
-  const textPrimary = '#FFFFFF';
-  const textSecondary = '#CCCCCC';
+  // Brand tokens mirrored from tokens.ts (widget runtime cannot import app modules).
+  const accent = '#D4B97A';
+  const background = '#0E0E10';
+  const textPrimary = '#F5F3EE';
+  const textSecondary = '#B4B0A8';
 
   const endDate = new Date(props.endTimeMs);
   const startDate = new Date(props.startedAtMs);

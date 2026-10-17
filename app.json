@@ -47,7 +47,7 @@
           "backgroundColor": "#ffffff",
           "dark": {
             "image": "./assets/images/dark-splash-icon.png",
-            "backgroundColor": "#121212"
+            "backgroundColor": "#0E0E10"
           }
         }
       ],
@@ -58,7 +58,7 @@
       [
         "expo-navigation-bar",
         {
-          "backgroundColor": "#121212",
+          "backgroundColor": "#0E0E10",
           "style": "light",
           "enforceContrast": false
         }

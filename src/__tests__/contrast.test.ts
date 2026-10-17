@@ -1,3 +1,4 @@
+import { Colors } from '@/src/constants/theme';
 import { color } from '@/src/constants/tokens';
 import {
   CONTRAST_MINIMUMS,
@@ -175,6 +176,37 @@ const PAIRS: ContrastPair[] = [
     kind: 'nonText',
   },
 
+  // Legacy `Colors` pairs still used by screens outside the overhaul
+  {
+    name: 'legacy textMuted on backgroundCard',
+    foreground: Colors.textMuted,
+    background: Colors.backgroundCard,
+    kind: 'text',
+  },
+  {
+    name: 'legacy textPlaceholder on backgroundElevated',
+    foreground: Colors.textPlaceholder,
+    background: Colors.backgroundElevated,
+    kind: 'text',
+  },
+  {
+    name: 'legacy textOnAccent on accent',
+    foreground: Colors.textOnAccent,
+    background: Colors.accent,
+    kind: 'text',
+  },
+  {
+    name: 'legacy textBlack on recommended (programme badge)',
+    foreground: Colors.textBlack,
+    background: Colors.recommended,
+    kind: 'text',
+  },
+  {
+    name: 'legacy destructive on backgroundCard',
+    foreground: Colors.destructive,
+    background: Colors.backgroundCard,
+    kind: 'text',
+  },
 ];
 
 describe('design token contrast (WCAG 2.2 AA)', () => {

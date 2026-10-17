@@ -1,11 +1,18 @@
+import { color } from './tokens';
+
+/**
+ * Legacy palette for screens not yet moved to `tokens.ts`. Values point at the
+ * "Forged" tokens where a direct equivalent exists so every screen shares one
+ * palette; new code should import from `tokens.ts` instead.
+ */
 export const Colors = {
   // Backgrounds
-  backgroundScreen: '#121212',
-  backgroundCard: '#1E1E1E',
+  backgroundScreen: color.bg,
+  backgroundCard: color.surface1,
   /** Workout header timer strips (session + rest) */
-  timerBarBackground: '#1A1A1A',
+  timerBarBackground: color.surface1,
   /** Raised surfaces and default borders (same tone) */
-  backgroundElevated: '#2A2A2A',
+  backgroundElevated: color.surface3,
   /** Muted fills and soft borders (same tone) */
   backgroundSubtle: '#333',
   backgroundBorder: '#3A3A3A',
@@ -17,41 +24,41 @@ export const Colors = {
   overlayLight: 'rgba(0,0,0,0.45)',
 
   // Text
-  textPrimary: '#FFFFFF',
-  textSecondary: '#CCCCCC',
-  textMuted: '#888888',
-  textPlaceholder: '#666666',
-  textOnAccent: '#121212',
+  textPrimary: color.textPrimary,
+  textSecondary: color.textSecondary,
+  textMuted: color.textTertiary,
+  textPlaceholder: color.textTertiary,
+  textOnAccent: color.onGold,
   textOnDark: '#444444',
   textBlack: '#000000',
 
   // Accent / brand
-  accent: '#C9B072',
+  accent: color.gold,
   /** Gold text on dark surfaces (same as accent in default palette). */
-  accentText: '#C9B072',
-  /** Same hue as `accent` (#C9B072 → rgb 201, 176, 114) */
-  accentOverlay: 'rgba(201, 176, 114, 0.9)',
+  accentText: color.gold,
+  /** Same hue as `accent` (#D4B97A → rgb 212, 185, 122) */
+  accentOverlay: 'rgba(212, 185, 122, 0.9)',
   /** Translucent accent fills */
-  accentWashFill: 'rgba(201, 176, 114, 0.12)',
+  accentWashFill: color.goldTint,
   /** Translucent accent borders and rings */
-  accentWashBorder: 'rgba(201, 176, 114, 0.25)',
+  accentWashBorder: 'rgba(212, 185, 122, 0.25)',
   /** Strong accent outline (e.g. hollow badges) */
-  accentWashOutline: 'rgba(201, 176, 114, 0.45)',
+  accentWashOutline: 'rgba(212, 185, 122, 0.45)',
 
-  // Recommended (personalization signal — intentionally distinct from accent)
-  recommended: '#1abc9c',
+  // Positive state (open, completed, recommended)
+  recommended: color.success,
   /** Translucent recommended fills */
-  recommendedWashFill: 'rgba(26, 188, 156, 0.12)',
+  recommendedWashFill: color.successTint,
   /** Translucent recommended borders */
-  recommendedWashBorder: 'rgba(26, 188, 156, 0.25)',
+  recommendedWashBorder: 'rgba(76, 195, 138, 0.25)',
 
   // Semantic
-  destructive: '#FF6B6B',
-  destructiveWashFill: 'rgba(255, 107, 107, 0.12)',
-  destructiveWashBorder: 'rgba(255, 107, 107, 0.25)',
+  destructive: color.danger,
+  destructiveWashFill: color.dangerTint,
+  destructiveWashBorder: 'rgba(255, 122, 112, 0.25)',
 
   // Tab bar
-  tabIconDefault: '#9BA1A6',
+  tabIconDefault: color.textSecondary,
 
   // Remote notification banner (Sanity schema defaults; CMS may override)
   remoteNotificationBorder: '#2a3142',
