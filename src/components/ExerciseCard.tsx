@@ -1,17 +1,23 @@
 import { ExerciseVideoPlayButton } from '@/src/components/exercise/ExerciseVideoPlayButton';
+import { ActionChip, Tag } from '@/src/components/ds';
 import { PBDetectedModal } from '@/src/components/PBDetectedModal';
+import { color } from '@/src/constants/tokens';
 import { useSubscription } from '@/src/hooks/use-subscription';
-import { useExerciseCardState } from '@/src/hooks/useExerciseCardState';
+import { useToast } from '@/src/hooks/toast-context';
+import {
+  useExerciseCardState,
+  type ExerciseCardPbPrompt,
+} from '@/src/hooks/useExerciseCardState';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useCallback, useRef } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { Colors } from '../constants/theme';
+import * as Haptics from 'expo-haptics';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
 import { getExerciseById } from '../data/exercises';
-import { exerciseHasVideo } from '../utils/youtube';
 import type { Exercise as ProgramExercise } from '../types/program';
 import { getAutoRestTimersEnabled } from '../utils/storage';
 import { formatWeightFromKg } from '../utils/weightUnits';
+import { exerciseHasVideo } from '../utils/youtube';
 import { ExerciseCardSetRow } from './ExerciseCardSetRow';
 import { exerciseCardStyles as styles } from './exerciseCardStyles';
 
@@ -34,6 +40,34 @@ type ExerciseCardProps = {
   onSetReorderDragChange?: (dragging: boolean) => void;
 };
 
+/** Coaching notes longer than this are clamped behind "Show more". */
+const LONG_NOTES_LENGTH = 180;
+const CLAMPED_NOTES_LINES = 3;
+const WEIGHT_STEP_KG = 2.5;
+const WEIGHT_STEP_LB = 5;
+
+function formatRestTime(seconds: number): string {
+  if (seconds < 60) {
+    return `${seconds}s`;
+  }
+  const minutes = Math.floor(seconds / 60);
+  const remainder = seconds % 60;
+  return `${minutes}:${remainder.toString().padStart(2, '0')}`;
+}
+
+function findSuggestedWeight(
+  weights: string[],
+  setIndex: number
+): number | undefined {
+  for (let i = setIndex - 1; i >= 0; i--) {
+    const value = Number(weights[i]);
+    if ((weights[i] ?? '').trim() !== '' && Number.isFinite(value)) {
+      return value;
+    }
+  }
+  return undefined;
+}
+
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   exerciseId,
   programExercise,
@@ -47,8 +81,15 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 }) => {
   const { isPro } = useSubscription();
   const { unit: weightUnit } = useWeightUnit();
+  const { showToast } = useToast();
   const exercise = exerciseId ? getExerciseById(exerciseId) : null;
   const rowHeightsRef = useRef<Record<number, number>>({});
+  const [reorderMode, setReorderMode] = useState(false);
+  const [notesExpanded, setNotesExpanded] = useState(false);
+  const [prSetIndices, setPrSetIndices] = useState<number[]>([]);
+  const [seenPbPrompt, setSeenPbPrompt] = useState<ExerciseCardPbPrompt | null>(
+    null
+  );
 
   const {
     weights,
@@ -63,6 +104,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     handleRepsChange,
     handleRpeChange,
     handleToggleSetState,
+    handleClearSetState,
     handleReorderSets,
     decrementSets,
     incrementSets,
@@ -79,6 +121,19 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     exerciseLoggingType: exercise?.logging_type ?? 'reps_and_weight',
     weightUnit,
   });
+
+  if (pbPrompt && pbPrompt !== seenPbPrompt) {
+    setSeenPbPrompt(pbPrompt);
+    setPrSetIndices((prev) =>
+      prev.includes(pbPrompt.setIndex) ? prev : [...prev, pbPrompt.setIndex]
+    );
+  }
+
+  useEffect(() => {
+    if (pbPrompt) {
+      void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    }
+  }, [pbPrompt]);
 
   const isSwapped =
     exerciseId !== null &&
@@ -119,111 +174,193 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
   if (!exercise) {
     return (
-      <View style={styles.card}>
-        <View style={styles.slotHeader}>
-          <Text style={styles.slotLabel}>Slot {slotNumber}: Empty</Text>
-          <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
-            <Text style={styles.swapButtonText}>Add Exercise</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={[styles.card, styles.emptySlot]}>
+        <Text style={styles.emptySlotLabel}>Slot {slotNumber}: empty</Text>
+        <ActionChip
+          label="Add exercise"
+          icon="add"
+          tone="gold"
+          onPress={onSwap}
+        />
       </View>
     );
   }
 
-  const weightColumnLabel = `${
+  const weightLabel = `${
     exercise.logging_type === 'reps' ? 'Added weight' : 'Weight'
   } (${weightUnit})`;
+  const repsLabel = exercise.logging_type === 'time' ? 'Time (s)' : 'Reps';
 
   let repRangeText: string | null = null;
+  let repsPlaceholder: string | undefined;
+  let suggestedReps: number | undefined;
 
   // `setScheme` lifts (e.g. 5/3/1) vary reps per set, so the single header chip
   // would be misleading - each set row shows its own target instead.
   if (!programExercise?.hideReps && !programExercise?.setScheme) {
     if (programExercise?.isAmrap) {
-      repRangeText = 'MAX REPS (AMRAP)';
+      repRangeText = 'Max reps (AMRAP)';
+      repsPlaceholder = 'Max';
     } else if (programExercise?.repRange) {
       const [min, max] = programExercise.repRange;
       const unit = exercise.logging_type === 'time' ? 'seconds' : 'reps';
-
-      if (min === max) {
-        repRangeText = `${min} ${unit}`;
-      } else {
-        repRangeText = `${min}-${max} ${unit}`;
-      }
+      const range = min === max ? `${min}` : `${min}–${max}`;
+      repRangeText = `${range} ${unit}`;
+      repsPlaceholder = range;
+      suggestedReps = min;
     }
   }
+
+  const additionalHeader =
+    !isSwapped && programExercise?.additionalHeader
+      ? programExercise.additionalHeader
+      : null;
+  const metaParts = [repRangeText, exercisePbChip].filter(
+    (part): part is string => !!part
+  );
+  const description = isSwapped
+    ? exercise.description
+    : (programExercise?.additionalDescription ?? exercise.description);
+  const notesAreLong = (description?.length ?? 0) > LONG_NOTES_LENGTH;
+
+  const firstUnloggedSet = Array.from({ length: numberOfSets }).findIndex(
+    (_, i) => setStates.get(i) === undefined
+  );
+  const canReorder = reorderMode && numberOfSets > 1;
+
+  const handleToggle = async (idx: number) => {
+    const nextState = await handleToggleSetState(idx);
+    if (nextState !== 'completed') return;
+
+    let startedRest = false;
+    if (restTimeSeconds && dayIndex !== null) {
+      const autoTimersEnabled = await getAutoRestTimersEnabled();
+      if (autoTimersEnabled) {
+        const isLastSet = idx === numberOfSets - 1;
+        if (isLastSet) {
+          onRestDismiss();
+        } else {
+          onRestStart({
+            dayIndex,
+            slotIndex,
+            exerciseId,
+            restTimeSeconds,
+          });
+          startedRest = true;
+        }
+      }
+    }
+
+    showToast({
+      message: `${exercise.name}, set ${idx + 1} logged`,
+      icon: 'checkmark-circle',
+      action: {
+        label: 'Undo',
+        onPress: () => {
+          void handleClearSetState(idx);
+          if (startedRest) {
+            onRestDismiss();
+          }
+        },
+      },
+    });
+  };
 
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Text style={styles.exerciseName}>{exercise.name}</Text>
-          {exerciseHasVideo(exercise) ||
-          (!isSwapped && programExercise?.additionalHeader) ||
-          exercisePbChip ||
-          repRangeText ? (
-            <View style={styles.headerMetaRow}>
-              <ExerciseVideoPlayButton exerciseId={exercise.id} />
-              {!isSwapped && programExercise?.additionalHeader ? (
-                <View style={[styles.metaChip, styles.metaChipAccent]}>
-                  <Text style={styles.metaChipAccentText}>
-                    {programExercise.additionalHeader}
-                  </Text>
-                </View>
-              ) : null}
-              {exercisePbChip ? (
-                <View style={styles.metaChip}>
-                  <Text style={styles.metaChipText} numberOfLines={1}>
-                    {exercisePbChip}
-                  </Text>
-                </View>
-              ) : null}
-              {repRangeText ? (
-                <View style={styles.metaChip}>
-                  <Text style={styles.metaChipText}>{repRangeText}</Text>
-                </View>
-              ) : null}
-            </View>
-          ) : null}
-          {(() => {
-            const description = isSwapped
-              ? exercise.description
-              : (programExercise?.additionalDescription ??
-                exercise.description);
-            return description ? (
-              <Text style={styles.additionalDescription}>{description}</Text>
-            ) : null;
-          })()}
-        </View>
+        <Text style={styles.exerciseName} accessibilityRole="header">
+          {exercise.name}
+        </Text>
+        {additionalHeader || metaParts.length > 0 ? (
+          <Text style={styles.metaLine}>
+            {additionalHeader ? (
+              <Text style={styles.metaLineAccent}>{additionalHeader}</Text>
+            ) : null}
+            {additionalHeader && metaParts.length > 0 ? ' · ' : ''}
+            {metaParts.join(' · ')}
+          </Text>
+        ) : null}
+        {exerciseHasVideo(exercise) || isSwapped ? (
+          <View style={styles.actionRow}>
+            <ExerciseVideoPlayButton exerciseId={exercise.id} />
+            {isSwapped ? <Tag label="Swapped" /> : null}
+          </View>
+        ) : null}
+        {description ? (
+          <View style={styles.notes}>
+            <Text
+              style={styles.notesText}
+              numberOfLines={
+                notesAreLong && !notesExpanded ? CLAMPED_NOTES_LINES : undefined
+              }
+            >
+              {description}
+            </Text>
+            {notesAreLong ? (
+              <Pressable
+                onPress={() => setNotesExpanded((prev) => !prev)}
+                style={styles.notesToggle}
+                accessibilityRole="button"
+                accessibilityState={{ expanded: notesExpanded }}
+                accessibilityLabel={
+                  notesExpanded
+                    ? 'Show less coaching notes'
+                    : 'Show more coaching notes'
+                }
+              >
+                <Text style={styles.notesToggleText}>
+                  {notesExpanded ? 'Show less' : 'Show more'}
+                </Text>
+              </Pressable>
+            ) : null}
+          </View>
+        ) : null}
       </View>
 
       <View style={styles.setsHeader}>
-        <Text style={styles.setsLabel}>Sets</Text>
+        <Text style={styles.setsTitle}>Sets</Text>
         <View style={styles.setControls}>
-          <TouchableOpacity
-            style={[
-              styles.setControlButton,
-              numberOfSets <= 1 && styles.setControlButtonDisabled,
+          <Pressable
+            style={({ pressed }) => [
+              styles.roundButton,
+              pressed && styles.roundButtonPressed,
             ]}
             onPress={decrementSets}
             disabled={numberOfSets <= 1}
+            accessibilityRole="button"
+            accessibilityLabel={`Remove a set from ${exercise.name}`}
+            accessibilityState={{ disabled: numberOfSets <= 1 }}
           >
             <Ionicons
               name="remove"
-              size={24}
-              color={numberOfSets <= 1 ? Colors.textOnDark : Colors.accent}
+              size={22}
+              color={numberOfSets <= 1 ? color.textDisabled : color.textPrimary}
             />
-          </TouchableOpacity>
-          <Text style={styles.setCountText}>{numberOfSets}</Text>
-          <TouchableOpacity
-            style={styles.setControlButton}
-            onPress={incrementSets}
+          </Pressable>
+          <Text
+            style={styles.setCountText}
+            accessibilityLabel={`${numberOfSets} sets`}
           >
-            <Ionicons name="add" size={24} color={Colors.accent} />
-          </TouchableOpacity>
-          {restTimeSeconds && dayIndex !== null && (
-            <TouchableOpacity
-              style={styles.restTimerButton}
+            {numberOfSets}
+          </Text>
+          <Pressable
+            style={({ pressed }) => [
+              styles.roundButton,
+              pressed && styles.roundButtonPressed,
+            ]}
+            onPress={incrementSets}
+            accessibilityRole="button"
+            accessibilityLabel={`Add a set to ${exercise.name}`}
+          >
+            <Ionicons name="add" size={22} color={color.textPrimary} />
+          </Pressable>
+          {restTimeSeconds && dayIndex !== null ? (
+            <Pressable
+              style={({ pressed }) => [
+                styles.roundButton,
+                pressed && styles.roundButtonPressed,
+              ]}
               onPress={() =>
                 onRestStart({
                   dayIndex,
@@ -232,65 +369,78 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                   restTimeSeconds,
                 })
               }
+              accessibilityRole="button"
+              accessibilityLabel={`Start rest timer, ${formatRestTime(restTimeSeconds)}`}
             >
-              <Ionicons name="time-outline" size={20} color={Colors.accent} />
-            </TouchableOpacity>
-          )}
+              <Ionicons name="time-outline" size={20} color={color.gold} />
+            </Pressable>
+          ) : null}
+          {numberOfSets > 1 ? (
+            <Pressable
+              style={({ pressed }) => [
+                styles.roundButton,
+                reorderMode && styles.roundButtonActive,
+                pressed && styles.roundButtonPressed,
+              ]}
+              onPress={() => setReorderMode((prev) => !prev)}
+              accessibilityRole="button"
+              accessibilityLabel="Reorder sets"
+              accessibilityState={{ selected: reorderMode }}
+            >
+              <Ionicons
+                name="swap-vertical"
+                size={20}
+                color={reorderMode ? color.gold : color.textSecondary}
+              />
+            </Pressable>
+          ) : null}
         </View>
       </View>
 
-      <View style={styles.setColumnHeaders}>
-        <View style={styles.dragHandleColumn} />
-        <Text style={[styles.inputGroup, styles.inputLabel]}>
-          {weightColumnLabel}
+      <View
+        style={styles.columnHeaders}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
+        <Text style={[styles.columnLabel, styles.columnSet]}>
+          {canReorder ? 'Move' : 'Set'}
         </Text>
-        <Text style={[styles.inputGroupRepsOrTime, styles.inputLabel]}>
-          {exercise.logging_type === 'time' ? 'Time' : 'Reps'}
+        <Text style={[styles.columnLabel, styles.columnFlex]}>
+          {weightLabel}
         </Text>
-        <Text style={[styles.inputGroupRpe, styles.inputLabel]}>RPE</Text>
-        <View style={styles.checkmarkColumn} />
+        <Text style={[styles.columnLabel, styles.columnReps]}>{repsLabel}</Text>
+        <Text style={[styles.columnLabel, styles.columnRpe]}>RPE</Text>
+        <View style={styles.columnCheck} />
       </View>
 
       {Array.from({ length: numberOfSets }).map((_, setIndex) => {
         const setState = setStates.get(setIndex);
-        const canLog = !!reps[setIndex] && !loading;
 
         return (
           <ExerciseCardSetRow
             key={setIndex}
             setIndex={setIndex}
+            exerciseName={exercise.name}
             loggingType={exercise.logging_type}
+            weightLabel={weightLabel}
+            weightUnitLabel={weightUnit}
+            weightStep={weightUnit === 'lb' ? WEIGHT_STEP_LB : WEIGHT_STEP_KG}
             weightValue={weights[setIndex] || ''}
             repsValue={reps[setIndex] || ''}
             rpeValue={rpes[setIndex] || ''}
             setState={setState}
+            isActive={!canReorder && setIndex === firstUnloggedSet}
+            isPr={prSetIndices.includes(setIndex)}
+            suggestedWeight={findSuggestedWeight(weights, setIndex)}
+            suggestedReps={suggestedReps}
+            repsPlaceholder={repsPlaceholder}
             loading={loading}
-            canLog={canLog}
-            canReorder={numberOfSets > 1}
+            canLog={!!reps[setIndex] && !loading}
+            canReorder={canReorder}
             onWeightChange={handleWeightChange}
             onRepsChange={handleRepsChange}
             onRpeChange={handleRpeChange}
-            onToggleSetState={async (idx) => {
-              const nextState = await handleToggleSetState(idx);
-              if (nextState !== 'completed') return;
-              if (!restTimeSeconds || dayIndex === null) return;
-
-              const autoTimersEnabled = await getAutoRestTimersEnabled();
-              if (!autoTimersEnabled) return;
-
-              const isLastSet = idx === numberOfSets - 1;
-              if (isLastSet) {
-                onRestDismiss();
-                return;
-              }
-
-              onRestStart({
-                dayIndex,
-                slotIndex,
-                exerciseId,
-                restTimeSeconds,
-              });
-            }}
+            onToggleSetState={(idx) => void handleToggle(idx)}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
             onRowLayout={handleRowLayout}
@@ -298,19 +448,22 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         );
       })}
 
-      {programExercise?.canSwap !== false && (
-        <View style={styles.swapButtonContainer}>
-          <TouchableOpacity style={styles.swapButton} onPress={onSwap}>
-            <Text style={styles.swapButtonText}>
-              {isPro
-                ? 'Swap Exercise'
-                : `Swap Exercise${
-                    remainingSwaps !== null ? ` (${remainingSwaps})` : ''
-                  }`}
-            </Text>
-          </TouchableOpacity>
+      {programExercise?.canSwap !== false ? (
+        <View style={styles.footer}>
+          <ActionChip
+            label={
+              isPro
+                ? 'Swap exercise'
+                : `Swap exercise${
+                    remainingSwaps !== null ? ` (${remainingSwaps} left)` : ''
+                  }`
+            }
+            icon="swap-horizontal"
+            tone="gold"
+            onPress={onSwap}
+          />
         </View>
-      )}
+      ) : null}
 
       {pbPrompt && exercise ? (
         <PBDetectedModal

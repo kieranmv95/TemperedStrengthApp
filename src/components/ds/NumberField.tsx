@@ -133,7 +133,7 @@ export function NumberField({
     : focused
       ? color.gold
       : state === 'completed'
-        ? color.success
+        ? color.borderSubtle
         : state === 'failed'
           ? color.danger
           : color.borderStrong;
@@ -174,7 +174,11 @@ export function NumberField({
           </Pressable>
         ) : null}
         <TextInput
-          style={[styles.input, { borderColor }]}
+          style={[
+            styles.input,
+            { borderColor },
+            state === 'completed' && styles.inputCompleted,
+          ]}
           value={value}
           onChangeText={handleChangeText}
           onFocus={() => setFocused(true)}
@@ -249,6 +253,9 @@ const styles = StyleSheet.create({
     backgroundColor: color.surface2,
     color: color.textPrimary,
     textAlign: 'center',
+  },
+  inputCompleted: {
+    color: color.textSecondary,
   },
   stepper: {
     width: MIN_TARGET_SIZE,

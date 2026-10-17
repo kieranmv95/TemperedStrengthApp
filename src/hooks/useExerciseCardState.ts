@@ -644,6 +644,55 @@ export function useExerciseCardState({
     return nextState;
   };
 
+  /**
+   * Returns a logged set to "not logged" (the toast's Undo). Reads the latest
+   * values from refs, so it is safe to call from a closure created before the
+   * set was logged.
+   */
+  const handleClearSetState = async (setIndex: number): Promise<void> => {
+    if (!exerciseId || dayIndex === null) {
+      return;
+    }
+    if (setStatesRef.current.get(setIndex) === undefined) {
+      return;
+    }
+
+    const weightKg = parseUserWeightInputToKg(
+      weightsRef.current[setIndex] ?? '',
+      weightUnit
+    );
+    const repsNum = parseInt(repsRef.current[setIndex] ?? '', 10);
+    if (weightKg !== null && (!Number.isFinite(weightKg) || weightKg < 0)) {
+      return;
+    }
+    if (isNaN(repsNum) || repsNum <= 0) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      clearPbDebounce(setIndex);
+      await saveLoggedSet(
+        dayIndex,
+        slotIndex,
+        setIndex,
+        weightKg,
+        repsNum,
+        null,
+        parseRpeInput(rpesRef.current[setIndex] ?? '')
+      );
+      setSetStates((prev) => {
+        const next = new Map(prev);
+        next.delete(setIndex);
+        return next;
+      });
+    } catch (error) {
+      console.error('Error clearing set state:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const decrementSets = async () => {
     if (numberOfSets > 1 && dayIndex !== null) {
       const newCount = numberOfSets - 1;
@@ -717,7 +766,7 @@ export function useExerciseCardState({
 
     await flushPendingSaves();
 
-    const moveItem = <T,>(items: T[]): T[] => {
+    const moveItem = <T>(items: T[]): T[] => {
       const next = [...items];
       const [item] = next.splice(fromIndex, 1);
       next.splice(toIndex, 0, item);
@@ -727,9 +776,8 @@ export function useExerciseCardState({
     const nextWeights = moveItem(weightsRef.current);
     const nextReps = moveItem(repsRef.current);
     const nextRpes = moveItem(rpesRef.current);
-    const stateList = Array.from(
-      { length: numberOfSets },
-      (_, i) => setStatesRef.current.get(i)
+    const stateList = Array.from({ length: numberOfSets }, (_, i) =>
+      setStatesRef.current.get(i)
     );
     const nextStateList = moveItem(stateList);
     const nextSetStates = new Map<number, 'completed' | 'failed'>();
@@ -787,6 +835,7 @@ export function useExerciseCardState({
     handleRepsChange,
     handleRpeChange,
     handleToggleSetState,
+    handleClearSetState,
     handleReorderSets,
     decrementSets,
     incrementSets,
