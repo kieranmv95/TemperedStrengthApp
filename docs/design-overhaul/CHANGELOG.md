@@ -1,5 +1,38 @@
 # Design overhaul changelog
 
+## Phase 3: Home, Workouts, Explore
+
+- **Home:**
+  - "Good afternoon, {first name}" with today's date, and the account badge beside the name.
+  - A hero Today card: session or Rest day, a rolling sessions-left count, animated progress, and "Start session" or "View week".
+  - Check-in shows a dot per behaviour with a supplement indicator and a text summary.
+  - Open workouts and the shop sit in a two-up bento.
+  - Partner ads use the dark theme: a CMS colour accent edge, a "Partner" label, the logo on a contained light panel, two-line copy and a gold CTA.
+  - An optional copyable promo code (Sanity `promoCode`) shows a "Code copied" toast.
+  - The ad carousel has no auto-advance, peeks the next card and has announced page dots.
+  - Cards fade up once on first load, and skeletons show while loading.
+- **Workouts:**
+  - One header row of chips; Filters shows a rolling, popping count badge.
+  - Removable active-filter chips.
+  - Discipline tiles have accessible names, skeletons and snap scrolling.
+  - Workout cards read as one element; the favourite heart is separately reachable, pops and announces the change.
+  - The filters sheet is a `BottomSheet` with FilterChips and counts, "Strength focus", Reset disabled until something is selected, and "Show N" with debounced announcements.
+  - "168+ workouts" is bound to the data.
+- **Explore:**
+  - Skills & Cues is the hero, with thumbnails behind skeletons (new `LoadingImage`).
+  - Shop and Discover are a two-up bento.
+  - Tools are a peeking row with "See all".
+  - Articles use FilterChips with counts and skeletons.
+- **Shared:**
+  - `StandardLayout variant="forged"` and `titleAccessory` are opt-in, and other screens are unchanged.
+  - `useMotion` delays, and `EnterOnMount`.
+  - The `logoPanel` token.
+- **Not done:**
+  - **Home key-lift chips, session duration and a rest-day recovery suggestion.** No data for them (presentation only).
+  - **Scaling the centred discipline tile.**
+  - **A shared-element transition from workout card to detail.** It stays a standard push.
+  - **After screenshots.** These need a manual pass.
+
 ## Phase 3: Program screen
 
 - **Tab bar:** the new `TabBar` replaces the default bar and `HapticTab` across the app.

@@ -25,6 +25,31 @@ Record the date, device and result. "Pending" means not yet checked by hand.
 | Session complete sheet: focus moves to the title and back on close; stats read with their values.                                                    | Pending   | Pending  | Pending      | Pending (no burst or count-up movement) |
 | Nothing floating covers focused or interactive content. The Expo dev tools gear is dev-only; hide it for this pass.                                  | Pending   | Pending  | Pending      | n/a                                     |
 
-## Home, Workouts, Explore
+## Home
 
-Not yet restyled.
+| Check                                                                                           | VoiceOver | TalkBack | Largest text | Reduce Motion              |
+| ----------------------------------------------------------------------------------------------- | --------- | -------- | ------------ | -------------------------- |
+| The greeting title is a header, and the account badge reads "Account type PRO".                 | Pending   | Pending  | Pending      | n/a                        |
+| The Today card reads as one button: program, session, and completed or left counts.             | Pending   | Pending  | Pending      | Pending (no rolling count) |
+| Check-in reads "Check-in, 1 of 4 behaviours · 1 supplement due".                                | Pending   | Pending  | Pending      | Pending (dots fade only)   |
+| Partner ad: "Partner" is read, the CTA is a link, and "Copy code TS10" is announced and toasts. | Pending   | Pending  | Pending      | n/a                        |
+| The ad carousel position reads "Ad 1 of 3", with no auto-advance.                               | Pending   | Pending  | n/a          | n/a                        |
+| Cards don't move on first load under Reduce Motion.                                             | n/a       | n/a      | n/a          | Pending                    |
+
+## Workouts
+
+| Check                                                                                                                                             | VoiceOver | TalkBack | Largest text | Reduce Motion                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------- | ------------ | ---------------------------------------- |
+| Filters reads "Filter workouts, N active"; Sort by reports expanded.                                                                              | Pending   | Pending  | Pending      | Pending (no badge pop)                   |
+| Discipline tiles read their names, including logo-only tiles.                                                                                     | Pending   | Pending  | Pending      | n/a                                      |
+| A workout card reads as one element; the heart is reachable after it and announces "Added to favourites".                                         | Pending   | Pending  | Pending      | Pending (no heart pop)                   |
+| Filters sheet: focus moves to "Filters"; chips read "Strength, 22 workouts, selected"; Reset is disabled when empty; count changes are announced. | Pending   | Pending  | Pending      | Pending (sheet fades instead of sliding) |
+| No floating element covers the search field.                                                                                                      | Pending   | Pending  | Pending      | n/a                                      |
+
+## Explore
+
+| Check                                                                               | VoiceOver | TalkBack | Largest text | Reduce Motion             |
+| ----------------------------------------------------------------------------------- | --------- | -------- | ------------ | ------------------------- |
+| Skills & Cues reads as one button, and thumbnails never show as empty grey squares. | Pending   | Pending  | Pending      | Pending (static skeleton) |
+| Tools: each tile reads its name and description; "See all tools" toggles the grid.  | Pending   | Pending  | Pending      | n/a                       |
+| Article chips read "Strength, 4 articles, selected".                                | Pending   | Pending  | Pending      | n/a                       |
