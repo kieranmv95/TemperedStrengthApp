@@ -86,7 +86,7 @@ export function HomeTodayCard({ summary, onPress }: HomeTodayCardProps) {
 
         <View style={styles.cta}>
           <Text style={styles.ctaText}>
-            {isTrainingDay ? 'Start session' : 'View week'}
+            {isTrainingDay ? 'Go to today’s session' : 'Go to program'}
           </Text>
         </View>
       </View>

@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, {
+  interpolateColor,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
@@ -66,12 +67,19 @@ function BehaviourDot({ filled }: { filled: boolean }) {
     fill.set(motionHelpers.fade(filled ? 1 : 0, 'base'));
   }, [filled, fill, motionHelpers]);
 
+  const ringStyle = useAnimatedStyle(() => ({
+    borderColor: interpolateColor(
+      fill.get(),
+      [0, 1],
+      [color.borderStrong, color.gold]
+    ),
+  }));
   const fillStyle = useAnimatedStyle(() => ({ opacity: fill.get() }));
 
   return (
-    <View style={styles.dot}>
+    <Animated.View style={[styles.dot, ringStyle]}>
       <Animated.View style={[styles.dotFill, fillStyle]} />
-    </View>
+    </Animated.View>
   );
 }
 
@@ -166,7 +174,6 @@ const styles = StyleSheet.create({
     height: DOT_SIZE,
     borderRadius: radius.pill,
     borderWidth: 1.5,
-    borderColor: color.borderStrong,
     overflow: 'hidden',
   },
   dotFill: {

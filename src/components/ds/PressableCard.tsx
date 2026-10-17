@@ -39,6 +39,8 @@ type PressableCardProps = {
   /** Light impact on press. Supplementary only; the visual press state always shows. */
   haptic?: boolean;
   disabled?: boolean;
+  /** Stretch to the height of its container, e.g. equal-height tiles in a row. */
+  fill?: boolean;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 };
@@ -81,6 +83,7 @@ export function PressableCard({
   showChevron = true,
   haptic = true,
   disabled = false,
+  fill = false,
   style,
   testID,
 }: PressableCardProps) {
@@ -121,7 +124,7 @@ export function PressableCard({
 
   return (
     <Pressable
-      style={style}
+      style={[fill && styles.fill, style]}
       onPress={handlePress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
@@ -135,12 +138,13 @@ export function PressableCard({
       <Animated.View
         style={[
           styles.surface,
+          fill && styles.fill,
           elevation.raised,
           surfaceStyle,
           disabled && styles.disabled,
         ]}
       >
-        <View style={styles.clip}>
+        <View style={[styles.clip, fill && styles.fill]}>
           {variant === 'hero' ? <HeroEdge /> : null}
           {variant === 'promo' && accentColor ? (
             <View
@@ -151,6 +155,7 @@ export function PressableCard({
           <View
             style={[
               styles.row,
+              fill && styles.rowFill,
               variant === 'hero' && styles.rowHero,
               variant === 'promo' && accentColor ? styles.rowPromo : null,
             ]}
@@ -180,6 +185,13 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.6,
+  },
+  fill: {
+    flex: 1,
+  },
+  rowFill: {
+    flex: 1,
+    alignItems: 'flex-start',
   },
   heroEdge: {
     position: 'absolute',

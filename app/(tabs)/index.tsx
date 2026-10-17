@@ -9,18 +9,15 @@ import { HomeCheckinCard } from '@/src/components/home/HomeCheckinCard';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
 import { HomeTodayCard } from '@/src/components/home/HomeTodayCard';
-import { SponsorAdsCarousel } from '@/src/components/home/SponsorAdsCarousel';
 import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
 import { LiveCompetition } from '@/src/components/LiveCompetition';
 import { color } from '@/src/constants/tokens';
 import { getAllExercises } from '@/src/data/exercises';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useHomeRemoteNotification } from '@/src/hooks/useHomeRemoteNotification';
-import { useHomeSponsorAds } from '@/src/hooks/useHomeSponsorAds';
 import { useRoles } from '@/src/hooks/useRoles';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
-import type { HomeSponsorAd } from '@/src/services/sanitySponsorAds';
 import {
   applyDailyStreakCheckIn,
   buildSnapshot,
@@ -102,7 +99,6 @@ function accountTypeBadgeLabel(
 export default function HomeTabScreen() {
   const posthog = usePostHog();
   const { banner: remoteNotification } = useHomeRemoteNotification();
-  const { ads: sponsorAds } = useHomeSponsorAds();
   const { unit: weightUnit } = useWeightUnit();
   const {
     isPro,
@@ -193,13 +189,6 @@ export default function HomeTabScreen() {
     const path = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
     router.push(path as Href);
   }, []);
-
-  const openSponsorCta = useCallback(
-    (ad: HomeSponsorAd) => {
-      openHomeCtaUrl(ad.affiliateUrl);
-    },
-    [openHomeCtaUrl]
-  );
 
   const recentPbs = useMemo(() => {
     if (!pbStore) {
@@ -398,15 +387,6 @@ export default function HomeTabScreen() {
               />
             </View>
           </EnterOnMount>
-
-          {sponsorAds.length > 0 ? (
-            <EnterOnMount index={nextEntrance()}>
-              <SponsorAdsCarousel
-                ads={sponsorAds}
-                onPressCta={openSponsorCta}
-              />
-            </EnterOnMount>
-          ) : null}
 
           {streakSnapshot ? (
             <EnterOnMount index={nextEntrance()}>

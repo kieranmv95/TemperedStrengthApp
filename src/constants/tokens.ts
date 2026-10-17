@@ -44,8 +44,6 @@ export const color = {
   infoTintStrong: 'rgba(108, 180, 238, 0.24)',
 
   scrim: 'rgba(0, 0, 0, 0.6)',
-  /** Light backing for partner logos designed for light backgrounds. */
-  logoPanel: '#F5F3EE',
 } as const;
 
 export type ColorToken = keyof typeof color;

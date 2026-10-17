@@ -310,16 +310,15 @@ export function YouAccountSettingsScreen() {
     setIsRefreshingSanityHome(true);
     void (async () => {
       try {
-        const { notification, sponsorAds, shopAds, skills } =
+        const { notification, shopAds, skills } =
           await refreshSanityHomeContent();
-        const sponsorCount = sponsorAds.length;
         const shopCount = shopAds.length;
         const skillsCount = skills.length;
         const notificationNote =
           notification !== null ? 'Notification loaded.' : 'No notification.';
         Alert.alert(
           'Sanity content refreshed',
-          `${notificationNote} ${sponsorCount} carousel ad${sponsorCount === 1 ? '' : 's'}, ${shopCount} in shop, ${skillsCount} skill${skillsCount === 1 ? '' : 's'}. Open Home, Hub, or Skills & Cues to preview.`
+          `${notificationNote} ${shopCount} ad${shopCount === 1 ? '' : 's'} in shop, ${skillsCount} skill${skillsCount === 1 ? '' : 's'}. Open Home, Hub, or Skills & Cues to preview.`
         );
       } catch (error) {
         console.error('Dev Sanity refresh failed:', error);
@@ -763,7 +762,7 @@ export function YouAccountSettingsScreen() {
                   </Text>
                   <Text style={styles.settingDescription}>
                     {isRefreshingSanityHome
-                      ? 'Fetching notification, sponsor ads, and skills from Sanity…'
+                      ? 'Fetching notification, shop ads, and skills from Sanity…'
                       : 'Clear cached Sanity content (home + skills) and refetch. Open Home, Hub, or Skills & Cues to preview.'}
                   </Text>
                 </View>

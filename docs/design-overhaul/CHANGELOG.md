@@ -1,5 +1,16 @@
 # Design overhaul changelog
 
+## Phase 3: Home review changes
+
+- **Removed** partner ad cards from Home, along with everything only they used:
+  - `SponsorAdsCarousel`, `SponsorAdCard` and `useHomeSponsorAds`;
+  - the Home carousel query, cache key and loader in `sanitySponsorAds`;
+  - the `promoCode` field, the `logoPanel` token and the `expo-clipboard` dependency.
+- **Kept** for the Shop, which still uses them: the Sanity sponsor ad service and the `home_sponsor_cta_pressed` event.
+- **Hero button:** now reads "Go to today's session" on training days, and "Go to program" otherwise.
+- **Check-in dots:** the outline turns gold with the fill.
+- **Equal heights:** the two-up tiles on Home and Explore now match in height (new `PressableCard` `fill` option).
+
 ## Phase 3: Home, Workouts, Explore
 
 - **Home:**

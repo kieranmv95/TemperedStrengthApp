@@ -54,6 +54,7 @@ export function HubPromoCard({
       accessibilityLabel={`${title}, ${description}`}
       accessibilityHint={accessibilityLabel}
       showChevron={!isTile}
+      fill={isTile}
       style={isTile ? styles.tileSlot : undefined}
     >
       <View style={isTile ? styles.tileContent : styles.rowContent}>
