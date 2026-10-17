@@ -639,6 +639,21 @@ export function YouAccountSettingsScreen() {
             <View style={styles.settingsSection}>
               <Text style={styles.settingsSectionTitle}>Dev settings</Text>
 
+              <TouchableOpacity
+                style={styles.settingItem}
+                onPress={() => router.push('/dev/tokens')}
+                accessibilityRole="button"
+              >
+                <View style={styles.settingContent}>
+                  <Text style={styles.settingTitle}>Design tokens preview</Text>
+                  <Text style={styles.settingDescription}>
+                    Every colour, type style, spacing, radius, elevation and
+                    motion token, with contrast ratios.
+                  </Text>
+                </View>
+                <SmallChevron />
+              </TouchableOpacity>
+
               <View style={styles.settingItem}>
                 <View style={styles.settingContent}>
                   <Text style={styles.settingTitle}>Force Pro mode</Text>

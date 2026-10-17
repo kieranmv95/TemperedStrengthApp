@@ -197,6 +197,10 @@ export default function RootLayout() {
                       options={{ headerShown: false }}
                     />
                     <Stack.Screen
+                      name="dev/tokens"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
                       name="account/general"
                       options={{ headerShown: false }}
                     />
