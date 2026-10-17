@@ -39,6 +39,8 @@ export type Motion = {
    * `from` value under Reduce Motion. Stop it by assigning a new value.
    */
   pulse: (from: number, to: number) => number;
+  /** One-off scale pop from 1 to `peak` and back, e.g. a selected tab icon. Stays at 1 under Reduce Motion. */
+  bounce: (peak: number) => number;
 };
 
 /**
@@ -129,5 +131,23 @@ export function useMotion(): Motion {
     );
   };
 
-  return { reduceMotion, timing, spring, fade, pulse };
+  const bounce = (peak: number): number => {
+    'worklet';
+    if (reduceMotion) {
+      return 1;
+    }
+    return withSequence(
+      withTiming(peak, {
+        duration: motion.duration.fast / 2,
+        easing: EASINGS.standard,
+        reduceMotion: ReduceMotion.Never,
+      }),
+      withSpring(1, {
+        ...motion.spring.snappy,
+        reduceMotion: ReduceMotion.Never,
+      })
+    );
+  };
+
+  return { reduceMotion, timing, spring, fade, pulse, bounce };
 }

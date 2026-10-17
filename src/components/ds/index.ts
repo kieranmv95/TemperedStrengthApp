@@ -21,6 +21,8 @@ import { SetCheckButton } from './SetCheckButton';
 import { Skeleton } from './Skeleton';
 import { SmallChevron } from './SmallChevron';
 import { StandardLayout } from './StandardLayout';
+import { TabBar } from './TabBar';
+import { TabBarView } from './TabBarView';
 import { Toast } from './Toast';
 
 export {
@@ -49,6 +51,8 @@ export {
   Skeleton,
   SmallChevron,
   StandardLayout,
+  TabBar,
+  TabBarView,
   Tag,
   Toast,
 };
