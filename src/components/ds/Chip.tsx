@@ -210,7 +210,14 @@ export function Tag({ label }: TagProps) {
   );
 }
 
-export type BadgeTone = 'gold' | 'neutral';
+export type BadgeTone = 'gold' | 'neutral' | 'success' | 'danger';
+
+const BADGE_TONES: Record<BadgeTone, { fill: string; foreground: string }> = {
+  gold: { fill: color.gold, foreground: color.onGold },
+  neutral: { fill: color.surface3, foreground: color.textPrimary },
+  success: { fill: color.successTint, foreground: color.success },
+  danger: { fill: color.dangerTint, foreground: color.danger },
+};
 
 type BadgeProps = {
   label: string;
@@ -219,25 +226,22 @@ type BadgeProps = {
   accessibilityLabel?: string;
 };
 
-/** Small filled status label, e.g. "PRO" or a level. */
+/** Small filled status label, e.g. "PRO", a level, or "Completed". */
 export function Badge({
   label,
   tone = 'gold',
   accessibilityLabel,
 }: BadgeProps) {
+  const tones = BADGE_TONES[tone];
+
   return (
     <View
-      style={[styles.badge, tone === 'gold' ? styles.badgeGold : null]}
+      style={[styles.badge, { backgroundColor: tones.fill }]}
       accessible
       accessibilityRole="text"
       accessibilityLabel={accessibilityLabel ?? label}
     >
-      <Text
-        style={[
-          styles.badgeLabel,
-          tone === 'gold' ? styles.badgeLabelGold : null,
-        ]}
-      >
+      <Text style={[styles.badgeLabel, { color: tones.foreground }]}>
         {label}
       </Text>
     </View>
@@ -292,16 +296,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.xs,
     paddingVertical: space.xxs,
     borderRadius: radius.sm,
-    backgroundColor: color.surface3,
-  },
-  badgeGold: {
-    backgroundColor: color.gold,
   },
   badgeLabel: {
     ...typography.captionStrong,
-    color: color.textPrimary,
-  },
-  badgeLabelGold: {
-    color: color.onGold,
   },
 });

@@ -1,4 +1,12 @@
-import { Colors, Spacing } from '@/src/constants/theme';
+import {
+  ActionChip,
+  Badge,
+  Collapsible,
+  ProgressBar,
+  Tag,
+} from '@/src/components/ds';
+import { color, space } from '@/src/constants/tokens';
+import { useMotion } from '@/src/hooks/useMotion';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { ProgramCompletedScreen } from '@/src/screens/ProgramCompletedScreen';
 import { ProgramStartingInXScreen } from '@/src/screens/ProgramStartingInXScreen';
@@ -16,18 +24,26 @@ import type {
   ProgramSessionStatus,
 } from '@/src/types/storage';
 import { formatVolumeFromKg } from '@/src/utils/weightUnits';
-import React, { useCallback, useState, type ComponentRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  type ComponentRef,
+} from 'react';
 import {
   KeyboardAvoidingView,
+  Pressable,
   ScrollView,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 import type { RestTimerStartPayload } from './ExerciseCard';
 import { ExerciseCard } from './ExerciseCard';
-import { CollapsibleWarmupSection } from './CollapsibleWarmupSection';
 import { ConditioningWorkoutBody } from './conditioning/ConditioningWorkoutBody';
 import { YoutubeEmbed } from './exercise/YoutubeEmbed';
 import { ProgramSessionStatusControls } from './ProgramSessionStatusControls';
@@ -72,6 +88,8 @@ type WorkoutScreenBodyProps = {
   exerciseCardKeySuffix?: string | number;
 };
 
+const DAYS_PER_WEEK = 7;
+
 export function WorkoutScreenBody({
   selectedDayIndex,
   isRestDay,
@@ -112,10 +130,34 @@ export function WorkoutScreenBody({
   exerciseCardKeySuffix = '',
 }: WorkoutScreenBodyProps) {
   const { unit: weightUnit } = useWeightUnit();
+  const motionHelpers = useMotion();
   const [scrollEnabled, setScrollEnabled] = useState(true);
+  /** Expanded state per day and section, kept for as long as the Program tab is mounted. */
+  const [expandedSections, setExpandedSections] = useState<
+    Record<string, boolean>
+  >({});
+  const contentOpacity = useSharedValue(1);
+
   const handleSetReorderDragChange = useCallback((dragging: boolean) => {
     setScrollEnabled(!dragging);
   }, []);
+
+  useEffect(() => {
+    contentOpacity.set(0);
+    contentOpacity.set(motionHelpers.fade(1, 'base'));
+  }, [selectedDayIndex, contentOpacity, motionHelpers]);
+
+  const contentStyle = useAnimatedStyle(() => ({
+    opacity: contentOpacity.get(),
+  }));
+
+  const sectionKey = (name: string) => `${selectedDayIndex ?? 'none'}:${name}`;
+  const isSectionExpanded = (name: string) =>
+    expandedSections[sectionKey(name)] ?? false;
+  const toggleSection = (name: string) => {
+    const key = sectionKey(name);
+    setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   if (showProgramCompleted) {
     return <ProgramCompletedScreen onViewAllPrograms={onViewAllPrograms} />;
@@ -145,6 +187,12 @@ export function WorkoutScreenBody({
     );
   }
 
+  const weekNumber =
+    selectedDayIndex !== null
+      ? Math.floor(selectedDayIndex / DAYS_PER_WEEK) + 1
+      : null;
+  const intensityLevel = getIntensityLevel(currentWorkout.intensity);
+
   return (
     <KeyboardAvoidingView
       behavior="padding"
@@ -156,151 +204,151 @@ export function WorkoutScreenBody({
         style={styles.scrollView}
         contentContainerStyle={[
           styles.content,
-          { paddingBottom: Spacing.xxl + tabBarHeight + bottomInset },
+          { paddingBottom: space.md + tabBarHeight + bottomInset },
         ]}
         keyboardShouldPersistTaps="always"
         scrollEnabled={scrollEnabled}
       >
-        <View style={styles.header}>
-          <View style={styles.headerTop}>
-            <View style={styles.headerTextContainer}>
-              <Text style={styles.title}>{currentWorkout.label}</Text>
-              {currentWorkout.description && (
-                <Text style={styles.description}>
-                  {currentWorkout.description}
-                </Text>
-              )}
-            </View>
-          </View>
-        </View>
-
-        {headerAccessory}
-
-        <ProgramSessionStatusControls
-          status={sessionStatus}
-          onMove={onMoveSession}
-          onComplete={onMarkSessionCompleted}
-          onSkip={onSkipSession}
-        />
-
-        {completedSession && !activeSession && (
-          <View style={styles.completedSessionBanner}>
-            <Text style={styles.completedSessionTitle}>Session Completed</Text>
-            <View style={styles.completedSessionStats}>
-              <View style={styles.completedSessionStat}>
-                <Text style={styles.completedSessionStatValue}>
-                  {formatSessionDuration(
-                    completedSession.completedAt - completedSession.startedAt
-                  )}
-                </Text>
-                <Text style={styles.completedSessionStatLabel}>Duration</Text>
-              </View>
-              {currentWorkout.format !== 'v2' && (
-                <>
-                  <View style={styles.completedSessionStat}>
-                    <Text style={styles.completedSessionStatValue}>
-                      {formatVolumeFromKg(
-                        completedSession.totalVolume,
-                        weightUnit
-                      )}
-                    </Text>
-                    <Text style={styles.completedSessionStatLabel}>Volume</Text>
-                  </View>
-                  <View style={styles.completedSessionStat}>
-                    <Text style={styles.completedSessionStatValue}>
-                      {completedSession.setsCompleted}
-                    </Text>
-                    <Text style={styles.completedSessionStatLabel}>Sets</Text>
-                  </View>
-                </>
-              )}
-            </View>
-            <TouchableOpacity
-              style={styles.redoButton}
-              onPress={handleRedoWorkout}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.redoButtonText}>Redo Workout</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {showIntensity ? (
-          <View style={styles.intensityCard}>
-            <View style={styles.intensityCardHeader}>
-              <Text style={styles.intensityLabel}>Intensity</Text>
-              <Text style={styles.intensityValue}>
-                {currentWorkout.intensity}/10
-              </Text>
-            </View>
-            <View style={styles.intensityBarTrack}>
-              <View
-                style={[
-                  styles.intensityBarFill,
-                  { width: `${currentWorkout.intensity * 10}%` },
-                ]}
-              />
-            </View>
-            <Text style={styles.intensityFeel}>
-              {getIntensityLevel(currentWorkout.intensity).label}.{' '}
-              {getIntensityLevel(currentWorkout.intensity).feel}
+        <Animated.View style={[styles.sections, contentStyle]}>
+          <View style={styles.header}>
+            {weekNumber !== null ? <Tag label={`Week ${weekNumber}`} /> : null}
+            <Text style={styles.title} accessibilityRole="header">
+              {currentWorkout.label}
             </Text>
-            <TouchableOpacity
-              style={styles.intensityCta}
-              onPress={onIntensityInfoPress}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.intensityCtaText}>
-                View all intensity levels
+            {currentWorkout.description ? (
+              <Text style={styles.description}>
+                {currentWorkout.description}
               </Text>
-            </TouchableOpacity>
+            ) : null}
           </View>
-        ) : null}
 
-        {(() => {
-          if (currentWorkout.format === 'v2' && selectedDayIndex !== null) {
-            return (
-              <ConditioningWorkoutBody
-                dayIndex={selectedDayIndex}
-                blocks={currentWorkout.blocks}
+          {headerAccessory}
+
+          <ProgramSessionStatusControls
+            status={sessionStatus}
+            expanded={isSectionExpanded('session-actions')}
+            onToggle={() => toggleSection('session-actions')}
+            onMove={onMoveSession}
+            onComplete={onMarkSessionCompleted}
+            onSkip={onSkipSession}
+          />
+
+          {completedSession && !activeSession ? (
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>Session completed</Text>
+              <View style={styles.statRow}>
+                <View style={styles.stat}>
+                  <Text style={styles.statValue}>
+                    {formatSessionDuration(
+                      completedSession.completedAt - completedSession.startedAt
+                    )}
+                  </Text>
+                  <Text style={styles.statLabel}>Duration</Text>
+                </View>
+                {currentWorkout.format !== 'v2' ? (
+                  <>
+                    <View style={styles.stat}>
+                      <Text style={styles.statValue}>
+                        {formatVolumeFromKg(
+                          completedSession.totalVolume,
+                          weightUnit
+                        )}
+                      </Text>
+                      <Text style={styles.statLabel}>Volume</Text>
+                    </View>
+                    <View style={styles.stat}>
+                      <Text style={styles.statValue}>
+                        {completedSession.setsCompleted}
+                      </Text>
+                      <Text style={styles.statLabel}>Sets</Text>
+                    </View>
+                  </>
+                ) : null}
+              </View>
+              <ActionChip
+                label="Redo workout"
+                icon="refresh"
+                tone="neutral"
+                onPress={() => void handleRedoWorkout()}
               />
-            );
-          }
+            </View>
+          ) : null}
 
-          let exerciseSlotIndex = 0;
-          return slots.map((slot, index) => {
-            if (slot.type === 'warmup') {
-              return (
-                <CollapsibleWarmupSection
-                  key={`warmup-${selectedDayIndex}-${index}`}
-                  title={slot.warmup.title ?? 'Warm-Up'}
-                  containerStyle={styles.warmupCard}
-                  titleStyle={styles.warmupTitle}
+          {showIntensity ? (
+            <View style={styles.card}>
+              <View style={styles.cardTitleRow}>
+                <Text style={styles.cardTitle}>Intensity</Text>
+                <Text
+                  style={styles.intensityValue}
+                  accessibilityLabel={`${currentWorkout.intensity} out of 10`}
                 >
-                  {slot.warmup.additionalDescription && (
-                    <Text style={styles.warmupDescription}>
-                      {slot.warmup.additionalDescription}
-                    </Text>
-                  )}
-                  <View style={styles.warmupList}>
-                    {slot.warmup.description.map((item, itemIndex) => (
-                      <View key={itemIndex} style={styles.warmupItem}>
-                        <Text style={styles.warmupBullet}>•</Text>
-                        <Text style={styles.warmupText}>{item}</Text>
-                      </View>
-                    ))}
-                  </View>
-                  {slot.warmup.videoUrl ? (
-                    <View style={styles.warmupVideo}>
+                  {currentWorkout.intensity}/10
+                </Text>
+              </View>
+              <ProgressBar
+                progress={currentWorkout.intensity / 10}
+                accessibilityLabel="Intensity"
+                accessibilityValueText={`${currentWorkout.intensity} out of 10, ${intensityLevel.label}`}
+              />
+              <Text style={styles.body}>
+                {intensityLevel.label}. {intensityLevel.feel}
+              </Text>
+              <Pressable
+                style={styles.textButton}
+                onPress={onIntensityInfoPress}
+                accessibilityRole="button"
+              >
+                <Text style={styles.textButtonLabel}>
+                  View all intensity levels
+                </Text>
+              </Pressable>
+            </View>
+          ) : null}
+
+          {(() => {
+            if (currentWorkout.format === 'v2' && selectedDayIndex !== null) {
+              return (
+                <ConditioningWorkoutBody
+                  dayIndex={selectedDayIndex}
+                  blocks={currentWorkout.blocks}
+                />
+              );
+            }
+
+            let exerciseSlotIndex = 0;
+            return slots.map((slot, index) => {
+              if (slot.type === 'warmup') {
+                const warmupTitle = slot.warmup.title ?? 'Warm-up';
+                return (
+                  <Collapsible
+                    key={`warmup-${selectedDayIndex}-${index}`}
+                    title={warmupTitle}
+                    expanded={isSectionExpanded(`warmup-${index}`)}
+                    onToggle={() => toggleSection(`warmup-${index}`)}
+                  >
+                    {slot.warmup.additionalDescription ? (
+                      <Text style={styles.callout}>
+                        {slot.warmup.additionalDescription}
+                      </Text>
+                    ) : null}
+                    <View style={styles.list}>
+                      {slot.warmup.description.map((item, itemIndex) => (
+                        <View key={itemIndex} style={styles.listItem}>
+                          <View style={styles.listBullet} />
+                          <Text style={styles.listText}>{item}</Text>
+                        </View>
+                      ))}
+                    </View>
+                    {slot.warmup.videoUrl ? (
                       <YoutubeEmbed
                         youtubeId={slot.warmup.videoUrl}
-                        accessibilityLabel={`Warm-up video for ${slot.warmup.title ?? 'Warm-Up'}`}
+                        accessibilityLabel={`Warm-up video for ${warmupTitle}`}
                       />
-                    </View>
-                  ) : null}
-                </CollapsibleWarmupSection>
-              );
-            } else {
+                    ) : null}
+                  </Collapsible>
+                );
+              }
+
               const currentExerciseIndex = exerciseSlotIndex;
               exerciseSlotIndex++;
               return (
@@ -317,80 +365,61 @@ export function WorkoutScreenBody({
                   onSetReorderDragChange={handleSetReorderDragChange}
                 />
               );
-            }
-          });
-        })()}
+            });
+          })()}
 
-        <View style={styles.notesContainer}>
-          <TouchableOpacity
-            style={styles.notesHeader}
-            onPress={toggleNotesExpanded}
-            activeOpacity={0.7}
+          <Collapsible
+            title="Notes"
+            expanded={isNotesExpanded}
+            onToggle={toggleNotesExpanded}
+            accessibilityLabel={
+              notes.length > 0 && !isNotesExpanded
+                ? 'Notes, has notes'
+                : 'Notes'
+            }
+            accessory={
+              notes.length > 0 && !isNotesExpanded ? (
+                <Badge label="Has notes" tone="neutral" />
+              ) : null
+            }
           >
-            <Text style={styles.notesTitle}>Notes</Text>
-            <View style={styles.notesHeaderRight}>
-              {notes.length > 0 && !isNotesExpanded && (
-                <View style={styles.notesBadge}>
-                  <Text style={styles.notesBadgeText}>Has notes</Text>
-                </View>
-              )}
-              <Text style={styles.notesExpandIcon}>
-                {isNotesExpanded ? '▼' : '▶'}
-              </Text>
-            </View>
-          </TouchableOpacity>
-          {isNotesExpanded && (
-            <>
-              <TextInput
-                ref={notesInputRef}
-                style={styles.notesInput}
-                value={notes}
-                onChangeText={handleNotesChange}
-                onFocus={handleNotesFocus}
-                onBlur={handleNotesBlur}
-                placeholder="Add notes for this workout..."
-                placeholderTextColor={Colors.textPlaceholder}
-                multiline
-                textAlignVertical="top"
-              />
-            </>
-          )}
+            <TextInput
+              ref={notesInputRef}
+              style={styles.notesInput}
+              value={notes}
+              onChangeText={handleNotesChange}
+              onFocus={handleNotesFocus}
+              onBlur={handleNotesBlur}
+              placeholder="Add notes for this workout…"
+              placeholderTextColor={color.textTertiary}
+              multiline
+              textAlignVertical="top"
+              accessibilityLabel="Workout notes"
+            />
+          </Collapsible>
 
           {(onOpenCopyWorkoutNotesModal && selectedDayIndex !== null) ||
           currentWorkout.format !== 'v2' ? (
-            <>
-              <View style={styles.notesActionsContainer}>
-                {onOpenCopyWorkoutNotesModal && selectedDayIndex !== null && (
-                  <TouchableOpacity
-                    style={styles.notesAction}
-                    onPress={onOpenCopyWorkoutNotesModal}
-                    activeOpacity={0.7}
-                    accessibilityRole="button"
-                    accessibilityLabel="Copy notes from another workout"
-                  >
-                    <Text style={styles.notesActionText}>
-                      Copy notes from another workout
-                    </Text>
-                  </TouchableOpacity>
-                )}
-
-                {currentWorkout.format !== 'v2' && (
-                  <TouchableOpacity
-                    style={styles.notesAction}
-                    onPress={onExportWorkoutText}
-                    activeOpacity={0.7}
-                    accessibilityRole="button"
-                    accessibilityLabel="Export workout as text"
-                  >
-                    <Text style={styles.notesActionText}>
-                      Export workout as text
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            </>
+            <View style={styles.notesActions}>
+              {onOpenCopyWorkoutNotesModal && selectedDayIndex !== null ? (
+                <ActionChip
+                  label="Copy notes from another workout"
+                  icon="copy-outline"
+                  tone="neutral"
+                  onPress={onOpenCopyWorkoutNotesModal}
+                />
+              ) : null}
+              {currentWorkout.format !== 'v2' ? (
+                <ActionChip
+                  label="Export workout as text"
+                  icon="share-outline"
+                  tone="neutral"
+                  onPress={() => void onExportWorkoutText()}
+                />
+              ) : null}
+            </View>
           ) : null}
-        </View>
+        </Animated.View>
       </ScrollView>
     </KeyboardAvoidingView>
   );

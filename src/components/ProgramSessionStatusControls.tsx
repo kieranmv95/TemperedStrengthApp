@@ -1,168 +1,176 @@
-import { CollapsibleWarmupSection } from '@/src/components/CollapsibleWarmupSection';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { Badge, Collapsible } from '@/src/components/ds';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import type { ProgramSessionStatus } from '@/src/types/storage';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 type ProgramSessionStatusControlsProps = {
   status: ProgramSessionStatus | null;
+  expanded: boolean;
+  onToggle: () => void;
   onMove?: () => void;
   onComplete: () => void;
   onSkip: () => void;
 };
 
+type StatusButtonProps = {
+  label: string;
+  activeLabel: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  active: boolean;
+  activeColor: string;
+  onPress: () => void;
+  accessibilityLabel: string;
+};
+
+function StatusButton({
+  label,
+  activeLabel,
+  icon,
+  active,
+  activeColor,
+  onPress,
+  accessibilityLabel,
+}: StatusButtonProps) {
+  return (
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.action,
+        active && { borderColor: activeColor },
+        pressed && styles.actionPressed,
+      ]}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityState={{ selected: active }}
+    >
+      {active ? <Ionicons name={icon} size={18} color={activeColor} /> : null}
+      <Text style={[styles.actionText, active && { color: activeColor }]}>
+        {active ? activeLabel : label}
+      </Text>
+    </Pressable>
+  );
+}
+
 export function ProgramSessionStatusControls({
   status,
+  expanded,
+  onToggle,
   onMove,
   onComplete,
   onSkip,
 }: ProgramSessionStatusControlsProps) {
+  const statusLabel =
+    status === 'completed'
+      ? 'Completed'
+      : status === 'skipped'
+        ? 'Skipped'
+        : null;
+
   return (
-    <CollapsibleWarmupSection
-      title="Session Actions"
-      contentName="session actions"
-      containerStyle={styles.container}
-      titleStyle={styles.title}
-      headerAccessory={
-        status ? (
-          <Text
-            style={[
-              styles.status,
-              status === 'completed'
-                ? styles.statusCompleted
-                : styles.statusSkipped,
-            ]}
-          >
-            {status === 'completed' ? 'Completed' : 'Skipped'}
-          </Text>
+    <Collapsible
+      title="Session actions"
+      expanded={expanded}
+      onToggle={onToggle}
+      accessibilityLabel={
+        statusLabel ? `Session actions, ${statusLabel}` : 'Session actions'
+      }
+      accessory={
+        statusLabel ? (
+          <Badge
+            label={statusLabel}
+            tone={status === 'completed' ? 'success' : 'danger'}
+          />
         ) : null
       }
     >
+      <View style={styles.actions}>
+        <StatusButton
+          label="Mark complete"
+          activeLabel="Completed"
+          icon="checkmark"
+          active={status === 'completed'}
+          activeColor={color.success}
+          onPress={onComplete}
+          accessibilityLabel="Mark session complete"
+        />
+        <StatusButton
+          label="Skip session"
+          activeLabel="Skipped"
+          icon="close"
+          active={status === 'skipped'}
+          activeColor={color.danger}
+          onPress={onSkip}
+          accessibilityLabel="Skip session"
+        />
+      </View>
       {onMove ? (
-        <TouchableOpacity
-          style={styles.moveAction}
+        <Pressable
           onPress={onMove}
-          activeOpacity={0.75}
+          style={({ pressed }) => [
+            styles.moveAction,
+            pressed && styles.actionPressed,
+          ]}
           accessibilityRole="button"
           accessibilityLabel="Move session"
+          accessibilityHint="Choose another day for this session"
         >
-          <Text style={styles.moveActionText}>Move Session</Text>
-        </TouchableOpacity>
+          <Ionicons
+            name="calendar-outline"
+            size={18}
+            color={color.textSecondary}
+          />
+          <Text style={styles.moveActionText}>Move session</Text>
+        </Pressable>
       ) : null}
-      <View style={styles.actions}>
-        <TouchableOpacity
-          style={[
-            styles.action,
-            status === 'completed' && styles.actionCompleted,
-          ]}
-          onPress={onComplete}
-          activeOpacity={0.75}
-          accessibilityRole="button"
-          accessibilityState={{ selected: status === 'completed' }}
-          accessibilityLabel="Mark session complete"
-        >
-          <Text
-            style={[
-              styles.actionText,
-              status === 'completed' && styles.actionTextCompleted,
-            ]}
-          >
-            {status === 'completed' ? 'Completed' : 'Mark Complete'}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.action, status === 'skipped' && styles.actionSkipped]}
-          onPress={onSkip}
-          activeOpacity={0.75}
-          accessibilityRole="button"
-          accessibilityState={{ selected: status === 'skipped' }}
-          accessibilityLabel="Skip session"
-        >
-          <Text
-            style={[
-              styles.actionText,
-              status === 'skipped' && styles.actionTextSkipped,
-            ]}
-          >
-            {status === 'skipped' ? 'Skipped' : 'Skip Session'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </CollapsibleWarmupSection>
+    </Collapsible>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.backgroundCard,
-    borderColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    marginBottom: Spacing.xxl,
-    padding: Spacing.xxl,
-  },
-  title: {
-    color: Colors.accent,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  status: {
-    flexShrink: 0,
-    fontSize: FontSize.md,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-  },
-  statusCompleted: {
-    color: Colors.recommended,
-  },
-  statusSkipped: {
-    color: Colors.destructive,
-  },
   actions: {
     flexDirection: 'row',
-    gap: Spacing.md,
-  },
-  moveAction: {
-    alignItems: 'center',
-    borderColor: Colors.backgroundBorder,
-    borderRadius: BorderRadius.lg,
-    borderWidth: 1,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.lg,
-  },
-  moveActionText: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.md,
-    fontWeight: '700',
+    flexWrap: 'wrap',
+    gap: space.xs,
   },
   action: {
+    flexDirection: 'row',
     alignItems: 'center',
-    borderColor: Colors.backgroundBorder,
-    borderRadius: BorderRadius.lg,
+    justifyContent: 'center',
+    gap: space.xxs,
+    flexGrow: 1,
+    flexBasis: 140,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.sm,
+    borderRadius: radius.pill,
     borderWidth: 1,
-    flex: 1,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.lg,
+    borderColor: color.borderStrong,
+    backgroundColor: color.surface2,
   },
-  actionCompleted: {
-    backgroundColor: Colors.recommendedWashFill,
-    borderColor: Colors.recommendedWashBorder,
-  },
-  actionSkipped: {
-    backgroundColor: Colors.destructiveWashFill,
-    borderColor: Colors.destructive,
+  actionPressed: {
+    backgroundColor: color.surface3,
   },
   actionText: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.md,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
-  actionTextCompleted: {
-    color: Colors.recommended,
+  moveAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: space.xxs,
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
   },
-  actionTextSkipped: {
-    color: Colors.destructive,
+  moveActionText: {
+    ...typography.calloutStrong,
+    color: color.textSecondary,
   },
 });
