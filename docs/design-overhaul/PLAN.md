@@ -1,6 +1,6 @@
 # Tempered Strength: "Forged" design overhaul plan
 
-Status: **Phase 3 complete: Program, Home, Workouts and Explore restyled. Phase 4 (manual accessibility pass and screenshots) is next.** See `CHANGELOG.md` and `A11Y-CHECKLIST.md`.
+Status: **Phase 3 complete: every screen is restyled, from onboarding and the program picker through Skills & Cues, check-in, tools, You and the shop. Phase 4 (manual accessibility pass and screenshots) is next.** See `CHANGELOG.md` and `A11Y-CHECKLIST.md`.
 
 ## Phase 2 findings
 

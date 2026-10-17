@@ -1,5 +1,51 @@
 # Design overhaul changelog
 
+## Phase 3: Every remaining screen
+
+Every screen now uses `tokens.ts` and the shared ds components. `theme.ts` keeps only the Award icon artwork colours and the remote-notification CMS defaults. The rules screens followed are in `MIGRATION-GUIDE.md`.
+
+- **Shared:**
+  - `StandardLayout` always uses the new header; the `variant` prop is removed.
+  - `Card`, `Pill`, `SmallChevron` and `CuratedSection` render with tokens, so every screen using them picks up the new look.
+  - The iOS keyboard Done bar and sheet bottom padding use tokens.
+  - Unused legacy `Spacing`, `BorderRadius`, `FontSize` and palette exports are removed.
+- **Onboarding:** header step titles, radio option cards, FilterChip interests, the shared `ProgressBar`, and a `useMotion` step fade. The step now changes immediately and fades in; there's no fade-out first.
+- **Program picker:**
+  - FilterChip filters, and program cards that read as one element, with PRO, difficulty and "Recommended" badges.
+  - Locked Pro programs show a lock icon, not a gold border.
+  - The details, start-date and weekday sheets are restyled but stay as Modals, because they open one another.
+  - Calendar days are 44pt and read their full date.
+- **Program states and modals:**
+  - Starting soon, Completed, Rest day, conditioning blocks, intensity levels, copy notes and training max are all restyled.
+  - Move session and Swap are now `BottomSheet`s, so they also close by dragging or tapping the scrim.
+- **Skills & Cues, articles, glossary and patch notes:**
+  - Skeleton loading, with tips, cues and videos in a shared pager that announces its position ("Tip 1 of 2").
+  - Videos open in a `BottomSheet`.
+  - Article bookmarks are a separate 44pt button.
+  - Glossary terms and patch-note versions use `Collapsible`.
+- **Workout detail and recovery:**
+  - Workout detail is on `StandardLayout`, with a stateful favourite button, and warm-ups use `Collapsible` (`CollapsibleWarmupSection` is deleted).
+  - Recovery cards carry real labels.
+  - Recovery flows show "Block X of Y" with a progress bar, and the timer sits in a `ProgressRing` and announces each step.
+- **Check-in and tools:**
+  - Check-in rows, the calendar, the log sheet (now a `BottomSheet`) and the supplement screens are restyled.
+  - Calculators use `NumberField`, which accepts a comma as the decimal point ("80,5" is 80.5).
+  - Calculators announce their result when you press Calculate.
+- **You and account:**
+  - Settings, records, awards, email, OTP and redeem-code screens are restyled.
+  - Every switch has a label, and kg/lb is a radio-role control.
+  - Awards show their status as text, not by fading alone.
+- **Shop, partners and competition:**
+  - The dark theme, with the CMS colour only as an accent edge and logos on a light panel.
+  - The shop and Together We Lift sheets are `BottomSheet`s.
+  - The Home competition card is fully tappable.
+- **Partner colours:** the collab and sponsor cards on workout detail and the discipline tag list no longer use their CMS background and text colours. They use the brand colour only as an accent edge, following Home.
+- **Copy:** sentence case throughout. Typo and punctuation fixes, plus "Visit website" and "Tap to learn more" defaults.
+- **Lint:** errors fell from 75 before the overhaul to 58. The remaining errors are `set-state-in-effect` and similar issues in data-loading effects, and fixing them would change logic.
+- **Not done:**
+  - **Chained sheets.** The program picker sheets, copy notes and training max stay as restyled Modals. `BottomSheet` can't chain sheets, and it has no keyboard avoidance.
+  - **Partner card link role.** `PressableCard` can't set an accessibility role, so partner collab cards announce as buttons rather than links.
+
 ## Phase 4: Large-text reflow
 
 - **Added** `useLargeText()`: true at an OS font scale of 1.3 or more (`LARGE_TEXT_FONT_SCALE`), updating live.
