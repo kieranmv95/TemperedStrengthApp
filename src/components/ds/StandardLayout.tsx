@@ -353,7 +353,9 @@ const styles = StyleSheet.create({
   titleRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignItems: 'center',
+    // Baseline, not centre: the display font sits low in its line box, so a
+    // centred badge looks raised next to the title.
+    alignItems: 'baseline',
     gap: space.xs,
   },
   headerRow: {
