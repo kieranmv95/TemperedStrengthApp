@@ -65,8 +65,8 @@ describe('workout logs codec', () => {
     const withExplicitStates: WorkoutLogs = {
       0: {
         0: {
-          0: { weight: 100, reps: 5, state: 'completed' },
-          1: { weight: 100, reps: 5, state: null },
+          0: { weight: 100, reps: 5, state: 'completed', rpe: null },
+          1: { weight: 100, reps: 5, state: null, rpe: null },
         },
       },
     };

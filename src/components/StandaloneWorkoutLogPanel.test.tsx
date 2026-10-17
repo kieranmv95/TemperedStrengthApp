@@ -82,7 +82,7 @@ describe('StandaloneWorkoutLogPanel', () => {
 
     await waitFor(() => expect(mockGet).toHaveBeenCalled());
 
-    fireEvent.press(getByText('Log result'));
+    await fireEvent.press(getByText('Log result'));
 
     await waitFor(() => {
       expect(getByText('When you did this')).toBeTruthy();
@@ -100,14 +100,14 @@ describe('StandaloneWorkoutLogPanel', () => {
 
     await waitFor(() => expect(mockGet).toHaveBeenCalled());
 
-    fireEvent.press(getByText('Log result'));
+    await fireEvent.press(getByText('Log result'));
 
     await waitFor(() => expect(getByText('Notes')).toBeTruthy());
 
     const notesField = getByPlaceholderText('Notes');
-    fireEvent.changeText(notesField, 'Session felt solid');
+    await fireEvent.changeText(notesField, 'Session felt solid');
 
-    fireEvent.press(getByText('Save'));
+    await fireEvent.press(getByText('Save'));
 
     await waitFor(() => {
       expect(mockUpsert).toHaveBeenCalled();

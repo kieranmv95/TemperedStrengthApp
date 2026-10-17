@@ -38,6 +38,7 @@ describe('storage write-race safety', () => {
         weight: 100 + setIndex,
         reps: 5,
         state: 'completed',
+        rpe: null,
       });
     }
   });
