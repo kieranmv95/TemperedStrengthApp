@@ -42,7 +42,8 @@ type NumberFieldProps = {
 
 const REPEAT_DELAY_MS = 400;
 const REPEAT_INTERVAL_MS = 90;
-const INPUT_MIN_HEIGHT = 48;
+/** Exported so controls shown in place of a field (e.g. "Add") match its height. */
+export const NUMBER_FIELD_MIN_HEIGHT = 48;
 
 function formatNumber(value: number): string {
   return String(Math.round(value * 100) / 100);
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
     ...typography.numericMedium,
     flex: 1,
     minWidth: 0,
-    minHeight: INPUT_MIN_HEIGHT,
+    minHeight: NUMBER_FIELD_MIN_HEIGHT,
     paddingHorizontal: space.xs,
     paddingVertical: space.xxs,
     borderRadius: radius.sm,

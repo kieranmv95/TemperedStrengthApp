@@ -7,6 +7,7 @@ import {
   typography,
 } from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
+import { NUMBER_FIELD_MIN_HEIGHT } from '@/src/components/ds/NumberField';
 
 export const SET_NUMBER_WIDTH = 32;
 const REPS_FIELD_WIDTH = 72;
@@ -170,7 +171,7 @@ export const exerciseCardStyles = StyleSheet.create({
     gap: space.xxs,
   },
   addWeightButton: {
-    minHeight: MIN_TARGET_SIZE,
+    minHeight: NUMBER_FIELD_MIN_HEIGHT,
     borderRadius: radius.sm,
     borderWidth: 1,
     borderStyle: 'dashed',
