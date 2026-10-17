@@ -1,5 +1,6 @@
 import { NumberField, SetCheckButton } from '@/src/components/ds';
 import { color } from '@/src/constants/tokens';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import type { Exercise } from '@/src/types/exercise';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useMemo, useState } from 'react';
@@ -65,6 +66,7 @@ export function ExerciseCardSetRow({
 }: ExerciseCardSetRowProps) {
   const isRepsOnly = loggingType === 'reps';
   const isTime = loggingType === 'time';
+  const largeText = useLargeText();
   const [showWeight, setShowWeight] = useState(!isRepsOnly);
   const showOptionalWeightReset = isRepsOnly && showWeight;
   const translateY = useSharedValue(0);
@@ -159,7 +161,7 @@ export function ExerciseCardSetRow({
           onChangeText={(value) => onWeightChange(setIndex, value)}
           placeholder={weightUnitLabel}
           allowDecimal
-          showLabel={false}
+          showLabel={largeText}
           state={fieldState}
           editable={!loading}
         />
@@ -211,21 +213,23 @@ export function ExerciseCardSetRow({
         </View>
       )}
 
-      <View style={styles.fields}>
-        <View style={styles.fieldFlex}>{weightField}</View>
-        <View style={styles.fieldReps}>
+      <View style={[styles.fields, largeText && styles.fieldsStacked]}>
+        <View style={largeText ? styles.fieldFullWidth : styles.fieldFlex}>
+          {weightField}
+        </View>
+        <View style={largeText ? styles.fieldFlex : styles.fieldReps}>
           <NumberField
             label={isTime ? 'Time (s)' : 'Reps'}
             accessibilityContext={context}
             value={repsValue}
             onChangeText={(value) => onRepsChange(setIndex, value)}
             placeholder={repsPlaceholder}
-            showLabel={false}
+            showLabel={largeText}
             state={fieldState}
             editable={!loading}
           />
         </View>
-        <View style={styles.fieldRpe}>
+        <View style={largeText ? styles.fieldFlex : styles.fieldRpe}>
           <NumberField
             label="RPE"
             accessibilityContext={context}
@@ -234,7 +238,7 @@ export function ExerciseCardSetRow({
             placeholder="1–10"
             min={1}
             max={10}
-            showLabel={false}
+            showLabel={largeText}
             hint="Rate of perceived exertion, 1 to 10. Optional."
             state={fieldState}
             editable={!loading}

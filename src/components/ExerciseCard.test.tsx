@@ -23,6 +23,10 @@ jest.mock('@/src/hooks/exercise-video-context', () => ({
 jest.mock('@/src/hooks/useWeightUnit', () => ({
   useWeightUnit: () => ({ unit: 'kg' }),
 }));
+let mockLargeText = false;
+jest.mock('@/src/hooks/useLargeText', () => ({
+  useLargeText: () => mockLargeText,
+}));
 jest.mock('posthog-react-native', () => ({
   usePostHog: () => ({ capture: jest.fn() }),
 }));
@@ -74,6 +78,7 @@ describe('ExerciseCard', () => {
   const name = exercise.name;
 
   beforeEach(async () => {
+    mockLargeText = false;
     mockReduceMotion(false);
     await closeAppDatabaseForTests();
     await openAppDatabase();
@@ -147,5 +152,18 @@ describe('ExerciseCard', () => {
 
     expect(screen.getByRole('button', { name: 'Reorder sets' })).toBeSelected();
     expect(screen.getByLabelText('Reorder set 1')).toBeOnTheScreen();
+  });
+
+  it('stacks set fields with their own labels at large text sizes', async () => {
+    mockLargeText = true;
+    await renderCard();
+
+    expect(
+      screen.queryByText('Set', { includeHiddenElements: true })
+    ).not.toBeOnTheScreen();
+    expect(
+      screen.getAllByText('Weight (kg)', { includeHiddenElements: true })
+    ).toHaveLength(programExercise.sets);
+    expect(screen.getByLabelText(`${name} set 1 Reps`)).toBeOnTheScreen();
   });
 });

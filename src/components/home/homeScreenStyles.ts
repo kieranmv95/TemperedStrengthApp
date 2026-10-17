@@ -15,6 +15,10 @@ export const homeScreenStyles = StyleSheet.create({
     flexDirection: 'row',
     gap: space.sm,
   },
+  /** Large text: tiles stack instead of sharing a row. */
+  bentoStacked: {
+    flexDirection: 'column',
+  },
   bentoTile: {
     flex: 1,
   },

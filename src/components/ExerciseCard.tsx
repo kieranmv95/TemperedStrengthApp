@@ -5,6 +5,7 @@ import { color } from '@/src/constants/tokens';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useToast } from '@/src/hooks/toast-context';
 import { useExerciseCardState } from '@/src/hooks/useExerciseCardState';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -64,6 +65,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   const { isPro } = useSubscription();
   const { unit: weightUnit } = useWeightUnit();
   const { showToast } = useToast();
+  const largeText = useLargeText();
   const exercise = exerciseId ? getExerciseById(exerciseId) : null;
   const rowHeightsRef = useRef<Record<number, number>>({});
   const [reorderMode, setReorderMode] = useState(false);
@@ -366,21 +368,25 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         </View>
       </View>
 
-      <View
-        style={styles.columnHeaders}
-        accessibilityElementsHidden
-        importantForAccessibility="no-hide-descendants"
-      >
-        <Text style={[styles.columnLabel, styles.columnSet]}>
-          {canReorder ? 'Move' : 'Set'}
-        </Text>
-        <Text style={[styles.columnLabel, styles.columnFlex]}>
-          {`Weight (${weightUnit})`}
-        </Text>
-        <Text style={[styles.columnLabel, styles.columnReps]}>{repsLabel}</Text>
-        <Text style={[styles.columnLabel, styles.columnRpe]}>RPE</Text>
-        <View style={styles.columnCheck} />
-      </View>
+      {largeText ? null : (
+        <View
+          style={styles.columnHeaders}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+        >
+          <Text style={[styles.columnLabel, styles.columnSet]}>
+            {canReorder ? 'Move' : 'Set'}
+          </Text>
+          <Text style={[styles.columnLabel, styles.columnFlex]}>
+            {`Weight (${weightUnit})`}
+          </Text>
+          <Text style={[styles.columnLabel, styles.columnReps]}>
+            {repsLabel}
+          </Text>
+          <Text style={[styles.columnLabel, styles.columnRpe]}>RPE</Text>
+          <View style={styles.columnCheck} />
+        </View>
+      )}
 
       {Array.from({ length: numberOfSets }).map((_, setIndex) => {
         const setState = setStates.get(setIndex);

@@ -10,6 +10,12 @@ For each screen, run the checks with:
 
 Record the date, device and result. "Pending" means not yet checked by hand.
 
+At large text (OS font scale 1.3 or more), expect these reflows:
+
+- set rows stack, with weight on its own line;
+- rest-timer controls wrap onto a second line;
+- two-up tiles become full-width cards.
+
 ## Program
 
 | Check                                                                                                                                                | VoiceOver | TalkBack | Largest text | Reduce Motion                           |

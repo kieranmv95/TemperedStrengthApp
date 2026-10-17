@@ -1,5 +1,14 @@
 # Design overhaul changelog
 
+## Phase 4: Large-text reflow
+
+- **Added** `useLargeText()`: true at an OS font scale of 1.3 or more (`LARGE_TEXT_FONT_SCALE`), updating live.
+- **At large text sizes:**
+  - Set rows put weight on its own line, with reps and RPE on the next. Each field shows its own label, and the column headers are hidden.
+  - The rest-timer controls wrap onto their own line.
+  - Two-up tiles on Home and Explore become full-width row cards.
+- **Unchanged:** the default text-size layouts.
+
 ## Phase 3: Home review changes
 
 - **Removed** partner ad cards from Home, along with everything only they used:

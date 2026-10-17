@@ -1,5 +1,6 @@
 import { ProgressRing } from '@/src/components/ds';
 import { color } from '@/src/constants/tokens';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -43,6 +44,7 @@ export const RestTimer: React.FC<RestTimerProps> = ({
   const [now, setNow] = useState(Date.now());
   const completedRef = useRef(false);
   const isRunning = timer.status === 'running';
+  const largeText = useLargeText();
 
   const remainingSeconds = useMemo(() => {
     const endTime = timer.startedAt + timer.restTimeSeconds * 1000;
@@ -94,7 +96,7 @@ export const RestTimer: React.FC<RestTimerProps> = ({
       : 0;
 
   return (
-    <View style={styles.bar}>
+    <View style={[styles.bar, largeText && styles.barStacked]}>
       <View style={styles.timerSection}>
         <ProgressRing
           progress={isRunning ? remainingFraction : 1}

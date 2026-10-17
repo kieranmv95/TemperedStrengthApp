@@ -23,6 +23,10 @@ export const workoutTimerBarStyles = StyleSheet.create({
     paddingHorizontal: space.md,
     paddingVertical: space.xs,
   },
+  /** Large text: the controls wrap onto their own line. */
+  barStacked: {
+    flexWrap: 'wrap',
+  },
   timerSection: {
     flexDirection: 'row',
     alignItems: 'center',

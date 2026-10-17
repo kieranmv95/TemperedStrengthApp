@@ -15,6 +15,7 @@ import { color } from '@/src/constants/tokens';
 import { getAllExercises } from '@/src/data/exercises';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useHomeRemoteNotification } from '@/src/hooks/useHomeRemoteNotification';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { useRoles } from '@/src/hooks/useRoles';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -100,6 +101,7 @@ export default function HomeTabScreen() {
   const posthog = usePostHog();
   const { banner: remoteNotification } = useHomeRemoteNotification();
   const { unit: weightUnit } = useWeightUnit();
+  const largeText = useLargeText();
   const {
     isPro,
     isLoading: subscriptionLoading,
@@ -355,10 +357,13 @@ export default function HomeTabScreen() {
             </EnterOnMount>
           ) : null}
 
-          <EnterOnMount index={nextEntrance()} style={styles.bentoRow}>
-            <View style={styles.bentoTile}>
+          <EnterOnMount
+            index={nextEntrance()}
+            style={[styles.bentoRow, largeText && styles.bentoStacked]}
+          >
+            <View style={largeText ? null : styles.bentoTile}>
               <HubPromoCard
-                layout="tile"
+                layout={largeText ? 'row' : 'tile'}
                 icon="barbell-outline"
                 eyebrow="Open workouts"
                 title="Just fancy a workout?"
@@ -371,9 +376,9 @@ export default function HomeTabScreen() {
                 accessibilityLabel="Opens Workouts"
               />
             </View>
-            <View style={styles.bentoTile}>
+            <View style={largeText ? null : styles.bentoTile}>
               <HubPromoCard
-                layout="tile"
+                layout={largeText ? 'row' : 'tile'}
                 icon="cart-outline"
                 eyebrow="Partner picks"
                 title="Browse the shop"

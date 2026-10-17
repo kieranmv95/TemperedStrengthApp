@@ -1,5 +1,6 @@
 import { PressableCard, Skeleton } from '@/src/components/ds';
 import { color, radius, space, typography } from '@/src/constants/tokens';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { usePartnerListings } from '@/src/hooks/use-partner-listings';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
@@ -113,6 +114,7 @@ export function HubPromoRow({
     coaches,
     isLoading: isDiscoverLoading,
   } = usePartnerListings();
+  const largeText = useLargeText();
   const hasDiscoverListings =
     gyms.length > 0 || clubs.length > 0 || coaches.length > 0;
   const showDiscoverCard =
@@ -123,12 +125,12 @@ export function HubPromoRow({
   }
 
   return (
-    <View style={styles.row}>
+    <View style={[styles.row, largeText && styles.rowStacked]}>
       {shopUnavailable ? (
         <HubPromoOfflineSlot label="Shop" />
       ) : (
         <HubPromoCard
-          layout="tile"
+          layout={largeText ? 'row' : 'tile'}
           icon="cart-outline"
           eyebrow="Partner picks"
           title="Browse the shop"
@@ -139,7 +141,7 @@ export function HubPromoRow({
       )}
       {showDiscoverCard ? (
         <HubPromoCard
-          layout="tile"
+          layout={largeText ? 'row' : 'tile'}
           icon="compass-outline"
           eyebrow="Discover"
           title="Explore near you"
@@ -157,6 +159,10 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     gap: space.sm,
+  },
+  /** Large text: tiles stack instead of sharing a row. */
+  rowStacked: {
+    flexDirection: 'column',
   },
   tileSlot: {
     flex: 1,

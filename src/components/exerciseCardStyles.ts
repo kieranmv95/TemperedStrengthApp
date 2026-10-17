@@ -159,6 +159,13 @@ export const exerciseCardStyles = StyleSheet.create({
   fieldFlex: {
     flex: 1,
   },
+  /** Large text: weight on its own line, reps and RPE share the next. */
+  fieldsStacked: {
+    flexWrap: 'wrap',
+  },
+  fieldFullWidth: {
+    flexBasis: '100%',
+  },
   fieldReps: {
     width: REPS_FIELD_WIDTH,
   },

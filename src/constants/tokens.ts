@@ -167,6 +167,9 @@ export const radius = {
 
 export type RadiusToken = keyof typeof radius;
 
+/** OS font scale at which side-by-side rows reflow to stacked layouts. */
+export const LARGE_TEXT_FONT_SCALE = 1.3;
+
 /** Minimum interactive target: 44pt (Apple HIG) on iOS, 48dp (Material) on Android. */
 export const MIN_TARGET_SIZE = Platform.OS === 'android' ? 48 : 44;
 
