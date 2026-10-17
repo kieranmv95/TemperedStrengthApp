@@ -1,33 +1,29 @@
 import { SponsorAdCard } from '@/src/components/home/SponsorAdCard';
-import {
-  SPONSOR_AUTO_SCROLL_MS,
-  SPONSOR_CAROUSEL_GAP,
-  homeScreenStyles as styles,
-} from '@/src/components/home/homeScreenStyles';
-import { Spacing } from '@/src/constants/theme';
+import { color, radius, space } from '@/src/constants/tokens';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { HomeSponsorAd } from '@/src/services/sanitySponsorAds';
 import { usePostHog } from 'posthog-react-native';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   FlatList,
+  StyleSheet,
   useWindowDimensions,
   View,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
 } from 'react-native';
 
-type ViewToken = {
-  item: HomeSponsorAd;
-  key: string;
-  index: number | null;
-  isViewable: boolean;
-};
-
 type SponsorAdsCarouselProps = {
   ads: HomeSponsorAd[];
   onPressCta: (ad: HomeSponsorAd) => void;
 };
+
+const PAGE_GUTTER = space.md;
+const CARD_GAP = space.sm;
+/** How much of the next card shows, so it's clear the row scrolls. */
+const NEXT_CARD_PEEK = space.xxl;
+const DOT_SIZE = 6;
+const ACTIVE_DOT_WIDTH = 16;
 
 function hostFromUrl(url: string): string {
   try {
@@ -37,21 +33,22 @@ function hostFromUrl(url: string): string {
   }
 }
 
-function SponsorCarouselSeparator() {
-  return <View style={styles.sponsorCarouselSeparator} />;
+function CarouselSeparator() {
+  return <View style={styles.separator} />;
 }
 
+/** Swipeable partner ads. No auto-advance; page dots show position. */
 export function SponsorAdsCarousel({
   ads,
   onPressCta,
 }: SponsorAdsCarouselProps) {
   const posthog = usePostHog();
   const { width: windowWidth } = useWindowDimensions();
-  const cardWidth = windowWidth - Spacing.xxl * 2;
-  const snapInterval = cardWidth + SPONSOR_CAROUSEL_GAP;
-  const listRef = useRef<FlatList<HomeSponsorAd>>(null);
-  const activeIndexRef = useRef(0);
-  const pausedRef = useRef(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const hasMultiple = ads.length > 1;
+  const cardWidth =
+    windowWidth - PAGE_GUTTER * 2 - (hasMultiple ? NEXT_CARD_PEEK : 0);
+  const snapInterval = cardWidth + CARD_GAP;
 
   const handlePressCta = useCallback(
     (ad: HomeSponsorAd) => {
@@ -65,63 +62,13 @@ export function SponsorAdsCarousel({
     [onPressCta, posthog]
   );
 
-  const onViewableItemsChanged = useRef(
-    ({
-      viewableItems,
-    }: {
-      viewableItems: ArrayLike<ViewToken>;
-      changed: ArrayLike<ViewToken>;
-    }) => {
-      const items = Array.from(viewableItems);
-      const primary = items.find((item) => item.isViewable);
-      if (primary?.index != null && primary.item) {
-        const index = primary.index;
-        activeIndexRef.current = index;
-      }
-    }
-  ).current;
-
-  const viewabilityConfig = useRef({
-    itemVisiblePercentThreshold: 60,
-  }).current;
-
-  useEffect(() => {
-    if (ads.length <= 1) {
-      return;
-    }
-    const timer = setInterval(() => {
-      if (pausedRef.current) {
-        return;
-      }
-      const nextIndex = (activeIndexRef.current + 1) % ads.length;
-      listRef.current?.scrollToIndex({ index: nextIndex, animated: true });
-      activeIndexRef.current = nextIndex;
-    }, SPONSOR_AUTO_SCROLL_MS);
-    return () => clearInterval(timer);
-  }, [ads]);
-
-  const onScrollBeginDrag = useCallback(() => {
-    pausedRef.current = true;
-  }, []);
-
   const onMomentumScrollEnd = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      pausedRef.current = false;
       const offsetX = event.nativeEvent.contentOffset.x;
       const index = Math.round(offsetX / snapInterval);
-      const clamped = Math.max(0, Math.min(index, ads.length - 1));
-      activeIndexRef.current = clamped;
+      setActiveIndex(Math.max(0, Math.min(index, ads.length - 1)));
     },
-    [ads, snapInterval]
-  );
-
-  const getItemLayout = useCallback(
-    (_: ArrayLike<HomeSponsorAd> | null | undefined, index: number) => ({
-      length: cardWidth,
-      offset: snapInterval * index,
-      index,
-    }),
-    [cardWidth, snapInterval]
+    [ads.length, snapInterval]
   );
 
   const renderItem = useCallback(
@@ -136,33 +83,67 @@ export function SponsorAdsCarousel({
   }
 
   return (
-    <View style={[styles.sponsorCarousel, styles.sponsorCarouselBleed]}>
+    <View style={styles.container}>
       <FlatList
-        ref={listRef}
         data={ads}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        ItemSeparatorComponent={SponsorCarouselSeparator}
+        ItemSeparatorComponent={CarouselSeparator}
         horizontal
         showsHorizontalScrollIndicator={false}
         decelerationRate="fast"
         snapToInterval={snapInterval}
         snapToAlignment="start"
         disableIntervalMomentum
-        getItemLayout={getItemLayout}
-        onScrollBeginDrag={onScrollBeginDrag}
         onMomentumScrollEnd={onMomentumScrollEnd}
-        onViewableItemsChanged={onViewableItemsChanged as never}
-        viewabilityConfig={viewabilityConfig}
-        onScrollToIndexFailed={(info) => {
-          listRef.current?.scrollToOffset({
-            offset: snapInterval * info.index,
-            animated: false,
-          });
-        }}
-        style={styles.sponsorCarouselList}
-        contentContainerStyle={styles.sponsorCarouselContent}
+        style={styles.list}
+        contentContainerStyle={styles.listContent}
       />
+      {hasMultiple ? (
+        <View
+          style={styles.dots}
+          accessible
+          accessibilityLabel={`Ad ${activeIndex + 1} of ${ads.length}`}
+        >
+          {ads.map((ad, index) => (
+            <View
+              key={ad.id}
+              style={[styles.dot, index === activeIndex && styles.dotActive]}
+            />
+          ))}
+        </View>
+      ) : null}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    gap: space.sm,
+  },
+  list: {
+    marginHorizontal: -PAGE_GUTTER,
+  },
+  listContent: {
+    paddingHorizontal: PAGE_GUTTER,
+  },
+  separator: {
+    width: CARD_GAP,
+  },
+  dots: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'center',
+    gap: space.xxs,
+  },
+  dot: {
+    width: DOT_SIZE,
+    height: DOT_SIZE,
+    borderRadius: radius.pill,
+    backgroundColor: color.textTertiary,
+  },
+  dotActive: {
+    width: ACTIVE_DOT_WIDTH,
+    backgroundColor: color.gold,
+  },
+});

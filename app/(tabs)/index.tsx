@@ -1,11 +1,18 @@
-import { Card, SmallChevron, StandardLayout } from '@/src/components/ds';
+import {
+  Badge,
+  EnterOnMount,
+  PressableCard,
+  Skeleton,
+  StandardLayout,
+} from '@/src/components/ds';
 import { HomeCheckinCard } from '@/src/components/home/HomeCheckinCard';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
+import { HomeTodayCard } from '@/src/components/home/HomeTodayCard';
 import { SponsorAdsCarousel } from '@/src/components/home/SponsorAdsCarousel';
 import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
 import { LiveCompetition } from '@/src/components/LiveCompetition';
-import { Colors } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import { getAllExercises } from '@/src/data/exercises';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useHomeRemoteNotification } from '@/src/hooks/useHomeRemoteNotification';
@@ -27,7 +34,6 @@ import {
   type HomeCheckinSummary,
 } from '@/src/utils/homeCheckinSummary';
 import {
-  formatHomeProgramSessionMeta,
   loadHomeProgramSummary,
   type HomeProgramSummary,
 } from '@/src/utils/homeProgramSummary';
@@ -44,20 +50,8 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import { useFocusEffect, router, type Href } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import {
-  ActivityIndicator,
-  Animated,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
 
 const exerciseNameById: ReadonlyMap<number, string> = (() => {
   const m = new Map<number, string>();
@@ -70,15 +64,23 @@ const exerciseNameById: ReadonlyMap<number, string> = (() => {
 function timeOfDayGreeting(): string {
   const h = new Date().getHours();
   if (h >= 5 && h < 12) {
-    return 'Morning';
+    return 'Good morning';
   }
   if (h >= 12 && h < 17) {
-    return 'Afternoon';
+    return 'Good afternoon';
   }
   if (h >= 17 && h < 23) {
-    return 'Evening';
+    return 'Good evening';
   }
-  return 'Hey';
+  return 'Hello';
+}
+
+function formatTodayDate(): string {
+  return new Date().toLocaleDateString('en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  });
 }
 
 function accountTypeBadgeLabel(
@@ -207,33 +209,37 @@ export default function HomeTabScreen() {
   }, [pbStore]);
 
   const showFreeStrip = !accessLoading && !isPro;
-  const freeStripOpacity = useRef(new Animated.Value(0)).current;
-  const freeStripHasRevealed = useRef(false);
-
-  useEffect(() => {
-    if (showFreeStrip && !freeStripHasRevealed.current) {
-      freeStripHasRevealed.current = true;
-      Animated.timing(freeStripOpacity, {
-        toValue: 1,
-        duration: 320,
-        useNativeDriver: true,
-      }).start();
-    } else if (!showFreeStrip && freeStripHasRevealed.current) {
-      freeStripHasRevealed.current = false;
-      freeStripOpacity.setValue(0);
-    }
-  }, [showFreeStrip, freeStripOpacity]);
-
+  const firstName = displayName?.split(/\s+/)[0] ?? null;
   const greet = timeOfDayGreeting();
-  const greetingTitle = displayName ? `${greet}, ${displayName}` : greet;
-  const headerSubtitle = 'Tempered Strength, Your training HQ.';
+  const greetingTitle = firstName ? `${greet}, ${firstName}` : greet;
+  const titleAccessory =
+    !accessLoading && accountBadge ? (
+      <Badge
+        label={accountBadge}
+        accessibilityLabel={`Account type ${accountBadge}`}
+      />
+    ) : null;
 
   if (loading) {
     return (
-      <StandardLayout title={greetingTitle}>
+      <StandardLayout
+        variant="forged"
+        title={greetingTitle}
+        subtitle={formatTodayDate()}
+      >
         <StandardLayout.Body>
-          <View style={styles.loadingBox}>
-            <ActivityIndicator color={Colors.accent} />
+          <View style={styles.skeletons}>
+            <Skeleton
+              width="100%"
+              height={208}
+              radius="md"
+              accessibilityLabel="Loading home"
+            />
+            <Skeleton width="100%" height={96} radius="md" />
+            <View style={styles.bentoRow}>
+              <Skeleton width="48%" height={148} radius="md" />
+              <Skeleton width="48%" height={148} radius="md" />
+            </View>
           </View>
         </StandardLayout.Body>
       </StandardLayout>
@@ -241,293 +247,223 @@ export default function HomeTabScreen() {
   }
 
   const hasPersonalBests = recentPbs.length > 0;
+  let entranceIndex = 0;
+  const nextEntrance = () => entranceIndex++;
 
   return (
-    <StandardLayout title={greetingTitle} subtitle={headerSubtitle}>
+    <StandardLayout
+      variant="forged"
+      title={greetingTitle}
+      subtitle={formatTodayDate()}
+      titleAccessory={titleAccessory}
+    >
       <StandardLayout.Body>
-        <View style={styles.spacing}>
-          {!accessLoading && (accountBadge || showFreeStrip) ? (
-            <View style={styles.accountStatusRow}>
-              {accountBadge ? (
-                <View
-                  style={styles.planBadgePro}
-                  accessibilityRole="text"
-                  accessibilityLabel={`Account type ${accountBadge}`}
-                >
-                  <Text style={styles.planBadgeLabelPro}>{accountBadge}</Text>
-                </View>
-              ) : null}
-
-              {showFreeStrip ? (
-                <Animated.View
-                  style={[
-                    styles.welcomeStrip,
-                    styles.welcomeStripFlex,
-                    { opacity: freeStripOpacity },
-                  ]}
-                >
-                  <TouchableOpacity
-                    activeOpacity={0.85}
-                    onPress={() =>
-                      trackHomeLink('welcome_strip', '/records', () =>
-                        router.push('/records')
-                      )
-                    }
-                    accessibilityRole="button"
-                    accessibilityLabel="Upgrade to Pro, free tier"
-                    accessibilityHint="Opens the You tab where you can upgrade to Tempered Strength Pro"
-                  >
-                    <View style={styles.welcomeStripTopRow}>
-                      <View style={styles.welcomeHeadlineCell}>
-                        <Text style={styles.welcomeTitle}>Upgrade to Pro</Text>
-                      </View>
-                      <View style={styles.planBadgeFree} pointerEvents="none">
-                        <Text style={styles.planBadgeLabelFree}>FREE TIER</Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </Animated.View>
-              ) : null}
-            </View>
-          ) : null}
-
-          {remoteNotification && (
-            <View
-              style={[
-                styles.notificationBanner,
-                {
-                  backgroundColor: remoteNotification.bgColor,
-                  borderColor: remoteNotification.borderColor,
-                },
-              ]}
-            >
-              {remoteNotification.title.length > 0 ? (
-                <Text
-                  style={[
-                    styles.notificationBannerTitle,
-                    { color: remoteNotification.titleColor },
-                  ]}
-                >
-                  {remoteNotification.title}
-                </Text>
-              ) : null}
-              {remoteNotification.body.length > 0 ? (
-                <Text
-                  style={[
-                    styles.notificationBannerBody,
-                    { color: remoteNotification.descriptionColor },
-                  ]}
-                >
-                  {remoteNotification.body}
-                </Text>
-              ) : null}
-              {remoteNotification.ctaText.length > 0 &&
-              remoteNotification.ctaUrl.length > 0 ? (
-                <TouchableOpacity
-                  style={[
-                    styles.notificationCta,
-                    { backgroundColor: remoteNotification.ctaColor },
-                  ]}
-                  onPress={() => openHomeCtaUrl(remoteNotification.ctaUrl)}
-                  accessibilityRole="button"
-                  accessibilityLabel={remoteNotification.ctaText}
-                >
+        <View style={styles.sections}>
+          {remoteNotification ? (
+            <EnterOnMount index={nextEntrance()}>
+              <View
+                style={[
+                  styles.notificationBanner,
+                  {
+                    backgroundColor: remoteNotification.bgColor,
+                    borderColor: remoteNotification.borderColor,
+                  },
+                ]}
+              >
+                {remoteNotification.title.length > 0 ? (
                   <Text
                     style={[
-                      styles.notificationCtaText,
-                      { color: remoteNotification.ctaTextColor },
+                      styles.notificationBannerTitle,
+                      { color: remoteNotification.titleColor },
+                    ]}
+                    accessibilityRole="header"
+                  >
+                    {remoteNotification.title}
+                  </Text>
+                ) : null}
+                {remoteNotification.body.length > 0 ? (
+                  <Text
+                    style={[
+                      styles.notificationBannerBody,
+                      { color: remoteNotification.descriptionColor },
                     ]}
                   >
-                    {remoteNotification.ctaText}
+                    {remoteNotification.body}
                   </Text>
-                </TouchableOpacity>
-              ) : null}
-            </View>
-          )}
+                ) : null}
+                {remoteNotification.ctaText.length > 0 &&
+                remoteNotification.ctaUrl.length > 0 ? (
+                  <Pressable
+                    style={[
+                      styles.notificationCta,
+                      { backgroundColor: remoteNotification.ctaColor },
+                    ]}
+                    onPress={() => openHomeCtaUrl(remoteNotification.ctaUrl)}
+                    accessibilityRole="button"
+                    accessibilityLabel={remoteNotification.ctaText}
+                  >
+                    <Text
+                      style={[
+                        styles.notificationCtaText,
+                        { color: remoteNotification.ctaTextColor },
+                      ]}
+                    >
+                      {remoteNotification.ctaText}
+                    </Text>
+                  </Pressable>
+                ) : null}
+              </View>
+            </EnterOnMount>
+          ) : null}
 
           <LiveCompetition />
 
-          <View>
-            {programSummary ? (
-              <Card
-                onPress={() =>
-                  trackHomeLink('your_program_card', '/program', () =>
-                    router.push('/program')
-                  )
-                }
-                accessibilityLabel="Open program"
-              >
-                <View style={styles.cardBody}>
-                  <Text style={styles.programTitle}>
-                    {programSummary.programName}
-                  </Text>
-                  <Text style={styles.programStatus}>
-                    {programSummary.todaySessionLabel}
-                  </Text>
-                  <Text style={styles.programSessionsRemaining}>
-                    {formatHomeProgramSessionMeta({
-                      sessionsCompleted: programSummary.sessionsCompleted,
-                      sessionsSkipped: programSummary.sessionsSkipped,
-                      sessionsRemaining: programSummary.sessionsRemaining,
-                    })}
-                  </Text>
-
-                  <View
-                    style={styles.programCalendarProgressTrack}
-                    accessible
-                    accessibilityRole="progressbar"
-                    accessibilityLabel="Program calendar progress"
-                    accessibilityValue={{
-                      min: 0,
-                      max: 100,
-                      now: Math.round(
-                        programSummary.calendarSessionSpanProgress * 100
-                      ),
-                    }}
-                  >
-                    <View
-                      style={[
-                        styles.programCalendarProgressFill,
-                        {
-                          width: `${Math.min(
-                            100,
-                            Math.max(
-                              0,
-                              Math.round(
-                                programSummary.calendarSessionSpanProgress *
-                                  10000
-                              ) / 100
-                            )
-                          )}%`,
-                        },
-                      ]}
-                    />
-                  </View>
-                </View>
-                <SmallChevron />
-              </Card>
-            ) : (
-              <Card
-                onPress={() =>
-                  trackHomeLink('pick_program_card', '/program', () =>
-                    router.push('/program')
-                  )
-                }
-                accessibilityLabel="Select a program"
-              >
-                <View style={styles.cardBody}>
-                  <Text style={styles.cardTitle}>Pick a program</Text>
-                  <Text style={styles.cardMuted}>
-                    Head to the Program tab and choose one then we will surface
-                    the good stuff here.
-                  </Text>
-                </View>
-                <SmallChevron />
-              </Card>
-            )}
-          </View>
-
-          {checkinSummary ? (
-            <HomeCheckinCard
-              loggedCount={checkinSummary.loggedCount}
-              totalCount={checkinSummary.totalCount}
-              supplementsDue={checkinSummary.supplementsDue}
-              supplementsTotal={checkinSummary.supplementsTotal}
+          <EnterOnMount index={nextEntrance()}>
+            <HomeTodayCard
+              summary={programSummary}
               onPress={() =>
-                trackHomeLink('daily_checkin_card', '/checkin', () =>
-                  router.push('/checkin')
+                trackHomeLink(
+                  programSummary ? 'your_program_card' : 'pick_program_card',
+                  '/program',
+                  () => router.push('/program')
                 )
               }
             />
+          </EnterOnMount>
+
+          {showFreeStrip ? (
+            <EnterOnMount index={nextEntrance()}>
+              <PressableCard
+                onPress={() =>
+                  trackHomeLink('welcome_strip', '/records', () =>
+                    router.push('/records')
+                  )
+                }
+                accessibilityLabel="Upgrade to Pro, free tier"
+                accessibilityHint="Opens the You tab where you can upgrade to Tempered Strength Pro"
+              >
+                <View style={styles.upgradeRow}>
+                  <Text style={styles.upgradeTitle}>Upgrade to Pro</Text>
+                  <Badge label="Free tier" tone="neutral" />
+                </View>
+              </PressableCard>
+            </EnterOnMount>
           ) : null}
 
-          <HubPromoCard
-            icon="barbell-outline"
-            eyebrow="Open workouts"
-            title="Just fancy a workout?"
-            description="Strength sessions, mobility flows and more when you fancy something outside a program."
-            onPress={() =>
-              trackHomeLink('just_a_workout_card', '/workouts', () =>
-                router.push('/workouts')
-              )
-            }
-            accessibilityLabel="Browse workouts"
-          />
+          {checkinSummary ? (
+            <EnterOnMount index={nextEntrance()}>
+              <HomeCheckinCard
+                loggedCount={checkinSummary.loggedCount}
+                totalCount={checkinSummary.totalCount}
+                supplementsDue={checkinSummary.supplementsDue}
+                supplementsTotal={checkinSummary.supplementsTotal}
+                onPress={() =>
+                  trackHomeLink('daily_checkin_card', '/checkin', () =>
+                    router.push('/checkin')
+                  )
+                }
+              />
+            </EnterOnMount>
+          ) : null}
+
+          <EnterOnMount index={nextEntrance()} style={styles.bentoRow}>
+            <View style={styles.bentoTile}>
+              <HubPromoCard
+                layout="tile"
+                icon="barbell-outline"
+                eyebrow="Open workouts"
+                title="Just fancy a workout?"
+                description="Strength, mobility flows and more outside a program."
+                onPress={() =>
+                  trackHomeLink('just_a_workout_card', '/workouts', () =>
+                    router.push('/workouts')
+                  )
+                }
+                accessibilityLabel="Opens Workouts"
+              />
+            </View>
+            <View style={styles.bentoTile}>
+              <HubPromoCard
+                layout="tile"
+                icon="cart-outline"
+                eyebrow="Partner picks"
+                title="Browse the shop"
+                description="The best gear at exclusive prices."
+                onPress={() =>
+                  trackHomeLink('browse_shop_card', '/shop', () =>
+                    router.push('/shop')
+                  )
+                }
+                accessibilityLabel="Opens partner products"
+              />
+            </View>
+          </EnterOnMount>
 
           {sponsorAds.length > 0 ? (
-            <SponsorAdsCarousel ads={sponsorAds} onPressCta={openSponsorCta} />
+            <EnterOnMount index={nextEntrance()}>
+              <SponsorAdsCarousel
+                ads={sponsorAds}
+                onPressCta={openSponsorCta}
+              />
+            </EnterOnMount>
           ) : null}
 
           {streakSnapshot ? (
-            <HomeStreakCard
-              snapshot={streakSnapshot}
-              displayName={displayName}
-            />
+            <EnterOnMount index={nextEntrance()}>
+              <HomeStreakCard
+                snapshot={streakSnapshot}
+                displayName={displayName}
+              />
+            </EnterOnMount>
           ) : null}
 
-          <HubPromoCard
-            icon="cart-outline"
-            eyebrow="Partner picks"
-            title="Browse the shop"
-            description="The best gear at exclusive prices."
-            onPress={() =>
-              trackHomeLink('browse_shop_card', '/shop', () =>
-                router.push('/shop')
-              )
-            }
-            accessibilityLabel="Browse partner products"
-          />
-
-          <View>
+          <EnterOnMount index={nextEntrance()}>
             {hasPersonalBests ? (
-              <Card
+              <PressableCard
                 onPress={() =>
                   trackHomeLink('recent_wins_card', '/records', () =>
                     router.push('/records')
                   )
                 }
-                accessibilityLabel="Open personal bests"
+                accessibilityLabel={`Your latest PB, ${recentPbs
+                  .map(
+                    (row) =>
+                      `${row.exerciseName}, ${formatRepMaxLabel(
+                        row.tier
+                      )}, ${formatWeightFromKg(row.weightKg, weightUnit)}`
+                  )
+                  .join('; ')}`}
+                accessibilityHint="Opens your personal bests"
               >
-                <View style={[styles.cardBody, styles.pbListContent]}>
-                  <View style={styles.pbListTitleRow}>
-                    <Ionicons
-                      name="trophy-outline"
-                      size={18}
-                      color={Colors.accent}
-                    />
-                    <Text style={styles.pbListTitle}>Your latest PB</Text>
-                  </View>
-                  {recentPbs.map((row, index) => (
-                    <View
-                      key={`${row.exerciseId}-${row.tier}-${row.achievedAt}-${index}`}
-                      style={[styles.pbRow]}
-                    >
-                      <View style={styles.pbRowText}>
-                        <Text
-                          style={styles.pbRowTitle}
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                        >
-                          {row.exerciseName}
-                        </Text>
-                        <Text style={styles.pbMaxLabel}>
-                          {formatRepMaxLabel(row.tier)}
-                        </Text>
-                      </View>
-                      <View style={styles.pbValueWrap}>
-                        <View style={styles.pbValueContainer}>
-                          <Text style={styles.pbValue}>
-                            {formatWeightFromKg(row.weightKg, weightUnit)}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  ))}
+                <View style={styles.pbTitleRow}>
+                  <Ionicons
+                    name="trophy-outline"
+                    size={18}
+                    color={color.gold}
+                  />
+                  <Text style={styles.cardTitle}>Your latest PB</Text>
                 </View>
-                <SmallChevron />
-              </Card>
+                {recentPbs.map((row, index) => (
+                  <View
+                    key={`${row.exerciseId}-${row.tier}-${row.achievedAt}-${index}`}
+                    style={styles.pbRow}
+                  >
+                    <View style={styles.pbRowText}>
+                      <Text style={styles.pbExercise} numberOfLines={2}>
+                        {row.exerciseName}
+                      </Text>
+                      <Text style={styles.pbTier}>
+                        {formatRepMaxLabel(row.tier)}
+                      </Text>
+                    </View>
+                    <Text style={styles.pbValue}>
+                      {formatWeightFromKg(row.weightKg, weightUnit)}
+                    </Text>
+                  </View>
+                ))}
+              </PressableCard>
             ) : (
-              <Card
+              <PressableCard
                 onPress={() =>
                   trackHomeLink(
                     'recent_wins_empty_card',
@@ -535,19 +471,17 @@ export default function HomeTabScreen() {
                     () => router.push('/records')
                   )
                 }
-                accessibilityLabel="Open personal bests to log records"
+                accessibilityLabel="No personal bests yet"
+                accessibilityHint="Opens the You tab to log records"
               >
-                <View style={styles.cardBody}>
-                  <Text style={styles.cardTitle}>No PRs yet</Text>
-                  <Text style={styles.emptySubtitle}>
-                    Your latest PB from your programs or on the you will show up
-                    here.
-                  </Text>
-                </View>
-                <SmallChevron />
-              </Card>
+                <Text style={styles.cardTitle}>No PBs yet</Text>
+                <Text style={styles.cardBody}>
+                  Personal bests from your programs and the You tab will show up
+                  here.
+                </Text>
+              </PressableCard>
             )}
-          </View>
+          </EnterOnMount>
         </View>
       </StandardLayout.Body>
     </StandardLayout>
