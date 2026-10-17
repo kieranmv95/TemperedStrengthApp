@@ -76,6 +76,13 @@ const PAIRS: ContrastPair[] = [
     kind: 'text',
   },
 
+  {
+    name: 'textSecondary on goldTint over bg (welcome strip)',
+    foreground: color.textSecondary,
+    background: flattenToHex(color.goldTint, color.bg),
+    kind: 'text',
+  },
+
   // Text on gold fills (primary buttons, badges)
   {
     name: 'onGold on gold',

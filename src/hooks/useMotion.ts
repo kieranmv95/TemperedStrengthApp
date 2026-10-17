@@ -10,6 +10,7 @@ import {
   Easing,
   ReduceMotion,
   useReducedMotion,
+  withDelay,
   withRepeat,
   withSequence,
   withSpring,
@@ -28,12 +29,16 @@ export type Motion = {
   timing: (
     toValue: number,
     duration?: DurationToken,
-    easing?: EasingToken
+    easing?: EasingToken,
+    delayMs?: number
   ) => number;
   /** Spring movement. Instant under Reduce Motion. */
   spring: (toValue: number, preset?: SpringToken) => number;
-  /** Opacity or colour progress. Shortened to a ≤150ms crossfade under Reduce Motion. */
-  fade: (toValue: number, duration?: DurationToken) => number;
+  /**
+   * Opacity or colour progress. Shortened to a ≤150ms crossfade with no delay
+   * under Reduce Motion.
+   */
+  fade: (toValue: number, duration?: DurationToken, delayMs?: number) => number;
   /**
    * Loading-only opacity loop between `from` and `to`. Returns the static
    * `from` value under Reduce Motion. Stop it by assigning a new value.
@@ -80,17 +85,19 @@ export function useMotion(): Motion {
   const timing = (
     toValue: number,
     duration: DurationToken = 'base',
-    easing: EasingToken = 'standard'
+    easing: EasingToken = 'standard',
+    delayMs = 0
   ): number => {
     'worklet';
     if (reduceMotion) {
       return toValue;
     }
-    return withTiming(toValue, {
+    const animation = withTiming(toValue, {
       duration: motion.duration[duration],
       easing: EASINGS[easing],
       reduceMotion: ReduceMotion.Never,
     });
+    return delayMs > 0 ? withDelay(delayMs, animation) : animation;
   };
 
   const spring = (toValue: number, preset: SpringToken = 'snappy'): number => {
@@ -104,15 +111,22 @@ export function useMotion(): Motion {
     });
   };
 
-  const fade = (toValue: number, duration: DurationToken = 'fast'): number => {
+  const fade = (
+    toValue: number,
+    duration: DurationToken = 'fast',
+    delayMs = 0
+  ): number => {
     'worklet';
-    return withTiming(toValue, {
+    const animation = withTiming(toValue, {
       duration: reduceMotion
         ? Math.min(motion.duration[duration], motion.reducedFadeDuration)
         : motion.duration[duration],
       easing: EASINGS.standard,
       reduceMotion: ReduceMotion.Never,
     });
+    return !reduceMotion && delayMs > 0
+      ? withDelay(delayMs, animation)
+      : animation;
   };
 
   const pulse = (from: number, to: number): number => {

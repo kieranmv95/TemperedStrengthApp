@@ -25,6 +25,7 @@ const sponsorAdFieldsGroq = `
   layout,
   affiliateUrl,
   ctaLabel,
+  promoCode,
   backgroundColor,
   titleColor,
   descriptionColor,
@@ -115,6 +116,8 @@ export type HomeSponsorAd = {
   categories: string[];
   /** Optional Tempered Strength team endorsement copy for shop detail. */
   review: string | null;
+  /** Optional discount code shown as a copyable chip, e.g. "TS10". */
+  promoCode: string | null;
 };
 
 type SanitySponsorAdDoc = {
@@ -125,6 +128,7 @@ type SanitySponsorAdDoc = {
   layout?: string | null;
   affiliateUrl?: string | null;
   ctaLabel?: string | null;
+  promoCode?: string | null;
   backgroundColor?: string | null;
   titleColor?: string | null;
   descriptionColor?: string | null;
@@ -353,9 +357,11 @@ function mapSponsorAd(raw: SanitySponsorAdDoc): HomeSponsorAd | null {
     productUrl,
     categories: mapSponsorCategories(raw.categories),
     review: mapSponsorReview(raw.review),
+    promoCode: mapSponsorReview(raw.promoCode),
   };
 }
 
+/** Trimmed optional text; empty becomes null. */
 function mapSponsorReview(value: string | null | undefined): string | null {
   const trimmed = value?.trim() ?? '';
   return trimmed.length > 0 ? trimmed : null;
@@ -403,6 +409,8 @@ function normalizeAdFromCache(raw: unknown): HomeSponsorAd | null {
     productUrl: typeof o.productUrl === 'string' ? o.productUrl : null,
     categories: mapSponsorCategories(o.categories),
     review: typeof o.review === 'string' ? mapSponsorReview(o.review) : null,
+    promoCode:
+      typeof o.promoCode === 'string' ? mapSponsorReview(o.promoCode) : null,
     theme: typeof o.theme === 'object' && o.theme !== null ? o.theme : null,
   });
 }

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { color, space, typography } from '@/src/constants/tokens';
 
 type StandardLayoutSectionProps = {
   children?: React.ReactNode;
@@ -52,6 +53,10 @@ type StandardLayoutProps = {
   filterBarButtons?: React.ReactNode;
   /** Content below the filter bar buttons (e.g. expanded sort panel). */
   filterBarBelowButtons?: React.ReactNode;
+  /** `forged` opts a screen into the redesigned header; other screens are unchanged. */
+  variant?: 'legacy' | 'forged';
+  /** Shown beside the title, e.g. an account badge. */
+  titleAccessory?: React.ReactNode;
   children?: React.ReactNode;
 };
 
@@ -71,8 +76,11 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
   filterBarOnly = false,
   filterBarButtons,
   filterBarBelowButtons,
+  variant = 'legacy',
+  titleAccessory,
   children,
 }) => {
+  const forged = variant === 'forged';
   const insets = useSafeAreaInsets();
   const [filtersExpanded, setFiltersExpanded] = React.useState(false);
 
@@ -140,6 +148,7 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
         style={[
           styles.headerContainer,
           onBackPress ? styles.headerContainerWithBack : null,
+          forged ? styles.headerContainerForged : null,
         ]}
       >
         {onBackPress ? (
@@ -157,18 +166,40 @@ const StandardLayoutBase: React.FC<StandardLayoutProps> = ({
                 color={Colors.textPrimary}
               />
             </TouchableOpacity>
-            <Text style={[styles.title, styles.titleInRow]} numberOfLines={2}>
+            <Text
+              style={[
+                styles.title,
+                styles.titleInRow,
+                forged ? styles.titleForged : null,
+              ]}
+              numberOfLines={2}
+              accessibilityRole="header"
+            >
               {title}
             </Text>
+            {titleAccessory}
           </View>
         ) : (
-          <Text style={styles.title}>{title}</Text>
+          <View style={titleAccessory ? styles.titleRow : null}>
+            <Text
+              style={[
+                styles.title,
+                forged ? styles.titleForged : null,
+                titleAccessory ? styles.titleBesideAccessory : null,
+              ]}
+              accessibilityRole="header"
+            >
+              {title}
+            </Text>
+            {titleAccessory}
+          </View>
         )}
         {subtitle ? (
           <Text
             style={[
               styles.subtitle,
               onBackPress ? styles.subtitleWithBack : null,
+              forged ? styles.subtitleForged : null,
             ]}
           >
             {subtitle}
@@ -290,6 +321,29 @@ const styles = StyleSheet.create({
   },
   headerContainerWithBack: {
     paddingTop: Spacing.md,
+  },
+  headerContainerForged: {
+    paddingBottom: space.sm,
+    borderBottomWidth: 0,
+  },
+  titleForged: {
+    ...typography.title1,
+    letterSpacing: 0,
+    fontWeight: undefined,
+  },
+  subtitleForged: {
+    ...typography.callout,
+    color: color.textSecondary,
+    marginTop: space.xxs,
+  },
+  titleBesideAccessory: {
+    flexShrink: 1,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: space.xs,
   },
   headerRow: {
     flexDirection: 'row',

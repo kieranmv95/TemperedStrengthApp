@@ -4,6 +4,7 @@ import { BottomSheet } from './BottomSheet';
 import { Card } from './Card';
 import { ActionChip, Badge, FilterChip, Tag } from './Chip';
 import { Collapsible } from './Collapsible';
+import { EnterOnMount } from './EnterOnMount';
 import { CuratedSection } from './CuratedSection';
 import { IconSymbol } from './IconSymbol';
 import {
@@ -35,6 +36,7 @@ export {
   Card,
   Collapsible,
   CuratedSection,
+  EnterOnMount,
   FilterChip,
   IconSymbol,
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
