@@ -58,6 +58,8 @@ const withSequence = jest.fn(<T,>(...animations: T[]): T => {
 
 const withDelay = jest.fn(<T,>(_delay: number, animation: T): T => animation);
 
+const withRepeat = jest.fn(<T,>(animation: T): T => animation);
+
 function cancelAnimation(): void {}
 
 function interpolate(
@@ -97,9 +99,8 @@ function useDerivedValue<T>(updater: () => T): MockSharedValue<T> {
   return makeMutable(updater());
 }
 
-function useReducedMotion(): boolean {
-  return false;
-}
+/** Launch-time Reduce Motion value; set per test via jest/mockReduceMotion. */
+const useReducedMotion = jest.fn((): boolean => false);
 
 function runOnJS<Args extends unknown[], R>(
   fn: (...args: Args) => R
@@ -201,6 +202,7 @@ export {
   useReducedMotion,
   useSharedValue,
   withDelay,
+  withRepeat,
   withSequence,
   withSpring,
   withTiming,

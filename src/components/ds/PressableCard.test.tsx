@@ -52,7 +52,7 @@ describe('PressableCard', () => {
   it('calls onPress with a light haptic', async () => {
     const { onPress } = await renderCard({});
 
-    fireEvent.press(screen.getByRole('button'));
+    await fireEvent.press(screen.getByRole('button'));
 
     expect(onPress).toHaveBeenCalledTimes(1);
     expect(Haptics.impactAsync).toHaveBeenCalledWith(
@@ -63,7 +63,7 @@ describe('PressableCard', () => {
   it('skips the haptic when haptic is false', async () => {
     await renderCard({ haptic: false });
 
-    fireEvent.press(screen.getByRole('button'));
+    await fireEvent.press(screen.getByRole('button'));
 
     expect(Haptics.impactAsync).not.toHaveBeenCalled();
   });
@@ -73,14 +73,14 @@ describe('PressableCard', () => {
 
     const card = screen.getByRole('button');
     expect(card).toBeDisabled();
-    fireEvent.press(card);
+    await fireEvent.press(card);
     expect(onPress).not.toHaveBeenCalled();
   });
 
   it('scales on press when motion is allowed', async () => {
     await renderCard({});
 
-    fireEvent(screen.getByRole('button'), 'pressIn');
+    await fireEvent(screen.getByRole('button'), 'pressIn');
 
     expect(withSpring).toHaveBeenCalledWith(
       motion.pressScale,
@@ -92,7 +92,7 @@ describe('PressableCard', () => {
     mockReduceMotion(true);
     await renderCard({});
 
-    fireEvent(screen.getByRole('button'), 'pressIn');
+    await fireEvent(screen.getByRole('button'), 'pressIn');
 
     expect(withSpring).not.toHaveBeenCalled();
   });

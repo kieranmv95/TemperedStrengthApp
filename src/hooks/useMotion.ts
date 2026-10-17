@@ -10,6 +10,8 @@ import {
   Easing,
   ReduceMotion,
   useReducedMotion,
+  withRepeat,
+  withSequence,
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
@@ -32,6 +34,11 @@ export type Motion = {
   spring: (toValue: number, preset?: SpringToken) => number;
   /** Opacity or colour progress. Shortened to a ≤150ms crossfade under Reduce Motion. */
   fade: (toValue: number, duration?: DurationToken) => number;
+  /**
+   * Loading-only opacity loop between `from` and `to`. Returns the static
+   * `from` value under Reduce Motion. Stop it by assigning a new value.
+   */
+  pulse: (from: number, to: number) => number;
 };
 
 /**
@@ -106,5 +113,21 @@ export function useMotion(): Motion {
     });
   };
 
-  return { reduceMotion, timing, spring, fade };
+  const pulse = (from: number, to: number): number => {
+    'worklet';
+    if (reduceMotion) {
+      return from;
+    }
+    const halfCycle = {
+      duration: motion.skeletonCycle / 2,
+      easing: EASINGS.standard,
+      reduceMotion: ReduceMotion.Never,
+    };
+    return withRepeat(
+      withSequence(withTiming(to, halfCycle), withTiming(from, halfCycle)),
+      -1
+    );
+  };
+
+  return { reduceMotion, timing, spring, fade, pulse };
 }

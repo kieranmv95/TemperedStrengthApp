@@ -208,6 +208,8 @@ export const motion = {
   pressScale: 0.98,
   entranceOffset: 8,
   entranceStagger: 40,
+  /** Full cycle of the loading skeleton pulse; the only looping animation, shown while loading. */
+  skeletonCycle: 1200,
 } as const;
 
 export type DurationToken = keyof typeof motion.duration;

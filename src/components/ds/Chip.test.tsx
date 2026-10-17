@@ -58,7 +58,7 @@ describe('FilterChip', () => {
     );
     await act(async () => {});
 
-    fireEvent.press(screen.getByRole('button', { name: 'EMOM' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'EMOM' }));
 
     expect(onPress).toHaveBeenCalledTimes(1);
     expect(Haptics.selectionAsync).toHaveBeenCalledTimes(1);
@@ -77,7 +77,7 @@ describe('ActionChip', () => {
       />
     );
 
-    fireEvent.press(
+    await fireEvent.press(
       screen.getByRole('button', { name: 'How to perform, Snatch' })
     );
     expect(onPress).toHaveBeenCalledTimes(1);

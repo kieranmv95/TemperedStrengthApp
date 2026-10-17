@@ -22,7 +22,9 @@ describe('SectionHeader', () => {
       />
     );
 
-    fireEvent.press(screen.getByRole('button', { name: 'See all tools' }));
+    await fireEvent.press(
+      screen.getByRole('button', { name: 'See all tools' })
+    );
     expect(onActionPress).toHaveBeenCalledTimes(1);
   });
 });
