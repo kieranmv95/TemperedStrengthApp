@@ -6,11 +6,13 @@ import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
 import { TogetherWeLiftProvider } from '@/src/hooks/together-we-lift-context';
 import { Colors } from '@/src/constants/theme';
+import { fontFamily } from '@/src/constants/tokens';
 import { initializeRevenueCat } from '@/src/services/revenueCatService';
 import { openAppDatabase } from '@/src/db/database';
 import { getOnboarded, runStorageMigrations } from '@/src/utils/storage';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { isRunningInExpoGo } from 'expo';
+import * as Font from 'expo-font';
 import { Stack, router } from 'expo-router';
 import * as NavigationBar from 'expo-navigation-bar';
 import { StatusBar } from 'expo-status-bar';
@@ -50,6 +52,16 @@ export default function RootLayout() {
         await openAppDatabase();
       } catch (error) {
         console.error('Failed to open app database:', error);
+      }
+      // Native builds embed these via the expo-font config plugin; Expo Go needs
+      // them loaded at runtime. Text falls back to the system font on failure.
+      try {
+        await Font.loadAsync({
+          [fontFamily.displaySemiBold]: require('@/assets/fonts/BarlowCondensed-SemiBold.ttf'),
+          [fontFamily.displayBold]: require('@/assets/fonts/BarlowCondensed-Bold.ttf'),
+        });
+      } catch (error) {
+        console.error('Failed to load display fonts:', error);
       }
       // Run AsyncStorage migrations before anything reads persisted data and before
       // the sync manager (mounted only once boot is ready) starts mirroring.

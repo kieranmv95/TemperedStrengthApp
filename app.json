@@ -51,6 +51,15 @@
           }
         }
       ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/BarlowCondensed-SemiBold.ttf",
+            "./assets/fonts/BarlowCondensed-Bold.ttf"
+          ]
+        }
+      ],
       "@react-native-community/datetimepicker",
       "expo-localization",
       "expo-video",
