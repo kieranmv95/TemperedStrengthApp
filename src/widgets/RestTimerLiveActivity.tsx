@@ -24,7 +24,7 @@ const RestTimerLiveActivityLayout = (props: RestTimerLiveActivityProps) => {
   'widget';
 
   // Brand tokens mirrored from tokens.ts (widget runtime cannot import app modules).
-  const accent = '#D4B97A';
+  const accent = '#FFBA6F';
   const background = '#0E0E10';
   const textPrimary = '#F5F3EE';
   const textSecondary = '#B4B0A8';

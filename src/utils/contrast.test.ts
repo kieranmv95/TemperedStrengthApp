@@ -4,10 +4,10 @@ describe('contrast', () => {
   it('parses short hex, long hex and rgba', () => {
     expect(parseColor('#fff')).toEqual({ r: 255, g: 255, b: 255, a: 1 });
     expect(parseColor('#0E0E10')).toEqual({ r: 14, g: 14, b: 16, a: 1 });
-    expect(parseColor('rgba(212, 185, 122, 0.12)')).toEqual({
-      r: 212,
-      g: 185,
-      b: 122,
+    expect(parseColor('rgba(255, 186, 111, 0.12)')).toEqual({
+      r: 255,
+      g: 186,
+      b: 111,
       a: 0.12,
     });
   });
@@ -19,8 +19,8 @@ describe('contrast', () => {
   });
 
   it('is symmetric', () => {
-    expect(contrastRatio('#D4B97A', '#17171A')).toBeCloseTo(
-      contrastRatio('#17171A', '#D4B97A'),
+    expect(contrastRatio('#FFBA6F', '#17171A')).toBeCloseTo(
+      contrastRatio('#17171A', '#FFBA6F'),
       5
     );
   });

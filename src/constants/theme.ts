@@ -13,7 +13,7 @@ export const Colors = {
   remoteNotificationBorder: '#2a3142',
   remoteNotificationBackground: '#1a1f2b',
   remoteNotificationDescription: '#cbd5e1',
-  remoteNotificationCta: '#d4b96a',
+  remoteNotificationCta: '#FFBA6F',
   remoteNotificationCtaText: '#1a1f2b',
 
   // Award icon (react-native-svg)

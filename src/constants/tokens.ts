@@ -26,12 +26,12 @@ export const color = {
   /** Disabled labels only (exempt from contrast minimums). */
   textDisabled: '#5E5A54',
 
-  gold: '#D4B97A',
-  goldStrong: '#E2C98E',
-  onGold: '#1A1508',
-  /** Same hue as `gold` (212, 185, 122). */
-  goldTint: 'rgba(212, 185, 122, 0.12)',
-  goldTintStrong: 'rgba(212, 185, 122, 0.24)',
+  gold: '#FFBA6F',
+  goldStrong: '#FFCA91',
+  onGold: '#1A1108',
+  /** Same hue as `gold` (255, 186, 111). */
+  goldTint: 'rgba(255, 186, 111, 0.12)',
+  goldTintStrong: 'rgba(255, 186, 111, 0.24)',
 
   success: '#4CC38A',
   successTint: 'rgba(76, 195, 138, 0.12)',
