@@ -152,6 +152,9 @@ describe('ExerciseCard', () => {
 
     expect(screen.getByRole('button', { name: 'Reorder sets' })).toBeSelected();
     expect(screen.getByLabelText('Reorder set 1')).toBeOnTheScreen();
+    expect(
+      screen.queryByText('Move', { includeHiddenElements: true })
+    ).not.toBeOnTheScreen();
   });
 
   it('stacks set fields with their own labels at large text sizes', async () => {

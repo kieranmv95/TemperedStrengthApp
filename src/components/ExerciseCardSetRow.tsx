@@ -194,11 +194,7 @@ export function ExerciseCardSetRow({
             accessibilityLabel={`Reorder set ${setNumber}`}
             accessibilityHint="Long press and drag to move this set"
           >
-            <Ionicons
-              name="reorder-three"
-              size={24}
-              color={color.textSecondary}
-            />
+            <Ionicons name="reorder-three" size={24} color={color.gold} />
           </View>
         </GestureDetector>
       ) : (

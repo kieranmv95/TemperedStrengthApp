@@ -18,6 +18,7 @@ import {
   toggleFavoriteWorkout,
 } from '@/src/utils/storage';
 import { COACH_ROLE } from '@/src/utils/workoutAccess';
+import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, router } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -88,18 +89,34 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.header} accessibilityRole="summary">
-        <Text style={styles.title} accessibilityRole="header">
-          Rest day
-        </Text>
+        <View style={styles.titleRow}>
+          <Ionicons
+            name="moon-outline"
+            size={24}
+            color={color.gold}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          />
+          <Text style={styles.title} accessibilityRole="header">
+            Rest day
+          </Text>
+        </View>
         <Text style={styles.subtitle}>
-          Your body needs recovery to grow stronger.
+          Your body needs recovery to grow stronger. Take this time to stretch,
+          foam roll, or simply take a day off.
         </Text>
-        <Text style={styles.description}>
-          Take this time to stretch, foam roll, or simply take a day off.{' '}
-          <Text style={styles.descriptionEmphasis}>
+        <View style={styles.callout}>
+          <Ionicons
+            name="information-circle-outline"
+            size={18}
+            color={color.gold}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          />
+          <Text style={styles.calloutText}>
             The suggestions below are optional. Skip them if you need full rest.
           </Text>
-        </Text>
+        </View>
       </View>
 
       {suggestions.recoveryIds.length > 0 ? (
@@ -108,6 +125,7 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
             title="Mobility"
             description={suggestions.context}
             size="medium"
+            icon="body-outline"
             style={styles.sectionHeader}
           />
           <RestDayMobilityCarousel
@@ -124,6 +142,7 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
             title="If you still want to train"
             description="Proper workouts that shouldn’t wreck tomorrow, only if you feel fresh."
             size="medium"
+            icon="barbell-outline"
             style={styles.sectionHeader}
           />
           <RestDayWorkoutCarousel
@@ -143,6 +162,7 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
             title="Other ideas"
             description="Easy recovery outside the app. Movement, heat, stillness, or full rest."
             size="medium"
+            icon="leaf-outline"
             style={styles.sectionHeader}
           />
           <RestDayActivityCarousel activities={suggestions.activities} />
@@ -155,6 +175,7 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
             title="Fancy trying something new?"
             description="Skill labs to explore on your own time. Curiosity, not homework."
             size="medium"
+            icon="flask-outline"
             style={styles.sectionHeader}
           />
           <RestDayWorkoutCarousel
@@ -207,28 +228,39 @@ const styles = StyleSheet.create({
     paddingBottom: space.xl,
   },
   header: {
-    marginBottom: space.xl,
+    marginBottom: space.lg,
     paddingTop: space.md,
+    gap: space.sm,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: space.xs,
   },
   title: {
     ...typography.title1,
     color: color.textPrimary,
+    flexShrink: 1,
   },
   subtitle: {
-    ...typography.body,
-    color: color.textSecondary,
-  },
-  description: {
     ...typography.callout,
     color: color.textSecondary,
   },
-  descriptionEmphasis: {
+  callout: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: space.xs,
+    padding: space.sm,
+    borderRadius: radius.sm,
+    backgroundColor: color.goldTint,
+  },
+  calloutText: {
     ...typography.calloutStrong,
-    color: color.textPrimary,
+    color: color.gold,
+    flex: 1,
   },
   section: {
-    marginBottom: space.xl,
+    marginBottom: space.lg,
   },
   sectionHeader: {
     marginBottom: space.sm,

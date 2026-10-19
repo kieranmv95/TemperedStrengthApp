@@ -24,11 +24,7 @@ export function RestDayActivityCard({
         accessibilityLabel={`${activity.title}, ${activity.description}`}
       >
         <View style={styles.visualTile}>
-          <Ionicons
-            name={activity.icon}
-            size={22}
-            color={color.textSecondary}
-          />
+          <Ionicons name={activity.icon} size={22} color={color.gold} />
         </View>
         <View style={styles.textBlock}>
           <Text style={styles.title}>{activity.title}</Text>
@@ -53,7 +49,7 @@ const styles = StyleSheet.create({
     width: ICON_TILE_SIZE,
     height: ICON_TILE_SIZE,
     borderRadius: radius.sm,
-    backgroundColor: color.surface2,
+    backgroundColor: color.goldTint,
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,

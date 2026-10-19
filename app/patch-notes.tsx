@@ -16,8 +16,13 @@ type PatchNote = {
 const PATCH_NOTES: PatchNote[] = [
   {
     version: '3.2.1',
-    dateLabel: '',
-    notes: [''],
+    dateLabel: '19th October 2026',
+    notes: [
+      'Refreshed the look across the app',
+      'Clearer set logging, including reordering sets',
+      'Rest days are easier to scan',
+      'Removed Discover search',
+    ],
   },
   {
     version: '3.2.0',

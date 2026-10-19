@@ -112,6 +112,10 @@ export const exerciseCardStyles = StyleSheet.create({
     width: SET_NUMBER_WIDTH,
     textAlign: 'center',
   },
+  columnSetIcon: {
+    width: SET_NUMBER_WIDTH,
+    alignItems: 'center',
+  },
   columnFlex: {
     flex: 1,
   },

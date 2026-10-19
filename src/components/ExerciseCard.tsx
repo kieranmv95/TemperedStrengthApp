@@ -374,9 +374,13 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
         >
-          <Text style={[styles.columnLabel, styles.columnSet]}>
-            {canReorder ? 'Move' : 'Set'}
-          </Text>
+          {canReorder ? (
+            <View style={styles.columnSetIcon}>
+              <Ionicons name="reorder-three" size={18} color={color.gold} />
+            </View>
+          ) : (
+            <Text style={[styles.columnLabel, styles.columnSet]}>Set</Text>
+          )}
           <Text style={[styles.columnLabel, styles.columnFlex]}>
             {`Weight (${weightUnit})`}
           </Text>
