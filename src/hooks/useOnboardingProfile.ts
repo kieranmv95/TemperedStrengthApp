@@ -1,8 +1,8 @@
 import type { OnboardingProfile } from '@/src/types/onboarding';
 import { getOnboardingProfile } from '@/src/utils/storage';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
-import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 export function useOnboardingProfile(): {
   profile: OnboardingProfile | null;

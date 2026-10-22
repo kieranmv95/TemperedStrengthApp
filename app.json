@@ -2,17 +2,11 @@
   "expo": {
     "name": "tempered-strength-app",
     "slug": "tempered-strength-app",
-    "version": "3.2.0",
+    "version": "3.2.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "temperedstrengthapp",
     "userInterfaceStyle": "dark",
-    "androidNavigationBar": {
-      "backgroundColor": "#121212",
-      "barStyle": "light-content",
-      "enforceContrast": false
-    },
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.kieranvenison.temperedstrengthapp",
@@ -37,12 +31,6 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-location",
-        {
-          "locationWhenInUsePermission": "Allow Tempered Strength to use your location to show nearby gyms, clubs, and coaches."
-        }
-      ],
       "expo-notifications",
       [
         "expo-splash-screen",
@@ -53,8 +41,17 @@
           "backgroundColor": "#ffffff",
           "dark": {
             "image": "./assets/images/dark-splash-icon.png",
-            "backgroundColor": "#121212"
+            "backgroundColor": "#0E0E10"
           }
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/BarlowCondensed-SemiBold.ttf",
+            "./assets/fonts/BarlowCondensed-Bold.ttf"
+          ]
         }
       ],
       "@react-native-community/datetimepicker",
@@ -64,9 +61,18 @@
       [
         "expo-navigation-bar",
         {
-          "backgroundColor": "#121212",
-          "barStyle": "light",
+          "backgroundColor": "#0E0E10",
+          "style": "light",
           "enforceContrast": false
+        }
+      ],
+      [
+        "expo-widgets",
+        {
+          "bundleIdentifier": "com.kieranvenison.temperedstrengthapp.ExpoWidgetsTarget",
+          "groupIdentifier": "group.com.kieranvenison.temperedstrengthapp",
+          "enablePushNotifications": false,
+          "frequentUpdates": false
         }
       ]
     ],

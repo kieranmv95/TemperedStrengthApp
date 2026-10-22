@@ -20,6 +20,7 @@ import { mutate, parseJsonMap, withKeyLock } from './internal';
 
 export {
   saveLoggedSet,
+  reorderLoggedSets,
   getLoggedSets,
   hasLoggedSets,
   clearLoggedSetsForSlot,
@@ -30,6 +31,7 @@ export {
   moveWorkoutLogsDayLocal,
   migrateWorkoutLogsFromKvLocal,
 } from '@/src/db/domains/workoutLogs/storage';
+export type { ReorderLoggedSetPayload } from '@/src/db/domains/workoutLogs/storage';
 
 /**
  * Save an exercise swap for a specific day and slot

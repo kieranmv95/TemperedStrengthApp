@@ -1,12 +1,12 @@
-import { exerciseCardStyles as cardStyles } from '@/src/components/exerciseCardStyles';
+import { ActionChip, PressableCard } from '@/src/components/ds';
 import { exerciseVideoStyles as styles } from '@/src/components/exercise/exerciseVideoStyles';
-import { Colors } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import { getExerciseById } from '@/src/data/exercises';
 import { useExerciseVideo } from '@/src/hooks/exercise-video-context';
 import { exerciseHasVideo } from '@/src/utils/youtube';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 const HOW_TO_LABEL = 'How to perform';
 const HOW_TO_HINT = 'Watch movement demo';
@@ -31,33 +31,31 @@ export function ExerciseVideoPlayButton({
 
   if (variant === 'banner') {
     return (
-      <TouchableOpacity
-        style={styles.playButtonBanner}
+      <PressableCard
         onPress={() => openExerciseVideo(exerciseId)}
-        accessibilityRole="button"
         accessibilityLabel={accessibilityLabel}
-        activeOpacity={0.7}
+        accessibilityHint={HOW_TO_HINT}
+        style={styles.playButtonBanner}
       >
-        <Ionicons name="play-circle" size={28} color={Colors.recommended} />
-        <View style={styles.playButtonTextBlock}>
-          <Text style={styles.playButtonLabel}>{HOW_TO_LABEL}</Text>
-          <Text style={styles.playButtonSubLabel}>{HOW_TO_HINT}</Text>
+        <View style={styles.playButtonRow}>
+          <Ionicons name="play-circle" size={28} color={color.info} />
+          <View style={styles.playButtonTextBlock}>
+            <Text style={styles.playButtonLabel}>{HOW_TO_LABEL}</Text>
+            <Text style={styles.playButtonSubLabel}>{HOW_TO_HINT}</Text>
+          </View>
         </View>
-        <Ionicons name="chevron-forward" size={20} color={Colors.textMuted} />
-      </TouchableOpacity>
+      </PressableCard>
     );
   }
 
   return (
-    <TouchableOpacity
-      style={[cardStyles.metaChip, cardStyles.metaChipRecommended]}
+    <ActionChip
+      label={HOW_TO_LABEL}
+      icon="play-circle"
+      tone="info"
       onPress={() => openExerciseVideo(exerciseId)}
-      accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
-      activeOpacity={0.7}
-    >
-      <Ionicons name="play-circle" size={14} color={Colors.recommended} />
-      <Text style={cardStyles.metaChipRecommendedText}>{HOW_TO_LABEL}</Text>
-    </TouchableOpacity>
+      accessibilityHint={HOW_TO_HINT}
+    />
   );
 }

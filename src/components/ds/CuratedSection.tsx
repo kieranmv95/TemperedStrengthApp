@@ -1,5 +1,5 @@
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
-import Ionicons from '@expo/vector-icons/build/Ionicons';
+import { color, space, typography } from '@/src/constants/tokens';
+import { Ionicons } from '@expo/vector-icons';
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
 type CuratedSectionProps = {
@@ -12,6 +12,18 @@ type CuratedSectionProps = {
   theme?: 'gold';
 };
 
+const TITLE_STYLE = {
+  large: typography.title2,
+  medium: typography.headline,
+  small: typography.calloutStrong,
+} as const;
+
+const ICON_SIZE = { large: 22, medium: 20, small: 18 } as const;
+
+/**
+ * Section heading with a description. Prefer SectionHeader for new code;
+ * this keeps its legacy props for existing screens.
+ */
 export const CuratedSection = ({
   title,
   description,
@@ -21,38 +33,23 @@ export const CuratedSection = ({
   iconSizeOverride,
   theme,
 }: CuratedSectionProps) => {
-  const iconSize = () => {
-    if (iconSizeOverride) {
-      return iconSizeOverride;
-    }
-
-    switch (size) {
-      case 'large':
-        return 28;
-      case 'medium':
-        return 24;
-      case 'small':
-        return 20;
-      default:
-        return 20;
-    }
-  };
   return (
-    <View style={style}>
+    <View style={[styles.container, style]}>
       <View style={styles.titleRow}>
-        {icon && (
+        {icon ? (
           <Ionicons
-            name={icon as any}
-            size={iconSize()}
-            color={Colors.accent}
+            name={icon as keyof typeof Ionicons.glyphMap}
+            size={iconSizeOverride ?? ICON_SIZE[size]}
+            color={color.gold}
           />
-        )}
+        ) : null}
         <Text
           style={[
+            TITLE_STYLE[size],
             styles.title,
-            styles[`title_${size}`],
-            theme && styles[`title_${theme}`],
+            theme === 'gold' && styles.titleGold,
           ]}
+          accessibilityRole="header"
         >
           {title}
         </Text>
@@ -63,22 +60,23 @@ export const CuratedSection = ({
 };
 
 const styles = StyleSheet.create({
+  container: {
+    gap: space.xxs,
+  },
   titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: space.xs,
   },
   title: {
-    color: Colors.textPrimary,
-    fontWeight: '800',
+    color: color.textPrimary,
+    flexShrink: 1,
   },
-  title_gold: { color: Colors.accent },
-  title_large: { fontSize: FontSize.displayXl },
-  title_medium: { fontSize: FontSize.displaySm },
-  title_small: { fontSize: FontSize.xl },
+  titleGold: {
+    color: color.gold,
+  },
   description: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
+    ...typography.callout,
+    color: color.textSecondary,
   },
 });

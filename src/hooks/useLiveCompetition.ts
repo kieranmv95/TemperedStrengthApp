@@ -8,8 +8,8 @@ import {
   type CompetitionEnvironment,
   environments,
 } from '@/src/utils/environment';
-import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 // Switch between test and production competition data from temperedstrength.com.
 const COMPETITION_FETCH_ENVIRONMENT: CompetitionEnvironment =

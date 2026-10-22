@@ -1,5 +1,6 @@
 // Public API for program workout set logs — SQLite is source of truth.
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getDatabase } from '@/src/db/database';
 import {
   getSupabaseClient,
   isSupabaseConfigured,
@@ -33,7 +34,15 @@ import {
   upsertLocalWorkoutLogSetRows,
 } from './repository';
 import type { SetState } from './types';
-import { workoutLogSetId } from './types';
+import { normalizeRpe, workoutLogSetId } from './types';
+
+/** One set position when rewriting slot order (payloads only; ids stay fixed). */
+export type ReorderLoggedSetPayload = {
+  weight: number | null;
+  reps: number | null;
+  state: SetState;
+  rpe: number | null;
+};
 
 async function stripWorkoutLogsFromSyncQueue(): Promise<void> {
   const raw = await AsyncStorage.getItem(SYNC_QUEUE_KEY);
@@ -124,24 +133,30 @@ export async function saveLoggedSet(
   setIndex: number,
   weight: number | null,
   reps: number,
-  state?: 'completed' | 'failed' | null
+  state?: 'completed' | 'failed' | null,
+  rpe?: number | null
 ): Promise<void> {
   return withKeyLock(WORKOUT_LOGS_KEY, async () => {
     await ensureLocalMigrated();
     const updatedAt = new Date().toISOString();
+    const existing = await getLoggedSetsForSlotFromDb(dayIndex, slotIndex);
+    const prior = existing[setIndex];
 
     let nextState: SetState = null;
     if (state !== undefined) {
       nextState = state;
-    } else {
-      const existing = await getLoggedSetsForSlotFromDb(dayIndex, slotIndex);
-      const prior = existing[setIndex];
-      if (prior?.state !== undefined) {
-        nextState =
-          prior.state === 'completed' || prior.state === 'failed'
-            ? prior.state
-            : null;
-      }
+    } else if (prior?.state !== undefined) {
+      nextState =
+        prior.state === 'completed' || prior.state === 'failed'
+          ? prior.state
+          : null;
+    }
+
+    let nextRpe: number | null = null;
+    if (rpe !== undefined) {
+      nextRpe = normalizeRpe(rpe);
+    } else if (prior?.rpe !== undefined) {
+      nextRpe = normalizeRpe(prior.rpe);
     }
 
     await upsertLocalWorkoutLogSetRow({
@@ -152,10 +167,84 @@ export async function saveLoggedSet(
       weight,
       reps,
       state: nextState,
+      rpe: nextRpe,
       updated_at: updatedAt,
       deleted_at: null,
       dirty: 1,
     });
+    await pushDirtyWorkoutLogsIfSignedIn();
+  });
+}
+
+/**
+ * Rewrite set payloads onto fixed indices `0..n-1` for a slot.
+ * Row ids stay `wls_{day}_{slot}_{set}`; only weight/reps/state/rpe move.
+ */
+export async function reorderLoggedSets(
+  dayIndex: number,
+  slotIndex: number,
+  ordered: ReorderLoggedSetPayload[]
+): Promise<void> {
+  return withKeyLock(WORKOUT_LOGS_KEY, async () => {
+    await ensureLocalMigrated();
+    const updatedAt = new Date().toISOString();
+    const existing = await getLoggedSetsForSlotFromDb(dayIndex, slotIndex);
+
+    const upserts = ordered.flatMap((payload, setIndex) => {
+      const reps = payload.reps;
+      const hasReps = reps !== null && Number.isFinite(reps) && reps > 0;
+
+      if (!hasReps) {
+        return [];
+      }
+
+      return [
+        {
+          id: workoutLogSetId(dayIndex, slotIndex, setIndex),
+          day_index: dayIndex,
+          slot_index: slotIndex,
+          set_index: setIndex,
+          weight: payload.weight,
+          reps: reps as number,
+          state: payload.state,
+          rpe: normalizeRpe(payload.rpe),
+          updated_at: updatedAt,
+          deleted_at: null,
+          dirty: 1 as const,
+        },
+      ];
+    });
+
+    const softDeleteIndexes = new Set<number>();
+    for (let setIndex = 0; setIndex < ordered.length; setIndex++) {
+      const reps = ordered[setIndex].reps;
+      const hasReps = reps !== null && Number.isFinite(reps) && reps > 0;
+      if (!hasReps && existing[setIndex]) {
+        softDeleteIndexes.add(setIndex);
+      }
+    }
+    for (const key of Object.keys(existing)) {
+      const setIndex = Number(key);
+      if (Number.isFinite(setIndex) && setIndex >= ordered.length) {
+        softDeleteIndexes.add(setIndex);
+      }
+    }
+
+    // Single transaction: permute payloads, then tombstone emptied indices.
+    await getDatabase().withTransactionAsync(async () => {
+      for (const row of upserts) {
+        await upsertLocalWorkoutLogSetRow(row);
+      }
+      for (const setIndex of softDeleteIndexes) {
+        await softDeleteWorkoutLogSet(
+          dayIndex,
+          slotIndex,
+          setIndex,
+          updatedAt
+        );
+      }
+    });
+
     await pushDirtyWorkoutLogsIfSignedIn();
   });
 }

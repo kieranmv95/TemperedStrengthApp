@@ -1,18 +1,10 @@
-import {
-  AppSafeAreaView,
-  AppScrollView,
-} from '@/src/components/AppSafeAreaView';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
-import { Ionicons } from '@expo/vector-icons';
+import { ActionChip, Collapsible, StandardLayout } from '@/src/components/ds';
+import { color, radius, space, typography } from '@/src/constants/tokens';
 import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
-import {
-  Linking,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Linking, StyleSheet, Text, View } from 'react-native';
+
+const BULLET_SIZE = 6;
 
 type PatchNote = {
   version: string;
@@ -23,37 +15,52 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '3.2.1',
+    dateLabel: '19th October 2026',
+    notes: [
+      'Refreshed the look across the app',
+      'Clearer set logging, including reordering sets',
+      'Rest days are easier to scan',
+      'Removed Discover search',
+    ],
+  },
+  {
     version: '3.2.0',
     dateLabel: '',
-    notes: ['behaviour and supplement tracking'],
+    notes: ['Behaviour and supplement tracking'],
   },
   {
     version: '3.1.0',
     dateLabel: '31st August 2026',
-    notes: ['skills section', 'new collab workouts added', 'Program rest days', 'UI fixes'],
+    notes: [
+      'Skills section',
+      'New collab workouts added',
+      'Program rest days',
+      'UI fixes',
+    ],
   },
   {
     version: '3.0.0',
     dateLabel: '05th August 2026',
-    notes: ['improved database sync', 'enhanced shop UI'],
+    notes: ['Improved database sync', 'Enhanced shop UI'],
   },
   {
     version: '2.14.1',
     dateLabel: '26th July 2026',
-    notes: ['OTP countdown fixed', 'collab images fixed'],
+    notes: ['OTP countdown fixed', 'Collab images fixed'],
   },
   {
     version: '2.14.0',
     dateLabel: '22nd July 2026',
-    notes: ['accounts'],
+    notes: ['Accounts'],
   },
   {
     version: '2.13.0',
     dateLabel: '17th July 2026',
     notes: [
-      'start programs on any day of the week',
-      'mark days as complete or skipped',
-      'removed the start session',
+      'Start programs on any day of the week',
+      'Mark days as complete or skipped',
+      'Removed the start session',
       'Promo redemption',
     ],
   },
@@ -70,7 +77,7 @@ const PATCH_NOTES: PatchNote[] = [
     dateLabel: '15th July 2026',
     notes: [
       'Clubs, coaches and PTs have landed',
-      'Workouts Review, top to bottom',
+      'Workouts review, top to bottom',
     ],
   },
   {
@@ -88,7 +95,7 @@ const PATCH_NOTES: PatchNote[] = [
     dateLabel: 'N/A',
     notes: [
       'Recovery flows added to the hub',
-      'Workotus section UI improvements',
+      'Workouts section UI improvements',
       'Data integrity improvements',
       'Fixed swap modal video bug',
     ],
@@ -170,7 +177,7 @@ const PATCH_NOTES: PatchNote[] = [
     dateLabel: '14th May 2026',
     notes: [
       'Added a suite of rainhill trials workouts',
-      'improved the pro banner to reduce flickering',
+      'Improved the pro banner to reduce flickering',
     ],
     articleUrl: 'https://temperedstrength.com/patch-notes/2.3.0',
   },
@@ -180,8 +187,8 @@ const PATCH_NOTES: PatchNote[] = [
     notes: [
       'Added rainhill trials workouts',
       'Added support for multi-difficulty workouts',
-      'fixed day switch bug',
-      'added prompt to finish workout',
+      'Fixed day switch bug',
+      'Added prompt to finish workout',
     ],
   },
   {
@@ -189,7 +196,7 @@ const PATCH_NOTES: PatchNote[] = [
     dateLabel: '05 May 2026',
     notes: [
       'Added moving sessions support to the programs',
-      'Imporved sliding calendar UI',
+      'Improved sliding calendar UI',
       'Moved start session button away from being a sticky header',
       'Improve notes behaviour and reversed order',
       'Added a new disciplines section to the workouts screen',
@@ -258,7 +265,7 @@ const PATCH_NOTES: PatchNote[] = [
     version: '1.8.2',
     dateLabel: '20 Apr 2026',
     notes: [
-      'Brief is now loaded from tempered strength API',
+      'Brief is now loaded from the Tempered Strength API',
       'Fix: Copy notes now works with legacy structure',
     ],
   },
@@ -281,7 +288,7 @@ const PATCH_NOTES: PatchNote[] = [
     notes: [
       'Logging & Personal Bests added',
       'Remove set as today’s session as the logic was confusing and needs rethinking',
-      'Placed rest timer under the globally session timer?',
+      'Placed rest timer under the global session timer',
       'Start session button padding added',
       'Rebuild the Articles and Brief section to link through to web and be better to use',
     ],
@@ -376,72 +383,48 @@ export default function PatchNotesScreen() {
   };
 
   return (
-    <AppSafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.headerBackButton}
-          onPress={() => router.back()}
-          accessibilityRole="button"
-          accessibilityLabel="Back"
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Patch Notes</Text>
-        <View style={styles.headerSpacer} />
-      </View>
-
-      <AppScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text style={styles.subtitle}>
-          See what’s new in the latest versions of Tempered Strength.
-        </Text>
-
+    <StandardLayout
+      title="Patch notes"
+      subtitle="See what’s new in the latest versions of Tempered Strength."
+      onBackPress={() => router.back()}
+    >
+      <StandardLayout.Body>
         <View style={styles.sectionList}>
           {PATCH_NOTES.map((p) => {
             const isOpen = openVersions.has(p.version);
             return (
-              <View key={p.version} style={styles.card}>
-                <TouchableOpacity
-                  style={styles.cardHeader}
-                  onPress={() => toggle(p.version)}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Toggle patch notes for version ${p.version}`}
-                  accessibilityState={{ expanded: isOpen }}
-                >
-                  <View style={styles.cardHeaderLeft}>
-                    <Text style={styles.versionText}>{p.version}</Text>
+              <Collapsible
+                key={p.version}
+                title={p.version}
+                expanded={isOpen}
+                onToggle={() => toggle(p.version)}
+                accessory={
+                  p.dateLabel ? (
                     <Text style={styles.dateText}>{p.dateLabel}</Text>
-                  </View>
-                  <Ionicons
-                    name={isOpen ? 'chevron-up' : 'chevron-down'}
-                    size={18}
-                    color={Colors.textMuted}
+                  ) : null
+                }
+                accessibilityLabel={
+                  p.dateLabel
+                    ? `Version ${p.version}, ${p.dateLabel}`
+                    : `Version ${p.version}`
+                }
+              >
+                {p.articleUrl ? (
+                  <ActionChip
+                    label="View article on website"
+                    icon="open-outline"
+                    tone="neutral"
+                    onPress={() => Linking.openURL(p.articleUrl as string)}
+                    accessibilityHint="Opens in your browser"
                   />
-                </TouchableOpacity>
-
-                {isOpen ? (
-                  <View style={styles.cardBody}>
-                    {p.articleUrl ? (
-                      <TouchableOpacity
-                        onPress={() => Linking.openURL(p.articleUrl as string)}
-                      >
-                        <Text style={styles.articleUrlText}>
-                          View article on website
-                        </Text>
-                      </TouchableOpacity>
-                    ) : null}
-                    {p.notes.map((n, idx) => (
-                      <View key={`${p.version}-${idx}`} style={styles.noteRow}>
-                        <View style={styles.bullet} />
-                        <Text style={styles.noteText}>{n}</Text>
-                      </View>
-                    ))}
-                  </View>
                 ) : null}
-              </View>
+                {p.notes.map((n, idx) => (
+                  <View key={`${p.version}-${idx}`} style={styles.noteRow}>
+                    <View style={styles.bullet} />
+                    <Text style={styles.noteText}>{n}</Text>
+                  </View>
+                ))}
+              </Collapsible>
             );
           })}
         </View>
@@ -451,115 +434,39 @@ export default function PatchNotesScreen() {
             Tip: tap a version to expand its notes.
           </Text>
         ) : null}
-      </AppScrollView>
-    </AppSafeAreaView>
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundScreen,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.xl,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
-  },
-  headerBackButton: {
-    padding: Spacing.xs,
-  },
-  headerTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-  },
-  headerSpacer: {
-    width: 32,
-  },
-  scroll: {
-    flex: 1,
-  },
-  content: {
-    padding: Spacing.xxl,
-    paddingBottom: Spacing.section,
-    gap: Spacing.xl,
-  },
-  subtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
-  },
   sectionList: {
-    gap: Spacing.md,
-  },
-  card: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    overflow: 'hidden',
-  },
-  cardHeader: {
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.xl,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: Spacing.xl,
-  },
-  cardHeaderLeft: {
-    flex: 1,
-    gap: Spacing.xs,
-  },
-  versionText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    fontWeight: '800',
-    letterSpacing: -0.2,
+    gap: space.sm,
   },
   dateText: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-  },
-  cardBody: {
-    paddingHorizontal: Spacing.xxl,
-    paddingBottom: Spacing.xxl,
-    gap: Spacing.md,
+    ...typography.caption,
+    color: color.textTertiary,
   },
   noteRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: Spacing.md,
+    gap: space.sm,
   },
   bullet: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: Colors.accent,
-    marginTop: 7,
+    width: BULLET_SIZE,
+    height: BULLET_SIZE,
+    borderRadius: radius.pill,
+    backgroundColor: color.textTertiary,
+    marginTop: (typography.callout.lineHeight - BULLET_SIZE) / 2,
   },
   noteText: {
+    ...typography.callout,
     flex: 1,
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
-    lineHeight: 20,
-  },
-  articleUrlText: {
-    textDecorationLine: 'underline',
-    color: Colors.accent,
-    fontSize: FontSize.base,
-    fontWeight: '500',
+    color: color.textSecondary,
   },
   hintText: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.base,
-    fontWeight: '500',
+    ...typography.caption,
+    color: color.textTertiary,
+    marginTop: space.md,
   },
 });

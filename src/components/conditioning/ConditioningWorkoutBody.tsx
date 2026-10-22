@@ -1,4 +1,12 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { ActionChip, ProgressBar, Skeleton, Tag } from '@/src/components/ds';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { getExerciseById } from '@/src/data/exercises';
 import type { WorkoutBlock, WorkoutMovement } from '@/src/types/program';
 import {
@@ -7,12 +15,16 @@ import {
 } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 type ConditioningWorkoutBodyProps = {
   dayIndex: number;
   blocks: WorkoutBlock[];
 };
+
+const LIST_BULLET_SIZE = 6;
+const LOADING_SKELETON_WIDTH = 64;
+const LOADING_SKELETON_HEIGHT = 16;
 
 function movementDisplayName(m: WorkoutMovement): string {
   if (m.label && m.label.trim().length > 0) return m.label.trim();
@@ -71,74 +83,67 @@ export function ConditioningWorkoutBody({
     );
   }
 
+  const progressText = `${completedCount} of ${blocks.length} blocks completed`;
+
   return (
     <View style={styles.container}>
-      <View style={styles.summaryRow}>
-        <Text style={styles.summaryText}>
-          {completedCount}/{blocks.length} blocks completed
-        </Text>
-        {loading ? <Text style={styles.loadingText}>Loading…</Text> : null}
+      <View style={styles.summary}>
+        <View style={styles.summaryRow}>
+          <Text style={styles.summaryText} accessibilityLabel={progressText}>
+            {completedCount}/{blocks.length} blocks completed
+          </Text>
+          {loading ? (
+            <Skeleton
+              width={LOADING_SKELETON_WIDTH}
+              height={LOADING_SKELETON_HEIGHT}
+              accessibilityLabel="Loading block progress"
+            />
+          ) : null}
+        </View>
+        <ProgressBar
+          progress={completedCount / blocks.length}
+          accessibilityLabel="Blocks completed"
+          accessibilityValueText={progressText}
+        />
       </View>
 
       {blocks.map((block) => {
         const isCompleted = !!logs[block.id]?.completed;
+        if (block.type === 'warmup') {
+          return (
+            <ConditioningWarmupBlock
+              key={`${dayIndex}-${block.id}`}
+              block={block}
+              isCompleted={isCompleted}
+              onToggleComplete={() => handleToggle(block.id)}
+            />
+          );
+        }
+
         return (
-          <View
-            key={block.id}
-            style={[styles.blockCard, isCompleted && styles.blockCardCompleted]}
-          >
+          <View key={block.id} style={styles.blockCard}>
             <View style={styles.blockHeader}>
-              <View style={styles.blockHeaderLeft}>
-                <View style={styles.blockTitleRow}>
-                  <Text style={styles.blockTitle}>{block.title}</Text>
-                  <View style={styles.blockTypeBadge}>
-                    <Text style={styles.blockTypeBadgeText}>
-                      {block.type === 'for_time'
-                        ? 'FOR TIME'
-                        : block.type.toUpperCase()}
-                    </Text>
-                  </View>
-                </View>
-                <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
+              <View style={styles.blockTitleRow}>
+                <Text style={styles.blockTitle} accessibilityRole="header">
+                  {block.title}
+                </Text>
+                <Tag label={blockTypeLabel(block)} />
               </View>
+              <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
             </View>
 
-            <TouchableOpacity
+            <BlockCompleteToggle
+              title={block.title}
+              isCompleted={isCompleted}
               onPress={() => handleToggle(block.id)}
-              activeOpacity={0.7}
-              style={[
-                styles.completeButton,
-                isCompleted && styles.completeButtonActive,
-              ]}
-            >
-              <Ionicons
-                name={isCompleted ? 'checkmark-circle' : 'ellipse-outline'}
-                size={18}
-                color={isCompleted ? Colors.textOnAccent : Colors.textMuted}
-              />
-              <Text
-                style={[
-                  styles.completeButtonText,
-                  isCompleted && styles.completeButtonTextActive,
-                ]}
-              >
-                {isCompleted ? 'Completed' : 'Mark complete'}
-              </Text>
-            </TouchableOpacity>
+            />
 
             {block.instructions ? (
               <Text style={styles.blockInstructions}>{block.instructions}</Text>
             ) : null}
 
-            {block.type === 'warmup' || block.type === 'cooldown' ? (
-              <View style={styles.warmupList}>
-                {block.description.map((item, idx) => (
-                  <View key={idx} style={styles.warmupItem}>
-                    <Text style={styles.warmupBullet}>•</Text>
-                    <Text style={styles.warmupText}>{item}</Text>
-                  </View>
-                ))}
-              </View>
+            {block.type === 'cooldown' ? (
+              <BulletList items={block.description} />
             ) : null}
 
             {block.movements?.length ? (
@@ -155,9 +160,6 @@ export function ConditioningWorkoutBody({
                         </Text>
                       ) : null}
                     </View>
-                    {m.prescription ? (
-                      <View style={styles.movementDivider} />
-                    ) : null}
                     {m.notes ? (
                       <Text style={styles.movementNotes}>{m.notes}</Text>
                     ) : null}
@@ -172,24 +174,161 @@ export function ConditioningWorkoutBody({
   );
 }
 
+type BlockCompleteToggleProps = {
+  title: string;
+  isCompleted: boolean;
+  onPress: () => void;
+};
+
+function BlockCompleteToggle({
+  title,
+  isCompleted,
+  onPress,
+}: BlockCompleteToggleProps) {
+  return (
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.completeButton,
+        isCompleted && styles.completeButtonActive,
+        pressed && styles.completeButtonPressed,
+      ]}
+      accessibilityRole="checkbox"
+      accessibilityLabel={`${title}, mark complete`}
+      accessibilityState={{ checked: isCompleted }}
+    >
+      <Ionicons
+        name={isCompleted ? 'checkmark-circle' : 'ellipse-outline'}
+        size={18}
+        color={isCompleted ? color.success : color.textSecondary}
+      />
+      <Text
+        style={[
+          styles.completeButtonText,
+          isCompleted && styles.completeButtonTextActive,
+        ]}
+      >
+        {isCompleted ? 'Completed' : 'Mark complete'}
+      </Text>
+    </Pressable>
+  );
+}
+
+type BulletListProps = {
+  items: string[];
+};
+
+function BulletList({ items }: BulletListProps) {
+  return (
+    <View style={styles.warmupList}>
+      {items.map((item, idx) => (
+        <View key={idx} style={styles.warmupItem}>
+          <View style={styles.warmupBullet} />
+          <Text style={styles.warmupText}>{item}</Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+type ConditioningWarmupBlockProps = {
+  block: Extract<WorkoutBlock, { type: 'warmup' }>;
+  isCompleted: boolean;
+  onToggleComplete: () => void;
+};
+
+function ConditioningWarmupBlock({
+  block,
+  isCompleted,
+  onToggleComplete,
+}: ConditioningWarmupBlockProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <View style={styles.blockCard}>
+      <Pressable
+        style={styles.blockHeader}
+        onPress={() => setIsExpanded(true)}
+        disabled={isExpanded}
+        accessible={!isExpanded}
+        accessibilityRole="button"
+        accessibilityLabel={`${block.title}, show warm-up`}
+        accessibilityState={{ expanded: isExpanded }}
+      >
+        <View style={styles.blockTitleRow}>
+          <Text style={[styles.blockTitle, styles.warmupTitleFlex]}>
+            {block.title}
+          </Text>
+          <Tag label="Warm-up" />
+          <ActionChip
+            label={isExpanded ? 'Hide' : 'Show'}
+            icon={isExpanded ? 'chevron-up' : 'chevron-down'}
+            tone="neutral"
+            onPress={() => setIsExpanded((prev) => !prev)}
+            accessibilityLabel={isExpanded ? 'Hide warm-up' : 'Show warm-up'}
+            accessibilityState={{ expanded: isExpanded }}
+          />
+        </View>
+        <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
+      </Pressable>
+
+      <BlockCompleteToggle
+        title={block.title}
+        isCompleted={isCompleted}
+        onPress={onToggleComplete}
+      />
+
+      {isExpanded ? (
+        <>
+          {block.instructions ? (
+            <Text style={styles.blockInstructions}>{block.instructions}</Text>
+          ) : null}
+          <BulletList items={block.description} />
+        </>
+      ) : null}
+    </View>
+  );
+}
+
+function blockTypeLabel(block: WorkoutBlock): string {
+  switch (block.type) {
+    case 'warmup':
+      return 'Warm-up';
+    case 'cooldown':
+      return 'Cool-down';
+    case 'rounds':
+      return 'Rounds';
+    case 'tabata':
+      return 'Tabata';
+    case 'emom':
+      return 'EMOM';
+    case 'amrap':
+      return 'AMRAP';
+    case 'for_time':
+      return 'For time';
+    default:
+      return '';
+  }
+}
+
 function formatBlockMeta(block: WorkoutBlock): string {
   switch (block.type) {
     case 'warmup':
       return 'Warm-up';
     case 'cooldown':
-      return 'Cool down';
+      return 'Cool-down';
     case 'rounds': {
       const rest = block.restSecondsBetweenRounds
-        ? ` • Rest ${block.restSecondsBetweenRounds}s`
+        ? ` · Rest ${block.restSecondsBetweenRounds}s`
         : '';
       return `${block.rounds} rounds${rest}`;
     }
     case 'tabata':
-      return `${block.rounds} rounds • ${block.workSeconds}s work / ${block.restSeconds}s rest`;
+      return `${block.rounds} rounds · ${block.workSeconds}s work / ${block.restSeconds}s rest`;
     case 'emom':
-      return `EMOM • ${block.minutes} min`;
+      return `EMOM · ${block.minutes} min`;
     case 'amrap':
-      return `AMRAP • ${block.minutes} min`;
+      return `AMRAP · ${block.minutes} min`;
     case 'for_time':
       return 'For time';
     default:
@@ -199,172 +338,137 @@ function formatBlockMeta(block: WorkoutBlock): string {
 
 const styles = StyleSheet.create({
   container: {
-    gap: Spacing.xxl,
+    gap: space.md,
+  },
+  summary: {
+    gap: space.xs,
   },
   summaryRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: space.xs,
   },
   summaryText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  loadingText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '600',
+    ...typography.numericSmall,
+    color: color.textSecondary,
   },
   blockCard: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
-    gap: Spacing.md,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-  },
-  blockCardCompleted: {
-    borderColor: Colors.accent,
+    ...elevation.raised,
+    backgroundColor: color.surface1,
+    borderRadius: radius.md,
+    padding: space.md,
+    gap: space.sm,
   },
   blockHeader: {
-    gap: Spacing.xs,
-  },
-  blockHeaderLeft: {
-    gap: Spacing.xs,
+    gap: space.xxs,
   },
   blockTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: space.xs,
     flexWrap: 'wrap',
   },
   blockTitle: {
-    color: Colors.textPrimary,
-    fontWeight: '800',
-    fontSize: FontSize.displaySm,
+    ...typography.headline,
+    color: color.textPrimary,
+    flexShrink: 1,
   },
-  blockTypeBadge: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.sm,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs,
-    borderWidth: 1,
-    borderColor: Colors.backgroundSubtle,
-  },
-  blockTypeBadgeText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.sm,
-    fontWeight: '700',
-    letterSpacing: 0.5,
+  warmupTitleFlex: {
+    flexGrow: 1,
+    minWidth: 0,
   },
   blockMeta: {
-    color: Colors.accent,
-    fontSize: FontSize.md,
-    fontWeight: '700',
-    fontStyle: 'italic',
+    ...typography.calloutStrong,
+    color: color.textSecondary,
   },
   blockInstructions: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
-    lineHeight: 22,
-    paddingBottom: 2,
+    ...typography.callout,
+    color: color.textSecondary,
   },
   completeButton: {
     alignSelf: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xs,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.pill,
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.md,
+    borderRadius: radius.pill,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    backgroundColor: Colors.backgroundCard,
+    borderColor: color.borderStrong,
   },
   completeButtonActive: {
-    backgroundColor: Colors.accent,
-    borderColor: Colors.accent,
+    backgroundColor: color.successTint,
+    borderColor: color.success,
+  },
+  completeButtonPressed: {
+    backgroundColor: color.surface3,
   },
   completeButtonText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
   completeButtonTextActive: {
-    color: Colors.textOnAccent,
+    color: color.success,
   },
   warmupList: {
-    gap: Spacing.md,
+    gap: space.xs,
   },
   warmupItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: Spacing.md,
+    gap: space.xs,
   },
   warmupBullet: {
-    color: Colors.accent,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
-    marginTop: 1,
+    width: LIST_BULLET_SIZE,
+    height: LIST_BULLET_SIZE,
+    borderRadius: LIST_BULLET_SIZE / 2,
+    backgroundColor: color.gold,
+    marginTop: space.xs,
   },
   warmupText: {
-    color: Colors.textSecondary,
+    ...typography.callout,
+    color: color.textSecondary,
     flex: 1,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
   },
   movements: {
-    marginTop: Spacing.sm,
-    gap: Spacing.md,
+    gap: space.sm,
   },
   movementRow: {
-    gap: Spacing.xs,
-    paddingTop: Spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: Colors.backgroundSubtle,
+    gap: space.xxs,
+    paddingTop: space.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: color.borderSubtle,
   },
   movementTopRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: Spacing.md,
+    gap: space.sm,
     flexWrap: 'wrap',
   },
   movementName: {
-    color: Colors.textPrimary,
-    fontWeight: '800',
-    fontSize: FontSize.lg,
+    ...typography.calloutStrong,
+    color: color.textPrimary,
     flexGrow: 1,
     flexShrink: 1,
     minWidth: 0,
   },
   movementPrescription: {
-    color: Colors.textMuted,
-    fontWeight: '700',
-    fontSize: FontSize.md,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    ...typography.captionStrong,
+    color: color.textSecondary,
     flexShrink: 1,
     textAlign: 'right',
   },
-  movementDivider: {
-    height: 0,
-  },
   movementNotes: {
-    color: Colors.textMuted,
-    fontWeight: '600',
-    fontSize: FontSize.lg,
-    lineHeight: 20,
+    ...typography.caption,
+    color: color.textTertiary,
   },
   empty: {
-    paddingVertical: Spacing.xl,
+    paddingVertical: space.lg,
     alignItems: 'center',
   },
   emptyText: {
-    color: Colors.textMuted,
-    fontWeight: '700',
+    ...typography.callout,
+    color: color.textTertiary,
   },
 });

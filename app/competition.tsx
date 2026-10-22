@@ -1,10 +1,10 @@
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
-import { Colors } from '@/src/constants/theme';
+import { Skeleton, StandardLayout } from '@/src/components/ds';
+import { space } from '@/src/constants/tokens';
 import { useLiveCompetition } from '@/src/hooks/useLiveCompetition';
 import { LiveCompetitionScreen } from '@/src/screens/LiveCompetitionScreen';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 export default function CompetitionRoute() {
   const { competition, isLoading, isRefetching, refetch } =
@@ -18,9 +18,22 @@ export default function CompetitionRoute() {
 
   if (isLoading) {
     return (
-      <AppSafeAreaView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.accent} />
-      </AppSafeAreaView>
+      <StandardLayout title="Competition" onBackPress={() => router.back()}>
+        <StandardLayout.Body>
+          <View style={styles.loading}>
+            <Skeleton
+              width="100%"
+              height={128}
+              radius="md"
+              accessibilityLabel="Loading competition"
+            />
+            <Skeleton width="60%" height={36} radius="pill" />
+            <Skeleton width="100%" height={48} radius="md" />
+            <Skeleton width="100%" height={48} radius="md" />
+            <Skeleton width="100%" height={48} radius="md" />
+          </View>
+        </StandardLayout.Body>
+      </StandardLayout>
     );
   }
 
@@ -38,10 +51,7 @@ export default function CompetitionRoute() {
 }
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Colors.backgroundScreen,
+  loading: {
+    gap: space.sm,
   },
 });

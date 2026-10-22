@@ -16,7 +16,7 @@ export type ExercisePersonalBestsLedger = Partial<
 
 export type PersonalBestsStore = Record<number, ExercisePersonalBestsLedger>;
 
-/** Derived “current best” for display (max weight; tie-break latest date). */
+/** Derived “current best” for display (best weight for the exercise; tie-break latest date). */
 export type PersonalBestEntry = {
   weight: number;
   achievedAt: string;

@@ -1,4 +1,4 @@
-import { Colors } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import type { StandaloneWorkoutLogEntry } from '@/src/types/standaloneWorkoutLogs';
 import type { SingleWorkout } from '@/src/types/workouts';
 import type { FormState } from '@/src/utils/standaloneWorkoutLogForm';
@@ -9,9 +9,9 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Modal,
+  Pressable,
   ScrollView,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import { LogFormModalFields } from './LogFormModalFields';
@@ -101,23 +101,29 @@ export function LogFormModal({
           keyboardVerticalOffset={24}
         >
           <View style={styles.modalOverlay}>
-            <View style={styles.modalCard}>
+            <View
+              style={styles.modalCard}
+              accessibilityViewIsModal
+              onAccessibilityEscape={onClose}
+            >
               <View style={styles.modalHeaderRow}>
                 <View style={styles.modalHeaderText}>
-                  <Text style={styles.modalTitle}>{title}</Text>
-                  <Text style={styles.modalSubtitle} numberOfLines={2}>
-                    {workout.title}
+                  <Text style={styles.modalTitle} accessibilityRole="header">
+                    {title}
                   </Text>
+                  <Text style={styles.modalSubtitle}>{workout.title}</Text>
                 </View>
-                <TouchableOpacity
-                  style={styles.modalCloseBtn}
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.modalCloseBtn,
+                    pressed && styles.modalCloseBtnPressed,
+                  ]}
                   onPress={onClose}
-                  hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
                   accessibilityRole="button"
-                  accessibilityLabel="Close"
+                  accessibilityLabel={`Close ${title.toLowerCase()}`}
                 >
-                  <Ionicons name="close" size={26} color={Colors.textMuted} />
-                </TouchableOpacity>
+                  <Ionicons name="close" size={24} color={color.textPrimary} />
+                </Pressable>
               </View>
 
               <ScrollView
@@ -132,23 +138,27 @@ export function LogFormModal({
                   {whenLine ? (
                     <Text style={styles.whenSingleLine}>{whenLine}</Text>
                   ) : null}
-                  <TouchableOpacity
-                    style={styles.whenButton}
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.whenButton,
+                      pressed && styles.whenButtonPressed,
+                    ]}
                     onPress={openWhenPicker}
-                    activeOpacity={0.8}
                     accessibilityRole="button"
                     accessibilityLabel="Change date and time"
-                    delayPressIn={0}
+                    accessibilityHint={
+                      whenLine ? `Currently ${whenLine}` : undefined
+                    }
                   >
                     <Ionicons
                       name="calendar-outline"
                       size={18}
-                      color={Colors.accent}
+                      color={color.textPrimary}
                     />
                     <Text style={styles.whenButtonText}>
                       Change date & time
                     </Text>
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
 
                 <LogFormModalFields
@@ -161,26 +171,28 @@ export function LogFormModal({
               </ScrollView>
 
               <View style={styles.modalActions}>
-                <TouchableOpacity
-                  style={styles.btnGhostLarge}
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.btnGhostLarge,
+                    pressed && styles.btnGhostPressed,
+                  ]}
                   onPress={onClose}
-                  activeOpacity={0.75}
+                  accessibilityRole="button"
                 >
                   <Text style={styles.btnGhostText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.btnPrimaryLarge}
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.btnPrimaryLarge,
+                    pressed && styles.btnPrimaryPressed,
+                  ]}
                   onPress={onSave}
-                  activeOpacity={0.85}
+                  accessibilityRole="button"
+                  accessibilityLabel="Save log"
                 >
-                  <Ionicons
-                    name="checkmark"
-                    size={22}
-                    color={Colors.textOnAccent}
-                    style={styles.btnPrimaryIcon}
-                  />
+                  <Ionicons name="checkmark" size={22} color={color.onGold} />
                   <Text style={styles.btnPrimaryText}>Save</Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </View>
           </View>
@@ -188,12 +200,14 @@ export function LogFormModal({
         {notesActive && keyboardHeight > 0 && (
           <View style={[styles.keyboardDoneBar, { bottom: keyboardHeight }]}>
             <View style={styles.keyboardDoneBarSpacer} />
-            <TouchableOpacity
+            <Pressable
               style={styles.keyboardDoneBtn}
               onPress={handleNotesDone}
+              accessibilityRole="button"
+              accessibilityLabel="Dismiss keyboard"
             >
               <Text style={styles.keyboardDoneText}>Done</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         )}
         <LogFormModalWhenPickers

@@ -1,16 +1,16 @@
-import { Colors } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import type { ArticleListItem } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
-  Image,
+  AccessibilityInfo,
+  Pressable,
   StyleProp,
   Text,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
-import { Card, SmallChevron } from '../ds';
+import { LoadingImage, PressableCard } from '../ds';
 import { articleCardStyles as styles } from './articleCardStyles';
 
 type ArticleCardProps = {
@@ -29,55 +29,55 @@ export function ArticleCard({
   style,
 }: ArticleCardProps) {
   const canFavorite = Boolean(onToggleFavorite);
-  // The bookmark button sits inside the card's press target. Stop propagation
-  // on every touch phase so tapping the bookmark never also opens the article.
-  const stopPropagation = (event: { stopPropagation: () => void }) => {
-    event.stopPropagation();
-  };
-  const handleToggleFavorite = (event: { stopPropagation: () => void }) => {
-    event.stopPropagation();
+
+  const handleToggleFavorite = () => {
+    AccessibilityInfo.announceForAccessibility(
+      isFavorite ? 'Removed from saved articles' : 'Saved article'
+    );
     onToggleFavorite?.(article.slug);
   };
 
   return (
-    <Card
-      onPress={() => onPress(article)}
-      accessibilityLabel="Open article"
-      style={[styles.card, style]}
-    >
-      <Image source={{ uri: article.image }} style={styles.compactImage} />
-      <View style={styles.compactContent}>
-        <View style={styles.compactCategoryRow}>
-          <Text style={styles.compactCategory}>{article.category}</Text>
-        </View>
-        <Text style={styles.compactTitle} numberOfLines={2}>
-          {article.title}
-        </Text>
-        <View style={styles.compactMeta}>
-          <Ionicons
-            name="time-outline"
-            size={12}
-            color={Colors.textPlaceholder}
+    <View style={[styles.card, style]}>
+      <PressableCard
+        onPress={() => onPress(article)}
+        accessibilityLabel={`${article.title}, ${article.category}, ${article.readTime} minute read`}
+        showChevron={!canFavorite}
+      >
+        <View style={[styles.row, canFavorite && styles.rowWithFavourite]}>
+          <LoadingImage
+            source={{ uri: article.image }}
+            style={styles.compactImage}
           />
-          <Text style={styles.compactMetaText}>{article.readTime} min</Text>
+          <View style={styles.compactContent}>
+            <Text style={styles.compactCategory}>{article.category}</Text>
+            <Text style={styles.compactTitle}>{article.title}</Text>
+            <View style={styles.compactMeta}>
+              <Ionicons
+                name="time-outline"
+                size={14}
+                color={color.textSecondary}
+              />
+              <Text style={styles.compactMetaText}>{article.readTime} min</Text>
+            </View>
+          </View>
         </View>
-      </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        {canFavorite && (
-          <TouchableOpacity
-            onPress={handleToggleFavorite}
-            onPressIn={stopPropagation}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Ionicons
-              name={isFavorite ? 'bookmark' : 'bookmark-outline'}
-              size={22}
-              color={isFavorite ? Colors.accent : Colors.textPlaceholder}
-            />
-          </TouchableOpacity>
-        )}
-        <SmallChevron />
-      </View>
-    </Card>
+      </PressableCard>
+      {canFavorite ? (
+        <Pressable
+          onPress={handleToggleFavorite}
+          style={styles.favouriteButton}
+          accessibilityRole="button"
+          accessibilityLabel={`Save ${article.title}`}
+          accessibilityState={{ selected: isFavorite }}
+        >
+          <Ionicons
+            name={isFavorite ? 'bookmark' : 'bookmark-outline'}
+            size={22}
+            color={isFavorite ? color.gold : color.textSecondary}
+          />
+        </Pressable>
+      ) : null}
+    </View>
   );
 }

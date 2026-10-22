@@ -1,6 +1,15 @@
-import { Pill } from '@/src/components/pill';
+import {
+  ActionChip,
+  Badge,
+  Collapsible,
+  FilterChip,
+  PressableCard,
+  SectionHeader,
+  Tag,
+} from '@/src/components/ds';
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
-import { Colors } from '@/src/constants/theme';
+import { categoryFilterDisplayLabel } from '@/src/components/workouts/workoutsScreenConstants';
+import { color } from '@/src/constants/tokens';
 import type {
   DetailedMovement,
   Divider,
@@ -10,17 +19,10 @@ import type {
 } from '@/src/types/workouts';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  Image,
-  Linking,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Image, Linking, ScrollView, Text, View } from 'react-native';
 import { workoutDetailStyles as styles } from './workoutDetailStyles';
-import { CATEGORY_ICONS, DIFFICULTY_COLORS } from './workoutUiConstants';
+import { CATEGORY_ICONS } from './workoutUiConstants';
 
 type WorkoutDetailScrollContentProps = {
   workout: SingleWorkout;
@@ -68,8 +70,86 @@ function renderMovementRow(movement: WorkoutMovement, movementIndex: number) {
   const movementText = movementToRowText(movement);
   return (
     <View key={movementIndex} style={styles.movementItem}>
-      <Text style={styles.movementBullet}>•</Text>
+      <View style={styles.movementBullet} />
       <Text style={styles.movementText}>{movementText}</Text>
+    </View>
+  );
+}
+
+/** Matches Warmup / Warm-Up / Warm Up (any casing). */
+function isWarmupBlockName(name: string): boolean {
+  return (
+    name
+      .trim()
+      .toLowerCase()
+      .replace(/[\s-]+/g, '') === 'warmup'
+  );
+}
+
+function renderBlockBody(block: WorkoutBlockBase) {
+  return (
+    <>
+      {block.mobilityFlow && (
+        <ActionChip
+          label={
+            block.mobilityFlowCopy
+              ? block.mobilityFlowCopy
+              : 'Start mobility flow'
+          }
+          icon="body-outline"
+          tone="gold"
+          onPress={() => {
+            router.push({
+              pathname: '/recovery/[id]',
+              params: { id: block.mobilityFlow as string },
+            });
+          }}
+        />
+      )}
+      {block.instructions && (
+        <Text style={styles.blockInstructions}>{block.instructions}</Text>
+      )}
+      {block.highlightInstructions && (
+        <Text style={styles.blockHighlightInstructions}>
+          {block.highlightInstructions}
+        </Text>
+      )}
+      {block.movements && (
+        <View style={styles.movementsList}>
+          {block.movements.map((movement, movementIndex) =>
+            renderMovementRow(movement, movementIndex)
+          )}
+        </View>
+      )}
+    </>
+  );
+}
+
+function renderWorkoutBlock(
+  block: WorkoutBlockBase,
+  key: string,
+  expanded: boolean,
+  onToggle: () => void
+) {
+  if (isWarmupBlockName(block.name)) {
+    return (
+      <Collapsible
+        key={key}
+        title={block.name}
+        expanded={expanded}
+        onToggle={onToggle}
+      >
+        {renderBlockBody(block)}
+      </Collapsible>
+    );
+  }
+
+  return (
+    <View key={key} style={styles.blockContainer}>
+      <Text style={styles.blockName} accessibilityRole="header">
+        {block.name}
+      </Text>
+      {renderBlockBody(block)}
     </View>
   );
 }
@@ -78,16 +158,25 @@ export function WorkoutDetailScrollContent({
   workout,
 }: WorkoutDetailScrollContentProps) {
   const [selectedScaleIndex, setSelectedScaleIndex] = useState(0);
+  /** Expanded warm-up sections by block key; collapsed until opened. */
+  const [expandedBlocks, setExpandedBlocks] = useState<Record<string, boolean>>(
+    {}
+  );
 
   useEffect(() => setSelectedScaleIndex(0), [workout.id]);
 
+  const isBlockExpanded = (key: string) => expandedBlocks[key] ?? false;
+  const toggleBlock = (key: string) => {
+    setExpandedBlocks((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
   const collab = workout.collab;
-  const handleCollabPress = useCallback(() => {
+  const handleCollabPress = () => {
     if (!collab?.link) return;
     Linking.openURL(collab.link).catch((error) => {
       console.error('Failed to open collab URL:', error);
     });
-  }, [collab?.link]);
+  };
 
   const visibleTags = useMemo(() => {
     return workout.tags;
@@ -112,13 +201,16 @@ export function WorkoutDetailScrollContent({
     return workout.blocks;
   }, [workout.blocks]);
 
+  const categoryLabel = categoryFilterDisplayLabel(workout.category);
+  const collabCtaLabel = collab?.linkCopy ? collab.linkCopy : 'Find out more';
+
   return (
     <ScrollView
       style={styles.detailContent}
       contentContainerStyle={styles.detailContentContainer}
     >
       <View style={styles.detailMetaRow}>
-        <View style={styles.detailCategoryBadge}>
+        <View style={styles.detailCategory}>
           {workout.category === 'Rainhill' ? (
             <Image
               source={require('@/assets/images/logos/rainhill_icon.png')}
@@ -126,221 +218,97 @@ export function WorkoutDetailScrollContent({
             />
           ) : (
             <Ionicons
-              name={CATEGORY_ICONS[workout.category] as any}
+              name={
+                CATEGORY_ICONS[
+                  workout.category
+                ] as keyof typeof Ionicons.glyphMap
+              }
               size={14}
-              color={Colors.accent}
+              color={color.gold}
             />
           )}
-          <Text style={styles.detailCategoryText}>{workout.category}</Text>
-        </View>
-        <View style={styles.detailMetaItem}>
-          <Ionicons name="time-outline" size={16} color={Colors.textMuted} />
-          <Text style={styles.detailMetaText}>{workout.estimatedTime} min</Text>
+          <Text style={styles.detailCategoryText}>{categoryLabel}</Text>
         </View>
         <View
-          style={[
-            styles.difficultyBadge,
-            { borderColor: DIFFICULTY_COLORS[workout.difficulty] },
-          ]}
+          style={styles.detailMetaItem}
+          accessible
+          accessibilityLabel={`${workout.estimatedTime} minutes`}
         >
-          <Text
-            style={[
-              styles.difficultyText,
-              { color: DIFFICULTY_COLORS[workout.difficulty] },
-            ]}
-          >
-            {workout.difficulty}
-          </Text>
+          <Ionicons name="time-outline" size={16} color={color.textSecondary} />
+          <Text style={styles.detailMetaText}>{workout.estimatedTime} min</Text>
         </View>
+        <Badge label={workout.difficulty} tone="neutral" />
       </View>
 
       <Text style={styles.detailDescription}>{workout.description}</Text>
 
       {collab ? (
-        <TouchableOpacity
-          style={[
-            styles.collabCard,
-            collab.bgColor ? { backgroundColor: collab.bgColor } : null,
-            collab.linkAndBorderColor
-              ? { borderColor: collab.linkAndBorderColor }
-              : null,
-          ]}
+        <PressableCard
+          variant="promo"
+          accentColor={collab.linkAndBorderColor}
+          showChevron={false}
           onPress={handleCollabPress}
-          activeOpacity={0.85}
-          accessibilityRole="link"
-          accessibilityLabel={`In collaboration with ${collab.name}. Find out more.`}
+          accessibilityLabel={`In collaboration with ${collab.name}. ${collabCtaLabel}.`}
+          accessibilityHint={collab.link ? 'Opens in your browser' : undefined}
         >
           <View style={styles.collabHeaderRow}>
             {collab.image ? (
               <Image source={collab.image} style={styles.collabImage} />
             ) : null}
             <View style={styles.collabHeaderText}>
-              <Text
-                style={[
-                  styles.collabLabel,
-                  collab.inColabWithColor
-                    ? { color: collab.inColabWithColor }
-                    : null,
-                ]}
-              >
-                In collaboration with
-              </Text>
-              <Text
-                style={[
-                  styles.collabName,
-                  collab.nameColor ? { color: collab.nameColor } : null,
-                ]}
-              >
-                {collab.name}
-              </Text>
+              <Text style={styles.collabLabel}>In collaboration with</Text>
+              <Text style={styles.collabName}>{collab.name}</Text>
             </View>
           </View>
           {collab.description ? (
-            <Text
-              style={[
-                styles.collabDescription,
-                collab.descriptionColor
-                  ? { color: collab.descriptionColor }
-                  : null,
-              ]}
-            >
-              {collab.description}
-            </Text>
+            <Text style={styles.collabDescription}>{collab.description}</Text>
           ) : null}
           <View style={styles.collabCtaRow}>
-            <Ionicons
-              name="open-outline"
-              size={16}
-              color={collab.linkAndBorderColor ?? Colors.accent}
-            />
-            <Text
-              style={[
-                styles.collabCtaText,
-                collab.linkAndBorderColor
-                  ? { color: collab.linkAndBorderColor }
-                  : null,
-              ]}
-            >
-              {collab.linkCopy ? collab.linkCopy : 'Click to find out more'}
-            </Text>
+            <Ionicons name="open-outline" size={16} color={color.gold} />
+            <Text style={styles.collabCtaText}>{collabCtaLabel}</Text>
           </View>
-        </TouchableOpacity>
+        </PressableCard>
       ) : null}
 
       {visibleTags.length > 0 ? (
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.tagsScrollRow}
-        >
+        <View style={styles.tagsRow}>
           {visibleTags.map((tag, index) => (
-            <Pill
-              key={`${index}-${tag}`}
-              label={tag}
-              isActive={false}
-              disabled
-              onPress={() => {}}
-            />
+            <Tag key={`${index}-${tag}`} label={tag} />
           ))}
-        </ScrollView>
+        </View>
       ) : null}
 
       {scaledBlocks ? (
         <>
-          <Text style={styles.scaleSelectorTitle}>Scalings</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.scaleSelectorRow}
-          >
-            {scaledBlocks.all.map((s, i) => (
-              <Pill
-                key={`${i}-${s.scale}`}
-                label={s.scale}
-                isActive={i === scaledBlocks.safeIndex}
-                onPress={() => setSelectedScaleIndex(i)}
-              />
-            ))}
-          </ScrollView>
-
-          {scaledBlocks.selected.blocks.map((block, blockIndex) => (
-            <View key={blockIndex} style={styles.blockContainer}>
-              <Text style={styles.blockName}>{block.name}</Text>
-              {block.mobilityFlow && (
-                <TouchableOpacity
-                  onPress={() => {
-                    router.push({
-                      pathname: '/recovery/[id]',
-                      params: { id: block.mobilityFlow as string },
-                    });
-                  }}
-                  style={styles.startFlowButton}
-                >
-                  <Text style={styles.startFlowText}>
-                    {block.mobilityFlowCopy
-                      ? block.mobilityFlowCopy
-                      : 'Start Mobility Flow'}
-                  </Text>
-                </TouchableOpacity>
-              )}
-              {block.instructions && (
-                <Text style={styles.blockInstructions}>
-                  {block.instructions}
-                </Text>
-              )}
-              {block.highlightInstructions && (
-                <Text style={styles.blockHighlightInstructions}>
-                  {block.highlightInstructions}
-                </Text>
-              )}
-              {block.movements && (
-                <View style={styles.movementsList}>
-                  {block.movements.map((movement, movementIndex) =>
-                    renderMovementRow(movement, movementIndex)
-                  )}
-                </View>
-              )}
+          <View style={styles.scaleSection}>
+            <SectionHeader title="Scalings" />
+            <View style={styles.scaleSelectorRow}>
+              {scaledBlocks.all.map((s, i) => (
+                <FilterChip
+                  key={`${i}-${s.scale}`}
+                  label={s.scale}
+                  selected={i === scaledBlocks.safeIndex}
+                  onPress={() => setSelectedScaleIndex(i)}
+                  accessibilityLabel={`${s.scale} scaling`}
+                />
+              ))}
             </View>
-          ))}
+          </View>
+
+          {scaledBlocks.selected.blocks.map((block, blockIndex) => {
+            const key = `${workout.id}-scale-${scaledBlocks.safeIndex}-block-${blockIndex}`;
+            return renderWorkoutBlock(block, key, isBlockExpanded(key), () =>
+              toggleBlock(key)
+            );
+          })}
         </>
       ) : flatBlocks ? (
-        flatBlocks.map((block, blockIndex) => (
-          <View key={blockIndex} style={styles.blockContainer}>
-            <Text style={styles.blockName}>{block.name}</Text>
-            {block.mobilityFlow && (
-              <TouchableOpacity
-                onPress={() => {
-                  router.push({
-                    pathname: '/recovery/[id]',
-                    params: { id: block.mobilityFlow as string },
-                  });
-                }}
-                style={styles.startFlowButton}
-              >
-                <Text style={styles.startFlowText}>
-                  {block.mobilityFlowCopy
-                    ? block.mobilityFlowCopy
-                    : 'Start Mobility Flow'}
-                </Text>
-              </TouchableOpacity>
-            )}
-            {block.instructions && (
-              <Text style={styles.blockInstructions}>{block.instructions}</Text>
-            )}
-            {block.highlightInstructions && (
-              <Text style={styles.blockHighlightInstructions}>
-                {block.highlightInstructions}
-              </Text>
-            )}
-            {block.movements && (
-              <View style={styles.movementsList}>
-                {block.movements.map((movement, movementIndex) =>
-                  renderMovementRow(movement, movementIndex)
-                )}
-              </View>
-            )}
-          </View>
-        ))
+        flatBlocks.map((block, blockIndex) => {
+          const key = `${workout.id}-block-${blockIndex}`;
+          return renderWorkoutBlock(block, key, isBlockExpanded(key), () =>
+            toggleBlock(key)
+          );
+        })
       ) : null}
 
       <StandaloneWorkoutLogPanel workout={workout} />

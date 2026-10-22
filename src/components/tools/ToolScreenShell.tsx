@@ -1,12 +1,16 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import {
-  AppSafeAreaView,
-  AppScrollView,
-} from '@/src/components/AppSafeAreaView';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { AppSafeAreaView, AppScrollView } from '@/src/components/ds';
 
 type ToolScreenShellProps = {
   title: string;
@@ -17,15 +21,17 @@ export function ToolScreenShell({ title, children }: ToolScreenShellProps) {
   return (
     <AppSafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
+        <Pressable
           style={styles.headerBackButton}
           onPress={() => router.back()}
+          accessibilityRole="button"
           accessibilityLabel="Go back"
         >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>{title}</Text>
-        <View style={styles.headerSpacer} />
+          <Ionicons name="arrow-back" size={24} color={color.textPrimary} />
+        </Pressable>
+        <Text style={styles.headerTitle} accessibilityRole="header">
+          {title}
+        </Text>
       </View>
       <AppScrollView
         style={styles.scrollView}
@@ -42,166 +48,136 @@ export function ToolScreenShell({ title, children }: ToolScreenShellProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.backgroundScreen,
+    backgroundColor: color.bg,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.xl,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
+    gap: space.xxs,
+    paddingHorizontal: space.md,
+    paddingTop: space.md,
+    paddingBottom: space.sm,
   },
   headerBackButton: {
-    padding: Spacing.xs,
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    justifyContent: 'center',
+    marginLeft: -space.xs,
   },
   headerTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    ...typography.title1,
+    color: color.textPrimary,
     flex: 1,
-    textAlign: 'center',
-  },
-  headerSpacer: {
-    width: 32,
+    minWidth: 0,
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
-    padding: Spacing.xxl,
-    paddingBottom: Spacing.section,
-    gap: Spacing.section,
+    paddingHorizontal: space.md,
+    paddingTop: space.md,
+    paddingBottom: space.xxl,
+    gap: space.md,
   },
 });
 
 export const toolFormStyles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    padding: Spacing.xxl,
-    gap: Spacing.xl,
-  },
-  cardTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
-    fontWeight: '700',
+    backgroundColor: color.surface1,
+    borderRadius: radius.md,
+    padding: space.md,
+    gap: space.md,
+    ...elevation.raised,
   },
   cardDescription: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
+    ...typography.body,
+    color: color.textSecondary,
   },
   fieldRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.xl,
+    alignItems: 'flex-end',
+    gap: space.sm,
   },
-  fieldLabel: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
-    width: 96,
+  /** Large text: the unit choice wraps below the input. */
+  fieldRowStacked: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
   },
   fieldInput: {
     flex: 1,
-    backgroundColor: Colors.backgroundScreen,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.lg,
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
   },
+  /** Holds the input height so chips line up with the field, not its label. */
   unitToggle: {
     flexDirection: 'row',
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    overflow: 'hidden',
+    alignItems: 'center',
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE + space.xxs,
   },
-  unitOption: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.lg,
-    backgroundColor: Colors.backgroundScreen,
-  },
-  unitOptionActive: {
-    backgroundColor: Colors.accentWashFill,
-  },
-  unitOptionText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
-  },
-  unitOptionTextActive: {
-    color: Colors.accent,
+  sectionLabel: {
+    ...typography.captionStrong,
+    color: color.textSecondary,
   },
   primaryButton: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.pill,
-    paddingVertical: Spacing.xxl,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.lg,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  primaryButtonDisabled: {
-    opacity: 0.5,
+  primaryButtonPressed: {
+    backgroundColor: color.goldStrong,
   },
   primaryButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.onGold,
   },
-  secondaryButton: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.pill,
-    paddingVertical: Spacing.xxl,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: Colors.backgroundBorder,
+  resultLabel: {
+    ...typography.headline,
+    color: color.textPrimary,
   },
-  secondaryButtonText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+  resultValue: {
+    ...typography.numericLarge,
+    color: color.textPrimary,
   },
-  resultHeading: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
-    fontWeight: '700',
+  resultBody: {
+    ...typography.callout,
+    color: color.textSecondary,
+  },
+  divider: {
+    paddingTop: space.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: color.borderSubtle,
+    gap: space.xs,
   },
   tableHeader: {
     flexDirection: 'row',
-    paddingBottom: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
+    paddingBottom: space.xs,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: color.borderSubtle,
   },
   tableHeaderCell: {
+    ...typography.captionStrong,
     flex: 1,
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '600',
+    color: color.textSecondary,
   },
   tableRow: {
     flexDirection: 'row',
-    paddingVertical: Spacing.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
+    alignItems: 'center',
+    paddingVertical: space.sm,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: color.borderSubtle,
   },
   tableCell: {
+    ...typography.numericSmall,
     flex: 1,
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
+    color: color.textPrimary,
   },
   errorText: {
-    backgroundColor: Colors.destructiveWashFill,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    padding: Spacing.xl,
-    color: Colors.destructive,
-    fontSize: FontSize.md,
+    ...typography.callout,
+    color: color.danger,
+    backgroundColor: color.dangerTint,
+    borderRadius: radius.sm,
+    padding: space.sm,
   },
 });

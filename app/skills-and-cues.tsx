@@ -1,20 +1,27 @@
 import { SkillCard } from '@/src/components/skills/SkillCard';
-import { StandardLayout } from '@/src/components/StandardLayout';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { Skeleton, StandardLayout } from '@/src/components/ds';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { useSkills } from '@/src/hooks/useSkills';
 import type { SkillSummary } from '@/src/types/skills';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
+
+const SKILL_CARD_PLACEHOLDER_HEIGHT = 136;
 
 export default function SkillsAndCuesScreen() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -44,43 +51,59 @@ export default function SkillsAndCuesScreen() {
   return (
     <StandardLayout
       title="Skills & Cues"
-      subtitle="Pro resources to nail down them complex skills."
+      subtitle="Pro resources to nail complex skills."
       onBackPress={() => router.back()}
       disableScroll
     >
       <StandardLayout.Filters>
-        <View style={styles.searchInputContainer}>
-          <Ionicons name="search" size={20} color={Colors.textPlaceholder} />
+        <View style={styles.search}>
+          <Ionicons name="search" size={18} color={color.textSecondary} />
           <TextInput
             style={styles.searchInput}
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder="Search exercises..."
-            placeholderTextColor={Colors.textPlaceholder}
+            placeholder="Search skills"
+            placeholderTextColor={color.textTertiary}
             autoCapitalize="none"
             autoCorrect={false}
             returnKeyType="search"
-            accessibilityLabel="Search exercises"
+            accessibilityLabel="Search skills"
           />
           {searchQuery.length > 0 ? (
-            <TouchableOpacity
+            <Pressable
               onPress={() => setSearchQuery('')}
+              style={styles.clearSearch}
               accessibilityRole="button"
               accessibilityLabel="Clear search"
             >
               <Ionicons
                 name="close-circle"
                 size={20}
-                color={Colors.textPlaceholder}
+                color={color.textSecondary}
               />
-            </TouchableOpacity>
+            </Pressable>
           ) : null}
         </View>
       </StandardLayout.Filters>
       <StandardLayout.Body>
         {isLoading ? (
           <View style={styles.loadingState}>
-            <ActivityIndicator color={Colors.accent} />
+            <Skeleton
+              width="100%"
+              height={SKILL_CARD_PLACEHOLDER_HEIGHT}
+              radius="md"
+              accessibilityLabel="Loading skills"
+            />
+            <Skeleton
+              width="100%"
+              height={SKILL_CARD_PLACEHOLDER_HEIGHT}
+              radius="md"
+            />
+            <Skeleton
+              width="100%"
+              height={SKILL_CARD_PLACEHOLDER_HEIGHT}
+              radius="md"
+            />
           </View>
         ) : (
           <FlatList
@@ -96,10 +119,12 @@ export default function SkillsAndCuesScreen() {
               <View style={styles.emptyState}>
                 <Ionicons
                   name="search-outline"
-                  size={64}
-                  color={Colors.backgroundSubtle}
+                  size={48}
+                  color={color.textTertiary}
                 />
-                <Text style={styles.emptyTitle}>No skills found</Text>
+                <Text style={styles.emptyTitle} accessibilityRole="header">
+                  No skills found
+                </Text>
                 <Text style={styles.emptyDescription}>
                   {searchQuery.trim().length > 0
                     ? 'Try a different search term.'
@@ -115,55 +140,58 @@ export default function SkillsAndCuesScreen() {
 }
 
 const styles = StyleSheet.create({
-  searchInputContainer: {
+  search: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    paddingHorizontal: 14,
-    paddingVertical: Spacing.xl,
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE + space.xxs,
+    paddingLeft: space.sm,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    gap: Spacing.lg,
+    borderColor: color.borderStrong,
+    backgroundColor: color.surface2,
   },
   searchInput: {
+    ...typography.body,
     flex: 1,
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
+    color: color.textPrimary,
+    paddingVertical: space.xs,
+  },
+  clearSearch: {
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   list: {
     flex: 1,
   },
   listContent: {
-    paddingTop: Spacing.xxl,
-    paddingBottom: Spacing.section,
-    gap: Spacing.md,
+    paddingTop: space.md,
+    paddingBottom: space.xxl,
+    gap: space.sm,
     flexGrow: 1,
   },
   loadingState: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: Spacing.section,
+    paddingTop: space.md,
+    gap: space.sm,
   },
   emptyState: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: Spacing.section,
-    gap: Spacing.lg,
-    paddingTop: Spacing.section,
+    paddingHorizontal: space.xxl,
+    paddingTop: space.xxl,
+    gap: space.xs,
   },
   emptyTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    ...typography.title2,
+    color: color.textPrimary,
     textAlign: 'center',
   },
   emptyDescription: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 22,
+    ...typography.callout,
+    color: color.textSecondary,
     textAlign: 'center',
   },
 });

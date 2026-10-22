@@ -1,4 +1,4 @@
-import { Spacing } from '@/src/constants/theme';
+import { space } from '@/src/constants/tokens';
 import { Platform } from 'react-native';
 
 /** True when running on iOS. */
@@ -19,7 +19,7 @@ export function getEffectiveBottomInset(inset: number): number {
 export function modalSheetBottomPadding(safeBottom: number): number {
   const bottom = getEffectiveBottomInset(safeBottom);
   if (isIos) {
-    return bottom + Spacing.xl;
+    return bottom + space.sm;
   }
-  return Math.max(bottom, Spacing.lg);
+  return Math.max(bottom, space.sm);
 }

@@ -40,17 +40,33 @@ describe('workout logs codec', () => {
       weight: null,
       reps: 10,
       state: 'failed',
+      rpe: null,
       updated_at: updatedAt,
       deleted_at: null,
     });
+  });
+
+  it('preserves optional rpe through expand → collapse', () => {
+    const withRpe: WorkoutLogs = {
+      0: {
+        0: {
+          0: { weight: 100, reps: 5, state: 'completed', rpe: 8 },
+          1: { weight: 100, reps: 5, state: null, rpe: null },
+        },
+      },
+    };
+    const rows = expandWorkoutLogsBlobToRows(withRpe, updatedAt);
+    expect(rows.find((r) => r.id === 'wls_0_0_0')?.rpe).toBe(8);
+    expect(rows.find((r) => r.id === 'wls_0_0_1')?.rpe).toBeNull();
+    expect(collapseRowsToWorkoutLogs(rows)).toEqual(withRpe);
   });
 
   it('round-trips expand → collapse', () => {
     const withExplicitStates: WorkoutLogs = {
       0: {
         0: {
-          0: { weight: 100, reps: 5, state: 'completed' },
-          1: { weight: 100, reps: 5, state: null },
+          0: { weight: 100, reps: 5, state: 'completed', rpe: null },
+          1: { weight: 100, reps: 5, state: null, rpe: null },
         },
       },
     };

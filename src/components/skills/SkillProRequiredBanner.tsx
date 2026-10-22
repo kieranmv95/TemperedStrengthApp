@@ -1,7 +1,8 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { Badge, PressableCard } from '@/src/components/ds';
+import { color, space, typography } from '@/src/constants/tokens';
 import { router } from 'expo-router';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 type SkillProRequiredBannerProps = {
   onPress?: () => void;
@@ -19,67 +20,42 @@ export function SkillProRequiredBanner({
   };
 
   return (
-    <TouchableOpacity
-      style={styles.banner}
+    <PressableCard
+      variant="hero"
       onPress={handlePress}
-      activeOpacity={0.85}
-      accessibilityRole="button"
-      accessibilityLabel="Pro or Coach required. Upgrade to unlock Skills and Cues"
+      accessibilityLabel="Pro or Coach required, you're on the free tier. Are you a coach, PT or gym owner? DM us for free access."
+      accessibilityHint="Opens upgrade options to unlock Skills and Cues"
     >
-      <View style={styles.textBlock}>
-        <Text style={styles.title}>Pro or Coach Required</Text>
+      <View style={styles.content}>
+        <View style={styles.titleRow}>
+          <Text style={styles.title}>Pro or Coach required</Text>
+          <Badge label="Free tier" tone="neutral" />
+        </View>
         <Text style={styles.subtitle}>
-          Are you a Coach, PT or Gym owner? DM us for free access
+          Are you a coach, PT or gym owner? DM us for free access.
         </Text>
       </View>
-      <View style={styles.badge} pointerEvents="none">
-        <Text style={styles.badgeLabel}>FREE TIER</Text>
-      </View>
-    </TouchableOpacity>
+    </PressableCard>
   );
 }
 
 const styles = StyleSheet.create({
-  banner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.xl,
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.accent,
-    paddingVertical: Spacing.xl,
-    paddingHorizontal: Spacing.xxl,
+  content: {
+    gap: space.xxs,
   },
-  textBlock: {
-    flex: 1,
-    minWidth: 0,
-    gap: Spacing.xs,
+  titleRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: space.xs,
   },
   title: {
-    color: Colors.accent,
-    fontSize: FontSize.displaySm,
-    fontWeight: '800',
+    ...typography.headline,
+    color: color.textPrimary,
+    flexShrink: 1,
   },
   subtitle: {
-    color: Colors.accent,
-    fontSize: FontSize.md,
-    lineHeight: 18,
-    fontWeight: '500',
-  },
-  badge: {
-    borderWidth: 1,
-    borderColor: Colors.accent,
-    borderRadius: BorderRadius.pill,
-    paddingHorizontal: Spacing.lg,
-    minHeight: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  badgeLabel: {
-    color: Colors.accent,
-    fontSize: FontSize.xs,
-    fontWeight: '800',
-    letterSpacing: 0.85,
+    ...typography.callout,
+    color: color.textSecondary,
   },
 });

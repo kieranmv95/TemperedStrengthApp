@@ -1,6 +1,9 @@
+import { BottomSheet } from '@/src/components/ds';
 import { moveSessionModalStyles as styles } from '@/src/components/moveSessionModalStyles';
+import { color } from '@/src/constants/tokens';
+import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo } from 'react';
-import { Modal, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 export type MoveSessionDayOption = {
   dayIndex: number;
@@ -12,6 +15,7 @@ export type MoveSessionDayOption = {
 
 type MoveSessionModalProps = {
   visible: boolean;
+  /** Kept for callers; the bottom sheet applies the safe-area inset itself. */
   bottomInset: number;
   fromDayIndex: number | null;
   options: MoveSessionDayOption[];
@@ -21,9 +25,24 @@ type MoveSessionModalProps = {
   onConfirm: () => void;
 };
 
+const DAY_ICON_SIZE = 16;
+
+function dayOptionAccessibilityLabel(
+  option: MoveSessionDayOption,
+  unavailable: boolean
+): string {
+  const day = `${option.weekdayLabel} ${option.dateLabel}`;
+  if (option.isFromDay) {
+    return `${day}, current session day`;
+  }
+  if (unavailable) {
+    return `${day}, already has a session`;
+  }
+  return `${day}, free`;
+}
+
 export function MoveSessionModal({
   visible,
-  bottomInset,
   fromDayIndex,
   options,
   selectedToDayIndex,
@@ -40,84 +59,131 @@ export function MoveSessionModal({
   }, [fromDayIndex, selectedToDayIndex, options]);
 
   return (
-    <Modal
+    <BottomSheet
       visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={onCancel}
-    >
-      <View style={styles.overlay}>
-        <View style={[styles.sheet, { paddingBottom: bottomInset + 24 }]}>
-          <Text style={styles.title}>Move Session</Text>
-          <Text style={styles.subtitle}>
-            Move session to another day this program week. You cannot move a
-            session outside of this program week to not disrupt the overall flow
-            of the program
-          </Text>
+      onClose={onCancel}
+      title="Move session"
+      footer={
+        <View style={styles.footerRow}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.btnGhost,
+              pressed && styles.btnGhostPressed,
+            ]}
+            onPress={onCancel}
+            accessibilityRole="button"
+            accessibilityLabel="Cancel"
+          >
+            <Text style={styles.btnGhostText}>Cancel</Text>
+          </Pressable>
 
-          <View style={styles.daysRow}>
-            {options.map((o) => {
-              const disabled = !o.isFromDay && !o.isFreeDay;
-              const selected = selectedToDayIndex === o.dayIndex;
-              return (
-                <TouchableOpacity
-                  key={o.dayIndex}
-                  style={[
-                    styles.dayBtn,
-                    o.isFromDay ? styles.dayBtnFrom : null,
-                    selected && !o.isFromDay ? styles.dayBtnSelected : null,
-                    disabled ? styles.dayBtnDisabled : null,
-                  ]}
-                  activeOpacity={0.85}
-                  disabled={disabled || o.isFromDay}
-                  onPress={() => onSelectToDayIndex(o.dayIndex)}
-                >
-                  <Text
-                    style={[
-                      styles.dayLabel,
-                      o.isFromDay ? styles.dayLabelFrom : null,
-                    ]}
-                  >
-                    {o.weekdayLabel}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.dayDateLabel,
-                      o.isFromDay ? styles.dayDateLabelFrom : null,
-                    ]}
-                  >
-                    {o.dateLabel}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-
-          <View style={styles.footer}>
-            <View style={styles.footerRow}>
-              <TouchableOpacity
-                style={styles.btnGhost}
-                onPress={onCancel}
-                activeOpacity={0.85}
-              >
-                <Text style={styles.btnGhostText}>Cancel</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.btnPrimary,
-                  !canConfirm ? styles.btnPrimaryDisabled : null,
-                ]}
-                disabled={!canConfirm}
-                onPress={onConfirm}
-                activeOpacity={0.85}
-              >
-                <Text style={styles.btnPrimaryText}>Move Session</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <Pressable
+            style={({ pressed }) => [
+              styles.btnPrimary,
+              pressed && canConfirm && styles.btnPrimaryPressed,
+              !canConfirm && styles.btnPrimaryDisabled,
+            ]}
+            disabled={!canConfirm}
+            onPress={onConfirm}
+            accessibilityRole="button"
+            accessibilityLabel="Move session"
+            accessibilityState={{ disabled: !canConfirm }}
+          >
+            <Text
+              style={[
+                styles.btnPrimaryText,
+                !canConfirm && styles.btnPrimaryTextDisabled,
+              ]}
+            >
+              Move session
+            </Text>
+          </Pressable>
         </View>
+      }
+    >
+      <Text style={styles.subtitle}>
+        Move this session to another day in this program week. Sessions can’t
+        move outside the week, so the overall flow of the program isn’t
+        disrupted.
+      </Text>
+
+      <View
+        style={styles.daysRow}
+        accessibilityRole="radiogroup"
+        accessibilityLabel="Move to day"
+      >
+        {options.map((o) => {
+          const disabled = !o.isFromDay && !o.isFreeDay;
+          const selected = selectedToDayIndex === o.dayIndex && !o.isFromDay;
+          return (
+            <Pressable
+              key={o.dayIndex}
+              style={({ pressed }) => [
+                styles.dayBtn,
+                pressed && styles.dayBtnPressed,
+                o.isFromDay ? styles.dayBtnFrom : null,
+                selected ? styles.dayBtnSelected : null,
+                disabled ? styles.dayBtnDisabled : null,
+              ]}
+              disabled={disabled || o.isFromDay}
+              onPress={() => onSelectToDayIndex(o.dayIndex)}
+              accessibilityRole="radio"
+              accessibilityLabel={dayOptionAccessibilityLabel(o, disabled)}
+              accessibilityState={{
+                checked: selected,
+                disabled: disabled || o.isFromDay,
+              }}
+            >
+              <Text
+                style={[
+                  styles.dayLabel,
+                  selected && styles.dayLabelSelected,
+                  disabled && styles.dayLabelDisabled,
+                ]}
+              >
+                {o.weekdayLabel}
+              </Text>
+              <Text
+                style={[
+                  styles.dayDateLabel,
+                  selected && styles.dayLabelSelected,
+                  disabled && styles.dayLabelDisabled,
+                ]}
+              >
+                {o.dateLabel}
+              </Text>
+              <View style={styles.dayIconSlot}>
+                {o.isFromDay ? (
+                  <Ionicons
+                    name="barbell-outline"
+                    size={DAY_ICON_SIZE}
+                    color={color.textSecondary}
+                  />
+                ) : selected ? (
+                  <Ionicons
+                    name="checkmark"
+                    size={DAY_ICON_SIZE}
+                    color={color.gold}
+                  />
+                ) : null}
+              </View>
+            </Pressable>
+          );
+        })}
       </View>
-    </Modal>
+
+      <View
+        style={styles.legend}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
+        <Ionicons
+          name="barbell-outline"
+          size={DAY_ICON_SIZE}
+          color={color.textSecondary}
+        />
+        <Text style={styles.legendText}>Current session day</Text>
+      </View>
+    </BottomSheet>
   );
 }

@@ -6,8 +6,6 @@ const SANITY_PROJECT_ID = 'n1zlvrwu';
 const SANITY_DATASET = environments.sanity;
 const SANITY_API_VERSION = '2024-01-01';
 
-/** AsyncStorage key for home carousel sponsor ads; local-only. */
-export const SANITY_SPONSOR_ADS_CACHE_KEY = 'sanity_sponsor_ads_v1';
 /** AsyncStorage key for Hub shop catalog (all sponsor ads). */
 export const SANITY_SPONSOR_SHOP_CACHE_KEY = 'sanity_sponsor_shop_v1';
 const CACHE_TTL_MS = __DEV__ ? 0 : 60 * 60 * 1000;
@@ -50,10 +48,6 @@ const sponsorAdFieldsGroq = `
     theme
   )
 `;
-
-const homeCarouselGroq = `*[_type == "appConfig"][0]{
-  "ads": activeSponsorAds[]->{${sponsorAdFieldsGroq}}
-}`;
 
 const allSponsorAdsGroq = `*[_type == "sponsorAd" && enabled != false] | order(coalesce(title, "") asc) {${sponsorAdFieldsGroq}}`;
 
@@ -144,10 +138,6 @@ type SanitySponsorThemeFields = {
   ctaBackgroundColor?: string | null;
   ctaTextColor?: string | null;
 };
-
-type AppConfigSponsorQueryResult = {
-  ads?: SanitySponsorAdDoc[] | null;
-} | null;
 
 type CachedPayload = {
   storedAt: number;
@@ -323,7 +313,7 @@ function mapSponsorAd(raw: SanitySponsorAdDoc): HomeSponsorAd | null {
     description,
     layout: layoutRaw,
     affiliateUrl,
-    ctaLabel: ctaLabel.length > 0 ? ctaLabel : 'Visit Website',
+    ctaLabel: ctaLabel.length > 0 ? ctaLabel : 'Visit website',
     bgColor: themeColor(
       theme,
       'backgroundColor',
@@ -457,12 +447,6 @@ async function writeCacheForKey(
   await AsyncStorage.setItem(key, JSON.stringify(payload));
 }
 
-async function fetchHomeCarouselFromSanity(): Promise<HomeSponsorAd[]> {
-  const result =
-    await getClient().fetch<AppConfigSponsorQueryResult>(homeCarouselGroq);
-  return mapSponsorAds(result?.ads ?? null);
-}
-
 async function fetchAllSponsorAdsFromSanity(): Promise<HomeSponsorAd[]> {
   const result =
     await getClient().fetch<SanitySponsorAdDoc[]>(allSponsorAdsGroq);
@@ -500,20 +484,6 @@ async function loadSponsorAdsWithCache(
 }
 
 /**
- * Loads home sponsor ads from Sanity, using a 1-hour cache window before
- * re-fetching. On network failure, returns the last cached list if one exists.
- */
-export async function loadHomeSponsorAds(
-  options?: LoadHomeSponsorAdsOptions
-): Promise<HomeSponsorAd[]> {
-  return loadSponsorAdsWithCache(
-    SANITY_SPONSOR_ADS_CACHE_KEY,
-    fetchHomeCarouselFromSanity,
-    options
-  );
-}
-
-/**
  * Loads every enabled sponsor ad for the Hub shop (not limited to appConfig carousel).
  */
 export async function loadAllSponsorAds(
@@ -526,10 +496,7 @@ export async function loadAllSponsorAds(
   );
 }
 
-/** Removes persisted sponsor ad caches. Next Home/Shop focus refetches. */
+/** Removes the persisted shop sponsor ad cache. Next Shop focus refetches. */
 export async function invalidateSanitySponsorAdsCache(): Promise<void> {
-  await Promise.all([
-    AsyncStorage.removeItem(SANITY_SPONSOR_ADS_CACHE_KEY),
-    AsyncStorage.removeItem(SANITY_SPONSOR_SHOP_CACHE_KEY),
-  ]);
+  await AsyncStorage.removeItem(SANITY_SPONSOR_SHOP_CACHE_KEY);
 }

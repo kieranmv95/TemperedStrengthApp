@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
+import { Tag } from './ds';
 import { SmallChevron } from './ds/SmallChevron';
 import { swapModalStyles as styles } from './swapModalStyles';
 
@@ -18,13 +19,31 @@ export function SwapModalAlternativeRow({
   matchScore,
   onPress,
 }: SwapModalAlternativeRowProps) {
+  const accessibilityLabel = [
+    name,
+    equipment,
+    muscle,
+    matchScore !== undefined ? `${matchScore}% match` : null,
+  ]
+    .filter((part): part is string => part !== null)
+    .join(', ');
+
   return (
-    <TouchableOpacity style={styles.alternativeItem} onPress={onPress}>
+    <Pressable
+      style={({ pressed }) => [
+        styles.alternativeItem,
+        pressed && styles.alternativeItemPressed,
+      ]}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint="Asks you to confirm this exercise for the slot"
+    >
       <View style={styles.alternativeContent}>
         <Text style={styles.alternativeName}>{name}</Text>
         <View style={styles.alternativeMeta}>
-          <Text style={styles.alternativeEquipment}>{equipment}</Text>
-          <Text style={styles.alternativeMuscle}>{muscle}</Text>
+          <Tag label={equipment} />
+          <Tag label={muscle} />
           {matchScore !== undefined && (
             <Text style={styles.alternativeMatchScore}>
               {matchScore}% match
@@ -33,6 +52,6 @@ export function SwapModalAlternativeRow({
         </View>
       </View>
       <SmallChevron />
-    </TouchableOpacity>
+    </Pressable>
   );
 }

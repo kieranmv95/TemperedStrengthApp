@@ -1,5 +1,6 @@
 // Public personal bests API — SQLite is the local source of truth.
 // Cloud row sync uses dirty flags; no personal_bests KV writes.
+import { getExerciseById } from '@/src/data/exercises';
 import type {
   ExercisePersonalBestsLedger,
   PersonalBestsStore,
@@ -8,6 +9,7 @@ import type {
 import {
   appendCascadeToLowerTiersOnly,
   currentMaxWeight,
+  isBetterWeight,
   logPersonalBestIntoLedger,
   newPbEntryId,
 } from '@/src/utils/personalBests';
@@ -139,12 +141,15 @@ export const savePersonalBest = async (
     const achievedAt = achievedAtIso ?? new Date().toISOString();
     const store = await getPersonalBestsStoreFromDb();
     const current = store[exerciseId] ?? {};
+    const lowerWeightIsBetter =
+      getExerciseById(exerciseId)?.lowerWeightIsBetter === true;
     const { updated, isPR, tiersWithNewRows } = logPersonalBestIntoLedger(
       current,
       primaryTier,
       weight,
       achievedAt,
-      newPbEntryId
+      newPbEntryId,
+      lowerWeightIsBetter
     );
 
     if (tiersWithNewRows.length === 0) {
@@ -209,7 +214,9 @@ export const updatePersonalBestEntry = async (
       throw new Error('Invalid weight');
     }
 
-    const oldTierMax = currentMaxWeight(ledger, tier);
+    const lowerWeightIsBetter =
+      getExerciseById(exerciseId)?.lowerWeightIsBetter === true;
+    const oldTierMax = currentMaxWeight(ledger, tier, lowerWeightIsBetter);
     const nextRows = [...rows];
     nextRows[idx] = { ...nextRows[idx], ...patch };
     let nextLedger: ExercisePersonalBestsLedger = {
@@ -217,11 +224,16 @@ export const updatePersonalBestEntry = async (
       [tier]: nextRows,
     };
 
-    const newTierMax = currentMaxWeight(nextLedger, tier);
+    const newTierMax = currentMaxWeight(
+      nextLedger,
+      tier,
+      lowerWeightIsBetter
+    );
     if (
       patch.weight !== undefined &&
       newTierMax !== undefined &&
-      (oldTierMax === undefined || newTierMax > oldTierMax)
+      (oldTierMax === undefined ||
+        isBetterWeight(newTierMax, oldTierMax, lowerWeightIsBetter))
     ) {
       const merged = nextRows[idx];
       const { updated, appendedTiers } = appendCascadeToLowerTiersOnly(
@@ -229,7 +241,8 @@ export const updatePersonalBestEntry = async (
         tier,
         newTierMax,
         merged.achievedAt,
-        newPbEntryId
+        newPbEntryId,
+        lowerWeightIsBetter
       );
       if (appendedTiers.length > 0) {
         nextLedger = updated;

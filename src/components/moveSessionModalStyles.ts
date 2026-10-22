@@ -1,119 +1,125 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
+import { flattenToHex } from '@/src/utils/contrast';
 import { StyleSheet } from 'react-native';
 
+const DAY_BUTTON_MIN_HEIGHT = 72;
+const DAY_ICON_SLOT_SIZE = 16;
+
+/** Selected day fill inside the sheet (sheets sit on surface1). */
+const DAY_SELECTED_FILL = flattenToHex(color.goldTint, color.surface1);
+
 export const moveSessionModalStyles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: Colors.overlay,
-    justifyContent: 'flex-end',
-  },
-  sheet: {
-    backgroundColor: Colors.backgroundCard,
-    borderTopLeftRadius: BorderRadius.pill,
-    borderTopRightRadius: BorderRadius.pill,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    padding: Spacing.section,
-  },
-  title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXl,
-    fontWeight: '700',
-    marginBottom: Spacing.md,
-  },
   subtitle: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-    marginBottom: Spacing.xxl,
+    ...typography.callout,
+    color: color.textSecondary,
   },
   daysRow: {
     flexDirection: 'row',
-    gap: Spacing.md,
-    marginBottom: Spacing.section,
+    gap: space.xxs,
   },
   dayBtn: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.lg,
-    paddingVertical: Spacing.lg,
+    gap: space.xxs,
+    minHeight: DAY_BUTTON_MIN_HEIGHT,
+    paddingVertical: space.xs,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    minHeight: 56,
+    borderColor: color.borderStrong,
+    backgroundColor: color.surface2,
+  },
+  dayBtnPressed: {
+    backgroundColor: color.surface3,
   },
   dayBtnDisabled: {
-    opacity: 0.35,
+    borderColor: color.surface3,
+    backgroundColor: color.surface1,
   },
   dayBtnFrom: {
-    backgroundColor: Colors.accent,
-    borderColor: Colors.accent,
+    borderColor: color.surface3,
+    backgroundColor: color.surface3,
   },
   dayBtnSelected: {
-    borderColor: Colors.accent,
+    borderColor: color.gold,
+    backgroundColor: DAY_SELECTED_FILL,
   },
   dayLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.base,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  dayLabelFrom: {
-    color: Colors.textOnAccent,
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
   dayDateLabel: {
-    marginTop: 2,
-    color: Colors.textMuted,
-    fontSize: FontSize.sm,
-    fontWeight: '600',
+    ...typography.caption,
+    color: color.textSecondary,
   },
-  dayDateLabelFrom: {
-    color: Colors.textOnAccent,
+  dayLabelSelected: {
+    color: color.gold,
   },
-  footer: {
-    borderTopWidth: 1,
-    borderTopColor: Colors.backgroundElevated,
-    paddingTop: Spacing.xxl,
+  dayLabelDisabled: {
+    color: color.textDisabled,
+  },
+  dayIconSlot: {
+    width: DAY_ICON_SLOT_SIZE,
+    height: DAY_ICON_SLOT_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  legend: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs,
+  },
+  legendText: {
+    ...typography.caption,
+    color: color.textTertiary,
   },
   footerRow: {
     flexDirection: 'row',
-    gap: Spacing.md,
+    gap: space.sm,
   },
   btnGhost: {
     flex: 1,
-    paddingVertical: Spacing.xxl,
-    paddingHorizontal: Spacing.xxl,
-    borderRadius: BorderRadius.xxl,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.md,
+    borderRadius: radius.pill,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    backgroundColor: Colors.backgroundElevated,
+    borderColor: color.borderStrong,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  btnGhostPressed: {
+    backgroundColor: color.surface3,
+  },
   btnGhostText: {
-    fontSize: FontSize.xl,
-    color: Colors.textSecondary,
-    fontWeight: '600',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
   btnPrimary: {
     flex: 1,
-    paddingVertical: Spacing.xxl,
-    paddingHorizontal: Spacing.xxl,
-    borderRadius: BorderRadius.xxl,
-    backgroundColor: Colors.accent,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.md,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  btnPrimaryPressed: {
+    backgroundColor: color.goldStrong,
+  },
   btnPrimaryDisabled: {
-    opacity: 0.4,
+    backgroundColor: color.surface3,
   },
   btnPrimaryText: {
-    fontSize: FontSize.xl,
-    color: Colors.textOnAccent,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    ...typography.calloutStrong,
+    color: color.onGold,
+  },
+  btnPrimaryTextDisabled: {
+    color: color.textDisabled,
   },
 });

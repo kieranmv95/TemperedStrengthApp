@@ -10,6 +10,7 @@ export type LocalWorkoutLogSetRow = {
   weight: number | null;
   reps: number;
   state: SetState;
+  rpe: number | null;
   updated_at: string;
   deleted_at: string | null;
   dirty: 0 | 1;
@@ -24,6 +25,7 @@ export type RemoteWorkoutLogSetRow = {
   weight: number | null;
   reps: number;
   state: string | null;
+  rpe: number | null;
   updated_at: string;
   deleted_at: string | null;
 };
@@ -45,10 +47,23 @@ export function workoutLogSetId(
   return `wls_${dayIndex}_${slotIndex}_${setIndex}`;
 }
 
+/** Accept only whole numbers 1–10; anything else becomes null. */
+export function normalizeRpe(value: unknown): number | null {
+  if (value === null || value === undefined || value === '') {
+    return null;
+  }
+  const n = typeof value === 'number' ? value : Number(value);
+  if (!Number.isFinite(n) || !Number.isInteger(n) || n < 1 || n > 10) {
+    return null;
+  }
+  return n;
+}
+
 export function rowToLoggedSet(row: {
   weight: number | null;
   reps: number;
   state: string | null;
+  rpe?: number | null;
 }): LoggedSet {
   const set: LoggedSet = {
     weight: row.weight,
@@ -56,6 +71,12 @@ export function rowToLoggedSet(row: {
   };
   if (row.state === 'completed' || row.state === 'failed' || row.state === null) {
     set.state = row.state;
+  }
+  const rpe = normalizeRpe(row.rpe ?? null);
+  if (rpe !== null) {
+    set.rpe = rpe;
+  } else if (row.rpe === null) {
+    set.rpe = null;
   }
   return set;
 }

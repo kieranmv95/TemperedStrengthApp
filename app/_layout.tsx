@@ -4,20 +4,23 @@ import { PostHogCaptureBridge } from '@/src/components/PostHogCaptureBridge';
 import { ExerciseVideoProvider } from '@/src/hooks/exercise-video-context';
 import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
+import { ToastProvider } from '@/src/hooks/toast-context';
 import { TogetherWeLiftProvider } from '@/src/hooks/together-we-lift-context';
-import { Colors } from '@/src/constants/theme';
+import { color, fontFamily } from '@/src/constants/tokens';
 import { initializeRevenueCat } from '@/src/services/revenueCatService';
 import { openAppDatabase } from '@/src/db/database';
 import { getOnboarded, runStorageMigrations } from '@/src/utils/storage';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { isRunningInExpoGo } from 'expo';
+import * as Font from 'expo-font';
 import { Stack, router } from 'expo-router';
 import * as NavigationBar from 'expo-navigation-bar';
 import { StatusBar } from 'expo-status-bar';
 import * as SystemUI from 'expo-system-ui';
 import { PostHogProvider } from 'posthog-react-native';
 import { useEffect, useState } from 'react';
-import { LogBox, Platform } from 'react-native';
+import { LogBox, Platform, StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
 // Expo Go on Android cannot use expo-notifications (SDK 53+). We lazy-load the
@@ -39,7 +42,7 @@ export default function RootLayout() {
       return;
     }
     NavigationBar.setStyle('dark');
-    void SystemUI.setBackgroundColorAsync(Colors.backgroundScreen);
+    void SystemUI.setBackgroundColorAsync(color.bg);
   }, []);
 
   useEffect(() => {
@@ -49,6 +52,16 @@ export default function RootLayout() {
         await openAppDatabase();
       } catch (error) {
         console.error('Failed to open app database:', error);
+      }
+      // Native builds embed these via the expo-font config plugin; Expo Go needs
+      // them loaded at runtime. Text falls back to the system font on failure.
+      try {
+        await Font.loadAsync({
+          [fontFamily.displaySemiBold]: require('@/assets/fonts/BarlowCondensed-SemiBold.ttf'),
+          [fontFamily.displayBold]: require('@/assets/fonts/BarlowCondensed-Bold.ttf'),
+        });
+      } catch (error) {
+        console.error('Failed to load display fonts:', error);
       }
       // Run AsyncStorage migrations before anything reads persisted data and before
       // the sync manager (mounted only once boot is ready) starts mirroring.
@@ -93,133 +106,157 @@ export default function RootLayout() {
   }
 
   return (
-    <PostHogProvider
-      apiKey="phc_qNQGZv7zvPaZr9GwisqwcJfgkVauS9QmVZEC3Dko6Sbj"
-      debug={__DEV__}
-      options={{
-        // If your PostHog project is EU-hosted, this must be "https://eu.i.posthog.com"
-        host: 'https://us.i.posthog.com',
-        // Make dev verification easier without impacting prod battery/network.
-        ...(__DEV__ ? { flushAt: 1, flushInterval: 2_000 } : null),
-      }}
-    >
-      <PostHogCaptureBridge />
-      <ThemeProvider value={DarkTheme}>
-        <SyncManagerProvider>
-          <AccountPromptController />
-          <SubscriptionProvider>
-            <SupplementReminderBridge />
-            <TogetherWeLiftProvider>
-              <ExerciseVideoProvider>
-                <Stack>
-                  <Stack.Screen
-                    name="(tabs)"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="glossary"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="tools/one-rep-max"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="tools/one-rep-max-breakdown"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="tools/creatine"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="tools/water-intake"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="checkin"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen name="shop" options={{ headerShown: false }} />
-                  <Stack.Screen
-                    name="discover"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="skills-and-cues"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="skill/[id]"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="workout"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="competition"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="recovery"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="partner/[kind]/[id]"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="article/[id]"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="patch-notes"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="account/general"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="account/program"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="account/redeem-promo"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="account/create-account"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="account/verify-otp"
-                    options={{ headerShown: false, gestureEnabled: false }}
-                  />
-                  <Stack.Screen
-                    name="onboarding"
-                    options={{
-                      headerShown: false,
-                      gestureEnabled: false,
-                      animation: 'fade',
-                    }}
-                  />
-                  <Stack.Screen
-                    name="paywall"
-                    options={{ presentation: 'modal', title: 'Upgrade to Pro' }}
-                  />
-                  <Stack.Screen
-                    name="customer-center"
-                    options={{ presentation: 'modal', title: 'Subscription' }}
-                  />
-                </Stack>
-                <StatusBar style="light" />
-              </ExerciseVideoProvider>
-            </TogetherWeLiftProvider>
-          </SubscriptionProvider>
-        </SyncManagerProvider>
-      </ThemeProvider>
-    </PostHogProvider>
+    <GestureHandlerRootView style={styles.root}>
+      <PostHogProvider
+        apiKey="phc_qNQGZv7zvPaZr9GwisqwcJfgkVauS9QmVZEC3Dko6Sbj"
+        debug={__DEV__}
+        // React Navigation v7 / Expo Router: automatic screen capture uses
+        // navigation hooks outside a screen context and throws.
+        autocapture={{
+          captureScreens: false,
+        }}
+        options={{
+          // If your PostHog project is EU-hosted, this must be "https://eu.i.posthog.com"
+          host: 'https://us.i.posthog.com',
+          // Make dev verification easier without impacting prod battery/network.
+          ...(__DEV__ ? { flushAt: 1, flushInterval: 2_000 } : null),
+        }}
+      >
+        <PostHogCaptureBridge />
+        <ThemeProvider value={DarkTheme}>
+          <SyncManagerProvider>
+            <AccountPromptController />
+            <SubscriptionProvider>
+              <SupplementReminderBridge />
+              <TogetherWeLiftProvider>
+                <ExerciseVideoProvider>
+                  <ToastProvider>
+                    <Stack>
+                      <Stack.Screen
+                        name="(tabs)"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="glossary"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="tools/one-rep-max"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="tools/one-rep-max-breakdown"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="tools/creatine"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="tools/water-intake"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="checkin"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="shop"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="skills-and-cues"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="skill/[id]"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="workout"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="competition"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="recovery"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="article/[id]"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="patch-notes"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="dev/tokens"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="dev/components"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="account/general"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="account/program"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="account/redeem-promo"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="account/create-account"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="account/verify-otp"
+                        options={{ headerShown: false, gestureEnabled: false }}
+                      />
+                      <Stack.Screen
+                        name="onboarding"
+                        options={{
+                          headerShown: false,
+                          gestureEnabled: false,
+                          animation: 'fade',
+                        }}
+                      />
+                      <Stack.Screen
+                        name="paywall"
+                        options={{
+                          presentation: 'modal',
+                          title: 'Upgrade to Pro',
+                        }}
+                      />
+                      <Stack.Screen
+                        name="customer-center"
+                        options={{
+                          presentation: 'modal',
+                          title: 'Subscription',
+                        }}
+                      />
+                    </Stack>
+                    <StatusBar style="light" />
+                  </ToastProvider>
+                </ExerciseVideoProvider>
+              </TogetherWeLiftProvider>
+            </SubscriptionProvider>
+          </SyncManagerProvider>
+        </ThemeProvider>
+      </PostHogProvider>
+    </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});

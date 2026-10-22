@@ -39,6 +39,7 @@ export async function pushDirtyWorkoutLogs(userId: string): Promise<void> {
     weight: row.weight,
     reps: row.reps,
     state: row.state,
+    rpe: row.rpe,
     updated_at: row.updated_at,
     deleted_at: row.deleted_at,
   }));
@@ -87,7 +88,7 @@ export async function pullWorkoutLogChanges(
   const { data, error } = await client
     .from(WORKOUT_LOG_SETS_TABLE)
     .select(
-      'id,user_id,day_index,slot_index,set_index,weight,reps,state,updated_at,deleted_at'
+      'id,user_id,day_index,slot_index,set_index,weight,reps,state,rpe,updated_at,deleted_at'
     )
     .eq('user_id', userId)
     .gt('updated_at', lastSyncedAt)

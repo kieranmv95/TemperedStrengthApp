@@ -1,15 +1,23 @@
 import Award from '@/src/components/Award';
-import { Pill } from '@/src/components/pill';
-import { StandardLayout } from '@/src/components/StandardLayout';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { FilterChip, Skeleton, StandardLayout } from '@/src/components/ds';
+import { color, space, typography } from '@/src/constants/tokens';
 import { getAll } from '@/src/data/awards';
 import { useSubscription } from '@/src/hooks/use-subscription';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 type StatusFilter = 'all' | 'achieved' | 'not_achieved';
+
+const AWARD_SKELETON_HEIGHT = 116;
+const AWARD_SKELETON_COUNT = 3;
+
+function trophiesLabel(label: string, count: number | undefined): string {
+  if (count === undefined) {
+    return label;
+  }
+  return `${label}, ${count} ${count === 1 ? 'trophy' : 'trophies'}`;
+}
 
 export function YouTrophiesScreen() {
   const { isPro } = useSubscription();
@@ -45,6 +53,10 @@ export function YouTrophiesScreen() {
     });
   }, [awardRows, statusFilter]);
 
+  const allCount = awardRows?.length;
+  const achievedCount = awardRows?.filter((row) => row.granted).length;
+  const notAchievedCount = awardRows?.filter((row) => !row.granted).length;
+
   return (
     <StandardLayout
       title="Trophies"
@@ -52,34 +64,45 @@ export function YouTrophiesScreen() {
       onBackPress={() => router.back()}
     >
       <StandardLayout.AdvancedFilters>
-        <View style={styles.filters}>
-          <View style={styles.filterRow}>
-            <Pill
-              label="All"
-              isActive={statusFilter === 'all'}
-              onPress={() => setStatusFilter('all')}
-              count={awardRows?.length}
-            />
-            <Pill
-              label="Achieved"
-              isActive={statusFilter === 'achieved'}
-              onPress={() => setStatusFilter('achieved')}
-              count={awardRows?.filter((row) => row.granted).length}
-            />
-            <Pill
-              label="Not achieved"
-              isActive={statusFilter === 'not_achieved'}
-              onPress={() => setStatusFilter('not_achieved')}
-              count={awardRows?.filter((row) => !row.granted).length}
-            />
-          </View>
+        <View style={styles.filterRow}>
+          <FilterChip
+            label="All"
+            selected={statusFilter === 'all'}
+            onPress={() => setStatusFilter('all')}
+            count={allCount}
+            accessibilityLabel={trophiesLabel('All', allCount)}
+          />
+          <FilterChip
+            label="Achieved"
+            selected={statusFilter === 'achieved'}
+            onPress={() => setStatusFilter('achieved')}
+            count={achievedCount}
+            accessibilityLabel={trophiesLabel('Achieved', achievedCount)}
+          />
+          <FilterChip
+            label="Not achieved"
+            selected={statusFilter === 'not_achieved'}
+            onPress={() => setStatusFilter('not_achieved')}
+            count={notAchievedCount}
+            accessibilityLabel={trophiesLabel('Not achieved', notAchievedCount)}
+          />
         </View>
       </StandardLayout.AdvancedFilters>
 
       <StandardLayout.Body>
         <View style={styles.awardsContainer}>
           {visibleRows === null ? (
-            <ActivityIndicator color={Colors.textMuted} />
+            Array.from({ length: AWARD_SKELETON_COUNT }, (_, index) => (
+              <Skeleton
+                key={index}
+                width="100%"
+                height={AWARD_SKELETON_HEIGHT}
+                radius="md"
+                accessibilityLabel={
+                  index === 0 ? 'Loading trophies' : undefined
+                }
+              />
+            ))
           ) : visibleRows.length === 0 ? (
             <Text style={styles.emptyStateText}>
               No trophies match your filters.
@@ -106,24 +129,19 @@ export function YouTrophiesScreen() {
 }
 
 const styles = StyleSheet.create({
-  filters: {
-    marginTop: Spacing.lg,
-    gap: Spacing.sm,
-  },
   filterRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: Spacing.sm,
+    gap: space.xs,
   },
   awardsContainer: {
-    gap: Spacing.xl,
-    paddingBottom: Spacing.md,
+    gap: space.sm,
+    paddingBottom: space.md,
   },
   emptyStateText: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
+    ...typography.callout,
+    color: color.textTertiary,
     textAlign: 'center',
-    marginTop: Spacing.xxl,
+    marginTop: space.xxl,
   },
 });

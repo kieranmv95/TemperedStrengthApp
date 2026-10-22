@@ -4,19 +4,21 @@ import { migration001Init } from './schema/001_init';
 import { migration002WorkoutLogSets } from './schema/002_workout_log_sets';
 import { migration003Checkin } from './schema/003_checkin';
 import { migration004WomensHealthDefaultOn } from './schema/004_womens_health_default_on';
+import { migration005WorkoutLogSetsRpe } from './schema/005_workout_log_sets_rpe';
 import type { LocalSchemaMigration } from './types';
 
 export type { LocalSchemaMigration } from './types';
 
 /**
  * Append-only list. Never reorder or renumber applied versions.
- * Next domain tables go in 005_..., etc.
+ * Next domain tables go in 006_..., etc.
  */
 export const LOCAL_SCHEMA_MIGRATIONS: LocalSchemaMigration[] = [
   migration001Init,
   migration002WorkoutLogSets,
   migration003Checkin,
   migration004WomensHealthDefaultOn,
+  migration005WorkoutLogSetsRpe,
 ];
 
 export async function runLocalSchemaMigrations(

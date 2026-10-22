@@ -1,5 +1,11 @@
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { AppSafeAreaView } from '@/src/components/ds';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import {
   AccountRestoreEmptyError,
   useSyncManager,
@@ -18,10 +24,10 @@ import {
   AppState,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -40,7 +46,7 @@ export function AccountVerifyOtpScreen() {
   const [verifying, setVerifying] = useState(false);
   const [resending, setResending] = useState(false);
   const [sentAt, setSentAt] = useState<number | null>(null);
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     let cancelled = false;
@@ -88,11 +94,7 @@ export function AccountVerifyOtpScreen() {
       // Mid-onboarding create still resumes that flow via accountCreated.
       const isOnboardingReturn = returnTo.startsWith('/onboarding');
       let destination: string = '/';
-      if (
-        !result.restored &&
-        intent === 'create' &&
-        isOnboardingReturn
-      ) {
+      if (!result.restored && intent === 'create' && isOnboardingReturn) {
         const separator = returnTo.includes('?') ? '&' : '?';
         destination = `${returnTo}${separator}accountCreated=1`;
       }
@@ -153,6 +155,14 @@ export function AccountVerifyOtpScreen() {
     }
   };
 
+  const resendDisabled = sentAt === null || cooldown > 0 || resending;
+  const resendLabel =
+    cooldown > 0
+      ? `Resend code in ${cooldown}s`
+      : resending
+        ? 'Sending…'
+        : 'Resend code';
+
   return (
     <AppSafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -160,59 +170,94 @@ export function AccountVerifyOtpScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <View style={styles.header}>
-          <Text style={styles.title}>Check your email</Text>
+          <Text style={styles.title} accessibilityRole="header">
+            Check your email
+          </Text>
           <Text style={styles.subtitle}>
             Enter the one-time code sent to {email}.
           </Text>
         </View>
 
-        <TextInput
-          value={code}
-          onChangeText={(value) =>
-            setCode(value.replace(/\D/g, '').slice(0, 8))
-          }
-          placeholder="00000000"
-          placeholderTextColor={Colors.textPlaceholder}
-          style={styles.input}
-          keyboardType="number-pad"
-          autoComplete="one-time-code"
-          textContentType="oneTimeCode"
-          returnKeyType="done"
-          onSubmitEditing={() => void submit()}
-          editable={!verifying}
-          accessibilityLabel="One-time code"
-        />
-
-        <TouchableOpacity
-          style={[styles.primaryButton, verifying && styles.disabled]}
-          onPress={() => void submit()}
-          disabled={verifying}
-        >
-          <Text style={styles.primaryButtonText}>
-            {verifying ? 'Restoring…' : 'Verify code'}
+        <View style={styles.field}>
+          <Text
+            style={styles.fieldLabel}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          >
+            One-time code
           </Text>
-        </TouchableOpacity>
+          <TextInput
+            value={code}
+            onChangeText={(value) =>
+              setCode(value.replace(/\D/g, '').slice(0, 8))
+            }
+            placeholder="00000000"
+            placeholderTextColor={color.textTertiary}
+            style={styles.input}
+            keyboardType="number-pad"
+            autoComplete="one-time-code"
+            textContentType="oneTimeCode"
+            returnKeyType="done"
+            onSubmitEditing={() => void submit()}
+            editable={!verifying}
+            accessibilityLabel="One-time code"
+            accessibilityState={{ disabled: verifying }}
+          />
+        </View>
 
-        <TouchableOpacity
-          style={styles.secondaryButton}
-          onPress={() => void resend()}
-          disabled={sentAt === null || cooldown > 0 || resending}
-        >
-          <Text style={styles.secondaryButtonText}>
-            {cooldown > 0
-              ? `Resend code in ${cooldown}s`
-              : resending
-                ? 'Sending…'
-                : 'Resend code'}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.secondaryButton}
-          onPress={() => router.back()}
-          disabled={verifying}
-        >
-          <Text style={styles.secondaryButtonText}>Change email</Text>
-        </TouchableOpacity>
+        <View style={styles.actions}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.primaryButton,
+              pressed && styles.primaryButtonPressed,
+              verifying && styles.disabled,
+            ]}
+            onPress={() => void submit()}
+            disabled={verifying}
+            accessibilityRole="button"
+            accessibilityLabel={verifying ? 'Restoring' : 'Verify code'}
+            accessibilityState={{ disabled: verifying, busy: verifying }}
+          >
+            <Text style={styles.primaryButtonText}>
+              {verifying ? 'Restoring…' : 'Verify code'}
+            </Text>
+          </Pressable>
+
+          <Pressable
+            style={({ pressed }) => [
+              styles.secondaryButton,
+              resendDisabled && styles.secondaryButtonDisabled,
+              pressed && styles.secondaryButtonPressed,
+            ]}
+            onPress={() => void resend()}
+            disabled={resendDisabled}
+            accessibilityRole="button"
+            accessibilityLabel={resendLabel}
+            accessibilityState={{ disabled: resendDisabled, busy: resending }}
+          >
+            <Text
+              style={[
+                styles.secondaryButtonText,
+                resendDisabled && styles.secondaryButtonTextDisabled,
+              ]}
+            >
+              {resendLabel}
+            </Text>
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              styles.textButton,
+              pressed && styles.textButtonPressed,
+            ]}
+            onPress={() => router.back()}
+            disabled={verifying}
+            accessibilityRole="button"
+            accessibilityLabel="Change email"
+            accessibilityState={{ disabled: verifying }}
+          >
+            <Text style={styles.textButtonText}>Change email</Text>
+          </Pressable>
+        </View>
       </KeyboardAvoidingView>
     </AppSafeAreaView>
   );
@@ -221,60 +266,101 @@ export function AccountVerifyOtpScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.backgroundScreen,
+    backgroundColor: color.bg,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    padding: Spacing.xxl,
-    gap: Spacing.xl,
+    padding: space.md,
+    gap: space.xl,
   },
   header: {
-    gap: Spacing.md,
+    gap: space.xs,
   },
   title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXl,
-    fontWeight: '700',
+    ...typography.title1,
+    color: color.textPrimary,
   },
   subtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.xl,
-    lineHeight: 24,
+    ...typography.body,
+    color: color.textSecondary,
+  },
+  field: {
+    gap: space.xxs,
+  },
+  fieldLabel: {
+    ...typography.captionStrong,
+    color: color.textSecondary,
   },
   input: {
-    backgroundColor: Colors.backgroundElevated,
-    borderColor: Colors.backgroundSubtle,
+    ...typography.numericMedium,
+    minHeight: MIN_TARGET_SIZE + space.sm,
+    paddingHorizontal: space.sm,
+    paddingVertical: space.xs,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderRadius: 16,
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayLg,
+    borderColor: color.borderStrong,
+    backgroundColor: color.surface2,
+    color: color.textPrimary,
     // Do not set letterSpacing on TextInput — RN can leak it into other
     // inputs elsewhere in the app (e.g. workout search).
     textAlign: 'center',
-    padding: Spacing.xl,
+  },
+  actions: {
+    gap: space.xs,
   },
   primaryButton: {
-    backgroundColor: Colors.accent,
-    borderRadius: 16,
-    paddingVertical: Spacing.xl,
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: space.lg,
+    backgroundColor: color.gold,
+  },
+  primaryButtonPressed: {
+    backgroundColor: color.goldStrong,
   },
   primaryButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
   secondaryButton: {
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
     alignItems: 'center',
-    paddingVertical: Spacing.sm,
+    justifyContent: 'center',
+    paddingHorizontal: space.lg,
+    borderWidth: 1,
+    borderColor: color.borderStrong,
+  },
+  secondaryButtonPressed: {
+    backgroundColor: color.surface3,
+  },
+  secondaryButtonDisabled: {
+    borderColor: color.surface3,
   },
   secondaryButtonText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.calloutStrong,
+    fontVariant: ['tabular-nums'],
+    color: color.textPrimary,
+  },
+  secondaryButtonTextDisabled: {
+    color: color.textDisabled,
+  },
+  textButton: {
+    minHeight: MIN_TARGET_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: radius.pill,
+  },
+  textButtonPressed: {
+    backgroundColor: color.surface3,
+  },
+  textButtonText: {
+    ...typography.calloutStrong,
+    color: color.textSecondary,
   },
   disabled: {
-    opacity: 0.5,
+    opacity: 0.6,
   },
 });

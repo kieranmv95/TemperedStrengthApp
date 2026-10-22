@@ -5,9 +5,16 @@ import { getEffectiveBottomInset } from '@/src/utils/platform';
 import { getTrainingMaxesStore, setTrainingMaxes } from '@/src/utils/storage';
 import { formatWeightFromKg } from '@/src/utils/weightUnits';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '../constants/tokens';
 import { TrainingMaxModal } from './TrainingMaxModal';
 
 type TrainingMaxesCardProps = {
@@ -46,14 +53,17 @@ export function TrainingMaxesCard({
   return (
     <View style={styles.card}>
       <View style={styles.headerRow}>
-        <Text style={styles.title}>Training Maxes</Text>
-        <TouchableOpacity
+        <Text style={styles.title} accessibilityRole="header">
+          Training maxes
+        </Text>
+        <Pressable
           onPress={() => setEditing(true)}
+          style={styles.editButton}
           accessibilityRole="button"
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          accessibilityLabel="Edit training maxes"
         >
           <Text style={styles.editText}>Edit</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View style={styles.rows}>
@@ -90,46 +100,47 @@ export function TrainingMaxesCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
-    marginBottom: Spacing.xl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    ...elevation.raised,
+    backgroundColor: color.surface1,
+    borderRadius: radius.md,
+    padding: space.md,
+    gap: space.xs,
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: Spacing.md,
   },
   title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
+  },
+  editButton: {
+    minHeight: MIN_TARGET_SIZE,
+    justifyContent: 'center',
+    paddingHorizontal: space.xs,
+    marginRight: -space.xs,
   },
   editText: {
-    color: Colors.accent,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.gold,
   },
   rows: {
-    gap: Spacing.md,
+    gap: space.xs,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: Spacing.md,
+    gap: space.sm,
   },
   liftName: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
+    ...typography.callout,
+    color: color.textSecondary,
     flex: 1,
   },
   liftValue: {
-    color: Colors.accent,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
+    ...typography.numericSmall,
+    color: color.textPrimary,
   },
 });

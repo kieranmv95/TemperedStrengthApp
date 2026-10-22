@@ -1,87 +1,64 @@
-import { BorderRadius, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
 
 export const SHOP_DETAIL_LOGO_MAX_WIDTH = 200;
 export const SHOP_DETAIL_LOGO_MAX_HEIGHT = 80;
 
 export const shopSponsorAdSheetStyles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  backdrop: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
-  },
-  sheet: {
-    borderTopLeftRadius: BorderRadius.pill,
-    borderTopRightRadius: BorderRadius.pill,
-    paddingTop: Spacing.section,
-    paddingHorizontal: Spacing.section,
-    maxHeight: '88%',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: Spacing.lg,
-    right: Spacing.lg,
-    zIndex: 1,
-    padding: Spacing.xs,
-  },
-  scrollContent: {
-    gap: Spacing.xxl,
-    paddingTop: Spacing.md,
-  },
-  logoWrap: {
-    alignSelf: 'center',
+  logoPanel: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
-    minHeight: SHOP_DETAIL_LOGO_MAX_HEIGHT,
+    padding: space.sm,
+    borderRadius: radius.md,
   },
   logo: {
     width: SHOP_DETAIL_LOGO_MAX_WIDTH,
+    maxWidth: '100%',
     height: SHOP_DETAIL_LOGO_MAX_HEIGHT,
   },
   description: {
-    fontSize: FontSize.lg,
-    lineHeight: 24,
-    fontWeight: '500',
-    textAlign: 'center',
+    ...typography.body,
+    color: color.textSecondary,
   },
   reviewAside: {
-    alignSelf: 'stretch',
-    paddingVertical: Spacing.md,
-    paddingLeft: Spacing.lg,
-    borderLeftWidth: 4,
-    gap: Spacing.sm,
+    gap: space.xs,
+    padding: space.md,
+    borderRadius: radius.md,
+    backgroundColor: color.surface2,
   },
   reviewHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
+    gap: space.xs,
   },
   reviewLabel: {
-    fontSize: FontSize.sm,
-    fontWeight: '800',
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
+    ...typography.captionStrong,
+    color: color.textPrimary,
   },
   reviewText: {
-    fontSize: FontSize.lg,
-    lineHeight: 22,
-    fontWeight: '500',
-    fontStyle: 'italic',
+    ...typography.callout,
+    color: color.textPrimary,
   },
   cta: {
-    alignSelf: 'stretch',
-    paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.section,
-    borderRadius: BorderRadius.pill,
+    minHeight: MIN_TARGET_SIZE,
     alignItems: 'center',
-    marginTop: Spacing.sm,
+    justifyContent: 'center',
+    paddingHorizontal: space.lg,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
+  },
+  ctaPressed: {
+    backgroundColor: color.goldStrong,
   },
   ctaText: {
-    fontSize: FontSize.xl,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.onGold,
+    textAlign: 'center',
   },
 });

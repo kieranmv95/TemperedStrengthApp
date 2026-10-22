@@ -7,8 +7,8 @@ import { SkillSectionHeader } from '@/src/components/skills/SkillSectionHeader';
 import { SkillTipsCarousel } from '@/src/components/skills/SkillTipsCarousel';
 import { SkillVideos } from '@/src/components/skills/SkillVideos';
 import { SkillWorkouts } from '@/src/components/skills/SkillWorkouts';
-import { StandardLayout } from '@/src/components/StandardLayout';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { Skeleton, StandardLayout } from '@/src/components/ds';
+import { color, space, typography } from '@/src/constants/tokens';
 import { useRoles } from '@/src/hooks/useRoles';
 import { useSkill } from '@/src/hooks/useSkills';
 import type { Skill } from '@/src/types/skills';
@@ -16,14 +16,17 @@ import { asStringId } from '@/src/utils/routeParams';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useMemo } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 const COACH_ROLE = 'coach';
+const DESCRIPTION_PLACEHOLDER_HEIGHT = 48;
+const SECTION_PLACEHOLDER_HEIGHT = 160;
 
 type SkillDetailSection = {
   key: string;
   title: string;
   subtitle?: string;
+  icon: keyof typeof Ionicons.glyphMap;
   resourceLabel: string;
   count: number;
 };
@@ -39,6 +42,7 @@ function getSkillDetailSections(
   const sections: SkillDetailSection[] = [
     {
       key: 'videos',
+      icon: 'videocam-outline',
       title: 'Videos',
       subtitle: isLocked ? undefined : 'Tap a video to open and watch.',
       resourceLabel: pluralize(skill.videoCount, 'video', 'videos'),
@@ -46,6 +50,7 @@ function getSkillDetailSections(
     },
     {
       key: 'cues',
+      icon: 'list-outline',
       title: 'Cues',
       subtitle: isLocked ? undefined : 'Tap a cue to view it fullscreen.',
       resourceLabel: pluralize(skill.cueCount, 'cue', 'cues'),
@@ -53,19 +58,22 @@ function getSkillDetailSections(
     },
     {
       key: 'tips',
+      icon: 'bulb-outline',
       title: 'Tips',
       resourceLabel: pluralize(skill.tipCount, 'tip', 'tips'),
       count: skill.tipCount,
     },
     {
       key: 'articles',
+      icon: 'newspaper-outline',
       title: 'Articles',
       resourceLabel: pluralize(skill.articleCount, 'article', 'articles'),
       count: skill.articleCount,
     },
     {
       key: 'mobility',
-      title: 'Mobility Flows',
+      icon: 'body-outline',
+      title: 'Mobility flows',
       resourceLabel: pluralize(
         skill.recoveryFlowCount,
         'mobility flow',
@@ -75,6 +83,7 @@ function getSkillDetailSections(
     },
     {
       key: 'workouts',
+      icon: 'barbell-outline',
       title: 'Workouts',
       resourceLabel: pluralize(skill.workoutCount, 'workout', 'workouts'),
       count: skill.workoutCount,
@@ -119,6 +128,7 @@ function renderSkillSections(
             <SkillSectionHeader
               title={section.title}
               subtitle={section.subtitle}
+              icon={section.icon}
             />
             {isLocked ? (
               <SkillLockedTeaser
@@ -160,10 +170,12 @@ export default function SkillDetailScreen() {
           <View style={styles.emptyState}>
             <Ionicons
               name="barbell-outline"
-              size={64}
-              color={Colors.backgroundSubtle}
+              size={48}
+              color={color.textTertiary}
             />
-            <Text style={styles.emptyTitle}>Skill not found</Text>
+            <Text style={styles.emptyTitle} accessibilityRole="header">
+              Skill not found
+            </Text>
             <Text style={styles.emptyDescription}>
               This skill may have been removed or the link is invalid.
             </Text>
@@ -175,14 +187,24 @@ export default function SkillDetailScreen() {
 
   if (skillLoading) {
     return (
-      <StandardLayout
-        title="Skill"
-        onBackPress={() => router.back()}
-        disableScroll
-      >
+      <StandardLayout title="Skill" onBackPress={() => router.back()}>
         <StandardLayout.Body>
-          <View style={styles.emptyState}>
-            <ActivityIndicator color={Colors.accent} />
+          <View style={styles.body}>
+            <Skeleton
+              width="100%"
+              height={DESCRIPTION_PLACEHOLDER_HEIGHT}
+              accessibilityLabel="Loading skill"
+            />
+            <Skeleton
+              width="100%"
+              height={SECTION_PLACEHOLDER_HEIGHT}
+              radius="md"
+            />
+            <Skeleton
+              width="100%"
+              height={SECTION_PLACEHOLDER_HEIGHT}
+              radius="md"
+            />
           </View>
         </StandardLayout.Body>
       </StandardLayout>
@@ -200,10 +222,12 @@ export default function SkillDetailScreen() {
           <View style={styles.emptyState}>
             <Ionicons
               name="barbell-outline"
-              size={64}
-              color={Colors.backgroundSubtle}
+              size={48}
+              color={color.textTertiary}
             />
-            <Text style={styles.emptyTitle}>Skill not found</Text>
+            <Text style={styles.emptyTitle} accessibilityRole="header">
+              Skill not found
+            </Text>
             <Text style={styles.emptyDescription}>
               This skill may have been removed or the link is invalid.
             </Text>
@@ -228,37 +252,33 @@ export default function SkillDetailScreen() {
 
 const styles = StyleSheet.create({
   body: {
-    gap: Spacing.xl,
+    gap: space.xl,
   },
   sections: {
-    gap: Spacing.section,
-    paddingBottom: Spacing.section,
+    gap: space.xxl,
   },
   section: {
-    gap: Spacing.xl,
+    gap: space.sm,
   },
   emptyState: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: Spacing.section,
-    gap: Spacing.lg,
+    paddingHorizontal: space.xxl,
+    gap: space.xs,
   },
   emptyTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    ...typography.title2,
+    color: color.textPrimary,
     textAlign: 'center',
   },
   emptyDescription: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 22,
+    ...typography.callout,
+    color: color.textSecondary,
     textAlign: 'center',
   },
   description: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.lg,
-    lineHeight: 22,
+    ...typography.body,
+    color: color.textSecondary,
   },
 });

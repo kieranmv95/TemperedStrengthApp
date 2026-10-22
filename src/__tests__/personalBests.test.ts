@@ -1,6 +1,8 @@
 import {
   appendCascadeToLowerTiersOnly,
-  formatExercisePbSubtitle,
+  findNearestRepMaxTier,
+  formatExercisePbChip,
+  getCurrentBestForTier,
   getLatestEntryForTier,
   logPersonalBestIntoLedger,
   newPbEntryId,
@@ -122,6 +124,64 @@ describe('logPersonalBestIntoLedger', () => {
     expect(tiersWithNewRows).toContain(5);
     expect(tiersWithNewRows).not.toContain(1);
   });
+
+  it('treats a lighter weight as a PR when lowerWeightIsBetter', () => {
+    const current = {
+      5: [{ id: 'a', weight: 40, achievedAt: t }],
+    };
+    const { updated, isPR, tiersWithNewRows } = logPersonalBestIntoLedger(
+      current,
+      5,
+      30,
+      t,
+      () => 'new-id',
+      true
+    );
+    expect(isPR).toBe(true);
+    expect(tiersWithNewRows.sort((a, b) => a - b)).toEqual([1, 2, 3, 5]);
+    expect(updated[5]?.[1]?.weight).toBe(30);
+    expect(updated[1]?.[0]?.weight).toBe(30);
+  });
+
+  it('does not treat heavier assistance as a PR when lowerWeightIsBetter', () => {
+    const current = {
+      5: [{ id: 'a', weight: 30, achievedAt: t }],
+    };
+    const { updated, isPR, tiersWithNewRows } = logPersonalBestIntoLedger(
+      current,
+      5,
+      40,
+      t,
+      () => 'new-id',
+      true
+    );
+    expect(isPR).toBe(false);
+    expect(tiersWithNewRows).toEqual([5]);
+    expect(updated[5]?.length).toBe(2);
+    expect(updated[1]).toBeUndefined();
+  });
+
+  it('cascades lighter assistance only to lower tiers that are worse', () => {
+    const current = {
+      1: [{ id: 'a', weight: 20, achievedAt: t }],
+      5: [{ id: 'b', weight: 40, achievedAt: t }],
+    };
+    const { updated, isPR, tiersWithNewRows } = logPersonalBestIntoLedger(
+      current,
+      5,
+      30,
+      t,
+      newPbEntryId,
+      true
+    );
+    expect(isPR).toBe(true);
+    expect(tiersWithNewRows).toContain(5);
+    expect(tiersWithNewRows).toContain(2);
+    expect(tiersWithNewRows).toContain(3);
+    expect(tiersWithNewRows).not.toContain(1);
+    expect(updated[1]?.length).toBe(1);
+    expect(updated[1]?.[0]?.weight).toBe(20);
+  });
 });
 
 describe('previewPersonalBestLog', () => {
@@ -143,6 +203,44 @@ describe('previewPersonalBestLog', () => {
       newRecords: [1, 2, 3, 5],
     });
   });
+
+  it('treats a lighter weight as a PR when lowerWeightIsBetter', () => {
+    const ledger = {
+      5: [{ id: 'a', weight: 40, achievedAt: t }],
+    };
+    expect(previewPersonalBestLog(ledger, 5, 30, true)).toEqual({
+      isPR: true,
+      newRecords: [1, 2, 3, 5],
+    });
+  });
+
+  it('is not a PR for heavier assistance when lowerWeightIsBetter', () => {
+    const ledger = {
+      5: [{ id: 'a', weight: 30, achievedAt: t }],
+    };
+    expect(previewPersonalBestLog(ledger, 5, 40, true)).toEqual({
+      isPR: false,
+      newRecords: [],
+    });
+  });
+});
+
+describe('getCurrentBestForTier with lowerWeightIsBetter', () => {
+  it('picks the lightest weight and ties on latest date', () => {
+    const t1 = '2026-01-01T00:00:00.000Z';
+    const t2 = '2026-02-01T00:00:00.000Z';
+    const ledger = {
+      5: [
+        { id: 'a', weight: 40, achievedAt: t1 },
+        { id: 'b', weight: 25, achievedAt: t1 },
+        { id: 'c', weight: 25, achievedAt: t2 },
+      ],
+    };
+    expect(getCurrentBestForTier(ledger, 5, true)).toEqual({
+      weight: 25,
+      achievedAt: t2,
+    });
+  });
 });
 
 describe('getLatestEntryForTier', () => {
@@ -159,52 +257,97 @@ describe('getLatestEntryForTier', () => {
   });
 });
 
-describe('formatExercisePbSubtitle', () => {
+describe('findNearestRepMaxTier', () => {
   const t1 = '2026-01-01T00:00:00.000Z';
-  const t2 = '2026-02-01T00:00:00.000Z';
 
-  it('returns null when there is no history', () => {
-    expect(formatExercisePbSubtitle(null)).toBeNull();
-    expect(formatExercisePbSubtitle({})).toBeNull();
+  it('returns null when the ledger is empty', () => {
+    expect(findNearestRepMaxTier({}, [3, 5])).toBeNull();
   });
 
-  it('returns null when only non-1RM tiers have data', () => {
+  it('prefers a tier inside the prescribed range', () => {
     expect(
-      formatExercisePbSubtitle({
-        5: [{ id: 'a', weight: 80, achievedAt: t1 }],
-      })
+      findNearestRepMaxTier(
+        {
+          1: [{ id: 'a', weight: 120, achievedAt: t1 }],
+          3: [{ id: 'b', weight: 100, achievedAt: t1 }],
+        },
+        [3, 5]
+      )
+    ).toBe(3);
+  });
+
+  it('picks the closer outside tier when none sit in range', () => {
+    expect(
+      findNearestRepMaxTier(
+        {
+          5: [{ id: 'a', weight: 90, achievedAt: t1 }],
+          10: [{ id: 'b', weight: 70, achievedAt: t1 }],
+        },
+        [6, 8]
+      )
+    ).toBe(5);
+  });
+
+  it('falls back to the only available tier', () => {
+    expect(
+      findNearestRepMaxTier(
+        {
+          1: [{ id: 'a', weight: 120, achievedAt: t1 }],
+        },
+        [3, 3]
+      )
+    ).toBe(1);
+  });
+});
+
+describe('formatExercisePbChip', () => {
+  const t1 = '2026-01-01T00:00:00.000Z';
+
+  it('returns null when there is no history or no rep range', () => {
+    expect(formatExercisePbChip(null, [3, 5])).toBeNull();
+    expect(formatExercisePbChip({}, [3, 5])).toBeNull();
+    expect(
+      formatExercisePbChip(
+        { 1: [{ id: 'a', weight: 80, achievedAt: t1 }] },
+        null
+      )
     ).toBeNull();
   });
 
-  it('shows best only when latest matches peak weight (1RM only)', () => {
+  it('shows the nearest tier as XRM - weight', () => {
     expect(
-      formatExercisePbSubtitle({
-        1: [{ id: 'a', weight: 80, achievedAt: t1 }],
-      })
-    ).toBe('80kg');
+      formatExercisePbChip(
+        {
+          1: [{ id: 'a', weight: 120, achievedAt: t1 }],
+          3: [{ id: 'b', weight: 100, achievedAt: t1 }],
+        },
+        [3, 5]
+      )
+    ).toBe('3RM - 100kg');
   });
 
-  it('shows best and latest when the most recent 1RM log is below peak', () => {
+  it('falls back to 1RM when that is the nearest available record', () => {
     expect(
-      formatExercisePbSubtitle({
-        1: [
-          { id: 'a', weight: 70, achievedAt: t1 },
-          { id: 'b', weight: 50, achievedAt: t2 },
-        ],
-      })
-    ).toBe('70kg / 50kg');
+      formatExercisePbChip(
+        {
+          1: [{ id: 'a', weight: 120, achievedAt: t1 }],
+        },
+        [3, 5]
+      )
+    ).toBe('1RM - 120kg');
   });
 
   it('formats lb values rounded to nearest whole lb', () => {
     // 100kg ≈ 220.462lb → 220lb
     expect(
-      formatExercisePbSubtitle(
+      formatExercisePbChip(
         {
-          1: [{ id: 'a', weight: 100, achievedAt: t1 }],
+          10: [{ id: 'a', weight: 100, achievedAt: t1 }],
         },
+        [10, 12],
         'lb'
       )
-    ).toBe('220lb');
+    ).toBe('10RM - 220lb');
   });
 });
 
@@ -225,6 +368,22 @@ describe('summarizePersonalBests', () => {
     });
     expect(s).toContain('1RM: 100 kg');
     expect(s).toContain('5RM: 85 kg');
+  });
+
+  it('uses the lightest weight when lowerWeightIsBetter', () => {
+    const t1 = '2026-01-01T00:00:00.000Z';
+    const t2 = '2026-01-02T00:00:00.000Z';
+    const s = summarizePersonalBests(
+      {
+        5: [
+          { id: 'a', weight: 40, achievedAt: t1 },
+          { id: 'b', weight: 25, achievedAt: t2 },
+        ],
+      },
+      'kg',
+      true
+    );
+    expect(s).toContain('5RM: 25 kg');
   });
 
   it('supports lb summaries rounded to nearest whole lb', () => {

@@ -1,11 +1,20 @@
 import { router } from 'expo-router';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '../constants/tokens';
 
 type ProgramStartingInXScreenProps = {
   daysUntilStart: number;
 };
+
+const COUNTDOWN_SIZE = 140;
 
 export const ProgramStartingInXScreen: React.FC<
   ProgramStartingInXScreenProps
@@ -29,31 +38,35 @@ export const ProgramStartingInXScreen: React.FC<
     <View style={styles.container}>
       <View style={styles.content} accessibilityRole="summary">
         <View style={styles.card}>
-          <View style={styles.countdownRow}>
-            <View style={styles.countdownCircle} accessibilityRole="image">
-              <Text style={styles.countdownValue}>{countdownLabel}</Text>
-              <Text style={styles.countdownCaption}>until start</Text>
-            </View>
+          <View
+            style={styles.countdownCircle}
+            accessible
+            accessibilityLabel={`${countdownLabel} until start`}
+          >
+            <Text style={styles.countdownValue}>{countdownLabel}</Text>
+            <Text style={styles.countdownCaption}>until start</Text>
           </View>
 
-          <Text style={styles.title}>{headline}</Text>
+          <Text style={styles.title} accessibilityRole="header">
+            {headline}
+          </Text>
           <Text style={styles.subtitle}>
             While you’re waiting, you can still get a great session in. Browse
             standalone workouts, or scroll the dates above to preview what’s
             coming up.
           </Text>
 
-          <View style={styles.actions}>
-            <TouchableOpacity
-              onPress={() => router.push('/workouts')}
-              activeOpacity={0.8}
-              style={styles.secondaryButton}
-              accessibilityRole="button"
-              accessibilityLabel="Browse workouts"
-            >
-              <Text style={styles.secondaryButtonText}>Browse workouts</Text>
-            </TouchableOpacity>
-          </View>
+          <Pressable
+            onPress={() => router.push('/workouts')}
+            style={({ pressed }) => [
+              styles.secondaryButton,
+              pressed && styles.secondaryButtonPressed,
+            ]}
+            accessibilityRole="button"
+            accessibilityLabel="Browse workouts"
+          >
+            <Text style={styles.secondaryButtonText}>Browse workouts</Text>
+          </Pressable>
         </View>
       </View>
     </View>
@@ -68,68 +81,60 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.section,
+    padding: space.xl,
   },
   card: {
     width: '100%',
-  },
-  countdownRow: {
     alignItems: 'center',
-    marginBottom: Spacing.xxl,
+    gap: space.sm,
   },
   countdownCircle: {
-    width: 140,
-    height: 140,
-    borderRadius: 70,
+    ...elevation.raised,
+    minWidth: COUNTDOWN_SIZE,
+    minHeight: COUNTDOWN_SIZE,
+    padding: space.md,
+    borderRadius: radius.pill,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.backgroundElevated,
-    borderWidth: 1,
-    borderColor: Colors.accentOverlay,
+    backgroundColor: color.surface1,
+    marginBottom: space.sm,
   },
   countdownValue: {
-    color: Colors.accent,
-    fontSize: 28,
-    fontWeight: '700',
+    ...typography.numericMedium,
+    color: color.textPrimary,
     textAlign: 'center',
-    marginBottom: Spacing.xs,
   },
   countdownCaption: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '700',
+    ...typography.caption,
+    color: color.textTertiary,
     textAlign: 'center',
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
   },
   title: {
-    color: Colors.accent,
-    fontSize: FontSize.displayXXl,
-    fontWeight: '700',
-    marginBottom: Spacing.md,
+    ...typography.title1,
+    color: color.textPrimary,
     textAlign: 'center',
   },
   subtitle: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.xxl,
-    lineHeight: 24,
+    ...typography.body,
+    color: color.textSecondary,
     textAlign: 'center',
-    paddingHorizontal: Spacing.xxl,
-    marginBottom: Spacing.section,
-  },
-  actions: {
-    gap: Spacing.md,
+    marginBottom: space.sm,
   },
   secondaryButton: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.pill,
-    paddingVertical: Spacing.xxl,
-    paddingHorizontal: Spacing.section,
+    alignSelf: 'stretch',
+    minHeight: MIN_TARGET_SIZE,
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: space.lg,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: color.borderStrong,
+  },
+  secondaryButtonPressed: {
+    backgroundColor: color.surface3,
   },
   secondaryButtonText: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '800',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
 });

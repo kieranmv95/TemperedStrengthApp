@@ -7,29 +7,38 @@ import { formatWeightValueFromKg } from '@/src/utils/weightUnits';
 
 type DayLogs = { [slotIndex: number]: { [setIndex: number]: LoggedSet } };
 
+function formatRpeSuffix(set: LoggedSet): string {
+  if (typeof set.rpe === 'number' && set.rpe >= 1 && set.rpe <= 10) {
+    return ` @${set.rpe}`;
+  }
+  return '';
+}
+
 function formatSetLine(
   set: LoggedSet,
   loggingType: Exercise['logging_type'],
   weightUnit: WeightUnit
 ): string {
+  const rpe = formatRpeSuffix(set);
+
   if (loggingType === 'time') {
-    return `${set.reps}s`;
+    return `${set.reps}s${rpe}`;
   }
 
   if (loggingType === 'reps') {
     if (set.weight !== null && set.weight > 0) {
       const value = formatWeightValueFromKg(set.weight, weightUnit);
-      return `x${set.reps} (+${value}${weightUnit})`;
+      return `x${set.reps} (+${value}${weightUnit})${rpe}`;
     }
-    return `x${set.reps}`;
+    return `x${set.reps}${rpe}`;
   }
 
   if (set.weight !== null && set.weight > 0) {
     const value = formatWeightValueFromKg(set.weight, weightUnit);
-    return `${value}${weightUnit}x${set.reps}`;
+    return `${value}${weightUnit}x${set.reps}${rpe}`;
   }
 
-  return `x${set.reps}`;
+  return `x${set.reps}${rpe}`;
 }
 
 export function buildWorkoutExportText(

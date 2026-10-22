@@ -4,46 +4,59 @@ import {
   sponsorAdThumbnailUrl,
   type HomeSponsorAd,
 } from '@/src/services/sanitySponsorAds';
+import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text } from 'react-native';
 
 type ShopAdListItemProps = {
   ad: HomeSponsorAd;
   onPress: (ad: HomeSponsorAd) => void;
 };
 
+/**
+ * Square partner tile in the partner's own brand colours, so logos designed
+ * for that background (light or dark) stay legible.
+ */
 export function ShopAdListItem({ ad, onPress }: ShopAdListItemProps) {
   const thumbnailUrl = sponsorAdThumbnailUrl(ad);
   const displayTitle = sponsorAdDisplayTitle(ad);
+  const hasTitle = ad.title.length > 0;
 
   return (
-    <TouchableOpacity
-      style={[
+    <Pressable
+      onPress={() => onPress(ad)}
+      style={({ pressed }) => [
         styles.card,
         { backgroundColor: ad.bgColor, borderColor: ad.titleColor },
+        pressed && styles.cardPressed,
       ]}
-      onPress={() => onPress(ad)}
-      activeOpacity={0.85}
       accessibilityRole="button"
-      accessibilityLabel={`${displayTitle}, view partner details`}
+      accessibilityLabel={
+        hasTitle ? `${displayTitle}, partner offer` : 'Partner offer'
+      }
       accessibilityHint="Opens offer details"
     >
-      <Text
-        style={[styles.title, { color: ad.titleColor }]}
-        numberOfLines={1}
-      >
-        {displayTitle}
-      </Text>
-      <View style={[styles.thumbWrap, { backgroundColor: ad.bgColor }]}>
+      {hasTitle ? (
+        <Text
+          style={[styles.title, { color: ad.titleColor }]}
+          numberOfLines={1}
+        >
+          {displayTitle}
+        </Text>
+      ) : null}
+      {thumbnailUrl ? (
         <Image
-          source={thumbnailUrl ? { uri: thumbnailUrl } : undefined}
+          source={{ uri: thumbnailUrl }}
           style={styles.image}
           contentFit="contain"
           contentPosition="center"
+          transition={150}
           accessibilityIgnoresInvertColors
         />
-      </View>
-    </TouchableOpacity>
+      ) : (
+        <Ionicons name="pricetag-outline" size={32} color={ad.titleColor} />
+      )}
+    </Pressable>
   );
 }

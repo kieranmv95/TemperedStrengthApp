@@ -1,9 +1,20 @@
+import { ProgressRing } from '@/src/components/ds';
+import { color } from '@/src/constants/tokens';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { AppState, Text, TouchableOpacity, View } from 'react-native';
-import { Colors } from '../constants/theme';
+import {
+  AccessibilityInfo,
+  AppState,
+  Pressable,
+  Text,
+  View,
+} from 'react-native';
 import type { RestTimerState } from '../types/storage';
-import { workoutTimerBarStyles } from './workoutTimerBarStyles';
+import {
+  TIMER_RING_SIZE,
+  workoutTimerBarStyles as styles,
+} from './workoutTimerBarStyles';
 
 type RestTimerProps = {
   timer: RestTimerState;
@@ -12,6 +23,9 @@ type RestTimerProps = {
   onRestart: () => void;
   onAdjust: (deltaSeconds: number) => void;
 };
+
+/** A timer started this recently is announced; older ones are being restored on return. */
+const FRESH_START_WINDOW_MS = 2000;
 
 const formatDuration = (totalSeconds: number): string => {
   const minutes = Math.floor(totalSeconds / 60);
@@ -30,6 +44,7 @@ export const RestTimer: React.FC<RestTimerProps> = ({
   const [now, setNow] = useState(Date.now());
   const completedRef = useRef(false);
   const isRunning = timer.status === 'running';
+  const largeText = useLargeText();
 
   const remainingSeconds = useMemo(() => {
     const endTime = timer.startedAt + timer.restTimeSeconds * 1000;
@@ -44,6 +59,15 @@ export const RestTimer: React.FC<RestTimerProps> = ({
 
   useEffect(() => {
     if (!isRunning) return;
+    if (Date.now() - timer.startedAt < FRESH_START_WINDOW_MS) {
+      AccessibilityInfo.announceForAccessibility(
+        `Rest timer started, ${timer.restTimeSeconds} seconds`
+      );
+    }
+  }, [isRunning, timer.startedAt, timer.restTimeSeconds]);
+
+  useEffect(() => {
+    if (!isRunning) return;
     const interval = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(interval);
   }, [isRunning]);
@@ -53,6 +77,7 @@ export const RestTimer: React.FC<RestTimerProps> = ({
       return;
     }
     completedRef.current = true;
+    AccessibilityInfo.announceForAccessibility('Rest complete');
     onComplete();
   }, [isRunning, remainingSeconds, onComplete]);
 
@@ -65,77 +90,94 @@ export const RestTimer: React.FC<RestTimerProps> = ({
     return () => subscription.remove();
   }, []);
 
+  const remainingFraction =
+    isRunning && timer.restTimeSeconds > 0
+      ? remainingSeconds / timer.restTimeSeconds
+      : 0;
+
   return (
-    <View style={workoutTimerBarStyles.bar}>
-      <View style={workoutTimerBarStyles.timerSection}>
-        <View style={workoutTimerBarStyles.dot} />
+    <View style={[styles.bar, largeText && styles.barStacked]}>
+      <View style={styles.timerSection}>
+        <ProgressRing
+          progress={isRunning ? remainingFraction : 1}
+          size={TIMER_RING_SIZE}
+          strokeWidth={4}
+          tone={isRunning ? 'gold' : 'success'}
+          accessibilityLabel="Rest timer"
+          accessibilityValueText={
+            isRunning
+              ? `${remainingSeconds} seconds remaining`
+              : 'Rest complete'
+          }
+        />
         {isRunning ? (
-          <Text style={workoutTimerBarStyles.timerText}>
-            Rest: {formatDuration(remainingSeconds)}
-          </Text>
+          <View style={styles.timerStack}>
+            <Text style={styles.timerCaption}>Rest</Text>
+            <Text style={styles.timerValue}>
+              {formatDuration(remainingSeconds)}
+            </Text>
+          </View>
         ) : (
-          <Text style={workoutTimerBarStyles.timerText}>Rest Complete</Text>
+          <Text style={[styles.timerText, styles.timerTextComplete]}>
+            Rest Complete
+          </Text>
         )}
       </View>
-      <View style={workoutTimerBarStyles.iconButtonGroup}>
-        <TouchableOpacity
-          style={[
-            workoutTimerBarStyles.iconButton,
-            workoutTimerBarStyles.buttonSize,
+      <View style={styles.iconButtonGroup}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.iconButton,
+            pressed && styles.iconButtonPressed,
           ]}
           onPress={onRestart}
-          activeOpacity={0.7}
           accessibilityRole="button"
           accessibilityLabel="Restart rest timer"
           testID="rest-timer-restart"
         >
-          <Ionicons name="refresh" size={20} color={Colors.textOnAccent} />
-        </TouchableOpacity>
+          <Ionicons name="refresh" size={20} color={color.textPrimary} />
+        </Pressable>
         {isRunning && (
           <>
-            <TouchableOpacity
-              style={[
-                workoutTimerBarStyles.adjustButton,
-                workoutTimerBarStyles.buttonSize,
+            <Pressable
+              style={({ pressed }) => [
+                styles.iconButton,
+                pressed && styles.iconButtonPressed,
               ]}
               onPress={() => onAdjust(-15)}
-              activeOpacity={0.7}
               accessibilityRole="button"
               accessibilityLabel="Subtract 15 seconds from rest timer"
               testID="rest-timer-minus-15"
             >
-              <Text style={workoutTimerBarStyles.adjustButtonText}>-15</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                workoutTimerBarStyles.adjustButton,
-                workoutTimerBarStyles.buttonSize,
+              <Text style={styles.adjustButtonText}>−15</Text>
+            </Pressable>
+            <Pressable
+              style={({ pressed }) => [
+                styles.iconButton,
+                pressed && styles.iconButtonPressed,
               ]}
               onPress={() => onAdjust(15)}
-              activeOpacity={0.7}
               accessibilityRole="button"
               accessibilityLabel="Add 15 seconds to rest timer"
               testID="rest-timer-plus-15"
             >
-              <Text style={workoutTimerBarStyles.adjustButtonText}>+15</Text>
-            </TouchableOpacity>
+              <Text style={styles.adjustButtonText}>+15</Text>
+            </Pressable>
           </>
         )}
-        <TouchableOpacity
-          style={[
-            workoutTimerBarStyles.iconButton,
-            workoutTimerBarStyles.buttonSize,
+        <Pressable
+          style={({ pressed }) => [
+            styles.iconButton,
+            pressed && styles.iconButtonPressed,
           ]}
           onPress={onDismiss}
-          activeOpacity={0.7}
           accessibilityRole="button"
           accessibilityLabel={
             isRunning ? 'Skip rest timer' : 'Dismiss rest timer'
           }
           testID="rest-timer-dismiss"
         >
-          <Ionicons name="close" size={20} color={Colors.textOnAccent} />
-        </TouchableOpacity>
+          <Ionicons name="close" size={20} color={color.textPrimary} />
+        </Pressable>
       </View>
     </View>
   );

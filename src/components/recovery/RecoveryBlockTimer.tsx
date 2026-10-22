@@ -1,9 +1,18 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { ProgressRing } from '@/src/components/ds';
+import {
+  color,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import type { RecoveryDose } from '@/src/types/recovery';
 import {
   formatCountdownSeconds,
   getRecoveryTimerSteps,
   isTimeBasedRecoveryDose,
+  type RecoveryTimerStep,
 } from '@/src/utils/recoveryTimer';
 import { Ionicons } from '@expo/vector-icons';
 import React, {
@@ -14,18 +23,29 @@ import React, {
   useState,
 } from 'react';
 import {
+  AccessibilityInfo,
   AppState,
+  Pressable,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
+
+const TIMER_RING_SIZE = 168;
+const TIMER_RING_STROKE = 6;
 
 type RecoveryBlockTimerProps = {
   dose: RecoveryDose;
 };
 
+function describeStep(step: RecoveryTimerStep): string {
+  return step.label
+    ? `${step.label}, ${step.seconds} seconds`
+    : `${step.seconds} seconds`;
+}
+
 export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
+  const largeText = useLargeText();
   const steps = useMemo(
     () => (isTimeBasedRecoveryDose(dose) ? getRecoveryTimerSteps(dose) : []),
     [dose]
@@ -65,10 +85,14 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
     setFinished(false);
     setEndTime(Date.now() + steps[0].seconds * 1000);
     setNow(Date.now());
+    AccessibilityInfo.announceForAccessibility(
+      `Timer started, ${describeStep(steps[0])}`
+    );
   };
 
   const stop = () => {
     reset();
+    AccessibilityInfo.announceForAccessibility('Timer stopped');
   };
 
   useEffect(() => {
@@ -99,17 +123,26 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
       setEndTime(Date.now() + steps[nextIndex].seconds * 1000);
       setNow(Date.now());
       advancingRef.current = false;
+      AccessibilityInfo.announceForAccessibility(
+        `Next, ${describeStep(steps[nextIndex])}`
+      );
       return;
     }
 
     setEndTime(null);
     setFinished(true);
     advancingRef.current = false;
+    AccessibilityInfo.announceForAccessibility("Time's up");
   }, [isRunning, remainingSeconds, stepIndex, steps]);
 
   if (steps.length === 0) {
     return null;
   }
+
+  const remainingFraction =
+    currentStep && currentStep.seconds > 0 && remainingSeconds !== null
+      ? remainingSeconds / currentStep.seconds
+      : 0;
 
   return (
     <View
@@ -123,49 +156,80 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
           {currentStep?.label ? (
             <Text style={timerStyles.stepLabel}>{currentStep.label}</Text>
           ) : null}
-          <Text style={timerStyles.countdown}>
-            {formatCountdownSeconds(remainingSeconds)}
-          </Text>
-          {steps.length > 1 ? (
-            <Text style={timerStyles.stepProgress}>
-              {stepIndex + 1} / {steps.length}
+          <ProgressRing
+            progress={remainingFraction}
+            size={TIMER_RING_SIZE}
+            strokeWidth={TIMER_RING_STROKE}
+            accessibilityLabel={
+              currentStep?.label ? `${currentStep.label} timer` : 'Timer'
+            }
+            accessibilityValueText={`${remainingSeconds} seconds remaining`}
+          >
+            {largeText ? null : (
+              <Text style={timerStyles.countdown}>
+                {formatCountdownSeconds(remainingSeconds)}
+              </Text>
+            )}
+          </ProgressRing>
+          {largeText ? (
+            <Text
+              style={timerStyles.countdown}
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            >
+              {formatCountdownSeconds(remainingSeconds)}
             </Text>
           ) : null}
-          <TouchableOpacity
-            style={timerStyles.secondaryButton}
+          {steps.length > 1 ? (
+            <Text style={timerStyles.stepProgress}>
+              Step {stepIndex + 1} of {steps.length}
+            </Text>
+          ) : null}
+          <Pressable
+            style={({ pressed }) => [
+              timerStyles.secondaryButton,
+              pressed && timerStyles.secondaryButtonPressed,
+            ]}
             onPress={stop}
-            activeOpacity={0.85}
             accessibilityRole="button"
             accessibilityLabel="Stop timer"
           >
+            <Ionicons name="stop" size={16} color={color.textPrimary} />
             <Text style={timerStyles.secondaryButtonText}>Stop</Text>
-          </TouchableOpacity>
+          </Pressable>
         </>
       ) : finished ? (
         <>
-          <Text style={timerStyles.completeText}>Time&apos;s up</Text>
-          <TouchableOpacity
-            style={timerStyles.secondaryButton}
+          <View style={timerStyles.completeRow}>
+            <Ionicons name="checkmark-circle" size={22} color={color.success} />
+            <Text style={timerStyles.completeText}>Time&apos;s up</Text>
+          </View>
+          <Pressable
+            style={({ pressed }) => [
+              timerStyles.secondaryButton,
+              pressed && timerStyles.secondaryButtonPressed,
+            ]}
             onPress={start}
-            activeOpacity={0.85}
             accessibilityRole="button"
             accessibilityLabel="Restart timer"
           >
-            <Ionicons name="refresh" size={18} color={Colors.textPrimary} />
+            <Ionicons name="refresh" size={18} color={color.textPrimary} />
             <Text style={timerStyles.secondaryButtonText}>Restart timer</Text>
-          </TouchableOpacity>
+          </Pressable>
         </>
       ) : (
-        <TouchableOpacity
-          style={timerStyles.startButton}
+        <Pressable
+          style={({ pressed }) => [
+            timerStyles.startButton,
+            pressed && timerStyles.startButtonPressed,
+          ]}
           onPress={start}
-          activeOpacity={0.85}
           accessibilityRole="button"
           accessibilityLabel="Start timer"
         >
-          <Ionicons name="play" size={18} color={Colors.textOnAccent} />
+          <Ionicons name="play" size={18} color={color.onGold} />
           <Text style={timerStyles.startButtonText}>Start timer</Text>
-        </TouchableOpacity>
+        </Pressable>
       )}
     </View>
   );
@@ -173,15 +237,13 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
 
 const timerStyles = StyleSheet.create({
   container: {
-    gap: Spacing.md,
-    marginBottom: Spacing.xxl,
+    gap: space.sm,
   },
   containerActive: {
     alignItems: 'center',
-    paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.xl,
-    borderRadius: BorderRadius.xxl,
-    backgroundColor: Colors.backgroundElevated,
+    padding: space.md,
+    borderRadius: radius.md,
+    backgroundColor: color.surface2,
   },
   containerIdle: {
     alignItems: 'flex-start',
@@ -189,49 +251,57 @@ const timerStyles = StyleSheet.create({
   startButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.full,
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.xxl,
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.xl,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
+  },
+  startButtonPressed: {
+    backgroundColor: color.goldStrong,
   },
   startButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.base,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
   countdown: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXXXl,
-    fontWeight: '800',
-    fontVariant: ['tabular-nums'],
+    ...typography.numericLarge,
+    color: color.textPrimary,
   },
   stepLabel: {
-    color: Colors.accent,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
     textAlign: 'center',
   },
   stepProgress: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '600',
+    ...typography.caption,
+    fontVariant: ['tabular-nums'],
+    color: color.textSecondary,
+  },
+  completeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs,
   },
   completeText: {
-    color: Colors.accent,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
   },
   secondaryButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.lg,
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.md,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: color.borderStrong,
+  },
+  secondaryButtonPressed: {
+    backgroundColor: color.surface3,
   },
   secondaryButtonText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.md,
-    fontWeight: '600',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
 });

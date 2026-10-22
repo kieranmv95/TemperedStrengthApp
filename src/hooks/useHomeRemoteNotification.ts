@@ -2,8 +2,8 @@ import {
   loadHomeRemoteNotificationBanner,
   type HomeRemoteNotificationBanner,
 } from '@/src/services/sanityAppConfig';
-import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 /**
  * Loads the Sanity-driven home notification when the screen is focused. See

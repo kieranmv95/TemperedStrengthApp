@@ -1,6 +1,9 @@
-import { SmallChevron } from '@/src/components/ds/SmallChevron';
-import { settingsScreenStyles as styles } from '@/src/components/settings/settingsScreenStyles';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { PressableCard, StandardLayout } from '@/src/components/ds';
+import {
+  settingsScreenStyles as styles,
+  settingsSwitchColors,
+} from '@/src/components/settings/settingsScreenStyles';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
@@ -12,27 +15,15 @@ import {
   setAutoPbDetectionInProgramsEnabled,
   setAutoRestTimersEnabled,
 } from '@/src/utils/storage';
-import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
 import { cancelTimerFinishedNotifications } from '@/src/services/localNotifications';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
-import {
-  Alert,
-  StyleSheet,
-  Switch,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {
-  AppSafeAreaView,
-  AppScrollView,
-} from '@/src/components/AppSafeAreaView';
+import { Alert, Switch, Text, View } from 'react-native';
 
 export default function AccountProgramSettingsScreen() {
   const posthog = usePostHog();
+  const largeText = useLargeText();
   const [hasProgram, setHasProgram] = useState<boolean>(false);
   const [, setActiveProgram] = useState<Program | null>(null);
   const [autoTimersEnabled, setAutoTimersEnabledState] =
@@ -124,12 +115,12 @@ export default function AccountProgramSettingsScreen() {
 
   const handleEndCurrentProgram = () => {
     Alert.alert(
-      'End Current Program',
+      'End current program',
       'This will permanently end your current program and clear all program data, including:\n\n• Program selection & start date\n• Program progress\n• Workout logs\n• Exercise swaps\n• Custom set counts\n• Workout notes\n• Rest timers / active session\n\nThis action cannot be undone.\n\nAre you sure you want to end your current program?',
       [
         { text: 'Cancel', style: 'cancel' },
         {
-          text: 'End Program',
+          text: 'End program',
           style: 'destructive',
           onPress: async () => {
             try {
@@ -144,7 +135,7 @@ export default function AccountProgramSettingsScreen() {
               setActiveProgram(null);
               router.replace('/');
               Alert.alert(
-                'Program Ended',
+                'Program ended',
                 'Your current program has been cleared.'
               );
             } catch (error) {
@@ -161,29 +152,16 @@ export default function AccountProgramSettingsScreen() {
   };
 
   return (
-    <AppSafeAreaView style={pageStyles.container}>
-      <View style={pageStyles.header}>
-        <TouchableOpacity
-          style={pageStyles.headerBackButton}
-          onPress={() => router.back()}
-          accessibilityRole="button"
-          accessibilityLabel="Back"
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={pageStyles.headerTitle}>Program settings</Text>
-        <View style={pageStyles.headerSpacer} />
-      </View>
-
-      <AppScrollView
-        style={pageStyles.scroll}
-        contentContainerStyle={pageStyles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text style={pageStyles.subtitle}>Program-specific preferences.</Text>
-
-        <View style={styles.settingsList}>
-          <View style={styles.settingItem}>
+    <StandardLayout
+      title="Program settings"
+      subtitle="Program-specific preferences."
+      onBackPress={() => router.back()}
+    >
+      <StandardLayout.Body>
+        <View style={styles.settingsSection}>
+          <View
+            style={[styles.settingItem, largeText && styles.settingItemStacked]}
+          >
             <View style={styles.settingContent}>
               <Text style={styles.settingTitle}>Auto rest timers</Text>
               <Text style={styles.settingDescription}>
@@ -192,19 +170,24 @@ export default function AccountProgramSettingsScreen() {
               </Text>
             </View>
             <Switch
+              {...settingsSwitchColors}
               value={autoTimersEnabled}
               onValueChange={(next) => {
                 if (autoTimersLoading) return;
                 persistAutoTimersEnabled(next);
               }}
               disabled={autoTimersLoading}
+              accessibilityLabel="Auto rest timers"
+              accessibilityHint="Starts the rest timer when you complete a set"
             />
           </View>
 
-          <View style={styles.settingItem}>
+          <View
+            style={[styles.settingItem, largeText && styles.settingItemStacked]}
+          >
             <View style={styles.settingContent}>
               <Text style={styles.settingTitle}>
-                Auto-detect PBs (Programs)
+                Auto-detect PBs in programs
               </Text>
               <Text style={styles.settingDescription}>
                 When enabled, if we detect a new PB we’ll prompt you to update
@@ -212,73 +195,36 @@ export default function AccountProgramSettingsScreen() {
               </Text>
             </View>
             <Switch
+              {...settingsSwitchColors}
               value={autoPbEnabled}
               onValueChange={(next) => {
                 if (autoPbLoading) return;
                 persistAutoPbEnabled(next);
               }}
               disabled={autoPbLoading}
+              accessibilityLabel="Auto-detect PBs in programs"
+              accessibilityHint="Prompts you to update personal bests after sets during program workouts"
             />
           </View>
 
           {hasProgram ? (
-            <TouchableOpacity
-              style={[styles.settingItem, styles.dangerItem]}
+            <PressableCard
               onPress={handleEndCurrentProgram}
+              accessibilityLabel="End current program, clear all program progress and related data"
+              accessibilityHint="Asks to confirm before ending"
             >
               <View style={styles.settingContent}>
                 <Text style={[styles.settingTitle, styles.dangerText]}>
-                  End Current Program
+                  End current program
                 </Text>
                 <Text style={styles.settingDescription}>
-                  Clear all program progress and related data
+                  Clear all program progress and related data.
                 </Text>
               </View>
-              <SmallChevron />
-            </TouchableOpacity>
+            </PressableCard>
           ) : null}
         </View>
-      </AppScrollView>
-    </AppSafeAreaView>
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 }
-
-const pageStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundScreen,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.xl,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
-  },
-  headerBackButton: {
-    padding: Spacing.xs,
-  },
-  headerTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-  },
-  headerSpacer: {
-    width: 32,
-  },
-  scroll: {
-    flex: 1,
-  },
-  content: {
-    padding: Spacing.xxl,
-    paddingBottom: Spacing.section,
-    gap: Spacing.xl,
-  },
-  subtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    fontWeight: '500',
-  },
-});

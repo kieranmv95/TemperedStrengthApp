@@ -1,4 +1,5 @@
 import { ProgramStartDateCalendar } from '@/src/components/ProgramStartDateCalendar';
+import { color } from '@/src/constants/tokens';
 import type { Program } from '@/src/types/program';
 import type { ProgramDaySplitKey } from '@/src/utils/programStartWeekday';
 import {
@@ -6,8 +7,9 @@ import {
   programAnchorFullWeekdayName,
 } from '@/src/utils/programStartWeekday';
 import { modalSheetBottomPadding } from '@/src/utils/platform';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, Pressable, ScrollView, Text, View } from 'react-native';
 import { programLauncherStyles as styles } from './programLauncherStyles';
 
 type ProgramLauncherDatePickerModalProps = {
@@ -38,34 +40,43 @@ export function ProgramLauncherDatePickerModal({
       visible={visible && !!selectedProgram}
       transparent
       animationType="slide"
+      statusBarTranslucent
       onRequestClose={onClose}
     >
       <View style={styles.modalOverlay}>
         <View
-          style={[
-            styles.datePickerContainer,
-            { paddingBottom: modalSheetBottomPadding(bottomInset) },
-          ]}
+          style={styles.sheet}
+          accessibilityViewIsModal
+          onAccessibilityEscape={onClose}
         >
-          <View style={styles.datePickerHeader}>
-            <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </TouchableOpacity>
-            <Text style={styles.datePickerTitle}>Select Start Date</Text>
-            <TouchableOpacity onPress={onConfirm} style={styles.confirmButton}>
-              <Text style={styles.confirmButtonText}>{confirmLabel}</Text>
-            </TouchableOpacity>
+          <View style={styles.sheetHeader}>
+            <View style={styles.sheetTitleRow}>
+              <Text style={styles.sheetTitle} accessibilityRole="header">
+                Select start date
+              </Text>
+            </View>
+            <Pressable
+              onPress={onClose}
+              style={({ pressed }) => [
+                styles.closeButton,
+                pressed && styles.closeButtonPressed,
+              ]}
+              accessibilityRole="button"
+              accessibilityLabel="Cancel"
+            >
+              <Ionicons name="close" size={24} color={color.textPrimary} />
+            </Pressable>
           </View>
           <ScrollView
-            style={styles.datePickerScroll}
-            contentContainerStyle={styles.datePickerScrollContent}
+            style={styles.sheetScroll}
+            contentContainerStyle={styles.sheetScrollContent}
             keyboardShouldPersistTaps="handled"
           >
             <Text style={styles.datePickerExplanation}>
               {selectedProgram?.daysSplit?.length ? (
                 <>
                   Pick any day to start. That weekday becomes day 1 of each
-                  program week — you&apos;ll choose your training days next.
+                  program week — you’ll choose your training days next.
                 </>
               ) : (
                 <>
@@ -88,6 +99,24 @@ export function ProgramLauncherDatePickerModal({
               allowedWeekdays={startDatePickerAllowedWeekdays}
             />
           </ScrollView>
+          <View
+            style={[
+              styles.sheetFooter,
+              { paddingBottom: modalSheetBottomPadding(bottomInset) },
+            ]}
+          >
+            <Pressable
+              style={({ pressed }) => [
+                styles.primaryButton,
+                pressed && styles.primaryButtonPressed,
+              ]}
+              onPress={onConfirm}
+              accessibilityRole="button"
+              accessibilityLabel={confirmLabel}
+            >
+              <Text style={styles.primaryButtonText}>{confirmLabel}</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </Modal>

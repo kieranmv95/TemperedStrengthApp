@@ -1,79 +1,88 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
+
+export const COPY_NOTES_SKELETON_ROW_HEIGHT = 64;
 
 export const copyWorkoutNotesModalStyles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: Colors.overlay,
+    backgroundColor: color.scrim,
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: Colors.backgroundCard,
-    borderTopLeftRadius: BorderRadius.pill,
-    borderTopRightRadius: BorderRadius.pill,
-    padding: Spacing.section,
+    ...elevation.overlay,
+    backgroundColor: color.surface1,
+    borderTopLeftRadius: radius.lg,
+    borderTopRightRadius: radius.lg,
+    paddingTop: space.md,
+    paddingHorizontal: space.md,
+    paddingBottom: space.xl,
     maxHeight: '80%',
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
     flexDirection: 'column',
+    gap: space.sm,
   },
   modalHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.lg,
+    gap: space.sm,
+    minHeight: MIN_TARGET_SIZE,
   },
   modalTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXl,
-    fontWeight: '700',
+    ...typography.title2,
+    color: color.textPrimary,
     flex: 1,
   },
   closeButton: {
-    width: 32,
-    height: 32,
-    borderRadius: BorderRadius.full,
-    backgroundColor: Colors.backgroundElevated,
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: -space.xs,
   },
-  closeButtonText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '600',
+  closeButtonPressed: {
+    backgroundColor: color.surface3,
+  },
+  skeletons: {
+    gap: space.xs,
   },
   emptyText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 22,
-    paddingVertical: Spacing.xxl,
+    ...typography.callout,
+    color: color.textSecondary,
+    paddingVertical: space.md,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: Spacing.xl,
-    paddingHorizontal: Spacing.md,
+    gap: space.sm,
+    paddingVertical: space.sm,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: Colors.backgroundElevated,
+    borderBottomColor: color.borderSubtle,
   },
   rowTextBlock: {
     flex: 1,
-    marginRight: Spacing.md,
+    minWidth: 0,
+    gap: space.xxs,
   },
   rowTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
   },
   rowPreview: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    marginTop: Spacing.xs,
-  },
-  copyHit: {
-    padding: Spacing.md,
+    ...typography.caption,
+    color: color.textTertiary,
   },
   list: {
     flexGrow: 0,
+  },
+  listContent: {
+    paddingBottom: space.xs,
   },
 });

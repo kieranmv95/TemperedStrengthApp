@@ -6,19 +6,27 @@ import {
   formatWeightValueFromKg,
   parseUserWeightInputToKg,
 } from '@/src/utils/weightUnits';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
   KeyboardAvoidingView,
   Modal,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import { BorderRadius, Colors, FontSize, Spacing } from '../constants/theme';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '../constants/tokens';
 
 type TrainingMaxModalProps = {
   visible: boolean;
@@ -73,6 +81,10 @@ export function TrainingMaxModal({
   }, [exerciseIds, inputs, weightUnit]);
 
   const allValid = exerciseIds.every((id) => parsedValues[id] !== undefined);
+  const confirmDisabled = !allValid || saving;
+  const title =
+    mode === 'edit' ? 'Edit training maxes' : 'Set your training maxes';
+  const confirmLabel = mode === 'edit' ? 'Save' : 'Start program';
 
   const handleConfirm = async () => {
     if (!allValid || saving) {
@@ -92,6 +104,7 @@ export function TrainingMaxModal({
       visible={visible}
       transparent
       animationType="slide"
+      statusBarTranslucent
       onRequestClose={onClose}
     >
       <View style={styles.overlay}>
@@ -99,73 +112,106 @@ export function TrainingMaxModal({
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           style={styles.sheet}
         >
-          <View style={styles.header}>
-            <Text style={styles.title}>
-              {mode === 'edit'
-                ? 'Edit Training Maxes'
-                : 'Set Your Training Maxes'}
-            </Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>✕</Text>
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView
-            style={styles.scroll}
-            contentContainerStyle={{ paddingBottom: Spacing.md }}
-            keyboardShouldPersistTaps="handled"
-          >
-            <Text style={styles.explanation}>
-              This program builds every working set from your training max.
-              Enter a training max for each lift: about 90% of your best single.
-              Not sure? Use a weight you can lift for 3-5 clean reps. You can
-              adjust these any time.
-            </Text>
-
-            {exerciseIds.map((id) => {
-              const exercise = getExerciseById(id);
-              return (
-                <View key={id} style={styles.field}>
-                  <Text style={styles.fieldLabel}>
-                    {exercise?.name ?? `Exercise ${id}`}
-                  </Text>
-                  <View style={styles.inputRow}>
-                    <TextInput
-                      style={styles.input}
-                      value={inputs[id] ?? ''}
-                      onChangeText={(text) =>
-                        setInputs((prev) => ({ ...prev, [id]: text }))
-                      }
-                      keyboardType="decimal-pad"
-                      placeholder="0"
-                      placeholderTextColor={Colors.textPlaceholder}
-                      returnKeyType="done"
-                    />
-                    <Text style={styles.unit}>{weightUnit}</Text>
-                  </View>
-                </View>
-              );
-            })}
-          </ScrollView>
-
           <View
-            style={[
-              styles.footer,
-              { paddingBottom: modalSheetBottomPadding(bottomInset) },
-            ]}
+            style={styles.sheetInner}
+            accessibilityViewIsModal
+            onAccessibilityEscape={onClose}
           >
-            <TouchableOpacity
-              style={[
-                styles.confirmButton,
-                (!allValid || saving) && styles.confirmButtonDisabled,
-              ]}
-              onPress={handleConfirm}
-              disabled={!allValid || saving}
-            >
-              <Text style={styles.confirmButtonText}>
-                {mode === 'edit' ? 'Save' : 'Start Program'}
+            <View style={styles.header}>
+              <Text style={styles.title} accessibilityRole="header">
+                {title}
               </Text>
-            </TouchableOpacity>
+              <Pressable
+                onPress={onClose}
+                style={({ pressed }) => [
+                  styles.closeButton,
+                  pressed && styles.closeButtonPressed,
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel={`Close ${title}`}
+              >
+                <Ionicons name="close" size={24} color={color.textPrimary} />
+              </Pressable>
+            </View>
+
+            <ScrollView
+              style={styles.scroll}
+              contentContainerStyle={styles.scrollContent}
+              keyboardShouldPersistTaps="handled"
+            >
+              <Text style={styles.explanation}>
+                This program builds every working set from your training max.
+                Enter a training max for each lift: about 90% of your best
+                single. Not sure? Use a weight you can lift for 3–5 clean reps.
+                You can adjust these any time.
+              </Text>
+
+              {exerciseIds.map((id) => {
+                const exerciseName =
+                  getExerciseById(id)?.name ?? `Exercise ${id}`;
+                return (
+                  <View key={id} style={styles.field}>
+                    <Text
+                      style={styles.fieldLabel}
+                      accessibilityElementsHidden
+                      importantForAccessibility="no-hide-descendants"
+                    >
+                      {exerciseName}
+                    </Text>
+                    <View style={styles.inputRow}>
+                      <TextInput
+                        style={styles.input}
+                        value={inputs[id] ?? ''}
+                        onChangeText={(text) =>
+                          setInputs((prev) => ({ ...prev, [id]: text }))
+                        }
+                        keyboardType="decimal-pad"
+                        placeholder="Not set"
+                        placeholderTextColor={color.textTertiary}
+                        returnKeyType="done"
+                        accessibilityLabel={`${exerciseName} training max, ${weightUnit}`}
+                      />
+                      <Text
+                        style={styles.unit}
+                        accessibilityElementsHidden
+                        importantForAccessibility="no-hide-descendants"
+                      >
+                        {weightUnit}
+                      </Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </ScrollView>
+
+            <View
+              style={[
+                styles.footer,
+                { paddingBottom: modalSheetBottomPadding(bottomInset) },
+              ]}
+            >
+              <Pressable
+                style={({ pressed }) => [
+                  styles.confirmButton,
+                  pressed && !confirmDisabled && styles.confirmButtonPressed,
+                  confirmDisabled && styles.confirmButtonDisabled,
+                ]}
+                onPress={handleConfirm}
+                disabled={confirmDisabled}
+                accessibilityRole="button"
+                accessibilityLabel={confirmLabel}
+                accessibilityState={{ disabled: confirmDisabled, busy: saving }}
+              >
+                <Text
+                  style={[
+                    styles.confirmButtonText,
+                    confirmDisabled && styles.confirmButtonTextDisabled,
+                  ]}
+                >
+                  {confirmLabel}
+                </Text>
+              </Pressable>
+            </View>
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -176,106 +222,107 @@ export function TrainingMaxModal({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: Colors.overlay,
+    backgroundColor: color.scrim,
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: Colors.backgroundCard,
-    borderTopLeftRadius: BorderRadius.pill,
-    borderTopRightRadius: BorderRadius.pill,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    ...elevation.overlay,
+    backgroundColor: color.surface1,
+    borderTopLeftRadius: radius.lg,
+    borderTopRightRadius: radius.lg,
     maxHeight: '85%',
-    paddingTop: Spacing.section,
-    paddingHorizontal: Spacing.section,
+    paddingTop: space.md,
+    paddingHorizontal: space.md,
+  },
+  sheetInner: {
+    flexShrink: 1,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.xxl,
+    gap: space.sm,
+    minHeight: MIN_TARGET_SIZE,
+    marginBottom: space.sm,
   },
   title: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXl,
-    fontWeight: '700',
+    ...typography.title2,
+    color: color.textPrimary,
     flex: 1,
-    paddingRight: Spacing.md,
   },
   closeButton: {
-    width: 32,
-    height: 32,
-    borderRadius: BorderRadius.full,
-    backgroundColor: Colors.backgroundElevated,
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: -space.xs,
   },
-  closeButtonText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '600',
+  closeButtonPressed: {
+    backgroundColor: color.surface3,
   },
   scroll: {
     flexGrow: 0,
   },
+  scrollContent: {
+    gap: space.md,
+    paddingBottom: space.md,
+  },
   explanation: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-    marginBottom: Spacing.xxl,
+    ...typography.callout,
+    color: color.textSecondary,
   },
   field: {
-    marginBottom: Spacing.xxl,
+    gap: space.xs,
   },
   fieldLabel: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-    marginBottom: Spacing.md,
+    ...typography.headline,
+    color: color.textPrimary,
   },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.xxl,
-    paddingHorizontal: Spacing.xxl,
+    gap: space.xs,
+    backgroundColor: color.surface2,
+    borderRadius: radius.sm,
+    paddingHorizontal: space.sm,
     borderWidth: 1,
-    borderColor: Colors.backgroundSubtle,
+    borderColor: color.borderStrong,
   },
   input: {
+    ...typography.numericMedium,
     flex: 1,
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
-    paddingVertical: Spacing.xxl,
+    minHeight: MIN_TARGET_SIZE + space.xxs,
+    color: color.textPrimary,
+    paddingVertical: space.xs,
   },
   unit: {
-    color: Colors.textMuted,
-    fontSize: FontSize.xl,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    ...typography.calloutStrong,
+    color: color.textSecondary,
   },
   footer: {
-    marginTop: Spacing.md,
-    paddingTop: Spacing.xxl,
-    borderTopWidth: 1,
-    borderTopColor: Colors.backgroundElevated,
+    paddingTop: space.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: color.borderSubtle,
   },
   confirmButton: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: space.lg,
+  },
+  confirmButtonPressed: {
+    backgroundColor: color.goldStrong,
   },
   confirmButtonDisabled: {
-    opacity: 0.4,
+    backgroundColor: color.surface3,
   },
   confirmButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    ...typography.calloutStrong,
+    color: color.onGold,
+  },
+  confirmButtonTextDisabled: {
+    color: color.textDisabled,
   },
 });

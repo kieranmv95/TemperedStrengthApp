@@ -1,6 +1,7 @@
 // Dev-only helpers to inspect the local SQLite workout_log_sets table.
 import { getDatabase } from '@/src/db/database';
 import type { LocalWorkoutLogSetRow, SetState } from './types';
+import { normalizeRpe } from './types';
 
 /**
  * Returns every workout_log_sets row (including soft-deleted).
@@ -17,11 +18,12 @@ export async function listAllWorkoutLogSetRowsForDebug(): Promise<
     weight: number | null;
     reps: number;
     state: string | null;
+    rpe: number | null;
     updated_at: string;
     deleted_at: string | null;
     dirty: number;
   }>(
-    `SELECT id, day_index, slot_index, set_index, weight, reps, state, updated_at, deleted_at, dirty
+    `SELECT id, day_index, slot_index, set_index, weight, reps, state, rpe, updated_at, deleted_at, dirty
      FROM workout_log_sets
      ORDER BY day_index ASC, slot_index ASC, set_index ASC`
   );
@@ -39,6 +41,7 @@ export async function listAllWorkoutLogSetRowsForDebug(): Promise<
       weight: row.weight,
       reps: row.reps,
       state,
+      rpe: normalizeRpe(row.rpe),
       updated_at: row.updated_at,
       deleted_at: row.deleted_at,
       dirty: row.dirty ? 1 : 0,

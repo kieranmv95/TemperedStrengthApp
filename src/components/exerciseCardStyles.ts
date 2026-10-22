@@ -1,226 +1,210 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
+import { NUMBER_FIELD_MIN_HEIGHT } from '@/src/components/ds/NumberField';
+
+export const SET_NUMBER_WIDTH = 32;
+const REPS_FIELD_WIDTH = 72;
+const RPE_FIELD_WIDTH = 64;
 
 export const exerciseCardStyles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
-    marginBottom: Spacing.xxl,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    ...elevation.raised,
+    backgroundColor: color.surface1,
+    borderRadius: radius.md,
+    padding: space.md,
+    gap: space.sm,
   },
   header: {
-    marginBottom: Spacing.xxl,
-  },
-  headerLeft: {
-    flex: 1,
-    gap: Spacing.md,
+    gap: space.xs,
   },
   exerciseName: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayXl,
-    fontWeight: '700',
+    ...typography.title2,
+    color: color.textPrimary,
   },
-  headerMetaRow: {
+  metaLine: {
+    ...typography.callout,
+    color: color.textSecondary,
+  },
+  metaLineAccent: {
+    ...typography.calloutStrong,
+    color: color.gold,
+  },
+  actionRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: space.xs,
+  },
+  notes: {
+    backgroundColor: color.surface2,
+    borderRadius: radius.sm,
+    padding: space.sm,
+    gap: space.xxs,
+  },
+  notesText: {
+    ...typography.callout,
+    color: color.textSecondary,
+  },
+  notesToggle: {
+    alignSelf: 'flex-start',
+    minHeight: MIN_TARGET_SIZE,
+    justifyContent: 'center',
+  },
+  notesToggleText: {
+    ...typography.calloutStrong,
+    color: color.gold,
+  },
+  setsHeader: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    gap: Spacing.sm,
-  },
-  metaChip: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.full,
-    backgroundColor: Colors.backgroundElevated,
-    borderWidth: 1,
-    borderColor: Colors.backgroundSubtle,
-  },
-  metaChipAccent: {
-    backgroundColor: Colors.accentWashFill,
-    borderColor: Colors.accentWashBorder,
-  },
-  metaChipText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.sm,
-    fontWeight: '700',
-  },
-  metaChipAccentText: {
-    color: Colors.accent,
-    fontSize: FontSize.sm,
-    fontWeight: '800',
-  },
-  metaChipRecommended: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.xs,
-    backgroundColor: Colors.recommendedWashFill,
-    borderColor: Colors.recommendedWashBorder,
-  },
-  metaChipRecommendedText: {
-    color: Colors.recommended,
-    fontSize: FontSize.sm,
-    fontWeight: '800',
-  },
-  additionalDescription: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-  },
-  setsHeader: {
-    marginBottom: Spacing.xl,
-    flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    gap: space.xs,
+    marginTop: space.xs,
   },
-  setsLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+  setsTitle: {
+    ...typography.headline,
+    color: color.textPrimary,
   },
   setControls: {
-    backgroundColor: Colors.backgroundElevated,
-    borderWidth: 1,
-    borderColor: Colors.backgroundSubtle,
-    borderRadius: BorderRadius.xl,
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: space.xxs,
   },
-  restTimerButton: {
-    padding: Spacing.xs,
+  roundButton: {
+    width: MIN_TARGET_SIZE,
+    height: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
+    backgroundColor: color.surface2,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  setControlButton: {
-    padding: Spacing.xs,
+  roundButtonPressed: {
+    backgroundColor: color.surface3,
   },
-  setControlButtonDisabled: {
-    opacity: 0.3,
+  roundButtonActive: {
+    backgroundColor: color.goldTint,
   },
   setCountText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
-    minWidth: 24,
+    ...typography.numericSmall,
+    color: color.textPrimary,
+    minWidth: space.xxl,
     textAlign: 'center',
   },
-  setContainer: {
-    marginBottom: Spacing.xl,
-  },
-  inputContainer: {
+  columnHeaders: {
     flexDirection: 'row',
-    gap: Spacing.xl,
-    marginBottom: 0,
+    alignItems: 'center',
+    gap: space.xs,
+    paddingHorizontal: space.xxs,
   },
-  inputGroup: {
+  columnLabel: {
+    ...typography.captionStrong,
+    color: color.textTertiary,
+  },
+  columnSet: {
+    width: SET_NUMBER_WIDTH,
+    textAlign: 'center',
+  },
+  columnSetIcon: {
+    width: SET_NUMBER_WIDTH,
+    alignItems: 'center',
+  },
+  columnFlex: {
     flex: 1,
   },
-  inputGroupRepsOrTime: {
+  columnReps: {
+    width: REPS_FIELD_WIDTH,
+  },
+  columnRpe: {
+    width: RPE_FIELD_WIDTH,
+  },
+  columnCheck: {
+    width: MIN_TARGET_SIZE,
+  },
+  setRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs,
+    padding: space.xxs,
+    borderRadius: radius.sm,
+  },
+  setNumberColumn: {
+    width: SET_NUMBER_WIDTH,
+    minHeight: MIN_TARGET_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: space.xxs,
+  },
+  setNumber: {
+    ...typography.numericSmall,
+    color: color.textSecondary,
+  },
+  setNumberActive: {
+    color: color.gold,
+  },
+  dragHandle: {
+    width: SET_NUMBER_WIDTH,
+    height: MIN_TARGET_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fields: {
+    flex: 1,
+    flexDirection: 'row',
+    gap: space.xs,
+  },
+  fieldFlex: {
     flex: 1,
   },
-  inputGroupGoldButton: {
-    backgroundColor: Colors.accent,
+  /** Large text: weight on its own line, reps and RPE share the next. */
+  fieldsStacked: {
+    flexWrap: 'wrap',
   },
-  inputGroupWithCheckmark: {
-    flex: 0.5,
+  fieldFullWidth: {
+    flexBasis: '100%',
+  },
+  fieldReps: {
+    width: REPS_FIELD_WIDTH,
+  },
+  fieldRpe: {
+    width: RPE_FIELD_WIDTH,
+  },
+  weightWithRemove: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    gap: Spacing.md,
+    gap: space.xxs,
   },
-  inputLabel: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    marginBottom: Spacing.md,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  input: {
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.lg,
-    padding: Spacing.xl,
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    fontWeight: '600',
+  addWeightButton: {
+    minHeight: NUMBER_FIELD_MIN_HEIGHT,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: Colors.backgroundSubtle,
+    borderStyle: 'dashed',
+    borderColor: color.borderStrong,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  inputFlex: {
-    flex: 1,
+  addWeightText: {
+    ...typography.calloutStrong,
+    color: color.textSecondary,
   },
-  inputWithLeadingButtonRow: {
+  footer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
+    flexWrap: 'wrap',
+    gap: space.xs,
+    marginTop: space.xs,
   },
-  leadingIconButton: {
-    width: 48,
-    height: 48,
-    borderRadius: BorderRadius.lg,
-    backgroundColor: Colors.backgroundElevated,
-    borderWidth: 2,
-    borderColor: Colors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
+  emptySlot: {
+    gap: space.sm,
   },
-  leadingIconButtonDisabled: {
-    opacity: 0.5,
-  },
-  inputButton: {
-    borderColor: Colors.accent,
-  },
-  inputButtonText: {
-    paddingVertical: 1,
-    color: Colors.accent,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-  inputCompleted: {
-    borderColor: Colors.accent,
-    borderWidth: 1,
-  },
-  inputFailed: {
-    borderColor: Colors.destructive,
-    borderWidth: 1,
-  },
-  checkmarkButton: {
-    paddingBottom: Spacing.md,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkmarkButtonDisabled: {
-    opacity: 0.3,
-  },
-  swapButtonContainer: {
-    marginTop: Spacing.md,
-  },
-  swapButton: {
-    paddingVertical: Spacing.xl,
-    borderRadius: BorderRadius.lg,
-    borderWidth: 1,
-    borderColor: Colors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  swapButtonText: {
-    color: Colors.accent,
-    fontSize: FontSize.lg,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  slotHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  slotLabel: {
-    color: Colors.accent,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    marginBottom: Spacing.xs,
+  emptySlotLabel: {
+    ...typography.headline,
+    color: color.textSecondary,
   },
 });

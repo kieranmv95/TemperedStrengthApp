@@ -1,13 +1,22 @@
 import { ExerciseVideoPlayButton } from '@/src/components/exercise/ExerciseVideoPlayButton';
 import { PbModalDateTimeField } from '@/src/components/PbModalDateTimeField';
-import { Card } from '@/src/components/ds';
 import {
+  ActionChip,
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
   IosKeyboardDoneAccessory,
-} from '@/src/components/forms/IosKeyboardDoneAccessory';
-import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+  Skeleton,
+  StandardLayout,
+} from '@/src/components/ds';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { getExerciseById } from '@/src/data/exercises';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import type { PersonalBestHistoryEntry } from '@/src/types/personalBests';
 import { formatRepMaxLabel, parseRepMaxParam } from '@/src/utils/personalBests';
@@ -24,26 +33,27 @@ import {
   parseUserWeightInputToKg,
 } from '@/src/utils/weightUnits';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
   Alert,
   FlatList,
   Keyboard,
   Modal,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
+const ENTRY_SKELETON_HEIGHT = 76;
+const ENTRY_SKELETON_COUNT = 3;
 
 export default function RepMaxHistoryScreen() {
   const { unit: weightUnit } = useWeightUnit();
+  const largeText = useLargeText();
   const { exerciseId: idParam, repMax: repParam } = useLocalSearchParams<{
     exerciseId: string | string[];
     repMax: string | string[];
@@ -220,131 +230,133 @@ export default function RepMaxHistoryScreen() {
 
   if (!Number.isFinite(exerciseId) || !exercise || tier === null) {
     return (
-      <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-        <View style={styles.detailHeader}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-          </TouchableOpacity>
-          <Text style={styles.detailTitle} numberOfLines={1}>
-            History
-          </Text>
-          <View style={styles.headerRightSpacer} />
-        </View>
-        <View style={styles.emptyState}>
+      <StandardLayout title="History" onBackPress={() => router.back()}>
+        <StandardLayout.Body>
           <Text style={styles.emptyDescription}>
             Invalid exercise or rep max.
           </Text>
-        </View>
-      </SafeAreaView>
+        </StandardLayout.Body>
+      </StandardLayout>
     );
   }
 
   if (exercise.logging_type === 'time') {
     return (
-      <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-        <View style={styles.detailHeader}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-          </TouchableOpacity>
-          <Text style={styles.detailTitle} numberOfLines={1}>
-            {exercise.name}
-          </Text>
-          <View style={styles.headerRightSpacer} />
-        </View>
-        <View style={styles.emptyState}>
+      <StandardLayout title={exercise.name} onBackPress={() => router.back()}>
+        <StandardLayout.Body>
           <Text style={styles.emptyDescription}>
             Personal bests apply to rep-based exercises only.
           </Text>
-        </View>
-      </SafeAreaView>
+        </StandardLayout.Body>
+      </StandardLayout>
     );
   }
 
+  const tierLabel = formatRepMaxLabel(tier);
+
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <View style={styles.detailHeader}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.detailTitle} numberOfLines={1}>
-          {formatRepMaxLabel(tier)} {exercise.name}
-        </Text>
-        <TouchableOpacity
-          style={styles.detailFavoriteButton}
+    <StandardLayout
+      title={`${tierLabel} ${exercise.name}`}
+      disableScroll
+      onBackPress={() => router.back()}
+      headerActions={
+        <ActionChip
+          label="Add entry"
+          icon="add"
+          tone="gold"
           onPress={openAdd}
           accessibilityLabel="Add personal best"
-        >
-          <Ionicons name="add" size={28} color={Colors.accent} />
-        </TouchableOpacity>
-      </View>
-
-      {loading || ledger === null ? (
-        <ActivityIndicator
-          color={Colors.textMuted}
-          style={localStyles.loader}
         />
-      ) : (
-        <FlatList
-          data={entries}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={localStyles.listContent}
-          ListHeaderComponent={
-            <ExerciseVideoPlayButton
-              exerciseId={exercise.id}
-              variant="banner"
-            />
-          }
-          ItemSeparatorComponent={() => (
-            <View style={localStyles.rowSeparator} />
-          )}
-          ListEmptyComponent={
-            <Text style={localStyles.emptyList}>
-              No history yet. Tap + to log a lift for this rep max.
-            </Text>
-          }
-          renderItem={({ item }) => (
-            <Card>
-              <View style={localStyles.rowMain}>
-                <Text style={localStyles.rowWeight}>
-                  {formatWeightFromKg(item.weight, weightUnit)}
-                </Text>
-                <Text style={localStyles.rowDate}>
-                  {new Date(item.achievedAt).toLocaleString()}
-                </Text>
-              </View>
-              <View style={localStyles.rowActions}>
-                <TouchableOpacity
-                  onPress={() => openEdit(item)}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                  accessibilityLabel="Edit entry"
+      }
+    >
+      <StandardLayout.Body>
+        {loading || ledger === null ? (
+          <View style={styles.skeletons}>
+            {Array.from({ length: ENTRY_SKELETON_COUNT }, (_, index) => (
+              <Skeleton
+                key={index}
+                width="100%"
+                height={ENTRY_SKELETON_HEIGHT}
+                radius="md"
+                accessibilityLabel={index === 0 ? 'Loading history' : undefined}
+              />
+            ))}
+          </View>
+        ) : (
+          <FlatList
+            data={entries}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={
+              <ExerciseVideoPlayButton
+                exerciseId={exercise.id}
+                variant="banner"
+              />
+            }
+            ListEmptyComponent={
+              <Text style={styles.emptyList}>
+                No history yet. Tap Add entry to log a lift for this rep max.
+              </Text>
+            }
+            renderItem={({ item }) => {
+              const weightText = formatWeightFromKg(item.weight, weightUnit);
+              const dateText = new Date(item.achievedAt).toLocaleString();
+              return (
+                <View
+                  style={[styles.entryCard, largeText && styles.entryStacked]}
                 >
-                  <Ionicons name="pencil" size={22} color={Colors.accent} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => confirmDelete(item)}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                  accessibilityLabel="Delete entry"
-                >
-                  <Ionicons
-                    name="trash-outline"
-                    size={22}
-                    color={Colors.destructive}
-                  />
-                </TouchableOpacity>
-              </View>
-            </Card>
-          )}
-        />
-      )}
+                  <View
+                    style={styles.rowMain}
+                    accessible
+                    accessibilityLabel={`${weightText}, ${dateText}`}
+                  >
+                    <Text style={styles.rowWeight}>{weightText}</Text>
+                    <Text style={styles.rowDate}>{dateText}</Text>
+                  </View>
+                  <View style={styles.rowActions}>
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.rowAction,
+                        pressed && styles.rowActionPressed,
+                      ]}
+                      onPress={() => openEdit(item)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Edit entry, ${weightText} on ${dateText}`}
+                    >
+                      <Ionicons
+                        name="pencil"
+                        size={18}
+                        color={color.textPrimary}
+                      />
+                      <Text style={styles.rowActionText}>Edit</Text>
+                    </Pressable>
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.rowAction,
+                        pressed && styles.rowActionDangerPressed,
+                      ]}
+                      onPress={() => confirmDelete(item)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Delete entry, ${weightText} on ${dateText}`}
+                      accessibilityHint="Asks to confirm before deleting"
+                    >
+                      <Ionicons
+                        name="trash-outline"
+                        size={18}
+                        color={color.danger}
+                      />
+                      <Text style={[styles.rowActionText, styles.dangerText]}>
+                        Delete
+                      </Text>
+                    </Pressable>
+                  </View>
+                </View>
+              );
+            }}
+          />
+        )}
+      </StandardLayout.Body>
 
       <Modal
         visible={addVisible}
@@ -355,53 +367,85 @@ export default function RepMaxHistoryScreen() {
           setAddVisible(false);
         }}
       >
-        <View style={localStyles.modalOverlay}>
-          <View style={localStyles.modalCard}>
+        <View style={styles.modalOverlay}>
+          <View
+            style={[styles.modalCard, elevation.overlay]}
+            accessibilityViewIsModal
+            onAccessibilityEscape={() => {
+              Keyboard.dismiss();
+              setAddVisible(false);
+            }}
+          >
             <ScrollView
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.modalContent}
             >
-              <Text style={localStyles.modalTitle}>
-                New {formatRepMaxLabel(tier)}
+              <Text style={styles.modalTitle} accessibilityRole="header">
+                New {tierLabel}
               </Text>
-              <Text style={localStyles.modalHint}>
-                Every save is added to history. If this is a personal best for
-                this rep max, lower rep maxes update too when the weight beats
-                them.
+              <Text style={styles.modalHint}>
+                {exercise.lowerWeightIsBetter
+                  ? 'Every save is added to history. If this is a personal best for this rep max, lower rep maxes update too when a lighter assistance beats them.'
+                  : 'Every save is added to history. If this is a personal best for this rep max, lower rep maxes update too when the weight beats them.'}
               </Text>
-              <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
-              <TextInput
-                style={localStyles.weightInput}
-                value={addWeight}
-                onChangeText={setAddWeight}
-                keyboardType="decimal-pad"
-                inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
-                onSubmitEditing={() => Keyboard.dismiss()}
-                placeholder="0"
-                placeholderTextColor={Colors.textPlaceholder}
-              />
+              <View style={styles.modalField}>
+                <Text
+                  style={styles.modalLabel}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                >
+                  Weight ({weightUnit})
+                </Text>
+                <TextInput
+                  style={styles.weightInput}
+                  value={addWeight}
+                  onChangeText={setAddWeight}
+                  keyboardType="decimal-pad"
+                  inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+                  onSubmitEditing={() => Keyboard.dismiss()}
+                  placeholder={weightUnit}
+                  placeholderTextColor={color.textTertiary}
+                  accessibilityLabel={`Weight in ${weightUnit}`}
+                />
+              </View>
               <PbModalDateTimeField value={addDate} onChange={setAddDate} />
               <IosKeyboardDoneAccessory />
-              <View style={localStyles.modalActions}>
-                <TouchableOpacity
-                  style={localStyles.modalCancel}
+              <View style={styles.modalActions}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.modalButton,
+                    styles.modalCancel,
+                    pressed && styles.modalCancelPressed,
+                  ]}
                   onPress={() => {
                     Keyboard.dismiss();
                     setAddVisible(false);
                   }}
                   disabled={addSaving}
+                  accessibilityRole="button"
+                  accessibilityLabel="Cancel"
+                  accessibilityState={{ disabled: addSaving }}
                 >
-                  <Text style={localStyles.modalCancelText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={localStyles.modalSave}
+                  <Text style={styles.modalCancelText}>Cancel</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.modalButton,
+                    styles.modalSave,
+                    pressed && styles.modalSavePressed,
+                    addSaving && styles.modalButtonBusy,
+                  ]}
                   onPress={saveAdd}
                   disabled={addSaving}
+                  accessibilityRole="button"
+                  accessibilityLabel={addSaving ? 'Saving' : 'Save entry'}
+                  accessibilityState={{ disabled: addSaving, busy: addSaving }}
                 >
-                  <Text style={localStyles.modalSaveText}>
+                  <Text style={styles.modalSaveText}>
                     {addSaving ? 'Saving…' : 'Save'}
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </ScrollView>
           </View>
@@ -417,162 +461,245 @@ export default function RepMaxHistoryScreen() {
           closeEdit();
         }}
       >
-        <View style={localStyles.modalOverlay}>
-          <View style={localStyles.modalCard}>
+        <View style={styles.modalOverlay}>
+          <View
+            style={[styles.modalCard, elevation.overlay]}
+            accessibilityViewIsModal
+            onAccessibilityEscape={() => {
+              Keyboard.dismiss();
+              closeEdit();
+            }}
+          >
             <ScrollView
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.modalContent}
             >
-              <Text style={localStyles.modalTitle}>Edit entry</Text>
-              <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
-              <TextInput
-                style={localStyles.weightInput}
-                value={editWeight}
-                onChangeText={setEditWeight}
-                keyboardType="decimal-pad"
-                inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
-                onSubmitEditing={() => Keyboard.dismiss()}
-                placeholder="0"
-                placeholderTextColor={Colors.textPlaceholder}
-              />
+              <Text style={styles.modalTitle} accessibilityRole="header">
+                Edit entry
+              </Text>
+              <View style={styles.modalField}>
+                <Text
+                  style={styles.modalLabel}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                >
+                  Weight ({weightUnit})
+                </Text>
+                <TextInput
+                  style={styles.weightInput}
+                  value={editWeight}
+                  onChangeText={setEditWeight}
+                  keyboardType="decimal-pad"
+                  inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+                  onSubmitEditing={() => Keyboard.dismiss()}
+                  placeholder={weightUnit}
+                  placeholderTextColor={color.textTertiary}
+                  accessibilityLabel={`Weight in ${weightUnit}`}
+                />
+              </View>
               <PbModalDateTimeField value={editDate} onChange={setEditDate} />
               <IosKeyboardDoneAccessory />
-              <View style={localStyles.modalActions}>
-                <TouchableOpacity
-                  style={localStyles.modalCancel}
+              <View style={styles.modalActions}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.modalButton,
+                    styles.modalCancel,
+                    pressed && styles.modalCancelPressed,
+                  ]}
                   onPress={() => {
                     Keyboard.dismiss();
                     closeEdit();
                   }}
                   disabled={editSaving}
+                  accessibilityRole="button"
+                  accessibilityLabel="Cancel"
+                  accessibilityState={{ disabled: editSaving }}
                 >
-                  <Text style={localStyles.modalCancelText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={localStyles.modalSave}
+                  <Text style={styles.modalCancelText}>Cancel</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.modalButton,
+                    styles.modalSave,
+                    pressed && styles.modalSavePressed,
+                    editSaving && styles.modalButtonBusy,
+                  ]}
                   onPress={saveEdit}
                   disabled={editSaving}
+                  accessibilityRole="button"
+                  accessibilityLabel={editSaving ? 'Saving' : 'Save changes'}
+                  accessibilityState={{
+                    disabled: editSaving,
+                    busy: editSaving,
+                  }}
                 >
-                  <Text style={localStyles.modalSaveText}>
+                  <Text style={styles.modalSaveText}>
                     {editSaving ? 'Saving…' : 'Save'}
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </ScrollView>
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </StandardLayout>
   );
 }
 
-const localStyles = StyleSheet.create({
-  loader: {
-    marginTop: Spacing.section,
+const styles = StyleSheet.create({
+  emptyDescription: {
+    ...typography.callout,
+    color: color.textSecondary,
+    textAlign: 'center',
+    marginTop: space.xxl,
+  },
+  skeletons: {
+    gap: space.sm,
+    paddingTop: space.xs,
   },
   listContent: {
-    padding: Spacing.xxl,
-    paddingTop: Spacing.xxl,
-    paddingBottom: Spacing.section,
+    paddingTop: space.xs,
+    paddingBottom: space.xxl,
+    gap: space.sm,
     flexGrow: 1,
   },
-  rowSeparator: {
-    height: Spacing.xl,
-  },
   emptyList: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.lg,
+    ...typography.callout,
+    color: color.textTertiary,
     textAlign: 'center',
-    marginTop: Spacing.section,
+    marginTop: space.xxl,
+  },
+  entryCard: {
+    ...elevation.raised,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+    padding: space.md,
+    borderRadius: radius.md,
+    backgroundColor: color.surface1,
+  },
+  /** Large text: the actions drop below the weight and date. */
+  entryStacked: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
   },
   rowMain: {
     flex: 1,
+    minWidth: 0,
+    gap: space.xxs,
   },
   rowWeight: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    ...typography.numericMedium,
+    color: color.textPrimary,
   },
   rowDate: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    marginTop: Spacing.xs,
+    ...typography.caption,
+    fontVariant: ['tabular-nums'],
+    color: color.textSecondary,
   },
   rowActions: {
     flexDirection: 'row',
-    gap: Spacing.xxl,
-    marginLeft: Spacing.md,
+    gap: space.xxs,
+  },
+  rowAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xxs,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.sm,
+    borderRadius: radius.pill,
+  },
+  rowActionPressed: {
+    backgroundColor: color.surface2,
+  },
+  rowActionDangerPressed: {
+    backgroundColor: color.dangerTint,
+  },
+  rowActionText: {
+    ...typography.calloutStrong,
+    color: color.textPrimary,
+  },
+  dangerText: {
+    color: color.danger,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: Colors.overlay,
+    backgroundColor: color.scrim,
     justifyContent: 'center',
-    paddingHorizontal: Spacing.xxl,
+    paddingHorizontal: space.md,
   },
   modalCard: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.section,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    backgroundColor: color.surface1,
+    borderRadius: radius.lg,
+    padding: space.xl,
     maxHeight: '90%',
   },
+  modalContent: {
+    gap: space.md,
+  },
   modalTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
-    fontWeight: '700',
-    marginBottom: Spacing.md,
+    ...typography.title2,
+    color: color.textPrimary,
   },
   modalHint: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    marginBottom: Spacing.xxl,
-    lineHeight: 20,
+    ...typography.callout,
+    color: color.textSecondary,
+  },
+  modalField: {
+    gap: space.xxs,
   },
   modalLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    marginBottom: Spacing.sm,
+    ...typography.captionStrong,
+    color: color.textSecondary,
   },
   weightInput: {
-    backgroundColor: Colors.backgroundElevated,
+    ...typography.numericMedium,
+    minHeight: MIN_TARGET_SIZE + space.xxs,
+    paddingHorizontal: space.sm,
+    paddingVertical: space.xs,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    borderRadius: 8,
-    padding: Spacing.xxl,
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    marginBottom: Spacing.xxl,
+    borderColor: color.borderStrong,
+    backgroundColor: color.surface2,
+    color: color.textPrimary,
   },
   modalActions: {
     flexDirection: 'row',
-    gap: Spacing.md,
-    marginTop: Spacing.md,
+    flexWrap: 'wrap',
+    gap: space.xs,
+    marginTop: space.xs,
+  },
+  modalButton: {
+    flexGrow: 1,
+    flexBasis: 120,
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalButtonBusy: {
+    opacity: 0.6,
   },
   modalCancel: {
-    flex: 1,
-    paddingVertical: Spacing.xxl,
-    alignItems: 'center',
-    borderRadius: 8,
-    backgroundColor: Colors.backgroundElevated,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    borderColor: color.borderStrong,
+  },
+  modalCancelPressed: {
+    backgroundColor: color.surface3,
   },
   modalCancelText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
   modalSave: {
-    flex: 1,
-    paddingVertical: Spacing.xxl,
-    alignItems: 'center',
-    borderRadius: 8,
-    backgroundColor: Colors.accent,
+    backgroundColor: color.gold,
+  },
+  modalSavePressed: {
+    backgroundColor: color.goldStrong,
   },
   modalSaveText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
 });

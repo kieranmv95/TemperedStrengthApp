@@ -1,23 +1,21 @@
 import { ArticleCard } from '@/src/components/brief/ArticleCard';
-import { Colors, Spacing } from '@/src/constants/theme';
+import { Skeleton } from '@/src/components/ds';
+import { space } from '@/src/constants/tokens';
 import { fetchArticles } from '@/src/services/briefApiService';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { ArticleListItem } from '@/src/types/brief';
-import {
-  getFavoriteArticles,
-  setFavoriteArticles,
-} from '@/src/utils/storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { getFavoriteArticles, setFavoriteArticles } from '@/src/utils/storage';
+import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
-  ActivityIndicator,
   ScrollView,
   StyleSheet,
   useWindowDimensions,
   View,
 } from 'react-native';
+
+const ARTICLE_CARD_PLACEHOLDER_HEIGHT = 104;
 
 type SkillArticlesProps = {
   articleSlugs: string[];
@@ -118,9 +116,12 @@ export function SkillArticles({ articleSlugs }: SkillArticlesProps) {
 
   if (isLoading) {
     return (
-      <View style={styles.loading}>
-        <ActivityIndicator size="small" color={Colors.accent} />
-      </View>
+      <Skeleton
+        width="100%"
+        height={ARTICLE_CARD_PLACEHOLDER_HEIGHT}
+        radius="md"
+        accessibilityLabel="Loading articles"
+      />
     );
   }
 
@@ -149,7 +150,10 @@ export function SkillArticles({ articleSlugs }: SkillArticlesProps) {
       contentContainerStyle={styles.list}
     >
       {resolvedArticles.map((article, index) => (
-        <View key={`${article.slug}-${index}`} style={{ width: multiCardWidth }}>
+        <View
+          key={`${article.slug}-${index}`}
+          style={{ width: multiCardWidth }}
+        >
           <ArticleCard
             article={article}
             onPress={handlePress}
@@ -165,17 +169,13 @@ export function SkillArticles({ articleSlugs }: SkillArticlesProps) {
 
 const styles = StyleSheet.create({
   scrollBleed: {
-    marginHorizontal: -Spacing.xxl,
+    marginHorizontal: -space.md,
   },
   list: {
-    gap: Spacing.md,
-    paddingHorizontal: Spacing.xxl,
+    gap: space.sm,
+    paddingHorizontal: space.md,
   },
   card: {
     marginBottom: 0,
-  },
-  loading: {
-    alignItems: 'flex-start',
-    paddingVertical: Spacing.md,
   },
 });

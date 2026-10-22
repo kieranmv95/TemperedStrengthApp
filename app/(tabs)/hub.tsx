@@ -1,12 +1,17 @@
 import { ArticleCard } from '@/src/components/brief/ArticleCard';
-import { Card, CuratedSection } from '@/src/components/ds';
+import {
+  FilterChip,
+  PressableCard,
+  SectionHeader,
+  Skeleton,
+  StandardLayout,
+} from '@/src/components/ds';
 import { HubPromoRow } from '@/src/components/hub/HubPromoRow';
+import { HubToolsSection } from '@/src/components/hub/HubToolsSection';
 import { SkillsAndCuesCard } from '@/src/components/hub/SkillsAndCuesCard';
 import { TogetherWeLiftBanner } from '@/src/components/hub/TogetherWeLiftBanner';
-import { Pill } from '@/src/components/pill';
-import { StandardLayout } from '@/src/components/StandardLayout';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
-import { TOOLS, type ToolRoute } from '@/src/data/tools';
+import { color, space, typography } from '@/src/constants/tokens';
+import { type ToolRoute } from '@/src/data/tools';
 import { useTogetherWeLift } from '@/src/hooks/use-together-we-lift';
 import { fetchArticles } from '@/src/services/briefApiService';
 import { increment } from '@/src/services/metricService';
@@ -14,18 +19,10 @@ import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { ArticleCategory, ArticleListItem } from '@/src/types/brief';
 import { getFavoriteArticles, setFavoriteArticles } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function HubScreen() {
   const posthog = usePostHog();
@@ -150,10 +147,6 @@ export default function HubScreen() {
     router.push('/shop');
   };
 
-  const handleOpenDiscover = () => {
-    router.push('/discover');
-  };
-
   const handleOpenSkillsAndCues = () => {
     router.push('/skills-and-cues');
   };
@@ -162,154 +155,132 @@ export default function HubScreen() {
     <TogetherWeLiftBanner onPress={() => openTogetherWeLift('hub_banner')} />
   );
 
-  const renderNetworkOfflineMessage = () => (
-    <View style={styles.sectionOffline}>
-      <Ionicons name="wifi-outline" size={40} color={Colors.backgroundSubtle} />
-      <Text style={styles.sectionOfflineTitle}>No connection</Text>
-      <Text style={styles.sectionOfflineDescription}>
-        This section needs the internet. Tools above work offline.
-      </Text>
+  const renderNetworkOfflineMessage = (description: string) => (
+    <View
+      style={[styles.offline, styles.pageGutter]}
+      accessible
+      accessibilityLabel={`No connection. ${description}`}
+    >
+      <Ionicons
+        name="cloud-offline-outline"
+        size={32}
+        color={color.textSecondary}
+      />
+      <Text style={styles.offlineTitle}>No connection</Text>
+      <Text style={styles.offlineDescription}>{description}</Text>
     </View>
   );
 
-  const listHeader = (
-    <View>
-      <View style={styles.section}>
-        <View style={[styles.skillsAndCuesSection, styles.pageGutter]}>
-          <SkillsAndCuesCard onPress={handleOpenSkillsAndCues} />
+  const articleFilterItems: {
+    key: string;
+    label: string;
+    icon?: 'bookmark';
+  }[] = [
+    { key: 'favorites', label: 'Saved', icon: 'bookmark' },
+    { key: 'all', label: 'All' },
+    ...categories.map((c) => ({ key: c, label: c })),
+  ];
 
-          <HubPromoRow
-            onPressShop={handleOpenShop}
-            onPressDiscover={handleOpenDiscover}
-            shopUnavailable={networkUnavailable}
-          />
+  const listHeader = (
+    <View style={styles.header}>
+      <View style={[styles.group, styles.pageGutter]}>
+        <SkillsAndCuesCard onPress={handleOpenSkillsAndCues} />
+        <HubPromoRow
+          onPressShop={handleOpenShop}
+          shopUnavailable={networkUnavailable}
+        />
+      </View>
+
+      <HubToolsSection onOpenTool={handleOpenTool} />
+
+      <View style={[styles.group, styles.pageGutter]}>
+        {networkUnavailable ? null : (
+          <PressableCard
+            onPress={handleSeeAllGlossary}
+            accessibilityLabel="Browse the glossary"
+            accessibilityHint="Terms we use across training, nutrition and recovery"
+          >
+            <View style={styles.cardTitleRow}>
+              <Ionicons name="book-outline" size={18} color={color.gold} />
+              <Text style={styles.cardTitle}>Browse the glossary</Text>
+            </View>
+            <Text style={styles.cardBody}>
+              Learn the terms we use across training, nutrition and recovery.
+            </Text>
+          </PressableCard>
+        )}
+        {charityBanner}
+      </View>
+
+      <View style={styles.group}>
+        <View style={styles.pageGutter}>
+          <SectionHeader title="Articles" />
+          <Text style={styles.sectionDescription}>
+            Your daily intel for the iron game.
+          </Text>
         </View>
 
-        <View style={styles.subSection}>
-          <View style={styles.pageGutter}>
-            <CuratedSection
-              icon="calculator-outline"
-              iconSizeOverride={18}
-              title="Tools"
-              description="Calculators and training utilities you can open anywhere"
-              size="large"
+        {networkUnavailable ? (
+          renderNetworkOfflineMessage(
+            'Articles need the internet. Tools above work offline.'
+          )
+        ) : articlesLoading ? (
+          <View style={[styles.group, styles.pageGutter]}>
+            <Skeleton
+              width="100%"
+              height={112}
+              radius="md"
+              accessibilityLabel="Loading articles"
             />
+            <Skeleton width="100%" height={112} radius="md" />
           </View>
-
+        ) : (
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.toolsScrollContent}
+            contentContainerStyle={styles.chipRow}
           >
-            {TOOLS.map((tool) => (
-              <Pill
-                key={tool.id}
-                variant="card"
-                onPress={() => handleOpenTool(tool.route)}
-                isActive={false}
-                label={tool.pillLabel}
-                icon={tool.icon}
-              />
-            ))}
+            {articleFilterItems.map((item) => {
+              const isFavoritesChip = item.key === 'favorites';
+              const isAllChip = item.key === 'all';
+              const isActive = isFavoritesChip
+                ? showFavoritesOnly
+                : isAllChip
+                  ? activeCategory === 'All' && !showFavoritesOnly
+                  : activeCategory === (item.key as ArticleCategory) &&
+                    !showFavoritesOnly;
+
+              const count = isFavoritesChip
+                ? favorites.length
+                : isAllChip
+                  ? articles.length
+                  : articles.filter((a) => a.category === item.key).length;
+
+              return (
+                <FilterChip
+                  key={item.key}
+                  onPress={() => {
+                    if (isFavoritesChip) {
+                      setShowFavoritesOnly((prev) => !prev);
+                      return;
+                    }
+                    setShowFavoritesOnly(false);
+                    setActiveCategory(
+                      isAllChip ? 'All' : (item.key as ArticleCategory)
+                    );
+                  }}
+                  selected={isActive}
+                  label={item.label}
+                  icon={item.icon}
+                  count={count}
+                  accessibilityLabel={`${item.label}, ${count} article${
+                    count === 1 ? '' : 's'
+                  }`}
+                />
+              );
+            })}
           </ScrollView>
-          {networkUnavailable ? (
-            renderNetworkOfflineMessage()
-          ) : (
-            <View style={styles.pageGutter}>
-              <Card
-                onPress={handleSeeAllGlossary}
-                accessibilityLabel="Browse the glossary"
-              >
-                <View style={styles.hubCtaContent}>
-                  <View style={styles.hubCtaTitleRow}>
-                    <Ionicons
-                      name="book-outline"
-                      size={18}
-                      color={Colors.accent}
-                    />
-                    <Text style={styles.hubCtaTitle}>Browse the glossary</Text>
-                  </View>
-                  <Text style={styles.hubCtaDescription}>
-                    Learn the terms we use across training, nutrition, and
-                    recovery.
-                  </Text>
-                </View>
-              </Card>
-            </View>
-          )}
-          <View style={styles.pageGutter}>{charityBanner}</View>
-        </View>
-
-        <View style={styles.articlesSection}>
-          <View style={styles.pageGutter}>
-            <CuratedSection
-              icon="newspaper-outline"
-              iconSizeOverride={18}
-              title="Articles"
-              description="Your daily intel for the iron game"
-              size="large"
-            />
-          </View>
-
-          {networkUnavailable ? (
-            renderNetworkOfflineMessage()
-          ) : articlesLoading ? (
-            <View style={styles.articlesLoading}>
-              <ActivityIndicator size="large" color={Colors.accent} />
-            </View>
-          ) : (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.filterScrollContent}
-            >
-              {[
-                {
-                  key: 'favorites',
-                  label: 'Saved',
-                  icon: 'bookmark' as const,
-                },
-                { key: 'all', label: 'All' },
-                ...categories.map((c) => ({ key: c, label: c })),
-              ].map((item) => {
-                const isFavoritesChip = item.key === 'favorites';
-                const isAllChip = item.key === 'all';
-                const isActive = isFavoritesChip
-                  ? showFavoritesOnly
-                  : isAllChip
-                    ? activeCategory === 'All' && !showFavoritesOnly
-                    : activeCategory === (item.key as ArticleCategory) &&
-                      !showFavoritesOnly;
-
-                const count = isFavoritesChip
-                  ? favorites.length
-                  : isAllChip
-                    ? articles.length
-                    : articles.filter((a) => a.category === item.key).length;
-
-                return (
-                  <Pill
-                    key={item.key}
-                    onPress={() => {
-                      if (isFavoritesChip) {
-                        setShowFavoritesOnly((prev) => !prev);
-                        return;
-                      }
-                      setShowFavoritesOnly(false);
-                      setActiveCategory(
-                        isAllChip ? 'All' : (item.key as ArticleCategory)
-                      );
-                    }}
-                    isActive={isActive}
-                    label={item.label}
-                    icon={item.icon}
-                    count={count}
-                  />
-                );
-              })}
-            </ScrollView>
-          )}
-        </View>
+        )}
       </View>
     </View>
   );
@@ -323,22 +294,24 @@ export default function HubScreen() {
       contentContainerStyle={styles.listContent}
       ListHeaderComponent={listHeader}
       ListEmptyComponent={
-        networkUnavailable || articlesLoading ? null : (
+        networkUnavailable || articlesLoading ? undefined : (
           <View style={styles.emptyState}>
             <Ionicons
-              name={showFavoritesOnly ? 'bookmark-outline' : 'document-text'}
-              size={64}
-              color={Colors.backgroundSubtle}
+              name={
+                showFavoritesOnly ? 'bookmark-outline' : 'document-text-outline'
+              }
+              size={48}
+              color={color.textTertiary}
             />
-            <Text style={styles.emptyTitle}>
+            <Text style={styles.emptyTitle} accessibilityRole="header">
               {showFavoritesOnly
-                ? 'No Saved Articles Yet'
-                : 'No Articles Found'}
+                ? 'No saved articles yet'
+                : 'No articles found'}
             </Text>
             <Text style={styles.emptyDescription}>
               {showFavoritesOnly
-                ? 'Tap the bookmark icon on any article to save it here.'
-                : 'Try selecting a different filter.'}
+                ? 'Tap the bookmark on any article to save it here.'
+                : 'Try a different filter.'}
             </Text>
           </View>
         )
@@ -353,14 +326,13 @@ export default function HubScreen() {
           />
         </View>
       )}
-      ListFooterComponent={<View style={styles.bottomSpacer} />}
     />
   );
 
   return (
     <StandardLayout
       title="Explore"
-      subtitle="Tools, products, and articles to help you train."
+      subtitle="Tools, products and articles to help you train."
       disableScroll
       edgeToEdgeBody
     >
@@ -370,99 +342,71 @@ export default function HubScreen() {
 }
 
 const styles = StyleSheet.create({
-  hubCtaTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-  },
-  skillsAndCuesSection: {
-    gap: Spacing.md,
-  },
-  sectionOffline: {
-    alignItems: 'center',
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.xxl,
-    gap: Spacing.md,
-  },
-  sectionOfflineTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-  sectionOfflineDescription: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
-    textAlign: 'center',
-  },
-  articlesLoading: {
-    alignItems: 'center',
-    paddingVertical: Spacing.xxl,
-  },
-  subSection: {
-    gap: Spacing.md,
-  },
-  articlesSection: {
-    gap: Spacing.md,
-  },
   pageGutter: {
-    paddingHorizontal: Spacing.xxl,
-  },
-  filterScrollContent: {
-    paddingBottom: Spacing.md,
-    paddingHorizontal: Spacing.xxl,
-    gap: Spacing.md,
-  },
-  toolsScrollContent: {
-    gap: Spacing.md,
-    paddingHorizontal: Spacing.xxl,
-  },
-  section: {
-    gap: Spacing.section,
-    marginBottom: Spacing.md,
-  },
-  hubCtaContent: {
-    flex: 1,
-    paddingRight: Spacing.xl,
-    gap: Spacing.xs,
-  },
-  hubCtaTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-  },
-  hubCtaDescription: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
+    paddingHorizontal: space.md,
   },
   listContent: {
-    paddingTop: Spacing.xxl,
-    paddingBottom: Spacing.md,
+    paddingTop: space.md,
+    paddingBottom: space.xxl,
+  },
+  header: {
+    gap: space.xl,
+    paddingBottom: space.sm,
+  },
+  group: {
+    gap: space.sm,
+  },
+  cardTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs,
+  },
+  cardTitle: {
+    ...typography.headline,
+    color: color.textPrimary,
+  },
+  cardBody: {
+    ...typography.callout,
+    color: color.textSecondary,
+    marginTop: space.xxs,
+  },
+  sectionDescription: {
+    ...typography.callout,
+    color: color.textSecondary,
+  },
+  chipRow: {
+    gap: space.xs,
+    paddingHorizontal: space.md,
+  },
+  offline: {
+    alignItems: 'center',
+    gap: space.xs,
+    paddingVertical: space.md,
+  },
+  offlineTitle: {
+    ...typography.headline,
+    color: color.textPrimary,
+    textAlign: 'center',
+  },
+  offlineDescription: {
+    ...typography.callout,
+    color: color.textSecondary,
+    textAlign: 'center',
   },
   emptyState: {
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 48,
-    paddingTop: Spacing.xxl,
+    gap: space.xs,
+    paddingHorizontal: space.xxl,
+    paddingTop: space.md,
   },
   emptyTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
-    fontWeight: '700',
-    marginTop: Spacing.xxl,
-    marginBottom: Spacing.md,
+    ...typography.title2,
+    color: color.textPrimary,
     textAlign: 'center',
   },
   emptyDescription: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 20,
+    ...typography.callout,
+    color: color.textSecondary,
     textAlign: 'center',
-  },
-  bottomSpacer: {
-    height: 32,
   },
 });

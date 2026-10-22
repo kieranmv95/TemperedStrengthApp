@@ -1,8 +1,8 @@
 import { ProgramLauncher } from '@/src/screens/ProgramLauncher';
 import { WorkoutScreen } from '@/src/screens/WorkoutScreen';
 import { getActiveProgramId, getProgramStartDate } from '@/src/utils/storage';
-import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 export default function ProgramTabScreen() {
   const [hasProgram, setHasProgram] = useState<boolean | null>(null);

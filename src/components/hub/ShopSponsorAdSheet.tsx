@@ -1,22 +1,14 @@
+import { BottomSheet, LoadingImage } from '@/src/components/ds';
 import { shopSponsorAdSheetStyles as styles } from '@/src/components/hub/shopSponsorAdSheetStyles';
-import { Spacing } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import {
   sponsorAdDetailLogoUrl,
   sponsorAdDisplayTitle,
   type HomeSponsorAd,
 } from '@/src/services/sanitySponsorAds';
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
-import React from 'react';
-import {
-  Modal,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
 
 type ShopSponsorAdSheetProps = {
   ad: HomeSponsorAd | null;
@@ -36,108 +28,80 @@ function ShopSponsorAdReviewAside({ ad }: ShopSponsorAdReviewAsideProps) {
 
   return (
     <View
-      style={[styles.reviewAside, { borderLeftColor: ad.titleColor }]}
+      style={styles.reviewAside}
+      accessible
       accessibilityRole="text"
       accessibilityLabel={`Tempered Strength review: ${ad.review}`}
     >
       <View style={styles.reviewHeader}>
-        <Ionicons name="ribbon" size={16} color={ad.titleColor} />
-        <Text style={[styles.reviewLabel, { color: ad.titleColor }]}>
-          Our take
-        </Text>
+        <Ionicons name="ribbon-outline" size={16} color={color.textSecondary} />
+        <Text style={styles.reviewLabel}>Our take</Text>
       </View>
-      <Text style={[styles.reviewText, { color: ad.descriptionColor }]}>
-        {ad.review}
-      </Text>
+      <Text style={styles.reviewText}>{ad.review}</Text>
     </View>
   );
 }
 
+/**
+ * Partner offer details in the dark theme. The CMS background colour is used
+ * only as a narrow accent edge; the logo sits on a contained light panel.
+ */
 export function ShopSponsorAdSheet({
   ad,
   visible,
   onClose,
   onPressCta,
 }: ShopSponsorAdSheetProps) {
-  const insets = useSafeAreaInsets();
+  // Keep the last ad on screen while the sheet animates closed.
+  const [displayedAd, setDisplayedAd] = useState(ad);
+  if (ad !== null && ad !== displayedAd) {
+    setDisplayedAd(ad);
+  }
 
-  if (!ad) {
+  if (!displayedAd) {
     return null;
   }
 
-  const logoUrl = sponsorAdDetailLogoUrl(ad);
-  const displayTitle = sponsorAdDisplayTitle(ad);
+  const logoUrl = sponsorAdDetailLogoUrl(displayedAd);
+  const displayTitle = sponsorAdDisplayTitle(displayedAd);
   const ctaAccessibilityLabel =
-    ad.title.length > 0 ? `${ad.ctaLabel}, ${ad.title}` : ad.ctaLabel;
+    displayedAd.title.length > 0
+      ? `${displayedAd.ctaLabel}, ${displayedAd.title}`
+      : displayedAd.ctaLabel;
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={onClose}
-    >
-      <View style={styles.overlay}>
+    <BottomSheet
+      visible={visible && ad !== null}
+      onClose={onClose}
+      title={displayTitle}
+      footer={
         <Pressable
-          style={styles.backdrop}
-          onPress={onClose}
-          accessibilityRole="button"
-          accessibilityLabel="Close partner details"
-        />
-        <View
-          style={[
-            styles.sheet,
-            {
-              backgroundColor: ad.bgColor,
-              paddingBottom: insets.bottom + Spacing.section,
-            },
-          ]}
+          style={({ pressed }) => [styles.cta, pressed && styles.ctaPressed]}
+          onPress={() => onPressCta(displayedAd)}
+          accessibilityRole="link"
+          accessibilityLabel={ctaAccessibilityLabel}
+          accessibilityHint="Opens the partner's website"
         >
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={onClose}
-            accessibilityRole="button"
-            accessibilityLabel="Close"
-            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-          >
-            <Ionicons name="close" size={28} color={ad.titleColor} />
-          </TouchableOpacity>
-
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollContent}
-          >
-            {logoUrl ? (
-              <View style={styles.logoWrap}>
-                <Image
-                  source={{ uri: logoUrl }}
-                  style={styles.logo}
-                  contentFit="contain"
-                  accessibilityLabel={displayTitle}
-                  accessibilityIgnoresInvertColors
-                />
-              </View>
-            ) : null}
-
-            <Text style={[styles.description, { color: ad.descriptionColor }]}>
-              {ad.description}
-            </Text>
-
-            <ShopSponsorAdReviewAside ad={ad} />
-
-            <TouchableOpacity
-              style={[styles.cta, { backgroundColor: ad.ctaColor }]}
-              onPress={() => onPressCta(ad)}
-              accessibilityRole="button"
-              accessibilityLabel={ctaAccessibilityLabel}
-            >
-              <Text style={[styles.ctaText, { color: ad.ctaTextColor }]}>
-                {ad.ctaLabel}
-              </Text>
-            </TouchableOpacity>
-          </ScrollView>
+          <Text style={styles.ctaText}>{displayedAd.ctaLabel}</Text>
+        </Pressable>
+      }
+    >
+      {logoUrl ? (
+        <View
+          style={[styles.logoPanel, { backgroundColor: displayedAd.bgColor }]}
+        >
+          <LoadingImage
+            source={{ uri: logoUrl }}
+            style={[styles.logo, { backgroundColor: displayedAd.bgColor }]}
+            resizeMode="contain"
+            accessibilityLabel={`${displayTitle} logo`}
+          />
         </View>
-      </View>
-    </Modal>
+      ) : null}
+
+      <Text style={styles.description}>{displayedAd.description}</Text>
+
+      <ShopSponsorAdReviewAside ad={displayedAd} />
+    </BottomSheet>
   );
 }

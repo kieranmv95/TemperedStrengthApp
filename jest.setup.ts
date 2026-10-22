@@ -2,6 +2,29 @@ import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/asy
 
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 
+/** See jest/reanimatedMock.tsx for why Reanimated's own Jest setup isn't used. */
+jest.mock('react-native-reanimated', () =>
+  jest.requireActual('./jest/reanimatedMock')
+);
+
+/**
+ * Icon fonts (@expo/vector-icons) load through expo-font on mount, and font
+ * files aren't in Jest's asset registry. Treat every font as already loaded.
+ */
+jest.mock('expo-font', () => ({
+  ...jest.requireActual('expo-font'),
+  loadAsync: jest.fn(() => Promise.resolve()),
+  isLoaded: jest.fn(() => true),
+}));
+
+/** Haptics are jest.fn()s so tests can assert feedback alongside visual state. */
+jest.mock('expo-haptics', () => ({
+  ...jest.requireActual('expo-haptics'),
+  impactAsync: jest.fn(() => Promise.resolve()),
+  notificationAsync: jest.fn(() => Promise.resolve()),
+  selectionAsync: jest.fn(() => Promise.resolve()),
+}));
+
 /**
  * Lightweight in-memory stand-in for expo-sqlite so unit tests can exercise
  * personal bests + workout log repositories without native modules.
@@ -106,6 +129,7 @@ jest.mock('expo-sqlite', () => {
           weight,
           reps,
           state,
+          rpe,
           updated_at,
           deleted_at,
           dirty,
@@ -118,6 +142,7 @@ jest.mock('expo-sqlite', () => {
           weight,
           reps,
           state,
+          rpe: rpe ?? null,
           updated_at,
           deleted_at,
           dirty,
@@ -328,9 +353,7 @@ jest.mock('expo-sqlite', () => {
       ) {
         const [dayIndex] = args;
         return [...mockWorkoutLogSets.values()]
-          .filter(
-            (row) => row.day_index === dayIndex && row.deleted_at == null
-          )
+          .filter((row) => row.day_index === dayIndex && row.deleted_at == null)
           .sort(
             (a, b) =>
               Number(a.slot_index) - Number(b.slot_index) ||

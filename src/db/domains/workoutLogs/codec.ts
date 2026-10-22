@@ -1,6 +1,6 @@
 import type { LoggedSet, WorkoutLogs } from '@/src/types/storage';
 import type { LocalWorkoutLogSetRow } from './types';
-import { workoutLogSetId } from './types';
+import { normalizeRpe, workoutLogSetId } from './types';
 
 function parseOptionalSetState(
   value: unknown
@@ -71,6 +71,7 @@ export function expandWorkoutLogsBlobToRows(
           reps: entry.reps,
           // Store absent state as null column (legacy blobs often omit the field).
           state: parsedState === undefined ? null : parsedState,
+          rpe: normalizeRpe(entry.rpe ?? null),
           updated_at: updatedAt,
           deleted_at: null,
         });
@@ -92,6 +93,7 @@ export function collapseRowsToWorkoutLogs(
     weight: number | null;
     reps: number;
     state: string | null;
+    rpe?: number | null;
     deleted_at?: string | null;
   }[]
 ): WorkoutLogs {
@@ -116,6 +118,12 @@ export function collapseRowsToWorkoutLogs(
     } else if (row.state === null) {
       // Keep null explicit when present (unchecked), same as LoggedSet.state=null.
       set.state = null;
+    }
+    const rpe = normalizeRpe(row.rpe ?? null);
+    if (rpe !== null) {
+      set.rpe = rpe;
+    } else if (row.rpe === null) {
+      set.rpe = null;
     }
     store[row.day_index][row.slot_index][row.set_index] = set;
   }

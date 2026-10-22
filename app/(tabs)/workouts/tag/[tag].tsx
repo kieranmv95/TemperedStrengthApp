@@ -1,11 +1,12 @@
+import { Card, PressableCard, StandardLayout } from '@/src/components/ds';
 import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
-import { workoutDetailStyles as headerStyles } from '@/src/components/workouts/workoutDetailStyles';
 import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
-import { Colors, Spacing } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import {
   disciplines,
   isNoEquipmentDiscipline,
   workoutMatchesDiscipline,
+  type Discipline,
 } from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useRoles } from '@/src/hooks/useRoles';
@@ -16,19 +17,42 @@ import {
   toggleFavoriteWorkout,
 } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
-import {
-  FlatList,
-  Image,
-  Linking,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { FlatList, Image, Linking, Text, View } from 'react-native';
+
+const EMPTY_ICON_SIZE = 48;
+
+type SponsorCardContentProps = {
+  discipline: Discipline;
+};
+
+function SponsorCardContent({ discipline }: SponsorCardContentProps) {
+  return (
+    <View style={styles.sponsorContent}>
+      {!!discipline.logo && (
+        <Image
+          source={discipline.logo.source}
+          style={[
+            styles.sponsorLogo,
+            { width: discipline.logo.width, height: discipline.logo.height },
+          ]}
+          accessibilityLabel={`${discipline.title} logo`}
+        />
+      )}
+      {!!discipline.description && (
+        <Text style={styles.sponsorDescription}>{discipline.description}</Text>
+      )}
+      {!!discipline.link && (
+        <View style={styles.sponsorLinkRow}>
+          <Ionicons name="globe-outline" size={16} color={color.gold} />
+          <Text style={styles.sponsorLinkText}>View event details</Text>
+        </View>
+      )}
+    </View>
+  );
+}
 
 export default function WorkoutsByTagScreen() {
   const { isPro, roles, isLoading: accessLoading } = useRoles();
@@ -38,7 +62,6 @@ export default function WorkoutsByTagScreen() {
 
   const discipline = disciplines.find((d) => d.tag === tag);
   const showSponsorCard = Boolean(discipline?.isSponsor);
-  const sponsorTheme = discipline?.theme;
 
   const [favorites, setFavorites] = useState<string[]>([]);
 
@@ -85,7 +108,7 @@ export default function WorkoutsByTagScreen() {
     router.push('/records');
   };
 
-  const handleSponsorPress = useCallback(() => {
+  const handleSponsorPress = () => {
     if (!discipline?.link) return;
     posthog.capture(posthogEventsNames.home.linkPressed, {
       link_id: `sponsor_tag:${tag || 'unknown'}`,
@@ -94,120 +117,85 @@ export default function WorkoutsByTagScreen() {
     Linking.openURL(discipline.link).catch((error) => {
       console.error('Failed to open sponsor URL:', error);
     });
-  }, [discipline?.link, posthog, tag]);
+  };
+
+  const renderSponsorCard = () => {
+    if (!showSponsorCard || !discipline) {
+      return undefined;
+    }
+    if (!discipline.link) {
+      return (
+        <Card style={styles.sponsorCard}>
+          <SponsorCardContent discipline={discipline} />
+        </Card>
+      );
+    }
+    return (
+      <PressableCard
+        variant="promo"
+        accentColor={discipline.theme?.borderColor}
+        showChevron={false}
+        onPress={handleSponsorPress}
+        accessibilityLabel={[
+          discipline.title,
+          discipline.description,
+          'View event details',
+        ]
+          .filter((part): part is string => !!part)
+          .join('. ')}
+        accessibilityHint="Opens in your browser"
+        style={styles.sponsorCard}
+      >
+        <SponsorCardContent discipline={discipline} />
+      </PressableCard>
+    );
+  };
 
   return (
-    <SafeAreaView
-      style={headerStyles.container}
-      edges={['top', 'left', 'right']}
+    <StandardLayout
+      title={discipline?.title || 'Workouts'}
+      onBackPress={() => router.back()}
+      disableScroll
+      edgeToEdgeBody
     >
-      <View style={headerStyles.detailHeader}>
-        <TouchableOpacity
-          style={headerStyles.backButton}
-          onPress={() => router.back()}
-          accessibilityLabel="Back"
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={headerStyles.detailTitle} numberOfLines={1}>
-          {discipline?.title || 'Workouts'}
-        </Text>
-        <View style={headerStyles.headerRightSpacer} />
-      </View>
-
-      {filteredWorkouts.length === 0 ? (
-        <View style={headerStyles.emptyState}>
-          <Ionicons name="barbell" size={64} color={Colors.backgroundSubtle} />
-          <Text style={headerStyles.emptyTitle}>No Workouts Found</Text>
-          <Text style={headerStyles.emptyDescription}>
-            {tag
-              ? 'No workouts match this discipline yet.'
-              : 'Missing discipline tag.'}
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={filteredWorkouts}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={[
-            styles.listContent,
-            { padding: Spacing.xxl, paddingTop: Spacing.xxl },
-          ]}
-          ListHeaderComponent={
-            showSponsorCard ? (
-              <TouchableOpacity
-                style={[
-                  styles.sponsorCard,
-                  sponsorTheme?.bgColor
-                    ? { backgroundColor: sponsorTheme.bgColor }
-                    : null,
-                  sponsorTheme?.borderColor
-                    ? { borderColor: sponsorTheme.borderColor }
-                    : null,
-                ]}
-                onPress={handleSponsorPress}
-                activeOpacity={0.85}
-              >
-                {!!discipline?.logo && (
-                  <Image
-                    source={discipline.logo.source}
-                    style={[
-                      styles.sponsorLogo,
-                      {
-                        width: discipline.logo.width,
-                        height: discipline.logo.height,
-                      },
-                    ]}
-                  />
-                )}
-                {!!discipline?.description && (
-                  <Text
-                    style={[
-                      styles.sponsorDescription,
-                      sponsorTheme?.descriptionColor
-                        ? { color: sponsorTheme.descriptionColor }
-                        : null,
-                    ]}
-                  >
-                    {discipline.description}
-                  </Text>
-                )}
-                {!!discipline?.link && (
-                  <View style={styles.sponsorLinkRow}>
-                    <Ionicons
-                      name="globe-outline"
-                      size={16}
-                      color={sponsorTheme?.linkColor ?? Colors.accent}
-                    />
-                    <Text
-                      style={[
-                        styles.sponsorLinkText,
-                        sponsorTheme?.linkColor
-                          ? { color: sponsorTheme.linkColor }
-                          : null,
-                      ]}
-                    >
-                      View event details
-                    </Text>
-                  </View>
-                )}
-              </TouchableOpacity>
-            ) : null
-          }
-          renderItem={({ item }) => (
-            <WorkoutCard
-              workout={item}
-              isFavorite={favorites.includes(item.id)}
-              isPro={isPro || accessLoading}
-              roles={roles}
-              onToggleFavorite={handleToggleFavorite}
-              onPress={handleWorkoutPress}
-              onLockedPress={handleLockedPress}
+      <StandardLayout.Body>
+        {filteredWorkouts.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Ionicons
+              name="barbell-outline"
+              size={EMPTY_ICON_SIZE}
+              color={color.textTertiary}
             />
-          )}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
-    </SafeAreaView>
+            <Text style={styles.emptyTitle} accessibilityRole="header">
+              No workouts found
+            </Text>
+            <Text style={styles.emptyDescription}>
+              {tag
+                ? 'No workouts match this discipline yet.'
+                : 'Missing discipline tag.'}
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={filteredWorkouts}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContent}
+            ListHeaderComponent={renderSponsorCard()}
+            renderItem={({ item }) => (
+              <WorkoutCard
+                workout={item}
+                isFavorite={favorites.includes(item.id)}
+                isPro={isPro || accessLoading}
+                roles={roles}
+                onToggleFavorite={handleToggleFavorite}
+                onPress={handleWorkoutPress}
+                onLockedPress={handleLockedPress}
+              />
+            )}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 }

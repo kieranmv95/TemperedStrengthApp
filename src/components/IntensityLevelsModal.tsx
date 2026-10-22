@@ -1,13 +1,30 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { Badge } from '@/src/components/ds';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { INTENSITY_LEVELS } from '@/src/screens/workoutScreenConstants';
 import React from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 type IntensityLevelsModalProps = {
   visible: boolean;
   currentIntensity: number | undefined;
   onClose: () => void;
 };
+
+const RANGE_COLUMN_WIDTH = 40;
 
 export function IntensityLevelsModal({
   visible,
@@ -19,51 +36,64 @@ export function IntensityLevelsModal({
       visible={visible}
       transparent
       animationType="fade"
+      statusBarTranslucent
       onRequestClose={onClose}
     >
       <View style={styles.intensityModalOverlay}>
-        <View style={styles.intensityModalContent}>
-          <Text style={styles.intensityModalTitle}>Intensity Levels</Text>
-          <Text style={styles.intensityModalSubtitle}>
-            How each level should feel during your session
-          </Text>
-          {INTENSITY_LEVELS.map((level) => {
-            const isActive =
-              currentIntensity !== undefined &&
-              currentIntensity >= level.range[0] &&
-              currentIntensity <= level.range[1];
-            return (
-              <View
-                key={level.label}
-                style={[
-                  styles.intensityModalRow,
-                  isActive && styles.intensityModalRowActive,
-                ]}
-              >
-                <View style={styles.intensityModalRowHeader}>
-                  <Text style={styles.intensityModalRange}>
-                    {level.range[0]}–{level.range[1]}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.intensityModalLabel,
-                      isActive && styles.intensityModalLabelActive,
-                    ]}
-                  >
-                    {level.label}
-                  </Text>
+        <View
+          style={[styles.intensityModalContent, elevation.overlay]}
+          accessibilityViewIsModal
+          onAccessibilityEscape={onClose}
+        >
+          <ScrollView contentContainerStyle={styles.intensityModalScroll}>
+            <Text style={styles.intensityModalTitle} accessibilityRole="header">
+              Intensity levels
+            </Text>
+            <Text style={styles.intensityModalSubtitle}>
+              How each level should feel during your session
+            </Text>
+            {INTENSITY_LEVELS.map((level) => {
+              const isActive =
+                currentIntensity !== undefined &&
+                currentIntensity >= level.range[0] &&
+                currentIntensity <= level.range[1];
+              return (
+                <View
+                  key={level.label}
+                  style={[
+                    styles.intensityModalRow,
+                    isActive && styles.intensityModalRowActive,
+                  ]}
+                  accessible
+                  accessibilityLabel={`${level.range[0]} to ${level.range[1]}, ${level.label}${isActive ? ', this workout' : ''}. ${level.feel}`}
+                >
+                  <View style={styles.intensityModalRowHeader}>
+                    <Text style={styles.intensityModalRange}>
+                      {level.range[0]}–{level.range[1]}
+                    </Text>
+                    <Text style={styles.intensityModalLabel}>
+                      {level.label}
+                    </Text>
+                    {isActive ? (
+                      <Badge label="This workout" tone="gold" />
+                    ) : null}
+                  </View>
+                  <Text style={styles.intensityModalFeel}>{level.feel}</Text>
                 </View>
-                <Text style={styles.intensityModalFeel}>{level.feel}</Text>
-              </View>
-            );
-          })}
-          <TouchableOpacity
-            style={styles.intensityModalClose}
+              );
+            })}
+          </ScrollView>
+          <Pressable
+            style={({ pressed }) => [
+              styles.intensityModalClose,
+              pressed && styles.intensityModalClosePressed,
+            ]}
             onPress={onClose}
-            activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel="Got it, close intensity levels"
           >
             <Text style={styles.intensityModalCloseText}>Got it</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </Modal>
@@ -73,72 +103,72 @@ export function IntensityLevelsModal({
 const styles = StyleSheet.create({
   intensityModalOverlay: {
     flex: 1,
-    backgroundColor: Colors.overlay,
+    backgroundColor: color.scrim,
     justifyContent: 'center',
-    padding: Spacing.xxl,
+    padding: space.md,
   },
   intensityModalContent: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.xxl,
+    maxHeight: '90%',
+    backgroundColor: color.surface2,
+    borderRadius: radius.lg,
+    padding: space.xl,
+    gap: space.md,
+  },
+  intensityModalScroll: {
+    gap: space.xs,
   },
   intensityModalTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayLg,
-    fontWeight: '800',
-    marginBottom: Spacing.xs,
+    ...typography.title2,
+    color: color.textPrimary,
   },
   intensityModalSubtitle: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    marginBottom: Spacing.xxl,
+    ...typography.callout,
+    color: color.textSecondary,
+    marginBottom: space.xs,
   },
   intensityModalRow: {
-    padding: Spacing.xl,
-    borderRadius: BorderRadius.lg,
-    marginBottom: Spacing.md,
+    padding: space.sm,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: color.borderSubtle,
+    gap: space.xxs,
   },
   intensityModalRowActive: {
-    backgroundColor: Colors.backgroundElevated,
-    borderWidth: 1,
-    borderColor: Colors.accent,
+    backgroundColor: color.surface3,
+    borderColor: color.gold,
   },
   intensityModalRowHeader: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
-    gap: Spacing.md,
-    marginBottom: Spacing.xs,
+    gap: space.xs,
   },
   intensityModalRange: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '700',
-    minWidth: 30,
+    ...typography.numericSmall,
+    color: color.textTertiary,
+    minWidth: RANGE_COLUMN_WIDTH,
   },
   intensityModalLabel: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
-  },
-  intensityModalLabelActive: {
-    color: Colors.accent,
+    ...typography.headline,
+    color: color.textPrimary,
   },
   intensityModalFeel: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.base,
-    lineHeight: 18,
-    paddingLeft: 38,
+    ...typography.callout,
+    color: color.textSecondary,
+    paddingLeft: RANGE_COLUMN_WIDTH + space.xs,
   },
   intensityModalClose: {
-    backgroundColor: Colors.accent,
-    borderRadius: BorderRadius.lg,
-    paddingVertical: Spacing.xl,
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
     alignItems: 'center',
-    marginTop: Spacing.xl,
+    justifyContent: 'center',
+  },
+  intensityModalClosePressed: {
+    backgroundColor: color.goldStrong,
   },
   intensityModalCloseText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
 });

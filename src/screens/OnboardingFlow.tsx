@@ -1,9 +1,10 @@
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView } from '@/src/components/ds';
 import { OnboardingOptionCard } from '@/src/components/onboarding/OnboardingOptionCard';
 import { OnboardingProgressBar } from '@/src/components/onboarding/OnboardingProgressBar';
 import { onboardingStyles as styles } from '@/src/components/onboarding/onboardingStyles';
-import { Colors } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
+import { useMotion } from '@/src/hooks/useMotion';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
   markAccountCreationSkipped,
@@ -24,23 +25,27 @@ import {
   setWeightUnit,
   type WeightUnit,
 } from '@/src/utils/storage';
+import { Ionicons } from '@expo/vector-icons';
 import { useEventListener } from 'expo';
 import { router, type Href, useLocalSearchParams } from 'expo-router';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { usePostHog } from 'posthog-react-native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
-  Animated,
   Image,
   KeyboardAvoidingView,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TOTAL_STEPS = 8;
@@ -103,14 +108,14 @@ const INTEREST_OPTIONS: { value: OnboardingInterest; label: string }[] = [
   { value: 'strength', label: 'Strength' },
   { value: 'powerlifting', label: 'Powerlifting' },
   { value: 'bodybuilding', label: 'Bodybuilding' },
-  { value: 'hypertrophy', label: 'Build Muscle' },
+  { value: 'hypertrophy', label: 'Build muscle' },
   { value: 'conditioning', label: 'Conditioning' },
   { value: 'hiit', label: 'HIIT' },
-  { value: 'olympic_lifting', label: 'Olympic Lifting' },
+  { value: 'olympic_lifting', label: 'Olympic lifting' },
   { value: 'pilates', label: 'Pilates' },
   { value: 'mobility', label: 'Mobility' },
   { value: 'endurance', label: 'Endurance' },
-  { value: 'fat_loss', label: 'Fat Loss' },
+  { value: 'fat_loss', label: 'Fat loss' },
 ];
 
 const EXPERIENCE_OPTIONS: {
@@ -185,24 +190,19 @@ function OnboardingFlow() {
     setStepIndex(WELCOME_STEP_INDEX);
   }, [skipAccountBackupStep, stepIndex]);
 
-  const fade = useRef(new Animated.Value(1)).current;
+  const motionHelpers = useMotion();
+  const stepOpacity = useSharedValue(1);
+  const stepFadeStyle = useAnimatedStyle(() => ({
+    opacity: stepOpacity.get(),
+  }));
 
   const animateStepChange = useCallback(
     (updateStep: () => void) => {
-      Animated.timing(fade, {
-        toValue: 0,
-        duration: 140,
-        useNativeDriver: true,
-      }).start(() => {
-        updateStep();
-        Animated.timing(fade, {
-          toValue: 1,
-          duration: 180,
-          useNativeDriver: true,
-        }).start();
-      });
+      updateStep();
+      stepOpacity.set(0);
+      stepOpacity.set(motionHelpers.fade(1, 'base'));
     },
-    [fade]
+    [stepOpacity, motionHelpers]
   );
 
   const finishIntro = useCallback(() => {
@@ -422,16 +422,20 @@ function OnboardingFlow() {
       case 1:
         return (
           <View style={styles.stepBody}>
-            <Text style={styles.stepTitle}>What can we call you?</Text>
-            <Text style={styles.stepSubtitle}>
-              Add a name or nickname so we can make the app feel a bit more
-              personal.
-            </Text>
+            <View style={styles.stepHeading}>
+              <Text style={styles.stepTitle} accessibilityRole="header">
+                What can we call you?
+              </Text>
+              <Text style={styles.stepSubtitle}>
+                Add a name or nickname so we can make the app feel a bit more
+                personal.
+              </Text>
+            </View>
             <TextInput
               value={name}
               onChangeText={setName}
               placeholder="Your name"
-              placeholderTextColor={Colors.textPlaceholder}
+              placeholderTextColor={color.textTertiary}
               style={styles.textInput}
               autoCapitalize="words"
               autoCorrect={false}
@@ -445,11 +449,19 @@ function OnboardingFlow() {
       case 2:
         return (
           <View style={styles.stepBody}>
-            <Text style={styles.stepTitle}>Gender</Text>
-            <Text style={styles.stepSubtitle}>
-              This helps us tailor program suggestions.
-            </Text>
-            <View style={styles.optionList}>
+            <View style={styles.stepHeading}>
+              <Text style={styles.stepTitle} accessibilityRole="header">
+                Gender
+              </Text>
+              <Text style={styles.stepSubtitle}>
+                This helps us tailor program suggestions.
+              </Text>
+            </View>
+            <View
+              style={styles.optionList}
+              accessibilityRole="radiogroup"
+              accessibilityLabel="Gender"
+            >
               {GENDER_OPTIONS.map((opt) => (
                 <OnboardingOptionCard
                   key={opt.value}
@@ -464,8 +476,12 @@ function OnboardingFlow() {
       case 3:
         return (
           <View style={styles.stepBody}>
-            <Text style={styles.stepTitle}>What interests you?</Text>
-            <Text style={styles.stepSubtitle}>Pick as many as you like.</Text>
+            <View style={styles.stepHeading}>
+              <Text style={styles.stepTitle} accessibilityRole="header">
+                What interests you?
+              </Text>
+              <Text style={styles.stepSubtitle}>Pick as many as you like.</Text>
+            </View>
             <View style={styles.optionListInline}>
               {INTEREST_OPTIONS.map((opt) => (
                 <OnboardingOptionCard
@@ -482,11 +498,19 @@ function OnboardingFlow() {
       case 4:
         return (
           <View style={styles.stepBody}>
-            <Text style={styles.stepTitle}>Experience level</Text>
-            <Text style={styles.stepSubtitle}>
-              How would you describe your training background?
-            </Text>
-            <View style={styles.optionList}>
+            <View style={styles.stepHeading}>
+              <Text style={styles.stepTitle} accessibilityRole="header">
+                Experience level
+              </Text>
+              <Text style={styles.stepSubtitle}>
+                How would you describe your training background?
+              </Text>
+            </View>
+            <View
+              style={styles.optionList}
+              accessibilityRole="radiogroup"
+              accessibilityLabel="Experience level"
+            >
               {EXPERIENCE_OPTIONS.map((opt) => (
                 <OnboardingOptionCard
                   key={opt.value}
@@ -501,11 +525,19 @@ function OnboardingFlow() {
       case 5:
         return (
           <View style={styles.stepBody}>
-            <Text style={styles.stepTitle}>Weight units</Text>
-            <Text style={styles.stepSubtitle}>
-              Choose how you want to view and enter weights.
-            </Text>
-            <View style={styles.optionList}>
+            <View style={styles.stepHeading}>
+              <Text style={styles.stepTitle} accessibilityRole="header">
+                Weight units
+              </Text>
+              <Text style={styles.stepSubtitle}>
+                Choose how you want to view and enter weights.
+              </Text>
+            </View>
+            <View
+              style={styles.optionList}
+              accessibilityRole="radiogroup"
+              accessibilityLabel="Weight units"
+            >
               <OnboardingOptionCard
                 label="kg"
                 selected={weightUnitStep === 'kg'}
@@ -522,13 +554,24 @@ function OnboardingFlow() {
       case 6:
         return (
           <View style={styles.stepBody}>
-            <Text style={styles.stepTitle}>Save your progress</Text>
-            <Text style={styles.stepSubtitle}>
-              Create an account to keep your programs, logs, preferences, and
-              personal bests safe across devices.
-            </Text>
-            <View style={styles.accountCard}>
-              <Text style={styles.accountCardTitle}>Local-first backup</Text>
+            <View style={styles.stepHeading}>
+              <Text style={styles.stepTitle} accessibilityRole="header">
+                Save your progress
+              </Text>
+              <Text style={styles.stepSubtitle}>
+                Create an account to keep your programs, logs, preferences, and
+                personal bests safe across devices.
+              </Text>
+            </View>
+            <View style={styles.accountCard} accessible>
+              <View style={styles.accountCardTitleRow}>
+                <Ionicons
+                  name="cloud-done-outline"
+                  size={20}
+                  color={color.textSecondary}
+                />
+                <Text style={styles.accountCardTitle}>Local-first backup</Text>
+              </View>
               <Text style={styles.accountCardDescription}>
                 The app keeps working offline. When you’re online, signed-in
                 devices securely sync your data.
@@ -539,7 +582,9 @@ function OnboardingFlow() {
       case 7:
         return (
           <View style={styles.welcomeStepBody}>
-            <Text style={styles.welcomeStepTitle}>You’re in.</Text>
+            <Text style={styles.welcomeStepTitle} accessibilityRole="header">
+              You’re in.
+            </Text>
             <Text style={styles.welcomeStepSubtitle}>
               Time to lift, log, and level up.
             </Text>
@@ -551,9 +596,8 @@ function OnboardingFlow() {
               }
               style={styles.genderHeroImage}
               resizeMode="contain"
-              accessibilityLabel={
-                gender === 'female' ? 'Female athlete' : 'Male athlete'
-              }
+              accessibilityElementsHidden
+              importantForAccessibility="no"
             />
           </View>
         );
@@ -608,7 +652,7 @@ function OnboardingFlow() {
         };
       case 7:
         return {
-          label: "Let's go",
+          label: 'Let’s go',
           onPress: () => completeOnboarding(profile, '/'),
           disabled: completing,
         };
@@ -636,48 +680,39 @@ function OnboardingFlow() {
       }
     >
       <KeyboardWrapper
-        style={{ flex: 1 }}
+        style={styles.keyboardWrapper}
         {...(isIos ? { behavior: 'padding' as const } : {})}
       >
         {showIntro ? (
-          <View style={{ flex: 1 }}>
+          <View style={styles.intro}>
             <VideoView
               player={introVideoPlayer}
-              style={StyleSheet.absoluteFillObject}
+              style={StyleSheet.absoluteFill}
               contentFit="cover"
               nativeControls={false}
               accessibilityLabel="Onboarding intro video"
             />
 
-            <View
-              style={{ flex: 1, padding: 24, justifyContent: 'space-between' }}
-            >
-              <View style={{ alignItems: 'flex-end' }}>
-                <TouchableOpacity
-                  onPress={skipIntro}
-                  accessibilityRole="button"
-                  accessibilityLabel="Skip intro"
-                  disabled={completing}
-                >
-                  <Text
-                    style={{
-                      color: Colors.textPrimary,
-                      fontSize: 16,
-                      fontWeight: '700',
-                    }}
-                  >
-                    Skip
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              <View style={{ gap: 12 }} />
+            <View style={styles.introOverlay}>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.introSkipButton,
+                  pressed && styles.introSkipButtonPressed,
+                ]}
+                onPress={skipIntro}
+                accessibilityRole="button"
+                accessibilityLabel="Skip intro"
+                accessibilityState={{ disabled: completing }}
+                disabled={completing}
+              >
+                <Text style={styles.introSkipText}>Skip</Text>
+              </Pressable>
             </View>
           </View>
         ) : showAccountChoice ? (
           <View style={styles.accountChoiceContainer}>
-            <View style={[styles.stepBody, { paddingHorizontal: 24 }]}>
-              <Text style={styles.stepTitle}>
+            <View style={[styles.stepHeading, styles.accountChoiceBody]}>
+              <Text style={styles.stepTitle} accessibilityRole="header">
                 Have you used Tempered Strength before?
               </Text>
               <Text style={styles.stepSubtitle}>
@@ -686,25 +721,36 @@ function OnboardingFlow() {
               </Text>
             </View>
             <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
-              <TouchableOpacity
-                style={styles.primaryButton}
+              <Pressable
+                style={({ pressed }) => [
+                  styles.primaryButton,
+                  pressed && styles.primaryButtonPressed,
+                ]}
                 onPress={() =>
                   router.push({
                     pathname: '/account/create-account',
                     params: { intent: 'restore', returnTo: '/' },
                   } as unknown as Href)
                 }
+                accessibilityRole="button"
+                accessibilityLabel="I already have an account"
+                accessibilityHint="Sign in to restore your training data"
               >
                 <Text style={styles.primaryButtonText}>
                   I already have an account
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.skipStepButton}
+              </Pressable>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.skipStepButton,
+                  pressed && styles.textButtonPressed,
+                ]}
                 onPress={continueAsNewUser}
+                accessibilityRole="button"
+                accessibilityLabel="I’m new"
               >
                 <Text style={styles.skipStepText}>I’m new</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </View>
         ) : (
@@ -715,21 +761,25 @@ function OnboardingFlow() {
                   currentStep={progressCurrent}
                   totalSteps={TOTAL_PROGRESS_STEPS}
                 />
-                <TouchableOpacity
-                  style={styles.skipSetupButton}
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.skipSetupButton,
+                    pressed && styles.textButtonPressed,
+                  ]}
                   onPress={handleSkipSetup}
                   accessibilityRole="button"
-                  accessibilityLabel="Skip onboarding"
+                  accessibilityLabel="Skip setup"
+                  accessibilityState={{ disabled: completing }}
                   disabled={completing}
                 >
                   <Text style={styles.skipSetupText}>Skip setup</Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </View>
 
             {stepIndex === WELCOME_STEP_INDEX ? (
               <View style={styles.welcomeStepContainer}>
-                <Animated.View style={{ opacity: fade }}>
+                <Animated.View style={stepFadeStyle}>
                   {renderStep()}
                 </Animated.View>
               </View>
@@ -739,38 +789,56 @@ function OnboardingFlow() {
                 contentContainerStyle={styles.scrollContent}
                 keyboardShouldPersistTaps="handled"
               >
-                <Animated.View style={{ flex: 1, opacity: fade }}>
+                <Animated.View style={[styles.stepFade, stepFadeStyle]}>
                   {renderStep()}
                 </Animated.View>
               </ScrollView>
             )}
 
             <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
-              <TouchableOpacity
-                style={[
+              <Pressable
+                style={({ pressed }) => [
                   styles.primaryButton,
+                  pressed && styles.primaryButtonPressed,
                   cta.disabled && styles.primaryButtonDisabled,
                 ]}
                 onPress={cta.onPress}
                 disabled={cta.disabled}
                 accessibilityRole="button"
                 accessibilityLabel={cta.label}
+                accessibilityState={{ disabled: cta.disabled }}
               >
-                <Text style={styles.primaryButtonText}>{cta.label}</Text>
-              </TouchableOpacity>
+                <Text
+                  style={[
+                    styles.primaryButtonText,
+                    cta.disabled && styles.primaryButtonTextDisabled,
+                  ]}
+                >
+                  {cta.label}
+                </Text>
+              </Pressable>
               {canGoBack ? (
                 <View style={styles.footerSecondaryRow}>
-                  <TouchableOpacity
-                    style={styles.backStepButton}
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.backStepButton,
+                      pressed && styles.textButtonPressed,
+                    ]}
                     onPress={handleBackStep}
                     disabled={completing || weightUnitSaving}
                     accessibilityRole="button"
-                    accessibilityLabel="Go back"
+                    accessibilityLabel="Back"
+                    accessibilityState={{
+                      disabled: completing || weightUnitSaving,
+                    }}
                   >
                     <Text style={styles.skipStepText}>Back</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.skipStepButton}
+                  </Pressable>
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.skipStepButton,
+                      pressed && styles.textButtonPressed,
+                    ]}
                     onPress={handleSkipStep}
                     disabled={completing}
                     accessibilityRole="button"
@@ -779,22 +847,27 @@ function OnboardingFlow() {
                         ? 'Skip this step and finish'
                         : 'Skip this step'
                     }
+                    accessibilityState={{ disabled: completing }}
                   >
                     <Text style={styles.skipStepText}>Skip</Text>
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
               ) : (
-                <TouchableOpacity
-                  style={styles.skipStepButton}
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.skipStepButton,
+                    pressed && styles.textButtonPressed,
+                  ]}
                   onPress={handleSkipStep}
                   disabled={completing}
                   accessibilityRole="button"
                   accessibilityLabel={
                     isLastStep ? 'Skip this step and finish' : 'Skip this step'
                   }
+                  accessibilityState={{ disabled: completing }}
                 >
                   <Text style={styles.skipStepText}>Skip</Text>
-                </TouchableOpacity>
+                </Pressable>
               )}
             </View>
           </View>

@@ -1,51 +1,13 @@
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { color, radius, space, typography } from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
 
 export const exerciseVideoStyles = StyleSheet.create({
-  sheetOverlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  sheetBackdrop: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
-  },
-  sheet: {
-    backgroundColor: Colors.backgroundCard,
-    borderTopLeftRadius: BorderRadius.pill,
-    borderTopRightRadius: BorderRadius.pill,
-    maxHeight: '88%',
-    overflow: 'hidden',
-  },
-  sheetHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: Spacing.xl,
-    paddingBottom: Spacing.lg,
-    paddingHorizontal: Spacing.section,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
-  },
-  sheetCloseButton: {
-    padding: Spacing.xs,
-    marginLeft: Spacing.md,
-  },
-  sheetContent: {
-    gap: Spacing.lg,
-    paddingBottom: Spacing.lg,
-  },
-  sheetVideoContainer: {
-    width: '100%',
-    aspectRatio: 16 / 9,
-    backgroundColor: Colors.backgroundElevated,
-  },
   videoContainer: {
     alignSelf: 'stretch',
     aspectRatio: 16 / 9,
-    borderRadius: BorderRadius.xl,
+    borderRadius: radius.md,
     overflow: 'hidden',
-    backgroundColor: Colors.backgroundElevated,
+    backgroundColor: color.surface2,
   },
   videoContainerFill: {
     flex: 1,
@@ -53,45 +15,28 @@ export const exerciseVideoStyles = StyleSheet.create({
   },
   webView: {
     flex: 1,
-    backgroundColor: Colors.backgroundElevated,
-  },
-  title: {
-    flex: 1,
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
-    fontWeight: '800',
-    letterSpacing: -0.3,
+    backgroundColor: color.surface2,
   },
   description: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.md,
-    lineHeight: 22,
-    fontWeight: '500',
-    paddingHorizontal: Spacing.section,
+    ...typography.body,
+    color: color.textSecondary,
   },
   playButtonBanner: {
+    alignSelf: 'stretch',
+    marginBottom: space.md,
+  },
+  playButtonRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'stretch',
-    gap: Spacing.md,
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.lg,
-    marginBottom: Spacing.lg,
-    borderRadius: BorderRadius.xl,
-    backgroundColor: Colors.recommendedWashFill,
-    borderWidth: 1,
-    borderColor: Colors.recommendedWashBorder,
+    gap: space.sm,
   },
   playButtonLabel: {
-    color: Colors.recommended,
-    fontSize: FontSize.md,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
   },
   playButtonSubLabel: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.sm,
-    fontWeight: '500',
-    marginTop: 2,
+    ...typography.caption,
+    color: color.textSecondary,
   },
   playButtonTextBlock: {
     flex: 1,

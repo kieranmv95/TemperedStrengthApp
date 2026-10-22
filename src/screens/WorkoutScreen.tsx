@@ -8,20 +8,24 @@ import { SessionTimer } from '@/src/components/SessionTimer';
 import { SwapModal } from '@/src/components/SwapModal';
 import { TrainingMaxesCard } from '@/src/components/TrainingMaxesCard';
 import { WorkoutScreenBody } from '@/src/components/WorkoutScreenBody';
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+import { AppSafeAreaView, Skeleton, StandardLayout } from '@/src/components/ds';
+import { color, space, typography } from '@/src/constants/tokens';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { useWorkoutScreenController } from '@/src/hooks/useWorkoutScreenController';
 import { workoutScreenStyles as styles } from '@/src/screens/workoutScreenStyles';
 import { cancelTimerFinishedNotifications } from '@/src/services/localNotifications';
 import { clearProgramData } from '@/src/utils/storage';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { router } from 'expo-router';
+import { useBottomTabBarHeight } from 'expo-router/tabs';
 import React from 'react';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { getEffectiveBottomInset } from '@/src/utils/platform';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { StandardLayout } from '../components/StandardLayout';
+
+const DAY_SELECTOR_SKELETON_HEIGHT = 72;
+const TITLE_SKELETON_HEIGHT = 32;
+const CARD_SKELETON_HEIGHT = 160;
 
 type WorkoutScreenProps = {
   onProgramReset?: () => void;
@@ -40,7 +44,7 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
   const handleViewAllPrograms = async () => {
     Alert.alert(
-      'End Program?',
+      'End program?',
       'To view all programs, we’ll end your current program and clear its data. This cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
@@ -77,8 +81,16 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         style={styles.container}
         edges={['top', 'left', 'right']}
       >
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading...</Text>
+        <View style={localStyles.loadingSkeletons}>
+          <Skeleton
+            width="100%"
+            height={DAY_SELECTOR_SKELETON_HEIGHT}
+            radius="md"
+            accessibilityLabel="Loading program"
+          />
+          <Skeleton width="60%" height={TITLE_SKELETON_HEIGHT} />
+          <Skeleton width="100%" height={CARD_SKELETON_HEIGHT} radius="md" />
+          <Skeleton width="100%" height={CARD_SKELETON_HEIGHT} radius="md" />
         </View>
       </AppSafeAreaView>
     );
@@ -88,25 +100,31 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
     !!c.program?.isPro && !subscriptionLoading && !isPro;
   if (isLockedProProgram) {
     return (
-      <StandardLayout title="PRO Required">
+      <StandardLayout title="Pro required">
         <StandardLayout.Body>
-          <Text style={styles.loadingText}>
-            Your Subscription ended part way through your program. Please renew
-            your subscription to continue.
-          </Text>
-          <Text style={styles.loadingText}>
-            Alternatively, you can start a new FREE program by ending your
-            current program in your account.
-          </Text>
-          <TouchableOpacity
-            onPress={() => router.push('/records')}
-            activeOpacity={0.7}
-            style={styles.startSessionButton}
-          >
-            <Text style={styles.startSessionButtonText}>
-              Manage subscription
+          <View style={localStyles.proRequiredBody}>
+            <Text style={localStyles.proRequiredText}>
+              Your subscription ended part way through your program. Please
+              renew your subscription to continue.
             </Text>
-          </TouchableOpacity>
+            <Text style={localStyles.proRequiredText}>
+              Alternatively, you can start a new free program by ending your
+              current program in your account.
+            </Text>
+            <Pressable
+              onPress={() => router.push('/records')}
+              style={({ pressed }) => [
+                styles.startSessionButton,
+                pressed && localStyles.primaryButtonPressed,
+              ]}
+              accessibilityRole="button"
+              accessibilityLabel="Manage subscription"
+            >
+              <Text style={styles.startSessionButtonText}>
+                Manage subscription
+              </Text>
+            </Pressable>
+          </View>
         </StandardLayout.Body>
       </StandardLayout>
     );
@@ -283,14 +301,34 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           ]}
         >
           <View style={styles.keyboardDoneBarSpacer} />
-          <TouchableOpacity
+          <Pressable
             style={styles.keyboardDoneBtn}
             onPress={c.handleNotesDone}
+            accessibilityRole="button"
+            accessibilityLabel="Done editing notes"
           >
             <Text style={styles.keyboardDoneText}>Done</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       )}
     </AppSafeAreaView>
   );
 };
+
+const localStyles = StyleSheet.create({
+  loadingSkeletons: {
+    flex: 1,
+    padding: space.md,
+    gap: space.md,
+  },
+  proRequiredBody: {
+    gap: space.sm,
+  },
+  proRequiredText: {
+    ...typography.body,
+    color: color.textSecondary,
+  },
+  primaryButtonPressed: {
+    backgroundColor: color.goldStrong,
+  },
+});

@@ -1,6 +1,7 @@
+import { StandardLayout } from '@/src/components/ds';
 import { WorkoutDetailScrollContent } from '@/src/components/workouts/WorkoutDetailScrollContent';
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
-import { Colors } from '@/src/constants/theme';
+import { color } from '@/src/constants/tokens';
 import { getStandaloneWorkoutById } from '@/src/data/workouts';
 import { useRoles } from '@/src/hooks/useRoles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -11,14 +12,13 @@ import {
 } from '@/src/utils/storage';
 import { isWorkoutLocked } from '@/src/utils/workoutAccess';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AccessibilityInfo, Pressable, Text, View } from 'react-native';
 
 const VIEW_SOURCES = new Set(['browse', 'search', 'programme', 'skills']);
+const STATE_ICON_SIZE = 48;
 
 export default function StandaloneWorkoutDetailScreen() {
   const { id: idParam, view_source: viewSourceParam } = useLocalSearchParams<{
@@ -52,16 +52,16 @@ export default function StandaloneWorkoutDetailScreen() {
     }, [workoutId, workout, viewSource, posthog])
   );
 
+  const loadFavorites = async () => {
+    const favs = await getFavoriteWorkouts();
+    setFavorites(favs);
+  };
+
   useFocusEffect(
     useCallback(() => {
       void loadFavorites();
     }, [])
   );
-
-  const loadFavorites = async () => {
-    const favs = await getFavoriteWorkouts();
-    setFavorites(favs);
-  };
 
   const handleToggleFavorite = async (w: NonNullable<typeof workout>) => {
     const newStatus = await toggleFavoriteWorkout(w.id);
@@ -82,88 +82,101 @@ export default function StandaloneWorkoutDetailScreen() {
 
   if (!workoutId || !workout) {
     return (
-      <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-        <View style={styles.detailHeader}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-          </TouchableOpacity>
-          <Text style={styles.detailTitle} numberOfLines={1}>
-            Workout
-          </Text>
-          <View style={styles.headerRightSpacer} />
-        </View>
-
-        <View style={styles.emptyState}>
-          <Ionicons name="barbell" size={64} color={Colors.backgroundSubtle} />
-          <Text style={styles.emptyTitle}>Workout not found</Text>
-          <Text style={styles.emptyDescription}>
-            This workout may have been removed or the link is invalid.
-          </Text>
-        </View>
-      </SafeAreaView>
+      <StandardLayout
+        title="Workout"
+        onBackPress={() => router.back()}
+        disableScroll
+      >
+        <StandardLayout.Body>
+          <View style={styles.emptyState}>
+            <Ionicons
+              name="barbell-outline"
+              size={STATE_ICON_SIZE}
+              color={color.textTertiary}
+            />
+            <Text style={styles.emptyTitle} accessibilityRole="header">
+              Workout not found
+            </Text>
+            <Text style={styles.emptyDescription}>
+              This workout may have been removed or the link is invalid.
+            </Text>
+          </View>
+        </StandardLayout.Body>
+      </StandardLayout>
     );
   }
 
-  const isLocked =
-    !accessLoading && isWorkoutLocked(workout, { isPro, roles });
+  const isLocked = !accessLoading && isWorkoutLocked(workout, { isPro, roles });
   const isFavorite = favorites.includes(workout.id);
 
+  const handleFavoritePress = () => {
+    AccessibilityInfo.announceForAccessibility(
+      isFavorite ? 'Removed from favourites' : 'Added to favourites'
+    );
+    void handleToggleFavorite(workout);
+  };
+
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <View style={styles.detailHeader}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.detailTitle} numberOfLines={1}>
-          {workout.title}
-        </Text>
-        <TouchableOpacity
+    <StandardLayout
+      title={workout.title}
+      onBackPress={() => router.back()}
+      disableScroll
+      edgeToEdgeBody
+      titleAccessory={
+        <Pressable
           style={styles.detailFavoriteButton}
-          onPress={() => handleToggleFavorite(workout)}
+          onPress={handleFavoritePress}
           disabled={isLocked}
+          accessibilityRole="button"
+          accessibilityLabel={`Favourite ${workout.title}`}
+          accessibilityState={{ selected: isFavorite, disabled: isLocked }}
         >
           <Ionicons
             name={isFavorite ? 'heart' : 'heart-outline'}
             size={24}
             color={
               isLocked
-                ? Colors.textPlaceholder
+                ? color.textDisabled
                 : isFavorite
-                  ? Colors.destructive
-                  : Colors.textPrimary
+                  ? color.gold
+                  : color.textSecondary
             }
           />
-        </TouchableOpacity>
-      </View>
-
-      {isLocked ? (
-        <View style={styles.lockedState}>
-          <Ionicons name="lock-closed" size={44} color={Colors.accent} />
-          <Text style={styles.lockedTitle}>Pro workout</Text>
-          <Text style={styles.lockedDescription}>
-            Upgrade to Pro to unlock this workout.
-          </Text>
-          <TouchableOpacity
-            style={styles.lockedCta}
-            onPress={handleLockedPress}
-          >
-            <Text style={styles.lockedCtaText}>Go to Account</Text>
+        </Pressable>
+      }
+    >
+      <StandardLayout.Body>
+        {isLocked ? (
+          <View style={styles.lockedState}>
             <Ionicons
-              name="chevron-forward"
-              size={18}
-              color={Colors.textOnAccent}
+              name="lock-closed"
+              size={STATE_ICON_SIZE}
+              color={color.textSecondary}
             />
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <WorkoutDetailScrollContent workout={workout} />
-      )}
-    </SafeAreaView>
+            <Text style={styles.lockedTitle} accessibilityRole="header">
+              Pro workout
+            </Text>
+            <Text style={styles.lockedDescription}>
+              Upgrade to Pro to unlock this workout.
+            </Text>
+            <Pressable
+              style={({ pressed }) => [
+                styles.lockedCta,
+                pressed && styles.lockedCtaPressed,
+              ]}
+              onPress={handleLockedPress}
+              accessibilityRole="button"
+              accessibilityLabel="Unlock with Pro"
+              accessibilityHint="Opens the You tab"
+            >
+              <Text style={styles.lockedCtaText}>Unlock with Pro</Text>
+              <Ionicons name="chevron-forward" size={18} color={color.onGold} />
+            </Pressable>
+          </View>
+        ) : (
+          <WorkoutDetailScrollContent workout={workout} />
+        )}
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 }

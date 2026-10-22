@@ -1,7 +1,11 @@
-import { Pill } from '@/src/components/pill';
-import { settingsScreenStyles } from '@/src/components/settings/settingsScreenStyles';
-import { StandardLayout } from '@/src/components/StandardLayout';
-import { Colors } from '@/src/constants/theme';
+import { CheckinListSkeleton } from '@/src/components/checkin/CheckinListSkeleton';
+import {
+  FilterChip,
+  ProgressBar,
+  SectionHeader,
+  StandardLayout,
+} from '@/src/components/ds';
+import { color } from '@/src/constants/tokens';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { checkinScreenStyles as styles } from '@/src/screens/checkin/checkinScreenStyles';
 import type {
@@ -28,13 +32,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 export function CheckinSettingsScreen() {
   const { isPro, isLoading: subscriptionLoading } = useSubscription();
@@ -165,71 +163,83 @@ export function CheckinSettingsScreen() {
 
     return (
       <View style={styles.list}>
-        {tracked.map((item, index) => (
-          <View key={item.id} style={styles.trackedRow}>
-            <View style={styles.trackedRowTextBlock}>
-              <Text style={styles.trackedRowTitle}>
-                {behaviourLabel(item.behaviourId)}
-              </Text>
+        {tracked.map((item, index) => {
+          const isFirst = index === 0;
+          const isLast = index === tracked.length - 1;
+          const canMoveUp = !isFirst && !saving;
+          const canMoveDown = !isLast && !saving;
+          return (
+            <View key={item.id} style={styles.trackedRow}>
+              <View style={styles.trackedRowTextBlock}>
+                <Text style={styles.trackedRowTitle}>
+                  {behaviourLabel(item.behaviourId)}
+                </Text>
+              </View>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.reorderButton,
+                  pressed && canMoveUp && styles.reorderButtonPressed,
+                  isFirst && styles.reorderButtonDisabled,
+                ]}
+                onPress={() => handleMove(index, -1)}
+                disabled={!canMoveUp}
+                accessibilityRole="button"
+                accessibilityLabel={`Move ${behaviourLabel(item.behaviourId)} up`}
+                accessibilityState={{ disabled: !canMoveUp }}
+              >
+                <Ionicons
+                  name="chevron-up"
+                  size={18}
+                  color={isFirst ? color.textDisabled : color.textPrimary}
+                />
+              </Pressable>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.reorderButton,
+                  pressed && canMoveDown && styles.reorderButtonPressed,
+                  isLast && styles.reorderButtonDisabled,
+                ]}
+                onPress={() => handleMove(index, 1)}
+                disabled={!canMoveDown}
+                accessibilityRole="button"
+                accessibilityLabel={`Move ${behaviourLabel(
+                  item.behaviourId
+                )} down`}
+                accessibilityState={{ disabled: !canMoveDown }}
+              >
+                <Ionicons
+                  name="chevron-down"
+                  size={18}
+                  color={isLast ? color.textDisabled : color.textPrimary}
+                />
+              </Pressable>
             </View>
-            <TouchableOpacity
-              style={[
-                styles.reorderButton,
-                index === 0 && styles.reorderButtonDisabled,
-              ]}
-              onPress={() => handleMove(index, -1)}
-              disabled={index === 0 || saving}
-              accessibilityRole="button"
-              accessibilityLabel={`Move ${behaviourLabel(item.behaviourId)} up`}
-            >
-              <Ionicons
-                name="chevron-up"
-                size={18}
-                color={Colors.textPrimary}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.reorderButton,
-                index === tracked.length - 1 && styles.reorderButtonDisabled,
-              ]}
-              onPress={() => handleMove(index, 1)}
-              disabled={index === tracked.length - 1 || saving}
-              accessibilityRole="button"
-              accessibilityLabel={`Move ${behaviourLabel(
-                item.behaviourId
-              )} down`}
-            >
-              <Ionicons
-                name="chevron-down"
-                size={18}
-                color={Colors.textPrimary}
-              />
-            </TouchableOpacity>
-          </View>
-        ))}
+          );
+        })}
       </View>
     );
   };
 
   const renderCapUpsell = () => (
-    <View style={settingsScreenStyles.upgradePrompt}>
-      <Text style={settingsScreenStyles.upgradePromptTitle}>
+    <View style={styles.upsellCard}>
+      <Text style={styles.upsellTitle} accessibilityRole="header">
         Free includes {FREE_BEHAVIOUR_CAP} behaviours
       </Text>
-      <Text style={settingsScreenStyles.upgradePromptBody}>
+      <Text style={styles.upsellBody}>
         Untrack one to swap it out, or upgrade to Pro for unlimited behaviours.
         Women’s health behaviours never count towards the limit.
       </Text>
-      <TouchableOpacity
+      <Pressable
+        style={({ pressed }) => [
+          styles.primaryButton,
+          pressed && styles.primaryButtonPressed,
+        ]}
         onPress={() => router.push('/paywall')}
         accessibilityRole="button"
         accessibilityLabel="Upgrade to Pro"
       >
-        <Text style={settingsScreenStyles.upgradePromptCta}>
-          Upgrade to Pro
-        </Text>
-      </TouchableOpacity>
+        <Text style={styles.primaryButtonText}>Upgrade to Pro</Text>
+      </Pressable>
     </View>
   );
 
@@ -245,14 +255,18 @@ export function CheckinSettingsScreen() {
             (item) => item.behaviourId === behaviour.id
           );
           return (
-            <TouchableOpacity
+            <Pressable
               key={behaviour.id}
-              style={styles.trackedRow}
+              style={({ pressed }) => [
+                styles.trackedRow,
+                pressed && styles.trackedRowPressed,
+              ]}
               onPress={() => handleToggleBehaviour(behaviour)}
               disabled={saving}
               accessibilityRole="checkbox"
               accessibilityLabel={behaviour.label}
-              accessibilityState={{ checked: isTracked }}
+              accessibilityHint={behaviour.description}
+              accessibilityState={{ checked: isTracked, disabled: saving }}
             >
               <View style={styles.trackedRowTextBlock}>
                 <Text style={styles.trackedRowTitle}>{behaviour.label}</Text>
@@ -265,9 +279,9 @@ export function CheckinSettingsScreen() {
               <Ionicons
                 name={isTracked ? 'checkbox' : 'square-outline'}
                 size={24}
-                color={isTracked ? Colors.accent : Colors.backgroundBorder}
+                color={isTracked ? color.gold : color.borderStrong}
               />
-            </TouchableOpacity>
+            </Pressable>
           );
         })}
       </View>
@@ -282,31 +296,50 @@ export function CheckinSettingsScreen() {
     >
       <StandardLayout.Body>
         {loading || subscriptionLoading ? (
-          <View style={styles.loadingBox}>
-            <ActivityIndicator color={Colors.accent} />
-          </View>
+          <CheckinListSkeleton accessibilityLabel="Loading behaviours" />
         ) : (
           <View style={styles.page}>
-            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            {error ? (
+              <Text
+                style={styles.errorText}
+                accessibilityRole="alert"
+                accessibilityLiveRegion="polite"
+              >
+                {error}
+              </Text>
+            ) : null}
 
             {!isPro ? (
-              <View style={styles.slotsRow}>
-                <Text style={styles.slotsLabel}>Free behaviour slots</Text>
-                <Text style={styles.slotsValue}>
-                  {countCapBehaviours(tracked)} / {FREE_BEHAVIOUR_CAP}
-                </Text>
+              <View style={styles.slotsCard}>
+                <View
+                  style={styles.slotsRow}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                >
+                  <Text style={styles.slotsLabel}>Free behaviour slots</Text>
+                  <Text style={styles.slotsValue}>
+                    {countCapBehaviours(tracked)} / {FREE_BEHAVIOUR_CAP}
+                  </Text>
+                </View>
+                <ProgressBar
+                  progress={countCapBehaviours(tracked) / FREE_BEHAVIOUR_CAP}
+                  accessibilityLabel="Free behaviour slots"
+                  accessibilityValueText={`${countCapBehaviours(
+                    tracked
+                  )} of ${FREE_BEHAVIOUR_CAP} used`}
+                />
               </View>
             ) : null}
 
             {showCapUpsell ? renderCapUpsell() : null}
 
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Tracked</Text>
+              <SectionHeader title="Tracked" />
               {renderTrackedSection()}
             </View>
 
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Browse</Text>
+              <SectionHeader title="Browse" />
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -314,10 +347,10 @@ export function CheckinSettingsScreen() {
                 contentContainerStyle={styles.chipScrollContent}
               >
                 {categories.map((category) => (
-                  <Pill
+                  <FilterChip
                     key={category.id}
                     label={category.label}
-                    isActive={activeCategory === category.id}
+                    selected={activeCategory === category.id}
                     onPress={() => setActiveCategory(category.id)}
                   />
                 ))}

@@ -1,5 +1,5 @@
 import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
-import { Spacing } from '@/src/constants/theme';
+import { space } from '@/src/constants/tokens';
 import { getStandaloneWorkoutById } from '@/src/data/workouts';
 import { useRoles } from '@/src/hooks/useRoles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -8,11 +8,15 @@ import {
   getFavoriteWorkouts,
   toggleFavoriteWorkout,
 } from '@/src/utils/storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import React, { useCallback, useMemo, useState } from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 
 type SkillWorkoutsProps = {
   workoutsIds: string[];
@@ -24,7 +28,6 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
   const cardWidth = windowWidth * 0.6;
   const { isPro, roles, isLoading: accessLoading } = useRoles();
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [rowHeight, setRowHeight] = useState<number | undefined>();
 
   const workouts = useMemo(() => {
     const resolved: SingleWorkout[] = [];
@@ -35,10 +38,6 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
       }
     }
     return resolved;
-  }, [workoutsIds]);
-
-  useEffect(() => {
-    setRowHeight(undefined);
   }, [workoutsIds]);
 
   useFocusEffect(
@@ -88,20 +87,7 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
       contentContainerStyle={styles.list}
     >
       {workouts.map((workout) => (
-        <View
-          key={workout.id}
-          style={[
-            styles.cardSlot,
-            { width: cardWidth },
-            rowHeight != null ? { height: rowHeight } : null,
-          ]}
-          onLayout={(event) => {
-            const nextHeight = Math.ceil(event.nativeEvent.layout.height);
-            setRowHeight((current) =>
-              current == null || nextHeight > current ? nextHeight : current
-            );
-          }}
-        >
+        <View key={workout.id} style={{ width: cardWidth }}>
           <WorkoutCard
             workout={workout}
             isFavorite={favorites.includes(workout.id)}
@@ -112,6 +98,7 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
             onLockedPress={handleLockedPress}
             style={styles.card}
             hideTags
+            fill
           />
         </View>
       ))}
@@ -121,20 +108,15 @@ export function SkillWorkouts({ workoutsIds }: SkillWorkoutsProps) {
 
 const styles = StyleSheet.create({
   scrollBleed: {
-    marginHorizontal: -Spacing.xxl,
+    marginHorizontal: -space.md,
   },
   list: {
-    gap: Spacing.md,
-    paddingHorizontal: Spacing.xxl,
+    gap: space.sm,
+    paddingHorizontal: space.md,
     alignItems: 'stretch',
-  },
-  cardSlot: {
-    alignSelf: 'stretch',
   },
   card: {
-    marginBottom: 0,
     flex: 1,
-    height: '100%',
-    alignItems: 'stretch',
+    marginBottom: 0,
   },
 });

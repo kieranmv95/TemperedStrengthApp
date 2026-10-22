@@ -1,13 +1,23 @@
-import { Card, SmallChevron } from '@/src/components/ds';
-import { ExerciseVideoPlayButton } from '@/src/components/exercise/ExerciseVideoPlayButton';
 import {
+  FilterChip,
   IOS_KEYBOARD_DONE_ACCESSORY_ID,
   IosKeyboardDoneAccessory,
-} from '@/src/components/forms/IosKeyboardDoneAccessory';
+  PressableCard,
+  Skeleton,
+  StandardLayout,
+} from '@/src/components/ds';
+import { ExerciseVideoPlayButton } from '@/src/components/exercise/ExerciseVideoPlayButton';
 import { PbModalDateTimeField } from '@/src/components/PbModalDateTimeField';
-import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
-import { BorderRadius, Colors, FontSize, Spacing } from '@/src/constants/theme';
+import {
+  color,
+  elevation,
+  MIN_TARGET_SIZE,
+  radius,
+  space,
+  typography,
+} from '@/src/constants/tokens';
 import { getExerciseById } from '@/src/data/exercises';
+import { useLargeText } from '@/src/hooks/useLargeText';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import type { RepMax } from '@/src/types/personalBests';
 import {
@@ -26,25 +36,45 @@ import {
   parseUserWeightInputToKg,
 } from '@/src/utils/weightUnits';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
   Alert,
   Keyboard,
   Modal,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
+const TIER_SKELETON_HEIGHT = 88;
+const TIER_SKELETON_COUNT = 3;
+
+type TierValueProps = {
+  label?: string;
+  weightText: string;
+  dateText: string;
+  isBest: boolean;
+};
+
+function TierValue({ label, weightText, dateText, isBest }: TierValueProps) {
+  return (
+    <View style={styles.tierHolder}>
+      {label ? <Text style={styles.tierSubLabel}>{label}</Text> : null}
+      <Text style={[styles.tierWeight, isBest && styles.tierWeightBest]}>
+        {weightText}
+      </Text>
+      <Text style={styles.tierDate}>{dateText}</Text>
+    </View>
+  );
+}
 
 export default function ExercisePersonalBestsScreen() {
   const { unit: weightUnit } = useWeightUnit();
+  const largeText = useLargeText();
   const { exerciseId: idParam } = useLocalSearchParams();
   const idStr = asStringId(idParam);
   const exerciseId = idStr ? parseInt(idStr, 10) : NaN;
@@ -53,6 +83,8 @@ export default function ExercisePersonalBestsScreen() {
     if (!Number.isFinite(exerciseId)) return undefined;
     return getExerciseById(exerciseId);
   }, [exerciseId]);
+
+  const lowerWeightIsBetter = exercise?.lowerWeightIsBetter === true;
 
   const [pbs, setPbs] = useState<Awaited<
     ReturnType<typeof getPersonalBestsForExercise>
@@ -132,173 +164,167 @@ export default function ExercisePersonalBestsScreen() {
 
   if (!Number.isFinite(exerciseId) || !exercise) {
     return (
-      <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-        <View style={styles.detailHeader}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-          </TouchableOpacity>
-          <Text style={styles.detailTitle} numberOfLines={1}>
-            Exercise
-          </Text>
-          <View style={styles.headerRightSpacer} />
-        </View>
-        <View style={styles.emptyState}>
+      <StandardLayout title="Exercise" onBackPress={() => router.back()}>
+        <StandardLayout.Body>
           <Text style={styles.emptyTitle}>Exercise not found</Text>
-        </View>
-      </SafeAreaView>
+        </StandardLayout.Body>
+      </StandardLayout>
     );
   }
 
+  const exerciseMeta = `${exercise.muscle} · ${exercise.equipment}`;
+
   if (exercise.logging_type === 'time') {
     return (
-      <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-        <View style={styles.detailHeader}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-          </TouchableOpacity>
-          <Text style={styles.detailTitle} numberOfLines={1}>
-            {exercise.name}
-          </Text>
-          <View style={styles.headerRightSpacer} />
-        </View>
-        <ScrollView
-          style={styles.detailContent}
-          contentContainerStyle={localStyles.scrollContent}
-        >
-          <Text style={localStyles.meta}>
-            {exercise.muscle} · {exercise.equipment}
-          </Text>
-          <ExerciseVideoPlayButton exerciseId={exercise.id} variant="banner" />
-          <View style={styles.emptyState}>
+      <StandardLayout
+        title={exercise.name}
+        subtitle={exerciseMeta}
+        onBackPress={() => router.back()}
+      >
+        <StandardLayout.Body>
+          <View style={styles.body}>
+            <ExerciseVideoPlayButton
+              exerciseId={exercise.id}
+              variant="banner"
+            />
             <Text style={styles.emptyDescription}>
               Personal bests for rep maxes apply to rep-based exercises only.
             </Text>
           </View>
-        </ScrollView>
-      </SafeAreaView>
+        </StandardLayout.Body>
+      </StandardLayout>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <View style={styles.detailHeader}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.detailTitle} numberOfLines={1}>
-          {exercise.name}
-        </Text>
-        <View style={styles.headerRightSpacer} />
-      </View>
+    <StandardLayout
+      title={exercise.name}
+      subtitle={exerciseMeta}
+      onBackPress={() => router.back()}
+    >
+      <StandardLayout.Body>
+        <View style={styles.body}>
+          <ExerciseVideoPlayButton exerciseId={exercise.id} variant="banner" />
 
-      <ScrollView
-        style={styles.detailContent}
-        contentContainerStyle={localStyles.scrollContent}
-      >
-        <Text style={localStyles.meta}>
-          {exercise.muscle} · {exercise.equipment}
-        </Text>
+          <Pressable
+            style={({ pressed }) => [
+              styles.logButton,
+              pressed && styles.logButtonPressed,
+            ]}
+            onPress={openLog}
+            accessibilityRole="button"
+            accessibilityLabel="Log lift"
+          >
+            <Ionicons name="add" size={22} color={color.onGold} />
+            <Text style={styles.logButtonText}>Log lift</Text>
+          </Pressable>
 
-        <ExerciseVideoPlayButton exerciseId={exercise.id} variant="banner" />
-
-        <TouchableOpacity style={localStyles.logButton} onPress={openLog}>
-          <Text style={localStyles.logButtonText}>Log Lift</Text>
-          <Ionicons name="add" size={22} color={Colors.textOnAccent} />
-        </TouchableOpacity>
-
-        {loading || pbs === null ? (
-          <ActivityIndicator
-            color={Colors.textMuted}
-            style={localStyles.loader}
-          />
-        ) : (
-          <View style={localStyles.tierList}>
-            {REP_MAX_ORDER.map((tier) => {
-              const best = getCurrentBestForTier(pbs, tier);
-              const latest = getLatestEntryForTier(pbs, tier);
-              const count = pbs[tier]?.length ?? 0;
-              const showLatest =
-                latest &&
-                best &&
-                (latest.weight !== best.weight ||
-                  latest.achievedAt !== best.achievedAt);
-              return (
-                <Card
-                  key={tier}
-                  onPress={() => router.push(`/records/${exerciseId}/${tier}`)}
-                  accessibilityLabel="Open rep max history"
-                >
-                  <View style={localStyles.tierRowLeft}>
-                    <Text style={localStyles.tierLabel}>
-                      {formatRepMaxLabel(tier)}
-                    </Text>
-                    {count > 0 ? (
-                      <Text style={localStyles.tierCount}>
-                        {count} {count === 1 ? 'entry' : 'entries'}
-                      </Text>
-                    ) : null}
-                  </View>
-                  <View style={localStyles.tierRowRight}>
-                    {best ? (
-                      <View>
-                        {showLatest && latest ? (
-                          <View style={localStyles.doubleTier}>
-                            <View style={localStyles.tierHolder}>
-                              <Text style={localStyles.tierSubLabel}>Best</Text>
-                              <Text style={localStyles.tierWeight}>
-                                {formatWeightFromKg(best.weight, weightUnit)}
-                              </Text>
-                              <Text style={localStyles.tierDate}>
-                                {new Date(best.achievedAt).toLocaleDateString()}
-                              </Text>
-                            </View>
-                            <View style={localStyles.tierHolder}>
-                              <Text style={localStyles.tierSubLabel}>
-                                Latest
-                              </Text>
-                              <Text style={localStyles.tierWeight}>
-                                {formatWeightFromKg(latest.weight, weightUnit)}
-                              </Text>
-                              <Text style={localStyles.tierDate}>
-                                {new Date(
-                                  latest.achievedAt
-                                ).toLocaleDateString()}
-                              </Text>
-                            </View>
-                          </View>
-                        ) : (
-                          <View style={localStyles.tierHolder}>
-                            <View>
-                              <Text style={localStyles.tierWeight}>
-                                {formatWeightFromKg(best.weight, weightUnit)}
-                              </Text>
-                              <Text style={localStyles.tierDate}>
-                                {new Date(best.achievedAt).toLocaleDateString()}
-                              </Text>
-                            </View>
-                          </View>
-                        )}
+          {loading || pbs === null ? (
+            <View style={styles.tierList}>
+              {Array.from({ length: TIER_SKELETON_COUNT }, (_, index) => (
+                <Skeleton
+                  key={index}
+                  width="100%"
+                  height={TIER_SKELETON_HEIGHT}
+                  radius="md"
+                  accessibilityLabel={
+                    index === 0 ? 'Loading personal bests' : undefined
+                  }
+                />
+              ))}
+            </View>
+          ) : (
+            <View style={styles.tierList}>
+              {REP_MAX_ORDER.map((tier) => {
+                const best = getCurrentBestForTier(
+                  pbs,
+                  tier,
+                  lowerWeightIsBetter
+                );
+                const latest = getLatestEntryForTier(pbs, tier);
+                const count = pbs[tier]?.length ?? 0;
+                const showLatest =
+                  latest &&
+                  best &&
+                  (latest.weight !== best.weight ||
+                    latest.achievedAt !== best.achievedAt);
+                const tierLabel = formatRepMaxLabel(tier);
+                const countLabel = `${count} ${count === 1 ? 'entry' : 'entries'}`;
+                const bestWeight = best
+                  ? formatWeightFromKg(best.weight, weightUnit)
+                  : null;
+                const bestDate = best
+                  ? new Date(best.achievedAt).toLocaleDateString()
+                  : null;
+                const latestWeight = latest
+                  ? formatWeightFromKg(latest.weight, weightUnit)
+                  : null;
+                const latestDate = latest
+                  ? new Date(latest.achievedAt).toLocaleDateString()
+                  : null;
+                const accessibilityParts = [tierLabel];
+                if (best) {
+                  accessibilityParts.push(`best ${bestWeight} on ${bestDate}`);
+                } else {
+                  accessibilityParts.push('not set');
+                }
+                if (showLatest && latest) {
+                  accessibilityParts.push(
+                    `latest ${latestWeight} on ${latestDate}`
+                  );
+                }
+                if (count > 0) {
+                  accessibilityParts.push(countLabel);
+                }
+                return (
+                  <PressableCard
+                    key={tier}
+                    onPress={() =>
+                      router.push(`/records/${exerciseId}/${tier}`)
+                    }
+                    accessibilityLabel={accessibilityParts.join(', ')}
+                    accessibilityHint="Opens rep max history"
+                  >
+                    <View
+                      style={[
+                        styles.tierRow,
+                        largeText && styles.tierRowStacked,
+                      ]}
+                    >
+                      <View style={styles.tierRowLeft}>
+                        <Text style={styles.tierLabel}>{tierLabel}</Text>
+                        {count > 0 ? (
+                          <Text style={styles.tierCount}>{countLabel}</Text>
+                        ) : null}
                       </View>
-                    ) : (
-                      <Text style={localStyles.tierEmpty}>—</Text>
-                    )}
-                    <SmallChevron />
-                  </View>
-                </Card>
-              );
-            })}
-          </View>
-        )}
-      </ScrollView>
+                      {best && bestWeight && bestDate ? (
+                        <View style={styles.tierValues}>
+                          <TierValue
+                            label={showLatest ? 'Best' : undefined}
+                            weightText={bestWeight}
+                            dateText={bestDate}
+                            isBest
+                          />
+                          {showLatest && latestWeight && latestDate ? (
+                            <TierValue
+                              label="Latest"
+                              weightText={latestWeight}
+                              dateText={latestDate}
+                              isBest={false}
+                            />
+                          ) : null}
+                        </View>
+                      ) : (
+                        <Text style={styles.tierEmpty}>Not set</Text>
+                      )}
+                    </View>
+                  </PressableCard>
+                );
+              })}
+            </View>
+          )}
+        </View>
+      </StandardLayout.Body>
 
       <Modal
         visible={logModalVisible}
@@ -309,255 +335,277 @@ export default function ExercisePersonalBestsScreen() {
           setLogModalVisible(false);
         }}
       >
-        <View style={localStyles.modalOverlay}>
-          <View style={localStyles.modalCard}>
+        <View style={styles.modalOverlay}>
+          <View
+            style={[styles.modalCard, elevation.overlay]}
+            accessibilityViewIsModal
+            onAccessibilityEscape={() => {
+              Keyboard.dismiss();
+              setLogModalVisible(false);
+            }}
+          >
             <ScrollView
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.modalContent}
             >
-              <Text style={localStyles.modalTitle}>Log Lift</Text>
-              <Text style={localStyles.modalLabel}>Rep max</Text>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={localStyles.tierPills}
-              >
-                {REP_MAX_ORDER.map((tier) => (
-                  <TouchableOpacity
-                    key={tier}
-                    style={[
-                      localStyles.tierPill,
-                      selectedTier === tier && localStyles.tierPillActive,
-                    ]}
-                    onPress={() => setSelectedTier(tier)}
-                  >
-                    <Text
-                      style={[
-                        localStyles.tierPillText,
-                        selectedTier === tier && localStyles.tierPillTextActive,
-                      ]}
-                    >
-                      {formatRepMaxLabel(tier)}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-              <Text style={localStyles.modalLabel}>Weight ({weightUnit})</Text>
-              <TextInput
-                style={localStyles.weightInput}
-                value={weightInput}
-                onChangeText={setWeightInput}
-                keyboardType="decimal-pad"
-                inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
-                onSubmitEditing={() => Keyboard.dismiss()}
-                placeholder="0"
-                placeholderTextColor={Colors.textPlaceholder}
-              />
+              <Text style={styles.modalTitle} accessibilityRole="header">
+                Log lift
+              </Text>
+              <View style={styles.modalField}>
+                <Text
+                  style={styles.modalLabel}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                >
+                  Rep max
+                </Text>
+                <View style={styles.tierChips}>
+                  {REP_MAX_ORDER.map((tier) => (
+                    <FilterChip
+                      key={tier}
+                      label={formatRepMaxLabel(tier)}
+                      selected={selectedTier === tier}
+                      onPress={() => setSelectedTier(tier)}
+                      accessibilityLabel={`Rep max ${formatRepMaxLabel(tier)}`}
+                    />
+                  ))}
+                </View>
+              </View>
+              <View style={styles.modalField}>
+                <Text
+                  style={styles.modalLabel}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                >
+                  Weight ({weightUnit})
+                </Text>
+                <TextInput
+                  style={styles.weightInput}
+                  value={weightInput}
+                  onChangeText={setWeightInput}
+                  keyboardType="decimal-pad"
+                  inputAccessoryViewID={IOS_KEYBOARD_DONE_ACCESSORY_ID}
+                  onSubmitEditing={() => Keyboard.dismiss()}
+                  placeholder={weightUnit}
+                  placeholderTextColor={color.textTertiary}
+                  accessibilityLabel={`Weight in ${weightUnit}`}
+                />
+              </View>
               <PbModalDateTimeField value={logDate} onChange={setLogDate} />
               <IosKeyboardDoneAccessory />
-              <View style={localStyles.modalActions}>
-                <TouchableOpacity
-                  style={localStyles.modalCancel}
+              <View style={styles.modalActions}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.modalButton,
+                    styles.modalCancel,
+                    pressed && styles.modalCancelPressed,
+                  ]}
                   onPress={() => {
                     Keyboard.dismiss();
                     setLogModalVisible(false);
                   }}
                   disabled={saving}
+                  accessibilityRole="button"
+                  accessibilityLabel="Cancel"
+                  accessibilityState={{ disabled: saving }}
                 >
-                  <Text style={localStyles.modalCancelText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={localStyles.modalSave}
+                  <Text style={styles.modalCancelText}>Cancel</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.modalButton,
+                    styles.modalSave,
+                    pressed && styles.modalSavePressed,
+                    saving && styles.modalButtonBusy,
+                  ]}
                   onPress={handleSaveLog}
                   disabled={saving}
+                  accessibilityRole="button"
+                  accessibilityLabel={saving ? 'Saving' : 'Save lift'}
+                  accessibilityState={{ disabled: saving, busy: saving }}
                 >
-                  <Text style={localStyles.modalSaveText}>
+                  <Text style={styles.modalSaveText}>
                     {saving ? 'Saving…' : 'Save'}
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </ScrollView>
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </StandardLayout>
   );
 }
 
-const localStyles = StyleSheet.create({
-  scrollContent: {
-    padding: Spacing.xxl,
-    paddingBottom: Spacing.section,
+const styles = StyleSheet.create({
+  body: {
+    gap: space.md,
   },
-  meta: {
-    color: Colors.textMuted,
-    fontSize: FontSize.xxl,
-    marginBottom: Spacing.xxl,
+  emptyTitle: {
+    ...typography.headline,
+    color: color.textPrimary,
+    textAlign: 'center',
+    marginTop: space.xxl,
+  },
+  emptyDescription: {
+    ...typography.callout,
+    color: color.textSecondary,
+    textAlign: 'center',
   },
   logButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
-    backgroundColor: Colors.accent,
-    paddingVertical: Spacing.xxl,
-    borderRadius: BorderRadius.xxl,
-    marginBottom: Spacing.section,
+    gap: space.xs,
+    minHeight: MIN_TARGET_SIZE,
+    paddingHorizontal: space.lg,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
+  },
+  logButtonPressed: {
+    backgroundColor: color.goldStrong,
   },
   logButtonText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-  },
-  loader: {
-    marginTop: Spacing.section,
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
   tierList: {
-    gap: Spacing.xl,
+    gap: space.sm,
+  },
+  tierRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+  },
+  /** Large text: the values drop below the rep max label. */
+  tierRowStacked: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
   },
   tierRowLeft: {
     flex: 1,
-    marginRight: Spacing.md,
-  },
-  tierRowRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
+    minWidth: 0,
+    gap: space.xxs,
   },
   tierLabel: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displaySm,
-    fontWeight: '700',
+    ...typography.headline,
+    color: color.textPrimary,
   },
   tierCount: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    marginTop: Spacing.xs,
+    ...typography.caption,
+    color: color.textSecondary,
+  },
+  tierValues: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: space.xs,
+  },
+  tierHolder: {
+    alignItems: 'center',
+    paddingVertical: space.xs,
+    paddingHorizontal: space.sm,
+    borderRadius: radius.sm,
+    backgroundColor: color.surface2,
   },
   tierSubLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    fontWeight: '600',
-    textAlign: 'center',
+    ...typography.captionStrong,
+    color: color.textSecondary,
   },
   tierWeight: {
-    color: Colors.accent,
-    fontSize: FontSize.xxl,
-    fontWeight: '700',
-    textAlign: 'center',
+    ...typography.numericMedium,
+    color: color.textPrimary,
+  },
+  tierWeightBest: {
+    color: color.gold,
   },
   tierDate: {
-    color: Colors.textMuted,
-    fontSize: FontSize.md,
-    textAlign: 'center',
-    marginTop: Spacing.xs,
+    ...typography.caption,
+    fontVariant: ['tabular-nums'],
+    color: color.textTertiary,
   },
   tierEmpty: {
-    color: Colors.textPlaceholder,
-    fontSize: FontSize.xxl,
+    ...typography.callout,
+    color: color.textTertiary,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: Colors.overlay,
+    backgroundColor: color.scrim,
     justifyContent: 'center',
-    paddingHorizontal: Spacing.xxl,
+    paddingHorizontal: space.md,
   },
   modalCard: {
-    backgroundColor: Colors.backgroundCard,
-    borderRadius: BorderRadius.xxl,
-    padding: Spacing.section,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    backgroundColor: color.surface1,
+    borderRadius: radius.lg,
+    padding: space.xl,
     maxHeight: '90%',
   },
+  modalContent: {
+    gap: space.md,
+  },
   modalTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
-    fontWeight: '700',
-    marginBottom: Spacing.xxl,
+    ...typography.title2,
+    color: color.textPrimary,
+  },
+  modalField: {
+    gap: space.xxs,
   },
   modalLabel: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    marginBottom: Spacing.sm,
+    ...typography.captionStrong,
+    color: color.textSecondary,
   },
-  tierPills: {
-    gap: Spacing.sm,
-    marginBottom: Spacing.xxl,
-  },
-  tierPill: {
-    paddingHorizontal: Spacing.xxl,
-    paddingVertical: Spacing.md,
-    borderRadius: 20,
-    backgroundColor: Colors.backgroundElevated,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-  },
-  tierPillActive: {
-    backgroundColor: Colors.accent,
-    borderColor: Colors.accent,
-  },
-  tierPillText: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
-  },
-  tierPillTextActive: {
-    color: Colors.textOnAccent,
+  tierChips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: space.xs,
   },
   weightInput: {
-    backgroundColor: Colors.backgroundElevated,
+    ...typography.numericMedium,
+    minHeight: MIN_TARGET_SIZE + space.xxs,
+    paddingHorizontal: space.sm,
+    paddingVertical: space.xs,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-    borderRadius: 8,
-    padding: Spacing.xxl,
-    color: Colors.textPrimary,
-    fontSize: FontSize.xxl,
-    marginBottom: Spacing.xxl,
+    borderColor: color.borderStrong,
+    backgroundColor: color.surface2,
+    color: color.textPrimary,
   },
   modalActions: {
     flexDirection: 'row',
-    gap: Spacing.md,
+    flexWrap: 'wrap',
+    gap: space.xs,
+    marginTop: space.xs,
+  },
+  modalButton: {
+    flexGrow: 1,
+    flexBasis: 120,
+    minHeight: MIN_TARGET_SIZE,
+    borderRadius: radius.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalButtonBusy: {
+    opacity: 0.6,
   },
   modalCancel: {
-    flex: 1,
-    paddingVertical: Spacing.xxl,
-    alignItems: 'center',
-    borderRadius: 8,
-    backgroundColor: Colors.backgroundElevated,
     borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
+    borderColor: color.borderStrong,
+  },
+  modalCancelPressed: {
+    backgroundColor: color.surface3,
   },
   modalCancelText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
+    ...typography.calloutStrong,
+    color: color.textPrimary,
   },
   modalSave: {
-    flex: 1,
-    paddingVertical: Spacing.xxl,
-    alignItems: 'center',
-    borderRadius: 8,
-    backgroundColor: Colors.accent,
+    backgroundColor: color.gold,
+  },
+  modalSavePressed: {
+    backgroundColor: color.goldStrong,
   },
   modalSaveText: {
-    color: Colors.textOnAccent,
-    fontSize: FontSize.lg,
-    fontWeight: '600',
-  },
-  doubleTier: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: Spacing.sm,
-  },
-  tierHolder: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: Colors.backgroundElevated,
-    borderRadius: BorderRadius.lg,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.xl,
+    ...typography.calloutStrong,
+    color: color.onGold,
   },
 });

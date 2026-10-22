@@ -1,8 +1,7 @@
-import { Pill } from '@/src/components/pill';
+import { ActionChip, FilterChip, StandardLayout } from '@/src/components/ds';
 import { RecoveryCard } from '@/src/components/recovery/RecoveryCard';
-import { workoutDetailStyles as headerStyles } from '@/src/components/workouts/workoutDetailStyles';
 import { workoutsListStyles as styles } from '@/src/components/workouts/workoutsListStyles';
-import { Colors, FontSize, Spacing } from '@/src/constants/theme';
+import { color, space, typography } from '@/src/constants/tokens';
 import { recoveries } from '@/src/data/recovery';
 import { useRoles } from '@/src/hooks/useRoles';
 import {
@@ -16,16 +15,17 @@ import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import {
   FlatList,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import { AppSafeAreaView } from '@/src/components/AppSafeAreaView';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const COACH_ROLE = 'coach';
+const STATE_ICON_SIZE = 48;
 
 type RecoverySortBy = 'name' | 'access';
 type RecoverySortDirection = 'asc' | 'desc';
@@ -44,10 +44,7 @@ const SORT_DIRECTION_OPTIONS: {
 ];
 
 function equipmentLabel(equipment: RecoveryEquipment): string {
-  return equipment
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  return equipment.charAt(0).toUpperCase() + equipment.slice(1);
 }
 
 function compareRecoveries(
@@ -72,6 +69,7 @@ function compareRecoveries(
 }
 
 export default function RecoveryScreen() {
+  const insets = useSafeAreaInsets();
   const { isPro, roles, isLoading: accessLoading } = useRoles();
   const hasAccess = isPro || roles.includes(COACH_ROLE) || accessLoading;
   const [searchQuery, setSearchQuery] = useState('');
@@ -184,322 +182,273 @@ export default function RecoveryScreen() {
     router.push('/records');
   };
 
+  const showControls = recoveries.length > 0;
+
   return (
-    <AppSafeAreaView style={headerStyles.container}>
-      <View style={recoveryStyles.header}>
-        <View style={recoveryStyles.headerRow}>
-          <TouchableOpacity
-            style={headerStyles.backButton}
-            onPress={() => router.back()}
-            accessibilityLabel="Back"
-          >
-            <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
-          </TouchableOpacity>
-          <Text style={headerStyles.detailTitle} numberOfLines={1}>
-            Recovery
-          </Text>
-          <View style={headerStyles.headerRightSpacer} />
-        </View>
-
-        {recoveries.length > 0 ? (
-          <View style={recoveryStyles.controls}>
-            <View style={recoveryStyles.buttonsRow}>
-              <TouchableOpacity
-                style={recoveryStyles.toggleButton}
-                onPress={() => setFiltersExpanded((value) => !value)}
-                activeOpacity={0.8}
-                accessibilityRole="button"
-                accessibilityLabel="Filter recovery flows"
-                accessibilityState={{ expanded: filtersExpanded }}
-              >
-                <Text style={recoveryStyles.toggleButtonText}>
-                  {filtersExpanded ? 'Hide filters' : 'Show filters'}
+    <StandardLayout
+      title="Recovery"
+      onBackPress={() => router.back()}
+      disableScroll
+      edgeToEdgeBody
+      headerActions={
+        showControls ? (
+          <>
+            <ActionChip
+              label={filtersExpanded ? 'Hide filters' : 'Show filters'}
+              icon="options-outline"
+              tone={filtersExpanded ? 'gold' : 'neutral'}
+              onPress={() => setFiltersExpanded((value) => !value)}
+              accessibilityLabel="Filter recovery flows"
+              accessibilityState={{ expanded: filtersExpanded }}
+            />
+            <ActionChip
+              label="Sort by"
+              icon="swap-vertical"
+              tone={sortExpanded ? 'gold' : 'neutral'}
+              onPress={() => setSortExpanded((value) => !value)}
+              accessibilityLabel="Sort recovery flows"
+              accessibilityState={{ expanded: sortExpanded }}
+            />
+          </>
+        ) : undefined
+      }
+    >
+      {showControls && (sortExpanded || filtersExpanded) ? (
+        <StandardLayout.Filters>
+          {sortExpanded ? (
+            <View style={recoveryStyles.panel}>
+              <View style={styles.filtersRow}>
+                <Text style={styles.filtersLabel} accessibilityRole="header">
+                  Sort by
                 </Text>
-                <Ionicons name="filter" size={16} color={Colors.textMuted} />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={recoveryStyles.toggleButton}
-                onPress={() => setSortExpanded((value) => !value)}
-                activeOpacity={0.8}
-                accessibilityRole="button"
-                accessibilityLabel="Sort recovery flows"
-                accessibilityState={{ expanded: sortExpanded }}
-              >
-                <Text style={recoveryStyles.toggleButtonText}>Sort by</Text>
-                <Ionicons
-                  name="swap-vertical"
-                  size={16}
-                  color={Colors.textMuted}
-                />
-              </TouchableOpacity>
-            </View>
-
-            {sortExpanded ? (
-              <View style={recoveryStyles.sortPanel}>
-                <View style={recoveryStyles.sortRow}>
-                  <Text style={styles.filtersLabel}>Sort by</Text>
-                  <View style={recoveryStyles.sortPills}>
-                    {SORT_BY_OPTIONS.map((option) => (
-                      <Pill
-                        key={option.value}
-                        label={option.label}
-                        isActive={sortBy === option.value}
-                        onPress={() => setSortBy(option.value)}
-                      />
-                    ))}
-                  </View>
-                </View>
-                <View style={recoveryStyles.sortRow}>
-                  <Text style={styles.filtersLabel}>Title</Text>
-                  <View style={recoveryStyles.sortPills}>
-                    {SORT_DIRECTION_OPTIONS.map((option) => (
-                      <Pill
-                        key={option.value}
-                        label={option.label}
-                        isActive={sortDirection === option.value}
-                        onPress={() => setSortDirection(option.value)}
-                      />
-                    ))}
-                  </View>
+                <View style={recoveryStyles.chipWrap}>
+                  {SORT_BY_OPTIONS.map((option) => (
+                    <FilterChip
+                      key={option.value}
+                      label={option.label}
+                      selected={sortBy === option.value}
+                      onPress={() => setSortBy(option.value)}
+                      accessibilityLabel={`Sort by ${option.label}`}
+                    />
+                  ))}
                 </View>
               </View>
-            ) : null}
-
-            {filtersExpanded ? (
-              <View style={recoveryStyles.filters}>
-                <View style={[styles.searchContainer, recoveryStyles.search]}>
-                  <Ionicons
-                    name="search"
-                    size={18}
-                    color={Colors.textPlaceholder}
-                    style={styles.searchIcon}
-                  />
-                  <TextInput
-                    style={styles.searchInput}
-                    placeholder="Search recovery flows..."
-                    placeholderTextColor={Colors.textPlaceholder}
-                    value={searchQuery}
-                    onChangeText={setSearchQuery}
-                    returnKeyType="search"
-                    autoCorrect={false}
-                    autoCapitalize="none"
-                  />
-                  {searchQuery.length > 0 ? (
-                    <TouchableOpacity
-                      onPress={() => setSearchQuery('')}
-                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                    >
-                      <Ionicons
-                        name="close-circle"
-                        size={18}
-                        color={Colors.textPlaceholder}
-                      />
-                    </TouchableOpacity>
-                  ) : null}
+              <View style={styles.filtersRow}>
+                <Text style={styles.filtersLabel} accessibilityRole="header">
+                  Order
+                </Text>
+                <View style={recoveryStyles.chipWrap}>
+                  {SORT_DIRECTION_OPTIONS.map((option) => (
+                    <FilterChip
+                      key={option.value}
+                      label={option.label}
+                      selected={sortDirection === option.value}
+                      onPress={() => setSortDirection(option.value)}
+                    />
+                  ))}
                 </View>
+              </View>
+            </View>
+          ) : null}
 
+          {filtersExpanded ? (
+            <View style={recoveryStyles.panel}>
+              <View style={styles.searchContainer}>
+                <Ionicons name="search" size={18} color={color.textSecondary} />
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Search recovery flows"
+                  placeholderTextColor={color.textTertiary}
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  returnKeyType="search"
+                  autoCorrect={false}
+                  autoCapitalize="none"
+                  accessibilityLabel="Search recovery flows"
+                />
+                {searchQuery.length > 0 ? (
+                  <Pressable
+                    onPress={() => setSearchQuery('')}
+                    style={styles.clearSearch}
+                    accessibilityRole="button"
+                    accessibilityLabel="Clear search"
+                  >
+                    <Ionicons
+                      name="close-circle"
+                      size={20}
+                      color={color.textSecondary}
+                    />
+                  </Pressable>
+                ) : null}
+              </View>
+
+              <View style={styles.filtersRow}>
+                <Text style={styles.filtersLabel} accessibilityRole="header">
+                  Focus
+                </Text>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.filterScrollContent}
+                >
+                  <FilterChip
+                    label="All"
+                    selected={selectedTags.length === 0}
+                    onPress={() => setSelectedTags([])}
+                    accessibilityLabel="All focus areas"
+                  />
+                  {availableTags.map((tag) => (
+                    <FilterChip
+                      key={tag}
+                      label={tag}
+                      selected={selectedTags.includes(tag)}
+                      onPress={() => toggleTag(tag)}
+                    />
+                  ))}
+                </ScrollView>
+              </View>
+
+              {availableEquipment.length > 0 || hasNoEquipmentRecoveries ? (
                 <View style={styles.filtersRow}>
+                  <Text style={styles.filtersLabel} accessibilityRole="header">
+                    Equipment
+                  </Text>
                   <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={styles.filterScrollContent}
                   >
-                    <Text style={styles.filtersLabel}>Focus</Text>
-                    <Pill
-                      label="All"
-                      isActive={selectedTags.length === 0}
-                      onPress={() => setSelectedTags([])}
+                    <FilterChip
+                      label="Any"
+                      selected={
+                        selectedEquipment.length === 0 && !noEquipmentOnly
+                      }
+                      onPress={selectAnyEquipment}
+                      accessibilityLabel="Any equipment"
                     />
-                    {availableTags.map((tag) => (
-                      <Pill
-                        key={tag}
-                        label={tag}
-                        isActive={selectedTags.includes(tag)}
-                        onPress={() => toggleTag(tag)}
+                    {hasNoEquipmentRecoveries ? (
+                      <FilterChip
+                        label="No equipment"
+                        selected={noEquipmentOnly}
+                        onPress={toggleNoEquipment}
+                      />
+                    ) : null}
+                    {availableEquipment.map((item) => (
+                      <FilterChip
+                        key={item}
+                        label={equipmentLabel(item)}
+                        selected={selectedEquipment.includes(item)}
+                        onPress={() => toggleEquipment(item)}
                       />
                     ))}
                   </ScrollView>
                 </View>
-
-                {availableEquipment.length > 0 || hasNoEquipmentRecoveries ? (
-                  <View style={styles.filtersRow}>
-                    <ScrollView
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      contentContainerStyle={styles.filterScrollContent}
-                    >
-                      <Text style={styles.filtersLabel}>Equipment</Text>
-                      <Pill
-                        label="Any"
-                        isActive={
-                          selectedEquipment.length === 0 && !noEquipmentOnly
-                        }
-                        onPress={selectAnyEquipment}
-                      />
-                      {hasNoEquipmentRecoveries ? (
-                        <Pill
-                          label="No equipment"
-                          isActive={noEquipmentOnly}
-                          onPress={toggleNoEquipment}
-                        />
-                      ) : null}
-                      {availableEquipment.map((item) => (
-                        <Pill
-                          key={item}
-                          label={equipmentLabel(item)}
-                          isActive={selectedEquipment.includes(item)}
-                          onPress={() => toggleEquipment(item)}
-                        />
-                      ))}
-                    </ScrollView>
-                  </View>
-                ) : null}
-              </View>
-            ) : null}
-          </View>
-        ) : null}
-      </View>
-
-      {recoveries.length === 0 ? (
-        <View style={headerStyles.emptyState}>
-          <Ionicons name="leaf" size={64} color={Colors.backgroundSubtle} />
-          <Text style={headerStyles.emptyTitle}>No Flows Found</Text>
-          <Text style={headerStyles.emptyDescription}>
-            Recovery flows will appear here.
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          style={recoveryStyles.list}
-          data={visibleRecoveries}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={recoveryStyles.listContent}
-          ListHeaderComponent={
-            <View style={recoveryStyles.intro}>
-              <Text style={recoveryStyles.introTitle}>
-                Train hard, recover smart
-              </Text>
-              <Text style={recoveryStyles.introText}>
-                Mobility, prehab, and recovery flows to keep your joints healthy
-                and your body moving well. Use these on rest days or after
-                training to stay consistent and injury-free.
-              </Text>
+              ) : null}
             </View>
-          }
-          ListEmptyComponent={
-            <View style={recoveryStyles.noResults}>
-              <Ionicons
-                name="filter"
-                size={48}
-                color={Colors.backgroundSubtle}
-              />
-              <Text style={recoveryStyles.noResultsText}>
-                No flows match these filters.
-              </Text>
-            </View>
-          }
-          renderItem={({ item }) => (
-            <RecoveryCard
-              recovery={item}
-              isPro={hasAccess}
-              onPress={handleRecoveryPress}
-              onLockedPress={handleLockedPress}
+          ) : null}
+        </StandardLayout.Filters>
+      ) : null}
+
+      <StandardLayout.Body>
+        {recoveries.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Ionicons
+              name="leaf-outline"
+              size={STATE_ICON_SIZE}
+              color={color.textTertiary}
             />
-          )}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
-    </AppSafeAreaView>
+            <Text style={styles.emptyTitle} accessibilityRole="header">
+              No flows found
+            </Text>
+            <Text style={styles.emptyDescription}>
+              Recovery flows will appear here.
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            style={recoveryStyles.list}
+            data={visibleRecoveries}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={[
+              styles.listContent,
+              { paddingBottom: insets.bottom + space.xxl },
+            ]}
+            ListHeaderComponent={
+              <View style={recoveryStyles.intro}>
+                <Text
+                  style={recoveryStyles.introTitle}
+                  accessibilityRole="header"
+                >
+                  Train hard, recover smart
+                </Text>
+                <Text style={recoveryStyles.introText}>
+                  Mobility, prehab, and recovery flows to keep your joints
+                  healthy and your body moving well. Use these on rest days or
+                  after training to stay consistent and injury-free.
+                </Text>
+              </View>
+            }
+            ListEmptyComponent={
+              <View style={recoveryStyles.noResults}>
+                <Ionicons
+                  name="options-outline"
+                  size={STATE_ICON_SIZE}
+                  color={color.textTertiary}
+                />
+                <Text style={recoveryStyles.noResultsText}>
+                  No flows match these filters.
+                </Text>
+              </View>
+            }
+            renderItem={({ item }) => (
+              <RecoveryCard
+                recovery={item}
+                isPro={hasAccess}
+                onPress={handleRecoveryPress}
+                onLockedPress={handleLockedPress}
+              />
+            )}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </StandardLayout.Body>
+    </StandardLayout>
   );
 }
 
 const recoveryStyles = StyleSheet.create({
-  header: {
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.backgroundElevated,
+  panel: {
+    gap: space.sm,
   },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: Spacing.xxl,
-  },
-  controls: {
-    paddingHorizontal: Spacing.xxl,
-    paddingBottom: Spacing.xxl,
-    gap: Spacing.xxl,
-  },
-  intro: {
-    gap: Spacing.sm,
-    marginBottom: Spacing.xxl,
-  },
-  introTitle: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.displayMd,
-    fontWeight: '800',
-  },
-  introText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
-    lineHeight: 22,
-  },
-  filters: {
-    gap: Spacing.xl,
-  },
-  search: {
-    marginTop: 0,
-    marginBottom: 0,
-  },
-  buttonsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: Spacing.md,
-  },
-  toggleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
-    borderRadius: 12,
-    backgroundColor: Colors.backgroundCard,
-    borderWidth: 1,
-    borderColor: Colors.backgroundElevated,
-  },
-  toggleButtonText: {
-    color: Colors.textPrimary,
-    fontSize: FontSize.base,
-    fontWeight: '700',
-  },
-  sortPanel: {
-    gap: Spacing.lg,
-  },
-  sortRow: {
-    gap: Spacing.md,
-  },
-  sortPills: {
+  chipWrap: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: Spacing.md,
+    gap: space.xs,
   },
   list: {
     flex: 1,
   },
-  listContent: {
-    paddingHorizontal: Spacing.xxl,
-    paddingTop: Spacing.xl,
-    paddingBottom: Spacing.md,
+  intro: {
+    gap: space.xxs,
+    marginBottom: space.md,
+  },
+  introTitle: {
+    ...typography.title2,
+    color: color.textPrimary,
+  },
+  introText: {
+    ...typography.callout,
+    color: color.textSecondary,
   },
   noResults: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: Spacing.section,
-    gap: Spacing.lg,
+    paddingVertical: space.xxl,
+    gap: space.sm,
   },
   noResultsText: {
-    color: Colors.textMuted,
-    fontSize: FontSize.lg,
+    ...typography.callout,
+    color: color.textSecondary,
     textAlign: 'center',
   },
 });

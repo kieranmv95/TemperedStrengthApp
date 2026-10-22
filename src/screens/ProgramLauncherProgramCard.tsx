@@ -1,8 +1,11 @@
+import { Badge, PressableCard, Tag } from '@/src/components/ds';
+import { color } from '@/src/constants/tokens';
 import type { Program } from '@/src/types/program';
 import { sessionsPerWeekFromProgram } from '@/src/utils/programWeekPattern';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { SmallChevron } from '../components/ds/SmallChevron';
+import { Text, View } from 'react-native';
+import { sentenceCaseLabel } from './programLauncherConstants';
 import { programLauncherStyles as styles } from './programLauncherStyles';
 
 type ProgramLauncherProgramCardProps = {
@@ -11,6 +14,8 @@ type ProgramLauncherProgramCardProps = {
   isRecommended?: boolean;
   onSelect: (program: Program) => void;
 };
+
+const LOCK_ICON_SIZE = 14;
 
 export function ProgramLauncherProgramCard({
   program,
@@ -22,47 +27,58 @@ export function ProgramLauncherProgramCard({
   const weekCount = Math.ceil((maxDayIndex + 1) / 7);
   const sessionsPerWeek = sessionsPerWeekFromProgram(program);
 
+  const difficultyLabel = sentenceCaseLabel(program.difficulty);
+  const categoryLabels = program.categories.map(sentenceCaseLabel);
+  const statsParts = [
+    `${weekCount} ${weekCount === 1 ? 'week' : 'weeks'}`,
+    sessionsPerWeek > 0 ? `${sessionsPerWeek} sessions/week` : null,
+    program.averageSessionDuration || null,
+  ].filter((part): part is string => part !== null);
+  const proLabel = program.isPro ? (isLocked ? 'Pro, locked' : 'Pro') : null;
+
+  const accessibilityLabel = [
+    program.name,
+    isRecommended ? 'Recommended for you' : null,
+    proLabel,
+    difficultyLabel,
+    ...categoryLabels,
+    ...statsParts,
+  ]
+    .filter((part): part is string => part !== null)
+    .join(', ');
+
   return (
-    <TouchableOpacity
-      style={[styles.programCard, isLocked && styles.programCardLocked]}
+    <PressableCard
       onPress={() => onSelect(program)}
-      disabled={false}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint="Opens program details"
     >
       <View style={styles.programContent}>
-        {isRecommended && (
-          <View style={styles.recommendedBadge}>
-            <Text style={styles.recommendedBadgeText}>
-              {'\u2605'} Recommended for you
-            </Text>
-          </View>
-        )}
-        <View style={styles.programNameRow}>
-          <Text style={styles.programName}>{program.name}</Text>
-        </View>
-        <View style={styles.programCategoryRow}>
-          {program.isPro && (
-            <View style={styles.proBadge}>
-              <Text style={styles.proBadgeText}>PRO</Text>
+        {isRecommended ? (
+          <Badge label="Recommended for you" tone="success" />
+        ) : null}
+        <Text style={styles.programName}>{program.name}</Text>
+        <View style={styles.programTagRow}>
+          {program.isPro ? (
+            <View style={styles.proBadgeRow}>
+              {isLocked ? (
+                <Ionicons
+                  name="lock-closed"
+                  size={LOCK_ICON_SIZE}
+                  color={color.textSecondary}
+                />
+              ) : null}
+              <Badge label="PRO" accessibilityLabel="Pro program" />
             </View>
-          )}
-          <Text style={styles.programCategoryText}>{program.difficulty}</Text>
-          {program.categories.map((category) => (
-            <Text key={category} style={styles.programCategoryText}>
-              {category}
-            </Text>
+          ) : null}
+          <Badge label={difficultyLabel} tone="neutral" />
+          {program.categories.map((category, index) => (
+            <Tag key={category} label={categoryLabels[index]} />
           ))}
         </View>
         <Text style={styles.programDescription}>{program.description}</Text>
-        <Text style={styles.programStats}>
-          {weekCount} {weekCount === 1 ? 'week' : 'weeks'}
-          {sessionsPerWeek > 0 && ` • ${sessionsPerWeek} sessions/week`}
-          {program.averageSessionDuration &&
-            ` • ${program.averageSessionDuration}`}
-        </Text>
+        <Text style={styles.programStats}>{statsParts.join(' · ')}</Text>
       </View>
-      <View style={styles.selectArrow}>
-        <SmallChevron />
-      </View>
-    </TouchableOpacity>
+    </PressableCard>
   );
 }
