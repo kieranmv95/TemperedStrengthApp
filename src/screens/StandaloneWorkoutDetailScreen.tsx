@@ -1,11 +1,21 @@
 import { StandardLayout } from '@/src/components/ds';
+import { TemperedDailyLockedUpsell } from '@/src/components/temperedDaily/TemperedDailyLockedUpsell';
+import { getTemperedDailyCategoryLabel } from '@/src/components/temperedDaily/temperedDailyConstants';
 import { WorkoutDetailScrollContent } from '@/src/components/workouts/WorkoutDetailScrollContent';
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
 import { color } from '@/src/constants/tokens';
+import {
+  getTemperedDailyWorkoutById,
+  temperedDailyProgram,
+} from '@/src/data/temperedDaily';
 import { getStandaloneWorkoutById } from '@/src/data/workouts';
 import { useRoles } from '@/src/hooks/useRoles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { asStringId } from '@/src/utils/routeParams';
+import {
+  getVisibleTemperedWeek,
+  isTemperedDailyWorkoutVisible,
+} from '@/src/utils/temperedDaily';
 import {
   getFavoriteWorkouts,
   toggleFavoriteWorkout,
@@ -14,10 +24,16 @@ import { isWorkoutLocked } from '@/src/utils/workoutAccess';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { AccessibilityInfo, Pressable, Text, View } from 'react-native';
 
-const VIEW_SOURCES = new Set(['browse', 'search', 'programme', 'skills']);
+const VIEW_SOURCES = new Set([
+  'browse',
+  'search',
+  'programme',
+  'skills',
+  'tempered_daily',
+]);
 const STATE_ICON_SIZE = 48;
 
 export default function StandaloneWorkoutDetailScreen() {
@@ -29,8 +45,25 @@ export default function StandaloneWorkoutDetailScreen() {
   const workoutId = asStringId(idParam);
   const workout = useMemo(() => {
     if (!workoutId) return undefined;
-    return getStandaloneWorkoutById(workoutId);
+    return (
+      getStandaloneWorkoutById(workoutId) ??
+      getTemperedDailyWorkoutById(workoutId)
+    );
   }, [workoutId]);
+  const isTemperedDaily =
+    !!workoutId &&
+    !getStandaloneWorkoutById(workoutId) &&
+    !!getTemperedDailyWorkoutById(workoutId);
+  const isHiddenTemperedDaily =
+    isTemperedDaily &&
+    !!workoutId &&
+    !isTemperedDailyWorkoutVisible(temperedDailyProgram, workoutId, new Date());
+
+  useEffect(() => {
+    if (isHiddenTemperedDaily) {
+      router.replace('/tempered-daily');
+    }
+  }, [isHiddenTemperedDaily]);
 
   const { isPro, roles, isLoading: accessLoading } = useRoles();
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -42,14 +75,14 @@ export default function StandaloneWorkoutDetailScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      if (!workoutId || !workout) {
+      if (!workoutId || !workout || isHiddenTemperedDaily) {
         return;
       }
       posthog.capture(posthogEventsNames.workout.view, {
         workout_name: workout.title,
         source: viewSource,
       });
-    }, [workoutId, workout, viewSource, posthog])
+    }, [workoutId, workout, isHiddenTemperedDaily, viewSource, posthog])
   );
 
   const loadFavorites = async () => {
@@ -79,6 +112,10 @@ export default function StandaloneWorkoutDetailScreen() {
   const handleLockedPress = () => {
     router.push('/records');
   };
+
+  if (isHiddenTemperedDaily) {
+    return null;
+  }
 
   if (!workoutId || !workout) {
     return (
@@ -146,7 +183,14 @@ export default function StandaloneWorkoutDetailScreen() {
       }
     >
       <StandardLayout.Body>
-        {isLocked ? (
+        {isLocked && isTemperedDaily ? (
+          <TemperedDailyLockedUpsell
+            workout={workout}
+            week={getVisibleTemperedWeek(temperedDailyProgram, new Date())}
+            onUnlock={() => router.push('/paywall')}
+            onViewWeek={() => router.push('/tempered-daily')}
+          />
+        ) : isLocked ? (
           <View style={styles.lockedState}>
             <Ionicons
               name="lock-closed"
@@ -174,7 +218,14 @@ export default function StandaloneWorkoutDetailScreen() {
             </Pressable>
           </View>
         ) : (
-          <WorkoutDetailScrollContent workout={workout} />
+          <WorkoutDetailScrollContent
+            workout={workout}
+            categoryLabel={
+              isTemperedDaily
+                ? getTemperedDailyCategoryLabel(workout.category)
+                : undefined
+            }
+          />
         )}
       </StandardLayout.Body>
     </StandardLayout>

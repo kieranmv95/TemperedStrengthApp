@@ -50,6 +50,8 @@ import { ProgramSessionStatusControls } from './ProgramSessionStatusControls';
 
 type WorkoutScreenBodyProps = {
   selectedDayIndex: number | null;
+  /** True when the selected program day is today's date. */
+  isSelectedDayToday: boolean;
   isRestDay: boolean;
   programId?: string | null;
   startDate?: string | null;
@@ -92,6 +94,7 @@ const DAYS_PER_WEEK = 7;
 
 export function WorkoutScreenBody({
   selectedDayIndex,
+  isSelectedDayToday,
   isRestDay,
   programId = null,
   startDate = null,
@@ -174,6 +177,7 @@ export function WorkoutScreenBody({
         selectedDayIndex={selectedDayIndex}
         startDate={startDate}
         workoutWeekPattern={workoutWeekPattern}
+        isToday={isSelectedDayToday}
         onProgramReset={onProgramReset}
       />
     );
