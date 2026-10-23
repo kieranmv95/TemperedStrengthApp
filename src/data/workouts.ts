@@ -28,9 +28,11 @@ export { WORKOUT_FOCUS_TAGS, WORKOUT_FORMAT_TAGS } from '@/src/types/workouts';
 
 type WorkoutJson = StandaloneWorkoutSource;
 
-function withLogSchema(workout: WorkoutJson): SingleWorkout {
+export function withLogSchema(workout: WorkoutJson): SingleWorkout {
   let schema =
-    STANDALONE_LOG_SCHEMA_BY_ID[workout.id] ?? DEFAULT_WORKOUT_LOG_SCHEMA;
+    workout.logSchema ??
+    STANDALONE_LOG_SCHEMA_BY_ID[workout.id] ??
+    DEFAULT_WORKOUT_LOG_SCHEMA;
   if (schema.kind === 'none') {
     schema = DEFAULT_WORKOUT_LOG_SCHEMA;
   }

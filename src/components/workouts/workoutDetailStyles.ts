@@ -131,10 +131,35 @@ export const workoutDetailStyles = StyleSheet.create({
   scaleSection: {
     gap: space.xs,
   },
-  scaleSelectorRow: {
+  scaleSegmentRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: space.xs,
+    padding: space.xxs,
+    gap: space.xxs,
+    backgroundColor: color.surface1,
+    borderRadius: radius.pill,
+    ...elevation.raised,
+  },
+  scaleSegment: {
+    flex: 1,
+    minHeight: MIN_TARGET_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: space.xs,
+    borderRadius: radius.pill,
+  },
+  scaleSegmentPressed: {
+    backgroundColor: color.surface2,
+  },
+  scaleSegmentActive: {
+    backgroundColor: color.gold,
+  },
+  scaleSegmentText: {
+    ...typography.calloutStrong,
+    color: color.textSecondary,
+    textAlign: 'center',
+  },
+  scaleSegmentTextActive: {
+    color: color.onGold,
   },
   blockContainer: {
     ...elevation.raised,
@@ -173,10 +198,17 @@ export const workoutDetailStyles = StyleSheet.create({
     backgroundColor: color.gold,
     marginTop: (typography.body.lineHeight - LIST_BULLET_SIZE) / 2,
   },
+  movementTextColumn: {
+    flex: 1,
+    gap: space.xxs,
+  },
   movementText: {
     ...typography.body,
     color: color.textPrimary,
-    flex: 1,
+  },
+  movementNote: {
+    ...typography.callout,
+    color: color.textSecondary,
   },
   divider: {
     paddingLeft: LIST_BULLET_SIZE + space.xs,

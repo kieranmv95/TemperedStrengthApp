@@ -35,6 +35,8 @@ export const ONBOARDED_KEY = 'onboarded';
 export const ONBOARDING_PROFILE_KEY = 'onboarding_profile';
 /** Device-only cache of last-known Pro entitlement for offline gating. */
 export const LAST_KNOWN_PRO_KEY = 'last_known_pro_v1';
+/** Home section order and which sections a Pro account has hidden. */
+export const HOME_LAYOUT_KEY = 'home_layout';
 
 /**
  * Per-device schema version used by the migration runner. This must never sync

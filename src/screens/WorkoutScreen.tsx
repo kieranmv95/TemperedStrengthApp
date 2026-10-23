@@ -168,6 +168,9 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
       <WorkoutScreenBody
         selectedDayIndex={c.selectedDayIndex}
+        isSelectedDayToday={
+          c.selectedDayIndex === null || c.selectedDayIndex === c.dayIndex
+        }
         isRestDay={c.isRestDay}
         programId={c.program?.id ?? null}
         startDate={c.startDate}

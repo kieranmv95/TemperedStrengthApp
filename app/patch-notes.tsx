@@ -1,7 +1,7 @@
 import { ActionChip, Collapsible, StandardLayout } from '@/src/components/ds';
 import { color, radius, space, typography } from '@/src/constants/tokens';
 import { router } from 'expo-router';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Linking, StyleSheet, Text, View } from 'react-native';
 
 const BULLET_SIZE = 6;
@@ -15,8 +15,13 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '3.3.0',
+    dateLabel: '1st November 2026',
+    notes: ['Daily Programming', 'Re-order home screen sections', 'Tidied up the You tab', 'TODO: Zone info and components'],
+  },
+  {
     version: '3.2.1',
-    dateLabel: '19th October 2026',
+    dateLabel: '23rd October 2026',
     notes: [
       'Refreshed the look across the app',
       'Clearer set logging, including reordering sets',
@@ -26,7 +31,7 @@ const PATCH_NOTES: PatchNote[] = [
   },
   {
     version: '3.2.0',
-    dateLabel: '',
+    dateLabel: '19th October',
     notes: ['Behaviour and supplement tracking'],
   },
   {

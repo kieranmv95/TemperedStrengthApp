@@ -1,22 +1,28 @@
 import {
   Badge,
   EnterOnMount,
-  PressableCard,
   Skeleton,
   StandardLayout,
 } from '@/src/components/ds';
-import { HomeCheckinCard } from '@/src/components/home/HomeCheckinCard';
+import { CustomiseHomeSheet } from '@/src/components/home/CustomiseHomeSheet';
+import {
+  HomeSection,
+  HomeUpgradeStrip,
+  homeSectionHasContent,
+} from '@/src/components/home/HomeSection';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
-import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
-import { HomeTodayCard } from '@/src/components/home/HomeTodayCard';
-import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
+import { TEMPERED_DAILY_VIEW_SOURCE } from '@/src/components/temperedDaily/temperedDailyConstants';
 import { LiveCompetition } from '@/src/components/LiveCompetition';
-import { color } from '@/src/constants/tokens';
+import { color, MIN_TARGET_SIZE } from '@/src/constants/tokens';
 import { getAllExercises } from '@/src/data/exercises';
+import {
+  getTemperedDailyWorkoutById,
+  temperedDailyProgram,
+} from '@/src/data/temperedDaily';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useHomeRemoteNotification } from '@/src/hooks/useHomeRemoteNotification';
-import { useLargeText } from '@/src/hooks/useLargeText';
 import { useRoles } from '@/src/hooks/useRoles';
+import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
@@ -35,20 +41,36 @@ import {
   loadHomeProgramSummary,
   type HomeProgramSummary,
 } from '@/src/utils/homeProgramSummary';
-import { formatRepMaxLabel } from '@/src/utils/personalBests';
+import {
+  defaultHomeLayout,
+  homeLayoutHasHidden,
+  moveHomeSection,
+  setHomeSectionVisible,
+  visibleHomeSectionIds,
+  type HomeSectionPreference,
+} from '@/src/utils/homeLayout';
+import { getTemperedDailyToday } from '@/src/utils/temperedDaily';
 import { listRecentPersonalBestRows } from '@/src/utils/recentPersonalBests';
 import {
+  getHomeLayout,
   getOnboardingProfile,
   getPersonalBestsStore,
+  setHomeLayout,
 } from '@/src/utils/storage';
 import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
 import { COACH_ROLE } from '@/src/utils/workoutAccess';
-import { formatWeightFromKg } from '@/src/utils/weightUnits';
 import { Ionicons } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import { useFocusEffect, router, type Href } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentRef,
+} from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 const exerciseNameById: ReadonlyMap<number, string> = (() => {
@@ -97,11 +119,14 @@ function accountTypeBadgeLabel(
   return null;
 }
 
+/** Keeps the free upgrade strip in its original place, after the first two sections. */
+const UPGRADE_STRIP_INDEX = 2;
+
 export default function HomeTabScreen() {
   const posthog = usePostHog();
   const { banner: remoteNotification } = useHomeRemoteNotification();
   const { unit: weightUnit } = useWeightUnit();
-  const largeText = useLargeText();
+  const { dataRevision } = useSyncManager();
   const {
     isPro,
     isLoading: subscriptionLoading,
@@ -121,27 +146,87 @@ export default function HomeTabScreen() {
   );
   const [checkinSummary, setCheckinSummary] =
     useState<HomeCheckinSummary | null>(null);
+  const [layout, setLayout] =
+    useState<HomeSectionPreference[]>(defaultHomeLayout);
+  const [customiseOpen, setCustomiseOpen] = useState(false);
   const hasCompletedInitialLoad = useRef(false);
+  const customiseButtonRef = useRef<ComponentRef<typeof Pressable>>(null);
+  const layoutRef = useRef(layout);
+  const layoutEpoch = useRef(0);
+  const flushingLayout = useRef(false);
+  const lastWrittenLayout = useRef<HomeSectionPreference[] | null>(null);
+  const persistLayoutRef = useRef<(next: HomeSectionPreference[]) => void>(
+    () => {}
+  );
+
+  const applyStoredLayout = useCallback(
+    (stored: HomeSectionPreference[], epoch: number) => {
+      if (epoch !== layoutEpoch.current || flushingLayout.current) {
+        return;
+      }
+      layoutRef.current = stored;
+      setLayout(stored);
+    },
+    []
+  );
+
+  const persistLayout = useCallback((next: HomeSectionPreference[]) => {
+    layoutEpoch.current += 1;
+    layoutRef.current = next;
+    setLayout(next);
+    if (flushingLayout.current) {
+      return;
+    }
+    flushingLayout.current = true;
+    void (async () => {
+      let attempted = next;
+      try {
+        for (;;) {
+          attempted = layoutRef.current;
+          await setHomeLayout(attempted);
+          lastWrittenLayout.current = attempted;
+          if (layoutRef.current === attempted) {
+            break;
+          }
+        }
+      } catch (error) {
+        console.error('Error saving home layout:', error);
+      } finally {
+        flushingLayout.current = false;
+        if (
+          layoutRef.current !== attempted &&
+          layoutRef.current !== lastWrittenLayout.current
+        ) {
+          persistLayoutRef.current(layoutRef.current);
+        }
+      }
+    })();
+  }, []);
+  persistLayoutRef.current = persistLayout;
 
   const loadHome = useCallback(async () => {
     const isFirstLoad = !hasCompletedInitialLoad.current;
     if (isFirstLoad) {
       setLoading(true);
     }
+    const layoutEpochAtRead = layoutEpoch.current;
     try {
-      const [profile, summary, store, streak, checkin] = await Promise.all([
-        getOnboardingProfile(),
-        loadHomeProgramSummary(),
-        getPersonalBestsStore(),
-        applyDailyStreakCheckIn(),
-        loadHomeCheckinSummary(),
-      ]);
+      const [profile, summary, store, streak, checkin, storedLayout] =
+        await Promise.all([
+          getOnboardingProfile(),
+          loadHomeProgramSummary(),
+          getPersonalBestsStore(),
+          applyDailyStreakCheckIn(),
+          loadHomeCheckinSummary(),
+          getHomeLayout(),
+        ]);
       const trimmed = profile?.name?.trim();
       setDisplayName(trimmed && trimmed.length > 0 ? trimmed : null);
       setProgramSummary(summary);
       setPbStore(store);
       setStreakSnapshot(streak);
       setCheckinSummary(checkin);
+      applyStoredLayout(storedLayout, layoutEpochAtRead);
     } catch (error) {
       console.error('Error loading home screen data:', error);
       setDisplayName(null);
@@ -155,7 +240,7 @@ export default function HomeTabScreen() {
       setLoading(false);
       hasCompletedInitialLoad.current = true;
     }
-  }, []);
+  }, [applyStoredLayout]);
 
   useFocusEffect(
     useCallback(() => {
@@ -164,6 +249,50 @@ export default function HomeTabScreen() {
         void refreshSubscription();
       }
     }, [loadHome, refreshSubscription])
+  );
+
+  useEffect(() => {
+    const epoch = layoutEpoch.current;
+    let cancelled = false;
+    void getHomeLayout().then((stored) => {
+      if (cancelled) {
+        return;
+      }
+      applyStoredLayout(stored, epoch);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [applyStoredLayout, dataRevision]);
+
+  const handleReorder = useCallback(
+    (fromIndex: number, toIndex: number) => {
+      const current = layoutRef.current;
+      const sectionId = current[fromIndex]?.id;
+      persistLayout(moveHomeSection(current, fromIndex, toIndex));
+      posthog.capture(posthogEventsNames.home.layoutChanged, {
+        change: 'reorder',
+        section_id: sectionId,
+        from_index: fromIndex,
+        to_index: toIndex,
+      });
+    },
+    [persistLayout, posthog]
+  );
+
+  const handleToggleVisible = useCallback(
+    (id: HomeSectionPreference['id'], visible: boolean) => {
+      if (!isPro) {
+        return;
+      }
+      persistLayout(setHomeSectionVisible(layoutRef.current, id, visible));
+      posthog.capture(posthogEventsNames.home.layoutChanged, {
+        change: 'visibility',
+        section_id: id,
+        visible,
+      });
+    },
+    [isPro, persistLayout, posthog]
   );
 
   const trackHomeLink = useCallback(
@@ -200,6 +329,11 @@ export default function HomeTabScreen() {
   }, [pbStore]);
 
   const showFreeStrip = !accessLoading && !isPro;
+  const now = new Date();
+  const temperedToday = getTemperedDailyToday(temperedDailyProgram, now);
+  const temperedWorkout = temperedToday.workoutId
+    ? (getTemperedDailyWorkoutById(temperedToday.workoutId) ?? null)
+    : null;
   const firstName = displayName?.split(/\s+/)[0] ?? null;
   const greet = timeOfDayGreeting();
   const greetingTitle = firstName ? `${greet}, ${firstName}` : greet;
@@ -233,237 +367,241 @@ export default function HomeTabScreen() {
     );
   }
 
-  const hasPersonalBests = recentPbs.length > 0;
+  const canHideSections = !subscriptionLoading && isPro;
+  const hideDecisionPending =
+    subscriptionLoading && homeLayoutHasHidden(layout);
+  const sectionIds = visibleHomeSectionIds(layout, canHideSections).filter(
+    (id) =>
+      homeSectionHasContent(id, {
+        checkinSummary,
+        streakSnapshot,
+      })
+  );
+  const upgradeStripIndex = Math.min(UPGRADE_STRIP_INDEX, sectionIds.length);
   let entranceIndex = 0;
   const nextEntrance = () => entranceIndex++;
 
+  const renderUpgradeStrip = (slot: number) => {
+    if (!showFreeStrip || slot !== upgradeStripIndex) {
+      return null;
+    }
+    return (
+      <EnterOnMount index={nextEntrance()}>
+        <HomeUpgradeStrip
+          onPress={() =>
+            trackHomeLink('welcome_strip', '/records', () =>
+              router.push('/records')
+            )
+          }
+        />
+      </EnterOnMount>
+    );
+  };
+
   return (
-    <StandardLayout
-      title={greetingTitle}
-      subtitle={formatTodayDate()}
-      titleAccessory={titleAccessory}
-    >
-      <StandardLayout.Body>
-        <View style={styles.sections}>
-          {remoteNotification ? (
-            <EnterOnMount index={nextEntrance()}>
-              <View
-                style={[
-                  styles.notificationBanner,
-                  {
-                    backgroundColor: remoteNotification.bgColor,
-                    borderColor: remoteNotification.borderColor,
-                  },
-                ]}
-              >
-                {remoteNotification.title.length > 0 ? (
-                  <Text
-                    style={[
-                      styles.notificationBannerTitle,
-                      { color: remoteNotification.titleColor },
-                    ]}
-                    accessibilityRole="header"
-                  >
-                    {remoteNotification.title}
-                  </Text>
-                ) : null}
-                {remoteNotification.body.length > 0 ? (
-                  <Text
-                    style={[
-                      styles.notificationBannerBody,
-                      { color: remoteNotification.descriptionColor },
-                    ]}
-                  >
-                    {remoteNotification.body}
-                  </Text>
-                ) : null}
-                {remoteNotification.ctaText.length > 0 &&
-                remoteNotification.ctaUrl.length > 0 ? (
-                  <Pressable
-                    style={[
-                      styles.notificationCta,
-                      { backgroundColor: remoteNotification.ctaColor },
-                    ]}
-                    onPress={() => openHomeCtaUrl(remoteNotification.ctaUrl)}
-                    accessibilityRole="button"
-                    accessibilityLabel={remoteNotification.ctaText}
-                  >
+    <>
+      <StandardLayout
+        title={greetingTitle}
+        subtitle={formatTodayDate()}
+        titleAccessory={titleAccessory}
+        headerActions={
+          <Pressable
+            ref={customiseButtonRef}
+            onPress={() => {
+              posthog.capture(posthogEventsNames.home.customiseOpened);
+              setCustomiseOpen(true);
+            }}
+            hitSlop={(MIN_TARGET_SIZE - 32) / 2}
+            style={({ pressed }) => [
+              styles.customiseButton,
+              pressed && styles.customiseButtonPressed,
+            ]}
+            accessibilityRole="button"
+            accessibilityLabel="Customise home"
+            accessibilityHint="Reorder home sections. Pro can also show or hide them."
+          >
+            <Ionicons
+              name="reorder-three"
+              size={20}
+              color={color.textPrimary}
+            />
+            <Text style={styles.customiseLabel}>Customise</Text>
+          </Pressable>
+        }
+      >
+        <StandardLayout.Body>
+          <View style={styles.sections}>
+            {remoteNotification ? (
+              <EnterOnMount index={nextEntrance()}>
+                <View
+                  style={[
+                    styles.notificationBanner,
+                    {
+                      backgroundColor: remoteNotification.bgColor,
+                      borderColor: remoteNotification.borderColor,
+                    },
+                  ]}
+                >
+                  {remoteNotification.title.length > 0 ? (
                     <Text
                       style={[
-                        styles.notificationCtaText,
-                        { color: remoteNotification.ctaTextColor },
+                        styles.notificationBannerTitle,
+                        { color: remoteNotification.titleColor },
+                      ]}
+                      accessibilityRole="header"
+                    >
+                      {remoteNotification.title}
+                    </Text>
+                  ) : null}
+                  {remoteNotification.body.length > 0 ? (
+                    <Text
+                      style={[
+                        styles.notificationBannerBody,
+                        { color: remoteNotification.descriptionColor },
                       ]}
                     >
-                      {remoteNotification.ctaText}
+                      {remoteNotification.body}
                     </Text>
-                  </Pressable>
-                ) : null}
+                  ) : null}
+                  {remoteNotification.ctaText.length > 0 &&
+                  remoteNotification.ctaUrl.length > 0 ? (
+                    <Pressable
+                      style={[
+                        styles.notificationCta,
+                        { backgroundColor: remoteNotification.ctaColor },
+                      ]}
+                      onPress={() => openHomeCtaUrl(remoteNotification.ctaUrl)}
+                      accessibilityRole="button"
+                      accessibilityLabel={remoteNotification.ctaText}
+                    >
+                      <Text
+                        style={[
+                          styles.notificationCtaText,
+                          { color: remoteNotification.ctaTextColor },
+                        ]}
+                      >
+                        {remoteNotification.ctaText}
+                      </Text>
+                    </Pressable>
+                  ) : null}
+                </View>
+              </EnterOnMount>
+            ) : null}
+
+            <LiveCompetition />
+
+            {hideDecisionPending ? (
+              <View style={styles.skeletons}>
+                <Skeleton
+                  width="100%"
+                  height={208}
+                  radius="md"
+                  accessibilityLabel="Loading home"
+                />
+                <Skeleton width="100%" height={96} radius="md" />
               </View>
-            </EnterOnMount>
-          ) : null}
-
-          <LiveCompetition />
-
-          <EnterOnMount index={nextEntrance()}>
-            <HomeTodayCard
-              summary={programSummary}
-              onPress={() =>
-                trackHomeLink(
-                  programSummary ? 'your_program_card' : 'pick_program_card',
-                  '/program',
-                  () => router.push('/program')
-                )
-              }
-            />
-          </EnterOnMount>
-
-          {showFreeStrip ? (
-            <EnterOnMount index={nextEntrance()}>
-              <PressableCard
-                onPress={() =>
-                  trackHomeLink('welcome_strip', '/records', () =>
-                    router.push('/records')
-                  )
-                }
-                accessibilityLabel="Upgrade to Pro, free tier"
-                accessibilityHint="Opens the You tab where you can upgrade to Tempered Strength Pro"
-              >
-                <View style={styles.upgradeRow}>
-                  <Text style={styles.upgradeTitle}>Upgrade to Pro</Text>
-                  <Badge label="Free tier" tone="neutral" />
-                </View>
-              </PressableCard>
-            </EnterOnMount>
-          ) : null}
-
-          {checkinSummary ? (
-            <EnterOnMount index={nextEntrance()}>
-              <HomeCheckinCard
-                loggedCount={checkinSummary.loggedCount}
-                totalCount={checkinSummary.totalCount}
-                supplementsDue={checkinSummary.supplementsDue}
-                supplementsTotal={checkinSummary.supplementsTotal}
-                onPress={() =>
-                  trackHomeLink('daily_checkin_card', '/checkin', () =>
-                    router.push('/checkin')
-                  )
-                }
-              />
-            </EnterOnMount>
-          ) : null}
-
-          <EnterOnMount
-            index={nextEntrance()}
-            style={[styles.bentoRow, largeText && styles.bentoStacked]}
-          >
-            <View style={largeText ? null : styles.bentoTile}>
-              <HubPromoCard
-                layout={largeText ? 'row' : 'tile'}
-                icon="barbell-outline"
-                eyebrow="Open workouts"
-                title="Just fancy a workout?"
-                description="Strength, mobility flows and more outside a program."
-                onPress={() =>
-                  trackHomeLink('just_a_workout_card', '/workouts', () =>
-                    router.push('/workouts')
-                  )
-                }
-                accessibilityLabel="Opens Workouts"
-              />
-            </View>
-            <View style={largeText ? null : styles.bentoTile}>
-              <HubPromoCard
-                layout={largeText ? 'row' : 'tile'}
-                icon="cart-outline"
-                eyebrow="Partner picks"
-                title="Browse the shop"
-                description="The best gear at exclusive prices."
-                onPress={() =>
-                  trackHomeLink('browse_shop_card', '/shop', () =>
-                    router.push('/shop')
-                  )
-                }
-                accessibilityLabel="Opens partner products"
-              />
-            </View>
-          </EnterOnMount>
-
-          {streakSnapshot ? (
-            <EnterOnMount index={nextEntrance()}>
-              <HomeStreakCard
-                snapshot={streakSnapshot}
-                displayName={displayName}
-              />
-            </EnterOnMount>
-          ) : null}
-
-          <EnterOnMount index={nextEntrance()}>
-            {hasPersonalBests ? (
-              <PressableCard
-                onPress={() =>
-                  trackHomeLink('recent_wins_card', '/records', () =>
-                    router.push('/records')
-                  )
-                }
-                accessibilityLabel={`Your latest PB, ${recentPbs
-                  .map(
-                    (row) =>
-                      `${row.exerciseName}, ${formatRepMaxLabel(
-                        row.tier
-                      )}, ${formatWeightFromKg(row.weightKg, weightUnit)}`
-                  )
-                  .join('; ')}`}
-                accessibilityHint="Opens your personal bests"
-              >
-                <View style={styles.pbTitleRow}>
-                  <Ionicons
-                    name="trophy-outline"
-                    size={18}
-                    color={color.gold}
-                  />
-                  <Text style={styles.cardTitle}>Your latest PB</Text>
-                </View>
-                {recentPbs.map((row, index) => (
-                  <View
-                    key={`${row.exerciseId}-${row.tier}-${row.achievedAt}-${index}`}
-                    style={styles.pbRow}
-                  >
-                    <View style={styles.pbRowText}>
-                      <Text style={styles.pbExercise} numberOfLines={2}>
-                        {row.exerciseName}
-                      </Text>
-                      <Text style={styles.pbTier}>
-                        {formatRepMaxLabel(row.tier)}
-                      </Text>
-                    </View>
-                    <Text style={styles.pbValue}>
-                      {formatWeightFromKg(row.weightKg, weightUnit)}
-                    </Text>
-                  </View>
-                ))}
-              </PressableCard>
+            ) : sectionIds.length === 0 ? (
+              <Text style={styles.emptyHome}>
+                Every section is hidden. Customise home to show them again.
+              </Text>
             ) : (
-              <PressableCard
-                onPress={() =>
-                  trackHomeLink(
-                    'recent_wins_empty_card',
-                    '/records/personal-bests',
-                    () => router.push('/records')
-                  )
-                }
-                accessibilityLabel="No personal bests yet"
-                accessibilityHint="Opens the You tab to log records"
-              >
-                <Text style={styles.cardTitle}>No PBs yet</Text>
-                <Text style={styles.cardBody}>
-                  Personal bests from your programs and the You tab will show up
-                  here.
-                </Text>
-              </PressableCard>
+              <>
+                {sectionIds.map((id, index) => (
+                  <React.Fragment key={id}>
+                    {renderUpgradeStrip(index)}
+                    <EnterOnMount index={nextEntrance()}>
+                      <HomeSection
+                        id={id}
+                        programSummary={programSummary}
+                        onOpenProgram={() =>
+                          trackHomeLink(
+                            programSummary
+                              ? 'your_program_card'
+                              : 'pick_program_card',
+                            '/program',
+                            () => router.push('/program')
+                          )
+                        }
+                        temperedToday={temperedToday}
+                        temperedWorkout={temperedWorkout}
+                        date={now}
+                        showProBadge={showFreeStrip}
+                        onOpenDailyWorkout={(workoutId) =>
+                          trackHomeLink(
+                            'tempered_daily_workout',
+                            `/workout/${workoutId}`,
+                            () =>
+                              router.push(
+                                `/workout/${workoutId}?view_source=${TEMPERED_DAILY_VIEW_SOURCE}`
+                              )
+                          )
+                        }
+                        onOpenDailyWeek={() =>
+                          trackHomeLink(
+                            'tempered_daily_week',
+                            '/tempered-daily',
+                            () => router.push('/tempered-daily')
+                          )
+                        }
+                        checkinSummary={checkinSummary}
+                        onOpenCheckin={() =>
+                          trackHomeLink('daily_checkin_card', '/checkin', () =>
+                            router.push('/checkin')
+                          )
+                        }
+                        onOpenWorkouts={() =>
+                          trackHomeLink(
+                            'just_a_workout_card',
+                            '/workouts',
+                            () => router.push('/workouts')
+                          )
+                        }
+                        onOpenShop={() =>
+                          trackHomeLink('browse_shop_card', '/shop', () =>
+                            router.push('/shop')
+                          )
+                        }
+                        streakSnapshot={streakSnapshot}
+                        displayName={displayName}
+                        recentPbs={recentPbs}
+                        weightUnit={weightUnit}
+                        onOpenRecords={() =>
+                          trackHomeLink('recent_wins_card', '/records', () =>
+                            router.push('/records')
+                          )
+                        }
+                        onOpenEmptyRecords={() =>
+                          trackHomeLink(
+                            'recent_wins_empty_card',
+                            '/records/personal-bests',
+                            () => router.push('/records')
+                          )
+                        }
+                      />
+                    </EnterOnMount>
+                  </React.Fragment>
+                ))}
+                {renderUpgradeStrip(sectionIds.length)}
+              </>
             )}
-          </EnterOnMount>
-        </View>
-      </StandardLayout.Body>
-    </StandardLayout>
+          </View>
+        </StandardLayout.Body>
+      </StandardLayout>
+      <CustomiseHomeSheet
+        visible={customiseOpen}
+        layout={layout}
+        canHideSections={canHideSections}
+        onClose={() => setCustomiseOpen(false)}
+        onReorder={handleReorder}
+        onToggleVisible={handleToggleVisible}
+        onUpgrade={() => {
+          setCustomiseOpen(false);
+          trackHomeLink('customise_upgrade', '/paywall', () => {
+            router.push('/paywall');
+          });
+        }}
+        returnFocusRef={customiseButtonRef}
+      />
+    </>
   );
 }
