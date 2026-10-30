@@ -63,7 +63,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import { useFocusEffect, router, type Href } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
-import React, {
+import {
   useCallback,
   useEffect,
   useMemo,
@@ -118,9 +118,6 @@ function accountTypeBadgeLabel(
   }
   return null;
 }
-
-/** Keeps the free upgrade strip in its original place, after the first two sections. */
-const UPGRADE_STRIP_INDEX = 2;
 
 export default function HomeTabScreen() {
   const posthog = usePostHog();
@@ -377,26 +374,8 @@ export default function HomeTabScreen() {
         streakSnapshot,
       })
   );
-  const upgradeStripIndex = Math.min(UPGRADE_STRIP_INDEX, sectionIds.length);
   let entranceIndex = 0;
   const nextEntrance = () => entranceIndex++;
-
-  const renderUpgradeStrip = (slot: number) => {
-    if (!showFreeStrip || slot !== upgradeStripIndex) {
-      return null;
-    }
-    return (
-      <EnterOnMount index={nextEntrance()}>
-        <HomeUpgradeStrip
-          onPress={() =>
-            trackHomeLink('welcome_strip', '/records', () =>
-              router.push('/records')
-            )
-          }
-        />
-      </EnterOnMount>
-    );
-  };
 
   return (
     <>
@@ -431,6 +410,18 @@ export default function HomeTabScreen() {
       >
         <StandardLayout.Body>
           <View style={styles.sections}>
+            {showFreeStrip ? (
+              <EnterOnMount index={nextEntrance()}>
+                <HomeUpgradeStrip
+                  onPress={() =>
+                    trackHomeLink('welcome_strip', '/records', () =>
+                      router.push('/records')
+                    )
+                  }
+                />
+              </EnterOnMount>
+            ) : null}
+
             {remoteNotification ? (
               <EnterOnMount index={nextEntrance()}>
                 <View
@@ -505,84 +496,76 @@ export default function HomeTabScreen() {
                 Every section is hidden. Customise home to show them again.
               </Text>
             ) : (
-              <>
-                {sectionIds.map((id, index) => (
-                  <React.Fragment key={id}>
-                    {renderUpgradeStrip(index)}
-                    <EnterOnMount index={nextEntrance()}>
-                      <HomeSection
-                        id={id}
-                        programSummary={programSummary}
-                        onOpenProgram={() =>
-                          trackHomeLink(
-                            programSummary
-                              ? 'your_program_card'
-                              : 'pick_program_card',
-                            '/program',
-                            () => router.push('/program')
+              sectionIds.map((id) => (
+                <EnterOnMount key={id} index={nextEntrance()}>
+                  <HomeSection
+                    id={id}
+                    programSummary={programSummary}
+                    onOpenProgram={() =>
+                      trackHomeLink(
+                        programSummary
+                          ? 'your_program_card'
+                          : 'pick_program_card',
+                        '/program',
+                        () => router.push('/program')
+                      )
+                    }
+                    temperedToday={temperedToday}
+                    temperedWorkout={temperedWorkout}
+                    date={now}
+                    showProBadge={showFreeStrip}
+                    onOpenDailyWorkout={(workoutId) =>
+                      trackHomeLink(
+                        'tempered_daily_workout',
+                        `/workout/${workoutId}`,
+                        () =>
+                          router.push(
+                            `/workout/${workoutId}?view_source=${TEMPERED_DAILY_VIEW_SOURCE}`
                           )
-                        }
-                        temperedToday={temperedToday}
-                        temperedWorkout={temperedWorkout}
-                        date={now}
-                        showProBadge={showFreeStrip}
-                        onOpenDailyWorkout={(workoutId) =>
-                          trackHomeLink(
-                            'tempered_daily_workout',
-                            `/workout/${workoutId}`,
-                            () =>
-                              router.push(
-                                `/workout/${workoutId}?view_source=${TEMPERED_DAILY_VIEW_SOURCE}`
-                              )
-                          )
-                        }
-                        onOpenDailyWeek={() =>
-                          trackHomeLink(
-                            'tempered_daily_week',
-                            '/tempered-daily',
-                            () => router.push('/tempered-daily')
-                          )
-                        }
-                        checkinSummary={checkinSummary}
-                        onOpenCheckin={() =>
-                          trackHomeLink('daily_checkin_card', '/checkin', () =>
-                            router.push('/checkin')
-                          )
-                        }
-                        onOpenWorkouts={() =>
-                          trackHomeLink(
-                            'just_a_workout_card',
-                            '/workouts',
-                            () => router.push('/workouts')
-                          )
-                        }
-                        onOpenShop={() =>
-                          trackHomeLink('browse_shop_card', '/shop', () =>
-                            router.push('/shop')
-                          )
-                        }
-                        streakSnapshot={streakSnapshot}
-                        displayName={displayName}
-                        recentPbs={recentPbs}
-                        weightUnit={weightUnit}
-                        onOpenRecords={() =>
-                          trackHomeLink('recent_wins_card', '/records', () =>
-                            router.push('/records')
-                          )
-                        }
-                        onOpenEmptyRecords={() =>
-                          trackHomeLink(
-                            'recent_wins_empty_card',
-                            '/records/personal-bests',
-                            () => router.push('/records')
-                          )
-                        }
-                      />
-                    </EnterOnMount>
-                  </React.Fragment>
-                ))}
-                {renderUpgradeStrip(sectionIds.length)}
-              </>
+                      )
+                    }
+                    onOpenDailyWeek={() =>
+                      trackHomeLink(
+                        'tempered_daily_week',
+                        '/tempered-daily',
+                        () => router.push('/tempered-daily')
+                      )
+                    }
+                    checkinSummary={checkinSummary}
+                    onOpenCheckin={() =>
+                      trackHomeLink('daily_checkin_card', '/checkin', () =>
+                        router.push('/checkin')
+                      )
+                    }
+                    onOpenWorkouts={() =>
+                      trackHomeLink('just_a_workout_card', '/workouts', () =>
+                        router.push('/workouts')
+                      )
+                    }
+                    onOpenShop={() =>
+                      trackHomeLink('browse_shop_card', '/shop', () =>
+                        router.push('/shop')
+                      )
+                    }
+                    streakSnapshot={streakSnapshot}
+                    displayName={displayName}
+                    recentPbs={recentPbs}
+                    weightUnit={weightUnit}
+                    onOpenRecords={() =>
+                      trackHomeLink('recent_wins_card', '/records', () =>
+                        router.push('/records')
+                      )
+                    }
+                    onOpenEmptyRecords={() =>
+                      trackHomeLink(
+                        'recent_wins_empty_card',
+                        '/records/personal-bests',
+                        () => router.push('/records')
+                      )
+                    }
+                  />
+                </EnterOnMount>
+              ))
             )}
           </View>
         </StandardLayout.Body>
