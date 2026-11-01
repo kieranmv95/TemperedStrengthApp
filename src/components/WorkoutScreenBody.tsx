@@ -24,6 +24,7 @@ import type {
   ProgramSessionStatus,
 } from '@/src/types/storage';
 import { formatVolumeFromKg } from '@/src/utils/weightUnits';
+import { Ionicons } from '@expo/vector-icons';
 import React, {
   useCallback,
   useEffect,
@@ -423,6 +424,36 @@ export function WorkoutScreenBody({
               ) : null}
             </View>
           ) : null}
+
+          <Pressable
+            onPress={onMarkSessionCompleted}
+            style={({ pressed }) => [
+              styles.completeSessionButton,
+              sessionStatus === 'completed' && styles.completeSessionButtonDone,
+              pressed &&
+                (sessionStatus === 'completed'
+                  ? styles.completeSessionButtonDonePressed
+                  : styles.completeSessionButtonPressed),
+            ]}
+            accessibilityRole="button"
+            accessibilityLabel="Mark session complete"
+            accessibilityState={{ selected: sessionStatus === 'completed' }}
+          >
+            {sessionStatus === 'completed' ? (
+              <Ionicons name="checkmark" size={18} color={color.success} />
+            ) : null}
+            <Text
+              style={[
+                styles.completeSessionButtonText,
+                sessionStatus === 'completed' &&
+                  styles.completeSessionButtonTextDone,
+              ]}
+            >
+              {sessionStatus === 'completed'
+                ? 'Completed'
+                : 'Mark session complete'}
+            </Text>
+          </Pressable>
         </Animated.View>
       </ScrollView>
     </KeyboardAvoidingView>

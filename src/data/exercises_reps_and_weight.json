@@ -389,6 +389,15 @@
     "pattern": "Hip Hinge"
   },
   {
+    "description": "Lie on an incline bench, lower the bar to your upper chest, and press it back up.",
+    "equipment": "Barbell",
+    "id": 114,
+    "logging_type": "reps_and_weight",
+    "muscle": "Upper Chest",
+    "name": "Incline Barbell Bench Press",
+    "pattern": "Horizontal Push"
+  },
+  {
     "description": "Lie on an incline bench with dumbbells and press them up from chest level.",
     "equipment": "Dumbbell",
     "id": 18,

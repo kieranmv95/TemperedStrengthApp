@@ -178,6 +178,34 @@ export const workoutScreenStyles = StyleSheet.create({
     ...typography.calloutStrong,
     color: color.onGold,
   },
+  completeSessionButton: {
+    minHeight: MIN_TARGET_SIZE,
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: space.xxs,
+    borderRadius: radius.pill,
+    backgroundColor: color.gold,
+  },
+  completeSessionButtonPressed: {
+    backgroundColor: color.goldStrong,
+  },
+  completeSessionButtonDone: {
+    backgroundColor: color.surface2,
+    borderWidth: 1,
+    borderColor: color.success,
+  },
+  completeSessionButtonDonePressed: {
+    backgroundColor: color.surface3,
+  },
+  completeSessionButtonText: {
+    ...typography.calloutStrong,
+    color: color.onGold,
+  },
+  completeSessionButtonTextDone: {
+    color: color.success,
+  },
   keyboardDoneBar: {
     position: 'absolute',
     left: 0,
