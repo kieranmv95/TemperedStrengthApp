@@ -5,8 +5,8 @@ import {
   StandardLayout,
 } from '@/src/components/ds';
 import {
-  settingsScreenStyles as styles,
   settingsSwitchColors,
+  settingsScreenStyles as styles,
 } from '@/src/components/settings/settingsScreenStyles';
 import { color } from '@/src/constants/tokens';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
@@ -25,13 +25,14 @@ import {
 import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect, router, type Href } from 'expo-router';
+import { router, useFocusEffect, type Href } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Switch, Text, View } from 'react-native';
 
 const PRO_FEATURES = [
-  'All programs access',
-  'All workout access',
+  'Daily Programming access',
+  'All Programs access',
+  'All Workout access',
   'Unlimited exercise swaps',
   'All recovery flows access',
   'All awards unlocked',
@@ -112,21 +113,21 @@ export function YouAccountSettingsScreen() {
   const promoExpiryLabel =
     isPromoPro && promoProGrant
       ? new Date(promoProGrant.expiresAt).toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
       : null;
 
   const promoDaysRemaining =
     isPromoPro && promoProGrant
       ? Math.max(
-          0,
-          Math.ceil(
-            (Date.parse(promoProGrant.expiresAt) - Date.now()) /
-              (24 * 60 * 60 * 1000)
-          )
+        0,
+        Math.ceil(
+          (Date.parse(promoProGrant.expiresAt) - Date.now()) /
+          (24 * 60 * 60 * 1000)
         )
+      )
       : null;
 
   const promoRemainingLabel =
@@ -447,11 +448,10 @@ export function YouAccountSettingsScreen() {
   };
 
   const signedInDescription = user
-    ? `${user.email ?? 'Your account'} · ${
-        syncError
-          ? `Backup needs attention: ${syncError}`
-          : 'Data backup is active. Tap to sign out.'
-      }`
+    ? `${user.email ?? 'Your account'} · ${syncError
+      ? `Backup needs attention: ${syncError}`
+      : 'Data backup is active. Tap to sign out.'
+    }`
     : '';
   const loginDescription = isConfigured
     ? 'Create or sign in to an account. Your data is not currently backed up.'

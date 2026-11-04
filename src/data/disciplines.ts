@@ -44,10 +44,31 @@ export type Discipline = {
 
 export const disciplines: Discipline[] = [
   {
+    title: 'Death by Beth',
+    tag: 'DBB',
+    showTitle: false,
+    hidden: true,
+    isSponsor: true,
+    logo: {
+      source: require('@/assets/images/logos/deathbybeth_logo.png'),
+      width: 75,
+      height: 75,
+    },
+    image: require('@/assets/images/disciplines/deathbybeth.png'),
+    description:
+      "Death by Beth is a fitness event that challenges you to push your limits. It's a fun and intense workout that will test your strength and endurance. It's a great way to get a feel for the event and get signed up for the next one.",
+    link: 'https://www.thearenagames.co.uk/',
+    theme: {
+      bgColor: '#39FF14',
+      borderColor: '#39FF14',
+      descriptionColor: '#000000',
+      linkColor: '#000000',
+    },
+  },
+  {
     title: 'Arena Games',
     tag: 'Arena',
     showTitle: false,
-    // Not ready for release yet - hidden from the discipline carousel.
     hidden: false,
     isSponsor: true,
     logo: {

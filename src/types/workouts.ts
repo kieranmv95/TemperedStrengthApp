@@ -120,10 +120,7 @@ export type SingleWorkout = {
   description: string;
   category: WorkoutCategory;
   difficulty:
-    | 'Beginner'
-    | 'Intermediate'
-    | 'Advanced'
-    | 'Multiple Difficulties';
+    'Beginner' | 'Intermediate' | 'Advanced' | 'Multiple Difficulties';
   estimatedTime: number;
   tags: WorkoutTag[];
   /** Equipment required for this workout; empty when bodyweight / no gear. */
@@ -177,6 +174,8 @@ export type WorkoutBlockBase = {
   instructions?: string;
   highlightInstructions?: string;
   movements?: WorkoutMovement[];
+  /** Block the user can skip, e.g. Additional Work. */
+  optional?: boolean;
 };
 
 /** Bundled workout row in `workout_data.ts` before `logSchema` is merged in `workouts.ts`. */
@@ -186,10 +185,7 @@ export type StandaloneWorkoutSource = {
   description: string;
   category: WorkoutCategory;
   difficulty:
-    | 'Beginner'
-    | 'Intermediate'
-    | 'Advanced'
-    | 'Multiple Difficulties';
+    'Beginner' | 'Intermediate' | 'Advanced' | 'Multiple Difficulties';
   estimatedTime: number;
   tags: WorkoutTag[];
   equipment: WorkoutEquipment[];
@@ -197,6 +193,8 @@ export type StandaloneWorkoutSource = {
   allowedRoles?: string[];
   partner?: boolean;
   collab?: WorkoutCollab;
+  /** Wins over `STANDALONE_LOG_SCHEMA_BY_ID` when set. */
+  logSchema?: WorkoutLogSchema;
   blocks:
     | WorkoutBlockBase[]
     | {
@@ -205,4 +203,21 @@ export type StandaloneWorkoutSource = {
         highlightInstructions?: string;
         blocks: WorkoutBlockBase[];
       }[];
+};
+
+/** One released week of Tempered Daily. Only the current week is ever shown. */
+export type TemperedDailyWeek = {
+  id: string;
+  /** ISO date of the Monday this week drops (00:01 device local time). */
+  weekStart: string;
+  blockName: string;
+  theme: string;
+  phase: string;
+  description: string;
+  primaryFocus: WorkoutFocusTag;
+  otherFocuses: WorkoutFocusTag[];
+  /** Shown as "Next week's focus" on the week view. */
+  nextWeekFocus?: string;
+  /** Exactly 7 entries, Monday → Sunday. `null` = rest day. */
+  days: (string | null)[];
 };

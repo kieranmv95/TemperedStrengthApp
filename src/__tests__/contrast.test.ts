@@ -134,6 +134,12 @@ const PAIRS: ContrastPair[] = [
     kind: 'text',
   },
   {
+    name: 'success on surface3 (pressed completed session button)',
+    foreground: color.success,
+    background: color.surface3,
+    kind: 'text',
+  },
+  {
     name: 'success on successTint over surface2 (recommended badge on pressed card)',
     foreground: color.success,
     background: flattenToHex(color.successTint, color.surface2),
@@ -253,6 +259,12 @@ const PAIRS: ContrastPair[] = [
     name: 'success set-complete fill vs surface2',
     foreground: color.success,
     background: color.surface2,
+    kind: 'nonText',
+  },
+  {
+    name: 'success completed-session border vs surface3',
+    foreground: color.success,
+    background: color.surface3,
     kind: 'nonText',
   },
   {

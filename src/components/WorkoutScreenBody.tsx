@@ -24,6 +24,7 @@ import type {
   ProgramSessionStatus,
 } from '@/src/types/storage';
 import { formatVolumeFromKg } from '@/src/utils/weightUnits';
+import { Ionicons } from '@expo/vector-icons';
 import React, {
   useCallback,
   useEffect,
@@ -50,6 +51,8 @@ import { ProgramSessionStatusControls } from './ProgramSessionStatusControls';
 
 type WorkoutScreenBodyProps = {
   selectedDayIndex: number | null;
+  /** True when the selected program day is today's date. */
+  isSelectedDayToday: boolean;
   isRestDay: boolean;
   programId?: string | null;
   startDate?: string | null;
@@ -92,6 +95,7 @@ const DAYS_PER_WEEK = 7;
 
 export function WorkoutScreenBody({
   selectedDayIndex,
+  isSelectedDayToday,
   isRestDay,
   programId = null,
   startDate = null,
@@ -174,6 +178,7 @@ export function WorkoutScreenBody({
         selectedDayIndex={selectedDayIndex}
         startDate={startDate}
         workoutWeekPattern={workoutWeekPattern}
+        isToday={isSelectedDayToday}
         onProgramReset={onProgramReset}
       />
     );
@@ -419,6 +424,36 @@ export function WorkoutScreenBody({
               ) : null}
             </View>
           ) : null}
+
+          <Pressable
+            onPress={onMarkSessionCompleted}
+            style={({ pressed }) => [
+              styles.completeSessionButton,
+              sessionStatus === 'completed' && styles.completeSessionButtonDone,
+              pressed &&
+                (sessionStatus === 'completed'
+                  ? styles.completeSessionButtonDonePressed
+                  : styles.completeSessionButtonPressed),
+            ]}
+            accessibilityRole="button"
+            accessibilityLabel="Mark session complete"
+            accessibilityState={{ selected: sessionStatus === 'completed' }}
+          >
+            {sessionStatus === 'completed' ? (
+              <Ionicons name="checkmark" size={18} color={color.success} />
+            ) : null}
+            <Text
+              style={[
+                styles.completeSessionButtonText,
+                sessionStatus === 'completed' &&
+                  styles.completeSessionButtonTextDone,
+              ]}
+            >
+              {sessionStatus === 'completed'
+                ? 'Completed'
+                : 'Mark session complete'}
+            </Text>
+          </Pressable>
         </Animated.View>
       </ScrollView>
     </KeyboardAvoidingView>
