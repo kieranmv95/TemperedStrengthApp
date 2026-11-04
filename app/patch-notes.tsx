@@ -17,7 +17,7 @@ const PATCH_NOTES: PatchNote[] = [
   {
     version: '3.3.0',
     dateLabel: '1st November 2026',
-    notes: ['Daily Programming', 'Re-order home screen sections', 'Tidied up the You tab', 'TODO: Zone info and components'],
+    notes: ['Daily Programming', 'Re-order home screen sections', 'Tidied up the You tab', 'Added moblity widget to the home page'],
   },
   {
     version: '3.2.1',
