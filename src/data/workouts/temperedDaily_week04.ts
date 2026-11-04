@@ -968,7 +968,7 @@ export const temperedDailyWeek04: StandaloneWorkoutSource[] = [
 
 export const temperedDailyWeek04Program: TemperedDailyWeek = {
   id: 'td_week_004',
-  weekStart: '2026-11-16',
+  weekStart: '2026-12-07',
   blockName: 'The Big Three',
   theme: 'Strength',
   phase: 'Test',

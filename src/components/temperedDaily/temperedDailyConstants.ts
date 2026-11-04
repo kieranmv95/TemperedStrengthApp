@@ -11,14 +11,16 @@ export const TEMPERED_DAILY_WEEK_TITLE = 'This week';
 export const TEMPERED_DAILY_WEEK_SUBTITLE =
   'A new week of training every Monday. Do the days you can.';
 export const TEMPERED_DAILY_VIEW_WEEK = 'View this week';
+export const TEMPERED_DAILY_SEE_COMING = "See what's coming";
+export const TEMPERED_DAILY_COMING_SOON = 'Coming soon';
+export const TEMPERED_DAILY_COMING_SOON_BODY =
+  'A new session every day, then a fresh week every Monday.';
 export const TEMPERED_DAILY_NEW_WEEK_DROPS = 'New week drops Monday 00:01';
 export const TEMPERED_DAILY_RELEASE_COPY =
   'Workouts become visible at 00:01 Monday';
 export const TEMPERED_DAILY_REST_DAY_TITLE = 'Rest day';
 export const TEMPERED_DAILY_REST_DAY_BODY =
   'Recover today. Check the rest of the week for your next session.';
-export const TEMPERED_DAILY_TEASER_BODY =
-  'A full week of programming drops every Monday. Check back soon.';
 
 export const TEMPERED_DAILY_REST_DAY_UPSELL = 'Try today’s workout!';
 
@@ -64,4 +66,15 @@ export function formatTemperedDayLabel(date: Date): string {
     day: 'numeric',
     month: 'short',
   });
+}
+
+/** Launch date, e.g. "Monday 16 November". */
+export function formatTemperedStartDate(date: Date): string {
+  const weekday = date.toLocaleDateString('en-GB', { weekday: 'long' });
+  const month = date.toLocaleDateString('en-GB', { month: 'long' });
+  return `${weekday} ${date.getDate()} ${month}`;
+}
+
+export function formatTemperedOpensLine(startLabel: string): string {
+  return `Opens ${startLabel}, 00:01`;
 }

@@ -1,12 +1,13 @@
 import { Badge, SectionHeader, StandardLayout, Tag } from '@/src/components/ds';
+import { TemperedDailyComingSoon } from '@/src/components/temperedDaily/TemperedDailyComingSoon';
 import { TemperedDailyDayCard } from '@/src/components/temperedDaily/TemperedDailyDayCard';
 import {
   DAY_LETTERS,
   formatTemperedDayLabel,
-  TEMPERED_DAILY_NAME,
+  TEMPERED_DAILY_COMING_SOON,
+  TEMPERED_DAILY_COMING_SOON_BODY,
   TEMPERED_DAILY_NEW_WEEK_DROPS,
   TEMPERED_DAILY_RELEASE_COPY,
-  TEMPERED_DAILY_TEASER_BODY,
   TEMPERED_DAILY_VIEW_SOURCE,
   TEMPERED_DAILY_WEEK_SUBTITLE,
   TEMPERED_DAILY_WEEK_TITLE,
@@ -30,12 +31,9 @@ import {
   getTemperedDailyToday,
   getTemperedDayDate,
 } from '@/src/utils/temperedDaily';
-import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-
-const STATE_ICON_SIZE = 48;
 
 function openWorkout(workoutId: string) {
   router.push(
@@ -58,28 +56,21 @@ export default function TemperedDailyWeekScreen() {
   const showProBadge = !subscriptionLoading && !isPro;
 
   if (!week) {
+    const upcoming = temperedDailyProgram[0] ?? null;
     return (
       <StandardLayout
-        title={TEMPERED_DAILY_WEEK_TITLE}
-        subtitle={TEMPERED_DAILY_WEEK_SUBTITLE}
+        title={TEMPERED_DAILY_COMING_SOON}
+        subtitle={TEMPERED_DAILY_COMING_SOON_BODY}
         onBackPress={() => router.back()}
-        disableScroll
       >
         <StandardLayout.Body>
-          <View style={styles.emptyState}>
-            <Ionicons
-              name="calendar-outline"
-              size={STATE_ICON_SIZE}
-              color={color.textTertiary}
+          {upcoming ? (
+            <TemperedDailyComingSoon
+              week={upcoming}
+              showUnlock={showProBadge}
+              onUnlock={() => router.push('/paywall')}
             />
-            <Text style={styles.emptyTitle} accessibilityRole="header">
-              {TEMPERED_DAILY_NAME}
-            </Text>
-            <Text style={styles.emptyDescription}>
-              {TEMPERED_DAILY_TEASER_BODY}
-            </Text>
-            <Text style={styles.dropLine}>{TEMPERED_DAILY_NEW_WEEK_DROPS}</Text>
-          </View>
+          ) : null}
         </StandardLayout.Body>
       </StandardLayout>
     );
@@ -288,22 +279,5 @@ const styles = StyleSheet.create({
   footerCaption: {
     ...typography.caption,
     color: color.textTertiary,
-  },
-  emptyState: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: space.xxl,
-    gap: space.xs,
-  },
-  emptyTitle: {
-    ...typography.title2,
-    color: color.textPrimary,
-    textAlign: 'center',
-  },
-  emptyDescription: {
-    ...typography.callout,
-    color: color.textSecondary,
-    textAlign: 'center',
   },
 });

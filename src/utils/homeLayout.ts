@@ -11,6 +11,7 @@ export const HOME_SECTION_ORDER = [
   'checkin',
   'wodShop',
   'streaks',
+  'mobility',
   'personalBests',
 ] as const;
 
@@ -27,6 +28,7 @@ export const HOME_SECTION_LABELS: Record<HomeSectionId, string> = {
   checkin: 'Check-in',
   wodShop: 'Workouts and shop',
   streaks: 'Streaks',
+  mobility: 'Mobility & flows',
   personalBests: 'Personal bests',
 };
 
@@ -36,11 +38,29 @@ function isHomeSectionId(value: string): value is HomeSectionId {
   return HOME_SECTION_IDS.has(value);
 }
 
+/** True when saved ids still appear in the built-in sequence, gaps allowed. */
+function followsDefaultOrder(ordered: HomeSectionPreference[]): boolean {
+  let lastIndex = -1;
+  for (const section of ordered) {
+    const index = HOME_SECTION_ORDER.indexOf(section.id);
+    if (index < lastIndex) {
+      return false;
+    }
+    lastIndex = index;
+  }
+  return true;
+}
+
 export function defaultHomeLayout(): HomeSectionPreference[] {
   return HOME_SECTION_ORDER.map((id) => ({ id, visible: true }));
 }
 
-/** Known sections, in the stored order, with any new sections appended. */
+/**
+ * Known sections, in the stored order.
+ * A layout that still follows the built-in sequence picks up new sections in
+ * that sequence, so they land under the section they follow by default.
+ * A reordered layout keeps its order and gains new sections at the end.
+ */
 export function normalizeHomeLayout(raw: unknown): HomeSectionPreference[] {
   const seen = new Set<HomeSectionId>();
   const ordered: HomeSectionPreference[] = [];
@@ -61,6 +81,16 @@ export function normalizeHomeLayout(raw: unknown): HomeSectionPreference[] {
         visible: record.visible !== false,
       });
     }
+  }
+
+  if (followsDefaultOrder(ordered)) {
+    const visibility = new Map(
+      ordered.map((section) => [section.id, section.visible])
+    );
+    return HOME_SECTION_ORDER.map((id) => ({
+      id,
+      visible: visibility.get(id) ?? true,
+    }));
   }
 
   for (const id of HOME_SECTION_ORDER) {

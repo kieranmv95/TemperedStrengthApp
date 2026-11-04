@@ -29,6 +29,9 @@ type SponsorCardContentProps = {
 };
 
 function SponsorCardContent({ discipline }: SponsorCardContentProps) {
+  const theme = discipline.theme;
+  const linkColor = theme?.linkColor ?? color.gold;
+
   return (
     <View style={styles.sponsorContent}>
       {!!discipline.logo && (
@@ -42,12 +45,21 @@ function SponsorCardContent({ discipline }: SponsorCardContentProps) {
         />
       )}
       {!!discipline.description && (
-        <Text style={styles.sponsorDescription}>{discipline.description}</Text>
+        <Text
+          style={[
+            styles.sponsorDescription,
+            theme?.descriptionColor ? { color: theme.descriptionColor } : null,
+          ]}
+        >
+          {discipline.description}
+        </Text>
       )}
       {!!discipline.link && (
         <View style={styles.sponsorLinkRow}>
-          <Ionicons name="globe-outline" size={16} color={color.gold} />
-          <Text style={styles.sponsorLinkText}>View event details</Text>
+          <Ionicons name="globe-outline" size={16} color={linkColor} />
+          <Text style={[styles.sponsorLinkText, { color: linkColor }]}>
+            View event details
+          </Text>
         </View>
       )}
     </View>
@@ -125,7 +137,14 @@ export default function WorkoutsByTagScreen() {
     }
     if (!discipline.link) {
       return (
-        <Card style={styles.sponsorCard}>
+        <Card
+          style={[
+            styles.sponsorCard,
+            discipline.theme?.bgColor
+              ? { backgroundColor: discipline.theme.bgColor }
+              : null,
+          ]}
+        >
           <SponsorCardContent discipline={discipline} />
         </Card>
       );
@@ -134,6 +153,7 @@ export default function WorkoutsByTagScreen() {
       <PressableCard
         variant="promo"
         accentColor={discipline.theme?.borderColor}
+        surfaceColor={discipline.theme?.bgColor}
         showChevron={false}
         onPress={handleSponsorPress}
         accessibilityLabel={[

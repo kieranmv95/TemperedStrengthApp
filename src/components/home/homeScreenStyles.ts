@@ -11,14 +11,14 @@ export const homeScreenStyles = StyleSheet.create({
   sections: {
     gap: space.md,
   },
+  /** In the scrolling body. Negative top margin cancels the body padding so it stays close to the date. */
   customiseButton: {
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
     gap: space.xxs,
     minHeight: 32,
-    marginTop: -space.xs,
-    marginBottom: -space.sm,
+    marginTop: -space.md,
     marginLeft: -space.xxs,
     paddingRight: space.xs,
   },

@@ -8,7 +8,7 @@ import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyl
 import { color } from '@/src/constants/tokens';
 import { useLargeText } from '@/src/hooks/useLargeText';
 import type { StreakSnapshot } from '@/src/services/streakService';
-import type { SingleWorkout } from '@/src/types/workouts';
+import type { SingleWorkout, TemperedDailyWeek } from '@/src/types/workouts';
 import type { HomeCheckinSummary } from '@/src/utils/homeCheckinSummary';
 import type { HomeSectionId } from '@/src/utils/homeLayout';
 import type { HomeProgramSummary } from '@/src/utils/homeProgramSummary';
@@ -43,6 +43,7 @@ type HomeSectionProps = {
   onOpenProgram: () => void;
   temperedToday: TemperedDailyToday;
   temperedWorkout: SingleWorkout | null;
+  temperedComingSoon: TemperedDailyWeek | null;
   date: Date;
   showProBadge: boolean;
   onOpenDailyWorkout: (workoutId: string) => void;
@@ -51,6 +52,7 @@ type HomeSectionProps = {
   onOpenCheckin: () => void;
   onOpenWorkouts: () => void;
   onOpenShop: () => void;
+  onOpenMobility: () => void;
   streakSnapshot: StreakSnapshot | null;
   displayName: string | null;
   recentPbs: RecentPersonalBestRow[];
@@ -65,6 +67,7 @@ export function HomeSection({
   onOpenProgram,
   temperedToday,
   temperedWorkout,
+  temperedComingSoon,
   date,
   showProBadge,
   onOpenDailyWorkout,
@@ -73,6 +76,7 @@ export function HomeSection({
   onOpenCheckin,
   onOpenWorkouts,
   onOpenShop,
+  onOpenMobility,
   streakSnapshot,
   displayName,
   recentPbs,
@@ -90,6 +94,7 @@ export function HomeSection({
         <TemperedDailyWidget
           today={temperedToday}
           workout={temperedWorkout}
+          comingSoonWeek={temperedComingSoon}
           date={date}
           showProBadge={showProBadge}
           onOpenWorkout={onOpenDailyWorkout}
@@ -142,6 +147,17 @@ export function HomeSection({
       }
       return (
         <HomeStreakCard snapshot={streakSnapshot} displayName={displayName} />
+      );
+    case 'mobility':
+      return (
+        <HubPromoCard
+          icon="body-outline"
+          eyebrow="Move & restore"
+          title="Mobility & flows"
+          description="Guided flows to help you recover and move better."
+          onPress={onOpenMobility}
+          accessibilityLabel="Opens mobility and recovery flows"
+        />
       );
     case 'personalBests':
       if (recentPbs.length > 0) {

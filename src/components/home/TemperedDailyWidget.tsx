@@ -1,11 +1,15 @@
 import { Badge, Tag } from '@/src/components/ds';
 import {
+  formatTemperedOpensLine,
+  formatTemperedStartDate,
   getTemperedDailyWorkoutLabels,
+  TEMPERED_DAILY_COMING_SOON,
+  TEMPERED_DAILY_COMING_SOON_BODY,
   TEMPERED_DAILY_NAME,
   TEMPERED_DAILY_NEW_WEEK_DROPS,
   TEMPERED_DAILY_REST_DAY_BODY,
   TEMPERED_DAILY_REST_DAY_TITLE,
-  TEMPERED_DAILY_TEASER_BODY,
+  TEMPERED_DAILY_SEE_COMING,
   TEMPERED_DAILY_TODAY_HEADING,
   TEMPERED_DAILY_VIEW_WEEK,
 } from '@/src/components/temperedDaily/temperedDailyConstants';
@@ -17,8 +21,11 @@ import {
   space,
   typography,
 } from '@/src/constants/tokens';
-import type { SingleWorkout } from '@/src/types/workouts';
-import type { TemperedDailyToday } from '@/src/utils/temperedDaily';
+import type { SingleWorkout, TemperedDailyWeek } from '@/src/types/workouts';
+import {
+  parseLocalDate,
+  type TemperedDailyToday,
+} from '@/src/utils/temperedDaily';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -27,6 +34,8 @@ type TemperedDailyWidgetProps = {
   today: TemperedDailyToday;
   /** Resolved from `today.workoutId`; null on a rest day or with no content. */
   workout: SingleWorkout | null;
+  /** First week, shown before it opens. Null once a week is live. */
+  comingSoonWeek: TemperedDailyWeek | null;
   date: Date;
   showProBadge: boolean;
   onOpenWorkout: (workoutId: string) => void;
@@ -45,6 +54,7 @@ function formatWidgetDate(date: Date): string {
 export function TemperedDailyWidget({
   today,
   workout,
+  comingSoonWeek,
   date,
   showProBadge,
   onOpenWorkout,
@@ -52,22 +62,30 @@ export function TemperedDailyWidget({
 }: TemperedDailyWidgetProps) {
   const { week, dayIndex } = today;
   const dateLabel = formatWidgetDate(date);
+  const comingSoonLabel = comingSoonWeek
+    ? formatTemperedStartDate(parseLocalDate(comingSoonWeek.weekStart))
+    : null;
 
-  const renderHeading = () => (
+  const renderHeading = (
+    overline: string = TEMPERED_DAILY_TODAY_HEADING,
+    dateLine: React.ReactNode = (
+      <>
+        {dateLabel}
+        {week ? (
+          <>
+            {' · '}
+            <Text style={styles.theme}>{week.theme}</Text>
+          </>
+        ) : null}
+      </>
+    )
+  ) => (
     <View style={styles.headingRow}>
       <View style={styles.heading}>
-        <Text style={styles.overline}>{TEMPERED_DAILY_TODAY_HEADING}</Text>
-        <Text style={styles.dateLine}>
-          {dateLabel}
-          {week ? (
-            <>
-              {' · '}
-              <Text style={styles.theme}>{week.theme}</Text>
-            </>
-          ) : null}
-        </Text>
+        <Text style={styles.overline}>{overline}</Text>
+        <Text style={styles.dateLine}>{dateLine}</Text>
       </View>
-      {showProBadge ? (
+      {showProBadge || !week ? (
         <Badge label="PRO" accessibilityLabel="Pro feature" />
       ) : null}
     </View>
@@ -77,10 +95,24 @@ export function TemperedDailyWidget({
     if (!week) {
       return (
         <View style={styles.body}>
-          {renderHeading()}
+          {renderHeading(
+            TEMPERED_DAILY_COMING_SOON,
+            comingSoonWeek ? (
+              <>
+                {'Week one · '}
+                <Text style={styles.theme}>{comingSoonWeek.theme}</Text>
+              </>
+            ) : null
+          )}
           <Text style={styles.title}>{TEMPERED_DAILY_NAME}</Text>
-          <Text style={styles.description}>{TEMPERED_DAILY_TEASER_BODY}</Text>
-          <Text style={styles.dropLine}>{TEMPERED_DAILY_NEW_WEEK_DROPS}</Text>
+          <Text style={styles.description}>
+            {TEMPERED_DAILY_COMING_SOON_BODY}
+          </Text>
+          {comingSoonLabel ? (
+            <Text style={styles.dropLine}>
+              {formatTemperedOpensLine(comingSoonLabel)}
+            </Text>
+          ) : null}
         </View>
       );
     }
@@ -145,18 +177,27 @@ export function TemperedDailyWidget({
     );
   };
 
+  const weekLinkLabel = week
+    ? TEMPERED_DAILY_VIEW_WEEK
+    : TEMPERED_DAILY_SEE_COMING;
+
   return (
     <View style={styles.card}>
+      {!week ? <View style={styles.comingSoonEdge} /> : null}
       {renderBody()}
       <View style={styles.divider} />
       <Pressable
         onPress={onOpenWeek}
         style={({ pressed }) => [styles.weekRow, pressed && styles.pressed]}
         accessibilityRole="button"
-        accessibilityLabel={TEMPERED_DAILY_VIEW_WEEK}
-        accessibilityHint={`Opens this week's ${TEMPERED_DAILY_NAME} workouts`}
+        accessibilityLabel={weekLinkLabel}
+        accessibilityHint={
+          week
+            ? `Opens this week's ${TEMPERED_DAILY_NAME} workouts`
+            : `Opens what's coming in ${TEMPERED_DAILY_NAME}`
+        }
       >
-        <Text style={styles.weekRowText}>{TEMPERED_DAILY_VIEW_WEEK}</Text>
+        <Text style={styles.weekRowText}>{weekLinkLabel}</Text>
         <Ionicons name="chevron-forward" size={18} color={color.gold} />
       </Pressable>
     </View>
@@ -169,6 +210,14 @@ const styles = StyleSheet.create({
     backgroundColor: color.surface1,
     borderRadius: radius.md,
     overflow: 'hidden',
+  },
+  comingSoonEdge: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    width: 4,
+    backgroundColor: color.gold,
   },
   body: {
     padding: space.md,

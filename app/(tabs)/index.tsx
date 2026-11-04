@@ -331,6 +331,9 @@ export default function HomeTabScreen() {
   const temperedWorkout = temperedToday.workoutId
     ? (getTemperedDailyWorkoutById(temperedToday.workoutId) ?? null)
     : null;
+  const temperedComingSoon = temperedToday.week
+    ? null
+    : (temperedDailyProgram[0] ?? null);
   const firstName = displayName?.split(/\s+/)[0] ?? null;
   const greet = timeOfDayGreeting();
   const greetingTitle = firstName ? `${greet}, ${firstName}` : greet;
@@ -383,33 +386,31 @@ export default function HomeTabScreen() {
         title={greetingTitle}
         subtitle={formatTodayDate()}
         titleAccessory={titleAccessory}
-        headerActions={
-          <Pressable
-            ref={customiseButtonRef}
-            onPress={() => {
-              posthog.capture(posthogEventsNames.home.customiseOpened);
-              setCustomiseOpen(true);
-            }}
-            hitSlop={(MIN_TARGET_SIZE - 32) / 2}
-            style={({ pressed }) => [
-              styles.customiseButton,
-              pressed && styles.customiseButtonPressed,
-            ]}
-            accessibilityRole="button"
-            accessibilityLabel="Customise home"
-            accessibilityHint="Reorder home sections. Pro can also show or hide them."
-          >
-            <Ionicons
-              name="reorder-three"
-              size={20}
-              color={color.textPrimary}
-            />
-            <Text style={styles.customiseLabel}>Customise</Text>
-          </Pressable>
-        }
       >
         <StandardLayout.Body>
           <View style={styles.sections}>
+            <Pressable
+              ref={customiseButtonRef}
+              onPress={() => {
+                posthog.capture(posthogEventsNames.home.customiseOpened);
+                setCustomiseOpen(true);
+              }}
+              hitSlop={(MIN_TARGET_SIZE - 32) / 2}
+              style={({ pressed }) => [
+                styles.customiseButton,
+                pressed && styles.customiseButtonPressed,
+              ]}
+              accessibilityRole="button"
+              accessibilityLabel="Customise home"
+              accessibilityHint="Reorder home sections. Pro can also show or hide them."
+            >
+              <Ionicons
+                name="reorder-three"
+                size={20}
+                color={color.textPrimary}
+              />
+              <Text style={styles.customiseLabel}>Customise</Text>
+            </Pressable>
             {showFreeStrip ? (
               <EnterOnMount index={nextEntrance()}>
                 <HomeUpgradeStrip
@@ -512,6 +513,7 @@ export default function HomeTabScreen() {
                     }
                     temperedToday={temperedToday}
                     temperedWorkout={temperedWorkout}
+                    temperedComingSoon={temperedComingSoon}
                     date={now}
                     showProBadge={showFreeStrip}
                     onOpenDailyWorkout={(workoutId) =>
@@ -545,6 +547,11 @@ export default function HomeTabScreen() {
                     onOpenShop={() =>
                       trackHomeLink('browse_shop_card', '/shop', () =>
                         router.push('/shop')
+                      )
+                    }
+                    onOpenMobility={() =>
+                      trackHomeLink('mobility_flows_card', '/recovery', () =>
+                        router.push('/recovery')
                       )
                     }
                     streakSnapshot={streakSnapshot}

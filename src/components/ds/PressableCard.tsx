@@ -17,6 +17,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import Animated, {
+  interpolate,
   interpolateColor,
   useAnimatedStyle,
   useSharedValue,
@@ -35,6 +36,8 @@ type PressableCardProps = {
   variant?: PressableCardVariant;
   /** Promo only: partner brand colour shown as a narrow leading edge. */
   accentColor?: string;
+  /** Promo only: partner brand background. Press feedback dims the card instead of stepping the surface. */
+  surfaceColor?: string;
   showChevron?: boolean;
   /** Light impact on press. Supplementary only; the visual press state always shows. */
   haptic?: boolean;
@@ -56,6 +59,7 @@ const SURFACES: Record<
 
 const HERO_EDGE_HEIGHT = 2;
 const PROMO_EDGE_WIDTH = 4;
+const BRAND_SURFACE_PRESSED_OPACITY = 0.85;
 
 function HeroEdge() {
   return (
@@ -80,6 +84,7 @@ export function PressableCard({
   accessibilityHint,
   variant = 'default',
   accentColor,
+  surfaceColor,
   showChevron = true,
   haptic = true,
   disabled = false,
@@ -91,15 +96,29 @@ export function PressableCard({
   const pressed = useSharedValue(0);
   const scale = useSharedValue(1);
   const surfaces = SURFACES[variant];
+  const brandSurface = variant === 'promo' ? surfaceColor : undefined;
 
-  const surfaceStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(
-      pressed.get(),
-      [0, 1],
-      [surfaces.rest, surfaces.pressed]
-    ),
-    transform: [{ scale: scale.get() }],
-  }));
+  const surfaceStyle = useAnimatedStyle(() => {
+    if (brandSurface) {
+      return {
+        backgroundColor: brandSurface,
+        opacity: interpolate(
+          pressed.get(),
+          [0, 1],
+          [1, BRAND_SURFACE_PRESSED_OPACITY]
+        ),
+        transform: [{ scale: scale.get() }],
+      };
+    }
+    return {
+      backgroundColor: interpolateColor(
+        pressed.get(),
+        [0, 1],
+        [surfaces.rest, surfaces.pressed]
+      ),
+      transform: [{ scale: scale.get() }],
+    };
+  });
 
   const handlePressIn = () => {
     pressed.set(motionHelpers.fade(1, 'instant'));

@@ -29,6 +29,7 @@ describe('home layout', () => {
       { id: 'checkin', visible: true },
       { id: 'wodShop', visible: true },
       { id: 'streaks', visible: true },
+      { id: 'mobility', visible: true },
       { id: 'personalBests', visible: true },
     ]);
     expect(normalizeHomeLayout(null)).toEqual(defaultHomeLayout());
@@ -48,6 +49,28 @@ describe('home layout', () => {
       'daily:true',
       'checkin:true',
       'wodShop:true',
+      'mobility:true',
+      'personalBests:true',
+    ]);
+  });
+
+  it('inserts a new section under its default neighbour when the saved order is unchanged', () => {
+    expect(
+      normalizeHomeLayout([
+        { id: 'program', visible: true },
+        { id: 'daily', visible: false },
+        { id: 'checkin', visible: true },
+        { id: 'wodShop', visible: true },
+        { id: 'streaks', visible: true },
+        { id: 'personalBests', visible: true },
+      ]).map((section) => `${section.id}:${section.visible}`)
+    ).toEqual([
+      'program:true',
+      'daily:false',
+      'checkin:true',
+      'wodShop:true',
+      'streaks:true',
+      'mobility:true',
       'personalBests:true',
     ]);
   });
@@ -65,6 +88,7 @@ describe('home layout', () => {
       'program',
       'wodShop',
       'streaks',
+      'mobility',
       'personalBests',
     ]);
     expect(moveHomeSection(layout, 0, 0)).toEqual(layout);
@@ -86,6 +110,7 @@ describe('home layout', () => {
       'checkin',
       'wodShop',
       'streaks',
+      'mobility',
       'personalBests',
     ]);
     expect(
