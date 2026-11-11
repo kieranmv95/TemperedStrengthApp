@@ -2,7 +2,6 @@ import {
   ActionChip,
   Badge,
   Collapsible,
-  FilterChip,
   PressableCard,
   SectionHeader,
   Tag,
@@ -20,12 +19,21 @@ import type {
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Image, Linking, ScrollView, Text, View } from 'react-native';
+import {
+  Image,
+  Linking,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import { workoutDetailStyles as styles } from './workoutDetailStyles';
 import { CATEGORY_ICONS } from './workoutUiConstants';
 
 type WorkoutDetailScrollContentProps = {
   workout: SingleWorkout;
+  /** Overrides the app-wide category label, e.g. for Tempered Daily. */
+  categoryLabel?: string;
 };
 
 type WorkoutScaledBlockGroup = {
@@ -44,9 +52,7 @@ function isScaledBlocks(
 
 function movementToRowText(movement: string | DetailedMovement): string {
   if (typeof movement === 'string') return movement;
-  return `${movement.name}: ${movement.value}${
-    movement.note ? ` (${movement.note})` : ''
-  }`;
+  return `${movement.name}: ${movement.value}`;
 }
 
 function isDivider(movement: unknown): movement is Divider {
@@ -68,10 +74,14 @@ function renderMovementRow(movement: WorkoutMovement, movementIndex: number) {
   }
 
   const movementText = movementToRowText(movement);
+  const note = typeof movement === 'string' ? undefined : movement.note;
   return (
     <View key={movementIndex} style={styles.movementItem}>
       <View style={styles.movementBullet} />
-      <Text style={styles.movementText}>{movementText}</Text>
+      <View style={styles.movementTextColumn}>
+        <Text style={styles.movementText}>{movementText}</Text>
+        {note ? <Text style={styles.movementNote}>{note}</Text> : null}
+      </View>
     </View>
   );
 }
@@ -131,6 +141,21 @@ function renderWorkoutBlock(
   expanded: boolean,
   onToggle: () => void
 ) {
+  if (block.optional) {
+    return (
+      <Collapsible
+        key={key}
+        title={block.name}
+        expanded={expanded}
+        onToggle={onToggle}
+        accessory={<Badge label="Optional" tone="neutral" />}
+        accessibilityLabel={`${block.name}, optional`}
+      >
+        {renderBlockBody(block)}
+      </Collapsible>
+    );
+  }
+
   if (isWarmupBlockName(block.name)) {
     return (
       <Collapsible
@@ -156,6 +181,7 @@ function renderWorkoutBlock(
 
 export function WorkoutDetailScrollContent({
   workout,
+  categoryLabel: categoryLabelOverride,
 }: WorkoutDetailScrollContentProps) {
   const [selectedScaleIndex, setSelectedScaleIndex] = useState(0);
   /** Expanded warm-up sections by block key; collapsed until opened. */
@@ -201,7 +227,8 @@ export function WorkoutDetailScrollContent({
     return workout.blocks;
   }, [workout.blocks]);
 
-  const categoryLabel = categoryFilterDisplayLabel(workout.category);
+  const categoryLabel =
+    categoryLabelOverride ?? categoryFilterDisplayLabel(workout.category);
   const collabCtaLabel = collab?.linkCopy ? collab.linkCopy : 'Find out more';
 
   return (
@@ -282,16 +309,33 @@ export function WorkoutDetailScrollContent({
         <>
           <View style={styles.scaleSection}>
             <SectionHeader title="Scalings" />
-            <View style={styles.scaleSelectorRow}>
-              {scaledBlocks.all.map((s, i) => (
-                <FilterChip
-                  key={`${i}-${s.scale}`}
-                  label={s.scale}
-                  selected={i === scaledBlocks.safeIndex}
-                  onPress={() => setSelectedScaleIndex(i)}
-                  accessibilityLabel={`${s.scale} scaling`}
-                />
-              ))}
+            <View style={styles.scaleSegmentRow} accessibilityRole="radiogroup">
+              {scaledBlocks.all.map((s, i) => {
+                const isActive = i === scaledBlocks.safeIndex;
+                return (
+                  <Pressable
+                    key={`${i}-${s.scale}`}
+                    style={({ pressed }) => [
+                      styles.scaleSegment,
+                      pressed && !isActive && styles.scaleSegmentPressed,
+                      isActive && styles.scaleSegmentActive,
+                    ]}
+                    onPress={() => setSelectedScaleIndex(i)}
+                    accessibilityRole="radio"
+                    accessibilityLabel={`${s.scale} scaling`}
+                    accessibilityState={{ checked: isActive }}
+                  >
+                    <Text
+                      style={[
+                        styles.scaleSegmentText,
+                        isActive && styles.scaleSegmentTextActive,
+                      ]}
+                    >
+                      {s.scale}
+                    </Text>
+                  </Pressable>
+                );
+              })}
             </View>
           </View>
 

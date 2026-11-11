@@ -1,7 +1,9 @@
 import { CuratedSection } from '@/src/components/ds';
 import { RestDayActivityCarousel } from '@/src/components/rest/RestDayActivityCarousel';
 import { RestDayMobilityCarousel } from '@/src/components/rest/RestDayMobilityCarousel';
+import { RestDayTemperedDailyCard } from '@/src/components/rest/RestDayTemperedDailyCard';
 import { RestDayWorkoutCarousel } from '@/src/components/rest/RestDayWorkoutCarousel';
+import { TEMPERED_DAILY_VIEW_SOURCE } from '@/src/components/temperedDaily/temperedDailyConstants';
 import {
   color,
   MIN_TARGET_SIZE,
@@ -9,10 +11,15 @@ import {
   space,
   typography,
 } from '@/src/constants/tokens';
+import {
+  getTemperedDailyWorkoutById,
+  temperedDailyProgram,
+} from '@/src/data/temperedDaily';
 import { useRoles } from '@/src/hooks/useRoles';
 import type { Program } from '@/src/types/program';
 import type { SingleWorkout } from '@/src/types/workouts';
 import { getRestDaySuggestionsForDay } from '@/src/utils/restDaySuggestions';
+import { getTemperedDailyToday } from '@/src/utils/temperedDaily';
 import {
   getFavoriteWorkouts,
   toggleFavoriteWorkout,
@@ -28,6 +35,8 @@ type RestDayScreenProps = {
   selectedDayIndex: number | null;
   startDate: string | null;
   workoutWeekPattern: Program['daysSplit'] | null;
+  /** True when the selected program day is today; gates the Tempered Daily card. */
+  isToday: boolean;
   onProgramReset?: () => void;
 };
 
@@ -36,6 +45,7 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
   selectedDayIndex,
   startDate,
   workoutWeekPattern,
+  isToday,
 }) => {
   const { isPro, roles, isLoading: accessLoading } = useRoles();
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -79,6 +89,11 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
     }
   };
 
+  const temperedToday = getTemperedDailyToday(temperedDailyProgram, new Date());
+  const temperedWorkout = temperedToday.workoutId
+    ? (getTemperedDailyWorkoutById(temperedToday.workoutId) ?? null)
+    : null;
+
   const showWorkouts = suggestions.workoutIds.length > 0;
   const showSkillLabs = suggestions.skillWorkoutIds.length > 0;
 
@@ -117,6 +132,18 @@ export const RestDayScreen: React.FC<RestDayScreenProps> = ({
             The suggestions below are optional. Skip them if you need full rest.
           </Text>
         </View>
+        {isToday && temperedToday.week && temperedWorkout ? (
+          <RestDayTemperedDailyCard
+            workout={temperedWorkout}
+            theme={temperedToday.week.theme}
+            showProBadge={!accessLoading && !isPro}
+            onPress={() =>
+              router.push(
+                `/workout/${temperedWorkout.id}?view_source=${TEMPERED_DAILY_VIEW_SOURCE}`
+              )
+            }
+          />
+        ) : null}
       </View>
 
       {suggestions.recoveryIds.length > 0 ? (

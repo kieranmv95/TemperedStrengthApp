@@ -177,6 +177,10 @@ export default function RootLayout() {
                         options={{ headerShown: false }}
                       />
                       <Stack.Screen
+                        name="tempered-daily/index"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
                         name="competition"
                         options={{ headerShown: false }}
                       />

@@ -49,6 +49,10 @@ export const posthogEventsNames = {
     linkPressed: 'home_link_pressed',
     /** User tapped a sponsor / affiliate CTA. */
     sponsorCtaPressed: 'home_sponsor_cta_pressed',
+    /** User opened the home customise sheet. */
+    customiseOpened: 'home_customise_opened',
+    /** User reordered a home section or changed its visibility. */
+    layoutChanged: 'home_layout_changed',
   },
   app: {
     settingChanged: 'setting_changed',
