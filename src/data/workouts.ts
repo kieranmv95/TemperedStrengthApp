@@ -13,18 +13,9 @@ export type {
   DetailedMovement,
   SingleWorkout,
   StandaloneWorkoutSource,
-  WorkoutCategory,
+  WorkoutDiscipline,
   WorkoutLogSchema,
-  WorkoutTag,
 } from '@/src/types/workouts';
-
-export {
-  WORKOUT_TAGS,
-  isWorkoutTag,
-  isWorkoutFocusTag,
-  isWorkoutFormatTag,
-} from '@/src/types/workouts';
-export { WORKOUT_FOCUS_TAGS, WORKOUT_FORMAT_TAGS } from '@/src/types/workouts';
 
 type WorkoutJson = StandaloneWorkoutSource;
 

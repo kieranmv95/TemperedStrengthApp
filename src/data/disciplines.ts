@@ -1,17 +1,51 @@
-import type {
-  SingleWorkout,
-  WorkoutCategory,
-  WorkoutSpecial,
+import {
+  WORKOUT_DISCIPLINES,
+  type SingleWorkout,
+  type WorkoutCollection,
+  type WorkoutDiscipline,
+  type WorkoutSpecial,
 } from '@/src/types/workouts';
 import { ImageSourcePropType } from 'react-native';
 
-/** Discipline carousel route key; not a `WorkoutTag` — filters by empty `equipment`. */
+/** Ionicon per discipline, used on pills, filter chips and workout cards. */
+export const DISCIPLINE_ICONS: Record<WorkoutDiscipline, string> = {
+  Metcon: 'timer-outline',
+  Strength: 'barbell-outline',
+  'Olympic Lifting': 'trending-up-outline',
+  Gymnastics: 'body-outline',
+  Conditioning: 'heart-outline',
+  Hyrox: 'fitness-outline',
+  Skills: 'school-outline',
+};
+
+/** Route key that filters by empty `equipment`. */
 export const NO_EQUIPMENT_DISCIPLINE_TAG = 'No Equipment';
 
-/** Discipline keys mapped to workout category (tags no longer duplicate this). */
-const DISCIPLINE_CATEGORY: Record<string, WorkoutCategory> = {
-  CrossFit: 'WOD',
+/**
+ * Route key per discipline. `Skill` predates the Skills rename and stays so
+ * existing links keep working.
+ */
+const DISCIPLINE_TAG_FOR: Record<WorkoutDiscipline, string> = {
+  Metcon: 'Metcon',
+  Strength: 'Strength',
+  'Olympic Lifting': 'Olympic Lifting',
+  Gymnastics: 'Gymnastics',
+  Conditioning: 'Conditioning',
   Hyrox: 'Hyrox',
+  Skills: 'Skill',
+};
+
+const DISCIPLINE_FOR_TAG: Record<string, WorkoutDiscipline> =
+  Object.fromEntries(
+    WORKOUT_DISCIPLINES.map((discipline) => [
+      DISCIPLINE_TAG_FOR[discipline],
+      discipline,
+    ])
+  );
+
+/** `CrossFit` was a discipline; its route now opens the benchmarks collection. */
+const DISCIPLINE_COLLECTION: Record<string, WorkoutCollection> = {
+  CrossFit: 'CrossFit Benchmarks',
 };
 
 /** Event keys mapped to the workout's event series. */
@@ -41,7 +75,8 @@ export type Discipline = {
   /** Hide from the discipline carousel while unreleased (data kept in place). */
   hidden?: boolean;
   tag: string;
-  image: ImageSourcePropType;
+  /** Tile artwork; events only. */
+  image?: ImageSourcePropType;
   /** Ionicon name for the Disciplines pill. */
   icon?: string;
   logo?: {
@@ -136,39 +171,26 @@ export const disciplines: Discipline[] = [
       linkColor: '#FF4BB8',
     },
   },
-  {
-    title: 'Olympic Lifting',
+  ...WORKOUT_DISCIPLINES.map((discipline): Discipline => ({
+    title: discipline,
     group: 'discipline',
-    tag: 'Olympic Lifting',
+    tag: DISCIPLINE_TAG_FOR[discipline],
     showTitle: true,
-    icon: 'barbell-outline',
-    image: require('@/assets/images/disciplines/oly.png'),
-  },
+    icon: DISCIPLINE_ICONS[discipline],
+  })),
   {
-    title: 'Skills',
-    group: 'discipline',
-    tag: 'Skill',
-    showTitle: true,
-    icon: 'school-outline',
-    image: require('@/assets/images/skills/thumbnails/Handstand.jpg'),
-    description:
-      'Drill-led sessions for complex movements — snatches, muscle-ups, handstands, and more. Positions and progressions before load.',
-  },
-  {
-    title: 'CrossFit',
+    title: 'CrossFit Benchmarks',
     group: 'discipline',
     tag: 'CrossFit',
     showTitle: true,
-    icon: 'timer-outline',
-    image: require('@/assets/images/disciplines/crossfit.png'),
+    icon: 'trophy-outline',
   },
   {
-    title: 'Hyrox',
+    title: 'Partner',
     group: 'discipline',
-    tag: 'Hyrox',
+    tag: 'Partner',
     showTitle: true,
-    icon: 'fitness-outline',
-    image: require('@/assets/images/disciplines/hyrox.png'),
+    icon: 'people-outline',
   },
   {
     title: 'Collabs',
@@ -177,17 +199,8 @@ export const disciplines: Discipline[] = [
     isSponsor: true,
     showTitle: true,
     icon: 'sparkles-outline',
-    image: require('@/assets/images/disciplines/collab.png'),
     description:
       'At Tempered Strength, sometimes we come across a workout that just takes our breath away... Literally. Find all the workouts from people we have collaborated with here.',
-  },
-  {
-    title: 'Partner',
-    group: 'discipline',
-    tag: 'Partner',
-    showTitle: true,
-    icon: 'people-outline',
-    image: require('@/assets/images/disciplines/partner.png'),
   },
 ];
 
@@ -212,22 +225,20 @@ export function workoutMatchesDiscipline(
   if (isNoEquipmentDiscipline(disciplineTag)) {
     return workout.equipment.length === 0;
   }
-  const category = DISCIPLINE_CATEGORY[disciplineTag];
-  if (category) {
-    return workout.category === category;
+  const discipline = DISCIPLINE_FOR_TAG[disciplineTag];
+  if (discipline) {
+    return workout.disciplines.includes(discipline);
+  }
+  const collection = DISCIPLINE_COLLECTION[disciplineTag];
+  if (collection) {
+    return workout.collections?.includes(collection) ?? false;
   }
   const special = DISCIPLINE_SPECIAL[disciplineTag];
   if (special) {
     return workout.special === special;
   }
   if (disciplineTag === 'Partner') {
-    return workout.tags.includes('Partner');
-  }
-  if (disciplineTag === 'Olympic Lifting') {
-    return workout.tags.includes('Olympic Lifting');
-  }
-  if (disciplineTag === 'Skill') {
-    return workout.tags.includes('Skill');
+    return Boolean(workout.partner);
   }
   if (disciplineTag === 'Collab') {
     return Boolean(workout.collab);

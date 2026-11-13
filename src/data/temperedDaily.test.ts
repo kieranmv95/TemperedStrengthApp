@@ -7,8 +7,8 @@ import {
 } from '@/src/data/temperedDaily';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import {
-  isWorkoutFocusTag,
-  isWorkoutTag,
+  WORKOUT_BODY_FOCUSES,
+  WORKOUT_DISCIPLINES,
   type SingleWorkout,
 } from '@/src/types/workouts';
 import { getTemperedDayDate, parseLocalDate } from '@/src/utils/temperedDaily';
@@ -62,8 +62,7 @@ function scaleNames(workout: SingleWorkout): string[] {
 describe('Tempered Daily solo sessions and scales', () => {
   it('no workout is a partner workout', () => {
     for (const w of temperedDailyWorkouts) {
-      expect(w.partner).not.toBe(true);
-      expect(w.tags).not.toContain('Partner');
+      expect(w.partner).toBeUndefined();
     }
   });
 
@@ -149,11 +148,15 @@ describe('temperedDailyProgram', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('focus tags are known focus tags', () => {
+  it('week focuses are disciplines or body areas', () => {
+    const known: readonly string[] = [
+      ...WORKOUT_DISCIPLINES,
+      ...WORKOUT_BODY_FOCUSES,
+    ];
     for (const week of temperedDailyProgram) {
-      expect(isWorkoutFocusTag(week.primaryFocus)).toBe(true);
-      for (const tag of week.otherFocuses) {
-        expect(isWorkoutFocusTag(tag)).toBe(true);
+      expect(known).toContain(week.primaryFocus);
+      for (const focus of week.otherFocuses) {
+        expect(known).toContain(focus);
       }
     }
   });
@@ -176,19 +179,16 @@ describe('temperedDailyWorkouts', () => {
     const allowedEquipment = new Set(WORKOUT_EQUIPMENT_OPTIONS);
     for (const w of temperedDailyWorkouts) {
       expect(w.isPremium).toBe(true);
-      expect(w.difficulty).toBe('Multiple Difficulties');
-      for (const tag of w.tags) {
-        expect(isWorkoutTag(tag)).toBe(true);
-      }
+      expect(w.levels).toEqual(['Intermediate', 'Advanced']);
       for (const eq of w.equipment) {
         expect(allowedEquipment.has(eq)).toBe(true);
       }
     }
   });
 
-  it('never uses the Hyrox category', () => {
+  it('never uses the Hyrox discipline', () => {
     for (const w of temperedDailyWorkouts) {
-      expect(w.category).not.toBe('Hyrox');
+      expect(w.disciplines).not.toContain('Hyrox');
     }
   });
 

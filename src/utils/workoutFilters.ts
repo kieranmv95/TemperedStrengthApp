@@ -1,12 +1,14 @@
-import type { CategoryFilter } from '@/src/components/workouts/workoutsScreenConstants';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import type {
   SingleWorkout,
+  WorkoutBodyFocus,
+  WorkoutCollection,
+  WorkoutDiscipline,
   WorkoutEquipment,
-  WorkoutFocusTag,
-  WorkoutFormatTag,
+  WorkoutFormat,
+  WorkoutLevel,
 } from '@/src/types/workouts';
-import { isWorkoutFocusTag, isWorkoutFormatTag } from '@/src/types/workouts';
+import { isWorkoutLocked } from '@/src/utils/workoutAccess';
 
 export type WorkoutTimeBucket = 'quick' | 'short' | 'medium' | 'long';
 
@@ -19,36 +21,76 @@ export type WorkoutTimeBucketOption = {
 export const WORKOUT_TIME_BUCKET_OPTIONS: WorkoutTimeBucketOption[] = [
   {
     id: 'quick',
-    label: 'Quick (<15m)',
+    label: 'Under 15 min',
     matches: (t) => t < 15,
   },
   {
     id: 'short',
-    label: 'Short (15–30m)',
+    label: '15–30 min',
     matches: (t) => t >= 15 && t < 30,
   },
   {
     id: 'medium',
-    label: 'Medium (30–45m)',
+    label: '30–45 min',
     matches: (t) => t >= 30 && t < 45,
   },
   {
     id: 'long',
-    label: 'Long (45m+)',
+    label: '45+ min',
     matches: (t) => t >= 45,
   },
 ];
 
-export type WorkoutFilterCriteria = {
-  searchQuery?: string;
-  activeCategoryFilter?: CategoryFilter;
-  selectedEquipment?: WorkoutEquipment[];
-  noEquipmentOnly?: boolean;
-  selectedFocus?: WorkoutFocusTag[];
-  selectedFormat?: WorkoutFormatTag[];
-  selectedTimeBuckets?: WorkoutTimeBucket[];
-  favoriteIds?: string[];
+/**
+ * Everything the user can filter by. Options in one group are OR'd; groups
+ * are AND'd together.
+ */
+export type WorkoutFilters = {
+  searchQuery: string;
+  favouritesOnly: boolean;
+  hideLocked: boolean;
+  disciplines: WorkoutDiscipline[];
+  timeBuckets: WorkoutTimeBucket[];
+  /** Kit the user has. Matches workouts that need nothing outside it. */
+  equipment: WorkoutEquipment[];
+  bodyweightOnly: boolean;
+  formats: WorkoutFormat[];
+  bodyFocus: WorkoutBodyFocus[];
+  levels: WorkoutLevel[];
+  partnerOnly: boolean;
+  collections: WorkoutCollection[];
 };
+
+/** Who is filtering: needed for favourites and the locked filter. */
+export type WorkoutFilterContext = {
+  favoriteIds: string[];
+  isPro: boolean;
+  roles: string[];
+};
+
+export const EMPTY_WORKOUT_FILTERS: WorkoutFilters = {
+  searchQuery: '',
+  favouritesOnly: false,
+  hideLocked: false,
+  disciplines: [],
+  timeBuckets: [],
+  equipment: [],
+  bodyweightOnly: false,
+  formats: [],
+  bodyFocus: [],
+  levels: [],
+  partnerOnly: false,
+  collections: [],
+};
+
+/** Multi-select groups, each matched with OR. */
+export type WorkoutFilterGroup =
+  | 'disciplines'
+  | 'timeBuckets'
+  | 'formats'
+  | 'bodyFocus'
+  | 'levels'
+  | 'collections';
 
 export function workoutMatchesTimeBucket(
   estimatedTime: number,
@@ -58,88 +100,87 @@ export function workoutMatchesTimeBucket(
   return option ? option.matches(estimatedTime) : false;
 }
 
-export function workoutMatchesFilters(
-  workout: SingleWorkout,
-  criteria: WorkoutFilterCriteria
-): boolean {
-  const searchQuery = criteria.searchQuery ?? '';
-  const activeCategoryFilter = criteria.activeCategoryFilter ?? 'All';
-  const selectedEquipment = criteria.selectedEquipment ?? [];
-  const noEquipmentOnly = criteria.noEquipmentOnly ?? false;
-  const selectedFocus = criteria.selectedFocus ?? [];
-  const selectedFormat = criteria.selectedFormat ?? [];
-  const selectedTimeBuckets = criteria.selectedTimeBuckets ?? [];
-  const favoriteIds = criteria.favoriteIds ?? [];
-
-  if (searchQuery.trim()) {
-    const query = searchQuery.trim().toLowerCase();
-    const matchesTitle = workout.title.toLowerCase().includes(query);
-    const matchesDescription = workout.description
-      .toLowerCase()
-      .includes(query);
-    const matchesTags = workout.tags.some((tag) =>
-      tag.toLowerCase().includes(query)
-    );
-    if (!matchesTitle && !matchesDescription && !matchesTags) {
-      return false;
-    }
-  }
-
-  if (noEquipmentOnly) {
-    if (workout.equipment.length > 0) return false;
-  } else if (selectedEquipment.length > 0) {
-    const hasAll = selectedEquipment.every((eq) =>
-      workout.equipment.includes(eq)
-    );
-    if (!hasAll) return false;
-  }
-
-  if (selectedFocus.length > 0) {
-    const hasFocus = workout.tags.some(
-      (tag) => isWorkoutFocusTag(tag) && selectedFocus.includes(tag)
-    );
-    if (!hasFocus) return false;
-  }
-
-  if (selectedFormat.length > 0) {
-    const hasFormat = workout.tags.some(
-      (tag) => isWorkoutFormatTag(tag) && selectedFormat.includes(tag)
-    );
-    if (!hasFormat) return false;
-  }
-
-  if (selectedTimeBuckets.length > 0) {
-    const matchesTime = selectedTimeBuckets.some((bucket) =>
-      workoutMatchesTimeBucket(workout.estimatedTime, bucket)
-    );
-    if (!matchesTime) return false;
-  }
-
-  if (activeCategoryFilter === 'All') return true;
-  if (activeCategoryFilter === 'Favorites') {
-    return favoriteIds.includes(workout.id);
-  }
-  if (activeCategoryFilter === 'Pro') return workout.isPremium;
-  return workout.category === activeCategoryFilter;
+function matchesSearch(workout: SingleWorkout, query: string): boolean {
+  const needle = query.trim().toLowerCase();
+  if (!needle) return true;
+  const haystack = [
+    workout.title,
+    workout.description,
+    ...workout.disciplines,
+    workout.format ?? '',
+    ...(workout.collections ?? []),
+    workout.special ?? '',
+  ];
+  return haystack.some((text) => text.toLowerCase().includes(needle));
 }
 
-export function countActiveWorkoutFilters(criteria: {
-  searchQuery: string;
-  activeCategoryFilter: CategoryFilter;
-  selectedEquipment: WorkoutEquipment[];
-  noEquipmentOnly: boolean;
-  selectedFocus: WorkoutFocusTag[];
-  selectedFormat: WorkoutFormatTag[];
-  selectedTimeBuckets: WorkoutTimeBucket[];
-}): number {
+function matchesAny<T>(selected: T[], values: readonly T[]): boolean {
+  return selected.length === 0 || selected.some((v) => values.includes(v));
+}
+
+export function workoutMatchesFilters(
+  workout: SingleWorkout,
+  filters: WorkoutFilters,
+  context: WorkoutFilterContext
+): boolean {
+  if (!matchesSearch(workout, filters.searchQuery)) return false;
+
+  if (filters.favouritesOnly && !context.favoriteIds.includes(workout.id)) {
+    return false;
+  }
+  if (
+    filters.hideLocked &&
+    isWorkoutLocked(workout, { isPro: context.isPro, roles: context.roles })
+  ) {
+    return false;
+  }
+
+  if (!matchesAny(filters.disciplines, workout.disciplines)) return false;
+  if (
+    filters.timeBuckets.length > 0 &&
+    !filters.timeBuckets.some((bucket) =>
+      workoutMatchesTimeBucket(workout.estimatedTime, bucket)
+    )
+  ) {
+    return false;
+  }
+
+  if (filters.bodyweightOnly) {
+    if (workout.equipment.length > 0) return false;
+  } else if (filters.equipment.length > 0) {
+    const canDo = workout.equipment.every((eq) =>
+      filters.equipment.includes(eq)
+    );
+    if (!canDo) return false;
+  }
+
+  if (!matchesAny(filters.formats, workout.format ? [workout.format] : [])) {
+    return false;
+  }
+  if (!matchesAny(filters.bodyFocus, workout.bodyFocus)) return false;
+  if (!matchesAny(filters.levels, workout.levels)) return false;
+  if (!matchesAny(filters.collections, workout.collections ?? [])) {
+    return false;
+  }
+  if (filters.partnerOnly && !workout.partner) return false;
+
+  return true;
+}
+
+export function countActiveWorkoutFilters(filters: WorkoutFilters): number {
   let count = 0;
-  if (criteria.searchQuery.trim().length > 0) count += 1;
-  if (criteria.activeCategoryFilter !== 'All') count += 1;
-  if (criteria.noEquipmentOnly) count += 1;
-  count += criteria.selectedEquipment.length;
-  count += criteria.selectedFocus.length;
-  count += criteria.selectedFormat.length;
-  count += criteria.selectedTimeBuckets.length;
+  if (filters.searchQuery.trim().length > 0) count += 1;
+  if (filters.favouritesOnly) count += 1;
+  if (filters.hideLocked) count += 1;
+  if (filters.bodyweightOnly) count += 1;
+  if (filters.partnerOnly) count += 1;
+  count += filters.disciplines.length;
+  count += filters.timeBuckets.length;
+  count += filters.equipment.length;
+  count += filters.formats.length;
+  count += filters.bodyFocus.length;
+  count += filters.levels.length;
+  count += filters.collections.length;
   return count;
 }
 
@@ -151,37 +192,40 @@ export function equipmentFilterLabel(eq: WorkoutEquipment): string {
 }
 
 export function countWorkoutsMatching(
-  criteria: WorkoutFilterCriteria,
-  overrides?: Partial<WorkoutFilterCriteria>
+  filters: WorkoutFilters,
+  context: WorkoutFilterContext,
+  overrides?: Partial<WorkoutFilters>
 ): number {
-  const merged = { ...criteria, ...overrides };
+  const merged = { ...filters, ...overrides };
   return allStandaloneWorkouts.filter((workout) =>
-    workoutMatchesFilters(workout, merged)
+    workoutMatchesFilters(workout, merged, context)
   ).length;
 }
 
 /**
- * Faceted count for an OR-group option (focus, format, duration).
- * Ignores the group's own selection so counts never grow as you select
- * more options within the group; only other groups' filters narrow it.
+ * Faceted count for one option in an OR group. Ignores the group's own
+ * selection, so counts never grow as more options in the group are picked.
  */
-export function countWithMultiSelectOption<T extends string>(
-  base: WorkoutFilterCriteria,
-  field: 'selectedFocus' | 'selectedFormat' | 'selectedTimeBuckets',
-  value: T
+export function countWithGroupOption<G extends WorkoutFilterGroup>(
+  filters: WorkoutFilters,
+  context: WorkoutFilterContext,
+  group: G,
+  value: WorkoutFilters[G][number]
 ): number {
-  return countWorkoutsMatching(base, { [field]: [value] });
+  return countWorkoutsMatching(filters, context, { [group]: [value] });
 }
 
-/** Faceted count: results if this equipment option were included. */
+/** Faceted count: results if the user also had this piece of kit. */
 export function countWithEquipmentOption(
-  base: WorkoutFilterCriteria,
-  eq: WorkoutEquipment,
-  current: WorkoutEquipment[]
+  filters: WorkoutFilters,
+  context: WorkoutFilterContext,
+  eq: WorkoutEquipment
 ): number {
-  const next = current.includes(eq) ? current : [...current, eq];
-  return countWorkoutsMatching(base, {
-    noEquipmentOnly: false,
-    selectedEquipment: next,
+  const next = filters.equipment.includes(eq)
+    ? filters.equipment
+    : [...filters.equipment, eq];
+  return countWorkoutsMatching(filters, context, {
+    bodyweightOnly: false,
+    equipment: next,
   });
 }

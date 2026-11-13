@@ -1,5 +1,4 @@
 import { Badge, PressableCard, Tag } from '@/src/components/ds';
-import { categoryFilterDisplayLabel } from '@/src/components/workouts/workoutsScreenConstants';
 import {
   color,
   MIN_TARGET_SIZE,
@@ -27,7 +26,11 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
-import { CATEGORY_ICONS } from './workoutUiConstants';
+import {
+  levelsLabel,
+  primaryDisciplineIcon,
+  workoutTagLabels,
+} from './workoutUiConstants';
 
 type WorkoutCardProps = {
   workout: SingleWorkout;
@@ -47,7 +50,6 @@ type WorkoutCardProps = {
 
 const CATEGORY_ICON_SIZE = 14;
 const HEART_POP_PEAK = 1.25;
-const MAX_TAGS = 3;
 
 type FavouriteButtonProps = {
   title: string;
@@ -111,7 +113,9 @@ export function WorkoutCard({
 }: WorkoutCardProps) {
   const isLocked = isWorkoutLocked(workout, { isPro, roles });
   const premiumBadge = premiumAccessBadgeLabel(workout.allowedRoles);
-  const categoryLabel = categoryFilterDisplayLabel(workout.category);
+  const disciplineLabel = workout.disciplines[0];
+  const levelLabel = levelsLabel(workout.levels);
+  const tagLabels = workoutTagLabels(workout);
 
   const handlePress = () => {
     if (isLocked) {
@@ -123,10 +127,10 @@ export function WorkoutCard({
 
   const accessibilityLabel = [
     workout.title,
-    categoryLabel,
+    disciplineLabel,
     workout.special ?? null,
     `${workout.estimatedTime} minutes`,
-    workout.difficulty,
+    levelLabel,
     workout.isPremium ? premiumBadge : null,
     isLocked ? 'locked' : null,
   ]
@@ -147,14 +151,12 @@ export function WorkoutCard({
       >
         <View style={styles.header}>
           <Ionicons
-            name={
-              CATEGORY_ICONS[workout.category] as keyof typeof Ionicons.glyphMap
-            }
+            name={primaryDisciplineIcon(workout)}
             size={CATEGORY_ICON_SIZE}
             color={color.gold}
           />
           <Text style={styles.category} numberOfLines={1}>
-            {categoryLabel}
+            {disciplineLabel}
           </Text>
           {workout.special ? (
             <Badge label={workout.special} tone="neutral" />
@@ -178,7 +180,7 @@ export function WorkoutCard({
             />
             <Text style={styles.metaText}>{workout.estimatedTime} min</Text>
           </View>
-          <Badge label={workout.difficulty} tone="neutral" />
+          <Badge label={levelLabel} tone="neutral" />
           {isLocked ? (
             <View style={styles.metaItem}>
               <Ionicons name="lock-closed" size={14} color={color.gold} />
@@ -187,9 +189,9 @@ export function WorkoutCard({
           ) : null}
         </View>
 
-        {hideTags || workout.tags.length === 0 ? null : (
+        {hideTags || tagLabels.length === 0 ? null : (
           <View style={styles.tags}>
-            {workout.tags.slice(0, MAX_TAGS).map((tag) => (
+            {tagLabels.map((tag) => (
               <Tag key={tag} label={tag} />
             ))}
           </View>

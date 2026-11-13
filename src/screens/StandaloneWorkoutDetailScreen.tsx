@@ -1,6 +1,5 @@
 import { StandardLayout } from '@/src/components/ds';
 import { TemperedDailyLockedUpsell } from '@/src/components/temperedDaily/TemperedDailyLockedUpsell';
-import { getTemperedDailyCategoryLabel } from '@/src/components/temperedDaily/temperedDailyConstants';
 import { WorkoutDetailScrollContent } from '@/src/components/workouts/WorkoutDetailScrollContent';
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
 import { color } from '@/src/constants/tokens';
@@ -218,14 +217,7 @@ export default function StandaloneWorkoutDetailScreen() {
             </Pressable>
           </View>
         ) : (
-          <WorkoutDetailScrollContent
-            workout={workout}
-            categoryLabel={
-              isTemperedDaily
-                ? getTemperedDailyCategoryLabel(workout.category)
-                : undefined
-            }
-          />
+          <WorkoutDetailScrollContent workout={workout} />
         )}
       </StandardLayout.Body>
     </StandardLayout>

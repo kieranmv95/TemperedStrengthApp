@@ -7,7 +7,6 @@ import {
   Tag,
 } from '@/src/components/ds';
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
-import { categoryFilterDisplayLabel } from '@/src/components/workouts/workoutsScreenConstants';
 import { color } from '@/src/constants/tokens';
 import type {
   DetailedMovement,
@@ -28,12 +27,14 @@ import {
   View,
 } from 'react-native';
 import { workoutDetailStyles as styles } from './workoutDetailStyles';
-import { CATEGORY_ICONS } from './workoutUiConstants';
+import {
+  levelsLabel,
+  primaryDisciplineIcon,
+  workoutDetailTagLabels,
+} from './workoutUiConstants';
 
 type WorkoutDetailScrollContentProps = {
   workout: SingleWorkout;
-  /** Overrides the app-wide category label, e.g. for Tempered Daily. */
-  categoryLabel?: string;
 };
 
 type WorkoutScaledBlockGroup = {
@@ -181,7 +182,6 @@ function renderWorkoutBlock(
 
 export function WorkoutDetailScrollContent({
   workout,
-  categoryLabel: categoryLabelOverride,
 }: WorkoutDetailScrollContentProps) {
   const [selectedScaleIndex, setSelectedScaleIndex] = useState(0);
   /** Expanded warm-up sections by block key; collapsed until opened. */
@@ -204,9 +204,7 @@ export function WorkoutDetailScrollContent({
     });
   };
 
-  const visibleTags = useMemo(() => {
-    return workout.tags;
-  }, [workout.tags]);
+  const visibleTags = workoutDetailTagLabels(workout);
 
   const scaledBlocks = useMemo(() => {
     if (!isScaledBlocks(workout.blocks)) return null;
@@ -227,8 +225,6 @@ export function WorkoutDetailScrollContent({
     return workout.blocks;
   }, [workout.blocks]);
 
-  const categoryLabel =
-    categoryLabelOverride ?? categoryFilterDisplayLabel(workout.category);
   const collabCtaLabel = collab?.linkCopy ? collab.linkCopy : 'Find out more';
 
   return (
@@ -239,13 +235,13 @@ export function WorkoutDetailScrollContent({
       <View style={styles.detailMetaRow}>
         <View style={styles.detailCategory}>
           <Ionicons
-            name={
-              CATEGORY_ICONS[workout.category] as keyof typeof Ionicons.glyphMap
-            }
+            name={primaryDisciplineIcon(workout)}
             size={14}
             color={color.gold}
           />
-          <Text style={styles.detailCategoryText}>{categoryLabel}</Text>
+          <Text style={styles.detailCategoryText}>
+            {workout.disciplines[0]}
+          </Text>
         </View>
         {workout.special ? (
           <Badge label={workout.special} tone="neutral" />
@@ -258,7 +254,7 @@ export function WorkoutDetailScrollContent({
           <Ionicons name="time-outline" size={16} color={color.textSecondary} />
           <Text style={styles.detailMetaText}>{workout.estimatedTime} min</Text>
         </View>
-        <Badge label={workout.difficulty} tone="neutral" />
+        <Badge label={levelsLabel(workout.levels)} tone="neutral" />
       </View>
 
       <Text style={styles.detailDescription}>{workout.description}</Text>

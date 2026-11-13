@@ -1,7 +1,51 @@
 import type { ImageSourcePropType } from 'react-native';
 
-export type WorkoutCategory =
-  'Strength' | 'Skill' | 'WOD' | 'Hyrox' | 'Conditioning' | 'Pilates';
+/** How the session trains you. A workout can have several; the first is its primary. */
+export const WORKOUT_DISCIPLINES = [
+  'Metcon',
+  'Strength',
+  'Olympic Lifting',
+  'Gymnastics',
+  'Conditioning',
+  'Hyrox',
+  'Skills',
+] as const;
+
+/** Body area the session loads most. */
+export const WORKOUT_BODY_FOCUSES = [
+  'Full Body',
+  'Upper Body',
+  'Lower Body',
+  'Core',
+] as const;
+
+/** Workout structure. Set-based strength and skill sessions have none. */
+export const WORKOUT_FORMATS = [
+  'AMRAP',
+  'EMOM',
+  'For Time',
+  'Intervals',
+  'Tabata',
+  'Chipper',
+  'Ladder',
+] as const;
+
+export const WORKOUT_LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
+
+/** Curated sets that cut across disciplines. */
+export const WORKOUT_COLLECTIONS = [
+  'CrossFit Benchmarks',
+  'Benchmarks',
+] as const;
+
+export type WorkoutDiscipline = (typeof WORKOUT_DISCIPLINES)[number];
+export type WorkoutBodyFocus = (typeof WORKOUT_BODY_FOCUSES)[number];
+export type WorkoutFormat = (typeof WORKOUT_FORMATS)[number];
+export type WorkoutLevel = (typeof WORKOUT_LEVELS)[number];
+export type WorkoutCollection = (typeof WORKOUT_COLLECTIONS)[number];
+
+/** `only` needs a partner; `option` has a partner version alongside solo. */
+export type WorkoutPartner = 'only' | 'option';
 
 /** Event series a workout belongs to, independent of its training category. */
 export type WorkoutSpecial =
@@ -23,56 +67,6 @@ export type WorkoutEquipment =
   | 'sled'
   | 'ghd'
   | 'sandbag';
-
-/** Training stimulus / body area — workouts typically have 1–2. */
-export const WORKOUT_FOCUS_TAGS = [
-  'Full Body',
-  'Upper Body',
-  'Lower Body',
-  'Core',
-  'Cardio',
-  'Strength',
-  'Gymnastics',
-  'Olympic Lifting',
-  'Skill',
-] as const;
-
-/** Workout structure / scoring — workouts typically have 1. */
-export const WORKOUT_FORMAT_TAGS = [
-  'AMRAP',
-  'EMOM',
-  'For Time',
-  'Intervals',
-  'Tabata',
-  'Chipper',
-  'Ladder',
-  'Benchmark',
-] as const;
-
-/** Modifier kept for Partner discipline filtering. */
-export const WORKOUT_MODIFIER_TAGS = ['Partner'] as const;
-
-export const WORKOUT_TAGS = [
-  ...WORKOUT_FOCUS_TAGS,
-  ...WORKOUT_FORMAT_TAGS,
-  ...WORKOUT_MODIFIER_TAGS,
-] as const;
-
-export type WorkoutFocusTag = (typeof WORKOUT_FOCUS_TAGS)[number];
-export type WorkoutFormatTag = (typeof WORKOUT_FORMAT_TAGS)[number];
-export type WorkoutTag = (typeof WORKOUT_TAGS)[number];
-
-export function isWorkoutFocusTag(tag: string): tag is WorkoutFocusTag {
-  return (WORKOUT_FOCUS_TAGS as readonly string[]).includes(tag);
-}
-
-export function isWorkoutFormatTag(tag: string): tag is WorkoutFormatTag {
-  return (WORKOUT_FORMAT_TAGS as readonly string[]).includes(tag);
-}
-
-export function isWorkoutTag(tag: string): tag is WorkoutTag {
-  return (WORKOUT_TAGS as readonly string[]).includes(tag);
-}
 
 /**
  * What the standalone workouts tab can record for a template.
@@ -112,13 +106,15 @@ export type SingleWorkout = {
   id: string;
   title: string;
   description: string;
-  category: WorkoutCategory;
   /** Event series, shown as a badge and used by the Events tiles. */
   special?: WorkoutSpecial;
-  difficulty:
-    'Beginner' | 'Intermediate' | 'Advanced' | 'Multiple Difficulties';
   estimatedTime: number;
-  tags: WorkoutTag[];
+  /** At least one. The first is the primary, shown on cards. */
+  disciplines: WorkoutDiscipline[];
+  bodyFocus: WorkoutBodyFocus[];
+  format?: WorkoutFormat;
+  levels: WorkoutLevel[];
+  collections?: WorkoutCollection[];
   /** Equipment required for this workout; empty when bodyweight / no gear. */
   equipment: WorkoutEquipment[];
   isPremium: boolean;
@@ -128,8 +124,7 @@ export type SingleWorkout = {
    * (e.g. `coach` for skill sessions).
    */
   allowedRoles?: string[];
-  /** True when designed to be done with a partner. */
-  partner?: boolean;
+  partner?: WorkoutPartner;
   /** Present when the workout is a collaboration; surfaced on the detail screen and Collab discipline. */
   collab?: WorkoutCollab;
   blocks: StandaloneWorkoutSource['blocks'];
@@ -179,16 +174,17 @@ export type StandaloneWorkoutSource = {
   id: string;
   title: string;
   description: string;
-  category: WorkoutCategory;
   special?: WorkoutSpecial;
-  difficulty:
-    'Beginner' | 'Intermediate' | 'Advanced' | 'Multiple Difficulties';
   estimatedTime: number;
-  tags: WorkoutTag[];
+  disciplines: WorkoutDiscipline[];
+  bodyFocus: WorkoutBodyFocus[];
+  format?: WorkoutFormat;
+  levels: WorkoutLevel[];
+  collections?: WorkoutCollection[];
   equipment: WorkoutEquipment[];
   isPremium: boolean;
   allowedRoles?: string[];
-  partner?: boolean;
+  partner?: WorkoutPartner;
   collab?: WorkoutCollab;
   /** Wins over `STANDALONE_LOG_SCHEMA_BY_ID` when set. */
   logSchema?: WorkoutLogSchema;
@@ -202,6 +198,9 @@ export type StandaloneWorkoutSource = {
       }[];
 };
 
+/** A Tempered Daily week is themed by a discipline or a body area. */
+export type WorkoutWeekFocus = WorkoutDiscipline | WorkoutBodyFocus;
+
 /** One released week of Tempered Daily. Only the current week is ever shown. */
 export type TemperedDailyWeek = {
   id: string;
@@ -211,8 +210,8 @@ export type TemperedDailyWeek = {
   theme: string;
   phase: string;
   description: string;
-  primaryFocus: WorkoutFocusTag;
-  otherFocuses: WorkoutFocusTag[];
+  primaryFocus: WorkoutWeekFocus;
+  otherFocuses: WorkoutWeekFocus[];
   /** Shown as "Next week's focus" on the week view. */
   nextWeekFocus?: string;
   /** Exactly 7 entries, Monday → Sunday. `null` = rest day. */

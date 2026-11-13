@@ -1,93 +1,145 @@
 import { ActionChip } from '@/src/components/ds';
-import {
-  categoryFilterDisplayLabel,
-  focusTagDisplayLabel,
-  type CategoryFilter,
-} from '@/src/components/workouts/workoutsScreenConstants';
 import { space } from '@/src/constants/tokens';
-import type {
-  WorkoutEquipment,
-  WorkoutFocusTag,
-  WorkoutFormatTag,
-} from '@/src/types/workouts';
 import {
-  WORKOUT_TIME_BUCKET_OPTIONS,
+  countActiveWorkoutFilters,
   equipmentFilterLabel,
-  type WorkoutTimeBucket,
+  WORKOUT_TIME_BUCKET_OPTIONS,
+  type WorkoutFilters,
 } from '@/src/utils/workoutFilters';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 const SEARCH_LABEL_MAX = 28;
 
-type WorkoutActiveFiltersBarProps = {
-  searchQuery: string;
-  activeCategoryFilter: CategoryFilter;
-  selectedEquipment: WorkoutEquipment[];
-  noEquipmentOnly: boolean;
-  selectedFocus: WorkoutFocusTag[];
-  selectedFormat: WorkoutFormatTag[];
-  selectedTimeBuckets: WorkoutTimeBucket[];
-  onResetAll: () => void;
-  onClearSearch: () => void;
-  onClearCategory: () => void;
-  onClearNoEquipment: () => void;
-  onRemoveEquipment: (eq: WorkoutEquipment) => void;
-  onRemoveFocus: (tag: WorkoutFocusTag) => void;
-  onRemoveFormat: (tag: WorkoutFormatTag) => void;
-  onRemoveTimeBucket: (bucket: WorkoutTimeBucket) => void;
+type ActiveFilter = {
+  key: string;
+  label: string;
+  /** Filter group, used for analytics. */
+  group: string;
+  remove: Partial<WorkoutFilters>;
 };
 
+type WorkoutActiveFiltersBarProps = {
+  filters: WorkoutFilters;
+  onResetAll: () => void;
+  onRemove: (changes: Partial<WorkoutFilters>, group: string) => void;
+};
+
+function listActiveFilters(filters: WorkoutFilters): ActiveFilter[] {
+  const active: ActiveFilter[] = [];
+  const search = filters.searchQuery.trim();
+  if (search) {
+    const label =
+      search.length > SEARCH_LABEL_MAX
+        ? `${search.slice(0, SEARCH_LABEL_MAX)}…`
+        : search;
+    active.push({
+      key: 'search',
+      label: `Search: ${label}`,
+      group: 'search',
+      remove: { searchQuery: '' },
+    });
+  }
+  if (filters.favouritesOnly) {
+    active.push({
+      key: 'favourites',
+      label: 'Favourites',
+      group: 'favourites',
+      remove: { favouritesOnly: false },
+    });
+  }
+  if (filters.hideLocked) {
+    active.push({
+      key: 'locked',
+      label: 'Hide locked',
+      group: 'locked',
+      remove: { hideLocked: false },
+    });
+  }
+  for (const value of filters.disciplines) {
+    active.push({
+      key: `discipline-${value}`,
+      label: value,
+      group: 'discipline',
+      remove: { disciplines: filters.disciplines.filter((v) => v !== value) },
+    });
+  }
+  for (const value of filters.timeBuckets) {
+    active.push({
+      key: `time-${value}`,
+      label:
+        WORKOUT_TIME_BUCKET_OPTIONS.find((b) => b.id === value)?.label ?? value,
+      group: 'time',
+      remove: { timeBuckets: filters.timeBuckets.filter((v) => v !== value) },
+    });
+  }
+  if (filters.bodyweightOnly) {
+    active.push({
+      key: 'bodyweight',
+      label: 'Bodyweight only',
+      group: 'equipment',
+      remove: { bodyweightOnly: false },
+    });
+  }
+  for (const value of filters.equipment) {
+    active.push({
+      key: `equipment-${value}`,
+      label: equipmentFilterLabel(value),
+      group: 'equipment',
+      remove: { equipment: filters.equipment.filter((v) => v !== value) },
+    });
+  }
+  for (const value of filters.formats) {
+    active.push({
+      key: `format-${value}`,
+      label: value,
+      group: 'format',
+      remove: { formats: filters.formats.filter((v) => v !== value) },
+    });
+  }
+  for (const value of filters.bodyFocus) {
+    active.push({
+      key: `focus-${value}`,
+      label: value,
+      group: 'focus',
+      remove: { bodyFocus: filters.bodyFocus.filter((v) => v !== value) },
+    });
+  }
+  for (const value of filters.levels) {
+    active.push({
+      key: `level-${value}`,
+      label: value,
+      group: 'level',
+      remove: { levels: filters.levels.filter((v) => v !== value) },
+    });
+  }
+  if (filters.partnerOnly) {
+    active.push({
+      key: 'partner',
+      label: 'Partner workouts',
+      group: 'partner',
+      remove: { partnerOnly: false },
+    });
+  }
+  for (const value of filters.collections) {
+    active.push({
+      key: `collection-${value}`,
+      label: value,
+      group: 'collection',
+      remove: { collections: filters.collections.filter((v) => v !== value) },
+    });
+  }
+  return active;
+}
+
 export function WorkoutActiveFiltersBar({
-  searchQuery,
-  activeCategoryFilter,
-  selectedEquipment,
-  noEquipmentOnly,
-  selectedFocus,
-  selectedFormat,
-  selectedTimeBuckets,
+  filters,
   onResetAll,
-  onClearSearch,
-  onClearCategory,
-  onClearNoEquipment,
-  onRemoveEquipment,
-  onRemoveFocus,
-  onRemoveFormat,
-  onRemoveTimeBucket,
+  onRemove,
 }: WorkoutActiveFiltersBarProps) {
-  const trimmedSearch = searchQuery.trim();
-
-  const hasActiveFilters = useMemo(() => {
-    return (
-      trimmedSearch.length > 0 ||
-      activeCategoryFilter !== 'All' ||
-      selectedEquipment.length > 0 ||
-      noEquipmentOnly ||
-      selectedFocus.length > 0 ||
-      selectedFormat.length > 0 ||
-      selectedTimeBuckets.length > 0
-    );
-  }, [
-    trimmedSearch,
-    activeCategoryFilter,
-    selectedEquipment,
-    noEquipmentOnly,
-    selectedFocus,
-    selectedFormat,
-    selectedTimeBuckets,
-  ]);
-
-  if (!hasActiveFilters) {
+  if (countActiveWorkoutFilters(filters) === 0) {
     return null;
   }
-
-  const searchLabel =
-    trimmedSearch.length > SEARCH_LABEL_MAX
-      ? `${trimmedSearch.slice(0, SEARCH_LABEL_MAX)}…`
-      : trimmedSearch;
-
-  const timeBucketLabel = (bucket: WorkoutTimeBucket) =>
-    WORKOUT_TIME_BUCKET_OPTIONS.find((b) => b.id === bucket)?.label ?? bucket;
 
   return (
     <View style={styles.container}>
@@ -103,75 +155,18 @@ export function WorkoutActiveFiltersBar({
           onPress={onResetAll}
           accessibilityLabel="Reset all filters"
         />
-
-        {trimmedSearch.length > 0 ? (
-          <RemovableFilter
-            label={`Search: ${searchLabel}`}
-            onRemove={onClearSearch}
-          />
-        ) : null}
-
-        {activeCategoryFilter !== 'All' ? (
-          <RemovableFilter
-            label={categoryFilterDisplayLabel(activeCategoryFilter)}
-            onRemove={onClearCategory}
-          />
-        ) : null}
-
-        {selectedFocus.map((tag) => (
-          <RemovableFilter
-            key={`focus-${tag}`}
-            label={focusTagDisplayLabel(tag)}
-            onRemove={() => onRemoveFocus(tag)}
-          />
-        ))}
-
-        {selectedFormat.map((tag) => (
-          <RemovableFilter
-            key={`format-${tag}`}
-            label={tag}
-            onRemove={() => onRemoveFormat(tag)}
-          />
-        ))}
-
-        {selectedTimeBuckets.map((bucket) => (
-          <RemovableFilter
-            key={`time-${bucket}`}
-            label={timeBucketLabel(bucket)}
-            onRemove={() => onRemoveTimeBucket(bucket)}
-          />
-        ))}
-
-        {noEquipmentOnly ? (
-          <RemovableFilter label="No equipment" onRemove={onClearNoEquipment} />
-        ) : null}
-
-        {selectedEquipment.map((eq) => (
-          <RemovableFilter
-            key={eq}
-            label={equipmentFilterLabel(eq)}
-            onRemove={() => onRemoveEquipment(eq)}
+        {listActiveFilters(filters).map((filter) => (
+          <ActionChip
+            key={filter.key}
+            label={filter.label}
+            icon="close"
+            tone="gold"
+            onPress={() => onRemove(filter.remove, filter.group)}
+            accessibilityLabel={`Remove ${filter.label} filter`}
           />
         ))}
       </ScrollView>
     </View>
-  );
-}
-
-type RemovableFilterProps = {
-  label: string;
-  onRemove: () => void;
-};
-
-function RemovableFilter({ label, onRemove }: RemovableFilterProps) {
-  return (
-    <ActionChip
-      label={label}
-      icon="close"
-      tone="gold"
-      onPress={onRemove}
-      accessibilityLabel={`Remove ${label} filter`}
-    />
   );
 }
 

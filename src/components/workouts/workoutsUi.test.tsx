@@ -1,11 +1,12 @@
 import { mockReduceMotion } from '@/jest/mockReduceMotion';
 import { WorkoutCard } from '@/src/components/workouts/WorkoutCard';
-import {
-  WorkoutFiltersSheet,
-  type WorkoutFiltersDraft,
-} from '@/src/components/workouts/WorkoutFiltersSheet';
+import { WorkoutFiltersSheet } from '@/src/components/workouts/WorkoutFiltersSheet';
 import { WorkoutFiltersBarButton } from '@/src/components/workouts/WorkoutSortControls';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
+import {
+  EMPTY_WORKOUT_FILTERS,
+  type WorkoutFilterContext,
+} from '@/src/utils/workoutFilters';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { AccessibilityInfo } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -16,14 +17,10 @@ const SAFE_AREA_METRICS = {
   insets: { top: 47, left: 0, right: 0, bottom: 34 },
 };
 
-const EMPTY_DRAFT: WorkoutFiltersDraft = {
-  searchQuery: '',
-  activeCategoryFilter: 'All',
-  selectedEquipment: [],
-  noEquipmentOnly: false,
-  selectedFocus: [],
-  selectedFormat: [],
-  selectedTimeBuckets: [],
+const FREE_USER: WorkoutFilterContext = {
+  favoriteIds: [],
+  isPro: false,
+  roles: [],
 };
 
 const freeWorkout = allStandaloneWorkouts.find((w) => !w.isPremium);
@@ -120,23 +117,67 @@ describe('WorkoutFiltersSheet', () => {
     mockReduceMotion(false);
   });
 
-  it('labels the focus Strength chip differently from the discipline', async () => {
+  it('lists training disciplines and keeps events and Pro out of them', async () => {
     await renderInProviders(
       <WorkoutFiltersSheet
         visible
-        draft={EMPTY_DRAFT}
-        favoriteIds={[]}
+        draft={EMPTY_WORKOUT_FILTERS}
+        context={FREE_USER}
         onClose={jest.fn()}
         onApply={jest.fn()}
       />
     );
 
+    for (const name of ['Metcon', 'Strength', 'Gymnastics', 'Hyrox']) {
+      expect(
+        screen.getByRole('button', {
+          name: new RegExp(`^${name}, \\d+ workouts?$`),
+        })
+      ).toBeOnTheScreen();
+    }
+    expect(screen.queryByRole('button', { name: /^Rainhill, / })).toBeNull();
+    expect(screen.queryByRole('button', { name: /^Pro, / })).toBeNull();
     expect(
-      screen.getByRole('button', { name: /^Strength, \d+ workouts?$/ })
+      screen.getByRole('button', { name: /^Hide locked, / })
     ).toBeOnTheScreen();
-    expect(
-      screen.getByRole('button', { name: /^Strength focus, \d+ workouts?$/ })
-    ).toBeOnTheScreen();
+  });
+
+  it('shows every time bucket in order, disabling empty ones', async () => {
+    await renderInProviders(
+      <WorkoutFiltersSheet
+        visible
+        draft={{ ...EMPTY_WORKOUT_FILTERS, disciplines: ['Skills'] }}
+        context={FREE_USER}
+        onClose={jest.fn()}
+        onApply={jest.fn()}
+      />
+    );
+
+    const labels = ['Under 15 min', '15–30 min', '30–45 min', '45+ min'];
+    for (const label of labels) {
+      const escaped = label.replace(/[+]/g, '\\+');
+      const chip = screen.getByRole('button', {
+        name: new RegExp(`^${escaped}, \\d+ workouts?$`),
+      });
+      expect(chip).toBeOnTheScreen();
+      if (/, 0 workouts$/.test(chip.props.accessibilityLabel)) {
+        expect(chip).toBeDisabled();
+      }
+    }
+  });
+
+  it('hides "Hide locked" for Pro users', async () => {
+    await renderInProviders(
+      <WorkoutFiltersSheet
+        visible
+        draft={EMPTY_WORKOUT_FILTERS}
+        context={{ ...FREE_USER, isPro: true }}
+        onClose={jest.fn()}
+        onApply={jest.fn()}
+      />
+    );
+
+    expect(screen.queryByRole('button', { name: /^Hide locked, / })).toBeNull();
   });
 
   it('disables Reset until something is selected and applies the draft', async () => {
@@ -144,8 +185,8 @@ describe('WorkoutFiltersSheet', () => {
     await renderInProviders(
       <WorkoutFiltersSheet
         visible
-        draft={EMPTY_DRAFT}
-        favoriteIds={[]}
+        draft={EMPTY_WORKOUT_FILTERS}
+        context={FREE_USER}
         onClose={jest.fn()}
         onApply={onApply}
       />
@@ -155,13 +196,13 @@ describe('WorkoutFiltersSheet', () => {
       screen.getByRole('button', { name: 'Reset filters' })
     ).toBeDisabled();
 
-    const strengthFocus = screen.getByRole('button', {
-      name: /^Strength focus, /,
-    });
-    await fireEvent.press(strengthFocus);
+    await fireEvent.press(
+      screen.getByRole('button', { name: /^Gymnastics, / })
+    );
+    await fireEvent.press(screen.getByRole('button', { name: /^Dumbbell, / }));
 
     expect(
-      screen.getByRole('button', { name: /^Strength focus, / })
+      screen.getByRole('button', { name: /^Gymnastics, / })
     ).toBeSelected();
     expect(screen.getByRole('button', { name: 'Reset filters' })).toBeEnabled();
 
@@ -169,7 +210,10 @@ describe('WorkoutFiltersSheet', () => {
       screen.getByRole('button', { name: /^Show \d+ workouts?$/ })
     );
     expect(onApply).toHaveBeenCalledWith(
-      expect.objectContaining({ selectedFocus: ['Strength'] })
+      expect.objectContaining({
+        disciplines: ['Gymnastics'],
+        equipment: ['dumbbell'],
+      })
     );
   });
 });

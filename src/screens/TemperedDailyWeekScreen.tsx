@@ -12,7 +12,6 @@ import {
   TEMPERED_DAILY_WEEK_SUBTITLE,
   TEMPERED_DAILY_WEEK_TITLE,
 } from '@/src/components/temperedDaily/temperedDailyConstants';
-import { focusTagDisplayLabel } from '@/src/components/workouts/workoutsScreenConstants';
 import {
   color,
   elevation,
@@ -93,11 +92,11 @@ export default function TemperedDailyWeekScreen() {
             </Text>
             <View style={styles.focusRow}>
               <Badge
-                label={focusTagDisplayLabel(week.primaryFocus)}
-                accessibilityLabel={`Primary focus, ${focusTagDisplayLabel(week.primaryFocus)}`}
+                label={week.primaryFocus}
+                accessibilityLabel={`Primary focus, ${week.primaryFocus}`}
               />
               {week.otherFocuses.map((tag) => (
-                <Tag key={tag} label={focusTagDisplayLabel(tag)} />
+                <Tag key={tag} label={tag} />
               ))}
             </View>
             <Text style={styles.description}>{week.description}</Text>

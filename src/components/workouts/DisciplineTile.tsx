@@ -24,7 +24,12 @@ export function DisciplineTile({ discipline, onPress }: DisciplineTileProps) {
       accessibilityLabel={discipline.title}
       accessibilityHint={`Shows ${discipline.title} workouts`}
     >
-      <LoadingImage source={discipline.image} style={StyleSheet.absoluteFill} />
+      {discipline.image ? (
+        <LoadingImage
+          source={discipline.image}
+          style={StyleSheet.absoluteFill}
+        />
+      ) : null}
       {discipline.showTitle ? (
         <View style={styles.titleBar}>
           <Text style={styles.title} numberOfLines={2}>

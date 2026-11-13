@@ -15,6 +15,16 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '3.4.0',
+    dateLabel: '13th November 2026',
+    notes: [
+      'Death By Beth workouts',
+      'Events and disciplines now have their own sections on the workouts screen',
+      'New disciplines: Metcon, Gymnastics and more, and a workout can have several',
+      'Simpler filters, including filtering by the equipment you have',
+    ],
+  },
+  {
     version: '3.3.0',
     dateLabel: '1st November 2026',
     notes: ['Daily Programming', 'Re-order home screen sections', 'Tidied up the You tab', 'Added moblity widget to the home page'],
