@@ -16,7 +16,6 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useRef } from 'react';
 import {
   AccessibilityInfo,
-  Image,
   Pressable,
   StyleProp,
   StyleSheet,
@@ -125,6 +124,7 @@ export function WorkoutCard({
   const accessibilityLabel = [
     workout.title,
     categoryLabel,
+    workout.special ?? null,
     `${workout.estimatedTime} minutes`,
     workout.difficulty,
     workout.isPremium ? premiumBadge : null,
@@ -146,25 +146,19 @@ export function WorkoutCard({
         style={styles.card}
       >
         <View style={styles.header}>
-          {workout.category === 'Rainhill' ? (
-            <Image
-              source={require('@/assets/images/logos/rainhill_icon.png')}
-              style={styles.categoryImage}
-            />
-          ) : (
-            <Ionicons
-              name={
-                CATEGORY_ICONS[
-                  workout.category
-                ] as keyof typeof Ionicons.glyphMap
-              }
-              size={CATEGORY_ICON_SIZE}
-              color={color.gold}
-            />
-          )}
+          <Ionicons
+            name={
+              CATEGORY_ICONS[workout.category] as keyof typeof Ionicons.glyphMap
+            }
+            size={CATEGORY_ICON_SIZE}
+            color={color.gold}
+          />
           <Text style={styles.category} numberOfLines={1}>
             {categoryLabel}
           </Text>
+          {workout.special ? (
+            <Badge label={workout.special} tone="neutral" />
+          ) : null}
           {workout.isPremium ? <Badge label={premiumBadge} /> : null}
         </View>
 
@@ -227,10 +221,6 @@ const styles = StyleSheet.create({
     gap: space.xs,
     minHeight: MIN_TARGET_SIZE - space.md,
     paddingRight: MIN_TARGET_SIZE,
-  },
-  categoryImage: {
-    width: CATEGORY_ICON_SIZE + space.xxs,
-    height: CATEGORY_ICON_SIZE + space.xxs,
   },
   category: {
     ...typography.overline,

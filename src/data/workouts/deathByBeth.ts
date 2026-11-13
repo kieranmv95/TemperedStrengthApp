@@ -9,7 +9,8 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
     title: '10 x 10 x 10',
     description:
       '10 rounds of 10 reps across 10 movements, with a 30 minute cap. A wallball for every station except the burpees. Can you finish it?',
-    category: 'Death By Beth',
+    category: 'WOD',
+    special: 'Death By Beth',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 30,
     tags: ['Full Body', 'For Time'],
@@ -49,7 +50,8 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
     title: '7 Rounds',
     description:
       'A fast 30 minutes. Devil press builds inside each round, then snatches, thrusters, overhead lunges, and a run. How many rounds can you complete?',
-    category: 'Death By Beth',
+    category: 'Conditioning',
+    special: 'Death By Beth',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 30,
     tags: ['Full Body', 'Cardio', 'AMRAP'],
@@ -89,7 +91,8 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
     title: 'Kettlebells',
     description:
       '10 rounds of a six-move kettlebell complex. Every 3 minutes, stop for crawl outs, hand-release push-ups, and swings, then carry on.',
-    category: 'Death By Beth',
+    category: 'WOD',
+    special: 'Death By Beth',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 40,
     tags: ['Full Body', 'For Time'],
@@ -131,7 +134,8 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
     title: 'Chipper with Ryan',
     description:
       'Winter Advent workout 1. One dumbbell, or a water bottle. A descending chipper of snatches and jump overs, then a short burpee and sit-up finisher.',
-    category: 'Death By Beth',
+    category: 'WOD',
+    special: 'Death By Beth',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 30,
     tags: ['Full Body', 'For Time', 'Chipper'],

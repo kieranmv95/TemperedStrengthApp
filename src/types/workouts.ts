@@ -1,15 +1,11 @@
 import type { ImageSourcePropType } from 'react-native';
 
 export type WorkoutCategory =
-  | 'Strength'
-  | 'Skill'
-  | 'WOD'
-  | 'Hyrox'
-  | 'Conditioning'
-  | 'Pilates'
-  | 'Rainhill'
-  | 'Girl Games'
-  | 'Death By Beth';
+  'Strength' | 'Skill' | 'WOD' | 'Hyrox' | 'Conditioning' | 'Pilates';
+
+/** Event series a workout belongs to, independent of its training category. */
+export type WorkoutSpecial =
+  'Death By Beth' | 'Rainhill' | 'Girl Games' | 'Arena';
 
 export type WorkoutEquipment =
   | 'kettlebell'
@@ -53,8 +49,6 @@ export const WORKOUT_FORMAT_TAGS = [
   'Benchmark',
 ] as const;
 
-export const BRAND_TAGS = ['Arena'] as const;
-
 /** Modifier kept for Partner discipline filtering. */
 export const WORKOUT_MODIFIER_TAGS = ['Partner'] as const;
 
@@ -62,7 +56,6 @@ export const WORKOUT_TAGS = [
   ...WORKOUT_FOCUS_TAGS,
   ...WORKOUT_FORMAT_TAGS,
   ...WORKOUT_MODIFIER_TAGS,
-  ...BRAND_TAGS,
 ] as const;
 
 export type WorkoutFocusTag = (typeof WORKOUT_FOCUS_TAGS)[number];
@@ -120,6 +113,8 @@ export type SingleWorkout = {
   title: string;
   description: string;
   category: WorkoutCategory;
+  /** Event series, shown as a badge and used by the Events tiles. */
+  special?: WorkoutSpecial;
   difficulty:
     'Beginner' | 'Intermediate' | 'Advanced' | 'Multiple Difficulties';
   estimatedTime: number;
@@ -185,6 +180,7 @@ export type StandaloneWorkoutSource = {
   title: string;
   description: string;
   category: WorkoutCategory;
+  special?: WorkoutSpecial;
   difficulty:
     'Beginner' | 'Intermediate' | 'Advanced' | 'Multiple Difficulties';
   estimatedTime: number;

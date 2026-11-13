@@ -7,7 +7,4 @@ export const CATEGORY_ICONS: Record<WorkoutCategory, string> = {
   Hyrox: 'fitness',
   Conditioning: 'heart',
   Pilates: 'body-outline',
-  Rainhill: 'rainhill',
-  'Girl Games': 'trophy-outline',
-  'Death By Beth': 'flame-outline',
 };

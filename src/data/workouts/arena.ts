@@ -19,9 +19,10 @@ export const arena: StandaloneWorkoutSource[] = [
     description:
       'A 4-person workout (2M/2F). Complete 60 sync down ups into max bike/rower cals, rest, then 120 reverse lunges into max bike/rower cals. Score = total cals (bike + rower). Same for all divisions.',
     category: 'WOD',
+    special: 'Arena',
     difficulty: 'Advanced',
     estimatedTime: 18,
-    tags: ['Lower Body', 'Intervals', 'Benchmark', 'Arena', 'Partner'],
+    tags: ['Lower Body', 'Intervals', 'Benchmark', 'Partner'],
     isPremium: false,
     collab: {
       ...collab,
@@ -69,9 +70,10 @@ export const arena: StandaloneWorkoutSource[] = [
     description:
       'The ultimate test of teamwork. A 4-person workout (2M/2F). For time with a 15-minute cap — buy in with sync double dumbbell snatches, 6 rounds of gymnastics and thrusters, then cash out with dumbbell snatches.',
     category: 'WOD',
+    special: 'Arena',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 15,
-    tags: ['Full Body', 'For Time', 'Benchmark', 'Arena', 'Partner'],
+    tags: ['Full Body', 'For Time', 'Benchmark', 'Partner'],
     isPremium: false,
     partner: true,
     collab: {
@@ -182,16 +184,10 @@ export const arena: StandaloneWorkoutSource[] = [
     description:
       'A 4-person workout (2M/2F). Two-parter in a 20-minute window — buy in with sync hang cleans, front squats and STOH, then each athlete builds a 1RM complex (hang clean + front squat + STOH) in the remaining time. Score = sum of all four complex weights.',
     category: 'WOD',
+    special: 'Arena',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 20,
-    tags: [
-      'Full Body',
-      'Olympic Lifting',
-      'Ladder',
-      'Benchmark',
-      'Arena',
-      'Partner',
-    ],
+    tags: ['Full Body', 'Olympic Lifting', 'Ladder', 'Benchmark', 'Partner'],
     isPremium: false,
     partner: true,
     collab: {
@@ -332,9 +328,10 @@ export const arena: StandaloneWorkoutSource[] = [
     description:
       'A 4-person workout (2M/2F). Eight minutes of max ski and bike, four minutes rest, then both mixed pairs race through 30 sync hang Grace.',
     category: 'WOD',
+    special: 'Arena',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 20,
-    tags: ['Full Body', 'Intervals', 'Benchmark', 'Arena', 'Partner'],
+    tags: ['Full Body', 'Intervals', 'Benchmark', 'Partner'],
     isPremium: false,
     partner: true,
     collab,
@@ -408,9 +405,10 @@ export const arena: StandaloneWorkoutSource[] = [
     description:
       'A 4-person workout (2M/2F). A synchro chipper with descending reps across snatches, toes to bar, lunges, chest to bar, devil presses and bar muscle-ups.',
     category: 'WOD',
+    special: 'Arena',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 20,
-    tags: ['Full Body', 'Chipper', 'For Time', 'Arena', 'Partner'],
+    tags: ['Full Body', 'Chipper', 'For Time', 'Partner'],
     isPremium: false,
     partner: true,
     collab,
@@ -483,9 +481,10 @@ export const arena: StandaloneWorkoutSource[] = [
     description:
       'A 4-person workout (2M/2F). A clean ladder — females buy in and build to a 1RM, then males do the same after a short rest. Heavy and precise.',
     category: 'WOD',
+    special: 'Arena',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 22,
-    tags: ['Olympic Lifting', 'Ladder', 'Benchmark', 'Arena', 'Partner'],
+    tags: ['Olympic Lifting', 'Ladder', 'Benchmark', 'Partner'],
     isPremium: false,
     partner: true,
     collab,
@@ -595,9 +594,10 @@ export const arena: StandaloneWorkoutSource[] = [
     description:
       'A 4-person workout (2M/2F). Each round is one 3x8m shuttle run, then an unbroken set of deadlifts. Score is total deadlifts.',
     category: 'WOD',
+    special: 'Arena',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 6,
-    tags: ['Lower Body', 'AMRAP', 'Benchmark', 'Arena', 'Partner'],
+    tags: ['Lower Body', 'AMRAP', 'Benchmark', 'Partner'],
     isPremium: false,
     partner: true,
     collab,
@@ -649,9 +649,10 @@ export const arena: StandaloneWorkoutSource[] = [
     description:
       'A 4-person workout (2M/2F). Five minutes of sync hang snatches and burpees, one minute rest, then a descending double-under and thruster chipper for time.',
     category: 'WOD',
+    special: 'Arena',
     difficulty: 'Multiple Difficulties',
     estimatedTime: 16,
-    tags: ['Full Body', 'For Time', 'Benchmark', 'Arena', 'Partner'],
+    tags: ['Full Body', 'For Time', 'Benchmark', 'Partner'],
     isPremium: false,
     partner: true,
     collab,

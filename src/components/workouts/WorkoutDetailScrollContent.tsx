@@ -238,24 +238,18 @@ export function WorkoutDetailScrollContent({
     >
       <View style={styles.detailMetaRow}>
         <View style={styles.detailCategory}>
-          {workout.category === 'Rainhill' ? (
-            <Image
-              source={require('@/assets/images/logos/rainhill_icon.png')}
-              style={styles.categoryIconImage}
-            />
-          ) : (
-            <Ionicons
-              name={
-                CATEGORY_ICONS[
-                  workout.category
-                ] as keyof typeof Ionicons.glyphMap
-              }
-              size={14}
-              color={color.gold}
-            />
-          )}
+          <Ionicons
+            name={
+              CATEGORY_ICONS[workout.category] as keyof typeof Ionicons.glyphMap
+            }
+            size={14}
+            color={color.gold}
+          />
           <Text style={styles.detailCategoryText}>{categoryLabel}</Text>
         </View>
+        {workout.special ? (
+          <Badge label={workout.special} tone="neutral" />
+        ) : null}
         <View
           style={styles.detailMetaItem}
           accessible

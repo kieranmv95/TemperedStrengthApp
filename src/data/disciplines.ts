@@ -1,16 +1,25 @@
-import type { SingleWorkout, WorkoutCategory } from '@/src/types/workouts';
+import type {
+  SingleWorkout,
+  WorkoutCategory,
+  WorkoutSpecial,
+} from '@/src/types/workouts';
 import { ImageSourcePropType } from 'react-native';
 
 /** Discipline carousel route key; not a `WorkoutTag` — filters by empty `equipment`. */
 export const NO_EQUIPMENT_DISCIPLINE_TAG = 'No Equipment';
 
-/** Discipline carousel keys mapped to workout category (tags no longer duplicate this). */
+/** Discipline keys mapped to workout category (tags no longer duplicate this). */
 const DISCIPLINE_CATEGORY: Record<string, WorkoutCategory> = {
   CrossFit: 'WOD',
   Hyrox: 'Hyrox',
+};
+
+/** Event keys mapped to the workout's event series. */
+const DISCIPLINE_SPECIAL: Record<string, WorkoutSpecial> = {
+  DBB: 'Death By Beth',
+  Arena: 'Arena',
   Rainhill: 'Rainhill',
   'Girl Games': 'Girl Games',
-  DBB: 'Death By Beth',
 };
 
 export type DisciplineTheme = {
@@ -26,11 +35,15 @@ export type DisciplineTheme = {
 
 export type Discipline = {
   title: string;
+  /** `event` renders as an Events tile; `discipline` as a Disciplines pill. */
+  group: 'event' | 'discipline';
   showTitle?: boolean;
   /** Hide from the discipline carousel while unreleased (data kept in place). */
   hidden?: boolean;
   tag: string;
   image: ImageSourcePropType;
+  /** Ionicon name for the Disciplines pill. */
+  icon?: string;
   logo?: {
     source: ImageSourcePropType;
     width: number;
@@ -46,6 +59,7 @@ export type Discipline = {
 export const disciplines: Discipline[] = [
   {
     title: 'Death by Beth',
+    group: 'event',
     tag: 'DBB',
     showTitle: false,
     hidden: false,
@@ -68,6 +82,7 @@ export const disciplines: Discipline[] = [
   },
   {
     title: 'Arena Games',
+    group: 'event',
     tag: 'Arena',
     showTitle: false,
     hidden: false,
@@ -90,6 +105,7 @@ export const disciplines: Discipline[] = [
   },
   {
     title: 'The Rainhill Trials',
+    group: 'event',
     tag: 'Rainhill',
     showTitle: false,
     isSponsor: true,
@@ -105,6 +121,7 @@ export const disciplines: Discipline[] = [
   },
   {
     title: 'The Girl Games',
+    group: 'event',
     tag: 'Girl Games',
     showTitle: false,
     isSponsor: true,
@@ -121,50 +138,67 @@ export const disciplines: Discipline[] = [
   },
   {
     title: 'Olympic Lifting',
+    group: 'discipline',
     tag: 'Olympic Lifting',
     showTitle: true,
+    icon: 'barbell-outline',
     image: require('@/assets/images/disciplines/oly.png'),
   },
   {
     title: 'Skills',
+    group: 'discipline',
     tag: 'Skill',
     showTitle: true,
+    icon: 'school-outline',
     image: require('@/assets/images/skills/thumbnails/Handstand.jpg'),
     description:
       'Drill-led sessions for complex movements — snatches, muscle-ups, handstands, and more. Positions and progressions before load.',
   },
   {
     title: 'CrossFit',
+    group: 'discipline',
     tag: 'CrossFit',
     showTitle: true,
+    icon: 'timer-outline',
     image: require('@/assets/images/disciplines/crossfit.png'),
   },
   {
     title: 'Hyrox',
+    group: 'discipline',
     tag: 'Hyrox',
     showTitle: true,
+    icon: 'fitness-outline',
     image: require('@/assets/images/disciplines/hyrox.png'),
   },
   {
     title: 'Collabs',
+    group: 'discipline',
     tag: 'Collab',
     isSponsor: true,
     showTitle: true,
+    icon: 'sparkles-outline',
     image: require('@/assets/images/disciplines/collab.png'),
     description:
       'At Tempered Strength, sometimes we come across a workout that just takes our breath away... Literally. Find all the workouts from people we have collaborated with here.',
   },
   {
     title: 'Partner',
+    group: 'discipline',
     tag: 'Partner',
     showTitle: true,
+    icon: 'people-outline',
     image: require('@/assets/images/disciplines/partner.png'),
   },
 ];
 
-/** Disciplines shown in the carousel (excludes any flagged `hidden`). */
-export const visibleDisciplines: Discipline[] = disciplines.filter(
-  (discipline) => !discipline.hidden
+/** Events shown as tiles on the workouts screen (excludes any flagged `hidden`). */
+export const visibleEvents: Discipline[] = disciplines.filter(
+  (discipline) => discipline.group === 'event' && !discipline.hidden
+);
+
+/** Training disciplines shown as pills on the workouts screen. */
+export const visibleTrainingDisciplines: Discipline[] = disciplines.filter(
+  (discipline) => discipline.group === 'discipline' && !discipline.hidden
 );
 
 export function isNoEquipmentDiscipline(tag: string): boolean {
@@ -182,6 +216,10 @@ export function workoutMatchesDiscipline(
   if (category) {
     return workout.category === category;
   }
+  const special = DISCIPLINE_SPECIAL[disciplineTag];
+  if (special) {
+    return workout.special === special;
+  }
   if (disciplineTag === 'Partner') {
     return workout.tags.includes('Partner');
   }
@@ -190,9 +228,6 @@ export function workoutMatchesDiscipline(
   }
   if (disciplineTag === 'Skill') {
     return workout.tags.includes('Skill');
-  }
-  if (disciplineTag === 'Arena') {
-    return workout.tags.includes('Arena');
   }
   if (disciplineTag === 'Collab') {
     return Boolean(workout.collab);

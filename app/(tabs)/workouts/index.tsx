@@ -1,5 +1,6 @@
 import { SectionHeader, StandardLayout } from '@/src/components/ds';
 import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
+import { DisciplinePill } from '@/src/components/workouts/DisciplinePill';
 import {
   DISCIPLINE_TILE_SIZE,
   DisciplineTile,
@@ -22,7 +23,11 @@ import {
   type WorkoutSortDirection,
 } from '@/src/components/workouts/workoutsScreenConstants';
 import { color, space, typography } from '@/src/constants/tokens';
-import { visibleDisciplines } from '@/src/data/disciplines';
+import {
+  visibleEvents,
+  visibleTrainingDisciplines,
+  type Discipline,
+} from '@/src/data/disciplines';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import { useRoles } from '@/src/hooks/useRoles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
@@ -42,9 +47,9 @@ import {
   type WorkoutTimeBucket,
 } from '@/src/utils/workoutFilters';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect, router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
-import React, {
+import {
   useCallback,
   useEffect,
   useMemo,
@@ -253,6 +258,14 @@ export default function WorkoutsScreen() {
     [filteredWorkouts, sortBy, sortDirection]
   );
 
+  const handleOpenDiscipline = (discipline: Discipline) => {
+    posthog.capture(posthogEventsNames.workout.filtersApplied, {
+      filter_type: 'discipline',
+      filter_value: discipline.tag,
+    });
+    router.push(`/workouts/tag/${encodeURIComponent(discipline.tag)}`);
+  };
+
   const handleChangeSortBy = (value: WorkoutSortBy) => {
     setSortBy(value);
     captureFilter('sort', `${value}_${sortDirection}`);
@@ -390,8 +403,8 @@ export default function WorkoutsScreen() {
               <View style={styles.listHeader}>
                 {hasActiveFilters ? (
                   <Text style={[styles.hiddenNote, styles.pageGutter]}>
-                    Mobility &amp; flows and Disciplines are hidden while
-                    filters are on.
+                    Mobility &amp; flows, Events, and Disciplines are hidden
+                    while filters are on.
                   </Text>
                 ) : (
                   <View style={styles.listHeader}>
@@ -406,10 +419,7 @@ export default function WorkoutsScreen() {
                       />
                     </View>
                     <View style={[styles.sectionHeading, styles.pageGutter]}>
-                      <SectionHeader title="Disciplines" />
-                      <Text style={styles.sectionDescription}>
-                        Get started with what you already know.
-                      </Text>
+                      <SectionHeader title="Events" />
                     </View>
                     <ScrollView
                       horizontal
@@ -418,22 +428,27 @@ export default function WorkoutsScreen() {
                       snapToInterval={DISCIPLINE_TILE_SIZE + space.sm}
                       decelerationRate="fast"
                     >
-                      {visibleDisciplines.map((discipline) => (
+                      {visibleEvents.map((discipline) => (
                         <DisciplineTile
                           key={discipline.tag}
                           discipline={discipline}
-                          onPress={() => {
-                            posthog.capture(
-                              posthogEventsNames.workout.filtersApplied,
-                              {
-                                filter_type: 'discipline',
-                                filter_value: discipline.tag,
-                              }
-                            );
-                            router.push(
-                              `/workouts/tag/${encodeURIComponent(discipline.tag)}`
-                            );
-                          }}
+                          onPress={() => handleOpenDiscipline(discipline)}
+                        />
+                      ))}
+                    </ScrollView>
+                    <View style={[styles.sectionHeading, styles.pageGutter]}>
+                      <SectionHeader title="Disciplines" />
+                    </View>
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      contentContainerStyle={styles.disciplinePillRow}
+                    >
+                      {visibleTrainingDisciplines.map((discipline) => (
+                        <DisciplinePill
+                          key={discipline.tag}
+                          discipline={discipline}
+                          onPress={() => handleOpenDiscipline(discipline)}
                         />
                       ))}
                     </ScrollView>
@@ -448,9 +463,8 @@ export default function WorkoutsScreen() {
                   />
                   <Text style={styles.sectionDescription}>
                     {hasActiveFilters
-                      ? `${sortedWorkouts.length} workout${
-                          sortedWorkouts.length === 1 ? '' : 's'
-                        } match`
+                      ? `${sortedWorkouts.length} workout${sortedWorkouts.length === 1 ? '' : 's'
+                      } match`
                       : `${allStandaloneWorkouts.length}+ workouts`}
                   </Text>
                 </View>
@@ -501,6 +515,10 @@ const styles = StyleSheet.create({
   },
   disciplineRow: {
     gap: space.sm,
+    paddingHorizontal: space.md,
+  },
+  disciplinePillRow: {
+    gap: space.xs,
     paddingHorizontal: space.md,
   },
   emptyState: {

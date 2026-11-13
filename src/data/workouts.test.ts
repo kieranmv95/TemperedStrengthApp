@@ -1,4 +1,7 @@
-import { WORKOUT_EQUIPMENT_OPTIONS } from '@/src/components/workouts/workoutsScreenConstants';
+import {
+  DISCIPLINE_CATEGORY_FILTERS,
+  WORKOUT_EQUIPMENT_OPTIONS,
+} from '@/src/components/workouts/workoutsScreenConstants';
 import { workoutMatchesDiscipline } from '@/src/data/disciplines';
 import { STANDALONE_LOG_SCHEMA_BY_ID } from '@/src/data/standaloneLogSchemas';
 import { workouts as workoutsData } from '@/src/data/workout_data';
@@ -86,6 +89,7 @@ describe('bundled standalone workouts', () => {
       'Girl Games',
       'The Girl Games',
       'Death By Beth',
+      'Arena',
       'No Equipment',
       'Bodyweight',
       'Kettlebell',
@@ -135,9 +139,28 @@ describe('bundled standalone workouts', () => {
     expect(wod!.tags).not.toContain('CrossFit');
   });
 
-  it('death by beth discipline matches workouts in the Death By Beth category', () => {
+  it('every event workout also has a training category', () => {
+    const eventWorkouts = allStandaloneWorkouts.filter((w) => w.special);
+    expect(eventWorkouts.length).toBeGreaterThan(0);
+    for (const w of eventWorkouts) {
+      expect(DISCIPLINE_CATEGORY_FILTERS).toContain(w.category);
+    }
+  });
+
+  it('keeps events out of the filter sheet disciplines', () => {
+    for (const special of [
+      'Death By Beth',
+      'Rainhill',
+      'Girl Games',
+      'Arena',
+    ]) {
+      expect(DISCIPLINE_CATEGORY_FILTERS as string[]).not.toContain(special);
+    }
+  });
+
+  it('death by beth event matches workouts in the Death By Beth series', () => {
     const deathByBethWorkouts = allStandaloneWorkouts.filter(
-      (w) => w.category === 'Death By Beth'
+      (w) => w.special === 'Death By Beth'
     );
     expect(deathByBethWorkouts.map((w) => w.id).sort()).toEqual([
       'dbb_01',
@@ -151,15 +174,15 @@ describe('bundled standalone workouts', () => {
       expect(w.difficulty).toBe('Multiple Difficulties');
     }
     const other = allStandaloneWorkouts.find(
-      (w) => w.category !== 'Death By Beth'
+      (w) => w.special !== 'Death By Beth'
     );
     expect(other).toBeDefined();
     expect(workoutMatchesDiscipline(other!, 'DBB')).toBe(false);
   });
 
-  it('girl games discipline matches workouts in the Girl Games category', () => {
+  it('girl games event matches workouts in the Girl Games series', () => {
     const girlGamesWorkouts = allStandaloneWorkouts.filter(
-      (w) => w.category === 'Girl Games'
+      (w) => w.special === 'Girl Games'
     );
     expect(girlGamesWorkouts.map((w) => w.id).sort()).toEqual([
       'gg_01',
@@ -175,7 +198,7 @@ describe('bundled standalone workouts', () => {
       expect(w.collab?.link).toBe('https://www.instagram.com/thegirlgames_/');
     }
     const nonGirlGames = allStandaloneWorkouts.find(
-      (w) => w.category !== 'Girl Games'
+      (w) => w.special !== 'Girl Games'
     );
     expect(nonGirlGames).toBeDefined();
     expect(workoutMatchesDiscipline(nonGirlGames!, 'Girl Games')).toBe(false);
@@ -194,17 +217,16 @@ describe('bundled standalone workouts', () => {
     expect(workoutMatchesDiscipline(nonCollab!, 'Collab')).toBe(false);
   });
 
-  it.skip('arena discipline matches workouts tagged Arena', () => {
-    const arenaWorkouts = allStandaloneWorkouts.filter((w) =>
-      w.tags.includes('Arena')
+  it('arena event matches workouts in the Arena series', () => {
+    const arenaWorkouts = allStandaloneWorkouts.filter(
+      (w) => w.special === 'Arena'
     );
     expect(arenaWorkouts.length).toBeGreaterThan(0);
     for (const w of arenaWorkouts) {
       expect(workoutMatchesDiscipline(w, 'Arena')).toBe(true);
+      expect(workoutMatchesDiscipline(w, 'CrossFit')).toBe(true);
     }
-    const nonArena = allStandaloneWorkouts.find(
-      (w) => !w.tags.includes('Arena')
-    );
+    const nonArena = allStandaloneWorkouts.find((w) => w.special !== 'Arena');
     expect(nonArena).toBeDefined();
     expect(workoutMatchesDiscipline(nonArena!, 'Arena')).toBe(false);
   });

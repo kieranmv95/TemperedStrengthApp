@@ -8,7 +8,6 @@ import {
 } from '@/src/constants/tokens';
 import { StyleSheet } from 'react-native';
 
-const CATEGORY_ICON_SIZE = 14;
 const COLLAB_IMAGE_SIZE = 48;
 const LIST_BULLET_SIZE = 6;
 
@@ -99,11 +98,6 @@ export const workoutDetailStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.xs,
-  },
-  categoryIconImage: {
-    width: CATEGORY_ICON_SIZE + space.xxs,
-    height: CATEGORY_ICON_SIZE + space.xxs,
-    resizeMode: 'contain',
   },
   detailCategoryText: {
     ...typography.overline,
