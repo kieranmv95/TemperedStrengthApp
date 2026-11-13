@@ -85,6 +85,7 @@ describe('bundled standalone workouts', () => {
       'Rainhill',
       'Girl Games',
       'The Girl Games',
+      'Death By Beth',
       'No Equipment',
       'Bodyweight',
       'Kettlebell',
@@ -132,6 +133,28 @@ describe('bundled standalone workouts', () => {
     expect(workoutMatchesDiscipline(oly!, 'Olympic Lifting')).toBe(true);
     expect(workoutMatchesDiscipline(skill!, 'Skill')).toBe(true);
     expect(wod!.tags).not.toContain('CrossFit');
+  });
+
+  it('death by beth discipline matches workouts in the Death By Beth category', () => {
+    const deathByBethWorkouts = allStandaloneWorkouts.filter(
+      (w) => w.category === 'Death By Beth'
+    );
+    expect(deathByBethWorkouts.map((w) => w.id).sort()).toEqual([
+      'dbb_01',
+      'dbb_02',
+      'dbb_03',
+      'dbb_04',
+    ]);
+    for (const w of deathByBethWorkouts) {
+      expect(workoutMatchesDiscipline(w, 'DBB')).toBe(true);
+      expect(w.isPremium).toBe(false);
+      expect(w.difficulty).toBe('Multiple Difficulties');
+    }
+    const other = allStandaloneWorkouts.find(
+      (w) => w.category !== 'Death By Beth'
+    );
+    expect(other).toBeDefined();
+    expect(workoutMatchesDiscipline(other!, 'DBB')).toBe(false);
   });
 
   it('girl games discipline matches workouts in the Girl Games category', () => {

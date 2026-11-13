@@ -9,4 +9,5 @@ export const CATEGORY_ICONS: Record<WorkoutCategory, string> = {
   Pilates: 'body-outline',
   Rainhill: 'rainhill',
   'Girl Games': 'trophy-outline',
+  'Death By Beth': 'flame-outline',
 };

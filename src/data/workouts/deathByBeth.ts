@@ -1,0 +1,197 @@
+import type { StandaloneWorkoutSource } from '@/src/types/workouts';
+
+const chooseYourWeight =
+  'Choose your own weight. Death By Beth is for everyone, and we all move together.';
+
+export const deathByBeth: StandaloneWorkoutSource[] = [
+  {
+    id: 'dbb_01',
+    title: '10 x 10 x 10',
+    description:
+      '10 rounds of 10 reps across 10 movements, with a 30 minute cap. A wallball for every station except the burpees. Can you finish it?',
+    category: 'Death By Beth',
+    difficulty: 'Multiple Difficulties',
+    estimatedTime: 30,
+    tags: ['Full Body', 'For Time'],
+    isPremium: false,
+    logSchema: {
+      kind: 'duration',
+      label: 'Finish time',
+      lowerIsBetter: true,
+    },
+    blocks: [
+      {
+        name: 'Warmup',
+        instructions: 'Warm up for a good 10 minutes before you start.',
+      },
+      {
+        name: 'For Time (30:00 Cap)',
+        instructions: `${chooseYourWeight} 10 rounds, in order. 10 reps of each movement. Wall to whiteboard is 1 shuttle rep. Score is your finish time, or the round and movement you reached if you hit the cap.`,
+        highlightInstructions: '10 rounds. 10 reps. 10 movements.',
+        movements: [
+          '10 Wallball Deadlifts',
+          '10 Wallball Squat Cleans',
+          '10 Wallball Shots',
+          '10 Wallball Sit Ups',
+          '10 Wallball Shuttle Runs (wall to whiteboard is 1 rep)',
+          '10 Wallball Snatches',
+          '10 Wallball Reverse Lunges',
+          '10 Wallball Push Press',
+          '10 Wallball Russian Twists',
+          '10 Burpees',
+        ],
+      },
+    ],
+    equipment: ['medicine ball'],
+  },
+  {
+    id: 'dbb_02',
+    title: '7 Rounds',
+    description:
+      'A fast 30 minutes. Devil press builds inside each round, then snatches, thrusters, overhead lunges, and a run. How many rounds can you complete?',
+    category: 'Death By Beth',
+    difficulty: 'Multiple Difficulties',
+    estimatedTime: 30,
+    tags: ['Full Body', 'Cardio', 'AMRAP'],
+    isPremium: false,
+    logSchema: {
+      kind: 'amrap',
+      timeCapMinutes: 30,
+      roundsLabel: 'Rounds',
+      extraRepsLabel: 'Extra reps',
+    },
+    blocks: [
+      {
+        name: 'Warmup',
+        instructions: 'Warm up for a good 10 minutes before you start.',
+      },
+      {
+        name: '7 Rounds (30:00)',
+        instructions: `${chooseYourWeight} Work in order for 7 rounds, or as far as you get inside 30 minutes. Any run can be a cardio machine of your choice. Score is rounds completed, plus reps into the next round.`,
+        highlightInstructions: 'Run, or swap the run for any cardio machine.',
+        movements: [
+          '1 Devil Press',
+          '10 Dumbbell Alternating Snatches',
+          '2 Devil Press',
+          '10 Thrusters',
+          '3 Devil Press',
+          '10 Overhead Reverse Lunges',
+          '400m Run',
+          '200m Run with Dumbbell',
+          '100m Run',
+        ],
+      },
+    ],
+    equipment: ['dumbbell'],
+  },
+  {
+    id: 'dbb_03',
+    title: 'Kettlebells',
+    description:
+      '10 rounds of a six-move kettlebell complex. Every 3 minutes, stop for crawl outs, hand-release push-ups, and swings, then carry on.',
+    category: 'Death By Beth',
+    difficulty: 'Multiple Difficulties',
+    estimatedTime: 40,
+    tags: ['Full Body', 'For Time'],
+    isPremium: false,
+    logSchema: {
+      kind: 'duration',
+      label: 'Finish time',
+      lowerIsBetter: true,
+    },
+    blocks: [
+      {
+        name: 'Warmup',
+        instructions: 'Warm up for a good 10 minutes before you start.',
+      },
+      {
+        name: '10 Rounds For Time',
+        instructions: `${chooseYourWeight} 10 rounds of the complex, in order. Every 3 minutes, stop and complete the triplet, then continue the round you were on. Score is your finish time.`,
+        highlightInstructions:
+          'Every 3:00 — 3 crawl outs, 6 hand-release push-ups, 9 swings.',
+        movements: [
+          { type: 'divider', note: '10 rounds' },
+          '10 Deadlifts',
+          '10 High Pulls',
+          '10 Cleans',
+          '10 Snatches',
+          '10 Goblet Squats',
+          '10 Presses',
+          { type: 'divider', note: 'Every 3 minutes' },
+          '3 Crawl Outs',
+          '6 Hand-Release Push-Ups',
+          '9 Kettlebell Swings',
+        ],
+      },
+    ],
+    equipment: ['kettlebell'],
+  },
+  {
+    id: 'dbb_04',
+    title: 'Chipper with Ryan',
+    description:
+      'Winter Advent workout 1. One dumbbell, or a water bottle. A descending chipper of snatches and jump overs, then a short burpee and sit-up finisher.',
+    category: 'Death By Beth',
+    difficulty: 'Multiple Difficulties',
+    estimatedTime: 30,
+    tags: ['Full Body', 'For Time', 'Chipper'],
+    isPremium: false,
+    logSchema: {
+      kind: 'duration',
+      label: 'Finish time',
+      lowerIsBetter: true,
+    },
+    blocks: [
+      {
+        name: 'Warmup',
+        instructions: 'Warm up for a good 10 minutes before you start.',
+      },
+      {
+        name: 'Chipper For Time',
+        instructions: `${chooseYourWeight} One dumbbell, or a water bottle. At each number, complete the snatches, then the jump overs, before dropping to the next number. 20 down to 2, counting by 2.`,
+        highlightInstructions: '20-18-16-14-12-10-8-6-4-2 of both.',
+        movements: [
+          '20 Dumbbell Snatches',
+          '20 Dumbbell Jump Overs',
+          '18 Dumbbell Snatches',
+          '18 Dumbbell Jump Overs',
+          '16 Dumbbell Snatches',
+          '16 Dumbbell Jump Overs',
+          '14 Dumbbell Snatches',
+          '14 Dumbbell Jump Overs',
+          '12 Dumbbell Snatches',
+          '12 Dumbbell Jump Overs',
+          '10 Dumbbell Snatches',
+          '10 Dumbbell Jump Overs',
+          '8 Dumbbell Snatches',
+          '8 Dumbbell Jump Overs',
+          '6 Dumbbell Snatches',
+          '6 Dumbbell Jump Overs',
+          '4 Dumbbell Snatches',
+          '4 Dumbbell Jump Overs',
+          '2 Dumbbell Snatches',
+          '2 Dumbbell Jump Overs',
+        ],
+      },
+      {
+        name: 'Finisher',
+        instructions:
+          'Same chipper style. 10 down to 2, counting by 2, of both movements.',
+        highlightInstructions: '10-8-6-4-2 of both.',
+        movements: [
+          '10 Hand-Release Burpees',
+          '10 Butterfly Sit Ups',
+          '8 Hand-Release Burpees',
+          '8 Butterfly Sit Ups',
+          '6 Hand-Release Burpees',
+          '6 Butterfly Sit Ups',
+          '4 Hand-Release Burpees',
+          '4 Butterfly Sit Ups',
+          '2 Hand-Release Burpees',
+          '2 Butterfly Sit Ups',
+        ],
+      },
+    ],
+    equipment: ['dumbbell'],
+  },
+];

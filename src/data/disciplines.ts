@@ -10,6 +10,7 @@ const DISCIPLINE_CATEGORY: Record<string, WorkoutCategory> = {
   Hyrox: 'Hyrox',
   Rainhill: 'Rainhill',
   'Girl Games': 'Girl Games',
+  DBB: 'Death By Beth',
 };
 
 export type DisciplineTheme = {
@@ -47,7 +48,7 @@ export const disciplines: Discipline[] = [
     title: 'Death by Beth',
     tag: 'DBB',
     showTitle: false,
-    hidden: true,
+    hidden: false,
     isSponsor: true,
     logo: {
       source: require('@/assets/images/logos/deathbybeth_logo.png'),
