@@ -37,6 +37,14 @@ export const ONBOARDING_PROFILE_KEY = 'onboarding_profile';
 export const LAST_KNOWN_PRO_KEY = 'last_known_pro_v1';
 /** Home section order and which sections a Pro account has hidden. */
 export const HOME_LAYOUT_KEY = 'home_layout';
+/** Birth year and zone method. Synced. */
+export const HEART_RATE_ZONE_SETTINGS_KEY = 'heart_rate_zone_settings';
+/** Device-only resting heart rate (manual entry or cached Health reading). */
+export const RESTING_HEART_RATE_KEY = 'resting_heart_rate';
+/** Device-only: the user connected Apple Health / Health Connect in the app. */
+export const HEALTH_CONNECTED_KEY = 'health_connected';
+/** Device-only, `__DEV__` builds only: mocked Health responses. */
+export const DEV_HEALTH_MOCK_SCENARIO_KEY = 'dev_health_mock_scenario';
 
 /**
  * Per-device schema version used by the migration runner. This must never sync

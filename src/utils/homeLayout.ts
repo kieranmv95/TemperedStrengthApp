@@ -12,6 +12,7 @@ export const HOME_SECTION_ORDER = [
   'wodShop',
   'streaks',
   'mobility',
+  'zones',
   'personalBests',
 ] as const;
 
@@ -29,6 +30,7 @@ export const HOME_SECTION_LABELS: Record<HomeSectionId, string> = {
   wodShop: 'Workouts and shop',
   streaks: 'Streaks',
   mobility: 'Mobility & flows',
+  zones: 'Heart rate zones',
   personalBests: 'Personal bests',
 };
 

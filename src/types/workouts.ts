@@ -1,4 +1,5 @@
 import type { ImageSourcePropType } from 'react-native';
+import type { HeartRateZoneId } from './heartRate';
 
 /** How the session trains you. A workout can have several; the first is its primary. */
 export const WORKOUT_DISCIPLINES = [
@@ -162,6 +163,8 @@ export type WorkoutBlockBase = {
   name: string;
   mobilityFlow?: string;
   mobilityFlowCopy?: string;
+  /** Heart rate zone the block targets; shows the zone widget. */
+  hrZone?: HeartRateZoneId;
   instructions?: string;
   highlightInstructions?: string;
   movements?: WorkoutMovement[];

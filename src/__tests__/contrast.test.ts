@@ -1,3 +1,7 @@
+import {
+  ZONE_COLORS,
+  ZONE_TILE_FOREGROUND,
+} from '@/src/components/zones/zoneColors';
 import { color } from '@/src/constants/tokens';
 import { TOGETHER_WE_LIFT } from '@/src/data/togetherWeLift';
 import {
@@ -309,6 +313,30 @@ const PAIRS: ContrastPair[] = [
     background: color.bg,
     kind: 'nonText',
   },
+
+  // Heart rate zones: number tiles and zone bar segments
+  ...Object.entries(ZONE_COLORS).flatMap(
+    ([zone, zoneColor]): ContrastPair[] => [
+      {
+        name: `zone ${zone} tile number on zone ${zone} fill`,
+        foreground: ZONE_TILE_FOREGROUND,
+        background: zoneColor,
+        kind: 'text',
+      },
+      {
+        name: `zone ${zone} bar segment vs surface1`,
+        foreground: zoneColor,
+        background: color.surface1,
+        kind: 'nonText',
+      },
+      {
+        name: `zone ${zone} bar segment vs surface2`,
+        foreground: zoneColor,
+        background: color.surface2,
+        kind: 'nonText',
+      },
+    ]
+  ),
 
   // Together We Lift banner keeps the charity's brand background
   {

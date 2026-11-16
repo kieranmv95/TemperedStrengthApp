@@ -810,6 +810,7 @@ const td042: StandaloneWorkoutSource = {
         td042Strength,
         {
           name: 'WOD: Zone 2 x 36',
+          hrZone: 2,
           instructions:
             'Three 12 minute pieces, no rest between them. Nasal breathing only. Log your total distance in your notes.',
           highlightInstructions: 'Conversational pace only',
@@ -835,6 +836,7 @@ const td042: StandaloneWorkoutSource = {
         td042Strength,
         {
           name: 'WOD: Zone 2 x 27',
+          hrZone: 2,
           instructions:
             'Three 9 minute pieces, no rest between them. Conversational pace. Log your total distance in your notes.',
           highlightInstructions: 'Conversational pace only',

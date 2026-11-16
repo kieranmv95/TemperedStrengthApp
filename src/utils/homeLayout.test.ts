@@ -30,6 +30,7 @@ describe('home layout', () => {
       { id: 'wodShop', visible: true },
       { id: 'streaks', visible: true },
       { id: 'mobility', visible: true },
+      { id: 'zones', visible: true },
       { id: 'personalBests', visible: true },
     ]);
     expect(normalizeHomeLayout(null)).toEqual(defaultHomeLayout());
@@ -50,6 +51,7 @@ describe('home layout', () => {
       'checkin:true',
       'wodShop:true',
       'mobility:true',
+      'zones:true',
       'personalBests:true',
     ]);
   });
@@ -71,6 +73,7 @@ describe('home layout', () => {
       'wodShop:true',
       'streaks:true',
       'mobility:true',
+      'zones:true',
       'personalBests:true',
     ]);
   });
@@ -89,6 +92,7 @@ describe('home layout', () => {
       'wodShop',
       'streaks',
       'mobility',
+      'zones',
       'personalBests',
     ]);
     expect(moveHomeSection(layout, 0, 0)).toEqual(layout);
@@ -111,6 +115,7 @@ describe('home layout', () => {
       'wodShop',
       'streaks',
       'mobility',
+      'zones',
       'personalBests',
     ]);
     expect(

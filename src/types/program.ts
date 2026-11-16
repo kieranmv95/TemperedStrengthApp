@@ -1,3 +1,5 @@
+import type { HeartRateZoneId } from './heartRate';
+
 export type Warmup = {
   type: 'warmup';
   title?: string;
@@ -81,6 +83,8 @@ export type WorkoutBlockBase = {
   title: string;
   instructions?: string;
   movements?: WorkoutMovement[];
+  /** Heart rate zone the block targets; shows the zone widget. */
+  hrZone?: HeartRateZoneId;
 };
 
 export type WorkoutBlockRounds = WorkoutBlockBase & {

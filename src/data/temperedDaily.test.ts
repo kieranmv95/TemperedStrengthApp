@@ -12,6 +12,7 @@ import {
   type SingleWorkout,
 } from '@/src/types/workouts';
 import { getTemperedDayDate, parseLocalDate } from '@/src/utils/temperedDaily';
+import { blocksOfWorkout, mentionedHrZone } from '@/src/utils/workoutHrZones';
 
 const BRAND_NAMES = /crossfit|hyrox/i;
 
@@ -182,6 +183,41 @@ describe('temperedDailyWorkouts', () => {
       expect(w.levels).toEqual(['Intermediate', 'Advanced']);
       for (const eq of w.equipment) {
         expect(allowedEquipment.has(eq)).toBe(true);
+      }
+    }
+  });
+
+  it('every block that names a heart rate zone shows the matching zone widget', () => {
+    const missing: string[] = [];
+    for (const w of temperedDailyWorkouts) {
+      for (const block of blocksOfWorkout(w)) {
+        const mentioned = mentionedHrZone(block);
+        if (mentioned !== null && block.hrZone !== mentioned) {
+          missing.push(`${w.id} "${block.name}": hrZone ${mentioned}`);
+        }
+      }
+    }
+    expect(missing).toEqual([]);
+  });
+
+  it('tags the Zone 2 block in both scales of every recovery session', () => {
+    const recoveryIds = [
+      'td_007',
+      'td_014',
+      'td_021',
+      'td_028',
+      'td_035',
+      'td_042',
+      'td_049',
+      'td_056',
+    ];
+    for (const id of recoveryIds) {
+      const workout = temperedDailyWorkouts.find((w) => w.id === id);
+      expect(workout).toBeDefined();
+      for (const entry of workout?.blocks ?? []) {
+        if ('scale' in entry) {
+          expect(entry.blocks.some((block) => block.hrZone === 2)).toBe(true);
+        }
       }
     }
   });

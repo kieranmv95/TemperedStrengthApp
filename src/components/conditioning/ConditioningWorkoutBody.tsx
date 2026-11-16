@@ -1,4 +1,5 @@
 import { ActionChip, ProgressBar, Skeleton, Tag } from '@/src/components/ds';
+import { HeartRateZoneChip } from '@/src/components/zones/HeartRateZoneChip';
 import {
   color,
   elevation,
@@ -8,6 +9,8 @@ import {
   typography,
 } from '@/src/constants/tokens';
 import { getExerciseById } from '@/src/data/exercises';
+import { useHeartRateZones } from '@/src/hooks/useHeartRateZones';
+import type { ZoneRange } from '@/src/types/heartRate';
 import type { WorkoutBlock, WorkoutMovement } from '@/src/types/program';
 import {
   getConditioningLogsForDay,
@@ -40,6 +43,7 @@ export function ConditioningWorkoutBody({
     [blockId: string]: { completed: boolean };
   }>({});
   const [loading, setLoading] = useState(true);
+  const { ranges: zoneRanges } = useHeartRateZones();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -116,6 +120,7 @@ export function ConditioningWorkoutBody({
               block={block}
               isCompleted={isCompleted}
               onToggleComplete={() => handleToggle(block.id)}
+              zoneRanges={zoneRanges}
             />
           );
         }
@@ -137,6 +142,10 @@ export function ConditioningWorkoutBody({
               isCompleted={isCompleted}
               onPress={() => handleToggle(block.id)}
             />
+
+            {block.hrZone ? (
+              <HeartRateZoneChip zone={block.hrZone} ranges={zoneRanges} />
+            ) : null}
 
             {block.instructions ? (
               <Text style={styles.blockInstructions}>{block.instructions}</Text>
@@ -235,12 +244,14 @@ type ConditioningWarmupBlockProps = {
   block: Extract<WorkoutBlock, { type: 'warmup' }>;
   isCompleted: boolean;
   onToggleComplete: () => void;
+  zoneRanges: ZoneRange[] | null;
 };
 
 function ConditioningWarmupBlock({
   block,
   isCompleted,
   onToggleComplete,
+  zoneRanges,
 }: ConditioningWarmupBlockProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -280,6 +291,9 @@ function ConditioningWarmupBlock({
 
       {isExpanded ? (
         <>
+          {block.hrZone ? (
+            <HeartRateZoneChip zone={block.hrZone} ranges={zoneRanges} />
+          ) : null}
           {block.instructions ? (
             <Text style={styles.blockInstructions}>{block.instructions}</Text>
           ) : null}

@@ -7,7 +7,9 @@ import {
   Tag,
 } from '@/src/components/ds';
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
+import { HeartRateZoneChip } from '@/src/components/zones/HeartRateZoneChip';
 import { color } from '@/src/constants/tokens';
+import type { ZoneRange } from '@/src/types/heartRate';
 import type {
   DetailedMovement,
   Divider,
@@ -35,6 +37,8 @@ import {
 
 type WorkoutDetailScrollContentProps = {
   workout: SingleWorkout;
+  /** User's heart rate zones for blocks with `hrZone`; `null` until set up. */
+  zoneRanges: ZoneRange[] | null;
 };
 
 type WorkoutScaledBlockGroup = {
@@ -97,7 +101,10 @@ function isWarmupBlockName(name: string): boolean {
   );
 }
 
-function renderBlockBody(block: WorkoutBlockBase) {
+function renderBlockBody(
+  block: WorkoutBlockBase,
+  zoneRanges: ZoneRange[] | null
+) {
   return (
     <>
       {block.mobilityFlow && (
@@ -116,6 +123,9 @@ function renderBlockBody(block: WorkoutBlockBase) {
             });
           }}
         />
+      )}
+      {block.hrZone && (
+        <HeartRateZoneChip zone={block.hrZone} ranges={zoneRanges} />
       )}
       {block.instructions && (
         <Text style={styles.blockInstructions}>{block.instructions}</Text>
@@ -140,7 +150,8 @@ function renderWorkoutBlock(
   block: WorkoutBlockBase,
   key: string,
   expanded: boolean,
-  onToggle: () => void
+  onToggle: () => void,
+  zoneRanges: ZoneRange[] | null
 ) {
   if (block.optional) {
     return (
@@ -152,7 +163,7 @@ function renderWorkoutBlock(
         accessory={<Badge label="Optional" tone="neutral" />}
         accessibilityLabel={`${block.name}, optional`}
       >
-        {renderBlockBody(block)}
+        {renderBlockBody(block, zoneRanges)}
       </Collapsible>
     );
   }
@@ -165,7 +176,7 @@ function renderWorkoutBlock(
         expanded={expanded}
         onToggle={onToggle}
       >
-        {renderBlockBody(block)}
+        {renderBlockBody(block, zoneRanges)}
       </Collapsible>
     );
   }
@@ -175,13 +186,14 @@ function renderWorkoutBlock(
       <Text style={styles.blockName} accessibilityRole="header">
         {block.name}
       </Text>
-      {renderBlockBody(block)}
+      {renderBlockBody(block, zoneRanges)}
     </View>
   );
 }
 
 export function WorkoutDetailScrollContent({
   workout,
+  zoneRanges,
 }: WorkoutDetailScrollContentProps) {
   const [selectedScaleIndex, setSelectedScaleIndex] = useState(0);
   /** Expanded warm-up sections by block key; collapsed until opened. */
@@ -331,16 +343,24 @@ export function WorkoutDetailScrollContent({
 
           {scaledBlocks.selected.blocks.map((block, blockIndex) => {
             const key = `${workout.id}-scale-${scaledBlocks.safeIndex}-block-${blockIndex}`;
-            return renderWorkoutBlock(block, key, isBlockExpanded(key), () =>
-              toggleBlock(key)
+            return renderWorkoutBlock(
+              block,
+              key,
+              isBlockExpanded(key),
+              () => toggleBlock(key),
+              zoneRanges
             );
           })}
         </>
       ) : flatBlocks ? (
         flatBlocks.map((block, blockIndex) => {
           const key = `${workout.id}-block-${blockIndex}`;
-          return renderWorkoutBlock(block, key, isBlockExpanded(key), () =>
-            toggleBlock(key)
+          return renderWorkoutBlock(
+            block,
+            key,
+            isBlockExpanded(key),
+            () => toggleBlock(key),
+            zoneRanges
           );
         })
       ) : null}

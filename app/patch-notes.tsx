@@ -15,6 +15,15 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '3.5.0',
+    dateLabel: '',
+    notes: [
+      'Heart rate zones, with basic and advanced (Karvonen) calculations',
+      'Connect Apple Health or Health Connect to pull in your resting heart rate',
+      'Zone workouts now show your bpm range for the zone',
+    ],
+  },
+  {
     version: '3.4.0',
     dateLabel: '13th November 2026',
     notes: [

@@ -1011,6 +1011,7 @@ const td014: StandaloneWorkoutSource = {
         td014Strength,
         {
           name: 'WOD: Zone 2 x 32',
+          hrZone: 2,
           instructions:
             'Four 8 minute pieces, no rest between them. Stay in Zone 2: you should be able to talk in full sentences the whole time. Log your total distance in your notes.',
           highlightInstructions: 'Conversational pace only',
@@ -1037,6 +1038,7 @@ const td014: StandaloneWorkoutSource = {
         td014Strength,
         {
           name: 'WOD: Zone 2 x 24',
+          hrZone: 2,
           instructions:
             'Four 6 minute pieces, no rest between them. Stay at a pace where you can talk in full sentences. Log your total distance in your notes.',
           highlightInstructions: 'Conversational pace only',

@@ -1,3 +1,4 @@
+import { HealthMockScenarioRow } from '@/src/components/dev/HealthMockScenarioRow';
 import {
   Badge,
   PressableCard,
@@ -12,6 +13,7 @@ import { color } from '@/src/constants/tokens';
 import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useLargeText } from '@/src/hooks/useLargeText';
+import { healthServiceName } from '@/src/services/health';
 import { refreshSanityHomeContent } from '@/src/services/sanityHomeContent';
 import type { OnboardingProfile } from '@/src/types/onboarding';
 import type { Program } from '@/src/types/program';
@@ -463,6 +465,7 @@ export function YouAccountSettingsScreen() {
   const deleteAccountDescription = isDeletingAccount
     ? 'Deleting account and cloud backup…'
     : 'Permanently delete your account and cloud backup. Local data stays on this device.';
+  const healthConnectionsDescription = `Connect ${healthServiceName()} for heart rate zones.`;
   const sanityRefreshDescription = isRefreshingSanityHome
     ? 'Fetching notification, shop ads, and skills from Sanity…'
     : 'Clear cached Sanity content (home + skills) and refetch. Open Home, Hub, or Skills & Cues to preview.';
@@ -583,6 +586,16 @@ export function YouAccountSettingsScreen() {
               <SettingText
                 title="Program settings"
                 description="Auto timers, PB detection, end current program."
+              />
+            </PressableCard>
+
+            <PressableCard
+              onPress={() => router.push('/account/health')}
+              accessibilityLabel={`Health connections, ${healthConnectionsDescription}`}
+            >
+              <SettingText
+                title="Health connections"
+                description={healthConnectionsDescription}
               />
             </PressableCard>
 
@@ -734,6 +747,8 @@ export function YouAccountSettingsScreen() {
                   accessibilityHint="Treat this device as Pro for local testing"
                 />
               </View>
+
+              <HealthMockScenarioRow />
 
               <PressableCard
                 onPress={handleClearAllData}

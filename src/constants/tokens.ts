@@ -42,6 +42,8 @@ export const color = {
   info: '#6CB4EE',
   infoTint: 'rgba(108, 180, 238, 0.12)',
   infoTintStrong: 'rgba(108, 180, 238, 0.24)',
+  /** Heart rate zone 5 only. */
+  violet: '#B79CFF',
 
   scrim: 'rgba(0, 0, 0, 0.6)',
 } as const;

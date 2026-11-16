@@ -2,7 +2,7 @@
   "expo": {
     "name": "tempered-strength-app",
     "slug": "tempered-strength-app",
-    "version": "3.4.0",
+    "version": "3.5.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "temperedstrengthapp",
@@ -22,7 +22,8 @@
         "backgroundColor": "#121212"
       },
       "permissions": [
-        "android.permission.POST_NOTIFICATIONS"
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.health.READ_RESTING_HEART_RATE"
       ]
     },
     "web": {
@@ -73,6 +74,23 @@
           "groupIdentifier": "group.com.kieranvenison.temperedstrengthapp",
           "enablePushNotifications": false,
           "frequentUpdates": false
+        }
+      ],
+      [
+        "@kingstinct/react-native-healthkit",
+        {
+          "NSHealthShareUsageDescription": "Tempered Strength reads your resting heart rate and date of birth to calculate your heart rate training zones.",
+          "NSHealthUpdateUsageDescription": false,
+          "background": false
+        }
+      ],
+      "react-native-health-connect",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
+          }
         }
       ]
     ],

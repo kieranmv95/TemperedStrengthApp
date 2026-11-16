@@ -8,6 +8,7 @@ import {
   temperedDailyProgram,
 } from '@/src/data/temperedDaily';
 import { getStandaloneWorkoutById } from '@/src/data/workouts';
+import { useHeartRateZones } from '@/src/hooks/useHeartRateZones';
 import { useRoles } from '@/src/hooks/useRoles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { asStringId } from '@/src/utils/routeParams';
@@ -65,6 +66,7 @@ export default function StandaloneWorkoutDetailScreen() {
   }, [isHiddenTemperedDaily]);
 
   const { isPro, roles, isLoading: accessLoading } = useRoles();
+  const { ranges: zoneRanges } = useHeartRateZones();
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const viewSource =
@@ -217,7 +219,10 @@ export default function StandaloneWorkoutDetailScreen() {
             </Pressable>
           </View>
         ) : (
-          <WorkoutDetailScrollContent workout={workout} />
+          <WorkoutDetailScrollContent
+            workout={workout}
+            zoneRanges={zoneRanges}
+          />
         )}
       </StandardLayout.Body>
     </StandardLayout>

@@ -26,6 +26,32 @@ jest.mock('expo-haptics', () => ({
 }));
 
 /**
+ * Health libraries are native-only (Nitro / TurboModule). Defaults report
+ * Health as available with no data; tests override per case.
+ */
+jest.mock('@kingstinct/react-native-healthkit', () => ({
+  AuthorizationRequestStatus: { unknown: 0, shouldRequest: 1, unnecessary: 2 },
+  isHealthDataAvailableAsync: jest.fn(() => Promise.resolve(true)),
+  requestAuthorization: jest.fn(() => Promise.resolve(true)),
+  getRequestStatusForAuthorization: jest.fn(() => Promise.resolve(2)),
+  queryQuantitySamples: jest.fn(() => Promise.resolve([])),
+  getDateOfBirthAsync: jest.fn(() => Promise.resolve(undefined)),
+}));
+
+jest.mock('react-native-health-connect', () => ({
+  SdkAvailabilityStatus: {
+    SDK_UNAVAILABLE: 1,
+    SDK_UNAVAILABLE_PROVIDER_UPDATE_REQUIRED: 2,
+    SDK_AVAILABLE: 3,
+  },
+  getSdkStatus: jest.fn(() => Promise.resolve(3)),
+  initialize: jest.fn(() => Promise.resolve(true)),
+  requestPermission: jest.fn(() => Promise.resolve([])),
+  getGrantedPermissions: jest.fn(() => Promise.resolve([])),
+  readRecords: jest.fn(() => Promise.resolve({ records: [] })),
+}));
+
+/**
  * Lightweight in-memory stand-in for expo-sqlite so unit tests can exercise
  * personal bests + workout log repositories without native modules.
  */

@@ -1,6 +1,8 @@
 import { Badge, PressableCard, StandardLayout } from '@/src/components/ds';
 import { settingsScreenStyles as settingsStyles } from '@/src/components/settings/settingsScreenStyles';
+import { ZonesSummaryCard } from '@/src/components/zones/ZonesSummaryCard';
 import { color, radius, space, typography } from '@/src/constants/tokens';
+import { useHeartRateZones } from '@/src/hooks/useHeartRateZones';
 import { useSubscription } from '@/src/hooks/use-subscription';
 import { useLargeText } from '@/src/hooks/useLargeText';
 import { useOnboardingProfile } from '@/src/hooks/useOnboardingProfile';
@@ -69,6 +71,7 @@ export function YouHubScreen() {
   const { isPro, isLoading: subscriptionLoading, refresh } = useSubscription();
   const { roles, isLoading: rolesLoading } = useRoles();
   const { profile } = useOnboardingProfile();
+  const { ranges: zoneRanges, isLoading: zonesLoading } = useHeartRateZones();
   const largeText = useLargeText();
   const displayName = profile?.name;
   const accessLoading = subscriptionLoading || rolesLoading;
@@ -129,6 +132,13 @@ export function YouHubScreen() {
               />
             </View>
           </View>
+
+          {zonesLoading ? null : (
+            <ZonesSummaryCard
+              ranges={zoneRanges}
+              onPress={() => router.push('/zones')}
+            />
+          )}
 
           {!accessLoading && !isPro ? (
             <PressableCard

@@ -9,6 +9,7 @@ import { STANDALONE_LOG_SCHEMA_BY_ID } from '@/src/data/standaloneLogSchemas';
 import { workouts as workoutsData } from '@/src/data/workout_data';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
 import type { WorkoutLogSchema } from '@/src/types/workouts';
+import { blocksOfWorkout, mentionedHrZone } from '@/src/utils/workoutHrZones';
 
 function assertWorkoutLogSchema(schema: WorkoutLogSchema, label: string): void {
   switch (schema.kind) {
@@ -62,6 +63,29 @@ describe('bundled standalone workouts', () => {
       ids.add(w.id);
       assertWorkoutLogSchema(w.logSchema, w.id);
       expect(w.blocks.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('every block that names a heart rate zone shows the matching zone widget', () => {
+    const missing: string[] = [];
+    for (const w of allStandaloneWorkouts) {
+      for (const block of blocksOfWorkout(w)) {
+        const mentioned = mentionedHrZone(block);
+        if (mentioned !== null && block.hrZone !== mentioned) {
+          missing.push(`${w.id} "${block.name}": hrZone ${mentioned}`);
+        }
+      }
+    }
+    expect(missing).toEqual([]);
+  });
+
+  it('every hrZone is between 1 and 5', () => {
+    for (const w of allStandaloneWorkouts) {
+      for (const block of blocksOfWorkout(w)) {
+        if (block.hrZone !== undefined) {
+          expect([1, 2, 3, 4, 5]).toContain(block.hrZone);
+        }
+      }
     }
   });
 

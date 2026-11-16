@@ -189,6 +189,10 @@ export default function RootLayout() {
                         options={{ headerShown: false }}
                       />
                       <Stack.Screen
+                        name="zones/index"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
                         name="article/[id]"
                         options={{ headerShown: false }}
                       />
@@ -210,6 +214,10 @@ export default function RootLayout() {
                       />
                       <Stack.Screen
                         name="account/program"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="account/health"
                         options={{ headerShown: false }}
                       />
                       <Stack.Screen

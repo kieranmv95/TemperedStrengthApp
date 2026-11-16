@@ -748,6 +748,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
       },
       {
         name: '30 Min - Zone 2',
+        hrZone: 2,
         instructions:
           'Pick one machine and stay on it. Maintain a conversational pace for the full 30 minutes. If you cannot speak in full sentences you are going too hard. If you feel like you could go forever you are probably right where you need to be. Record your distance at the end.',
         movements: [
@@ -1212,6 +1213,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
       },
       {
         name: '5 Rounds',
+        hrZone: 3,
         instructions:
           'Rest 60s between rounds.Work through each movement in full before moving on to the next. Rest only as needed to keep moving.',
         highlightInstructions: 'Run at 70-80% of max heart rate',
