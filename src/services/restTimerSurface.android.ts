@@ -1,5 +1,6 @@
 import { isRunningInExpoGo } from 'expo';
 import {
+  GYM_TIMER_ANDROID_NOTIFICATION_ID,
   REST_TIMER_ANDROID_NOTIFICATION_ID,
   REST_TIMER_DEEP_LINK,
   type RestTimerSurfacePayload,
@@ -10,6 +11,7 @@ type RestTimerAndroidNotificationProps = {
   label: string;
   untilLabel: string;
   status: RestTimerSurfaceStatus;
+  title?: string;
 };
 
 type CustomNotificationHandle = {
@@ -65,7 +67,18 @@ function toProps(
     label: payload.label,
     untilLabel: payload.untilLabel,
     status: payload.status,
+    title: payload.title,
   };
+}
+
+function deepLinkFor(payload: RestTimerSurfacePayload): string {
+  return payload.url ?? REST_TIMER_DEEP_LINK;
+}
+
+function notificationIdFor(payload: RestTimerSurfacePayload): string {
+  return payload.url === undefined || payload.url === REST_TIMER_DEEP_LINK
+    ? REST_TIMER_ANDROID_NOTIFICATION_ID
+    : GYM_TIMER_ANDROID_NOTIFICATION_ID;
 }
 
 function remainingMs(endTimeMs: number): number {
@@ -80,17 +93,20 @@ export async function startRestTimerSurface(
 
   try {
     const props = toProps(payload);
+    const title = props.title ?? 'Rest';
     activeNotification = await factory.post(props, {
-      id: REST_TIMER_ANDROID_NOTIFICATION_ID,
+      id: notificationIdFor(payload),
       ongoing: true,
       autoCancel: false,
       alertOnlyOnce: true,
-      title: props.label,
+      title,
       text:
         props.status === 'complete'
-          ? 'Rest complete'
+          ? title === 'Rest'
+            ? 'Rest complete'
+            : 'Timer finished'
           : `Until ${props.untilLabel}`,
-      url: REST_TIMER_DEEP_LINK,
+      url: deepLinkFor(payload),
       timeoutAfter: remainingMs(payload.endTimeMs),
     });
   } catch (error) {
@@ -107,25 +123,28 @@ export async function updateRestTimerSurface(
 
   try {
     const props = toProps(payload);
+    const id = notificationIdFor(payload);
     const existing =
-      activeNotification ??
-      (await factory.get(REST_TIMER_ANDROID_NOTIFICATION_ID));
+      activeNotification ?? (await factory.get(id));
 
     if (!existing) {
       await startRestTimerSurface(payload);
       return;
     }
 
+    const title = props.title ?? 'Rest';
     await existing.update(props, {
       ongoing: true,
       autoCancel: false,
       alertOnlyOnce: true,
-      title: props.label,
+      title,
       text:
         props.status === 'complete'
-          ? 'Rest complete'
+          ? title === 'Rest'
+            ? 'Rest complete'
+            : 'Timer finished'
           : `Until ${props.untilLabel}`,
-      url: REST_TIMER_DEEP_LINK,
+      url: deepLinkFor(payload),
       timeoutAfter: remainingMs(payload.endTimeMs),
     });
     activeNotification = existing;
@@ -142,11 +161,8 @@ export async function endRestTimerSurface(
   if (!factory) return;
 
   try {
-    const existing =
-      activeNotification ??
-      (await factory.get(REST_TIMER_ANDROID_NOTIFICATION_ID));
-    if (existing) {
-      await existing.cancel();
+    if (activeNotification) {
+      await activeNotification.cancel();
     } else {
       await factory.cancelAll();
     }
@@ -174,7 +190,7 @@ export async function syncRestTimerSurface(
   }
 
   try {
-    const existing = await factory.get(REST_TIMER_ANDROID_NOTIFICATION_ID);
+    const existing = await factory.get(notificationIdFor(payload));
     activeNotification = existing;
     if (existing) {
       await updateRestTimerSurface(payload);

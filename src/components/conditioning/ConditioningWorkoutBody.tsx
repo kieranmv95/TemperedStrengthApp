@@ -1,4 +1,5 @@
 import { ActionChip, ProgressBar, Skeleton, Tag } from '@/src/components/ds';
+import { StartGymTimerButton } from '@/src/components/gymTimer/StartGymTimerButton';
 import { HeartRateZoneChip } from '@/src/components/zones/HeartRateZoneChip';
 import {
   color,
@@ -12,6 +13,7 @@ import { getExerciseById } from '@/src/data/exercises';
 import { useHeartRateZones } from '@/src/hooks/useHeartRateZones';
 import type { ZoneRange } from '@/src/types/heartRate';
 import type { WorkoutBlock, WorkoutMovement } from '@/src/types/program';
+import { mapProgramBlockToGymTimer } from '@/src/utils/gymTimer';
 import {
   getConditioningLogsForDay,
   toggleConditioningBlockCompleted,
@@ -125,6 +127,8 @@ export function ConditioningWorkoutBody({
           );
         }
 
+        const timerConfig = mapProgramBlockToGymTimer(block);
+
         return (
           <View key={block.id} style={styles.blockCard}>
             <View style={styles.blockHeader}>
@@ -136,6 +140,10 @@ export function ConditioningWorkoutBody({
               </View>
               <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
             </View>
+
+            {timerConfig ? (
+              <StartGymTimerButton config={timerConfig} />
+            ) : null}
 
             <BlockCompleteToggle
               title={block.title}

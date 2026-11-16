@@ -90,6 +90,8 @@ export type WorkoutBlockBase = {
 export type WorkoutBlockRounds = WorkoutBlockBase & {
   type: 'rounds';
   rounds: number;
+  /** When set, each round is a fixed work block; omit for open work + Next. */
+  workSeconds?: number;
   restSecondsBetweenRounds?: number;
 };
 
@@ -103,6 +105,8 @@ export type WorkoutBlockTabata = WorkoutBlockBase & {
 export type WorkoutBlockEmom = WorkoutBlockBase & {
   type: 'emom';
   minutes: number;
+  /** Defaults to 60 (classic EMOM). Use 120 for E2MOM, etc. */
+  intervalSec?: number;
 };
 
 export type WorkoutBlockAmrap = WorkoutBlockBase & {
@@ -112,6 +116,7 @@ export type WorkoutBlockAmrap = WorkoutBlockBase & {
 
 export type WorkoutBlockForTime = WorkoutBlockBase & {
   type: 'for_time';
+  timeCapSeconds?: number;
 };
 
 export type WorkoutBlockWarmup = WorkoutBlockBase & {

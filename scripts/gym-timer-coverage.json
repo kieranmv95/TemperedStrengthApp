@@ -1,0 +1,1773 @@
+{
+  "generatedAt": "2026-11-16T15:57:38.814Z",
+  "tagged": 170,
+  "skipped": 58,
+  "rows": [
+    {
+      "id": "ar_06",
+      "title": "ICEY",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "ar_07",
+      "title": "FLEX FM",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "ar_08",
+      "title": "Back 2 Back",
+      "format": "Ladder",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "ar_01",
+      "title": "SKI GRACE",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "ar_02",
+      "title": "DESCENDER",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "ar_03",
+      "title": "CLEAN CUT",
+      "format": "Ladder",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "ar_04",
+      "title": "DEAD RUN",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "ar_05",
+      "title": "DOUBLE DOWN",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_15",
+      "title": "Snatch Balance Builder",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_79",
+      "title": "Olympic Complex: Clean & Jerk Stability",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_80",
+      "title": "Snatch Session",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_81",
+      "title": "Clean & Jerk Session",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "rh_06",
+      "title": "Four Movement Fury",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "rh_11",
+      "title": "Revolution",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "rh_10",
+      "title": "Atom",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "rh_08",
+      "title": "Dead Thruster",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "rainhill_wod_04",
+      "title": "The 600m Sting",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "rh_02",
+      "title": "Double Trouble",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "rh_09",
+      "title": "Snatch and Walk",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "rh_03",
+      "title": "Seeding: The Gauntlet",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "rh_04",
+      "title": "The Ladder Carry",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "rh_05",
+      "title": "Row, Bag and Bell",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "rh_07",
+      "title": "Clean Complex Meet Chipper",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "gg_01",
+      "title": "METCON - Row",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "gg_02",
+      "title": "METCON - Assault Bike",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "gg_03",
+      "title": "METCON - Ski",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "dbb_01",
+      "title": "10 x 10 x 10",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "dbb_02",
+      "title": "7 Rounds",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "dbb_03",
+      "title": "Kettlebells",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "dbb_04",
+      "title": "Chipper with Ryan",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_05",
+      "title": "Leg Primer",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "f_06",
+      "title": "Upper Body Hypertrophy",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "f_12",
+      "title": "The Pushup Pyramid",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "f_19",
+      "title": "Grip Strength 101",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "f_21",
+      "title": "Chest & Triceps",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "f_22",
+      "title": "Back and Biceps",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "f_23",
+      "title": "Legs: Squat & Hinge",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_02",
+      "title": "Olympic Complex: Snatch Stability",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_04",
+      "title": "Strength Press Day",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_06",
+      "title": "Strength Squat Day",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_09",
+      "title": "Pistol Squat Clinic",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_13",
+      "title": "Pause Back Squats - Strength",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_16",
+      "title": "The Muscle Up Lab",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_19",
+      "title": "Pull-ups and Dips - Strength",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_21",
+      "title": "Chest Day",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_22",
+      "title": "Back Day",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_23",
+      "title": "Legs Day",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_24",
+      "title": "Shoulders Day",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_25",
+      "title": "Arms Day",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "f_04",
+      "title": "The Century",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_01",
+      "title": "The Triple Stack",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "f_02",
+      "title": "Death by 10 Metres",
+      "format": "EMOM",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "f_10",
+      "title": "Hip Snap",
+      "format": "EMOM",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "f_13",
+      "title": "Four Minutes of Fury",
+      "format": "Tabata",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "TABATA"
+    },
+    {
+      "id": "f_15",
+      "title": "The Endless Climb",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "f_18",
+      "title": "Ground & Pound",
+      "format": "EMOM",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "f_30",
+      "title": "Cindy (Bodyweight AMRAP)",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "f_31",
+      "title": "Fran (Thrusters and Pull-ups)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_32",
+      "title": "Helen (Run, KB, Pull-ups)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_33",
+      "title": "Annie (Skipping and Sitting)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_34",
+      "title": "Grace (C&J's)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_35",
+      "title": "Karen (Wall Balls)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_36",
+      "title": "Jackie (Row, Thrusters, Pull-ups)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_37",
+      "title": "Nancy (run, OH squats)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_38",
+      "title": "Diane (Deadlift, HSPU)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_39",
+      "title": "Isabel (Snatch)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_40",
+      "title": "Elizabeth (Row, Clean, Dip)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_41",
+      "title": "Angie (Pull-ups, Push-ups, Sit-ups, Squats)",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_42",
+      "title": "Barbara (Sit-ups, Push-ups, Pull-ups, Squats)",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "f_43",
+      "title": "Chelsea (Pull-ups, Push-ups, Squats)",
+      "format": "EMOM",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "f_44",
+      "title": "Fight Gone Bad (Classic)",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "f_45",
+      "title": "The Chief (Power Cleans + Bodyweight Movements)",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "f_46",
+      "title": "DT (Deadlifts + Olympic lifts)",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_47",
+      "title": "Kelly (Run, Box Jumps, Wall balls)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_48",
+      "title": "Lynne (Bench press, Pull-ups)",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "f_49",
+      "title": "Kalsu - Thruster Burpees",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_03",
+      "title": "Metabolic Stress: Row/Thruster",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_07",
+      "title": "Murph",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_14",
+      "title": "The 100 Club",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_18",
+      "title": "Press From Hell",
+      "format": "Ladder",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_26",
+      "title": "Eva",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_27",
+      "title": "King Kong",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_28",
+      "title": "Nate (Muscle-ups + HSPU + KB)",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "p_29",
+      "title": "Randy (Power Snatch)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_30",
+      "title": "Amanda (Muscle-ups + Snatch)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_72",
+      "title": "The Fixus Games 1",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_71",
+      "title": "Performance Ritual",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_36",
+      "title": "Order 66",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_09",
+      "title": "Standard PFT",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_20",
+      "title": "The Long Pull",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "f_50",
+      "title": "Hyrox Prep: Run + Row Engine Session",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "f_51",
+      "title": "Sled Exposure",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "f_52",
+      "title": "Wall Ball Density 10",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "f_53",
+      "title": "Jump The Gap",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "f_54",
+      "title": "Carry Capacity Builder",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_56",
+      "title": "Race Day Simulation",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "f_57",
+      "title": "No Ski, No Problem",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_58",
+      "title": "Run to the Wall",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "f_59",
+      "title": "Pit Stop",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_60",
+      "title": "The Quiet Work",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "f_61",
+      "title": "Push Your Luck (Sled)",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "f_62",
+      "title": "Sled Pull Intervals (Moderate)",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "f_63",
+      "title": "Roxzone Transitions",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_64",
+      "title": "Hyrox Mini AMRAP 12",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "f_65",
+      "title": "The Qualifier",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_67",
+      "title": "Grippy",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_68",
+      "title": "Wall Ball 150 Test",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_69",
+      "title": "Race Sim: Half",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_01",
+      "title": "The Anvil Grinder",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_17",
+      "title": "Earn Your 5k",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_20",
+      "title": "The Hybrid Finisher",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_31",
+      "title": "Full Hyrox Event",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_33",
+      "title": "Elite Stations Repeat",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "p_34",
+      "title": "Hyrox PFT (Pro Standard)",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_35",
+      "title": "Roxzone Killer",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "p_73",
+      "title": "Hyrox Lite",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_55",
+      "title": "Sandbag Lunge Repeatability",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_32",
+      "title": "Hyrox Heavy Sled Day",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_70",
+      "title": "Redline",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "f_07",
+      "title": "Row Till You Break",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "f_11",
+      "title": "The 500 Club",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "f_17",
+      "title": "Skipping Skill Practice",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "f_24",
+      "title": "Mikko's Triangle",
+      "format": "EMOM",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "f_66",
+      "title": "Run Pacing Ladder",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "p_05",
+      "title": "The Diesel",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_08",
+      "title": "The Mile That Earns It",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_10",
+      "title": "The Double Under Clinic",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "p_12",
+      "title": "The Ergathlon",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_55",
+      "title": "Ignition",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "p_56",
+      "title": "The Ladder",
+      "format": "Ladder",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_57",
+      "title": "Push Storm",
+      "format": "Tabata",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "TABATA"
+    },
+    {
+      "id": "p_58",
+      "title": "Up And Down",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_59",
+      "title": "Death by Dumbbell",
+      "format": "EMOM",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "p_60",
+      "title": "The Grind",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_61",
+      "title": "Station Six",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "p_62",
+      "title": "Burn Out",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_63",
+      "title": "The Gauntlet",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "p_64",
+      "title": "Pressing Matters",
+      "format": "EMOM",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "p_65",
+      "title": "Lower Inferno",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_66",
+      "title": "Full Send",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "p_67",
+      "title": "The Hurricane",
+      "format": "Intervals",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "p_68",
+      "title": "Pull Everything",
+      "format": "Tabata",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "TABATA"
+    },
+    {
+      "id": "p_69",
+      "title": "Leg Day Lies",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "p_70",
+      "title": "Core Reckoning",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_71",
+      "title": "The Accumulator",
+      "format": "Ladder",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_72",
+      "title": "Double Trouble",
+      "format": "AMRAP",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "p_74",
+      "title": "Power Hour",
+      "format": "EMOM",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "p_76",
+      "title": "The Last Pull",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_77",
+      "title": "Lower Body Finale",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "p_78",
+      "title": "Peak",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "sw_01",
+      "title": "Snatch Skill Lab",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_02",
+      "title": "Clean & Jerk Skill Lab",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_03",
+      "title": "Split Jerk Clinic",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_04",
+      "title": "Strict Pull-Up Builder",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_05",
+      "title": "The Kip Clinic",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_06",
+      "title": "Chest to Bar Builder",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_07",
+      "title": "Butterfly School",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_08",
+      "title": "Bar Muscle-Up Lab",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_09",
+      "title": "Strict Bar Muscle-Up Strength",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_10",
+      "title": "Toes to Bar Clinic",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_11",
+      "title": "Ring Muscle-Up Lab",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_12",
+      "title": "Strict Ring Muscle-Up Strength",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_13",
+      "title": "Overhead Squat Fix",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_14",
+      "title": "Worm Work",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_15",
+      "title": "Pistol Progression",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_16",
+      "title": "Handstand Walk Progression",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_17",
+      "title": "Handstand Push-Up Builder",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_18",
+      "title": "Rope Climb Clinic",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_19",
+      "title": "Legless Rope Climb",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_20",
+      "title": "Box Jump Mechanics",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_21",
+      "title": "Devil's Press Efficiency",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "sw_22",
+      "title": "Kettlebell Swing Mechanics",
+      "source": "standalone",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "td_001",
+      "title": "Find Your Five",
+      "format": "AMRAP",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "td_002",
+      "title": "Station to Station",
+      "format": "For Time",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_003",
+      "title": "Press Test",
+      "format": "EMOM",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "td_004",
+      "title": "Fast Hips",
+      "format": "For Time",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_005",
+      "title": "Off the Floor",
+      "format": "For Time",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_006",
+      "title": "Long Road",
+      "format": "Chipper",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_007",
+      "title": "Slow Burn",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_008",
+      "title": "Under the Bar",
+      "format": "AMRAP",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "td_009",
+      "title": "Long Haul",
+      "format": "For Time",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_010",
+      "title": "Stacked",
+      "format": "Chipper",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_011",
+      "title": "Overhead Speed",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_012",
+      "title": "Dead Weight",
+      "format": "For Time",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_013",
+      "title": "Engine Room",
+      "format": "AMRAP",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "td_014",
+      "title": "Easy Miles",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_015",
+      "title": "Heavy Doubles",
+      "format": "For Time",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_016",
+      "title": "Race Pace",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_017",
+      "title": "Tight Arch",
+      "format": "AMRAP",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "td_018",
+      "title": "Quick Feet",
+      "format": "Tabata",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "TABATA"
+    },
+    {
+      "id": "td_019",
+      "title": "Pull Heavy",
+      "format": "For Time",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_020",
+      "title": "Quick Fire",
+      "format": "AMRAP",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "td_021",
+      "title": "Reset",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_022",
+      "title": "Squat Test",
+      "source": "tempered_daily",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "td_023",
+      "title": "Cruise Control",
+      "format": "AMRAP",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "td_024",
+      "title": "Bench Test",
+      "source": "tempered_daily",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "td_025",
+      "title": "Play Day",
+      "format": "EMOM",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "td_026",
+      "title": "Deadlift Test",
+      "source": "tempered_daily",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "td_027",
+      "title": "Victory Lap",
+      "format": "Chipper",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_028",
+      "title": "Unwind",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_029",
+      "title": "Split Finder",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_030",
+      "title": "Run the Gauntlet",
+      "format": "For Time",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_031",
+      "title": "Minute Maker",
+      "format": "EMOM",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "td_032",
+      "title": "Spark Plug",
+      "format": "AMRAP",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "td_033",
+      "title": "Ladder Climb",
+      "format": "Ladder",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_034",
+      "title": "Long Game",
+      "format": "Chipper",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_035",
+      "title": "Soft Pedal",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_036",
+      "title": "Thousand Club",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_037",
+      "title": "Race Rehearsal",
+      "format": "Chipper",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_038",
+      "title": "Thirty Strong",
+      "format": "EMOM",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "td_039",
+      "title": "Twenty Ten",
+      "format": "Tabata",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "TABATA"
+    },
+    {
+      "id": "td_040",
+      "title": "Five Alive",
+      "format": "For Time",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_041",
+      "title": "Steady State",
+      "format": "AMRAP",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "td_042",
+      "title": "Low and Slow",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_043",
+      "title": "Redline Row",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_044",
+      "title": "Sprint Station",
+      "format": "AMRAP",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "td_045",
+      "title": "Thirty Seconds Flat",
+      "format": "EMOM",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "td_046",
+      "title": "Step Up",
+      "format": "Ladder",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_047",
+      "title": "Fast Finish",
+      "format": "For Time",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_048",
+      "title": "Short Fuse",
+      "format": "Chipper",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_049",
+      "title": "Reset Ride",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_050",
+      "title": "2k Row Test",
+      "source": "tempered_daily",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "td_051",
+      "title": "Shake Out",
+      "format": "For Time",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_052",
+      "title": "Ten Minute Test",
+      "source": "tempered_daily",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "td_053",
+      "title": "Light Switch",
+      "format": "EMOM",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "td_054",
+      "title": "5k Run Test",
+      "source": "tempered_daily",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "td_055",
+      "title": "Free Flow",
+      "format": "AMRAP",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "AMRAP"
+    },
+    {
+      "id": "td_056",
+      "title": "Deep Breath",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    }
+  ]
+}

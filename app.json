@@ -51,7 +51,8 @@
         {
           "fonts": [
             "./assets/fonts/BarlowCondensed-SemiBold.ttf",
-            "./assets/fonts/BarlowCondensed-Bold.ttf"
+            "./assets/fonts/BarlowCondensed-Bold.ttf",
+            "./assets/fonts/DSEG7Classic-Bold.ttf"
           ]
         }
       ],
@@ -59,6 +60,29 @@
       "expo-localization",
       "expo-video",
       "expo-web-browser",
+      "expo-audio",
+      "expo-screen-orientation",
+      [
+        "expo-quick-actions",
+        {
+          "iosActions": [
+            {
+              "id": "gym-rest-90",
+              "title": "Rest 90s",
+              "subtitle": "Between-set rest timer",
+              "icon": "symbol:timer",
+              "params": { "href": "/tools/timers?quick=rest90" }
+            },
+            {
+              "id": "gym-tabata",
+              "title": "Start Tabata",
+              "subtitle": "8 × 20s / 10s",
+              "icon": "symbol:flame",
+              "params": { "href": "/tools/timers?quick=tabata" }
+            }
+          ]
+        }
+      ],
       [
         "expo-navigation-bar",
         {

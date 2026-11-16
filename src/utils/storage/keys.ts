@@ -45,6 +45,12 @@ export const RESTING_HEART_RATE_KEY = 'resting_heart_rate';
 export const HEALTH_CONNECTED_KEY = 'health_connected';
 /** Device-only, `__DEV__` builds only: mocked Health responses. */
 export const DEV_HEALTH_MOCK_SCENARIO_KEY = 'dev_health_mock_scenario';
+/** Device-only: active gym timer runtime (survives reload). */
+export const GYM_TIMER_RUNTIME_KEY = 'gym_timer_runtime';
+/** Synced: saved Pro gym timer presets. */
+export const GYM_TIMER_PRESETS_KEY = 'gym_timer_presets';
+/** Synced: lead-in + default mute for gym timers. */
+export const GYM_TIMER_SETTINGS_KEY = 'gym_timer_settings';
 
 /**
  * Per-device schema version used by the migration runner. This must never sync

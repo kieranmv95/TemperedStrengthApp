@@ -3,6 +3,7 @@ export type ToolId =
   | 'one-rep-max-breakdown'
   | 'creatine'
   | 'water-intake'
+  | 'timers'
   | 'checkin';
 
 /** Not every tool lives under `/tools` — check-in is a full feature area. */
@@ -11,6 +12,7 @@ export type ToolRoute =
   | '/tools/one-rep-max-breakdown'
   | '/tools/creatine'
   | '/tools/water-intake'
+  | '/tools/timers'
   | '/checkin';
 
 export type ToolDefinition = {
@@ -67,6 +69,15 @@ export const TOOLS: ToolDefinition[] = [
       'Daily hydration target from bodyweight, activity level, and creatine use.',
     route: '/tools/water-intake',
     icon: 'water-outline',
+  },
+  {
+    id: 'timers',
+    title: 'Gym Timers',
+    pillLabel: 'Timers',
+    description:
+      'AMRAP, EMOM, Tabata, For Time, rest, and more — full-screen gym clock.',
+    route: '/tools/timers',
+    icon: 'timer-outline',
   },
 ];
 

@@ -25,6 +25,35 @@ jest.mock('expo-haptics', () => ({
   selectionAsync: jest.fn(() => Promise.resolve()),
 }));
 
+jest.mock('expo-keep-awake', () => ({
+  activateKeepAwakeAsync: jest.fn(() => Promise.resolve()),
+  deactivateKeepAwake: jest.fn(),
+}));
+
+jest.mock('expo-screen-orientation', () => ({
+  unlockAsync: jest.fn(() => Promise.resolve()),
+  lockAsync: jest.fn(() => Promise.resolve()),
+  OrientationLock: { PORTRAIT_UP: 1 },
+}));
+
+jest.mock('expo-audio', () => ({
+  createAudioPlayer: jest.fn(() => ({
+    play: jest.fn(),
+    seekTo: jest.fn(() => Promise.resolve()),
+  })),
+}));
+
+jest.mock('expo-quick-actions', () => ({
+  setItems: jest.fn(() => Promise.resolve()),
+  addListener: jest.fn(() => ({ remove: jest.fn() })),
+  initial: null,
+  isSupported: jest.fn(() => Promise.resolve(false)),
+}));
+
+jest.mock('expo-quick-actions/hooks', () => ({
+  useQuickActionCallback: jest.fn(),
+}));
+
 /**
  * Health libraries are native-only (Nitro / TurboModule). Defaults report
  * Health as available with no data; tests override per case.

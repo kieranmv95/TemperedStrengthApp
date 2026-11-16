@@ -6,6 +6,7 @@ import {
   SectionHeader,
   Tag,
 } from '@/src/components/ds';
+import { StartGymTimerButton } from '@/src/components/gymTimer/StartGymTimerButton';
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
 import { HeartRateZoneChip } from '@/src/components/zones/HeartRateZoneChip';
 import { color } from '@/src/constants/tokens';
@@ -17,6 +18,7 @@ import type {
   WorkoutBlockBase,
   WorkoutMovement,
 } from '@/src/types/workouts';
+import { resolveWorkoutTimerConfig } from '@/src/utils/gymTimer';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -238,6 +240,10 @@ export function WorkoutDetailScrollContent({
   }, [workout.blocks]);
 
   const collabCtaLabel = collab?.linkCopy ? collab.linkCopy : 'Find out more';
+  const timerConfig = useMemo(
+    () => resolveWorkoutTimerConfig(workout),
+    [workout]
+  );
 
   return (
     <ScrollView
@@ -270,6 +276,8 @@ export function WorkoutDetailScrollContent({
       </View>
 
       <Text style={styles.detailDescription}>{workout.description}</Text>
+
+      {timerConfig ? <StartGymTimerButton config={timerConfig} /> : null}
 
       {collab ? (
         <PressableCard

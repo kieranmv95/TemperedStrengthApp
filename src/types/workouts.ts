@@ -1,4 +1,5 @@
 import type { ImageSourcePropType } from 'react-native';
+import type { GymTimerConfig } from './gymTimer';
 import type { HeartRateZoneId } from './heartRate';
 
 /** How the session trains you. A workout can have several; the first is its primary. */
@@ -128,6 +129,11 @@ export type SingleWorkout = {
   partner?: WorkoutPartner;
   /** Present when the workout is a collaboration; surfaced on the detail screen and Collab discipline. */
   collab?: WorkoutCollab;
+  /**
+   * Gym clock for WODs / metcons. Omit on strength and untimed sessions.
+   * Launcher stamps `source` at start time.
+   */
+  timerConfig?: GymTimerConfig;
   blocks: StandaloneWorkoutSource['blocks'];
 };
 
@@ -191,6 +197,8 @@ export type StandaloneWorkoutSource = {
   collab?: WorkoutCollab;
   /** Wins over `STANDALONE_LOG_SCHEMA_BY_ID` when set. */
   logSchema?: WorkoutLogSchema;
+  /** Gym clock for WODs / metcons. Omit on strength and untimed sessions. */
+  timerConfig?: GymTimerConfig;
   blocks:
     | WorkoutBlockBase[]
     | {

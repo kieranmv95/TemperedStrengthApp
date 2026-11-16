@@ -6,6 +6,7 @@ import type {
   SingleWorkout,
   StandaloneWorkoutSource,
 } from '@/src/types/workouts';
+import { deriveWorkoutTimerConfig } from '@/src/utils/gymTimer/deriveWorkoutTimerConfig';
 
 import { workouts as workoutsData } from './workout_data';
 
@@ -27,9 +28,12 @@ export function withLogSchema(workout: WorkoutJson): SingleWorkout {
   if (schema.kind === 'none') {
     schema = DEFAULT_WORKOUT_LOG_SCHEMA;
   }
+  const timerConfig =
+    workout.timerConfig ?? deriveWorkoutTimerConfig(workout, schema);
   return {
     ...workout,
     logSchema: schema,
+    ...(timerConfig ? { timerConfig } : {}),
   };
 }
 

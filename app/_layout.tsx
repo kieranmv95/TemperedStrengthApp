@@ -1,11 +1,14 @@
 import { AccountPromptController } from '@/src/components/account/AccountPromptController';
 import { SupplementReminderBridge } from '@/src/components/checkin/SupplementReminderBridge';
+import { GymTimerQuickActions } from '@/src/components/gymTimer/GymTimerQuickActions';
 import { PostHogCaptureBridge } from '@/src/components/PostHogCaptureBridge';
 import { ExerciseVideoProvider } from '@/src/hooks/exercise-video-context';
+import { GymTimerProvider } from '@/src/hooks/gym-timer-context';
 import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
 import { ToastProvider } from '@/src/hooks/toast-context';
 import { TogetherWeLiftProvider } from '@/src/hooks/together-we-lift-context';
+import { gymClockFont } from '@/src/constants/gymClock';
 import { color, fontFamily } from '@/src/constants/tokens';
 import { initializeRevenueCat } from '@/src/services/revenueCatService';
 import { openAppDatabase } from '@/src/db/database';
@@ -59,6 +62,7 @@ export default function RootLayout() {
         await Font.loadAsync({
           [fontFamily.displaySemiBold]: require('@/assets/fonts/BarlowCondensed-SemiBold.ttf'),
           [fontFamily.displayBold]: require('@/assets/fonts/BarlowCondensed-Bold.ttf'),
+          [gymClockFont.digits]: require('@/assets/fonts/DSEG7Classic-Bold.ttf'),
         });
       } catch (error) {
         console.error('Failed to load display fonts:', error);
@@ -131,6 +135,8 @@ export default function RootLayout() {
               <TogetherWeLiftProvider>
                 <ExerciseVideoProvider>
                   <ToastProvider>
+                    <GymTimerProvider>
+                    <GymTimerQuickActions />
                     <Stack>
                       <Stack.Screen
                         name="(tabs)"
@@ -154,6 +160,10 @@ export default function RootLayout() {
                       />
                       <Stack.Screen
                         name="tools/water-intake"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="tools/timers"
                         options={{ headerShown: false }}
                       />
                       <Stack.Screen
@@ -256,6 +266,7 @@ export default function RootLayout() {
                       />
                     </Stack>
                     <StatusBar style="light" />
+                    </GymTimerProvider>
                   </ToastProvider>
                 </ExerciseVideoProvider>
               </TogetherWeLiftProvider>

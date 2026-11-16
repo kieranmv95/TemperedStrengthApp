@@ -19,6 +19,14 @@ function rangesAccessibilityLabel(ranges: ZoneRange[]): string {
     .join('; ');
 }
 
+/** Compact bpm label for the summary strip — no "bpm" suffix so five columns fit. */
+function compactZoneBpm(range: ZoneRange): string {
+  if (range.maxBpm === null) {
+    return `${range.minBpm}+`;
+  }
+  return `${range.minBpm}–${range.maxBpm}`;
+}
+
 type ZoneColumnProps = {
   range: ZoneRange;
 };
@@ -26,14 +34,9 @@ type ZoneColumnProps = {
 function ZoneColumn({ range }: ZoneColumnProps) {
   return (
     <View style={styles.column}>
-      {range.maxBpm === null ? (
-        <Text style={styles.bpm}>{range.minBpm}+</Text>
-      ) : (
-        <>
-          <Text style={styles.bpm}>{range.minBpm}</Text>
-          <Text style={styles.bpm}>{range.maxBpm}</Text>
-        </>
-      )}
+      <Text style={styles.bpm} numberOfLines={1} adjustsFontSizeToFit>
+        {compactZoneBpm(range)}
+      </Text>
     </View>
   );
 }
@@ -129,15 +132,19 @@ const styles = StyleSheet.create({
   },
   columns: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 2,
   },
   column: {
     flex: 1,
     alignItems: 'center',
+    minWidth: 0,
   },
   bpm: {
-    ...typography.numericSmall,
+    ...typography.captionStrong,
+    fontVariant: ['tabular-nums'],
     color: color.textPrimary,
+    textAlign: 'center',
   },
   zoneLabel: {
     ...typography.caption,

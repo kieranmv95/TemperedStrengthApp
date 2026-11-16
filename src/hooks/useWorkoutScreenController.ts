@@ -834,6 +834,17 @@ export function useWorkoutScreenController() {
         posthog.capture(posthogEventsNames.timer.started, {
           timer_duration_secs: payload.restTimeSeconds,
         });
+        // Prefer the gym clock for between-set rest when the provider is mounted.
+        const { startStrengthRestOnGymClock } = await import(
+          '@/src/utils/gymTimer/strengthRestBridge'
+        );
+        if (startStrengthRestOnGymClock(payload.restTimeSeconds)) {
+          await cancelTimerNotification();
+          await endRestTimerSurface();
+          setRestTimer(null);
+          await clearRestTimer();
+          return;
+        }
         const startedAt = Date.now();
         const newTimer: RestTimerState = {
           dayIndex: payload.dayIndex,
@@ -852,7 +863,7 @@ export function useWorkoutScreenController() {
         console.error('Error starting rest timer:', error);
       }
     },
-    [scheduleTimerNotification, posthog]
+    [scheduleTimerNotification, posthog, cancelTimerNotification]
   );
 
   const handleRestDismiss = useCallback(async () => {

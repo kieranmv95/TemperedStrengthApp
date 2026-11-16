@@ -5,6 +5,7 @@ export type RestTimerAndroidNotificationProps = {
   label: string;
   untilLabel: string;
   status: 'running' | 'complete';
+  title?: string;
 };
 
 const RestTimerAndroidNotificationLayout = (
@@ -12,9 +13,12 @@ const RestTimerAndroidNotificationLayout = (
 ) => {
   'widget';
 
+  const title = props.title && props.title.length > 0 ? props.title : 'Rest';
   const line =
     props.status === 'complete'
-      ? 'Rest complete'
+      ? title === 'Rest'
+        ? 'Rest complete'
+        : `${title} done`
       : `${props.label} until ${props.untilLabel}`;
 
   return {
