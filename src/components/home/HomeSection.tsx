@@ -1,5 +1,6 @@
 import { Badge, PressableCard } from '@/src/components/ds';
 import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
+import { HubToolsSection } from '@/src/components/hub/HubToolsSection';
 import { HomeCheckinCard } from '@/src/components/home/HomeCheckinCard';
 import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
 import { HomeTodayCard } from '@/src/components/home/HomeTodayCard';
@@ -7,6 +8,7 @@ import { TemperedDailyWidget } from '@/src/components/home/TemperedDailyWidget';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
 import { ZonesSummaryCard } from '@/src/components/zones/ZonesSummaryCard';
 import { color } from '@/src/constants/tokens';
+import type { ToolRoute } from '@/src/data/tools';
 import { useLargeText } from '@/src/hooks/useLargeText';
 import type { StreakSnapshot } from '@/src/services/streakService';
 import type { ZoneRange } from '@/src/types/heartRate';
@@ -54,6 +56,7 @@ type HomeSectionProps = {
   onOpenCheckin: () => void;
   onOpenWorkouts: () => void;
   onOpenShop: () => void;
+  onOpenTool: (route: ToolRoute) => void;
   onOpenMobility: () => void;
   zoneRanges: ZoneRange[] | null;
   onOpenZones: () => void;
@@ -80,6 +83,7 @@ export function HomeSection({
   onOpenCheckin,
   onOpenWorkouts,
   onOpenShop,
+  onOpenTool,
   onOpenMobility,
   zoneRanges,
   onOpenZones,
@@ -145,6 +149,12 @@ export function HomeSection({
               accessibilityLabel="Opens partner products"
             />
           </View>
+        </View>
+      );
+    case 'tools':
+      return (
+        <View style={styles.toolsBleed}>
+          <HubToolsSection tilesOnly onOpenTool={onOpenTool} />
         </View>
       );
     case 'streaks':

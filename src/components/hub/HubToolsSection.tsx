@@ -51,31 +51,39 @@ function ToolTile({ tool, onPress, fill = false }: ToolTileProps) {
 
 type HubToolsSectionProps = {
   onOpenTool: (route: ToolRoute) => void;
+  /** Home shows the scrolling tiles only, with no title or See all control. */
+  tilesOnly?: boolean;
 };
 
 /**
  * Tools as a horizontal row where the next tile peeks in, or as a wrapped
  * grid after "See all".
  */
-export function HubToolsSection({ onOpenTool }: HubToolsSectionProps) {
+export function HubToolsSection({
+  onOpenTool,
+  tilesOnly = false,
+}: HubToolsSectionProps) {
   const [showAll, setShowAll] = useState(false);
+  const expanded = showAll && !tilesOnly;
 
   return (
     <View style={styles.section}>
-      <View style={styles.header}>
-        <SectionHeader
-          title="Tools"
-          actionLabel={showAll ? 'Show less' : 'See all'}
-          onActionPress={() => setShowAll((prev) => !prev)}
-          actionAccessibilityLabel={
-            showAll ? 'Show fewer tools' : 'See all tools'
-          }
-        />
-        <Text style={styles.description}>
-          Calculators and training utilities that work offline.
-        </Text>
-      </View>
-      {showAll ? (
+      {tilesOnly ? null : (
+        <View style={styles.header}>
+          <SectionHeader
+            title="Tools"
+            actionLabel={showAll ? 'Show less' : 'See all'}
+            onActionPress={() => setShowAll((prev) => !prev)}
+            actionAccessibilityLabel={
+              showAll ? 'Show fewer tools' : 'See all tools'
+            }
+          />
+          <Text style={styles.description}>
+            Calculators and training utilities that work offline.
+          </Text>
+        </View>
+      )}
+      {expanded ? (
         <View style={styles.grid}>
           {TOOLS.map((tool) => (
             <View key={tool.id} style={styles.gridCell}>

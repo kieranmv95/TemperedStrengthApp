@@ -111,15 +111,8 @@ export function GymTimerOverlay() {
           accessibilityLabel="Gym timer"
         >
           <View style={[styles.row, landscape && styles.rowLandscape]}>
-            {paintedLandscape ? null : (
-              <Text style={styles.mode}>{modeLabel(runtime.config.type)}</Text>
-            )}
             <View style={styles.center}>
-              {paintedLandscape ? (
-                <Text style={[styles.mode, styles.modeInline]}>
-                  {modeLabel(runtime.config.type)}
-                </Text>
-              ) : null}
+              <Text style={styles.mode}>{modeLabel(runtime.config.type)}</Text>
               {showRounds ? (
                 <Text style={styles.round}>
                   R {display.segment?.round}/{display.segment?.totalRounds}
@@ -274,8 +267,8 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: gymClock.mode,
     letterSpacing: 2,
-  },
-  modeInline: {
+    textAlign: 'center',
+    textTransform: 'uppercase',
     marginBottom: 8,
   },
   center: {

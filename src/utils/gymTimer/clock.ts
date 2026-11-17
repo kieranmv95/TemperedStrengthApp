@@ -250,13 +250,13 @@ export function modeLabel(type: GymTimerRuntime['config']['type']): string {
     case 'FOR_TIME':
       return 'FT';
     case 'TABATA':
-      return 'Tb';
+      return 'TB';
     case 'EMOM':
       return 'EM';
     case 'AMRAP':
       return 'AR';
     case 'ROUNDS':
-      return 'Rd';
+      return 'RD';
     case 'INTERVALS':
       return 'IN';
     default: {

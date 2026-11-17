@@ -566,6 +566,9 @@ export default function HomeTabScreen() {
                         router.push('/shop')
                       )
                     }
+                    onOpenTool={(route) =>
+                      trackHomeLink('tool', route, () => router.push(route))
+                    }
                     onOpenMobility={() =>
                       trackHomeLink('mobility_flows_card', '/recovery', () =>
                         router.push('/recovery')
