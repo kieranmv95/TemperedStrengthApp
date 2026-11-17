@@ -283,6 +283,7 @@ export function WorkoutDetailScrollContent({
         <PressableCard
           variant="promo"
           accentColor={collab.linkAndBorderColor}
+          surfaceColor={collab.bgColor}
           showChevron={false}
           onPress={handleCollabPress}
           accessibilityLabel={`In collaboration with ${collab.name}. ${collabCtaLabel}.`}
@@ -293,16 +294,52 @@ export function WorkoutDetailScrollContent({
               <Image source={collab.image} style={styles.collabImage} />
             ) : null}
             <View style={styles.collabHeaderText}>
-              <Text style={styles.collabLabel}>In collaboration with</Text>
-              <Text style={styles.collabName}>{collab.name}</Text>
+              <Text
+                style={[
+                  styles.collabLabel,
+                  collab.inColabWithColor
+                    ? { color: collab.inColabWithColor }
+                    : null,
+                ]}
+              >
+                In collaboration with
+              </Text>
+              <Text
+                style={[
+                  styles.collabName,
+                  collab.nameColor ? { color: collab.nameColor } : null,
+                ]}
+              >
+                {collab.name}
+              </Text>
             </View>
           </View>
           {collab.description ? (
-            <Text style={styles.collabDescription}>{collab.description}</Text>
+            <Text
+              style={[
+                styles.collabDescription,
+                collab.descriptionColor
+                  ? { color: collab.descriptionColor }
+                  : null,
+              ]}
+            >
+              {collab.description}
+            </Text>
           ) : null}
           <View style={styles.collabCtaRow}>
-            <Ionicons name="open-outline" size={16} color={color.gold} />
-            <Text style={styles.collabCtaText}>{collabCtaLabel}</Text>
+            <Ionicons
+              name="open-outline"
+              size={16}
+              color={collab.nameColor ?? color.gold}
+            />
+            <Text
+              style={[
+                styles.collabCtaText,
+                collab.nameColor ? { color: collab.nameColor } : null,
+              ]}
+            >
+              {collabCtaLabel}
+            </Text>
           </View>
         </PressableCard>
       ) : null}

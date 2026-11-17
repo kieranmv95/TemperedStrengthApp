@@ -86,6 +86,8 @@ export type Discipline = {
   };
   description?: string;
   link?: string;
+  /** Label for the sponsor link. Falls back to "View event details". */
+  linkLabel?: string;
   isSponsor?: boolean;
   /** Optional white-label colours for the sponsor card on the discipline screen. */
   theme?: DisciplineTheme;
@@ -106,8 +108,9 @@ export const disciplines: Discipline[] = [
     },
     image: require('@/assets/images/disciplines/deathbybeth.png'),
     description:
-      "Death by Beth is a fitness event that challenges you to push your limits. It's a fun and intense workout that will test your strength and endurance. It's a great way to get a feel for the event and get signed up for the next one.",
-    link: 'https://www.thearenagames.co.uk/',
+      "Fitness for everyone. No matter what level you're at, this will test you.",
+    link: 'https://www.instagram.com/coach_bethb/',
+    linkLabel: 'Check out Death by Beth here',
     theme: {
       bgColor: '#39FF14',
       borderColor: '#39FF14',

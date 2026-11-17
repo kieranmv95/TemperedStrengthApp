@@ -69,6 +69,9 @@ type GymTimerContextValue = {
   bumpRound: () => void;
   advanceOpenSegment: () => void;
   setMuted: (muted: boolean) => void;
+  /** Turns the open clock to landscape. The rest of the app stays portrait. */
+  forceLandscape: boolean;
+  setForceLandscape: (forceLandscape: boolean) => void;
   updateSettings: (next: GymTimerSettings) => Promise<void>;
   savePreset: (config: GymTimerConfig) => Promise<void>;
   deletePreset: (id: string) => Promise<void>;
@@ -99,6 +102,7 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
     DEFAULT_GYM_TIMER_SETTINGS
   );
   const [presets, setPresets] = useState<GymTimerPreset[]>([]);
+  const [forceLandscape, setForceLandscape] = useState(false);
   const runtimeRef = useRef<GymTimerRuntime | null>(null);
   const lastBeepSecRef = useRef<number | null>(null);
   const pausedKeepAwakeTimer = useRef<ReturnType<typeof setTimeout> | null>(
@@ -199,24 +203,40 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
     void syncRestTimerSurface(payload);
   }, [runtime]);
 
+  // Only touch orientation while a gym timer overlay is open. Calling
+  // lockAsync on every cold start races ScreenOrientationRegistry and can
+  // crash; app.json already defaults to portrait.
   useEffect(() => {
-    const unlock =
-      runtime?.viewState === 'open' &&
-      runtime.lifecycle !== 'done' &&
-      runtime.lifecycle !== 'ready';
-    if (unlock) {
-      void ScreenOrientation.unlockAsync();
-    } else {
-      void ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP
-      );
+    if (!runtime || runtime.viewState !== 'open') {
+      return;
+    }
+    void ScreenOrientation.lockAsync(
+      forceLandscape
+        ? ScreenOrientation.OrientationLock.LANDSCAPE
+        : ScreenOrientation.OrientationLock.PORTRAIT_UP
+    ).catch(() => {
+      // A portrait-only binary cannot rotate. The clock paints landscape
+      // itself when the window stays portrait.
+    });
+  }, [runtime?.viewState, forceLandscape]);
+
+  useEffect(() => {
+    if (!runtime || runtime.viewState !== 'open') {
+      return;
     }
     return () => {
       void ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
-      );
+      ).catch(() => {
+        // Ignore. The overlay is already gone.
+      });
     };
-  }, [runtime?.viewState, runtime?.lifecycle]);
+  }, [runtime?.viewState]);
+
+  useEffect(() => {
+    if (runtime && runtime.viewState !== 'closed') return;
+    setForceLandscape(false);
+  }, [runtime]);
 
   const handleSegmentCross = useCallback(
     async (next: GymTimerRuntime, finished: boolean) => {
@@ -248,10 +268,7 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
     const id = setInterval(() => {
       const current = runtimeRef.current;
       if (!current) return;
-      if (
-        current.lifecycle !== 'running' &&
-        current.lifecycle !== 'lead_in'
-      ) {
+      if (current.lifecycle !== 'running' && current.lifecycle !== 'lead_in') {
         return;
       }
       const display = getDisplay(current);
@@ -265,8 +282,11 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
         lastBeepSecRef.current = remaining;
         void playGymTimerBeep('tick', current.muted);
       }
-      const { runtime: advanced, crossedSegment, finished } =
-        advanceRuntime(current);
+      const {
+        runtime: advanced,
+        crossedSegment,
+        finished,
+      } = advanceRuntime(current);
       if (crossedSegment || finished) {
         applyRuntime(advanced);
         void handleSegmentCross(advanced, finished);
@@ -282,8 +302,11 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
       if (!current) return;
       if (state === 'active') {
         void cancelGymTimerFinishNotification();
-        const { runtime: advanced, crossedSegment, finished } =
-          advanceRuntime(current);
+        const {
+          runtime: advanced,
+          crossedSegment,
+          finished,
+        } = advanceRuntime(current);
         if (crossedSegment || finished || advanced !== current) {
           applyRuntime(advanced);
           if (crossedSegment || finished) {
@@ -465,10 +488,7 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
   const bumpRound = useCallback(() => {
     const current = runtimeRef.current;
     if (!current) return;
-    if (
-      current.config.type !== 'AMRAP' &&
-      current.config.type !== 'FOR_TIME'
-    ) {
+    if (current.config.type !== 'AMRAP' && current.config.type !== 'FOR_TIME') {
       return;
     }
     applyRuntime({
@@ -506,24 +526,21 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
     setPresets(await getGymTimerPresets());
   }, []);
 
-  const savePreset = useCallback(
-    async (config: GymTimerConfig) => {
-      const now = Date.now();
-      const preset: GymTimerPreset = {
-        id: `preset_${now}`,
-        createdAt: now,
-        updatedAt: now,
-        config: {
-          ...config,
-          source: { kind: 'preset' },
-        },
-      };
-      const next = [preset, ...(await getGymTimerPresets())];
-      await saveGymTimerPresets(next);
-      setPresets(next);
-    },
-    []
-  );
+  const savePreset = useCallback(async (config: GymTimerConfig) => {
+    const now = Date.now();
+    const preset: GymTimerPreset = {
+      id: `preset_${now}`,
+      createdAt: now,
+      updatedAt: now,
+      config: {
+        ...config,
+        source: { kind: 'preset' },
+      },
+    };
+    const next = [preset, ...(await getGymTimerPresets())];
+    await saveGymTimerPresets(next);
+    setPresets(next);
+  }, []);
 
   const deletePreset = useCallback(async (id: string) => {
     const next = (await getGymTimerPresets()).filter((p) => p.id !== id);
@@ -562,6 +579,8 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
       bumpRound,
       advanceOpenSegment,
       setMuted,
+      forceLandscape,
+      setForceLandscape,
       updateSettings,
       savePreset,
       deletePreset,
@@ -583,6 +602,8 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
       bumpRound,
       advanceOpenSegment,
       setMuted,
+      forceLandscape,
+      setForceLandscape,
       updateSettings,
       savePreset,
       deletePreset,

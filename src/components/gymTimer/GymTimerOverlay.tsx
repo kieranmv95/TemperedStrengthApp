@@ -6,6 +6,7 @@ import {
   modeLabel,
 } from '@/src/utils/gymTimer';
 import { Ionicons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import {
   Pressable,
@@ -32,12 +33,26 @@ export function GymTimerOverlay() {
     bumpRound,
     advanceOpenSegment,
     setMuted,
+    forceLandscape,
+    setForceLandscape,
   } = useGymTimer();
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
-  const landscape = width > height;
+  const windowLandscape = width > height;
+  const [paintedLandscape, setPaintedLandscape] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
   const [now, setNow] = useState(0);
+
+  // The app stays portrait. Ask the OS to rotate, and if it cannot (portrait
+  // lock in the installed binary), turn the clock view itself after a beat.
+  useEffect(() => {
+    if (!forceLandscape || windowLandscape) {
+      setPaintedLandscape(false);
+      return;
+    }
+    const id = setTimeout(() => setPaintedLandscape(true), 400);
+    return () => clearTimeout(id);
+  }, [forceLandscape, windowLandscape]);
 
   useEffect(() => {
     if (!runtime || runtime.viewState !== 'open') return;
@@ -56,10 +71,7 @@ export function GymTimerOverlay() {
   }
 
   const display = getDisplay(runtime, now);
-  const digitColor = phaseColor(
-    runtime.config.type,
-    display.segment?.phase
-  );
+  const digitColor = phaseColor(runtime.config.type, display.segment?.phase);
   const digits = formatGymTimerDigits(display.displaySec);
   const colonBlink =
     (runtime.lifecycle === 'running' || runtime.lifecycle === 'lead_in') &&
@@ -72,101 +84,140 @@ export function GymTimerOverlay() {
     runtime.config.type === 'AMRAP' || runtime.config.type === 'FOR_TIME';
   const showNext = display.segment?.openEnded === true;
 
-  const renderedDigits = colonBlink
-    ? digits.replace(':', ' ')
-    : digits;
+  const renderedDigits = colonBlink ? digits.replace(':', ' ') : digits;
+  const landscape = windowLandscape || paintedLandscape;
+  const frameStyle = paintedLandscape
+    ? {
+        position: 'absolute' as const,
+        width: height,
+        height: width,
+        top: (height - width) / 2,
+        left: (width - height) / 2,
+        transform: [{ rotate: '90deg' as const }],
+        paddingLeft: Math.max(insets.top, 16),
+        paddingRight: Math.max(insets.bottom, 16),
+        paddingTop: Math.max(insets.right, 16),
+        paddingBottom: Math.max(insets.left, 16),
+      }
+    : [styles.fill, { paddingTop: insets.top, paddingBottom: insets.bottom }];
 
   return (
-    <View
-      style={[styles.root, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
-      accessibilityViewIsModal
-    >
-      <Pressable
-        style={styles.flex}
-        onPress={() => setControlsVisible(true)}
-        accessibilityLabel="Gym timer"
-      >
-        <View style={[styles.row, landscape && styles.rowLandscape]}>
-          <Text style={styles.mode}>{modeLabel(runtime.config.type)}</Text>
-          <View style={styles.center}>
-            {showRounds ? (
-              <Text style={styles.round}>
-                R {display.segment?.round}/{display.segment?.totalRounds}
-              </Text>
-            ) : null}
-            {showBump && runtime.lifecycle !== 'ready' ? (
-              <Text style={styles.round}>Rounds {runtime.completedRounds}</Text>
-            ) : null}
-            <SevenSegmentDigits
-              value={renderedDigits}
-              color={digitColor}
-              fontSize={landscape ? 96 : 88}
-              paused={runtime.lifecycle === 'paused'}
-              accessibilityLabel={digits}
-            />
-            <Text style={[styles.phase, { color: digitColor }]}>
-              {runtime.lifecycle === 'ready'
-                ? 'READY'
-                : runtime.lifecycle === 'done'
-                  ? 'DONE'
-                  : runtime.lifecycle === 'paused'
-                    ? 'PAUSED'
-                    : phaseWord(display.segment?.phase)}
-            </Text>
-            {runtime.config.name ? (
-              <Text style={styles.name} numberOfLines={1}>
-                {runtime.config.name}
-              </Text>
-            ) : null}
-          </View>
-          <View style={styles.icons}>
-            <Pressable
-              onPress={() => setMuted(!runtime.muted)}
-              hitSlop={12}
-              accessibilityLabel={runtime.muted ? 'Unmute' : 'Mute'}
-            >
-              <Ionicons
-                name={runtime.muted ? 'volume-mute' : 'volume-high'}
-                size={22}
-                color={gymClock.controlsStrong}
+    <View style={styles.backdrop} accessibilityViewIsModal>
+      {paintedLandscape ? <StatusBar hidden /> : null}
+      <View style={[styles.root, frameStyle]}>
+        <Pressable
+          style={styles.flex}
+          onPress={() => setControlsVisible(true)}
+          accessibilityLabel="Gym timer"
+        >
+          <View style={[styles.row, landscape && styles.rowLandscape]}>
+            {paintedLandscape ? null : (
+              <Text style={styles.mode}>{modeLabel(runtime.config.type)}</Text>
+            )}
+            <View style={styles.center}>
+              {paintedLandscape ? (
+                <Text style={[styles.mode, styles.modeInline]}>
+                  {modeLabel(runtime.config.type)}
+                </Text>
+              ) : null}
+              {showRounds ? (
+                <Text style={styles.round}>
+                  R {display.segment?.round}/{display.segment?.totalRounds}
+                </Text>
+              ) : null}
+              {showBump && runtime.lifecycle !== 'ready' ? (
+                <Text style={styles.round}>
+                  Rounds {runtime.completedRounds}
+                </Text>
+              ) : null}
+              <SevenSegmentDigits
+                value={renderedDigits}
+                color={digitColor}
+                fontSize={landscape ? 96 : 88}
+                paused={runtime.lifecycle === 'paused'}
+                accessibilityLabel={digits}
               />
-            </Pressable>
+              <Text style={[styles.phase, { color: digitColor }]}>
+                {runtime.lifecycle === 'ready'
+                  ? 'READY'
+                  : runtime.lifecycle === 'done'
+                    ? 'DONE'
+                    : runtime.lifecycle === 'paused'
+                      ? 'PAUSED'
+                      : phaseWord(display.segment?.phase)}
+              </Text>
+              {runtime.config.name ? (
+                <Text style={styles.name} numberOfLines={1}>
+                  {runtime.config.name}
+                </Text>
+              ) : null}
+            </View>
+            <View style={styles.icons}>
+              <Pressable
+                onPress={() => setMuted(!runtime.muted)}
+                hitSlop={12}
+                accessibilityLabel={runtime.muted ? 'Unmute' : 'Mute'}
+              >
+                <Ionicons
+                  name={runtime.muted ? 'volume-mute' : 'volume-high'}
+                  size={22}
+                  color={gymClock.controlsStrong}
+                />
+              </Pressable>
+            </View>
           </View>
-        </View>
-      </Pressable>
+        </Pressable>
 
-      {controlsVisible ? (
-        <View style={[styles.controls, { paddingBottom: Math.max(insets.bottom, 16) }]}>
-          {runtime.lifecycle === 'ready' ? (
-            <ControlButton label="Start" onPress={begin} primary />
-          ) : null}
-          {runtime.lifecycle === 'running' ||
-          runtime.lifecycle === 'lead_in' ? (
-            <ControlButton label="Pause" onPress={pause} />
-          ) : null}
-          {runtime.lifecycle === 'paused' ? (
-            <ControlButton label="Resume" onPress={resume} primary />
-          ) : null}
-          {showNext &&
-          (runtime.lifecycle === 'running' ||
-            runtime.lifecycle === 'paused') ? (
-            <ControlButton label="Next" onPress={advanceOpenSegment} primary />
-          ) : null}
-          {showBump &&
-          (runtime.lifecycle === 'running' ||
-            runtime.lifecycle === 'paused') ? (
-            <ControlButton label="+ Round" onPress={bumpRound} />
-          ) : null}
-          {runtime.lifecycle === 'done' ? (
-            <ControlButton label="Restart" onPress={reset} primary />
-          ) : null}
-          {runtime.lifecycle !== 'ready' ? (
-            <ControlButton label="Reset" onPress={reset} />
-          ) : null}
-          <ControlButton label="Minimise" onPress={minimise} />
-          <ControlButton label="Close" onPress={close} />
-        </View>
-      ) : null}
+        {controlsVisible ? (
+          <View
+            style={[
+              styles.controls,
+              {
+                paddingBottom: paintedLandscape
+                  ? 16
+                  : Math.max(insets.bottom, 16),
+              },
+            ]}
+          >
+            {runtime.lifecycle === 'ready' ? (
+              <ControlButton label="Start" onPress={begin} primary />
+            ) : null}
+            {runtime.lifecycle === 'running' ||
+            runtime.lifecycle === 'lead_in' ? (
+              <ControlButton label="Pause" onPress={pause} />
+            ) : null}
+            {runtime.lifecycle === 'paused' ? (
+              <ControlButton label="Resume" onPress={resume} primary />
+            ) : null}
+            {showNext &&
+            (runtime.lifecycle === 'running' ||
+              runtime.lifecycle === 'paused') ? (
+              <ControlButton
+                label="Next"
+                onPress={advanceOpenSegment}
+                primary
+              />
+            ) : null}
+            {showBump &&
+            (runtime.lifecycle === 'running' ||
+              runtime.lifecycle === 'paused') ? (
+              <ControlButton label="+ Round" onPress={bumpRound} />
+            ) : null}
+            {runtime.lifecycle === 'done' ? (
+              <ControlButton label="Restart" onPress={reset} primary />
+            ) : null}
+            {runtime.lifecycle !== 'ready' ? (
+              <ControlButton label="Reset" onPress={reset} />
+            ) : null}
+            <ControlButton
+              label={forceLandscape ? 'Portrait' : 'Landscape'}
+              onPress={() => setForceLandscape(!forceLandscape)}
+            />
+            <ControlButton label="Minimise" onPress={minimise} />
+            <ControlButton label="Close" onPress={close} />
+          </View>
+        ) : null}
+      </View>
     </View>
   );
 }
@@ -197,11 +248,15 @@ function ControlButton({
 }
 
 const styles = StyleSheet.create({
-  root: {
+  backdrop: {
     ...StyleSheet.absoluteFill,
     backgroundColor: gymClock.panel,
     zIndex: 1000,
   },
+  root: {
+    backgroundColor: gymClock.panel,
+  },
+  fill: { flex: 1 },
   flex: { flex: 1 },
   row: {
     flex: 1,
@@ -219,6 +274,9 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: gymClock.mode,
     letterSpacing: 2,
+  },
+  modeInline: {
+    marginBottom: 8,
   },
   center: {
     alignItems: 'center',

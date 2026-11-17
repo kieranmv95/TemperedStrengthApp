@@ -4,7 +4,6 @@ import { HeartRateZoneChip } from '@/src/components/zones/HeartRateZoneChip';
 import {
   color,
   elevation,
-  MIN_TARGET_SIZE,
   radius,
   space,
   typography,
@@ -141,15 +140,16 @@ export function ConditioningWorkoutBody({
               <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
             </View>
 
-            {timerConfig ? (
-              <StartGymTimerButton config={timerConfig} />
-            ) : null}
-
-            <BlockCompleteToggle
-              title={block.title}
-              isCompleted={isCompleted}
-              onPress={() => handleToggle(block.id)}
-            />
+            <View style={styles.blockActions}>
+              {timerConfig ? (
+                <StartGymTimerButton config={timerConfig} size="compact" />
+              ) : null}
+              <BlockCompleteToggle
+                title={block.title}
+                isCompleted={isCompleted}
+                onPress={() => handleToggle(block.id)}
+              />
+            </View>
 
             {block.hrZone ? (
               <HeartRateZoneChip zone={block.hrZone} ranges={zoneRanges} />
@@ -216,7 +216,7 @@ function BlockCompleteToggle({
     >
       <Ionicons
         name={isCompleted ? 'checkmark-circle' : 'ellipse-outline'}
-        size={18}
+        size={16}
         color={isCompleted ? color.success : color.textSecondary}
       />
       <Text
@@ -291,11 +291,13 @@ function ConditioningWarmupBlock({
         <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
       </Pressable>
 
-      <BlockCompleteToggle
-        title={block.title}
-        isCompleted={isCompleted}
-        onPress={onToggleComplete}
-      />
+      <View style={styles.blockActions}>
+        <BlockCompleteToggle
+          title={block.title}
+          isCompleted={isCompleted}
+          onPress={onToggleComplete}
+        />
+      </View>
 
       {isExpanded ? (
         <>
@@ -404,17 +406,22 @@ const styles = StyleSheet.create({
     ...typography.calloutStrong,
     color: color.textSecondary,
   },
+  blockActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: space.sm,
+  },
   blockInstructions: {
     ...typography.callout,
     color: color.textSecondary,
   },
   completeButton: {
-    alignSelf: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: space.xs,
-    minHeight: MIN_TARGET_SIZE,
-    paddingHorizontal: space.md,
+    gap: space.xxs,
+    minHeight: 40,
+    paddingHorizontal: space.sm,
     borderRadius: radius.pill,
     borderWidth: 1,
     borderColor: color.borderStrong,

@@ -178,6 +178,7 @@ describe('workouts screen browse', () => {
       'dbb_02',
       'dbb_03',
       'dbb_04',
+      'dbb_05',
     ]);
     expect(idsMatching('Girl Games')).toEqual(['gg_01', 'gg_02', 'gg_03']);
     expect(idsMatching('Rainhill')).toHaveLength(11);

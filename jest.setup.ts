@@ -33,7 +33,7 @@ jest.mock('expo-keep-awake', () => ({
 jest.mock('expo-screen-orientation', () => ({
   unlockAsync: jest.fn(() => Promise.resolve()),
   lockAsync: jest.fn(() => Promise.resolve()),
-  OrientationLock: { PORTRAIT_UP: 1 },
+  OrientationLock: { PORTRAIT_UP: 3, LANDSCAPE: 5 },
 }));
 
 jest.mock('expo-audio', () => ({

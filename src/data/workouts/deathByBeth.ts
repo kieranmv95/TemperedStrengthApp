@@ -3,13 +3,28 @@ import type { StandaloneWorkoutSource } from '@/src/types/workouts';
 const chooseYourWeight =
   'Choose your own weight. Death By Beth is for everyone, and we all move together.';
 
+const collab = {
+  image: require('@/assets/images/collabs/dbb_small.png'),
+  name: 'Death by Beth',
+  description:
+    "Fitness for everyone. No matter what level you're at, this will test you.",
+  link: 'https://www.instagram.com/coach_bethb/',
+  linkCopy: 'Check out Death by Beth here',
+  bgColor: '#39FF14',
+  linkAndBorderColor: '#39FF14',
+  nameColor: '#000000',
+  descriptionColor: '#000000',
+  inColabWithColor: '#000000',
+};
+
 export const deathByBeth: StandaloneWorkoutSource[] = [
   {
     id: 'dbb_01',
-    title: '10 x 10 x 10',
+    title: 'Same Ball',
     description:
       '10 rounds of 10 reps across 10 movements, with a 30 minute cap. A wallball for every station except the burpees. Can you finish it?',
     special: 'Death By Beth',
+    collab,
     estimatedTime: 30,
     disciplines: ['Metcon', 'Gymnastics'],
     bodyFocus: ['Full Body'],
@@ -28,14 +43,14 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
       },
       {
         name: 'For Time (30:00 Cap)',
-        instructions: `${chooseYourWeight} 10 rounds, in order. 10 reps of each movement. Wall to whiteboard is 1 shuttle rep. Score is your finish time, or the round and movement you reached if you hit the cap.`,
+        instructions: `${chooseYourWeight} 10 rounds, in order. 10 reps of each movement. 5 metres is 1 shuttle rep. Score is your finish time, or the round and movement you reached if you hit the cap.`,
         highlightInstructions: '10 rounds. 10 reps. 10 movements.',
         movements: [
           '10 Wallball Deadlifts',
           '10 Wallball Squat Cleans',
           '10 Wallball Shots',
           '10 Wallball Sit Ups',
-          '10 Wallball Shuttle Runs (wall to whiteboard is 1 rep)',
+          '10 Wallball Shuttle Runs (5 metres is 1 rep)',
           '10 Wallball Snatches',
           '10 Wallball Reverse Lunges',
           '10 Wallball Push Press',
@@ -48,10 +63,11 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
   },
   {
     id: 'dbb_02',
-    title: '7 Rounds',
+    title: 'Rising Devil',
     description:
       'A fast 30 minutes. Devil press builds inside each round, then snatches, thrusters, overhead lunges, and a run. How many rounds can you complete?',
     special: 'Death By Beth',
+    collab,
     estimatedTime: 30,
     disciplines: ['Metcon', 'Conditioning'],
     bodyFocus: ['Full Body'],
@@ -90,16 +106,17 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
   },
   {
     id: 'dbb_03',
-    title: 'Kettlebells',
+    title: 'Three Six Nine',
     description:
       '10 rounds of a six-move kettlebell complex. Every 3 minutes, stop for crawl outs, hand-release push-ups, and swings, then carry on.',
     special: 'Death By Beth',
+    collab,
     estimatedTime: 40,
     disciplines: ['Metcon'],
     bodyFocus: ['Full Body'],
     format: 'For Time',
     levels: ['Beginner', 'Intermediate', 'Advanced'],
-    isPremium: false,
+    isPremium: true,
     logSchema: {
       kind: 'duration',
       label: 'Finish time',
@@ -114,7 +131,7 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
         name: '10 Rounds For Time',
         instructions: `${chooseYourWeight} 10 rounds of the complex, in order. Every 3 minutes, stop and complete the triplet, then continue the round you were on. Score is your finish time.`,
         highlightInstructions:
-          'Every 3:00 — 3 crawl outs, 6 hand-release push-ups, 9 swings.',
+          'Every 3:00: 3 crawl outs, 6 hand-release push-ups, 9 swings.',
         movements: [
           { type: 'divider', note: '10 rounds' },
           '10 Deadlifts',
@@ -134,16 +151,17 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
   },
   {
     id: 'dbb_04',
-    title: 'Chipper with Ryan',
+    title: 'Over the Bell',
     description:
-      'Winter Advent workout 1. One dumbbell, or a water bottle. A descending chipper of snatches and jump overs, then a short burpee and sit-up finisher.',
+      'A descending chipper of snatches and jump overs, then a short burpee and sit-up finisher.',
     special: 'Death By Beth',
+    collab,
     estimatedTime: 30,
     disciplines: ['Metcon'],
     bodyFocus: ['Full Body'],
     format: 'Chipper',
     levels: ['Beginner', 'Intermediate', 'Advanced'],
-    isPremium: false,
+    isPremium: true,
     logSchema: {
       kind: 'duration',
       label: 'Finish time',
@@ -156,7 +174,7 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
       },
       {
         name: 'Chipper For Time',
-        instructions: `${chooseYourWeight} One dumbbell, or a water bottle. At each number, complete the snatches, then the jump overs, before dropping to the next number. 20 down to 2, counting by 2.`,
+        instructions: `${chooseYourWeight} At each number, complete the snatches, then the jump overs, before dropping to the next number. 20 down to 2, counting by 2.`,
         highlightInstructions: '20-18-16-14-12-10-8-6-4-2 of both.',
         movements: [
           '20 Dumbbell Snatches',
@@ -201,5 +219,85 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
       },
     ],
     equipment: ['dumbbell'],
+  },
+  {
+    id: 'dbb_05',
+    title: 'Trilogy',
+    description:
+      'Three pieces, back to back. Wall balls and sit ups descend from 50 to 10, with a run and a bike every round. Then a 12 minute dumbbell EMOM, and a barbell ladder down to 1.',
+    special: 'Death By Beth',
+    collab,
+    estimatedTime: 45,
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
+    isPremium: true,
+    logSchema: {
+      kind: 'duration',
+      label: 'Finish time',
+      lowerIsBetter: true,
+    },
+    timerConfig: {
+      v: 1,
+      type: 'FOR_TIME',
+      config: { capSec: 45 * 60 },
+    },
+    blocks: [
+      {
+        name: 'Warmup',
+        instructions: 'Warm up for a good 10 minutes before you start.',
+      },
+      {
+        name: 'Part A (15:00 Cap)',
+        instructions: `${chooseYourWeight} 5 rounds, descending. Wall balls and sit ups go 50, 40, 30, 20, 10. Every round, run 100m and bike 250m. Those stay the same. Move on at 15:00 if you are still going.`,
+        highlightInstructions:
+          '50-40-30-20-10 wall balls and sit ups. 100m run and 250m bike every round.',
+        movements: [
+          '50 Wall Balls',
+          '50 Sit Ups',
+          '100m Run',
+          '250m Bike',
+          '40 Wall Balls',
+          '40 Sit Ups',
+          '100m Run',
+          '250m Bike',
+          '30 Wall Balls',
+          '30 Sit Ups',
+          '100m Run',
+          '250m Bike',
+          '20 Wall Balls',
+          '20 Sit Ups',
+          '100m Run',
+          '250m Bike',
+          '10 Wall Balls',
+          '10 Sit Ups',
+          '100m Run',
+          '250m Bike',
+        ],
+      },
+      {
+        name: 'Part B (EMOM 12:00)',
+        instructions: `${chooseYourWeight} 4 rounds. Each round is 3 minutes, one station per minute. Start the next station at the top of the next minute.`,
+        highlightInstructions: 'Minute 1, minute 2, minute 3. Repeat 4 times.',
+        movements: [
+          'Minute 1: 10 Devil Press',
+          'Minute 2: 15 Dumbbell V-Reverse',
+          'Minute 3: 20 Dumbbell Overhead Lunges',
+        ],
+      },
+      {
+        name: 'Finisher (18:00 Cap)',
+        instructions: `${chooseYourWeight} 10 down to 1. At each number, complete the hang cleans, thrusters, burpees over the barbell, and bike calories before dropping to the next number. Move on at 18:00 if you are still going. Score is your total time across all three pieces.`,
+        highlightInstructions: '10-9-8-7-6-5-4-3-2-1 of each.',
+        movements: [
+          'Barbell Hang Cleans',
+          'Barbell Thrusters',
+          'Burpees over Barbell',
+          'Bike Calories',
+        ],
+      },
+    ],
+    equipment: ['medicine ball', 'dumbbell', 'barbell', 'bike'],
   },
 ];
