@@ -27,7 +27,15 @@ import type {
   RemoteSupplementRow,
   RemoteTrackedBehaviourRow,
 } from '@/src/db/domains/checkin/types';
+import { repairCheckinIdsForSync } from '@/src/db/domains/checkin/repairIds';
 import { getSupabaseClient } from '@/src/services/supabaseClient';
+import {
+  isPermanentSyncWriteError,
+  pushRows,
+  readAllPages,
+  requireSyncTimestamp,
+  coerceSyncTimestamp,
+} from '@/src/sync/syncWrite';
 import {
   CHECKIN_BEHAVIOUR_ENTRIES_TABLE,
   CHECKIN_SETTINGS_TABLE,
@@ -65,6 +73,8 @@ function parseSchedule(raw: string): RemoteSupplementRow['schedule'] {
 }
 
 export async function pushDirtyCheckin(userId: string): Promise<void> {
+  await repairCheckinIdsForSync();
+
   const client = getSupabaseClient();
   const healthOptIn = await isHealthSyncOptedIn();
 
@@ -91,16 +101,21 @@ export async function pushDirtyCheckin(userId: string): Promise<void> {
       lapse_pending: row.lapse_pending === 1,
       editable_behaviour_ids: editableBehaviourIds,
       editable_supplement_id: row.editable_supplement_id,
-      updated_at: row.updated_at,
+      updated_at: requireSyncTimestamp(row.updated_at),
     };
     const { error } = await client
       .from(CHECKIN_SETTINGS_TABLE)
       .upsert(payload, { onConflict: 'user_id' });
-    if (error) throw error;
-    await markCheckinSettingsClean();
+    if (error && !isPermanentSyncWriteError(error)) throw error;
+    if (error) {
+      console.error('Backup skipped check-in settings:', error);
+    } else {
+      await markCheckinSettingsClean();
+    }
   }
 
   const dirtyTracked = await listDirtyTrackedBehaviours();
+  // Sensitive rows stay dirty until the user opts in. Do not mark them clean.
   const trackedPayloads: RemoteTrackedBehaviourRow[] = dirtyTracked
     .filter((row) => healthOptIn || row.sensitive === 0)
     .map((row) => ({
@@ -109,28 +124,18 @@ export async function pushDirtyCheckin(userId: string): Promise<void> {
       behaviour_id: row.behaviour_id,
       sort_order: row.sort_order,
       sensitive: row.sensitive === 1,
-      updated_at: row.updated_at,
-      deleted_at: row.deleted_at,
+      updated_at: requireSyncTimestamp(row.updated_at),
+      deleted_at: coerceSyncTimestamp(row.deleted_at),
     }));
-  for (
-    let index = 0;
-    index < trackedPayloads.length;
-    index += CHECKIN_UPSERT_BATCH_SIZE
-  ) {
-    const batch = trackedPayloads.slice(
-      index,
-      index + CHECKIN_UPSERT_BATCH_SIZE
-    );
-    const { error } = await client
-      .from(CHECKIN_TRACKED_BEHAVIOURS_TABLE)
-      .upsert(batch, { onConflict: 'id' });
-    if (error) throw error;
-  }
-  if (trackedPayloads.length > 0) {
-    await markTrackedBehaviourRowsClean(trackedPayloads.map((r) => r.id));
-  }
-  // Mark non-synced sensitive dirty rows clean only locally? No — keep dirty so
-  // opt-in later pushes them. Do not mark sensitive dirty rows clean when skipped.
+  await pushRows({
+    table: CHECKIN_TRACKED_BEHAVIOURS_TABLE,
+    rows: trackedPayloads,
+    // Natural key, so a rewritten local id updates the existing cloud row.
+    onConflict: 'user_id,behaviour_id',
+    idOf: (row) => row.id,
+    batchSize: CHECKIN_UPSERT_BATCH_SIZE,
+    markClean: markTrackedBehaviourRowsClean,
+  });
 
   const dirtyEntries = await listDirtyBehaviourEntries();
   const entryPayloads: RemoteBehaviourEntryRow[] = dirtyEntries
@@ -141,26 +146,20 @@ export async function pushDirtyCheckin(userId: string): Promise<void> {
       local_date: row.local_date,
       behaviour_id: row.behaviour_id,
       value: parseEntryValue(row.value),
-      logged_at: row.logged_at,
+      logged_at: requireSyncTimestamp(row.logged_at),
       source: row.source,
       sensitive: row.sensitive === 1,
-      updated_at: row.updated_at,
-      deleted_at: row.deleted_at,
+      updated_at: requireSyncTimestamp(row.updated_at),
+      deleted_at: coerceSyncTimestamp(row.deleted_at),
     }));
-  for (
-    let index = 0;
-    index < entryPayloads.length;
-    index += CHECKIN_UPSERT_BATCH_SIZE
-  ) {
-    const batch = entryPayloads.slice(index, index + CHECKIN_UPSERT_BATCH_SIZE);
-    const { error } = await client
-      .from(CHECKIN_BEHAVIOUR_ENTRIES_TABLE)
-      .upsert(batch, { onConflict: 'id' });
-    if (error) throw error;
-  }
-  if (entryPayloads.length > 0) {
-    await markBehaviourEntryRowsClean(entryPayloads.map((r) => r.id));
-  }
+  await pushRows({
+    table: CHECKIN_BEHAVIOUR_ENTRIES_TABLE,
+    rows: entryPayloads,
+    onConflict: 'user_id,local_date,behaviour_id',
+    idOf: (row) => row.id,
+    batchSize: CHECKIN_UPSERT_BATCH_SIZE,
+    markClean: markBehaviourEntryRowsClean,
+  });
 
   const dirtySupplements = await listDirtySupplements();
   const supplementPayloads: RemoteSupplementRow[] = dirtySupplements.map(
@@ -176,28 +175,19 @@ export async function pushDirtyCheckin(userId: string): Promise<void> {
       schedule: parseSchedule(row.schedule),
       reminders_enabled: row.reminders_enabled === 1,
       status: row.status,
-      created_at: row.created_at,
-      updated_at: row.updated_at,
-      deleted_at: row.deleted_at,
+      created_at: requireSyncTimestamp(row.created_at),
+      updated_at: requireSyncTimestamp(row.updated_at),
+      deleted_at: coerceSyncTimestamp(row.deleted_at),
     })
   );
-  for (
-    let index = 0;
-    index < supplementPayloads.length;
-    index += CHECKIN_UPSERT_BATCH_SIZE
-  ) {
-    const batch = supplementPayloads.slice(
-      index,
-      index + CHECKIN_UPSERT_BATCH_SIZE
-    );
-    const { error } = await client
-      .from(CHECKIN_SUPPLEMENTS_TABLE)
-      .upsert(batch, { onConflict: 'id' });
-    if (error) throw error;
-  }
-  if (supplementPayloads.length > 0) {
-    await markSupplementRowsClean(supplementPayloads.map((r) => r.id));
-  }
+  await pushRows({
+    table: CHECKIN_SUPPLEMENTS_TABLE,
+    rows: supplementPayloads,
+    onConflict: 'id',
+    idOf: (row) => row.id,
+    batchSize: CHECKIN_UPSERT_BATCH_SIZE,
+    markClean: markSupplementRowsClean,
+  });
 
   const dirtyLogs = await listDirtySupplementLogs();
   const logPayloads: RemoteSupplementLogRow[] = dirtyLogs.map((row) => ({
@@ -207,24 +197,18 @@ export async function pushDirtyCheckin(userId: string): Promise<void> {
     supplement_id: row.supplement_id,
     scheduled_time: row.scheduled_time,
     status: row.status,
-    actioned_at: row.actioned_at,
-    updated_at: row.updated_at,
-    deleted_at: row.deleted_at,
+    actioned_at: requireSyncTimestamp(row.actioned_at),
+    updated_at: requireSyncTimestamp(row.updated_at),
+    deleted_at: coerceSyncTimestamp(row.deleted_at),
   }));
-  for (
-    let index = 0;
-    index < logPayloads.length;
-    index += CHECKIN_UPSERT_BATCH_SIZE
-  ) {
-    const batch = logPayloads.slice(index, index + CHECKIN_UPSERT_BATCH_SIZE);
-    const { error } = await client
-      .from(CHECKIN_SUPPLEMENT_LOGS_TABLE)
-      .upsert(batch, { onConflict: 'id' });
-    if (error) throw error;
-  }
-  if (logPayloads.length > 0) {
-    await markSupplementLogRowsClean(logPayloads.map((r) => r.id));
-  }
+  await pushRows({
+    table: CHECKIN_SUPPLEMENT_LOGS_TABLE,
+    rows: logPayloads,
+    onConflict: 'user_id,local_date,supplement_id,scheduled_time',
+    idOf: (row) => row.id,
+    batchSize: CHECKIN_UPSERT_BATCH_SIZE,
+    markClean: markSupplementLogRowsClean,
+  });
 }
 
 async function pullTable<T extends { updated_at: string }>(input: {
@@ -240,24 +224,29 @@ async function pullTable<T extends { updated_at: string }>(input: {
     ? EPOCH
     : ((await getCheckinLastRowSyncedAt(input.table)) ?? EPOCH);
 
-  let query = getSupabaseClient()
-    .from(input.table)
-    .select(input.select)
-    .eq('user_id', input.userId)
-    .gt('updated_at', lastSyncedAt)
-    .order('updated_at', { ascending: true });
+  const rows = await readAllPages<T>((from, to) => {
+    let query = getSupabaseClient()
+      .from(input.table)
+      .select(input.select)
+      .eq('user_id', input.userId)
+      .gt('updated_at', lastSyncedAt)
+      .order('updated_at', { ascending: true });
+    if (input.filterSensitive && !input.healthOptIn) {
+      query = query.eq('sensitive', false);
+    }
+    return query.range(from, to);
+  });
 
-  if (input.filterSensitive && !input.healthOptIn) {
-    query = query.eq('sensitive', false);
-  }
-
-  const { data, error } = await query;
-  if (error) throw error;
-
-  const rows = (data ?? []) as unknown as T[];
   let newest = lastSyncedAt;
   for (const row of rows) {
-    await input.apply(row);
+    try {
+      await input.apply(row);
+    } catch (error) {
+      console.error(
+        `Skipping ${input.table} row that could not be saved locally:`,
+        error
+      );
+    }
     if (row.updated_at > newest) {
       newest = row.updated_at;
     }

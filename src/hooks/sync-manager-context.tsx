@@ -26,7 +26,6 @@ import {
   migrateLocalDataToSupabase,
   pullChanges,
   remoteDataExists,
-  SyncPayloadTooLargeError,
   syncNow as runSync,
 } from '@/src/sync/syncEngine';
 import { ensurePersonalBestsCloudMigrated } from '@/src/sync/domains/personalBests';
@@ -52,7 +51,7 @@ type SyncContextValue = {
     email: string,
     token: string,
     intent: AccountIntent
-  ) => Promise<{ restored: boolean }>;
+  ) => Promise<{ restored: boolean; backupError: string | null }>;
   signOut: () => Promise<void>;
   deleteAccount: () => Promise<void>;
 };
@@ -66,6 +65,22 @@ export class AccountRestoreEmptyError extends Error {
     );
     this.name = 'AccountRestoreEmptyError';
   }
+}
+
+function errorMessage(error: unknown, fallback: string): string {
+  if (error instanceof Error && error.message.trim().length > 0) {
+    return error.message;
+  }
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    typeof error.message === 'string' &&
+    error.message.trim().length > 0
+  ) {
+    return error.message;
+  }
+  return fallback;
 }
 
 const SyncContext = createContext<SyncContextValue | null>(null);
@@ -193,7 +208,7 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
       email: string,
       token: string,
       intent: AccountIntent
-    ): Promise<{ restored: boolean }> => {
+    ): Promise<{ restored: boolean; backupError: string | null }> => {
       const client = getSupabaseClient();
       const { data, error } = await client.auth.verifyOtp({
         email: email.trim().toLowerCase(),
@@ -208,6 +223,22 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
       sessionRef.current = data.session;
       setSession(data.session);
       const userId = data.user.id;
+
+      const keepSessionWithBackupError = async (
+        backupFailure: unknown,
+        restored: boolean
+      ): Promise<{ restored: boolean; backupError: string }> => {
+        try {
+          await setAccountActive(userId);
+        } catch (activeError) {
+          console.error('Failed to mark account active:', activeError);
+        }
+        const message = errorMessage(backupFailure, 'Account backup failed.');
+        setSyncError(message);
+        console.error('Account backup failed after sign-in:', backupFailure);
+        return { restored, backupError: message };
+      };
+
       try {
         const previousUserId = await getActiveAccountUserId();
         const hasRemoteData = await remoteDataExists(userId);
@@ -222,16 +253,15 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
           }
           await setAccountActive(userId);
           if (previousUserId === userId) {
+            // Sign-out keeps the user id, so this device still has its data.
+            // Pushing it must not undo a code Supabase already accepted.
             await enqueueCurrentLocalData();
             try {
               await runSync(userId);
               setSyncError(null);
             } catch (syncFailure) {
-              if (syncFailure instanceof SyncPayloadTooLargeError) {
-                setSyncError(syncFailure.message);
-              } else {
-                throw syncFailure;
-              }
+              markLocalDataUpdated();
+              return keepSessionWithBackupError(syncFailure, true);
             }
           } else {
             await pullChanges(userId, { full: true });
@@ -240,7 +270,7 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
             await ensureWorkoutLogsCloudMigrated(userId);
           }
           markLocalDataUpdated();
-          return { restored: true };
+          return { restored: true, backupError: null };
         }
 
         await migrateLocalDataToSupabase(userId);
@@ -248,23 +278,48 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
         await pullChanges(userId, { full: true });
         setSyncError(null);
         markLocalDataUpdated();
-        return { restored: false };
+        return { restored: false, backupError: null };
       } catch (finalizeError) {
-        await client.auth.signOut();
-        sessionRef.current = null;
-        setSession(null);
-        await clearAccountActive();
-        throw finalizeError;
+        if (finalizeError instanceof AccountRestoreEmptyError) {
+          await client.auth
+            .signOut({ scope: 'local' })
+            .catch((signOutError) => {
+              console.error(
+                'Failed to roll back empty restore session:',
+                signOutError
+              );
+            });
+          sessionRef.current = null;
+          setSession(null);
+          await clearAccountActive();
+          throw finalizeError;
+        }
+        return keepSessionWithBackupError(finalizeError, false);
       }
     },
     [markLocalDataUpdated]
   );
 
   const signOut = useCallback(async (): Promise<void> => {
-    const { error } = await getSupabaseClient().auth.signOut();
-    if (error) throw error;
+    const client = getSupabaseClient();
+    try {
+      const { error } = await client.auth.signOut();
+      if (error) {
+        // A dead refresh token can fail the global revoke after the local
+        // session is already gone. Drop it locally so sign-in can start clean.
+        await client.auth.signOut({ scope: 'local' });
+      }
+    } catch (signOutError) {
+      console.error('Failed to sign out:', signOutError);
+      try {
+        await client.auth.signOut({ scope: 'local' });
+      } catch (localError) {
+        console.error('Failed to clear local session:', localError);
+      }
+    }
     sessionRef.current = null;
     setSession(null);
+    setSyncError(null);
     await clearAccountActive();
   }, []);
 

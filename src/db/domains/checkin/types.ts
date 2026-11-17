@@ -9,6 +9,7 @@ import type {
   SupplementSchedule,
   SupplementStatus,
 } from '@/src/types/supplements';
+import { createUuid } from '@/src/utils/uuid';
 
 export const CHECKIN_DOMAIN = 'checkin';
 
@@ -178,9 +179,5 @@ export function settingsRowToApp(
 }
 
 export function newCheckinId(): string {
-  const c = globalThis.crypto;
-  if (c && typeof c.randomUUID === 'function') {
-    return c.randomUUID();
-  }
-  return `checkin_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+  return createUuid();
 }

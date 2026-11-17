@@ -31,6 +31,13 @@ import {
   pushDirtyCheckin,
 } from './domains/checkin';
 import { shouldSync, SYNCED_KEYS } from './syncedKeys';
+import {
+  isQuarantined,
+  quarantineKey,
+  readAllPages,
+  requireSyncTimestamp,
+  upsertUntilAccepted,
+} from './syncWrite';
 
 const EPOCH = '1970-01-01T00:00:00.000Z';
 export const MAX_SYNC_VALUE_BYTES = 500_000;
@@ -188,39 +195,63 @@ export async function pushQueue(userId: string): Promise<string[]> {
   const pushedOperations = queue.filter(
     (operation) => !oversizedOperations.includes(operation)
   );
-  const rows = pushedOperations.map((operation) => {
-    return {
-      user_id: userId,
-      key: operation.key,
-      // Values are stored as the exact AsyncStorage string inside jsonb. This
-      // preserves both raw strings ("kg") and serialized objects losslessly.
-      value: operation.value ?? '',
-      updated_at: operation.updatedAt,
-      deleted_at: operation.op === 'delete' ? operation.updatedAt : null,
-    };
+  const queuedAtByKey = new Map<string, string>();
+  const rows = pushedOperations.flatMap((operation) => {
+    if (isQuarantined(`kv:${operation.key}`)) return [];
+    const updatedAt = requireSyncTimestamp(operation.updatedAt);
+    queuedAtByKey.set(operation.key, operation.updatedAt);
+    return [
+      {
+        user_id: userId,
+        key: operation.key,
+        // Values are stored as the exact AsyncStorage string inside jsonb. This
+        // preserves both raw strings ("kg") and serialized objects losslessly.
+        value: operation.value ?? '',
+        updated_at: updatedAt,
+        deleted_at: operation.op === 'delete' ? updatedAt : null,
+      },
+    ];
   });
 
   const client = getSupabaseClient();
-  for (let index = 0; index < rows.length; index += UPSERT_BATCH_SIZE) {
-    const batch = rows.slice(index, index + UPSERT_BATCH_SIZE);
-    const { error } = await client
-      .from('user_kv_store')
-      .upsert(batch, { onConflict: 'user_id,key' });
-    if (error) throw error;
+  const acceptedAt = new Map<string, string>();
+  let pushFailure: unknown = null;
+  try {
+    for (let index = 0; index < rows.length; index += UPSERT_BATCH_SIZE) {
+      const batch = rows.slice(index, index + UPSERT_BATCH_SIZE);
+      const result = await upsertUntilAccepted(
+        batch,
+        async (slice) => {
+          const { error } = await client
+            .from('user_kv_store')
+            .upsert(slice, { onConflict: 'user_id,key' });
+          return { error };
+        },
+        (row) => row.key
+      );
+      for (const key of result.acceptedIds) {
+        const queuedAt = queuedAtByKey.get(key);
+        if (queuedAt) acceptedAt.set(key, queuedAt);
+      }
+      for (const rejected of result.rejected) {
+        quarantineKey(`kv:${rejected.id}`);
+        console.error(`Backup skipped "${rejected.id}": ${rejected.message}`);
+      }
+    }
+  } catch (error) {
+    pushFailure = error;
   }
 
   const clearPushed = queueChain.then(async () => {
     const current = parseQueue(await AsyncStorage.getItem(SYNC_QUEUE_KEY));
-    const pushed = new Map(
-      pushedOperations.map((item) => [item.key, item.updatedAt])
-    );
     const remaining = current.filter(
-      (item) => pushed.get(item.key) !== item.updatedAt
+      (item) => acceptedAt.get(item.key) !== item.updatedAt
     );
     await AsyncStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify(remaining));
   });
   queueChain = clearPushed.catch(() => undefined);
   await clearPushed;
+  if (pushFailure) throw pushFailure;
   return oversizedOperations.map((operation) => operation.key);
 }
 
@@ -232,15 +263,15 @@ export async function pullChanges(
     ? EPOCH
     : ((await AsyncStorage.getItem(LAST_SYNCED_AT_KEY)) ?? EPOCH);
 
-  const { data, error } = await getSupabaseClient()
-    .from('user_kv_store')
-    .select('key,value,updated_at,deleted_at')
-    .eq('user_id', userId)
-    .gt('updated_at', lastSyncedAt)
-    .order('updated_at', { ascending: true });
-
-  if (error) throw error;
-  const rows = (data ?? []) as RemoteRow[];
+  const rows = await readAllPages<RemoteRow>((from, to) =>
+    getSupabaseClient()
+      .from('user_kv_store')
+      .select('key,value,updated_at,deleted_at')
+      .eq('user_id', userId)
+      .gt('updated_at', lastSyncedAt)
+      .order('updated_at', { ascending: true })
+      .range(from, to)
+  );
   let newestTimestamp = lastSyncedAt;
 
   for (const row of rows) {
@@ -250,12 +281,16 @@ export async function pullChanges(
     );
     if (localUpdatedAt && localUpdatedAt >= row.updated_at) continue;
 
-    if (row.deleted_at) {
-      await AsyncStorage.removeItem(row.key);
-    } else {
-      await AsyncStorage.setItem(row.key, serializeRemoteValue(row.value));
+    try {
+      if (row.deleted_at) {
+        await AsyncStorage.removeItem(row.key);
+      } else {
+        await AsyncStorage.setItem(row.key, serializeRemoteValue(row.value));
+      }
+      await AsyncStorage.setItem(`${SYNC_TS_PREFIX}${row.key}`, row.updated_at);
+    } catch (error) {
+      console.error(`Skipping backup key "${row.key}":`, error);
     }
-    await AsyncStorage.setItem(`${SYNC_TS_PREFIX}${row.key}`, row.updated_at);
     if (row.updated_at > newestTimestamp) newestTimestamp = row.updated_at;
   }
 
@@ -268,48 +303,94 @@ export async function pullChanges(
   }
 }
 
+async function runSyncStep(
+  label: string,
+  step: () => Promise<void>,
+  failures: unknown[]
+): Promise<void> {
+  try {
+    await step();
+  } catch (error) {
+    console.error(label, error);
+    failures.push(error);
+  }
+}
+
 export async function syncNow(userId: string): Promise<void> {
   if (syncInFlight) return syncInFlight;
   syncInFlight = (async () => {
-    // Structured domains must not block each other (or the KV queue).
-    const domainErrors: unknown[] = [];
+    const { error: sessionError } = await getSupabaseClient().auth.getSession();
+    if (sessionError) {
+      console.error(
+        'Account session refresh failed before backup:',
+        sessionError
+      );
+    }
 
-    for (const step of [
+    // Each step is isolated. A bad check-in row must not block workout logs,
+    // and a failed push must not skip the pull.
+    const failures: unknown[] = [];
+
+    await runSyncStep(
+      'Personal bests cloud migration failed:',
       () => ensurePersonalBestsCloudMigrated(userId),
+      failures
+    );
+    await runSyncStep(
+      'Workout logs cloud migration failed:',
       () => ensureWorkoutLogsCloudMigrated(userId),
+      failures
+    );
+    await runSyncStep(
+      'Personal bests push failed:',
       () => pushDirtyPersonalBests(userId),
+      failures
+    );
+    await runSyncStep(
+      'Workout logs push failed:',
       () => pushDirtyWorkoutLogs(userId),
+      failures
+    );
+    await runSyncStep(
+      'Check-in push failed:',
       () => pushDirtyCheckin(userId),
-    ]) {
-      try {
-        await step();
-      } catch (error) {
-        console.error('Structured domain sync step failed:', error);
-        domainErrors.push(error);
-      }
+      failures
+    );
+
+    let oversizedKeys: string[] = [];
+    try {
+      oversizedKeys = await pushQueue(userId);
+    } catch (error) {
+      console.error('Backup queue push failed:', error);
+      failures.push(error);
     }
 
-    const oversizedKeys = await pushQueue(userId);
-    await pullChanges(userId);
-
-    for (const step of [
+    await runSyncStep(
+      'Backup pull failed:',
+      () => pullChanges(userId),
+      failures
+    );
+    await runSyncStep(
+      'Personal bests pull failed:',
       () => pullPersonalBestChanges(userId),
+      failures
+    );
+    await runSyncStep(
+      'Workout logs pull failed:',
       () => pullWorkoutLogChanges(userId),
+      failures
+    );
+    await runSyncStep(
+      'Check-in pull failed:',
       () => pullCheckinChanges(userId),
-    ]) {
-      try {
-        await step();
-      } catch (error) {
-        console.error('Structured domain pull step failed:', error);
-        domainErrors.push(error);
-      }
-    }
+      failures
+    );
 
+    if (failures.length > 0) {
+      throw failures[0];
+    }
     if (oversizedKeys.length > 0) {
       throw new SyncPayloadTooLargeError(oversizedKeys);
-    }
-    if (domainErrors.length > 0) {
-      throw domainErrors[0];
     }
   })();
   try {
@@ -319,55 +400,68 @@ export async function syncNow(userId: string): Promise<void> {
   }
 }
 
+async function tableHasRow(
+  query: PromiseLike<{ data: unknown[] | null; error: unknown }>
+): Promise<boolean> {
+  const { data, error } = await query;
+  if (error) throw error;
+  return (data?.length ?? 0) > 0;
+}
+
 export async function remoteDataExists(userId: string): Promise<boolean> {
   const client = getSupabaseClient();
-  const { data, error } = await client
-    .from('user_kv_store')
-    .select('id')
-    .eq('user_id', userId)
-    .limit(1);
-  if (error) throw error;
-  if ((data?.length ?? 0) > 0) {
-    return true;
-  }
+  const probes = [
+    () =>
+      tableHasRow(
+        client.from('user_kv_store').select('id').eq('user_id', userId).limit(1)
+      ),
+    () =>
+      tableHasRow(
+        client
+          .from(PERSONAL_BEST_ENTRIES_TABLE)
+          .select('id')
+          .eq('user_id', userId)
+          .limit(1)
+      ),
+    () =>
+      tableHasRow(
+        client
+          .from(WORKOUT_LOG_SETS_TABLE)
+          .select('id')
+          .eq('user_id', userId)
+          .limit(1)
+      ),
+    () =>
+      tableHasRow(
+        client
+          .from(CHECKIN_SETTINGS_TABLE)
+          .select('user_id')
+          .eq('user_id', userId)
+          .limit(1)
+      ),
+    () =>
+      tableHasRow(
+        client
+          .from(CHECKIN_BEHAVIOUR_ENTRIES_TABLE)
+          .select('id')
+          .eq('user_id', userId)
+          .limit(1)
+      ),
+  ];
 
-  const { data: pbRows, error: pbError } = await client
-    .from(PERSONAL_BEST_ENTRIES_TABLE)
-    .select('id')
-    .eq('user_id', userId)
-    .limit(1);
-  if (pbError) throw pbError;
-  if ((pbRows?.length ?? 0) > 0) {
-    return true;
+  const failures: unknown[] = [];
+  for (const probe of probes) {
+    try {
+      if (await probe()) return true;
+    } catch (error) {
+      console.error('Backup lookup failed for one table:', error);
+      failures.push(error);
+    }
   }
-
-  const { data: wlRows, error: wlError } = await client
-    .from(WORKOUT_LOG_SETS_TABLE)
-    .select('id')
-    .eq('user_id', userId)
-    .limit(1);
-  if (wlError) throw wlError;
-  if ((wlRows?.length ?? 0) > 0) {
-    return true;
+  if (failures.length === probes.length) {
+    throw failures[0];
   }
-
-  const { data: checkinRows, error: checkinError } = await client
-    .from(CHECKIN_SETTINGS_TABLE)
-    .select('user_id')
-    .eq('user_id', userId)
-    .limit(1);
-  if (checkinError) throw checkinError;
-  if ((checkinRows?.length ?? 0) > 0) {
-    return true;
-  }
-
-  const { data: checkinEntryRows, error: checkinEntryError } = await client
-    .from(CHECKIN_BEHAVIOUR_ENTRIES_TABLE)
-    .select('id')
-    .eq('user_id', userId)
-    .limit(1);
-  if (checkinEntryError) throw checkinEntryError;
-  return (checkinEntryRows?.length ?? 0) > 0;
+  return false;
 }
 
 export async function migrateLocalDataToSupabase(
@@ -381,11 +475,9 @@ export async function migrateLocalDataToSupabase(
     reportKvSizeWarningIfNeeded(key, value, 'migrate');
     return isSyncValueTooLarge(value) ? [key] : [];
   });
-  if (oversizedKeys.length > 0) {
-    throw new SyncPayloadTooLargeError(oversizedKeys);
-  }
+  const oversizedKeySet = new Set(oversizedKeys);
   const rows = entries.flatMap(([key, value]) => {
-    if (value === null) return [];
+    if (value === null || oversizedKeySet.has(key)) return [];
     return [
       {
         user_id: userId,
@@ -398,28 +490,50 @@ export async function migrateLocalDataToSupabase(
   });
 
   const client = getSupabaseClient();
+  const acceptedKeys = new Set<string>();
   for (let index = 0; index < rows.length; index += UPSERT_BATCH_SIZE) {
     const batch = rows.slice(index, index + UPSERT_BATCH_SIZE);
-    const { error } = await client
-      .from('user_kv_store')
-      .upsert(batch, { onConflict: 'user_id,key' });
-    if (error) throw error;
+    const result = await upsertUntilAccepted(
+      batch,
+      async (slice) => {
+        const { error } = await client
+          .from('user_kv_store')
+          .upsert(slice, { onConflict: 'user_id,key' });
+        return { error };
+      },
+      (row) => row.key
+    );
+    for (const key of result.acceptedIds) acceptedKeys.add(key);
+    for (const rejected of result.rejected) {
+      quarantineKey(`kv:${rejected.id}`);
+      console.error(
+        `Backup skipped "${rejected.id}" during account setup: ${rejected.message}`
+      );
+    }
   }
 
   const timestampEntries = entries
-    .filter(([, value]) => value !== null)
+    .filter(([key, value]) => value !== null && acceptedKeys.has(key))
     .map(
       ([key]) => [`${SYNC_TS_PREFIX}${key}`, migratedAt] as [string, string]
     );
   if (timestampEntries.length > 0) {
     await AsyncStorage.multiSet(timestampEntries);
   }
-  await AsyncStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify([]));
+  const queued = parseQueue(await AsyncStorage.getItem(SYNC_QUEUE_KEY));
+  await AsyncStorage.setItem(
+    SYNC_QUEUE_KEY,
+    JSON.stringify(queued.filter((item) => !acceptedKeys.has(item.key)))
+  );
   await AsyncStorage.setItem(LAST_SYNCED_AT_KEY, migratedAt);
 
   // Structured domains (not KV blobs).
   await ensurePersonalBestsCloudMigrated(userId);
   await ensureWorkoutLogsCloudMigrated(userId);
+
+  if (oversizedKeys.length > 0) {
+    throw new SyncPayloadTooLargeError(oversizedKeys);
+  }
 }
 
 export async function enqueueCurrentLocalData(): Promise<void> {
