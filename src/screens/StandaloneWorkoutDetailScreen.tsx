@@ -1,3 +1,4 @@
+import { CopyrightedContentGuard } from '@/src/components/copyright/CopyrightedContentGuard';
 import { StandardLayout } from '@/src/components/ds';
 import { TemperedDailyLockedUpsell } from '@/src/components/temperedDaily/TemperedDailyLockedUpsell';
 import { WorkoutDetailScrollContent } from '@/src/components/workouts/WorkoutDetailScrollContent';
@@ -219,10 +220,13 @@ export default function StandaloneWorkoutDetailScreen() {
             </Pressable>
           </View>
         ) : (
-          <WorkoutDetailScrollContent
-            workout={workout}
-            zoneRanges={zoneRanges}
-          />
+          <>
+            <WorkoutDetailScrollContent
+              workout={workout}
+              zoneRanges={zoneRanges}
+            />
+            {workout.isPremium ? <CopyrightedContentGuard active /> : null}
+          </>
         )}
       </StandardLayout.Body>
     </StandardLayout>

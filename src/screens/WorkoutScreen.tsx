@@ -1,4 +1,5 @@
 import { CopyWorkoutNotesModal } from '@/src/components/CopyWorkoutNotesModal';
+import { CopyrightedContentGuard } from '@/src/components/copyright/CopyrightedContentGuard';
 import { DaySelector } from '@/src/components/DaySelector';
 import { IntensityLevelsModal } from '@/src/components/IntensityLevelsModal';
 import { MoveSessionModal } from '@/src/components/MoveSessionModal';
@@ -295,6 +296,8 @@ export const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
           </View>
         </View>
       )}
+
+      {c.program?.isPro ? <CopyrightedContentGuard active /> : null}
 
       {c.notesActive && c.keyboardHeight > 0 && (
         <View

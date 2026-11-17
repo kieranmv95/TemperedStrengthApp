@@ -1,3 +1,4 @@
+import { COPYRIGHT_OVERLAY_BACKGROUND } from '@/src/components/copyright/CopyrightedContentGuard';
 import {
   ZONE_COLORS,
   ZONE_TILE_FOREGROUND,
@@ -51,6 +52,18 @@ const PAIRS: ContrastPair[] = [
   ...onEverySurface('textPrimary', color.textPrimary, 'text'),
   ...onEverySurface('textSecondary', color.textSecondary, 'text'),
   ...onEverySurface('textTertiary', color.textTertiary, 'text'),
+  {
+    name: 'textPrimary on copyright overlay',
+    foreground: color.textPrimary,
+    background: COPYRIGHT_OVERLAY_BACKGROUND,
+    kind: 'text',
+  },
+  {
+    name: 'textSecondary on copyright overlay',
+    foreground: color.textSecondary,
+    background: COPYRIGHT_OVERLAY_BACKGROUND,
+    kind: 'text',
+  },
 
   // Gold accent text and icons
   ...onEverySurface('gold', color.gold, 'text'),
