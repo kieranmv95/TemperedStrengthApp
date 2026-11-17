@@ -7,7 +7,7 @@ const collab = {
   image: require('@/assets/images/collabs/dbb_small.png'),
   name: 'Death by Beth',
   description:
-    "Fitness for everyone. No matter what level you're at, this will test you.",
+    'A high-energy, all-level workout to push your limits – choose your weights and survive! Not for the faint-hearted! ☠️',
   link: 'https://www.instagram.com/coach_bethb/',
   linkCopy: 'Check out Death by Beth here',
   bgColor: '#39FF14',
@@ -18,6 +18,50 @@ const collab = {
 };
 
 export const deathByBeth: StandaloneWorkoutSource[] = [
+  {
+    id: 'dbb_06',
+    title: '7 Deadly Sins',
+    description:
+      '10 stations of 7. Every station is the movement, then 7 calories on the bike and 7 on the rower. 30 minute cap.',
+    special: 'Death By Beth',
+    collab,
+    estimatedTime: 30,
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
+    isPremium: false,
+    logSchema: {
+      kind: 'duration',
+      label: 'Finish time',
+      lowerIsBetter: true,
+    },
+    blocks: [
+      {
+        name: 'Warmup',
+        instructions: 'Warm up for a good 10 minutes before you start.',
+      },
+      {
+        name: 'For Time (30:00 Cap)',
+        instructions: `${chooseYourWeight} 10 stations, in order. Each station is 7 reps, then 7 calories on the bike and 7 calories on the rower. Score is your finish time, or the station you reached if you hit the cap.`,
+        highlightInstructions:
+          'Every station: 7 reps, 7 calorie bike, 7 calorie row.',
+        movements: [
+          '7 Burpees, 7 cal bike, 7 cal row',
+          '7 KB Swings, 7 cal bike, 7 cal row',
+          '7 Hand-Release Push-Ups, 7 cal bike, 7 cal row',
+          '7 KB Sumo Deadlift High Pulls, 7 cal bike, 7 cal row',
+          '7 Air Squats, 7 cal bike, 7 cal row',
+          '7 KB Thrusters, 7 cal bike, 7 cal row',
+          '7 Reverse Lunges, 7 cal bike, 7 cal row',
+          '7 Ab-Mat Sit Ups, 7 cal bike, 7 cal row',
+          '7 Goblet Squats, 7 cal bike, 7 cal row',
+          '7 Down Ups, 7 cal bike, 7 cal row',
+        ],
+      },
+    ],
+    equipment: ['kettlebell', 'bike', 'rower'],
+  },
   {
     id: 'dbb_01',
     title: 'Same Ball',
@@ -139,7 +183,7 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
           '10 Cleans',
           '10 Snatches',
           '10 Goblet Squats',
-          '10 Presses',
+          '10 Push Presses',
           { type: 'divider', note: 'Every 3 minutes' },
           '3 Crawl Outs',
           '6 Hand-Release Push-Ups',
@@ -282,7 +326,7 @@ export const deathByBeth: StandaloneWorkoutSource[] = [
         highlightInstructions: 'Minute 1, minute 2, minute 3. Repeat 4 times.',
         movements: [
           'Minute 1: 10 Devil Press',
-          'Minute 2: 15 Dumbbell V-Reverse',
+          'Minute 2: 15 Dumbbell Reverse Lunges',
           'Minute 3: 20 Dumbbell Overhead Lunges',
         ],
       },

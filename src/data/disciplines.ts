@@ -108,7 +108,7 @@ export const disciplines: Discipline[] = [
     },
     image: require('@/assets/images/disciplines/deathbybeth.png'),
     description:
-      "Fitness for everyone. No matter what level you're at, this will test you.",
+      'High-energy, all-level workouts to push your limits – choose your weights and survive! Not for the faint-hearted! ☠️',
     link: 'https://www.instagram.com/coach_bethb/',
     linkLabel: 'Check out Death by Beth here',
     theme: {
