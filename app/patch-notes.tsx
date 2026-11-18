@@ -21,12 +21,6 @@ const PATCH_NOTES: PatchNote[] = [
       'Heart rate zones, with basic and advanced (Karvonen) calculations',
       'Connect Apple Health or Health Connect to pull in your resting heart rate',
       'Zone workouts now show your bpm range for the zone',
-    ],
-  },
-  {
-    version: '3.4.0',
-    dateLabel: '13th November 2026',
-    notes: [
       'Death By Beth workouts',
       'Events and disciplines now have their own sections on the workouts screen',
       'New disciplines: Metcon, Gymnastics and more, and a workout can have several',
