@@ -22,7 +22,7 @@ function scaleNames(workout: SingleWorkout): string[] {
 
 describe('workout metadata rules', () => {
   it('covers the whole library and Tempered Daily', () => {
-    expect(allStandaloneWorkouts.length).toBe(172);
+    expect(allStandaloneWorkouts.length).toBe(174);
     expect(temperedDailyWorkouts.length).toBe(56);
   });
 

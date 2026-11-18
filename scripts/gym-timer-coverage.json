@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-16T15:57:38.814Z",
-  "tagged": 170,
+  "generatedAt": "2026-11-18T07:37:33.369Z",
+  "tagged": 172,
   "skipped": 58,
   "rows": [
     {
@@ -208,8 +208,16 @@
       "timerType": "FOR_TIME"
     },
     {
+      "id": "dbb_06",
+      "title": "7 Deadly Sins",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
       "id": "dbb_01",
-      "title": "10 x 10 x 10",
+      "title": "Same Ball",
       "format": "For Time",
       "source": "standalone",
       "status": "tagged",
@@ -217,7 +225,7 @@
     },
     {
       "id": "dbb_02",
-      "title": "7 Rounds",
+      "title": "Rising Devil",
       "format": "AMRAP",
       "source": "standalone",
       "status": "tagged",
@@ -225,7 +233,7 @@
     },
     {
       "id": "dbb_03",
-      "title": "Kettlebells",
+      "title": "Three Six Nine",
       "format": "For Time",
       "source": "standalone",
       "status": "tagged",
@@ -233,8 +241,16 @@
     },
     {
       "id": "dbb_04",
-      "title": "Chipper with Ryan",
+      "title": "Over the Bell",
       "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "dbb_05",
+      "title": "Trilogy",
+      "format": "For Time",
       "source": "standalone",
       "status": "tagged",
       "timerType": "FOR_TIME"
