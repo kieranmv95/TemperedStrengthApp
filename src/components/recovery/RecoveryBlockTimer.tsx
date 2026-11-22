@@ -7,6 +7,10 @@ import {
   typography,
 } from '@/src/constants/tokens';
 import { useLargeText } from '@/src/hooks/useLargeText';
+import {
+  gymTimerHapticPhaseChange,
+  playGymTimerBeep,
+} from '@/src/services/gymTimerFeedback';
 import type { RecoveryDose } from '@/src/types/recovery';
 import {
   formatCountdownSeconds,
@@ -15,6 +19,7 @@ import {
   type RecoveryTimerStep,
 } from '@/src/utils/recoveryTimer';
 import { Ionicons } from '@expo/vector-icons';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import React, {
   useCallback,
   useEffect,
@@ -33,6 +38,28 @@ import {
 
 const TIMER_RING_SIZE = 168;
 const TIMER_RING_STROKE = 6;
+const RECOVERY_TIMER_KEEP_AWAKE_TAG = 'recovery-timer';
+
+async function activateRecoveryTimerKeepAwake(): Promise<void> {
+  try {
+    await activateKeepAwakeAsync(RECOVERY_TIMER_KEEP_AWAKE_TAG);
+  } catch {
+    // Keep-awake is best-effort. The countdown still runs if the OS refuses.
+  }
+}
+
+async function deactivateRecoveryTimerKeepAwake(): Promise<void> {
+  try {
+    await deactivateKeepAwake(RECOVERY_TIMER_KEEP_AWAKE_TAG);
+  } catch {
+    // ignore
+  }
+}
+
+function cueRecoveryTimer(kind: 'work' | 'finish'): void {
+  void playGymTimerBeep(kind, false);
+  void gymTimerHapticPhaseChange();
+}
 
 type RecoveryBlockTimerProps = {
   dose: RecoveryDose;
@@ -111,6 +138,14 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
   }, []);
 
   useEffect(() => {
+    if (!isRunning) return;
+    void activateRecoveryTimerKeepAwake();
+    return () => {
+      void deactivateRecoveryTimerKeepAwake();
+    };
+  }, [isRunning]);
+
+  useEffect(() => {
     if (!isRunning || remainingSeconds === null || remainingSeconds > 0) {
       return;
     }
@@ -126,6 +161,7 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
       AccessibilityInfo.announceForAccessibility(
         `Next, ${describeStep(steps[nextIndex])}`
       );
+      cueRecoveryTimer('work');
       return;
     }
 
@@ -133,6 +169,7 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
     setFinished(true);
     advancingRef.current = false;
     AccessibilityInfo.announceForAccessibility("Time's up");
+    cueRecoveryTimer('finish');
   }, [isRunning, remainingSeconds, stepIndex, steps]);
 
   if (steps.length === 0) {
