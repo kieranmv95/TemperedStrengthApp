@@ -1,11 +1,4 @@
-import type {
-  SingleWorkout,
-  WorkoutCategory,
-  WorkoutEquipment,
-  WorkoutFocusTag,
-} from '@/src/types/workouts';
-
-export type CategoryFilter = 'All' | WorkoutCategory | 'Favorites' | 'Pro';
+import type { WorkoutEquipment } from '@/src/types/workouts';
 
 export type WorkoutSortBy = 'name' | 'duration';
 export type WorkoutSortDirection = 'asc' | 'desc';
@@ -26,70 +19,36 @@ export const WORKOUT_SORT_DIRECTION_OPTIONS: {
   { value: 'desc', label: 'Descending' },
 ];
 
-export function categoryFilterDisplayLabel(filter: CategoryFilter): string {
-  if (filter === 'WOD') return 'CrossFit';
-  return filter;
-}
-
-/**
- * Focus tags shown in filters. "Strength" is also a Discipline (a workout
- * category), so the focus tag is labelled differently to tell them apart.
- */
-export function focusTagDisplayLabel(tag: WorkoutFocusTag): string {
-  if (tag === 'Strength') return 'Strength focus';
-  return tag;
-}
-
-export const CATEGORY_FILTERS: CategoryFilter[] = [
-  'All',
-  'Favorites',
-  'Pro',
-  'Strength',
-  'WOD',
-  'Hyrox',
-  'Conditioning',
-  'Rainhill',
-  'Girl Games',
-];
-
-/** Discipline options shown in the filter sheet (excludes implicit "All"). */
-export const DISCIPLINE_CATEGORY_FILTERS: Exclude<CategoryFilter, 'All'>[] = [
-  'Favorites',
-  'Pro',
-  'Strength',
-  'WOD',
-  'Hyrox',
-  'Conditioning',
-  'Rainhill',
-  'Girl Games',
-];
-
-export const WORKOUT_EQUIPMENT_OPTIONS: WorkoutEquipment[] = [
-  'kettlebell',
+/** Kit most people have access to; always shown in the filter sheet. */
+export const COMMON_EQUIPMENT: WorkoutEquipment[] = [
   'dumbbell',
+  'kettlebell',
   'barbell',
-  'skipping rope',
-  'static machines',
+  'pull-up bar',
+  'medicine ball',
+  'box',
   'rower',
   'bike',
   'ski erg',
-  'bands',
-  'box',
-  'medicine ball',
-  'pull-up bar',
-  'sled',
-  'ghd',
-  'sandbag',
 ];
 
-export function getEquipmentFiltersInUse(
-  workouts: SingleWorkout[]
-): WorkoutEquipment[] {
-  const inUse = new Set<WorkoutEquipment>();
-  for (const workout of workouts) {
-    for (const eq of workout.equipment) {
-      inUse.add(eq);
-    }
-  }
-  return WORKOUT_EQUIPMENT_OPTIONS.filter((eq) => inUse.has(eq));
+/** Specialist kit, shown behind "More equipment". */
+export const MORE_EQUIPMENT: WorkoutEquipment[] = [
+  'sandbag',
+  'sled',
+  'bands',
+  'skipping rope',
+  'ghd',
+  'static machines',
+];
+
+export const WORKOUT_EQUIPMENT_OPTIONS: WorkoutEquipment[] = [
+  ...COMMON_EQUIPMENT,
+  ...MORE_EQUIPMENT,
+];
+
+export function toggleValue<T>(values: T[], value: T): T[] {
+  return values.includes(value)
+    ? values.filter((v) => v !== value)
+    : [...values, value];
 }

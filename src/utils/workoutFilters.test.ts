@@ -1,31 +1,45 @@
+import { allStandaloneWorkouts } from '@/src/data/workouts';
+import type { SingleWorkout } from '@/src/types/workouts';
 import {
-  isWorkoutFocusTag,
-  isWorkoutFormatTag,
-  WORKOUT_FOCUS_TAGS,
-  WORKOUT_FORMAT_TAGS,
-} from '@/src/types/workouts';
-import {
-  countWithMultiSelectOption,
+  countActiveWorkoutFilters,
+  countWithEquipmentOption,
+  countWithGroupOption,
+  EMPTY_WORKOUT_FILTERS,
   workoutMatchesFilters,
   workoutMatchesTimeBucket,
   WORKOUT_TIME_BUCKET_OPTIONS,
+  type WorkoutFilterContext,
+  type WorkoutFilters,
 } from '@/src/utils/workoutFilters';
-import type { SingleWorkout } from '@/src/types/workouts';
-import { allStandaloneWorkouts } from '@/src/data/workouts';
 
 const sampleWorkout: SingleWorkout = {
   id: 'test',
   title: 'Test Workout',
   description: 'A test',
-  category: 'WOD',
-  difficulty: 'Intermediate',
   estimatedTime: 20,
-  tags: ['Full Body', 'AMRAP'],
-  equipment: [],
+  disciplines: ['Metcon', 'Gymnastics'],
+  bodyFocus: ['Full Body'],
+  format: 'AMRAP',
+  levels: ['Intermediate'],
+  equipment: ['dumbbell', 'pull-up bar'],
   isPremium: false,
   logSchema: { kind: 'none' },
   blocks: [{ name: 'WOD', movements: ['10 burpees'] }],
 };
+
+const context: WorkoutFilterContext = {
+  favoriteIds: [],
+  isPro: false,
+  roles: [],
+};
+
+function matches(filters: Partial<WorkoutFilters>, workout = sampleWorkout) {
+  return workoutMatchesFilters(
+    workout,
+    { ...EMPTY_WORKOUT_FILTERS, ...filters },
+    context
+  );
+}
 
 describe('workoutFilters', () => {
   it('maps estimated time to duration buckets', () => {
@@ -39,89 +53,113 @@ describe('workoutFilters', () => {
 
   it('covers every minute with at least one bucket', () => {
     for (let minutes = 5; minutes <= 90; minutes += 1) {
-      const matches = WORKOUT_TIME_BUCKET_OPTIONS.some((b) =>
+      const covered = WORKOUT_TIME_BUCKET_OPTIONS.some((b) =>
         b.matches(minutes)
       );
-      expect(matches).toBe(true);
+      expect(covered).toBe(true);
     }
   });
 
-  it('filters by focus OR within group and AND across groups', () => {
+  it('ORs options within a group and ANDs across groups', () => {
+    expect(matches({ disciplines: ['Strength'] })).toBe(false);
+    expect(matches({ disciplines: ['Strength', 'Gymnastics'] })).toBe(true);
     expect(
-      workoutMatchesFilters(sampleWorkout, {
-        selectedFocus: ['Upper Body'],
-      })
+      matches({ disciplines: ['Gymnastics'], formats: ['For Time'] })
     ).toBe(false);
+    expect(matches({ disciplines: ['Gymnastics'], formats: ['AMRAP'] })).toBe(
+      true
+    );
+    expect(matches({ timeBuckets: ['quick'] })).toBe(false);
+    expect(matches({ timeBuckets: ['quick', 'short'] })).toBe(true);
+  });
+
+  it('matches equipment as "what I have", not "needs all of"', () => {
+    expect(matches({ equipment: ['dumbbell'] })).toBe(false);
+    expect(matches({ equipment: ['dumbbell', 'pull-up bar'] })).toBe(true);
+    expect(matches({ equipment: ['dumbbell', 'pull-up bar', 'barbell'] })).toBe(
+      true
+    );
+    expect(matches({ bodyweightOnly: true })).toBe(false);
     expect(
-      workoutMatchesFilters(sampleWorkout, {
-        selectedFocus: ['Full Body'],
-      })
-    ).toBe(true);
-    expect(
-      workoutMatchesFilters(sampleWorkout, {
-        selectedFocus: ['Full Body'],
-        selectedFormat: ['For Time'],
-      })
-    ).toBe(false);
-    expect(
-      workoutMatchesFilters(sampleWorkout, {
-        selectedFocus: ['Full Body'],
-        selectedFormat: ['AMRAP'],
-      })
+      matches({ bodyweightOnly: true }, { ...sampleWorkout, equipment: [] })
     ).toBe(true);
   });
 
-  it('filters by duration bucket', () => {
+  it('always lets bodyweight workouts through an equipment filter', () => {
     expect(
-      workoutMatchesFilters(sampleWorkout, {
-        selectedTimeBuckets: ['short'],
-      })
+      matches({ equipment: ['dumbbell'] }, { ...sampleWorkout, equipment: [] })
+    ).toBe(true);
+  });
+
+  it('filters partner, favourites and locked workouts', () => {
+    expect(matches({ partnerOnly: true })).toBe(false);
+    expect(
+      matches({ partnerOnly: true }, { ...sampleWorkout, partner: 'option' })
+    ).toBe(true);
+    expect(matches({ favouritesOnly: true })).toBe(false);
+    expect(
+      workoutMatchesFilters(
+        sampleWorkout,
+        { ...EMPTY_WORKOUT_FILTERS, favouritesOnly: true },
+        { ...context, favoriteIds: ['test'] }
+      )
     ).toBe(true);
     expect(
-      workoutMatchesFilters(sampleWorkout, {
-        selectedTimeBuckets: ['quick'],
-      })
+      matches({ hideLocked: true }, { ...sampleWorkout, isPremium: true })
     ).toBe(false);
   });
 
-  it('classifies focus and format tags', () => {
-    for (const tag of WORKOUT_FOCUS_TAGS) {
-      expect(isWorkoutFocusTag(tag)).toBe(true);
-      expect(isWorkoutFormatTag(tag)).toBe(false);
-    }
-    for (const tag of WORKOUT_FORMAT_TAGS) {
-      expect(isWorkoutFormatTag(tag)).toBe(true);
-      expect(isWorkoutFocusTag(tag)).toBe(false);
-    }
-    expect(isWorkoutFocusTag('Partner')).toBe(false);
-    expect(isWorkoutFormatTag('Partner')).toBe(false);
+  it('searches disciplines, format and collection names', () => {
+    expect(matches({ searchQuery: 'gymnastics' })).toBe(true);
+    expect(matches({ searchQuery: 'amrap' })).toBe(true);
+    expect(matches({ searchQuery: 'hyrox' })).toBe(false);
   });
 
-  it('faceted counts ignore the group own selection so they never grow', () => {
-    const emomOnly = {
-      activeCategoryFilter: 'All' as const,
-      selectedFormat: ['EMOM' as const],
-    };
-    const emomOnlyCount = allStandaloneWorkouts.filter((w) =>
-      workoutMatchesFilters(w, emomOnly)
+  it('counts each selected option as one active filter', () => {
+    expect(countActiveWorkoutFilters(EMPTY_WORKOUT_FILTERS)).toBe(0);
+    expect(
+      countActiveWorkoutFilters({
+        ...EMPTY_WORKOUT_FILTERS,
+        disciplines: ['Metcon', 'Gymnastics'],
+        equipment: ['dumbbell'],
+        partnerOnly: true,
+      })
+    ).toBe(4);
+  });
+
+  it('faceted group counts ignore the group own selection so they never grow', () => {
+    const emomOnly = allStandaloneWorkouts.filter((w) =>
+      workoutMatchesFilters(
+        w,
+        { ...EMPTY_WORKOUT_FILTERS, formats: ['EMOM'] },
+        context
+      )
     ).length;
 
-    // With no format selected, EMOM's count is the plain EMOM count.
     expect(
-      countWithMultiSelectOption(
-        { activeCategoryFilter: 'All' },
-        'selectedFormat',
+      countWithGroupOption(EMPTY_WORKOUT_FILTERS, context, 'formats', 'EMOM')
+    ).toBe(emomOnly);
+    expect(
+      countWithGroupOption(
+        { ...EMPTY_WORKOUT_FILTERS, formats: ['AMRAP'] },
+        context,
+        'formats',
         'EMOM'
       )
-    ).toBe(emomOnlyCount);
+    ).toBe(emomOnly);
+  });
 
-    // Selecting another format (Benchmark) must not change EMOM's count.
-    expect(
-      countWithMultiSelectOption(
-        { activeCategoryFilter: 'All', selectedFormat: ['Benchmark'] },
-        'selectedFormat',
-        'EMOM'
-      )
-    ).toBe(emomOnlyCount);
+  it('equipment counts grow as more kit is added', () => {
+    const dumbbell = countWithEquipmentOption(
+      EMPTY_WORKOUT_FILTERS,
+      context,
+      'dumbbell'
+    );
+    const dumbbellAndBar = countWithEquipmentOption(
+      { ...EMPTY_WORKOUT_FILTERS, equipment: ['dumbbell'] },
+      context,
+      'pull-up bar'
+    );
+    expect(dumbbellAndBar).toBeGreaterThanOrEqual(dumbbell);
   });
 });

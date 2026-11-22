@@ -18,6 +18,8 @@ export type RestTimerLiveActivityProps = {
   startedAtMs: number;
   label: string;
   status: 'running' | 'complete';
+  /** Header chip; defaults to Rest for program between-set timers. */
+  title?: string;
 };
 
 const RestTimerLiveActivityLayout = (props: RestTimerLiveActivityProps) => {
@@ -32,6 +34,7 @@ const RestTimerLiveActivityLayout = (props: RestTimerLiveActivityProps) => {
   const endDate = new Date(props.endTimeMs);
   const startDate = new Date(props.startedAtMs);
   const isComplete = props.status === 'complete';
+  const title = props.title && props.title.length > 0 ? props.title : 'Rest';
   const timerInterval = { lower: startDate, upper: endDate };
 
   const countdownLarge = (
@@ -69,7 +72,7 @@ const RestTimerLiveActivityLayout = (props: RestTimerLiveActivityProps) => {
         multilineTextAlignment('trailing'),
       ]}
     >
-      Rest complete
+      {title === 'Rest' ? 'Rest complete' : 'Done'}
     </Text>
   );
 
@@ -108,7 +111,7 @@ const RestTimerLiveActivityLayout = (props: RestTimerLiveActivityProps) => {
                   foregroundStyle(accent),
                 ]}
               >
-                Rest
+                {title}
               </Text>
             </HStack>
             <Text
@@ -118,7 +121,11 @@ const RestTimerLiveActivityLayout = (props: RestTimerLiveActivityProps) => {
                 lineLimit(1),
               ]}
             >
-              {isComplete ? 'Ready for the next set' : props.label}
+              {isComplete
+                ? title === 'Rest'
+                  ? 'Ready for the next set'
+                  : 'Timer finished'
+                : props.label}
             </Text>
           </VStack>
           {isComplete ? completeLabel : countdownLarge}
@@ -166,7 +173,7 @@ const RestTimerLiveActivityLayout = (props: RestTimerLiveActivityProps) => {
             foregroundStyle(accent),
           ]}
         >
-          Rest
+          {title}
         </Text>
       </VStack>
     ),

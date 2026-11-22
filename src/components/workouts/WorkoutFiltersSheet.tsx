@@ -1,11 +1,16 @@
-import { AnimatedNumber, BottomSheet, FilterChip } from '@/src/components/ds';
 import {
-  DISCIPLINE_CATEGORY_FILTERS,
-  categoryFilterDisplayLabel,
-  focusTagDisplayLabel,
-  getEquipmentFiltersInUse,
-  type CategoryFilter,
+  ActionChip,
+  AnimatedNumber,
+  BottomSheet,
+  Collapsible,
+  FilterChip,
+} from '@/src/components/ds';
+import {
+  COMMON_EQUIPMENT,
+  MORE_EQUIPMENT,
+  toggleValue,
 } from '@/src/components/workouts/workoutsScreenConstants';
+import { DISCIPLINE_ICONS } from '@/src/data/disciplines';
 import {
   color,
   MIN_TARGET_SIZE,
@@ -13,51 +18,44 @@ import {
   space,
   typography,
 } from '@/src/constants/tokens';
-import { allStandaloneWorkouts } from '@/src/data/workouts';
-import type {
-  WorkoutEquipment,
-  WorkoutFocusTag,
-  WorkoutFormatTag,
+import {
+  WORKOUT_BODY_FOCUSES,
+  WORKOUT_COLLECTIONS,
+  WORKOUT_DISCIPLINES,
+  WORKOUT_FORMATS,
+  WORKOUT_LEVELS,
+  type WorkoutEquipment,
 } from '@/src/types/workouts';
-import { WORKOUT_FOCUS_TAGS, WORKOUT_FORMAT_TAGS } from '@/src/types/workouts';
 import {
   countActiveWorkoutFilters,
   countWithEquipmentOption,
-  countWithMultiSelectOption,
+  countWithGroupOption,
   countWorkoutsMatching,
+  EMPTY_WORKOUT_FILTERS,
   equipmentFilterLabel,
   WORKOUT_TIME_BUCKET_OPTIONS,
-  workoutMatchesFilters,
-  type WorkoutFilterCriteria,
-  type WorkoutTimeBucket,
+  type WorkoutFilterContext,
+  type WorkoutFilterGroup,
+  type WorkoutFilters,
 } from '@/src/utils/workoutFilters';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AccessibilityInfo,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from 'react-native';
 
-export type WorkoutFiltersDraft = {
-  searchQuery: string;
-  activeCategoryFilter: CategoryFilter;
-  selectedEquipment: WorkoutEquipment[];
-  noEquipmentOnly: boolean;
-  selectedFocus: WorkoutFocusTag[];
-  selectedFormat: WorkoutFormatTag[];
-  selectedTimeBuckets: WorkoutTimeBucket[];
-};
-
 type WorkoutFiltersSheetProps = {
   visible: boolean;
-  draft: WorkoutFiltersDraft;
-  favoriteIds: string[];
+  draft: WorkoutFilters;
+  context: WorkoutFilterContext;
   onClose: () => void;
-  onApply: (draft: WorkoutFiltersDraft) => void;
+  onApply: (draft: WorkoutFilters) => void;
 };
 
 /** Wait for a pause in tapping before announcing the new match count. */
@@ -67,14 +65,28 @@ function workoutsLabel(count: number): string {
   return `${count} workout${count === 1 ? '' : 's'}`;
 }
 
+/** Hide options with no results unless they are already selected. */
+function showFilterChip(count: number, isActive: boolean): boolean {
+  return isActive || count > 0;
+}
+
 type FilterSectionProps = {
   title: string;
-  /** e.g. a "Clear" action or an "Any" hint. */
+  description?: string;
+  /** e.g. a "Clear" action. */
   accessory?: React.ReactNode;
+  /** One row that scrolls sideways, edge to edge, instead of wrapping. */
+  scrollable?: boolean;
   children: React.ReactNode;
 };
 
-function FilterSection({ title, accessory, children }: FilterSectionProps) {
+function FilterSection({
+  title,
+  description,
+  accessory,
+  scrollable = false,
+  children,
+}: FilterSectionProps) {
   return (
     <View style={styles.section}>
       <View style={styles.sectionHeader}>
@@ -83,20 +95,112 @@ function FilterSection({ title, accessory, children }: FilterSectionProps) {
         </Text>
         {accessory}
       </View>
-      <View style={styles.chipRow}>{children}</View>
+      {description ? (
+        <Text style={styles.sectionDescription}>{description}</Text>
+      ) : null}
+      {scrollable ? (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.scrollRow}
+          contentContainerStyle={styles.scrollRowContent}
+        >
+          {children}
+        </ScrollView>
+      ) : (
+        <View style={styles.chipRow}>{children}</View>
+      )}
     </View>
   );
 }
 
+type ClearActionProps = {
+  label: string;
+  onPress: () => void;
+};
+
+function ClearAction({ label, onPress }: ClearActionProps) {
+  return (
+    <Pressable
+      onPress={onPress}
+      style={styles.sectionAction}
+      accessibilityRole="button"
+      accessibilityLabel={`Clear ${label}`}
+    >
+      <Text style={styles.sectionActionText}>Clear</Text>
+    </Pressable>
+  );
+}
+
+type GroupChipsProps<G extends WorkoutFilterGroup> = {
+  group: G;
+  options: readonly { value: WorkoutFilters[G][number]; label: string }[];
+  filters: WorkoutFilters;
+  context: WorkoutFilterContext;
+  onToggle: (value: WorkoutFilters[G][number]) => void;
+  iconFor?: (value: WorkoutFilters[G][number]) => string;
+  /** For ordered scales such as time: keep every option in place, disabled when empty. */
+  keepEmpty?: boolean;
+};
+
+function GroupChips<G extends WorkoutFilterGroup>({
+  group,
+  options,
+  filters,
+  context,
+  onToggle,
+  iconFor,
+  keepEmpty = false,
+}: GroupChipsProps<G>) {
+  const selected = filters[group] as readonly WorkoutFilters[G][number][];
+  return (
+    <>
+      {options.map(({ value, label }) => {
+        const isActive = selected.includes(value);
+        const count = countWithGroupOption(filters, context, group, value);
+        const isEmpty = !showFilterChip(count, isActive);
+        if (isEmpty && !keepEmpty) return null;
+        return (
+          <FilterChip
+            key={String(value)}
+            label={label}
+            selected={isActive}
+            disabled={isEmpty}
+            onPress={() => onToggle(value)}
+            icon={
+              iconFor
+                ? (iconFor(value) as keyof typeof Ionicons.glyphMap)
+                : undefined
+            }
+            count={count}
+            accessibilityLabel={`${label}, ${workoutsLabel(count)}`}
+          />
+        );
+      })}
+    </>
+  );
+}
+
+function asOptions<T extends string>(values: readonly T[]) {
+  return values.map((value) => ({ value, label: value }));
+}
+
+const TIME_OPTIONS = WORKOUT_TIME_BUCKET_OPTIONS.map((b) => ({
+  value: b.id,
+  label: b.label,
+}));
+
 export function WorkoutFiltersSheet({
   visible,
   draft,
-  favoriteIds,
+  context,
   onClose,
   onApply,
 }: WorkoutFiltersSheetProps) {
-  const [localDraft, setLocalDraft] = useState<WorkoutFiltersDraft>(draft);
+  const [localDraft, setLocalDraft] = useState<WorkoutFilters>(draft);
   const [wasVisible, setWasVisible] = useState(visible);
+  const [showMoreEquipment, setShowMoreEquipment] = useState(false);
+  const [moreFiltersExpanded, setMoreFiltersExpanded] = useState(false);
   const announceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const announcedCount = useRef<number | null>(null);
 
@@ -105,36 +209,20 @@ export function WorkoutFiltersSheet({
     setWasVisible(visible);
     if (visible) {
       setLocalDraft(draft);
+      setShowMoreEquipment(
+        draft.equipment.some((eq) => MORE_EQUIPMENT.includes(eq))
+      );
+      setMoreFiltersExpanded(
+        draft.formats.length > 0 ||
+          draft.bodyFocus.length > 0 ||
+          draft.levels.length > 0 ||
+          draft.collections.length > 0 ||
+          draft.partnerOnly
+      );
     }
   }
 
-  const equipmentFiltersInUse = useMemo(
-    () => getEquipmentFiltersInUse(allStandaloneWorkouts),
-    []
-  );
-
-  const baseCriteria = useMemo(
-    (): WorkoutFilterCriteria => ({
-      searchQuery: localDraft.searchQuery,
-      activeCategoryFilter: localDraft.activeCategoryFilter,
-      selectedEquipment: localDraft.selectedEquipment,
-      noEquipmentOnly: localDraft.noEquipmentOnly,
-      selectedFocus: localDraft.selectedFocus,
-      selectedFormat: localDraft.selectedFormat,
-      selectedTimeBuckets: localDraft.selectedTimeBuckets,
-      favoriteIds,
-    }),
-    [localDraft, favoriteIds]
-  );
-
-  const previewCount = useMemo(
-    () =>
-      allStandaloneWorkouts.filter((workout) =>
-        workoutMatchesFilters(workout, baseCriteria)
-      ).length,
-    [baseCriteria]
-  );
-
+  const previewCount = countWorkoutsMatching(localDraft, context);
   const hasSelections = countActiveWorkoutFilters(localDraft) > 0;
 
   useEffect(() => {
@@ -164,78 +252,55 @@ export function WorkoutFiltersSheet({
     };
   }, [previewCount, visible]);
 
-  const handleReset = () => {
-    setLocalDraft({
-      searchQuery: '',
-      activeCategoryFilter: 'All',
-      selectedEquipment: [],
-      noEquipmentOnly: false,
-      selectedFocus: [],
-      selectedFormat: [],
-      selectedTimeBuckets: [],
-    });
+  const update = (changes: Partial<WorkoutFilters>) => {
+    setLocalDraft((prev) => ({ ...prev, ...changes }));
   };
 
-  const toggleFocus = (tag: WorkoutFocusTag) => {
+  const toggleGroup = <G extends WorkoutFilterGroup>(
+    group: G,
+    value: WorkoutFilters[G][number]
+  ) => {
     setLocalDraft((prev) => ({
       ...prev,
-      selectedFocus: prev.selectedFocus.includes(tag)
-        ? prev.selectedFocus.filter((t) => t !== tag)
-        : [...prev.selectedFocus, tag],
-    }));
-  };
-
-  const toggleFormat = (tag: WorkoutFormatTag) => {
-    setLocalDraft((prev) => ({
-      ...prev,
-      selectedFormat: prev.selectedFormat.includes(tag)
-        ? prev.selectedFormat.filter((t) => t !== tag)
-        : [...prev.selectedFormat, tag],
-    }));
-  };
-
-  const toggleTimeBucket = (bucket: WorkoutTimeBucket) => {
-    setLocalDraft((prev) => ({
-      ...prev,
-      selectedTimeBuckets: prev.selectedTimeBuckets.includes(bucket)
-        ? prev.selectedTimeBuckets.filter((b) => b !== bucket)
-        : [...prev.selectedTimeBuckets, bucket],
+      [group]: toggleValue(prev[group] as WorkoutFilters[G][number][], value),
     }));
   };
 
   const toggleEquipment = (eq: WorkoutEquipment) => {
     setLocalDraft((prev) => ({
       ...prev,
-      noEquipmentOnly: false,
-      selectedEquipment: prev.selectedEquipment.includes(eq)
-        ? prev.selectedEquipment.filter((item) => item !== eq)
-        : [...prev.selectedEquipment, eq],
+      bodyweightOnly: false,
+      equipment: toggleValue(prev.equipment, eq),
     }));
   };
 
-  const selectDiscipline = (
-    filter: (typeof DISCIPLINE_CATEGORY_FILTERS)[number]
-  ) => {
-    setLocalDraft((prev) => ({
-      ...prev,
-      activeCategoryFilter:
-        prev.activeCategoryFilter === filter ? 'All' : filter,
-    }));
+  const toggleCount = (changes: Partial<WorkoutFilters>) =>
+    countWorkoutsMatching(localDraft, context, changes);
+
+  const favouritesCount = toggleCount({ favouritesOnly: true });
+  const unlockedCount = toggleCount({ hideLocked: true });
+  const bodyweightCount = toggleCount({ bodyweightOnly: true, equipment: [] });
+  const partnerCount = toggleCount({ partnerOnly: true });
+
+  const renderEquipmentChip = (eq: WorkoutEquipment) => {
+    const isActive = localDraft.equipment.includes(eq);
+    const count = countWithEquipmentOption(localDraft, context, eq);
+    if (!showFilterChip(count, isActive)) return null;
+    const label = equipmentFilterLabel(eq);
+    return (
+      <FilterChip
+        key={eq}
+        label={label}
+        selected={isActive}
+        onPress={() => toggleEquipment(eq)}
+        count={count}
+        accessibilityLabel={`${label}, ${workoutsLabel(count)}`}
+      />
+    );
   };
 
-  const showFilterChip = (count: number, isActive: boolean) =>
-    isActive || count > 0;
-
-  const allEquipmentActive =
-    localDraft.selectedEquipment.length === 0 && !localDraft.noEquipmentOnly;
-  const allEquipmentCount = countWorkoutsMatching(baseCriteria, {
-    selectedEquipment: [],
-    noEquipmentOnly: false,
-  });
-  const noEquipmentCount = countWorkoutsMatching(baseCriteria, {
-    selectedEquipment: [],
-    noEquipmentOnly: true,
-  });
+  const equipmentSelected =
+    localDraft.equipment.length > 0 || localDraft.bodyweightOnly;
 
   return (
     <BottomSheet
@@ -251,7 +316,7 @@ export function WorkoutFiltersSheet({
               !hasSelections && styles.resetButtonDisabled,
               pressed && hasSelections && styles.resetButtonPressed,
             ]}
-            onPress={handleReset}
+            onPress={() => setLocalDraft(EMPTY_WORKOUT_FILTERS)}
             disabled={!hasSelections}
             accessibilityRole="button"
             accessibilityLabel="Reset filters"
@@ -292,9 +357,7 @@ export function WorkoutFiltersSheet({
           placeholder="Search workouts"
           placeholderTextColor={color.textTertiary}
           value={localDraft.searchQuery}
-          onChangeText={(text) =>
-            setLocalDraft((prev) => ({ ...prev, searchQuery: text }))
-          }
+          onChangeText={(text) => update({ searchQuery: text })}
           returnKeyType="search"
           autoCorrect={false}
           autoCapitalize="none"
@@ -302,9 +365,7 @@ export function WorkoutFiltersSheet({
         />
         {localDraft.searchQuery.length > 0 ? (
           <Pressable
-            onPress={() =>
-              setLocalDraft((prev) => ({ ...prev, searchQuery: '' }))
-            }
+            onPress={() => update({ searchQuery: '' })}
             style={styles.clearSearch}
             accessibilityRole="button"
             accessibilityLabel="Clear search"
@@ -318,184 +379,159 @@ export function WorkoutFiltersSheet({
         ) : null}
       </View>
 
+      <View style={styles.chipRow}>
+        <FilterChip
+          label="Favourites"
+          icon="heart"
+          selected={localDraft.favouritesOnly}
+          onPress={() => update({ favouritesOnly: !localDraft.favouritesOnly })}
+          count={favouritesCount}
+          accessibilityLabel={`Favourites, ${workoutsLabel(favouritesCount)}`}
+        />
+        {context.isPro ? null : (
+          <FilterChip
+            label="Hide locked"
+            icon="lock-open-outline"
+            selected={localDraft.hideLocked}
+            onPress={() => update({ hideLocked: !localDraft.hideLocked })}
+            count={unlockedCount}
+            accessibilityLabel={`Hide locked, ${workoutsLabel(unlockedCount)}`}
+          />
+        )}
+      </View>
+
       <FilterSection
         title="Discipline"
         accessory={
-          localDraft.activeCategoryFilter !== 'All' ? (
-            <Pressable
-              onPress={() =>
-                setLocalDraft((prev) => ({
-                  ...prev,
-                  activeCategoryFilter: 'All',
-                }))
-              }
-              style={styles.sectionAction}
-              accessibilityRole="button"
-              accessibilityLabel="Clear discipline"
-            >
-              <Text style={styles.sectionActionText}>Clear</Text>
-            </Pressable>
-          ) : (
-            <Text style={styles.sectionHint}>Any</Text>
-          )
+          localDraft.disciplines.length > 0 ? (
+            <ClearAction
+              label="discipline"
+              onPress={() => update({ disciplines: [] })}
+            />
+          ) : null
         }
       >
-        {DISCIPLINE_CATEGORY_FILTERS.map((filter) => {
-          const isActive = localDraft.activeCategoryFilter === filter;
-          const count = countWorkoutsMatching(baseCriteria, {
-            activeCategoryFilter: filter,
-          });
-          if (!showFilterChip(count, isActive)) {
-            return null;
-          }
-          const label = categoryFilterDisplayLabel(filter);
-          return (
-            <FilterChip
-              key={filter}
-              label={label}
-              selected={isActive}
-              onPress={() => selectDiscipline(filter)}
-              icon={
-                filter === 'Favorites'
-                  ? 'heart'
-                  : filter === 'Pro'
-                    ? 'star'
-                    : undefined
-              }
-              count={count}
-              accessibilityLabel={`${label}, ${workoutsLabel(count)}`}
-            />
-          );
-        })}
+        <GroupChips
+          group="disciplines"
+          options={asOptions(WORKOUT_DISCIPLINES)}
+          filters={localDraft}
+          context={context}
+          onToggle={(value) => toggleGroup('disciplines', value)}
+          iconFor={(value) => DISCIPLINE_ICONS[value]}
+        />
       </FilterSection>
 
-      <FilterSection title="Focus">
-        {WORKOUT_FOCUS_TAGS.map((tag) => {
-          const isActive = localDraft.selectedFocus.includes(tag);
-          const count = countWithMultiSelectOption(
-            baseCriteria,
-            'selectedFocus',
-            tag
-          );
-          if (!showFilterChip(count, isActive)) {
-            return null;
-          }
-          const label = focusTagDisplayLabel(tag);
-          return (
-            <FilterChip
-              key={tag}
-              label={label}
-              selected={isActive}
-              onPress={() => toggleFocus(tag)}
-              count={count}
-              accessibilityLabel={`${label}, ${workoutsLabel(count)}`}
+      <FilterSection
+        title="Time"
+        scrollable
+        accessory={
+          localDraft.timeBuckets.length > 0 ? (
+            <ClearAction
+              label="time"
+              onPress={() => update({ timeBuckets: [] })}
             />
-          );
-        })}
+          ) : null
+        }
+      >
+        <GroupChips
+          group="timeBuckets"
+          options={TIME_OPTIONS}
+          filters={localDraft}
+          context={context}
+          onToggle={(value) => toggleGroup('timeBuckets', value)}
+          keepEmpty
+        />
       </FilterSection>
 
-      <FilterSection title="Format">
-        {WORKOUT_FORMAT_TAGS.map((tag) => {
-          const isActive = localDraft.selectedFormat.includes(tag);
-          const count = countWithMultiSelectOption(
-            baseCriteria,
-            'selectedFormat',
-            tag
-          );
-          if (!showFilterChip(count, isActive)) {
-            return null;
-          }
-          return (
-            <FilterChip
-              key={tag}
-              label={tag}
-              selected={isActive}
-              onPress={() => toggleFormat(tag)}
-              count={count}
-              accessibilityLabel={`${tag}, ${workoutsLabel(count)}`}
+      <FilterSection
+        title="What do you have?"
+        description="Shows workouts you can do with the kit you pick."
+        accessory={
+          equipmentSelected ? (
+            <ClearAction
+              label="equipment"
+              onPress={() => update({ equipment: [], bodyweightOnly: false })}
             />
-          );
-        })}
+          ) : null
+        }
+      >
+        <FilterChip
+          label="Bodyweight only"
+          selected={localDraft.bodyweightOnly}
+          onPress={() =>
+            update({
+              bodyweightOnly: !localDraft.bodyweightOnly,
+              equipment: [],
+            })
+          }
+          count={bodyweightCount}
+          accessibilityLabel={`Bodyweight only, ${workoutsLabel(bodyweightCount)}`}
+        />
+        {COMMON_EQUIPMENT.map(renderEquipmentChip)}
+        {showMoreEquipment ? MORE_EQUIPMENT.map(renderEquipmentChip) : null}
+        <ActionChip
+          label={showMoreEquipment ? 'Less equipment' : 'More equipment'}
+          icon={showMoreEquipment ? 'chevron-up' : 'chevron-down'}
+          tone="neutral"
+          onPress={() => setShowMoreEquipment((value) => !value)}
+          accessibilityState={{ expanded: showMoreEquipment }}
+        />
       </FilterSection>
 
-      <FilterSection title="Duration">
-        {WORKOUT_TIME_BUCKET_OPTIONS.map((bucket) => {
-          const isActive = localDraft.selectedTimeBuckets.includes(bucket.id);
-          const count = countWithMultiSelectOption(
-            baseCriteria,
-            'selectedTimeBuckets',
-            bucket.id
-          );
-          if (!showFilterChip(count, isActive)) {
-            return null;
-          }
-          return (
-            <FilterChip
-              key={bucket.id}
-              label={bucket.label}
-              selected={isActive}
-              onPress={() => toggleTimeBucket(bucket.id)}
-              count={count}
-              accessibilityLabel={`${bucket.label}, ${workoutsLabel(count)}`}
+      <Collapsible
+        title="More filters"
+        expanded={moreFiltersExpanded}
+        onToggle={() => setMoreFiltersExpanded((value) => !value)}
+      >
+        <View style={styles.moreFilters}>
+          <FilterSection title="Format">
+            <GroupChips
+              group="formats"
+              options={asOptions(WORKOUT_FORMATS)}
+              filters={localDraft}
+              context={context}
+              onToggle={(value) => toggleGroup('formats', value)}
             />
-          );
-        })}
-      </FilterSection>
-
-      <FilterSection title="Equipment">
-        {showFilterChip(allEquipmentCount, allEquipmentActive) ? (
-          <FilterChip
-            label="Any"
-            selected={allEquipmentActive}
-            onPress={() =>
-              setLocalDraft((prev) => ({
-                ...prev,
-                selectedEquipment: [],
-                noEquipmentOnly: false,
-              }))
-            }
-            count={allEquipmentCount}
-            accessibilityLabel={`Any equipment, ${workoutsLabel(allEquipmentCount)}`}
-          />
-        ) : null}
-        {showFilterChip(noEquipmentCount, localDraft.noEquipmentOnly) ? (
-          <FilterChip
-            label="No equipment"
-            selected={localDraft.noEquipmentOnly}
-            onPress={() =>
-              setLocalDraft((prev) => ({
-                ...prev,
-                noEquipmentOnly: !prev.noEquipmentOnly,
-                selectedEquipment: [],
-              }))
-            }
-            count={noEquipmentCount}
-            accessibilityLabel={`No equipment, ${workoutsLabel(noEquipmentCount)}`}
-          />
-        ) : null}
-        {equipmentFiltersInUse.map((eq) => {
-          const isActive = localDraft.selectedEquipment.includes(eq);
-          const count = countWithEquipmentOption(
-            baseCriteria,
-            eq,
-            localDraft.selectedEquipment
-          );
-          if (!showFilterChip(count, isActive)) {
-            return null;
-          }
-          const label = equipmentFilterLabel(eq);
-          return (
-            <FilterChip
-              key={eq}
-              label={label}
-              selected={isActive}
-              onPress={() => toggleEquipment(eq)}
-              count={count}
-              accessibilityLabel={`${label}, ${workoutsLabel(count)}`}
+          </FilterSection>
+          <FilterSection title="Body focus">
+            <GroupChips
+              group="bodyFocus"
+              options={asOptions(WORKOUT_BODY_FOCUSES)}
+              filters={localDraft}
+              context={context}
+              onToggle={(value) => toggleGroup('bodyFocus', value)}
             />
-          );
-        })}
-      </FilterSection>
+          </FilterSection>
+          <FilterSection title="Level">
+            <GroupChips
+              group="levels"
+              options={asOptions(WORKOUT_LEVELS)}
+              filters={localDraft}
+              context={context}
+              onToggle={(value) => toggleGroup('levels', value)}
+            />
+          </FilterSection>
+          <FilterSection title="Partner">
+            <FilterChip
+              label="Partner workouts"
+              icon="people-outline"
+              selected={localDraft.partnerOnly}
+              onPress={() => update({ partnerOnly: !localDraft.partnerOnly })}
+              count={partnerCount}
+              accessibilityLabel={`Partner workouts, ${workoutsLabel(partnerCount)}`}
+            />
+          </FilterSection>
+          <FilterSection title="Collections">
+            <GroupChips
+              group="collections"
+              options={asOptions(WORKOUT_COLLECTIONS)}
+              filters={localDraft}
+              context={context}
+              onToggle={(value) => toggleGroup('collections', value)}
+            />
+          </FilterSection>
+        </View>
+      </Collapsible>
     </BottomSheet>
   );
 }
@@ -537,6 +573,10 @@ const styles = StyleSheet.create({
     ...typography.headline,
     color: color.textPrimary,
   },
+  sectionDescription: {
+    ...typography.callout,
+    color: color.textSecondary,
+  },
   sectionAction: {
     minHeight: MIN_TARGET_SIZE,
     justifyContent: 'center',
@@ -546,14 +586,20 @@ const styles = StyleSheet.create({
     ...typography.calloutStrong,
     color: color.gold,
   },
-  sectionHint: {
-    ...typography.callout,
-    color: color.textTertiary,
-  },
   chipRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: space.xs,
+  },
+  scrollRow: {
+    marginHorizontal: -space.md,
+  },
+  scrollRowContent: {
+    gap: space.xs,
+    paddingHorizontal: space.md,
+  },
+  moreFilters: {
+    gap: space.md,
   },
   footer: {
     flexDirection: 'row',

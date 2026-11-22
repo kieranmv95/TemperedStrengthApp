@@ -6,10 +6,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Leg Primer',
     description:
       'High volume bodyweight leg pump. Keep rest minimal to maximise metabolic stress.',
-    category: 'Strength',
-    difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['Lower Body', 'Strength'],
+    disciplines: ['Strength', 'Gymnastics'],
+    bodyFocus: ['Lower Body'],
+    levels: ['Beginner'],
     isPremium: false,
     blocks: [
       {
@@ -34,10 +34,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Upper Body Hypertrophy',
     description:
       'Hypertrophy focus. Control the eccentric (lowering) phase for 2 seconds on every rep.',
-    category: 'Strength',
-    difficulty: 'Intermediate',
     estimatedTime: 30,
-    tags: ['Upper Body', 'Strength'],
+    disciplines: ['Strength'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Intermediate'],
     isPremium: false,
     blocks: [
       {
@@ -65,10 +65,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'The Pushup Pyramid',
     description:
       'Every rep earned. You climb to 10 and fight your way back down. Rest only as long as the set took. Form over speed, chest to floor every time.',
-    category: 'Strength',
-    difficulty: 'Intermediate',
     estimatedTime: 20,
-    tags: ['Upper Body', 'Strength'],
+    disciplines: ['Strength'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Intermediate'],
     isPremium: false,
     blocks: [
       {
@@ -153,10 +153,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Grip Strength 101',
     description:
       "Building the foundations for pullups and heavy deadlifts. Don't use straps.",
-    category: 'Strength',
-    difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['Upper Body', 'Strength'],
+    disciplines: ['Strength', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Beginner'],
     isPremium: false,
     blocks: [
       {
@@ -184,10 +184,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Chest & Triceps',
     description:
       'A classic push session built around the bench press. Control the descent on every rep - the lowering phase is where the chest work really happens.',
-    category: 'Strength',
-    difficulty: 'Intermediate',
     estimatedTime: 50,
-    tags: ['Upper Body', 'Strength'],
+    disciplines: ['Strength'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Intermediate'],
     isPremium: true,
     blocks: [
       {
@@ -285,10 +285,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Back and Biceps',
     description:
       'A pulling session focused on building lat width and mid-back thickness. Think of your hands as hooks - pull with your elbows, not your hands.',
-    category: 'Strength',
-    difficulty: 'Intermediate',
     estimatedTime: 50,
-    tags: ['Upper Body', 'Strength'],
+    disciplines: ['Strength'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Intermediate'],
     isPremium: true,
     blocks: [
       {
@@ -375,10 +375,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Legs: Squat & Hinge',
     description:
       'A balanced lower body session covering both the anterior and posterior chain. The most important session of the week for overall strength and body composition.',
-    category: 'Strength',
-    difficulty: 'Intermediate',
     estimatedTime: 55,
-    tags: ['Lower Body', 'Strength'],
+    disciplines: ['Strength'],
+    bodyFocus: ['Lower Body'],
+    levels: ['Intermediate'],
     isPremium: false,
     blocks: [
       {
@@ -480,10 +480,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Olympic Complex: Snatch Stability',
     description:
       'Developing technical speed and overhead stability with the snatch.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Olympic Lifting', 'Upper Body', 'Strength'],
+    disciplines: ['Strength', 'Olympic Lifting'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -530,10 +530,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Strength Press Day',
     description:
       'A proper overhead pressing session from the ground up. You will build to a heavy single, hit your volume work at 85%, then finish with accessory work that fills the gaps most pressers ignore. No leg drive, no excuses.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 60,
-    tags: ['Upper Body', 'Strength'],
+    disciplines: ['Strength'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -593,10 +593,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Strength Squat Day',
     description:
       'This is a proper squat session, not just a finisher. You will build to a heavy front squat, hit volume at 80%, then finish with accessory work that makes the next session better. Elbows up, chest tall, and do not bail on depth when it gets heavy.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 50,
-    tags: ['Lower Body', 'Strength'],
+    disciplines: ['Strength'],
+    bodyFocus: ['Lower Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -664,10 +664,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Pistol Squat Clinic',
     description:
       'Pistol squats are one of the hardest bodyweight movements to master. This session builds up to them properly, starting with the mobility and strength foundations and earning the full rep by the end. Do not skip the progressions, they are the session.',
-    category: 'Skill',
-    difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Lower Body', 'Gymnastics'],
+    disciplines: ['Gymnastics', 'Strength'],
+    bodyFocus: ['Lower Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -729,10 +729,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Pause Back Squats - Strength',
     description:
       'Pause squats expose every weakness in your squat. No bounce, no stretch reflex, just raw strength from the hole. This session builds to a heavy pause single, hits volume with a 3 second hold, then finishes with accessory work that makes the bottom position stronger every time you come back.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 65,
-    tags: ['Lower Body', 'Strength'],
+    disciplines: ['Strength'],
+    bodyFocus: ['Lower Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -808,10 +808,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'The Muscle Up Lab',
     description:
       'The muscle up is not one skill, it is three. A powerful pull, a fast transition, and a strong dip. Most athletes fail in the transition because they never train it in isolation. This session breaks the movement into its components, trains each one separately, then puts it back together.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Upper Body', 'Gymnastics'],
+    disciplines: ['Gymnastics', 'Strength'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -879,10 +879,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Pull-ups and Dips - Strength',
     description:
       'This session assumes you can perform weigthed pull-ups and dips. Pull-ups and dips have built more upper body strength than any machine ever invented. This session treats them with the respect they deserve. You will build to a heavy weighted single on both movements, hit volume at 85%, then finish with accessory work that fills every gap the big two leave behind.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 65,
-    tags: ['Upper Body', 'Strength'],
+    disciplines: ['Strength', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -959,10 +959,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Chest Day',
     description:
       'Full chest and tricep session with structured progressive loading. The pec deck finisher will leave you unable to tie your own shoelaces.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 60,
-    tags: ['Upper Body', 'Strength'],
+    disciplines: ['Strength'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -1065,10 +1065,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Back Day',
     description:
       'A complete back session targeting thickness, width, and rear delt health. Pull with your elbows - your hands are just hooks.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 60,
-    tags: ['Upper Body', 'Strength'],
+    disciplines: ['Strength', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -1164,10 +1164,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Legs Day',
     description:
       'The most demanding session of the week. Quad, hamstring, and glute work across every major movement pattern. You earn the rest days after this one.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 65,
-    tags: ['Lower Body', 'Strength'],
+    disciplines: ['Strength'],
+    bodyFocus: ['Lower Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -1260,10 +1260,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Shoulders Day',
     description:
       'Full shoulder development from pressing strength to lateral width and rear delt health. The face pull at the end is not optional.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Upper Body', 'Strength'],
+    disciplines: ['Strength'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -1359,10 +1359,10 @@ export const strength: StandaloneWorkoutSource[] = [
     title: 'Arms Day',
     description:
       'Dedicated bicep and tricep session. The arms respond exceptionally well to focused isolation work - give them your full attention for once.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Upper Body', 'Strength'],
+    disciplines: ['Strength'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {

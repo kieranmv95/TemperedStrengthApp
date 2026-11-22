@@ -6,10 +6,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Redline',
     description:
       'Score is total time taken to complete. include the rest. its redline central and challenges the mind. The question is can you hang on? #chasepain',
-    category: 'Conditioning',
-    difficulty: 'Advanced',
     estimatedTime: 15,
-    tags: ['Cardio', 'Full Body', 'For Time'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
     isPremium: false,
     collab: {
       image: require('@/assets/images/collabs/chase_pain.jpg'),
@@ -61,10 +62,12 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Row Till You Break',
     description:
       'Pure anaerobic punishment. Three cracks at 500m, each one should leave you breathless. Rest just enough to go again, but not enough to fully recover. Your split time is your score.',
-    category: 'Conditioning',
-    difficulty: 'Advanced',
     estimatedTime: 25,
-    tags: ['Cardio', 'Intervals', 'Benchmark'],
+    disciplines: ['Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Advanced'],
+    collections: ['Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -100,10 +103,12 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'The 500 Club',
     description:
       'Five rounds of 500m at 90-95% effort. The goal is consistency, not just a fast first rep. If your splits are falling apart by round three, you went out too hot. Record every split and chase them next time.',
-    category: 'Conditioning',
-    difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Cardio', 'Intervals', 'Benchmark'],
+    disciplines: ['Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Advanced'],
+    collections: ['Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -143,10 +148,10 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Skipping Skill Practice',
     description:
       'Jump rope is a skill before it is a workout. This session is about building rhythm and foot speed, not fitness. Stay light on the balls of your feet, keep your elbows in, and do not stare at the ground. Trip? Reset and go again, everyone does.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['Cardio'],
+    disciplines: ['Conditioning'],
+    bodyFocus: ['Full Body'],
+    levels: ['Beginner'],
     isPremium: false,
     blocks: [
       {
@@ -182,10 +187,12 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: "Mikko's Triangle",
     description:
       'A classic erg benchmark. Pick a single calorie target and complete that amount every working minute — every minute.',
-    category: 'Conditioning',
-    difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Cardio', 'EMOM', 'Benchmark'],
+    disciplines: ['Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'EMOM',
+    levels: ['Advanced'],
+    collections: ['Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -218,10 +225,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Run Pacing Ladder',
     description:
       'A pacing session that teaches you how to control effort and recover quickly.',
-    category: 'Conditioning',
-    difficulty: 'Intermediate',
     estimatedTime: 35,
-    tags: ['Cardio', 'Intervals'],
+    disciplines: ['Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Intermediate'],
     isPremium: false,
     blocks: [
       {
@@ -252,10 +260,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'The Diesel',
     description:
       'Four kilometres at a pace you can actually hold. This is not about suffering, it is about sustaining. Target 10-15 seconds slower than your 2k split and lock into a rhythm you could hold for another 2k if you had to. Legs drive, arms finish, breathe on the recovery.',
-    category: 'Conditioning',
-    difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Cardio', 'Benchmark'],
+    disciplines: ['Conditioning'],
+    bodyFocus: ['Full Body'],
+    levels: ['Advanced'],
+    collections: ['Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -286,10 +295,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'The Mile That Earns It',
     description:
       'A full mile of sandbag carry, broken up by movements that make picking it back up feel even heavier. You will cover 1600m in four 400m legs with a penalty block between each one. Switch carry positions as needed but the bag never goes in a locker, it stays with you the whole time.',
-    category: 'Conditioning',
-    difficulty: 'Advanced',
     estimatedTime: 50,
-    tags: ['Full Body', 'For Time'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -356,10 +366,10 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'The Double Under Clinic',
     description:
       'This is for athletes who can already string double unders together but want to get faster, more consistent and less rattled when they trip. Four blocks that isolate the specific skills that separate good double unders from great ones. Relaxed grip, high jump, patient wrists.',
-    category: 'Conditioning',
-    difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Cardio'],
+    disciplines: ['Conditioning'],
+    bodyFocus: ['Full Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -427,10 +437,12 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'The Ergathlon',
     description:
       'at 10k in total, This is a Triple-erg test and a run. Minimal transitions are key. Maintain a steady aerobic pace.',
-    category: 'Conditioning',
-    difficulty: 'Advanced',
     estimatedTime: 40,
-    tags: ['Cardio', 'For Time', 'Benchmark', 'Chipper'],
+    disciplines: ['Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Advanced'],
+    collections: ['Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -452,10 +464,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Ignition',
     description:
       'First session. Full body. The WOD is an AMRAP - as many rounds as possible in 10 minutes. Set a pace you can hold and do not blow up in round two.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 12,
-    tags: ['Full Body', 'AMRAP'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Beginner'],
     equipment: [],
     isPremium: true,
     blocks: [
@@ -482,10 +495,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'The Ladder',
     description:
       'Lower body focus. The WOD is a descending ladder - reps drop each round so the session gets faster as you go. Start controlled.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['Full Body', 'For Time', 'Ladder'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'Ladder',
+    levels: ['Beginner'],
     equipment: ['medicine ball'],
     isPremium: true,
     blocks: [
@@ -509,10 +523,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Push Storm',
     description:
       'Upper body push focus. The WOD is a Tabata - 8 rounds of 20s work, 10s rest. Four stations. Simple format, uncomfortable execution.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 8,
-    tags: ['Upper Body', 'Tabata'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Upper Body'],
+    format: 'Tabata',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'medicine ball'],
     isPremium: true,
     blocks: [
@@ -530,10 +545,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Up And Down',
     description:
       'Full body. One pass through a list of movements, for time. Pace from the start.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['Full Body', 'For Time', 'Chipper'],
+    disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -562,10 +578,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Death by Dumbbell',
     description:
       'Upper body and core. The WOD is an EMOM - every minute on the minute for 12 minutes. Work starts the second the clock does.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 12,
-    tags: ['Full Body', 'EMOM'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'EMOM',
+    levels: ['Beginner'],
     equipment: ['dumbbell'],
     isPremium: true,
     blocks: [
@@ -595,10 +612,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'The Grind',
     description:
       'Lower body and posterior chain. The WOD is 5 rounds for time - as fast as possible with form intact. This is where it starts to feel like real conditioning.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['Lower Body', 'For Time'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Lower Body'],
+    format: 'For Time',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'box'],
     isPremium: true,
     blocks: [
@@ -626,10 +644,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Station Six',
     description:
       'Six stations, rotating continuously for 15 minutes. The first station-style session of the programme - move through all six then repeat.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 15,
-    tags: ['Full Body', 'AMRAP'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Beginner'],
     equipment: ['kettlebell', 'medicine ball'],
     isPremium: true,
     blocks: [
@@ -662,10 +681,12 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Burn Out',
     description:
       'This WOD is a descending rep scheme - starts with high reps, drops each round. Starts heavy, finishes fast.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['Full Body', 'For Time', 'Partner'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Beginner'],
+    partner: 'option',
     equipment: ['medicine ball'],
     isPremium: true,
     blocks: [
@@ -710,10 +731,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'The Gauntlet',
     description:
       'Full body. The WOD is an AMRAP 15 - five movements, more volume than anything in weeks 1–2. This is where the programme steps up.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 15,
-    tags: ['Full Body', 'AMRAP'],
+    disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar'],
     isPremium: true,
     blocks: [
@@ -744,10 +766,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Pressing Matters',
     description:
       'Upper body push and pull. The WOD is an EMOM 16 - longer than week two. Four movements rotating across 16 minutes.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 16,
-    tags: ['Upper Body', 'EMOM'],
+    disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    format: 'EMOM',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar'],
     isPremium: true,
     blocks: [
@@ -777,10 +800,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Lower Inferno',
     description:
       'Lower body chipper. One pass. More reps than the week one chipper. Pace it from the first movement - this session punishes anyone who goes out too fast.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['Lower Body', 'For Time'],
+    disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+    bodyFocus: ['Lower Body'],
+    format: 'For Time',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'box', 'bands'],
     isPremium: true,
     blocks: [
@@ -810,10 +834,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Full Send',
     description:
       'Full body to close week three. The WOD is a 4-round station circuit with rest between rounds. Station work, high heart rate, no hiding.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['Full Body', 'For Time', 'Intervals'],
+    disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -843,10 +868,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'The Hurricane',
     description:
       'Full body power. The WOD is a three-round hurricane - three movements, maximum effort, rest between rounds. Designed to spike and recover, spike and recover.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 15,
-    tags: ['Full Body', 'For Time', 'Intervals'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'medicine ball'],
     isPremium: true,
     blocks: [
@@ -874,10 +900,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Pull Everything',
     description:
       'Pull-dominant upper body. The WOD is a Tabata with pull and core stations. Eight rounds, alternating between pulling movements and anti-rotation work.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 6,
-    tags: ['Upper Body', 'Tabata'],
+    disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    format: 'Tabata',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -901,10 +928,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Leg Day Lies',
     description:
       'Lower body. The WOD is an AMRAP 18 - longest lower body WOD of the programme so far. Pace accordingly from the first movement.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 18,
-    tags: ['Lower Body', 'AMRAP'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Lower Body'],
+    format: 'AMRAP',
+    levels: ['Beginner'],
     equipment: ['kettlebell', 'box'],
     isPremium: true,
     blocks: [
@@ -934,10 +962,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Core Reckoning',
     description:
       'Full body with a core emphasis. The WOD is a chipper with a core movement between every strength station. There is no hiding place in this one.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['Full Body', 'For Time', 'Chipper'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar'],
     isPremium: true,
     blocks: [
@@ -969,10 +998,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'The Accumulator',
     description:
       'Full body. The WOD is an ascending ladder - reps build each round. Starts easy, finishes brutal. Unlike the descending ladder in week one, this one gets harder as it goes.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['Full Body', 'For Time', 'Ladder'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'Ladder',
+    levels: ['Beginner'],
     equipment: ['medicine ball'],
     isPremium: true,
     blocks: [
@@ -996,10 +1026,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Double Trouble',
     description:
       'Upper body pairs. The WOD is a push and pull AMRAP 20 - five movements alternating push and pull. Longest upper body WOD of the programme.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['Full Body', 'AMRAP'],
+    disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar'],
     isPremium: true,
     blocks: [
@@ -1028,10 +1059,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Power Hour',
     description:
       'Full body power. The WOD is an EMOM 20 - the longest EMOM of the programme. Five movements rotating across 20 minutes. Tests your ability to sustain effort, not just produce it.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['Full Body', 'EMOM'],
+    disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'EMOM',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -1062,10 +1094,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'The Last Pull',
     description:
       'Pull-dominant upper body. The WOD is a chipper - every movement involves pulling, rowing, or anti-rotation work. The longest upper body WOD of the programme.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 20,
-    tags: ['Upper Body', 'For Time', 'Chipper'],
+    disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    format: 'Chipper',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'pull-up bar', 'bands'],
     isPremium: true,
     blocks: [
@@ -1097,10 +1130,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Lower Body Finale',
     description:
       'Lower body finale. The WOD is a hard lower body chipper, high volume, high intensity.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['Lower Body', 'For Time'],
+    disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+    bodyFocus: ['Lower Body'],
+    format: 'For Time',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'box', 'medicine ball'],
     isPremium: true,
     blocks: [
@@ -1126,10 +1160,11 @@ export const conditioning: StandaloneWorkoutSource[] = [
     title: 'Peak',
     description:
       'Full body. Everything. The WOD is one of the longer chippers we offer - nine movements, one pass, for time.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['Full Body', 'For Time', 'Chipper'],
+    disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'medicine ball', 'pull-up bar'],
     isPremium: true,
     blocks: [

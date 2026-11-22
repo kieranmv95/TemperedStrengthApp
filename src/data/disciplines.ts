@@ -1,13 +1,57 @@
-import type { SingleWorkout, WorkoutCategory } from '@/src/types/workouts';
+import {
+  WORKOUT_DISCIPLINES,
+  type SingleWorkout,
+  type WorkoutCollection,
+  type WorkoutDiscipline,
+  type WorkoutSpecial,
+} from '@/src/types/workouts';
 import { ImageSourcePropType } from 'react-native';
 
-/** Discipline carousel route key; not a `WorkoutTag` — filters by empty `equipment`. */
+/** Ionicon per discipline, used on pills, filter chips and workout cards. */
+export const DISCIPLINE_ICONS: Record<WorkoutDiscipline, string> = {
+  Metcon: 'timer-outline',
+  Strength: 'barbell-outline',
+  'Olympic Lifting': 'trending-up-outline',
+  Gymnastics: 'body-outline',
+  Conditioning: 'heart-outline',
+  Hyrox: 'fitness-outline',
+  Skills: 'school-outline',
+};
+
+/** Route key that filters by empty `equipment`. */
 export const NO_EQUIPMENT_DISCIPLINE_TAG = 'No Equipment';
 
-/** Discipline carousel keys mapped to workout category (tags no longer duplicate this). */
-const DISCIPLINE_CATEGORY: Record<string, WorkoutCategory> = {
-  CrossFit: 'WOD',
+/**
+ * Route key per discipline. `Skill` predates the Skills rename and stays so
+ * existing links keep working.
+ */
+const DISCIPLINE_TAG_FOR: Record<WorkoutDiscipline, string> = {
+  Metcon: 'Metcon',
+  Strength: 'Strength',
+  'Olympic Lifting': 'Olympic Lifting',
+  Gymnastics: 'Gymnastics',
+  Conditioning: 'Conditioning',
   Hyrox: 'Hyrox',
+  Skills: 'Skill',
+};
+
+const DISCIPLINE_FOR_TAG: Record<string, WorkoutDiscipline> =
+  Object.fromEntries(
+    WORKOUT_DISCIPLINES.map((discipline) => [
+      DISCIPLINE_TAG_FOR[discipline],
+      discipline,
+    ])
+  );
+
+/** `CrossFit` was a discipline; its route now opens the benchmarks collection. */
+const DISCIPLINE_COLLECTION: Record<string, WorkoutCollection> = {
+  CrossFit: 'CrossFit Benchmarks',
+};
+
+/** Event keys mapped to the workout's event series. */
+const DISCIPLINE_SPECIAL: Record<string, WorkoutSpecial> = {
+  DBB: 'Death By Beth',
+  Arena: 'Arena',
   Rainhill: 'Rainhill',
   'Girl Games': 'Girl Games',
 };
@@ -25,11 +69,16 @@ export type DisciplineTheme = {
 
 export type Discipline = {
   title: string;
+  /** `event` renders as an Events tile; `discipline` as a Disciplines pill. */
+  group: 'event' | 'discipline';
   showTitle?: boolean;
   /** Hide from the discipline carousel while unreleased (data kept in place). */
   hidden?: boolean;
   tag: string;
-  image: ImageSourcePropType;
+  /** Tile artwork; events only. */
+  image?: ImageSourcePropType;
+  /** Ionicon name for the Disciplines pill. */
+  icon?: string;
   logo?: {
     source: ImageSourcePropType;
     width: number;
@@ -37,6 +86,8 @@ export type Discipline = {
   };
   description?: string;
   link?: string;
+  /** Label for the sponsor link. Falls back to "View event details". */
+  linkLabel?: string;
   isSponsor?: boolean;
   /** Optional white-label colours for the sponsor card on the discipline screen. */
   theme?: DisciplineTheme;
@@ -45,9 +96,10 @@ export type Discipline = {
 export const disciplines: Discipline[] = [
   {
     title: 'Death by Beth',
+    group: 'event',
     tag: 'DBB',
     showTitle: false,
-    hidden: true,
+    hidden: false,
     isSponsor: true,
     logo: {
       source: require('@/assets/images/logos/deathbybeth_logo.png'),
@@ -56,8 +108,9 @@ export const disciplines: Discipline[] = [
     },
     image: require('@/assets/images/disciplines/deathbybeth.png'),
     description:
-      "Death by Beth is a fitness event that challenges you to push your limits. It's a fun and intense workout that will test your strength and endurance. It's a great way to get a feel for the event and get signed up for the next one.",
-    link: 'https://www.thearenagames.co.uk/',
+      'High-energy, all-level workouts to push your limits – choose your weights and survive! Not for the faint-hearted! ☠️',
+    link: 'https://www.instagram.com/coach_bethb/',
+    linkLabel: 'Check out Death by Beth here',
     theme: {
       bgColor: '#39FF14',
       borderColor: '#39FF14',
@@ -67,6 +120,7 @@ export const disciplines: Discipline[] = [
   },
   {
     title: 'Arena Games',
+    group: 'event',
     tag: 'Arena',
     showTitle: false,
     hidden: false,
@@ -89,6 +143,7 @@ export const disciplines: Discipline[] = [
   },
   {
     title: 'The Rainhill Trials',
+    group: 'event',
     tag: 'Rainhill',
     showTitle: false,
     isSponsor: true,
@@ -104,6 +159,7 @@ export const disciplines: Discipline[] = [
   },
   {
     title: 'The Girl Games',
+    group: 'event',
     tag: 'Girl Games',
     showTitle: false,
     isSponsor: true,
@@ -118,52 +174,47 @@ export const disciplines: Discipline[] = [
       linkColor: '#FF4BB8',
     },
   },
-  {
-    title: 'Olympic Lifting',
-    tag: 'Olympic Lifting',
+  ...WORKOUT_DISCIPLINES.map((discipline): Discipline => ({
+    title: discipline,
+    group: 'discipline',
+    tag: DISCIPLINE_TAG_FOR[discipline],
     showTitle: true,
-    image: require('@/assets/images/disciplines/oly.png'),
-  },
+    icon: DISCIPLINE_ICONS[discipline],
+  })),
   {
-    title: 'Skills',
-    tag: 'Skill',
-    showTitle: true,
-    image: require('@/assets/images/skills/thumbnails/Handstand.jpg'),
-    description:
-      'Drill-led sessions for complex movements — snatches, muscle-ups, handstands, and more. Positions and progressions before load.',
-  },
-  {
-    title: 'CrossFit',
+    title: 'CrossFit Benchmarks',
+    group: 'discipline',
     tag: 'CrossFit',
     showTitle: true,
-    image: require('@/assets/images/disciplines/crossfit.png'),
-  },
-  {
-    title: 'Hyrox',
-    tag: 'Hyrox',
-    showTitle: true,
-    image: require('@/assets/images/disciplines/hyrox.png'),
-  },
-  {
-    title: 'Collabs',
-    tag: 'Collab',
-    isSponsor: true,
-    showTitle: true,
-    image: require('@/assets/images/disciplines/collab.png'),
-    description:
-      'At Tempered Strength, sometimes we come across a workout that just takes our breath away... Literally. Find all the workouts from people we have collaborated with here.',
+    icon: 'trophy-outline',
   },
   {
     title: 'Partner',
+    group: 'discipline',
     tag: 'Partner',
     showTitle: true,
-    image: require('@/assets/images/disciplines/partner.png'),
+    icon: 'people-outline',
+  },
+  {
+    title: 'Collabs',
+    group: 'discipline',
+    tag: 'Collab',
+    isSponsor: true,
+    showTitle: true,
+    icon: 'sparkles-outline',
+    description:
+      'At Tempered Strength, sometimes we come across a workout that just takes our breath away... Literally. Find all the workouts from people we have collaborated with here.',
   },
 ];
 
-/** Disciplines shown in the carousel (excludes any flagged `hidden`). */
-export const visibleDisciplines: Discipline[] = disciplines.filter(
-  (discipline) => !discipline.hidden
+/** Events shown as tiles on the workouts screen (excludes any flagged `hidden`). */
+export const visibleEvents: Discipline[] = disciplines.filter(
+  (discipline) => discipline.group === 'event' && !discipline.hidden
+);
+
+/** Training disciplines shown as pills on the workouts screen. */
+export const visibleTrainingDisciplines: Discipline[] = disciplines.filter(
+  (discipline) => discipline.group === 'discipline' && !discipline.hidden
 );
 
 export function isNoEquipmentDiscipline(tag: string): boolean {
@@ -177,21 +228,20 @@ export function workoutMatchesDiscipline(
   if (isNoEquipmentDiscipline(disciplineTag)) {
     return workout.equipment.length === 0;
   }
-  const category = DISCIPLINE_CATEGORY[disciplineTag];
-  if (category) {
-    return workout.category === category;
+  const discipline = DISCIPLINE_FOR_TAG[disciplineTag];
+  if (discipline) {
+    return workout.disciplines.includes(discipline);
+  }
+  const collection = DISCIPLINE_COLLECTION[disciplineTag];
+  if (collection) {
+    return workout.collections?.includes(collection) ?? false;
+  }
+  const special = DISCIPLINE_SPECIAL[disciplineTag];
+  if (special) {
+    return workout.special === special;
   }
   if (disciplineTag === 'Partner') {
-    return workout.tags.includes('Partner');
-  }
-  if (disciplineTag === 'Olympic Lifting') {
-    return workout.tags.includes('Olympic Lifting');
-  }
-  if (disciplineTag === 'Skill') {
-    return workout.tags.includes('Skill');
-  }
-  if (disciplineTag === 'Arena') {
-    return workout.tags.includes('Arena');
+    return Boolean(workout.partner);
   }
   if (disciplineTag === 'Collab') {
     return Boolean(workout.collab);

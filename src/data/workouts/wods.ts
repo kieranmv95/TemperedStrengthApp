@@ -6,10 +6,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'The Century',
     description:
       'A benchmark test of mental grit. The goal is to finish 100 burpees as fast as possible.',
-    category: 'WOD',
-    difficulty: 'Intermediate',
     estimatedTime: 20,
-    tags: ['Full Body', 'Chipper', 'Benchmark'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Intermediate'],
+    collections: ['Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -33,10 +35,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'The Triple Stack',
     description:
       'Classic AMRAP. Aim for a consistent pace you can maintain for the full duration. Target 5+ rounds.',
-    category: 'WOD',
-    difficulty: 'Intermediate',
     estimatedTime: 15,
-    tags: ['Full Body', 'AMRAP', 'Partner'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Intermediate'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -80,10 +84,11 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Death by 10 Metres',
     description:
       'An EMOM shuttle test with a twist. Each round you add a sprint, and a movement penalty. Starts easy, becomes a full-body lung burner fast.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 25,
-    tags: ['Full Body', 'EMOM'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'EMOM',
+    levels: ['Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -111,10 +116,11 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Hip Snap',
     description:
       'Posterior chain power, built one swing at a time. The reps climb every two minutes so there is no cruising. Flat back, aggressive hip snap, and let the bell float.',
-    category: 'Conditioning',
-    difficulty: 'Intermediate',
     estimatedTime: 10,
-    tags: ['Full Body', 'EMOM'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'EMOM',
+    levels: ['Intermediate'],
     isPremium: false,
     blocks: [
       {
@@ -160,10 +166,11 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Four Minutes of Fury',
     description:
       '4 minutes. That is all. But if you are not redlining by round 4 you are not working hard enough. Tabata protocol: 20 seconds all-out, 10 seconds to survive. Eight rounds, alternating between two movements. No excuses.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 10,
-    tags: ['Full Body', 'Tabata'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'Tabata',
+    levels: ['Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -201,10 +208,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'The Endless Climb',
     description:
       'A ladder that never stops climbing. Every round adds 2 reps to both movements and the clock does not care. Pace yourself early or blow up before the halfway mark. Your score is the round you reach when time is called.',
-    category: 'WOD',
-    difficulty: 'Intermediate',
     estimatedTime: 18,
-    tags: ['Full Body', 'AMRAP', 'Partner'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Intermediate'],
+    partner: 'option',
     isPremium: true,
     blocks: [
       {
@@ -265,10 +274,11 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Ground & Pound',
     description:
       'Core tension, shoulder stability and leg power, all without touching a single piece of kit. Each minute has two movements that fight each other in the best way. Get through both and the rest of the minute is yours.',
-    category: 'WOD',
-    difficulty: 'Intermediate',
     estimatedTime: 18,
-    tags: ['Full Body', 'EMOM'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'EMOM',
+    levels: ['Intermediate'],
     isPremium: false,
     blocks: [
       {
@@ -302,10 +312,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Cindy (Bodyweight AMRAP)',
     description:
       'The classic 20-minute bodyweight engine test. Smooth is fast. Keep sets crisp.',
-    category: 'WOD',
-    difficulty: 'Intermediate',
     estimatedTime: 20,
-    tags: ['Full Body', 'AMRAP', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Intermediate'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -330,10 +342,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Fran (Thrusters and Pull-ups)',
     description:
       'A fast, brutal classic. Sprint the barbell, survive the pull-ups.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 15,
-    tags: ['Upper Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -358,10 +372,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Helen (Run, KB, Pull-ups)',
     description:
       'Short rounds, high output. The run is your limiter. The swings are your tax.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['Full Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -390,10 +406,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Annie (Skipping and Sitting)',
     description:
       'A pure midline and engine burner. Keep the jump rope relaxed and efficient.',
-    category: 'WOD',
-    difficulty: 'Intermediate',
     estimatedTime: 20,
-    tags: ['Core', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Core'],
+    format: 'For Time',
+    levels: ['Intermediate'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -416,10 +434,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: "Grace (C&J's)",
     description:
       'Power, speed, and composure under fatigue. Every rep should be snappy.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 10,
-    tags: ['Upper Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Olympic Lifting'],
+    bodyFocus: ['Upper Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -474,10 +494,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Karen (Wall Balls)',
     description:
       'Simple on paper. Mentally battle in reality. Small sets from the start.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 15,
-    tags: ['Full Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -501,10 +523,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Jackie (Row, Thrusters, Pull-ups)',
     description:
       'Engine into grip and shoulders. Keep the row controlled and the thrusters smooth.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['Upper Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -531,10 +555,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Nancy (run, OH squats)',
     description:
       'Legs and lungs. The overhead squat demands patience and positioning.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Full Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -559,10 +585,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Diane (Deadlift, HSPU)',
     description:
       'Heavy hinge plus inverted pressing. Keep your back safe and your sets smart.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['Upper Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -624,10 +652,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Isabel (Snatch)',
     description:
       'Speed under a bar. Your best score is the fastest safe cycling you can manage.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 10,
-    tags: ['Upper Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Olympic Lifting'],
+    bodyFocus: ['Upper Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -651,10 +681,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Elizabeth (Row, Clean, Dip)',
     description:
       'Fast rounds. Clean technique, stable shoulders, and short rests.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 15,
-    tags: ['Upper Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics', 'Olympic Lifting'],
+    bodyFocus: ['Upper Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -678,10 +710,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Angie (Pull-ups, Push-ups, Sit-ups, Squats)',
     description:
       'A simple bodyweight chipper. Stay disciplined with sets so you don’t crater.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 40,
-    tags: ['Full Body', 'For Time', 'Benchmark', 'Chipper'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -716,10 +750,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Barbara (Sit-ups, Push-ups, Pull-ups, Squats)',
     description:
       'High output rounds with enforced rest. Sprint the work, then recover with intent.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Full Body', 'Intervals', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -748,10 +784,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Chelsea (Pull-ups, Push-ups, Squats)',
     description:
       'A 30-minute EMOM. Keep moving, never sprint the early minutes.',
-    category: 'WOD',
-    difficulty: 'Intermediate',
     estimatedTime: 40,
-    tags: ['Full Body', 'EMOM', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'EMOM',
+    levels: ['Intermediate'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -780,10 +818,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Fight Gone Bad (Classic)',
     description:
       'A points-style benchmark. Output matters, but transitions matter more.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Full Body', 'Intervals', 'Benchmark'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -816,10 +856,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'The Chief (Power Cleans + Bodyweight Movements)',
     description:
       'Short windows, high pace. The only goal is consistent output across sets.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 25,
-    tags: ['Full Body', 'AMRAP', 'Benchmark'],
+    disciplines: ['Metcon', 'Olympic Lifting'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -847,10 +889,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'DT (Deadlifts + Olympic lifts)',
     description:
       'Grip and barbell cycling. Break early to keep the bar moving.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 25,
-    tags: ['Full Body', 'For Time', 'Benchmark', 'Chipper'],
+    disciplines: ['Metcon', 'Olympic Lifting'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -903,10 +947,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Kelly (Run, Box Jumps, Wall balls)',
     description:
       'Longer benchmark with consistent rounds. Smooth transitions win.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Full Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -933,10 +979,11 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Lynne (Bench press, Pull-ups)',
     description:
       'Max reps under fatigue. Keep strict form, track total reps honestly.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Upper Body', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -964,10 +1011,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Kalsu - Thruster Burpees',
     description:
       'A brutal thruster benchmark. Every minute you pay the burpee tax.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Full Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -995,10 +1044,11 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Metabolic Stress: Row/Thruster',
     description:
       "A 'couplet' designed to maximise lactate production. This will burn.",
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['Full Body', 'For Time'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -1021,10 +1071,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Murph',
     description:
       'The gold standard of endurance. No partitioning means finishing all reps of one movement before the next.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 60,
-    tags: ['Full Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -1132,10 +1184,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'The 100 Club',
     description:
       'High-volume plyometrics and metabolic demand. Stay efficient on the box step-down.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 25,
-    tags: ['Full Body', 'For Time', 'Partner'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    partner: 'option',
     isPremium: true,
     blocks: [
       {
@@ -1178,10 +1232,11 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Press From Hell',
     description:
       'A descending ladder that gets kinder with every round, but your lungs will not notice. Devil press and box step ups paired together from 10 down to 1. The reps shrink, the suffering does not. Use the swing of the dumbbells to drive the press overhead and do not fight the movement.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Full Body', 'For Time', 'Ladder'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'Ladder',
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -1221,10 +1276,13 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Eva',
     description:
       'A high-volume benchmark. Long rounds, constant grip demand, and a steady run pace.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Full Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
+    partner: 'option',
     isPremium: true,
     blocks: [
       {
@@ -1276,10 +1334,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'King Kong',
     description:
       'A heavy classic. Only for athletes with solid technique and strict standards.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['Upper Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics', 'Olympic Lifting'],
+    bodyFocus: ['Upper Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -1338,10 +1398,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Nate (Muscle-ups + HSPU + KB)',
     description:
       'A 20-minute AMRAP that rewards efficient gymnastics and a strong hinge.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Gymnastics', 'AMRAP', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -1366,10 +1428,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Randy (Power Snatch)',
     description:
       'A fast barbell benchmark. Crisp reps only. Grip and lungs will be tested.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['Upper Body', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Olympic Lifting'],
+    bodyFocus: ['Upper Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -1391,10 +1455,12 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'Amanda (Muscle-ups + Snatch)',
     description:
       'A sharp classic: high-skill and fast reps. Scale to maintain standards.',
-    category: 'WOD',
-    difficulty: 'Advanced',
     estimatedTime: 20,
-    tags: ['Gymnastics', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Gymnastics', 'Olympic Lifting'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['CrossFit Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -1423,12 +1489,13 @@ export const wods: StandaloneWorkoutSource[] = [
     title: 'The Fixus Games 1',
     description:
       'A long chipper from CrossFit Fixus in Middleton. Four 1km runs broken up by wall balls, kettlebell swings, box step overs and dumbbell thrusters. Partner or individual — 40 minute cap.',
-    category: 'WOD',
-    difficulty: 'Multiple Difficulties',
     estimatedTime: 40,
-    tags: ['Full Body', 'For Time', 'Chipper', 'Partner'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Intermediate', 'Advanced'],
+    partner: 'only',
     isPremium: false,
-    partner: true,
     collab: {
       image: require('@/assets/images/collabs/crossfit_fIxus.jpg'),
       name: 'CrossFit Fixus',

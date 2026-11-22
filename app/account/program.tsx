@@ -7,19 +7,24 @@ import { useLargeText } from '@/src/hooks/useLargeText';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import type { Program } from '@/src/types/program';
 import { getProgramById } from '@/src/utils/program';
+import type { GymTimerSettings } from '@/src/types/gymTimer';
 import {
   clearProgramData,
   getActiveProgramId,
   getAutoPbDetectionInProgramsEnabled,
   getAutoRestTimersEnabled,
+  getGymTimerSettings,
   setAutoPbDetectionInProgramsEnabled,
   setAutoRestTimersEnabled,
+  setGymTimerSettings,
+  DEFAULT_GYM_TIMER_SETTINGS,
 } from '@/src/utils/storage';
 import { cancelTimerFinishedNotifications } from '@/src/services/localNotifications';
 import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
-import { Alert, Switch, Text, View } from 'react-native';
+import { Alert, Pressable, Switch, Text, View } from 'react-native';
+import { color, radius, space, typography } from '@/src/constants/tokens';
 
 export default function AccountProgramSettingsScreen() {
   const posthog = usePostHog();
@@ -31,6 +36,8 @@ export default function AccountProgramSettingsScreen() {
   const [autoTimersLoading, setAutoTimersLoading] = useState<boolean>(true);
   const [autoPbEnabled, setAutoPbEnabledState] = useState<boolean>(true);
   const [autoPbLoading, setAutoPbLoading] = useState<boolean>(true);
+  const [gymTimerSettings, setGymTimerSettingsState] =
+    useState<GymTimerSettings>(DEFAULT_GYM_TIMER_SETTINGS);
 
   const checkProgramStatus = async () => {
     try {
@@ -105,11 +112,35 @@ export default function AccountProgramSettingsScreen() {
     }
   };
 
+  const loadGymTimerSettings = async () => {
+    try {
+      setGymTimerSettingsState(await getGymTimerSettings());
+    } catch (error) {
+      console.error('Error loading gym timer settings:', error);
+    }
+  };
+
+  const persistLeadInSec = async (leadInSec: 0 | 5 | 10) => {
+    const next = { ...gymTimerSettings, leadInSec };
+    setGymTimerSettingsState(next);
+    try {
+      await setGymTimerSettings(next);
+      posthog.capture(posthogEventsNames.app.settingChanged, {
+        setting_name: 'gym_timer_lead_in',
+        new_value: String(leadInSec),
+      });
+    } catch (error) {
+      console.error('Error saving gym timer lead-in:', error);
+      setGymTimerSettingsState(await getGymTimerSettings());
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       checkProgramStatus();
       loadAutoTimersEnabled();
       loadAutoPbEnabled();
+      void loadGymTimerSettings();
     }, [])
   );
 
@@ -180,6 +211,58 @@ export default function AccountProgramSettingsScreen() {
               accessibilityLabel="Auto rest timers"
               accessibilityHint="Starts the rest timer when you complete a set"
             />
+          </View>
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Gym timer lead-in</Text>
+              <Text style={styles.settingDescription}>
+                Countdown before work starts on AMRAP, EMOM, Tabata, and other
+                gym clocks.
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: space.xs,
+                  marginTop: space.sm,
+                }}
+              >
+                {([0, 5, 10] as const).map((sec) => {
+                  const selected = gymTimerSettings.leadInSec === sec;
+                  return (
+                    <Pressable
+                      key={sec}
+                      onPress={() => void persistLeadInSec(sec)}
+                      style={{
+                        minWidth: 56,
+                        minHeight: 40,
+                        paddingHorizontal: space.sm,
+                        borderRadius: radius.md,
+                        borderWidth: 1,
+                        borderColor: selected ? color.gold : color.borderStrong,
+                        backgroundColor: selected
+                          ? color.goldTint
+                          : color.surface2,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                      accessibilityRole="button"
+                      accessibilityState={{ selected }}
+                      accessibilityLabel={`${sec} second lead-in`}
+                    >
+                      <Text
+                        style={{
+                          ...typography.headline,
+                          color: color.textPrimary,
+                        }}
+                      >
+                        {sec}s
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            </View>
           </View>
 
           <View

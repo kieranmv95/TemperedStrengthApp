@@ -1,10 +1,15 @@
 // User-level settings and onboarding flags.
+import {
+  HEALTH_MOCK_SCENARIOS,
+  type HealthMockScenario,
+} from '@/src/services/healthTypes';
 import type { OnboardingProfile } from '@/src/types/onboarding';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { syncRemoveItem, syncSetItem } from '@/src/sync/syncStorage';
 import {
   AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY,
   AUTO_REST_TIMERS_ENABLED_KEY,
+  DEV_HEALTH_MOCK_SCENARIO_KEY,
   DEV_PRO_OVERRIDE_ENABLED_KEY,
   LAST_KNOWN_PRO_KEY,
   ONBOARDED_KEY,
@@ -244,6 +249,36 @@ export const setDevProOverrideEnabled = async (
     );
   } catch (error) {
     console.error('Error setting dev Pro override enabled:', error);
+    throw error;
+  }
+};
+
+function isHealthMockScenario(value: string): value is HealthMockScenario {
+  return (HEALTH_MOCK_SCENARIOS as string[]).includes(value);
+}
+
+export const getDevHealthMockScenario =
+  async (): Promise<HealthMockScenario> => {
+    if (!__DEV__) return 'off';
+
+    try {
+      const raw = await AsyncStorage.getItem(DEV_HEALTH_MOCK_SCENARIO_KEY);
+      return raw !== null && isHealthMockScenario(raw) ? raw : 'off';
+    } catch (error) {
+      console.error('Error getting dev health mock scenario:', error);
+      return 'off';
+    }
+  };
+
+export const setDevHealthMockScenario = async (
+  scenario: HealthMockScenario
+): Promise<void> => {
+  if (!__DEV__) return;
+
+  try {
+    await AsyncStorage.setItem(DEV_HEALTH_MOCK_SCENARIO_KEY, scenario);
+  } catch (error) {
+    console.error('Error setting dev health mock scenario:', error);
     throw error;
   }
 };

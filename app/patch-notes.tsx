@@ -15,6 +15,19 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '3.5.0',
+    dateLabel: '',
+    notes: [
+      'Heart rate zones, with basic and advanced (Karvonen) calculations',
+      'Connect Apple Health or Health Connect to pull in your resting heart rate',
+      'Zone workouts now show your bpm range for the zone',
+      'Death By Beth workouts',
+      'Events and disciplines now have their own sections on the workouts screen',
+      'New disciplines: Metcon, Gymnastics and more, and a workout can have several',
+      'Simpler filters, including filtering by the equipment you have',
+    ],
+  },
+  {
     version: '3.3.0',
     dateLabel: '1st November 2026',
     notes: ['Daily Programming', 'Re-order home screen sections', 'Tidied up the You tab', 'Added moblity widget to the home page'],

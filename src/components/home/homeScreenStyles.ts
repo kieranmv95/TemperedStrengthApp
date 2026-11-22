@@ -44,6 +44,10 @@ export const homeScreenStyles = StyleSheet.create({
   bentoTile: {
     flex: 1,
   },
+  /** Cancels body padding so the tools row can scroll to the screen edge. */
+  toolsBleed: {
+    marginHorizontal: -space.md,
+  },
   skeletons: {
     gap: space.md,
   },

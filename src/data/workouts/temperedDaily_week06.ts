@@ -106,10 +106,11 @@ const td036: StandaloneWorkoutSource = {
   title: 'Thousand Club',
   description:
     'Back squats at a steady load, then four 1000m rows with short rest. Long enough to hurt, short enough to hold form. Settle into a split early and protect it.',
-  category: 'Conditioning',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Cardio', 'Lower Body', 'Intervals'],
+  disciplines: ['Conditioning'],
+  bodyFocus: ['Lower Body'],
+  format: 'Intervals',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['barbell', 'rower'],
   isPremium: true,
   logSchema: {
@@ -209,10 +210,11 @@ const td037: StandaloneWorkoutSource = {
   title: 'Race Rehearsal',
   description:
     'A race-style hybrid chipper. Pulling strength first, then four runs with a station after each: ski erg, sled push, walking lunges and wall balls. Practise steady running on tired legs and fast, calm transitions.',
-  category: 'Conditioning',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Cardio', 'Full Body', 'Chipper'],
+  disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+  bodyFocus: ['Full Body'],
+  format: 'Chipper',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['pull-up bar', 'barbell', 'ski erg', 'sled', 'sandbag', 'dumbbell', 'medicine ball', 'bands'],
   isPremium: true,
   logSchema: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
@@ -342,10 +344,11 @@ const td038: StandaloneWorkoutSource = {
   title: 'Thirty Strong',
   description:
     'Strict pressing, then a 30 minute EMOM across the rower, burpees, the ski erg and handstand push-ups. A long, honest piece that rewards even pacing over heroics.',
-  category: 'Conditioning',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Cardio', 'Upper Body', 'EMOM'],
+  disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+  bodyFocus: ['Upper Body'],
+  format: 'EMOM',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['barbell', 'dumbbell', 'rower', 'ski erg', 'bands'],
   isPremium: true,
   logSchema: { kind: 'max_reps', label: 'Total calories', higherIsBetter: true },
@@ -444,10 +447,11 @@ const td039: StandaloneWorkoutSource = {
   title: 'Twenty Ten',
   description:
     'Light power snatch technique on the minute, then four Tabatas back to back: bike, burpees, kettlebell swings and hollow rocks. Twenty seconds hard, ten seconds rest, thirty two times.',
-  category: 'WOD',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 55,
-  tags: ['Full Body', 'Olympic Lifting', 'Tabata'],
+  disciplines: ['Metcon', 'Olympic Lifting'],
+  bodyFocus: ['Full Body'],
+  format: 'Tabata',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['barbell', 'dumbbell', 'bike', 'kettlebell', 'bands', 'ghd'],
   isPremium: true,
   logSchema: {
@@ -558,10 +562,11 @@ const td040: StandaloneWorkoutSource = {
   title: 'Five Alive',
   description:
     'Steady deadlifts, then five rounds of rowing, burpees and a 600m run. Your legs and lungs are already working when the run starts. Hold the same run pace every round.',
-  category: 'Conditioning',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Cardio', 'Lower Body', 'For Time'],
+  disciplines: ['Metcon', 'Conditioning'],
+  bodyFocus: ['Lower Body'],
+  format: 'For Time',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['barbell', 'rower'],
   isPremium: true,
   logSchema: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
@@ -650,10 +655,11 @@ const td041: StandaloneWorkoutSource = {
   title: 'Steady State',
   description:
     'A long 35 minute AMRAP with no heavy barbell. Running, wall balls, kettlebell swings, step-ups and the bike. Find a rhythm you can hold for the full time and just keep moving.',
-  category: 'WOD',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Full Body', 'Cardio', 'AMRAP'],
+  disciplines: ['Metcon'],
+  bodyFocus: ['Full Body'],
+  format: 'AMRAP',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['kettlebell', 'sandbag', 'medicine ball', 'dumbbell', 'box', 'bike'],
   isPremium: true,
   logSchema: {
@@ -785,10 +791,11 @@ const td042: StandaloneWorkoutSource = {
   title: 'Low and Slow',
   description:
     'Recovery with a longer aerobic piece. Light tempo work, 36 minutes of easy Zone 2 across three machines and a long stretch. Slow is the point.',
-  category: 'Conditioning',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Cardio', 'Full Body', 'Intervals'],
+  disciplines: ['Conditioning'],
+  bodyFocus: ['Full Body'],
+  format: 'Intervals',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['dumbbell', 'rower', 'bike', 'ski erg', 'bands'],
   isPremium: true,
   logSchema: {
@@ -803,6 +810,7 @@ const td042: StandaloneWorkoutSource = {
         td042Strength,
         {
           name: 'WOD: Zone 2 x 36',
+          hrZone: 2,
           instructions:
             'Three 12 minute pieces, no rest between them. Nasal breathing only. Log your total distance in your notes.',
           highlightInstructions: 'Conversational pace only',
@@ -828,6 +836,7 @@ const td042: StandaloneWorkoutSource = {
         td042Strength,
         {
           name: 'WOD: Zone 2 x 27',
+          hrZone: 2,
           instructions:
             'Three 9 minute pieces, no rest between them. Conversational pace. Log your total distance in your notes.',
           highlightInstructions: 'Conversational pace only',
@@ -871,7 +880,7 @@ export const temperedDailyWeek06Program: TemperedDailyWeek = {
   phase: 'Accumulation',
   description:
     'The big week. This is where the engine gets built. Intervals get longer, WODs get longer and the total work goes up across every day. Keep almost everything at RPE 7–8. You should finish each session tired but not wrecked. Saturday is a 35 minute grind and Sunday is a longer easy flush. Short on time? Prioritise Monday, Wednesday and Friday.',
-  primaryFocus: 'Cardio',
+  primaryFocus: 'Conditioning',
   otherFocuses: ['Full Body', 'Lower Body'],
   nextWeekFocus: 'Engine – Intensification',
   days: ['td_036', 'td_037', 'td_038', 'td_039', 'td_040', 'td_041', 'td_042'],

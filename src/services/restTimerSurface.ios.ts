@@ -10,6 +10,7 @@ type RestTimerLiveActivityProps = {
   startedAtMs: number;
   label: string;
   status: RestTimerSurfaceStatus;
+  title?: string;
 };
 
 type LiveActivityInstance = {
@@ -68,7 +69,12 @@ function toProps(payload: RestTimerSurfacePayload): RestTimerLiveActivityProps {
     startedAtMs: payload.startedAtMs,
     label: payload.label,
     status: payload.status,
+    title: payload.title,
   };
+}
+
+function deepLinkFor(payload: RestTimerSurfacePayload): string {
+  return payload.url ?? REST_TIMER_DEEP_LINK;
 }
 
 async function endAllInstances(
@@ -94,7 +100,7 @@ export async function startRestTimerSurface(
     await endAllInstances(factory);
     const props = toProps(payload);
     const staleDate = new Date(payload.endTimeMs);
-    activeInstance = factory.start(props, REST_TIMER_DEEP_LINK, staleDate);
+    activeInstance = factory.start(props, deepLinkFor(payload), staleDate);
   } catch (error) {
     console.warn('Failed to start rest timer Live Activity:', error);
     activeInstance = null;

@@ -22,12 +22,14 @@ export const girlGames: StandaloneWorkoutSource[] = [
     title: 'METCON - Row',
     description:
       'A partner pyramid chipper. You-go-I-go on the row, snatches, lunges and farmer carries, with synchro sprints and chest-to-floor burpees over the line at the turnaround.',
-    category: 'Girl Games',
-    difficulty: 'Advanced',
+    special: 'Girl Games',
     estimatedTime: 40,
-    tags: ['Full Body', 'For Time', 'Chipper', 'Partner'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Advanced'],
+    partner: 'only',
     isPremium: false,
-    partner: true,
     collab,
     blocks: [
       {
@@ -60,12 +62,14 @@ export const girlGames: StandaloneWorkoutSource[] = [
     title: 'METCON - Assault Bike',
     description:
       'A 40-minute partner race. Assault bike, sandbag lunges, dual DB ground-to-shoulders and wall balls, with synchro chest-to-floor burpees through the middle.',
-    category: 'Girl Games',
-    difficulty: 'Advanced',
+    special: 'Girl Games',
     estimatedTime: 40,
-    tags: ['Full Body', 'For Time', 'Chipper', 'Partner'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Advanced'],
+    partner: 'only',
     isPremium: false,
-    partner: true,
     collab,
     blocks: [
       {
@@ -98,12 +102,14 @@ export const girlGames: StandaloneWorkoutSource[] = [
     title: 'METCON - Ski',
     description:
       'Ski, devil press, front-loaded lunges and kettlebell swings out and back, with a synchro dumbbell push press at the peak.',
-    category: 'Girl Games',
-    difficulty: 'Advanced',
+    special: 'Girl Games',
     estimatedTime: 40,
-    tags: ['Full Body', 'For Time', 'Chipper', 'Partner'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Advanced'],
+    partner: 'only',
     isPremium: false,
-    partner: true,
     collab,
     blocks: [
       {

@@ -1,8 +1,4 @@
-import {
-  isWorkoutFormatTag,
-  type SingleWorkout,
-  type WorkoutCategory,
-} from '@/src/types/workouts';
+import type { SingleWorkout } from '@/src/types/workouts';
 
 export const TEMPERED_DAILY_NAME = 'Tempered Daily';
 export const TEMPERED_DAILY_TODAY_HEADING = 'Today’s workout';
@@ -41,22 +37,12 @@ export const TEMPERED_DAILY_VIEW_SOURCE = 'tempered_daily';
 
 export const DAY_LETTERS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] as const;
 
-/**
- * Category as written on the workout. Tempered Daily never uses the app-wide
- * display label, which maps 'WOD' to a brand name.
- */
-export function getTemperedDailyCategoryLabel(
-  category: WorkoutCategory
-): string {
-  return category;
-}
-
-/** Format tag (e.g. "For Time") followed by the category label. */
+/** Format (e.g. "For Time") followed by the primary discipline. */
 export function getTemperedDailyWorkoutLabels(
   workout: SingleWorkout
 ): string[] {
-  const labels: string[] = workout.tags.filter(isWorkoutFormatTag);
-  labels.push(getTemperedDailyCategoryLabel(workout.category));
+  const labels: string[] = workout.format ? [workout.format] : [];
+  labels.push(workout.disciplines[0]);
   return labels;
 }
 

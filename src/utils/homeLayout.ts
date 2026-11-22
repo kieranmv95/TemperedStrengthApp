@@ -10,8 +10,10 @@ export const HOME_SECTION_ORDER = [
   'daily',
   'checkin',
   'wodShop',
+  'tools',
   'streaks',
   'mobility',
+  'zones',
   'personalBests',
 ] as const;
 
@@ -27,8 +29,10 @@ export const HOME_SECTION_LABELS: Record<HomeSectionId, string> = {
   daily: 'Tempered Daily',
   checkin: 'Check-in',
   wodShop: 'Workouts and shop',
+  tools: 'Tools',
   streaks: 'Streaks',
   mobility: 'Mobility & flows',
+  zones: 'Heart rate zones',
   personalBests: 'Personal bests',
 };
 

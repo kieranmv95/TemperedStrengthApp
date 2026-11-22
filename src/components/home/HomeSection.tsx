@@ -1,13 +1,17 @@
 import { Badge, PressableCard } from '@/src/components/ds';
 import { HubPromoCard } from '@/src/components/hub/HubPromoRow';
+import { HubToolsSection } from '@/src/components/hub/HubToolsSection';
 import { HomeCheckinCard } from '@/src/components/home/HomeCheckinCard';
 import { HomeStreakCard } from '@/src/components/home/HomeStreakCard';
 import { HomeTodayCard } from '@/src/components/home/HomeTodayCard';
 import { TemperedDailyWidget } from '@/src/components/home/TemperedDailyWidget';
 import { homeScreenStyles as styles } from '@/src/components/home/homeScreenStyles';
+import { ZonesSummaryCard } from '@/src/components/zones/ZonesSummaryCard';
 import { color } from '@/src/constants/tokens';
+import type { ToolRoute } from '@/src/data/tools';
 import { useLargeText } from '@/src/hooks/useLargeText';
 import type { StreakSnapshot } from '@/src/services/streakService';
+import type { ZoneRange } from '@/src/types/heartRate';
 import type { SingleWorkout, TemperedDailyWeek } from '@/src/types/workouts';
 import type { HomeCheckinSummary } from '@/src/utils/homeCheckinSummary';
 import type { HomeSectionId } from '@/src/utils/homeLayout';
@@ -52,7 +56,10 @@ type HomeSectionProps = {
   onOpenCheckin: () => void;
   onOpenWorkouts: () => void;
   onOpenShop: () => void;
+  onOpenTool: (route: ToolRoute) => void;
   onOpenMobility: () => void;
+  zoneRanges: ZoneRange[] | null;
+  onOpenZones: () => void;
   streakSnapshot: StreakSnapshot | null;
   displayName: string | null;
   recentPbs: RecentPersonalBestRow[];
@@ -76,7 +83,10 @@ export function HomeSection({
   onOpenCheckin,
   onOpenWorkouts,
   onOpenShop,
+  onOpenTool,
   onOpenMobility,
+  zoneRanges,
+  onOpenZones,
   streakSnapshot,
   displayName,
   recentPbs,
@@ -141,6 +151,12 @@ export function HomeSection({
           </View>
         </View>
       );
+    case 'tools':
+      return (
+        <View style={styles.toolsBleed}>
+          <HubToolsSection tilesOnly onOpenTool={onOpenTool} />
+        </View>
+      );
     case 'streaks':
       if (!streakSnapshot) {
         return null;
@@ -159,6 +175,8 @@ export function HomeSection({
           accessibilityLabel="Opens mobility and recovery flows"
         />
       );
+    case 'zones':
+      return <ZonesSummaryCard ranges={zoneRanges} onPress={onOpenZones} />;
     case 'personalBests':
       if (recentPbs.length > 0) {
         return (

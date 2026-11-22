@@ -275,9 +275,9 @@ export const hiit_shred_6wk_pro: Program = {
         {
           id: 'wod',
           type: 'for_time',
-          title: 'WOD - Descending Ladder (For Time)',
+          title: 'WOD - Descending Ladder',
           instructions:
-            'Complete each movement for 21 reps, then 15, then 9 reps. Work through all reps of each exercise before moving on. Time yourself.',
+            'Complete each movement for 21, then 15, then 9 — reps on the jumps and lunges, calories on the ski erg. Work through all of each exercise before moving on. Time yourself.',
           movements: [
             {
               id: 'm1',
@@ -293,10 +293,10 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm3',
-              exerciseId: 107, // Ball Slams
-              prescription: '21 / 15 / 9 reps',
+              label: 'Ski Erg',
+              prescription: '21 / 15 / 9 cal',
               notes:
-                'Full extension overhead before every slam. Drive it down.',
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
           ],
         },
@@ -368,9 +368,10 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm3',
-              exerciseId: 107, // Ball Slams
+              label: 'Ski Erg',
               prescription: '20s on / 10s off',
-              notes: 'Full extension, slam hard, pick it up fast.',
+              notes:
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
             {
               id: 'm4',
@@ -419,38 +420,40 @@ export const hiit_shred_6wk_pro: Program = {
         {
           id: 'wod',
           type: 'for_time',
-          title: 'WOD - Ground & Pound Chipper (For Time)',
+          title: 'WOD - Ground & Pound Chipper',
           instructions:
             'Complete all reps in order. One pass. Time yourself. Do not go out too fast.',
           movements: [
             {
               id: 'm1',
               exerciseId: 103, // Burpees
-              prescription: '20 reps',
+              prescription: '21 reps',
               notes: 'Steady effort. This is not the last movement.',
             },
             {
               id: 'm2',
               exerciseId: 74, // DB Goblet Front Squat
-              prescription: '20 reps',
+              prescription: '21 reps',
               notes: 'Upright torso. Drive hard out of the hole.',
             },
             {
               id: 'm3',
               exerciseId: 10, // Pull-ups
-              prescription: '10 reps',
-              notes: 'Band or assist is fine. Every rep counts.',
+              prescription: '21 reps',
+              notes:
+                'Band or assist is fine. Every rep counts. Break up as needed',
             },
             {
               id: 'm4',
-              exerciseId: 107, // Ball Slams
-              prescription: '20 reps',
-              notes: 'Full extension overhead. Drive it into the floor.',
+              label: 'Ski Erg',
+              prescription: '21 cal',
+              notes:
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
             {
               id: 'm5',
-              exerciseId: 102, // Squat Jumps
-              prescription: '15 reps',
+              exerciseId: 106, // Wall Balls
+              prescription: '21 reps',
               notes: 'Land soft. Depth every rep.',
             },
           ],
@@ -589,9 +592,9 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm4',
-              exerciseId: 93, // Bodyweight Calf Raises
-              prescription: '20 reps',
-              notes: 'Full range. Pause at the top.',
+              exerciseId: 21, // Bodyweight Squats
+              prescription: '21 reps',
+              notes: 'Full depth. Drive up hard.',
             },
           ],
         },
@@ -719,7 +722,7 @@ export const hiit_shred_6wk_pro: Program = {
         {
           id: 'wod',
           type: 'for_time',
-          title: 'WOD - Burn Out (For Time)',
+          title: 'WOD - Burn Out',
           instructions:
             'Complete 25, 20, 15, 10, 5 reps of each movement in order. Each round drops by 5 reps. Time yourself.',
           movements: [
@@ -737,9 +740,10 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm3',
-              exerciseId: 107, // Ball Slams
-              prescription: '25 / 20 / 15 / 10 / 5 reps',
-              notes: 'Full extension overhead every rep.',
+              label: 'Ski Erg',
+              prescription: '20 / 15 / 10 / 5 / 3 cals',
+              notes:
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
           ],
         },
@@ -889,9 +893,10 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm3',
-              exerciseId: 107, // Ball Slams
-              prescription: '12 reps',
-              notes: 'Full extension. Slam hard. Pick it up fast.',
+              label: 'Ski Erg',
+              prescription: '6 cals',
+              notes:
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
             {
               id: 'm4',
@@ -942,7 +947,7 @@ export const hiit_shred_6wk_pro: Program = {
         {
           id: 'wod',
           type: 'for_time',
-          title: 'WOD - Lower Inferno Chipper (For Time)',
+          title: 'WOD - Lower Inferno Chipper',
           instructions:
             'Complete all reps in order. One pass. Time yourself. The wall sit at the end will test everything you have left.',
           movements: [
@@ -1022,7 +1027,7 @@ export const hiit_shred_6wk_pro: Program = {
         {
           id: 'wod',
           type: 'rounds',
-          title: 'WOD - Full Send (4 Rounds For Time)',
+          title: 'WOD - Full Send',
           instructions:
             '4 rounds. Complete all reps of each movement before moving on. Rest 60s between rounds.',
           rounds: 4,
@@ -1047,9 +1052,10 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm4',
-              exerciseId: 107, // Ball Slams
-              prescription: '15 reps',
-              notes: 'Full extension. Drive it into the floor.',
+              label: 'Ski Erg',
+              prescription: '10 cals',
+              notes:
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
             {
               id: 'm5',
@@ -1103,7 +1109,7 @@ export const hiit_shred_6wk_pro: Program = {
         {
           id: 'wod',
           type: 'rounds',
-          title: 'WOD - The Hurricane (3 Rounds For Time)',
+          title: 'WOD - The Hurricane',
           instructions:
             '3 rounds. Go as hard as you can each round. Rest 90s between rounds. This is designed to hurt and then let you recover. Use the rest.',
           rounds: 3,
@@ -1122,9 +1128,10 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm3',
-              exerciseId: 107, // Ball Slams
-              prescription: '20 reps',
-              notes: 'Everything you have. Full extension before every slam.',
+              label: 'Ski Erg',
+              prescription: '10 cals',
+              notes:
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
           ],
         },
@@ -1324,7 +1331,7 @@ export const hiit_shred_6wk_pro: Program = {
         {
           id: 'wod',
           type: 'for_time',
-          title: 'WOD - Core Reckoning Chipper (For Time)',
+          title: 'WOD - Core Reckoning Chipper',
           instructions:
             'Complete in order. One pass. Core movements between every station - do not skip them.',
           movements: [
@@ -1354,9 +1361,10 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm5',
-              exerciseId: 107, // Ball Slams
-              prescription: '20 reps',
-              notes: 'Full extension every rep.',
+              label: 'Ski Erg',
+              prescription: '20 cals',
+              notes:
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
             {
               id: 'm6',
@@ -1421,7 +1429,7 @@ export const hiit_shred_6wk_pro: Program = {
         {
           id: 'wod',
           type: 'for_time',
-          title: 'WOD - The Accumulator (For Time)',
+          title: 'WOD - The Accumulator',
           instructions:
             'Complete rounds of 5, 10, 15, 20 reps of each movement. Reps climb each round. Time yourself. The last round will feel very different to the first.',
           movements: [
@@ -1439,9 +1447,10 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm3',
-              exerciseId: 102, // Squat Jumps
-              prescription: '5 / 10 / 15 / 20 reps',
-              notes: 'Land soft every rep. Full depth.',
+              label: 'Ski Erg',
+              prescription: '5 / 10 / 15 / 20 cals',
+              notes:
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
           ],
         },
@@ -1561,7 +1570,7 @@ export const hiit_shred_6wk_pro: Program = {
         {
           id: 'wod',
           type: 'for_time',
-          title: 'WOD - Hyrox Lite (For Time)',
+          title: 'WOD - Hyrox Lite',
           instructions:
             'Eight stations. Complete all reps in order. One pass. Time yourself - this is your benchmark. Every station feeds into the next. Pace from station one.',
           movements: [
@@ -1679,9 +1688,10 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm4',
-              exerciseId: 107, // Ball Slams
-              prescription: '12 reps',
-              notes: 'Full extension. Slam hard.',
+              label: 'Ski Erg',
+              prescription: '12 cals',
+              notes:
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
             {
               id: 'm5',
@@ -1773,9 +1783,10 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm5',
-              exerciseId: 107, // Ball Slams
-              prescription: '15 reps',
-              notes: 'Full extension. Slam hard.',
+              label: 'Ski Erg',
+              prescription: '15 cals',
+              notes:
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
           ],
         },
@@ -1824,7 +1835,7 @@ export const hiit_shred_6wk_pro: Program = {
         {
           id: 'wod',
           type: 'for_time',
-          title: 'WOD - The Last Pull Chipper (For Time)',
+          title: 'WOD - The Last Pull Chipper',
           instructions:
             'Complete in order. One pass. Pull, hinge, core - no pushing today. Time yourself.',
           movements: [
@@ -1914,7 +1925,7 @@ export const hiit_shred_6wk_pro: Program = {
         {
           id: 'wod',
           type: 'for_time',
-          title: 'WOD - Six Weeks Done (For Time)',
+          title: 'WOD - Six Weeks Done',
           instructions:
             'One pass. Everything in order. The final lower body test. Time yourself.',
           movements: [
@@ -1944,9 +1955,10 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm5',
-              exerciseId: 107, // Ball Slams
-              prescription: '30 reps',
-              notes: 'Full extension overhead before every slam.',
+              label: 'Ski Erg',
+              prescription: '15 cals',
+              notes:
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
             {
               id: 'm6',
@@ -2008,7 +2020,7 @@ export const hiit_shred_6wk_pro: Program = {
         {
           id: 'wod',
           type: 'for_time',
-          title: 'WOD - Peak (For Time)',
+          title: 'WOD - Peak',
           instructions:
             'Nine movements. One pass. Everything in order. Time yourself. This is the final session of the programme - leave nothing behind.',
           movements: [
@@ -2032,9 +2044,10 @@ export const hiit_shred_6wk_pro: Program = {
             },
             {
               id: 'm4',
-              exerciseId: 107, // Ball Slams
-              prescription: '30 reps',
-              notes: 'Full extension. Drive it into the floor.',
+              label: 'Ski Erg',
+              prescription: '15 cals',
+              notes:
+                'Pull with your lats. Stay tall. No ski erg? Row the same calories.',
             },
             {
               id: 'm5',

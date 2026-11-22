@@ -58,7 +58,7 @@ function SponsorCardContent({ discipline }: SponsorCardContentProps) {
         <View style={styles.sponsorLinkRow}>
           <Ionicons name="globe-outline" size={16} color={linkColor} />
           <Text style={[styles.sponsorLinkText, { color: linkColor }]}>
-            View event details
+            {discipline.linkLabel ?? 'View event details'}
           </Text>
         </View>
       )}
@@ -159,7 +159,7 @@ export default function WorkoutsByTagScreen() {
         accessibilityLabel={[
           discipline.title,
           discipline.description,
-          'View event details',
+          discipline.linkLabel ?? 'View event details',
         ]
           .filter((part): part is string => !!part)
           .join('. ')}

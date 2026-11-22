@@ -2,7 +2,7 @@
   "expo": {
     "name": "tempered-strength-app",
     "slug": "tempered-strength-app",
-    "version": "3.3.0",
+    "version": "3.5.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "temperedstrengthapp",
@@ -22,7 +22,8 @@
         "backgroundColor": "#121212"
       },
       "permissions": [
-        "android.permission.POST_NOTIFICATIONS"
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.health.READ_RESTING_HEART_RATE"
       ]
     },
     "web": {
@@ -50,7 +51,8 @@
         {
           "fonts": [
             "./assets/fonts/BarlowCondensed-SemiBold.ttf",
-            "./assets/fonts/BarlowCondensed-Bold.ttf"
+            "./assets/fonts/BarlowCondensed-Bold.ttf",
+            "./assets/fonts/DSEG7Classic-Bold.ttf"
           ]
         }
       ],
@@ -58,6 +60,39 @@
       "expo-localization",
       "expo-video",
       "expo-web-browser",
+      "expo-audio",
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "PORTRAIT"
+        }
+      ],
+      "./plugins/withIosClockOrientations.js",
+      [
+        "expo-quick-actions",
+        {
+          "iosActions": [
+            {
+              "id": "gym-rest-90",
+              "title": "Rest 90s",
+              "subtitle": "Between-set rest timer",
+              "icon": "symbol:timer",
+              "params": {
+                "href": "/tools/timers?quick=rest90"
+              }
+            },
+            {
+              "id": "gym-tabata",
+              "title": "Start Tabata",
+              "subtitle": "8 × 20s / 10s",
+              "icon": "symbol:flame",
+              "params": {
+                "href": "/tools/timers?quick=tabata"
+              }
+            }
+          ]
+        }
+      ],
       [
         "expo-navigation-bar",
         {
@@ -74,7 +109,27 @@
           "enablePushNotifications": false,
           "frequentUpdates": false
         }
-      ]
+      ],
+      [
+        "@kingstinct/react-native-healthkit",
+        {
+          "NSHealthShareUsageDescription": "Tempered Strength reads your resting heart rate and date of birth to calculate your heart rate training zones.",
+          "NSHealthUpdateUsageDescription": "Tempered Strength does not write health data to Apple Health. This permission is required by HealthKit even for read-only access.",
+          "background": false
+        }
+      ],
+      "react-native-health-connect",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
+          }
+        }
+      ],
+      "expo-sqlite",
+      "expo-image",
+      "expo-status-bar"
     ],
     "experiments": {
       "typedRoutes": true,

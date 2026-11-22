@@ -14,6 +14,8 @@ export * from './storage/personalBests';
 export * from './storage/trainingMaxes';
 export * from './storage/checkin';
 export * from './storage/homeLayout';
+export * from './storage/heartRate';
+export * from './storage/gymTimer';
 export {
   runStorageMigrations,
   LATEST_SCHEMA_VERSION,

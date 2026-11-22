@@ -6,10 +6,10 @@ export const oly: StandaloneWorkoutSource[] = [
     title: 'Snatch Balance Builder',
     description:
       'The snatch balance is the most underused drill in weightlifting. It trains the one thing most athletes fear: committing to the catch. This session builds from the ground up, earning the right to load the bar through positional drills before a single plate goes on.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Olympic Lifting', 'Upper Body', 'Strength'],
+    disciplines: ['Strength', 'Olympic Lifting'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -78,10 +78,10 @@ export const oly: StandaloneWorkoutSource[] = [
     title: 'Olympic Complex: Clean & Jerk Stability',
     description:
       'Building technical speed and overhead stability through the clean and jerk.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Olympic Lifting', 'Full Body', 'Strength'],
+    disciplines: ['Strength', 'Gymnastics', 'Olympic Lifting'],
+    bodyFocus: ['Full Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -128,10 +128,10 @@ export const oly: StandaloneWorkoutSource[] = [
     title: 'Snatch Session',
     description:
       'A complete snatch day: positional drills to sharpen technique, a heavy build to test it, and complementary strength to hold it all together. Own the positions before you chase the numbers.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 60,
-    tags: ['Olympic Lifting', 'Full Body', 'Strength'],
+    disciplines: ['Strength', 'Olympic Lifting'],
+    bodyFocus: ['Full Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -189,10 +189,10 @@ export const oly: StandaloneWorkoutSource[] = [
     title: 'Clean & Jerk Session',
     description:
       'A complete clean and jerk day: positional drills to sharpen the pull and the overhead, a heavy build to test them, and complementary strength to back it up. Sharp technique first, big weights second.',
-    category: 'Strength',
-    difficulty: 'Advanced',
     estimatedTime: 60,
-    tags: ['Olympic Lifting', 'Full Body', 'Strength'],
+    disciplines: ['Strength', 'Gymnastics', 'Olympic Lifting'],
+    bodyFocus: ['Full Body'],
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {

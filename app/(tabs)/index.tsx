@@ -32,7 +32,9 @@ import {
   parseStreakState,
   type StreakSnapshot,
 } from '@/src/services/streakService';
+import type { ZoneRange } from '@/src/types/heartRate';
 import type { PersonalBestsStore } from '@/src/types/personalBests';
+import { zoneRangesFromSettings } from '@/src/utils/heartRateZones';
 import {
   loadHomeCheckinSummary,
   type HomeCheckinSummary,
@@ -52,9 +54,11 @@ import {
 import { getTemperedDailyToday } from '@/src/utils/temperedDaily';
 import { listRecentPersonalBestRows } from '@/src/utils/recentPersonalBests';
 import {
+  getHeartRateZoneSettings,
   getHomeLayout,
   getOnboardingProfile,
   getPersonalBestsStore,
+  getRestingHeartRate,
   setHomeLayout,
 } from '@/src/utils/storage';
 import { tryConsumeSubscriptionRefreshCooldown } from '@/src/utils/subscriptionRefreshThrottle';
@@ -143,6 +147,7 @@ export default function HomeTabScreen() {
   );
   const [checkinSummary, setCheckinSummary] =
     useState<HomeCheckinSummary | null>(null);
+  const [zoneRanges, setZoneRanges] = useState<ZoneRange[] | null>(null);
   const [layout, setLayout] =
     useState<HomeSectionPreference[]>(defaultHomeLayout);
   const [customiseOpen, setCustomiseOpen] = useState(false);
@@ -208,21 +213,32 @@ export default function HomeTabScreen() {
     }
     const layoutEpochAtRead = layoutEpoch.current;
     try {
-      const [profile, summary, store, streak, checkin, storedLayout] =
-        await Promise.all([
-          getOnboardingProfile(),
-          loadHomeProgramSummary(),
-          getPersonalBestsStore(),
-          applyDailyStreakCheckIn(),
-          loadHomeCheckinSummary(),
-          getHomeLayout(),
-        ]);
+      const [
+        profile,
+        summary,
+        store,
+        streak,
+        checkin,
+        storedLayout,
+        zoneSettings,
+        restingHr,
+      ] = await Promise.all([
+        getOnboardingProfile(),
+        loadHomeProgramSummary(),
+        getPersonalBestsStore(),
+        applyDailyStreakCheckIn(),
+        loadHomeCheckinSummary(),
+        getHomeLayout(),
+        getHeartRateZoneSettings(),
+        getRestingHeartRate(),
+      ]);
       const trimmed = profile?.name?.trim();
       setDisplayName(trimmed && trimmed.length > 0 ? trimmed : null);
       setProgramSummary(summary);
       setPbStore(store);
       setStreakSnapshot(streak);
       setCheckinSummary(checkin);
+      setZoneRanges(zoneRangesFromSettings(zoneSettings, restingHr));
       applyStoredLayout(storedLayout, layoutEpochAtRead);
     } catch (error) {
       console.error('Error loading home screen data:', error);
@@ -233,6 +249,7 @@ export default function HomeTabScreen() {
         buildSnapshot(parseStreakState(null), formatLocalYMD(new Date()))
       );
       setCheckinSummary(null);
+      setZoneRanges(null);
     } finally {
       setLoading(false);
       hasCompletedInitialLoad.current = true;
@@ -549,9 +566,18 @@ export default function HomeTabScreen() {
                         router.push('/shop')
                       )
                     }
+                    onOpenTool={(route) =>
+                      trackHomeLink('tool', route, () => router.push(route))
+                    }
                     onOpenMobility={() =>
                       trackHomeLink('mobility_flows_card', '/recovery', () =>
                         router.push('/recovery')
+                      )
+                    }
+                    zoneRanges={zoneRanges}
+                    onOpenZones={() =>
+                      trackHomeLink('heart_rate_zones_card', '/zones', () =>
+                        router.push('/zones')
                       )
                     }
                     streakSnapshot={streakSnapshot}

@@ -7,8 +7,17 @@ import {
   getWorkoutLogsLastRowSyncedAt,
   setWorkoutLogsLastRowSyncedAt,
 } from '@/src/db/domains/workoutLogs/meta';
-import type { RemoteWorkoutLogSetRow } from '@/src/db/domains/workoutLogs/types';
+import {
+  normalizeRpe,
+  type RemoteWorkoutLogSetRow,
+} from '@/src/db/domains/workoutLogs/types';
 import { getSupabaseClient } from '@/src/services/supabaseClient';
+import {
+  coerceSyncTimestamp,
+  pushRows,
+  readAllPages,
+  requireSyncTimestamp,
+} from '@/src/sync/syncWrite';
 import {
   WORKOUT_LOG_SETS_TABLE,
   WORKOUT_LOG_UPSERT_BATCH_SIZE,
@@ -29,7 +38,6 @@ export async function pushDirtyWorkoutLogs(userId: string): Promise<void> {
     });
   }
 
-  const client = getSupabaseClient();
   const payloads: RemoteWorkoutLogSetRow[] = dirty.map((row) => ({
     id: row.id,
     user_id: userId,
@@ -38,28 +46,21 @@ export async function pushDirtyWorkoutLogs(userId: string): Promise<void> {
     set_index: row.set_index,
     weight: row.weight,
     reps: row.reps,
-    state: row.state,
-    rpe: row.rpe,
-    updated_at: row.updated_at,
-    deleted_at: row.deleted_at,
+    state:
+      row.state === 'completed' || row.state === 'failed' ? row.state : null,
+    rpe: normalizeRpe(row.rpe),
+    updated_at: requireSyncTimestamp(row.updated_at),
+    deleted_at: coerceSyncTimestamp(row.deleted_at),
   }));
 
-  for (
-    let index = 0;
-    index < payloads.length;
-    index += WORKOUT_LOG_UPSERT_BATCH_SIZE
-  ) {
-    const batch = payloads.slice(index, index + WORKOUT_LOG_UPSERT_BATCH_SIZE);
-    const { error } = await client
-      .from(WORKOUT_LOG_SETS_TABLE)
-      .upsert(batch, { onConflict: 'id' });
-    if (error) {
-      console.error('[sync] pushDirtyWorkoutLogs upsert failed', error);
-      throw error;
-    }
-  }
-
-  await markWorkoutLogSetRowsClean(dirty.map((row) => row.id));
+  await pushRows({
+    table: WORKOUT_LOG_SETS_TABLE,
+    rows: payloads,
+    onConflict: 'id',
+    idOf: (row) => row.id,
+    batchSize: WORKOUT_LOG_UPSERT_BATCH_SIZE,
+    markClean: markWorkoutLogSetRowsClean,
+  });
 }
 
 /** Hard-delete every set row for this user (end program / wipe). */
@@ -84,25 +85,28 @@ export async function pullWorkoutLogChanges(
     ? EPOCH
     : ((await getWorkoutLogsLastRowSyncedAt()) ?? EPOCH);
 
-  const client = getSupabaseClient();
-  const { data, error } = await client
-    .from(WORKOUT_LOG_SETS_TABLE)
-    .select(
-      'id,user_id,day_index,slot_index,set_index,weight,reps,state,rpe,updated_at,deleted_at'
-    )
-    .eq('user_id', userId)
-    .gt('updated_at', lastSyncedAt)
-    .order('updated_at', { ascending: true });
-
-  if (error) {
-    throw error;
-  }
-
-  const rows = (data ?? []) as RemoteWorkoutLogSetRow[];
+  const rows = await readAllPages<RemoteWorkoutLogSetRow>((from, to) =>
+    getSupabaseClient()
+      .from(WORKOUT_LOG_SETS_TABLE)
+      .select(
+        'id,user_id,day_index,slot_index,set_index,weight,reps,state,rpe,updated_at,deleted_at'
+      )
+      .eq('user_id', userId)
+      .gt('updated_at', lastSyncedAt)
+      .order('updated_at', { ascending: true })
+      .range(from, to)
+  );
   let newest = lastSyncedAt;
 
   for (const row of rows) {
-    await applyRemoteWorkoutLogSetRow(row);
+    try {
+      await applyRemoteWorkoutLogSetRow(row);
+    } catch (error) {
+      console.error(
+        'Skipping workout log row that could not be saved locally:',
+        error
+      );
+    }
     if (row.updated_at > newest) {
       newest = row.updated_at;
     }

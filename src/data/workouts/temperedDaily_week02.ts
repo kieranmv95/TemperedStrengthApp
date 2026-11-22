@@ -111,10 +111,11 @@ const td008: StandaloneWorkoutSource = {
   title: 'Under the Bar',
   description:
     'Five sets of five on the back squat. Every set at the same weight, every rep looking the same. Volume is the goal, not grinding. Then a longer AMRAP that leans on the engine and upper body while the legs recover.',
-  category: 'Strength',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Lower Body', 'Strength', 'AMRAP'],
+  disciplines: ['Strength'],
+  bodyFocus: ['Lower Body'],
+  format: 'AMRAP',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['barbell', 'bike', 'dumbbell', 'bands', 'ghd'],
   isPremium: true,
   logSchema: {
@@ -256,10 +257,11 @@ const td009: StandaloneWorkoutSource = {
   title: 'Long Haul',
   description:
     'A big hybrid engine session. Heavy rows and chin-ups to build the upper back, then four long rounds of running, ski, sled pull and sandbag lunges. Pace it like a race you want to finish strong.',
-  category: 'Conditioning',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Cardio', 'Full Body', 'For Time'],
+  disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+  bodyFocus: ['Full Body'],
+  format: 'For Time',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['barbell', 'pull-up bar', 'ski erg', 'sled', 'sandbag', 'bands'],
   isPremium: true,
   logSchema: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
@@ -400,10 +402,11 @@ const td010: StandaloneWorkoutSource = {
   title: 'Stacked',
   description:
     'Five sets of five on the bench press, all at the same weight. Smooth bar path, same touch point, every rep. Then a chipper that keeps the upper body busy without asking for more heavy pressing.',
-  category: 'Strength',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Upper Body', 'Strength', 'Chipper'],
+  disciplines: ['Strength', 'Gymnastics'],
+  bodyFocus: ['Upper Body'],
+  format: 'Chipper',
+  levels: ['Intermediate', 'Advanced'],
   equipment: [
     'barbell',
     'rower',
@@ -557,10 +560,11 @@ const td011: StandaloneWorkoutSource = {
   title: 'Overhead Speed',
   description:
     'A snatch technique EMOM to sharpen speed and overhead positions, followed by five intervals that blend running, burpees and a bike sprint. Light bar, fast elbows, big engine.',
-  category: 'WOD',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Full Body', 'Olympic Lifting', 'Intervals'],
+  disciplines: ['Metcon', 'Olympic Lifting'],
+  bodyFocus: ['Full Body'],
+  format: 'Intervals',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['barbell', 'rower', 'bike', 'box', 'dumbbell', 'bands'],
   isPremium: true,
   logSchema: {
@@ -679,10 +683,11 @@ const td012: StandaloneWorkoutSource = {
   title: 'Dead Weight',
   description:
     'Five sets of five on the deadlift. Reset every rep, same set-up, same brace. Then take tired legs into three rounds of running, wall balls and box step-ups.',
-  category: 'Strength',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Lower Body', 'Strength', 'For Time'],
+  disciplines: ['Strength'],
+  bodyFocus: ['Lower Body'],
+  format: 'For Time',
+  levels: ['Intermediate', 'Advanced'],
   equipment: [
     'barbell',
     'rower',
@@ -822,10 +827,11 @@ const td013: StandaloneWorkoutSource = {
   title: 'Engine Room',
   description:
     'A kettlebell strength circuit, then a long 28 minute AMRAP of running, wall balls, swings and burpees. Big volume, no heavy barbell. Find a rhythm you can hold and stay in it.',
-  category: 'WOD',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Full Body', 'AMRAP'],
+  disciplines: ['Metcon'],
+  bodyFocus: ['Full Body'],
+  format: 'AMRAP',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['kettlebell', 'medicine ball', 'dumbbell'],
   isPremium: true,
   logSchema: {
@@ -986,10 +992,11 @@ const td014: StandaloneWorkoutSource = {
   title: 'Easy Miles',
   description:
     'A recovery session built around easy aerobic work. Light tempo pulling, a long Zone 2 piece across four machines and a full stretch. Conversational pace from start to finish.',
-  category: 'Conditioning',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Cardio', 'Core', 'Intervals'],
+  disciplines: ['Conditioning', 'Gymnastics'],
+  bodyFocus: ['Core'],
+  format: 'Intervals',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['dumbbell', 'rower', 'bike', 'ski erg', 'pull-up bar'],
   isPremium: true,
   logSchema: {
@@ -1004,6 +1011,7 @@ const td014: StandaloneWorkoutSource = {
         td014Strength,
         {
           name: 'WOD: Zone 2 x 32',
+          hrZone: 2,
           instructions:
             'Four 8 minute pieces, no rest between them. Stay in Zone 2: you should be able to talk in full sentences the whole time. Log your total distance in your notes.',
           highlightInstructions: 'Conversational pace only',
@@ -1030,6 +1038,7 @@ const td014: StandaloneWorkoutSource = {
         td014Strength,
         {
           name: 'WOD: Zone 2 x 24',
+          hrZone: 2,
           instructions:
             'Four 6 minute pieces, no rest between them. Stay at a pace where you can talk in full sentences. Log your total distance in your notes.',
           highlightInstructions: 'Conversational pace only',
@@ -1079,7 +1088,7 @@ export const temperedDailyWeek02Program: TemperedDailyWeek = {
   description:
     'Volume week. Squat Monday, bench Wednesday and deadlift Friday all move to five sets of five at the same weight, so every set is a chance to practise perfect reps. The conditioning gets longer too, with the biggest sessions of the block on Tuesday and Saturday. Eat well and sleep well this week. Short on time? Prioritise Monday, Wednesday and Friday.',
   primaryFocus: 'Strength',
-  otherFocuses: ['Lower Body', 'Upper Body', 'Cardio'],
+  otherFocuses: ['Lower Body', 'Upper Body', 'Conditioning'],
   nextWeekFocus: 'Strength – Intensification',
   days: ['td_008', 'td_009', 'td_010', 'td_011', 'td_012', 'td_013', 'td_014'],
 };

@@ -6,10 +6,12 @@ export const rainhill: StandaloneWorkoutSource[] = [
     title: 'Four Movement Fury',
     description:
       'A four-movement AMRAP. Simple on paper, brutal in practice. The double unders will punish any loss of composure.',
-    category: 'Rainhill',
-    difficulty: 'Multiple Difficulties',
+    special: 'Rainhill',
     estimatedTime: 10,
-    tags: ['Full Body', 'AMRAP', 'Gymnastics'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -74,10 +76,12 @@ export const rainhill: StandaloneWorkoutSource[] = [
     title: 'Revolution',
     description:
       "Two rowing tests bookending a five-minute AMRAP. Your legs will be cooked going into the second row. That's the point.",
-    category: 'Rainhill',
-    difficulty: 'Multiple Difficulties',
+    special: 'Rainhill',
     estimatedTime: 11,
-    tags: ['Full Body', 'AMRAP', 'Gymnastics'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -193,10 +197,12 @@ export const rainhill: StandaloneWorkoutSource[] = [
     title: 'Atom',
     description:
       'Four rounds of a barbell complex, then max distance on the rower with whatever time remains. The barbell will cost you - how much is up to you.',
-    category: 'Rainhill',
-    difficulty: 'Multiple Difficulties',
+    special: 'Rainhill',
     estimatedTime: 10,
-    tags: ['Full Body', 'Chipper', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Olympic Lifting'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -291,10 +297,12 @@ export const rainhill: StandaloneWorkoutSource[] = [
     title: 'Dead Thruster',
     description:
       'A seven-minute barbell and kettlebell AMRAP. Heavy deadlifts into overhead work - the later movements will expose any fatigue you built in the first two.',
-    category: 'Rainhill',
-    difficulty: 'Multiple Difficulties',
+    special: 'Rainhill',
     estimatedTime: 7,
-    tags: ['Full Body', 'AMRAP', 'Gymnastics'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Intermediate', 'Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -336,10 +344,12 @@ export const rainhill: StandaloneWorkoutSource[] = [
     id: 'rainhill_wod_04',
     title: 'The 600m Sting',
     description: "It reads like a chipper... but it's not.",
-    category: 'Rainhill',
-    difficulty: 'Multiple Difficulties',
+    special: 'Rainhill',
     estimatedTime: 9,
-    tags: ['Cardio', 'For Time', 'Chipper'],
+    disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -404,10 +414,12 @@ export const rainhill: StandaloneWorkoutSource[] = [
     title: 'Double Trouble',
     description:
       'A descending chipper built around overhead endurance and rope skills. Opens and closes with double unders. The middle third is where it breaks people.',
-    category: 'Rainhill',
-    difficulty: 'Multiple Difficulties',
+    special: 'Rainhill',
     estimatedTime: 11,
-    tags: ['Gymnastics', 'For Time', 'Chipper'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -487,10 +499,12 @@ export const rainhill: StandaloneWorkoutSource[] = [
     title: 'Snatch and Walk',
     description:
       "A descending chipper built around snatches and handstand walks. The double unders drop each round - the handstand walk distance does too, but it won't feel like it.",
-    category: 'Rainhill',
-    difficulty: 'Multiple Difficulties',
+    special: 'Rainhill',
     estimatedTime: 10,
-    tags: ['Gymnastics', 'For Time', 'Chipper'],
+    disciplines: ['Metcon', 'Gymnastics', 'Olympic Lifting'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Intermediate', 'Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -559,10 +573,12 @@ export const rainhill: StandaloneWorkoutSource[] = [
     title: 'Seeding: The Gauntlet',
     description:
       'Three sequential chippers, each with its own timecap. Descending reps, ascending difficulty. Note your finish time for each block separately.',
-    category: 'Rainhill',
-    difficulty: 'Advanced',
+    special: 'Rainhill',
     estimatedTime: 15,
-    tags: ['Full Body', 'For Time', 'Chipper'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -612,10 +628,12 @@ export const rainhill: StandaloneWorkoutSource[] = [
     title: 'The Ladder Carry',
     description:
       'An ascending AMRAP. Distance and reps climb every round. Kettlebell cycling and grip are the limiters - pace the carries early.',
-    category: 'Rainhill',
-    difficulty: 'Multiple Difficulties',
+    special: 'Rainhill',
     estimatedTime: 8,
-    tags: ['Full Body', 'AMRAP', 'Gymnastics'],
+    disciplines: ['Metcon', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -710,10 +728,12 @@ export const rainhill: StandaloneWorkoutSource[] = [
     title: 'Row, Bag and Bell',
     description:
       'A three-part workout with two rowing tests bookending a sandbag and kettlebell chipper. Pace the chipper - the second row will find you out.',
-    category: 'Rainhill',
-    difficulty: 'Multiple Difficulties',
+    special: 'Rainhill',
     estimatedTime: 12,
-    tags: ['Full Body', 'For Time', 'Chipper', 'Benchmark'],
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -874,10 +894,12 @@ export const rainhill: StandaloneWorkoutSource[] = [
     title: 'Clean Complex Meet Chipper',
     description:
       'A two-part barbell workout. Six minutes to find your heaviest complex, then straight into a barbell chipper against the clock. The load you pick in part one will follow you into part two.',
-    category: 'Rainhill',
-    difficulty: 'Multiple Difficulties',
+    special: 'Rainhill',
     estimatedTime: 12,
-    tags: ['Full Body', 'Chipper', 'For Time', 'Benchmark'],
+    disciplines: ['Metcon', 'Olympic Lifting'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
     isPremium: false,
     blocks: [
       {

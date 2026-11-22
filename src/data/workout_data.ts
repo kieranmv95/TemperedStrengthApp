@@ -2,6 +2,7 @@ import type { StandaloneWorkoutSource } from '@/src/types/workouts';
 
 import { arena } from './workouts/arena';
 import { conditioning } from './workouts/conditioning';
+import { deathByBeth } from './workouts/deathByBeth';
 import { girlGames } from './workouts/girlGames';
 import { hyrox } from './workouts/hyrox';
 import { oly } from './workouts/oly';
@@ -15,6 +16,7 @@ export const workouts: StandaloneWorkoutSource[] = [
   ...oly,
   ...rainhill,
   ...girlGames,
+  ...deathByBeth,
   ...strength,
   ...wods,
   ...hyrox,

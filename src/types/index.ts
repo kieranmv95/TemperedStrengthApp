@@ -18,7 +18,7 @@ export type {
 export type {
   DetailedMovement,
   SingleWorkout,
-  WorkoutCategory,
+  WorkoutDiscipline,
   WorkoutLogSchema,
 } from './workouts';
 export type {

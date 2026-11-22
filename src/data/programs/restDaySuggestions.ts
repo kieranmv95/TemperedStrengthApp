@@ -589,52 +589,6 @@ export const restDaySuggestionsByProgramId: Record<
     ],
   },
 
-  hiit_shred_free: {
-    sets: [
-      {
-        context: 'After a hard HIIT day, flush the legs; no extra metcons.',
-        recoveryIds: ['r_08', 'p_01', 'r_05'],
-        workoutIds: [
-          W.skip,
-          W.pushupPyramid,
-          W.legPrimer,
-          W.annie,
-          W.quietWork,
-          W.runPacing,
-        ],
-        skillWorkoutIds: ['sw_20', 'sw_10', 'sw_05', 'sw_21'],
-        activities: [walk2040, easySwim, fullRest],
-      },
-      {
-        context: 'Mid-week recovery, your CNS needs easy movement, not intensity.',
-        recoveryIds: ['r_05', 'r_15', 'r_02'],
-        workoutIds: [
-          W.skip,
-          W.grip,
-          W.doubleUnderClinic,
-          W.diesel,
-          W.performanceRitual,
-        ],
-        skillWorkoutIds: ['sw_10', 'sw_05', 'sw_20', 'sw_07'],
-        activities: [easyCycle, fullRest],
-      },
-      {
-        context: 'Before the next HIIT session, stay fresh, not fatigued.',
-        recoveryIds: ['r_02', 'r_08', 'p_01'],
-        workoutIds: [
-          W.skip,
-          W.pushupPyramid,
-          W.annie,
-          W.barbara,
-          W.quietWork,
-          W.pistolClinic,
-        ],
-        skillWorkoutIds: ['sw_05', 'sw_21', 'sw_20', 'sw_06'],
-        activities: [walk2040, easySwim],
-      },
-    ],
-  },
-
   hiit_shred_6wk_pro: {
     sets: [
       {

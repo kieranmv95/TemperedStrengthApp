@@ -1,5 +1,4 @@
 import { Badge, Tag } from '@/src/components/ds';
-import { focusTagDisplayLabel } from '@/src/components/workouts/workoutsScreenConstants';
 import {
   color,
   elevation,
@@ -80,11 +79,11 @@ export function TemperedDailyComingSoon({
 
       <View style={styles.focusRow}>
         <Badge
-          label={focusTagDisplayLabel(week.primaryFocus)}
-          accessibilityLabel={`Primary focus, ${focusTagDisplayLabel(week.primaryFocus)}`}
+          label={week.primaryFocus}
+          accessibilityLabel={`Primary focus, ${week.primaryFocus}`}
         />
         {week.otherFocuses.map((tag) => (
-          <Tag key={tag} label={focusTagDisplayLabel(tag)} />
+          <Tag key={tag} label={tag} />
         ))}
       </View>
 

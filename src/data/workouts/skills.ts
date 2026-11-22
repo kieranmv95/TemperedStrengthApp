@@ -6,10 +6,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Snatch Skill Lab',
     description:
       'A drill-led snatch session focused on the turnover and the catch, not the number on the bar. Positions first, speed second, load last. If a rep is slow under the bar, the weight stops climbing.',
-    category: 'Skill',
-    difficulty: 'Advanced',
     estimatedTime: 50,
-    tags: ['Skill', 'Olympic Lifting', 'Full Body'],
+    disciplines: ['Skills', 'Olympic Lifting'],
+    bodyFocus: ['Full Body'],
+    levels: ['Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -81,10 +81,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Clean & Jerk Skill Lab',
     description:
       'Two lifts, one session. Drill the pull and the rack, then drill the overhead, then put them together under a clock. Every rep resets from the floor.',
-    category: 'Skill',
-    difficulty: 'Advanced',
     estimatedTime: 50,
-    tags: ['Skill', 'Olympic Lifting', 'Full Body'],
+    disciplines: ['Skills', 'Olympic Lifting'],
+    bodyFocus: ['Full Body'],
+    levels: ['Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -155,10 +155,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Split Jerk Clinic',
     description:
       'The split jerk is a footwork skill dressed up as a strength lift. Most misses are a slow front foot or a soft back leg, not a weak press. This session drills the split before it ever loads it.',
-    category: 'Skill',
-    difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Skill', 'Olympic Lifting', 'Upper Body'],
+    disciplines: ['Skills', 'Olympic Lifting'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -232,10 +232,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Strict Pull-Up Builder',
     description:
       'Everything else on the bar is built on this. Strict pull-ups, honest range, no kip to hide behind. Whether you have one rep or twenty, this session has a lane for you.',
-    category: 'Skill',
-    difficulty: 'Multiple Difficulties',
     estimatedTime: 40,
-    tags: ['Skill', 'Upper Body', 'Gymnastics'],
+    disciplines: ['Skills', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -388,10 +388,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'The Kip Clinic',
     description:
       'The kip is a rhythm, not a thrash. Two shapes, hollow and arch, swapped at the right moment. This session builds the swing before it ever asks you to pull, because a bad kip repeated 500 times is just practice at being bad.',
-    category: 'Skill',
-    difficulty: 'Intermediate',
     estimatedTime: 40,
-    tags: ['Skill', 'Upper Body', 'Gymnastics'],
+    disciplines: ['Skills', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Intermediate'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -465,10 +465,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Chest to Bar Builder',
     description:
       'The gap between a pull-up and a chest to bar is about four inches of pull height, and those four inches come from the hips and the lats. This session builds the extra range rather than hoping you thrash your way to it.',
-    category: 'Skill',
-    difficulty: 'Advanced',
     estimatedTime: 40,
-    tags: ['Skill', 'Upper Body', 'Gymnastics'],
+    disciplines: ['Skills', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -537,10 +537,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Butterfly School',
     description:
       'Butterfly is the fastest way to cycle a pull-up and the fastest way to rip your hands if you rush it. You need 10 clean kipping pull-ups before you start this. The skill is the continuous circle, not the speed.',
-    category: 'Skill',
-    difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Skill', 'Upper Body', 'Gymnastics'],
+    disciplines: ['Skills', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -610,10 +610,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Bar Muscle-Up Lab',
     description:
       'A bar muscle-up is a high pull and a fast turnover, not a big pull-up. Most athletes fail because they pull to the chest instead of to the hips. This session trains the height, the hip drive and the turnover separately, then puts them back together.',
-    category: 'Skill',
-    difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Skill', 'Upper Body', 'Gymnastics'],
+    disciplines: ['Skills', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -682,10 +682,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Strict Bar Muscle-Up Strength',
     description:
       'No kip, no swing, no momentum. A strict bar muscle-up is raw pulling power plus the ability to change direction over the bar. This is a strength session more than a skill session, and it is deliberately slow.',
-    category: 'Skill',
-    difficulty: 'Advanced',
     estimatedTime: 50,
-    tags: ['Skill', 'Upper Body', 'Strength'],
+    disciplines: ['Skills', 'Gymnastics', 'Strength'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -759,10 +759,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Toes to Bar Clinic',
     description:
       'Toes to bar is a compression problem and a timing problem. If you cannot touch your toes to your hands sitting on the floor, no amount of swinging will fix it on the bar. Compression first, then the kip.',
-    category: 'Skill',
-    difficulty: 'Intermediate',
     estimatedTime: 40,
-    tags: ['Skill', 'Core', 'Gymnastics'],
+    disciplines: ['Skills', 'Gymnastics'],
+    bodyFocus: ['Core'],
+    levels: ['Intermediate'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -834,10 +834,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Ring Muscle-Up Lab',
     description:
       'Rings move, and that is the whole problem. The false grip is uncomfortable, unglamorous and completely non-negotiable. This session builds the grip, the transition and the dip in that order.',
-    category: 'Skill',
-    difficulty: 'Advanced',
     estimatedTime: 50,
-    tags: ['Skill', 'Upper Body', 'Gymnastics'],
+    disciplines: ['Skills', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -907,10 +907,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Strict Ring Muscle-Up Strength',
     description:
       'The hardest bodyweight skill in the building. No swing, no leg drive, no momentum through the transition. This session assumes you already have a kipping ring muscle-up and want the strict version.',
-    category: 'Skill',
-    difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Skill', 'Upper Body', 'Strength'],
+    disciplines: ['Skills', 'Gymnastics', 'Strength'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -988,10 +988,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Overhead Squat Fix',
     description:
       'The overhead squat exposes ankles, hips, t-spine and shoulders all at once, which is why most people hate it. This session opens the positions, then loads them, then tests whether they held.',
-    category: 'Skill',
-    difficulty: 'Intermediate',
     estimatedTime: 45,
-    tags: ['Skill', 'Olympic Lifting', 'Lower Body'],
+    disciplines: ['Skills', 'Olympic Lifting'],
+    bodyFocus: ['Lower Body'],
+    levels: ['Intermediate'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -1063,13 +1063,13 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Worm Work',
     description:
       'The worm is a team skill, not an individual one. Everything is decided by whoever calls the reps and whether the whole line moves at the same time. No worm? Use a log, a heavy barbell held by the team, or a loaded sandbag on the shoulders.',
-    category: 'Skill',
-    difficulty: 'Intermediate',
     estimatedTime: 40,
-    tags: ['Skill', 'Full Body', 'Strength', 'Partner'],
+    disciplines: ['Skills', 'Strength'],
+    bodyFocus: ['Full Body'],
+    levels: ['Intermediate'],
+    partner: 'only',
     isPremium: true,
     allowedRoles: ['coach'],
-    partner: true,
     blocks: [
       {
         name: 'Warmup',
@@ -1140,10 +1140,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Pistol Progression',
     description:
       'A pistol squat needs ankle range, single leg strength and balance, and most people are missing at least one. This session finds out which one it is and trains it, then earns the full rep at the end.',
-    category: 'Skill',
-    difficulty: 'Intermediate',
     estimatedTime: 40,
-    tags: ['Skill', 'Lower Body', 'Gymnastics'],
+    disciplines: ['Skills', 'Gymnastics'],
+    bodyFocus: ['Lower Body'],
+    levels: ['Intermediate'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -1212,10 +1212,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Handstand Walk Progression',
     description:
       'Handstand walking is a balance skill built on a shoulder strength base. If you cannot hold a wall facing handstand for 60 seconds, that is the session, not the walking. Wrists get prepped properly here because they take the brunt of it.',
-    category: 'Skill',
-    difficulty: 'Advanced',
     estimatedTime: 40,
-    tags: ['Skill', 'Upper Body', 'Gymnastics'],
+    disciplines: ['Skills', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -1289,10 +1289,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Handstand Push-Up Builder',
     description:
       'Strict first, kipping second. The kipping handstand push-up is a hip drive skill and it is only safe on top of strict strength. Three lanes here depending on where you are.',
-    category: 'Skill',
-    difficulty: 'Multiple Difficulties',
     estimatedTime: 45,
-    tags: ['Skill', 'Upper Body', 'Gymnastics'],
+    disciplines: ['Skills', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Beginner', 'Intermediate', 'Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -1451,10 +1451,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Rope Climb Clinic',
     description:
       'A rope climb is a leg exercise that people insist on doing with their arms. Get the foot lock right and you can climb all day. Get it wrong and you will burn your grip out on rep two. Long socks and long leggings for this one.',
-    category: 'Skill',
-    difficulty: 'Intermediate',
     estimatedTime: 40,
-    tags: ['Skill', 'Upper Body', 'Gymnastics'],
+    disciplines: ['Skills', 'Gymnastics'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Intermediate'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -1526,10 +1526,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Legless Rope Climb',
     description:
       'Take the legs away and a rope climb becomes a pulling test with a grip tax. You need strict pull-ups and a solid standard climb before this. Everything here builds the hand over hand pull and the grip that has to survive it.',
-    category: 'Skill',
-    difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Skill', 'Upper Body', 'Strength'],
+    disciplines: ['Skills', 'Gymnastics', 'Strength'],
+    bodyFocus: ['Upper Body'],
+    levels: ['Advanced'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -1597,10 +1597,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Box Jump Mechanics',
     description:
       'Box jumps break more shins than any other movement in the gym, and almost always because of a rushed rebound at rep 40. This session trains the landing first, then the height, then the cycle rate.',
-    category: 'Skill',
-    difficulty: 'Intermediate',
     estimatedTime: 35,
-    tags: ['Skill', 'Lower Body', 'Gymnastics'],
+    disciplines: ['Skills', 'Gymnastics'],
+    bodyFocus: ['Lower Body'],
+    levels: ['Intermediate'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -1675,10 +1675,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: "Devil's Press Efficiency",
     description:
       "The devil's press is a burpee and a double dumbbell snatch welded together, and most people fight it. Swing the dumbbells, do not press them. This session breaks the movement into halves before putting it back under a clock.",
-    category: 'Skill',
-    difficulty: 'Intermediate',
     estimatedTime: 35,
-    tags: ['Skill', 'Full Body', 'Strength'],
+    disciplines: ['Skills', 'Strength'],
+    bodyFocus: ['Full Body'],
+    levels: ['Intermediate'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [
@@ -1746,10 +1746,10 @@ export const skills: StandaloneWorkoutSource[] = [
     title: 'Kettlebell Swing Mechanics',
     description:
       'The swing is a hinge, not a squat, and the bell floats because your hips threw it there. If your shoulders are burning, you are lifting it rather than swinging it. This session fixes the hinge, then builds density.',
-    category: 'Skill',
-    difficulty: 'Beginner',
     estimatedTime: 35,
-    tags: ['Skill', 'Full Body', 'Strength'],
+    disciplines: ['Skills', 'Strength'],
+    bodyFocus: ['Full Body'],
+    levels: ['Beginner'],
     isPremium: true,
     allowedRoles: ['coach'],
     blocks: [

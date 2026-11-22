@@ -1,14 +1,18 @@
 import { ActionChip, ProgressBar, Skeleton, Tag } from '@/src/components/ds';
+import { StartGymTimerButton } from '@/src/components/gymTimer/StartGymTimerButton';
+import { HeartRateZoneChip } from '@/src/components/zones/HeartRateZoneChip';
 import {
   color,
   elevation,
-  MIN_TARGET_SIZE,
   radius,
   space,
   typography,
 } from '@/src/constants/tokens';
 import { getExerciseById } from '@/src/data/exercises';
+import { useHeartRateZones } from '@/src/hooks/useHeartRateZones';
+import type { ZoneRange } from '@/src/types/heartRate';
 import type { WorkoutBlock, WorkoutMovement } from '@/src/types/program';
+import { mapProgramBlockToGymTimer } from '@/src/utils/gymTimer';
 import {
   getConditioningLogsForDay,
   toggleConditioningBlockCompleted,
@@ -40,6 +44,7 @@ export function ConditioningWorkoutBody({
     [blockId: string]: { completed: boolean };
   }>({});
   const [loading, setLoading] = useState(true);
+  const { ranges: zoneRanges } = useHeartRateZones();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -116,9 +121,12 @@ export function ConditioningWorkoutBody({
               block={block}
               isCompleted={isCompleted}
               onToggleComplete={() => handleToggle(block.id)}
+              zoneRanges={zoneRanges}
             />
           );
         }
+
+        const timerConfig = mapProgramBlockToGymTimer(block);
 
         return (
           <View key={block.id} style={styles.blockCard}>
@@ -132,11 +140,20 @@ export function ConditioningWorkoutBody({
               <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
             </View>
 
-            <BlockCompleteToggle
-              title={block.title}
-              isCompleted={isCompleted}
-              onPress={() => handleToggle(block.id)}
-            />
+            <View style={styles.blockActions}>
+              {timerConfig ? (
+                <StartGymTimerButton config={timerConfig} size="compact" />
+              ) : null}
+              <BlockCompleteToggle
+                title={block.title}
+                isCompleted={isCompleted}
+                onPress={() => handleToggle(block.id)}
+              />
+            </View>
+
+            {block.hrZone ? (
+              <HeartRateZoneChip zone={block.hrZone} ranges={zoneRanges} />
+            ) : null}
 
             {block.instructions ? (
               <Text style={styles.blockInstructions}>{block.instructions}</Text>
@@ -199,7 +216,7 @@ function BlockCompleteToggle({
     >
       <Ionicons
         name={isCompleted ? 'checkmark-circle' : 'ellipse-outline'}
-        size={18}
+        size={16}
         color={isCompleted ? color.success : color.textSecondary}
       />
       <Text
@@ -235,12 +252,14 @@ type ConditioningWarmupBlockProps = {
   block: Extract<WorkoutBlock, { type: 'warmup' }>;
   isCompleted: boolean;
   onToggleComplete: () => void;
+  zoneRanges: ZoneRange[] | null;
 };
 
 function ConditioningWarmupBlock({
   block,
   isCompleted,
   onToggleComplete,
+  zoneRanges,
 }: ConditioningWarmupBlockProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -272,14 +291,19 @@ function ConditioningWarmupBlock({
         <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
       </Pressable>
 
-      <BlockCompleteToggle
-        title={block.title}
-        isCompleted={isCompleted}
-        onPress={onToggleComplete}
-      />
+      <View style={styles.blockActions}>
+        <BlockCompleteToggle
+          title={block.title}
+          isCompleted={isCompleted}
+          onPress={onToggleComplete}
+        />
+      </View>
 
       {isExpanded ? (
         <>
+          {block.hrZone ? (
+            <HeartRateZoneChip zone={block.hrZone} ranges={zoneRanges} />
+          ) : null}
           {block.instructions ? (
             <Text style={styles.blockInstructions}>{block.instructions}</Text>
           ) : null}
@@ -382,17 +406,22 @@ const styles = StyleSheet.create({
     ...typography.calloutStrong,
     color: color.textSecondary,
   },
+  blockActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: space.sm,
+  },
   blockInstructions: {
     ...typography.callout,
     color: color.textSecondary,
   },
   completeButton: {
-    alignSelf: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: space.xs,
-    minHeight: MIN_TARGET_SIZE,
-    paddingHorizontal: space.md,
+    gap: space.xxs,
+    minHeight: 40,
+    paddingHorizontal: space.sm,
     borderRadius: radius.pill,
     borderWidth: 1,
     borderColor: color.borderStrong,

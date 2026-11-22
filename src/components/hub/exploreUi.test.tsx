@@ -22,6 +22,24 @@ describe('HubToolsSection', () => {
     expect(onOpenTool).toHaveBeenCalledWith(firstTool.route);
   });
 
+  it('can show the scrolling tiles without a title or See all control', async () => {
+    await render(<HubToolsSection tilesOnly onOpenTool={jest.fn()} />);
+    await act(async () => {});
+
+    expect(screen.queryByText('Tools')).not.toBeOnTheScreen();
+    expect(
+      screen.queryByText(
+        'Calculators and training utilities that work offline.'
+      )
+    ).not.toBeOnTheScreen();
+    expect(
+      screen.queryByRole('button', { name: 'See all tools' })
+    ).not.toBeOnTheScreen();
+    expect(
+      screen.getByRole('button', { name: TOOLS[0].title })
+    ).toBeOnTheScreen();
+  });
+
   it('switches between the peeking row and the full grid', async () => {
     await render(<HubToolsSection onOpenTool={jest.fn()} />);
     await act(async () => {});

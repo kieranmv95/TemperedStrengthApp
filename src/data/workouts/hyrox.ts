@@ -20,10 +20,11 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Performance Ritual',
     description:
       'A Hyrox-style chipper into a short bodyweight finisher. Move well, keep transitions tight, and empty the tank on the last 10 burpees.',
-    category: 'Hyrox',
-    difficulty: 'Intermediate',
     estimatedTime: 25,
-    tags: ['Full Body', 'Chipper', 'For Time'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Intermediate'],
     isPremium: false,
     collab: replabCollab,
     blocks: [
@@ -70,10 +71,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Order 66',
     description:
       'A high-output Hyrox-style workout chipper, designed in homage to the iconic Star Wars films.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Full Body', 'Chipper', 'For Time', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Advanced'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -129,10 +132,13 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Standard PFT',
     description:
       'The official Hyrox Physical Fitness Test. Use this to gauge your current level.',
-    category: 'Hyrox',
-    difficulty: 'Intermediate',
     estimatedTime: 30,
-    tags: ['Full Body', 'For Time', 'Benchmark', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Intermediate'],
+    collections: ['Benchmarks'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -190,10 +196,13 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'The Long Pull',
     description:
       'This is not a sprint. Four rounds of rowing with bodyweight work in between, building fatigue the way a Hyrox race does. Your legs will be burning before you sit back down. Record your 500m/600m(partner) split each row and try to hold it across all four rounds.',
-    category: 'Hyrox',
-    difficulty: 'Intermediate',
     estimatedTime: 40,
-    tags: ['Full Body', 'Intervals', 'Benchmark', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Intermediate'],
+    collections: ['Benchmarks'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -257,10 +266,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Hyrox Prep: Run + Row Engine Session',
     description:
       'A simple Hyrox-style engine session. Keep transitions fast and breathing controlled.',
-    category: 'Hyrox',
-    difficulty: 'Intermediate',
     estimatedTime: 35,
-    tags: ['Cardio', 'Intervals', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Intermediate'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -316,10 +327,11 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Sled Exposure',
     description:
       'Technique first. Learn bracing, posture, and smooth drive without redlining.',
-    category: 'Hyrox',
-    difficulty: 'Beginner',
     estimatedTime: 35,
-    tags: ['Lower Body', 'Intervals'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Lower Body'],
+    format: 'Intervals',
+    levels: ['Beginner'],
     isPremium: true,
     blocks: [
       {
@@ -353,10 +365,11 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Wall Ball Density 10',
     description:
       'Hyrox-specific density test. Pick a target pace and hold it without long breaks.',
-    category: 'Hyrox',
-    difficulty: 'Intermediate',
     estimatedTime: 12,
-    tags: ['Full Body', 'Benchmark'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    levels: ['Intermediate'],
+    collections: ['Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -380,10 +393,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Jump The Gap',
     description:
       'Eight rounds of burpee broad jumps and air squats, Burpee Broad Jumps tends to be the movement that breaks people in Hyrox. The goal is consistent distance every round, not an all-out sprint that falls apart by round four. Solo or with a partner, the rules are the same: strong hips, full extension, calm breathing.',
-    category: 'Hyrox',
-    difficulty: 'Intermediate',
     estimatedTime: 20,
-    tags: ['Full Body', 'Intervals', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Intermediate'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -458,10 +473,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Carry Capacity Builder',
     description:
       'Grip and posture under fatigue. Walk tall, breathe steady. This will feel heavy, expect to be slow and have to break up the heavy carry.',
-    category: 'Hyrox',
-    difficulty: 'Intermediate',
     estimatedTime: 35,
-    tags: ['Full Body', 'For Time', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Intermediate'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -509,10 +526,11 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Race Day Simulation',
     description:
       'Hyrox does not let you sit on a rower with fresh legs. This session makes sure you never do either. You will earn your 2000m row by getting through a full body burnout first, then rowing on legs that already have nothing left. That is the point.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Full Body', 'Benchmark'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    levels: ['Advanced'],
+    collections: ['Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -552,10 +570,11 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'No Ski, No Problem',
     description:
       'No SkiErg? This is your substitute. The row covers the upper body pulling demand and the run keeps the legs turning over, just like race day transitions. Five rounds of both with no scheduled rest. Smooth is fast.',
-    category: 'Hyrox',
-    difficulty: 'Intermediate',
     estimatedTime: 35,
-    tags: ['Cardio', 'For Time'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Intermediate'],
     isPremium: false,
     blocks: [
       {
@@ -584,10 +603,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Run to the Wall',
     description:
       'Run hard enough to make wall balls feel heavy, then stay composed anyway.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Cardio', 'Intervals', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Advanced'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -642,10 +663,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Pit Stop',
     description:
       'Hyrox-style stations with minimal running. Great when space is limited.',
-    category: 'Hyrox',
-    difficulty: 'Intermediate',
     estimatedTime: 30,
-    tags: ['Full Body', 'For Time', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Intermediate'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -708,10 +731,10 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'The Quiet Work',
     description:
       'Not every session needs to hurt. Zone 2 work is where your engine actually gets built, and most people skip it because it feels too easy. It is not. Stay conversational the whole time, if you cannot hold a sentence you are going too hard. Pick your machine and settle in.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 40,
-    tags: ['Cardio'],
+    disciplines: ['Conditioning'],
+    bodyFocus: ['Full Body'],
+    levels: ['Beginner'],
     isPremium: true,
     blocks: [
       {
@@ -725,6 +748,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
       },
       {
         name: '30 Min - Zone 2',
+        hrZone: 2,
         instructions:
           'Pick one machine and stay on it. Maintain a conversational pace for the full 30 minutes. If you cannot speak in full sentences you are going too hard. If you feel like you could go forever you are probably right where you need to be. Record your distance at the end.',
         movements: [
@@ -750,10 +774,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Push Your Luck (Sled)',
     description:
       'Hyrox sled push practice. Smooth drive, no collapsing. Moderate weight, moderate pace.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Lower Body', 'Intervals', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Lower Body'],
+    format: 'Intervals',
+    levels: ['Advanced'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -809,10 +835,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Sled Pull Intervals (Moderate)',
     description:
       'Hyrox sled pull practice. Keep torso tall and stride consistent.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 35,
-    tags: ['Lower Body', 'Intervals', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Lower Body'],
+    format: 'Intervals',
+    levels: ['Advanced'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -853,17 +881,19 @@ export const hyrox: StandaloneWorkoutSource[] = [
         ],
       },
     ],
-    equipment: ['sled'],
+    equipment: ['sled', 'medicine ball'],
   },
   {
     id: 'f_63',
     title: 'Roxzone Transitions',
     description:
       'Run in, get working fast. A session built around Hyrox transitions and composure.',
-    category: 'Hyrox',
-    difficulty: 'Intermediate',
     estimatedTime: 30,
-    tags: ['Full Body', 'For Time', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Intermediate'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -910,10 +940,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Hyrox Mini AMRAP 12',
     description:
       'A short Hyrox-style effort when you want intensity without a long session.',
-    category: 'Hyrox',
-    difficulty: 'Intermediate',
     estimatedTime: 20,
-    tags: ['Full Body', 'AMRAP', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'AMRAP',
+    levels: ['Intermediate'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -966,10 +998,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'The Qualifier',
     description:
       'A short, fast paced Hyrox-style benchmark. Minimal transition time, flat out.',
-    category: 'Hyrox',
-    difficulty: 'Intermediate',
     estimatedTime: 35,
-    tags: ['Full Body', 'For Time', 'Benchmark'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Intermediate'],
+    collections: ['Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -997,10 +1031,13 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Grippy',
     description:
       'Carry medley under fatigue. Your job is to keep posture tall and steps clean.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 30,
-    tags: ['Full Body', 'For Time', 'Benchmark', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['Benchmarks'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -1061,10 +1098,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Wall Ball 150 Test',
     description:
       'A Hyrox-flavoured benchmark. One movement. One goal. Keep moving.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 25,
-    tags: ['Full Body', 'For Time', 'Benchmark'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['Benchmarks'],
     isPremium: false,
     blocks: [
       {
@@ -1088,10 +1127,11 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Race Sim: Half',
     description:
       'A half-distance Hyrox-style simulation. Focus on steady output and smooth transitions.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Full Body', 'For Time', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
     isPremium: false,
     blocks: [
       {
@@ -1158,10 +1198,11 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'The Anvil Grinder',
     description:
       'Elite Hyrox preparation. Heavy sled work paired with aerobic fatigue.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Full Body', 'For Time'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -1172,6 +1213,7 @@ export const hyrox: StandaloneWorkoutSource[] = [
       },
       {
         name: '5 Rounds',
+        hrZone: 3,
         instructions:
           'Rest 60s between rounds.Work through each movement in full before moving on to the next. Rest only as needed to keep moving.',
         highlightInstructions: 'Run at 70-80% of max heart rate',
@@ -1189,10 +1231,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Earn Your 5k',
     description:
       'Anyone can run a 5k on fresh legs. This session makes sure you never do. A short burnout before the run taxes the legs just enough to make the first kilometre feel like the third. Hit the burnout, then run your best 5k anyway. Sub 20:00 is the target, sub 18:00 is elite.',
-    category: 'Conditioning',
-    difficulty: 'Advanced',
     estimatedTime: 45,
-    tags: ['Cardio', 'For Time', 'Benchmark'],
+    disciplines: ['Conditioning', 'Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -1231,10 +1275,11 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'The Hybrid Finisher',
     description:
       'A combination of erg and bodyweight movements to finish the week.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 40,
-    tags: ['Full Body', 'Chipper', 'For Time'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Advanced'],
     isPremium: true,
     blocks: [
       {
@@ -1264,10 +1309,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Full Hyrox Event',
     description:
       'A full Hyrox simulation. Long, demanding, and specific. Keep moving.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 85,
-    tags: ['Full Body', 'For Time', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    partner: 'option',
     isPremium: true,
     blocks: [
       {
@@ -1363,10 +1410,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Elite Stations Repeat',
     description:
       'High output station repeats. Big breathing. Tight transitions.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Full Body', 'Intervals', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Advanced'],
+    partner: 'option',
     isPremium: true,
     blocks: [
       {
@@ -1433,10 +1482,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Hyrox PFT (Pro Standard)',
     description:
       'A higher-standard Hyrox fitness test. Record finish time and station notes.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 40,
-    tags: ['Full Body', 'For Time', 'Benchmark'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    collections: ['Benchmarks'],
     isPremium: true,
     blocks: [
       {
@@ -1464,10 +1515,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Roxzone Killer',
     description:
       'Shorter runs, brutal transitions, dense stations. Designed to make you better at the messy middle.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 55,
-    tags: ['Full Body', 'Intervals', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Full Body'],
+    format: 'Intervals',
+    levels: ['Advanced'],
+    partner: 'option',
     isPremium: true,
     blocks: [
       {
@@ -1516,10 +1569,11 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Hyrox Lite',
     description:
       'Hyrox-style session. Eight stations, one round each, for time. Functional movements, high volume, designed to replicate the feel of race-day conditioning. This is the longest lower body session of the programme - pace from station one.',
-    category: 'Conditioning',
-    difficulty: 'Beginner',
     estimatedTime: 25,
-    tags: ['Full Body', 'For Time'],
+    disciplines: ['Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Beginner'],
     equipment: ['dumbbell', 'box', 'medicine ball'],
     isPremium: true,
     blocks: [
@@ -1552,10 +1606,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Sandbag Lunge Repeatability',
     description:
       'Leg endurance with a Hyrox bias. Keep steps consistent and upright.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 40,
-    tags: ['Lower Body', 'For Time', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Lower Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    partner: 'option',
     isPremium: false,
     blocks: [
       {
@@ -1610,10 +1666,12 @@ export const hyrox: StandaloneWorkoutSource[] = [
     title: 'Hyrox Heavy Sled Day',
     description:
       'Hyrox sled day. Heavy exposure with enough aerobic work to keep you honest.',
-    category: 'Hyrox',
-    difficulty: 'Advanced',
     estimatedTime: 60,
-    tags: ['Lower Body', 'For Time', 'Partner'],
+    disciplines: ['Hyrox'],
+    bodyFocus: ['Lower Body'],
+    format: 'For Time',
+    levels: ['Advanced'],
+    partner: 'option',
     isPremium: true,
     blocks: [
       {

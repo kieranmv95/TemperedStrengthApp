@@ -17,6 +17,15 @@ import {
   getOtpResendCooldownRemainingSeconds,
 } from '@/src/sync/accountStorage';
 import { SyncPayloadTooLargeError } from '@/src/sync/syncEngine';
+
+function isAuthError(error: unknown): boolean {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    '__isAuthError' in error &&
+    (error as { __isAuthError: unknown }).__isAuthError === true
+  );
+}
 import { router, useLocalSearchParams, type Href } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import {
@@ -99,12 +108,17 @@ export function AccountVerifyOtpScreen() {
         destination = `${returnTo}${separator}accountCreated=1`;
       }
 
-      const successBody = result.restored
-        ? 'Your account backup is loaded on this device.'
-        : 'Your account is ready. Training data will sync while you stay signed in.';
+      const successTitle = result.backupError
+        ? 'Signed in'
+        : 'Successfully logged in';
+      const successBody = result.backupError
+        ? `Your code was accepted, but backup needs attention: ${result.backupError}`
+        : result.restored
+          ? 'Your account backup is loaded on this device.'
+          : 'Your account is ready. Training data will sync while you stay signed in.';
 
       Alert.alert(
-        'Successfully logged in',
+        successTitle,
         successBody,
         [
           {
@@ -129,9 +143,21 @@ export function AccountVerifyOtpScreen() {
         Alert.alert('Backup could not be completed', error.message);
         return;
       }
+      if (!isAuthError(error)) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'Please check your connection and try again.';
+        Alert.alert('Could not finish signing in', message);
+        return;
+      }
+      const detail =
+        error instanceof Error && error.message.trim().length > 0
+          ? ` ${error.message}`
+          : '';
       Alert.alert(
         'Code not accepted',
-        'The code may be invalid or expired. Check it and try again.'
+        `The code may be invalid or expired. Check it and try again.${detail}`
       );
     } finally {
       setVerifying(false);

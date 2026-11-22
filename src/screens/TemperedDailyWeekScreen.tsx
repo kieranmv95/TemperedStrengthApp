@@ -1,3 +1,4 @@
+import { CopyrightedContentGuard } from '@/src/components/copyright/CopyrightedContentGuard';
 import { Badge, SectionHeader, StandardLayout, Tag } from '@/src/components/ds';
 import { TemperedDailyComingSoon } from '@/src/components/temperedDaily/TemperedDailyComingSoon';
 import { TemperedDailyDayCard } from '@/src/components/temperedDaily/TemperedDailyDayCard';
@@ -12,7 +13,6 @@ import {
   TEMPERED_DAILY_WEEK_SUBTITLE,
   TEMPERED_DAILY_WEEK_TITLE,
 } from '@/src/components/temperedDaily/temperedDailyConstants';
-import { focusTagDisplayLabel } from '@/src/components/workouts/workoutsScreenConstants';
 import {
   color,
   elevation,
@@ -77,118 +77,121 @@ export default function TemperedDailyWeekScreen() {
   }
 
   return (
-    <StandardLayout
-      title={TEMPERED_DAILY_WEEK_TITLE}
-      subtitle={TEMPERED_DAILY_WEEK_SUBTITLE}
-      onBackPress={() => router.back()}
-    >
-      <StandardLayout.Body>
-        <View style={styles.sections}>
-          <View style={styles.header}>
-            <Text style={styles.overline}>
-              {`${week.blockName} · ${week.phase}`}
-            </Text>
-            <Text style={styles.theme} accessibilityRole="header">
-              {week.theme}
-            </Text>
-            <View style={styles.focusRow}>
-              <Badge
-                label={focusTagDisplayLabel(week.primaryFocus)}
-                accessibilityLabel={`Primary focus, ${focusTagDisplayLabel(week.primaryFocus)}`}
-              />
-              {week.otherFocuses.map((tag) => (
-                <Tag key={tag} label={focusTagDisplayLabel(tag)} />
-              ))}
-            </View>
-            <Text style={styles.description}>{week.description}</Text>
-            {todayIndex === null ? (
-              <Text style={styles.dropLine}>
-                {TEMPERED_DAILY_NEW_WEEK_DROPS}
+    <>
+      <StandardLayout
+        title={TEMPERED_DAILY_WEEK_TITLE}
+        subtitle={TEMPERED_DAILY_WEEK_SUBTITLE}
+        onBackPress={() => router.back()}
+      >
+        <StandardLayout.Body>
+          <View style={styles.sections}>
+            <View style={styles.header}>
+              <Text style={styles.overline}>
+                {`${week.blockName} · ${week.phase}`}
               </Text>
-            ) : null}
-          </View>
+              <Text style={styles.theme} accessibilityRole="header">
+                {week.theme}
+              </Text>
+              <View style={styles.focusRow}>
+                <Badge
+                  label={week.primaryFocus}
+                  accessibilityLabel={`Primary focus, ${week.primaryFocus}`}
+                />
+                {week.otherFocuses.map((tag) => (
+                  <Tag key={tag} label={tag} />
+                ))}
+              </View>
+              <Text style={styles.description}>{week.description}</Text>
+              {todayIndex === null ? (
+                <Text style={styles.dropLine}>
+                  {TEMPERED_DAILY_NEW_WEEK_DROPS}
+                </Text>
+              ) : null}
+            </View>
 
-          <View style={styles.daySection}>
-            <View style={styles.dayRow} accessibilityRole="radiogroup">
-              {DAY_LETTERS.map((letter, index) => {
-                const isSelected = index === selectedIndex;
-                const isToday = index === todayIndex;
+            <View style={styles.daySection}>
+              <View style={styles.dayRow} accessibilityRole="radiogroup">
+                {DAY_LETTERS.map((letter, index) => {
+                  const isSelected = index === selectedIndex;
+                  const isToday = index === todayIndex;
+                  const dayLabel = formatTemperedDayLabel(
+                    getTemperedDayDate(week, index)
+                  );
+                  return (
+                    <Pressable
+                      key={dayLabel}
+                      onPress={() => setSelectedIndex(index)}
+                      style={({ pressed }) => [
+                        styles.dayButton,
+                        isToday && styles.dayButtonToday,
+                        pressed && !isSelected && styles.dayButtonPressed,
+                        isSelected && styles.dayButtonSelected,
+                      ]}
+                      accessibilityRole="radio"
+                      accessibilityLabel={
+                        isToday ? `${dayLabel}, today` : dayLabel
+                      }
+                      accessibilityState={{ checked: isSelected }}
+                    >
+                      <Text
+                        style={[
+                          styles.dayLetter,
+                          isToday && styles.dayLetterToday,
+                          isSelected && styles.dayLetterSelected,
+                        ]}
+                      >
+                        {letter}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+              <TemperedDailyDayCard
+                dayLabel={formatTemperedDayLabel(
+                  getTemperedDayDate(week, selectedIndex)
+                )}
+                workout={workoutForDay(week, selectedIndex)}
+                isToday={selectedIndex === todayIndex}
+                showProBadge={showProBadge}
+                onPress={openWorkout}
+              />
+            </View>
+
+            <View style={styles.listSection}>
+              <SectionHeader title="All this week" />
+              {week.days.map((_, index) => {
                 const dayLabel = formatTemperedDayLabel(
                   getTemperedDayDate(week, index)
                 );
                 return (
-                  <Pressable
+                  <TemperedDailyDayCard
                     key={dayLabel}
-                    onPress={() => setSelectedIndex(index)}
-                    style={({ pressed }) => [
-                      styles.dayButton,
-                      isToday && styles.dayButtonToday,
-                      pressed && !isSelected && styles.dayButtonPressed,
-                      isSelected && styles.dayButtonSelected,
-                    ]}
-                    accessibilityRole="radio"
-                    accessibilityLabel={
-                      isToday ? `${dayLabel}, today` : dayLabel
-                    }
-                    accessibilityState={{ checked: isSelected }}
-                  >
-                    <Text
-                      style={[
-                        styles.dayLetter,
-                        isToday && styles.dayLetterToday,
-                        isSelected && styles.dayLetterSelected,
-                      ]}
-                    >
-                      {letter}
-                    </Text>
-                  </Pressable>
+                    dayLabel={dayLabel}
+                    workout={workoutForDay(week, index)}
+                    isToday={index === todayIndex}
+                    showProBadge={showProBadge}
+                    onPress={openWorkout}
+                  />
                 );
               })}
             </View>
-            <TemperedDailyDayCard
-              dayLabel={formatTemperedDayLabel(
-                getTemperedDayDate(week, selectedIndex)
-              )}
-              workout={workoutForDay(week, selectedIndex)}
-              isToday={selectedIndex === todayIndex}
-              showProBadge={showProBadge}
-              onPress={openWorkout}
-            />
-          </View>
 
-          <View style={styles.listSection}>
-            <SectionHeader title="All this week" />
-            {week.days.map((_, index) => {
-              const dayLabel = formatTemperedDayLabel(
-                getTemperedDayDate(week, index)
-              );
-              return (
-                <TemperedDailyDayCard
-                  key={dayLabel}
-                  dayLabel={dayLabel}
-                  workout={workoutForDay(week, index)}
-                  isToday={index === todayIndex}
-                  showProBadge={showProBadge}
-                  onPress={openWorkout}
-                />
-              );
-            })}
-          </View>
-
-          <View style={styles.footer}>
-            {week.nextWeekFocus ? (
-              <Text style={styles.footerText}>
-                {'Next week’s focus: '}
-                <Text style={styles.footerFocus}>{week.nextWeekFocus}</Text>
+            <View style={styles.footer}>
+              {week.nextWeekFocus ? (
+                <Text style={styles.footerText}>
+                  {'Next week’s focus: '}
+                  <Text style={styles.footerFocus}>{week.nextWeekFocus}</Text>
+                </Text>
+              ) : null}
+              <Text style={styles.footerCaption}>
+                {TEMPERED_DAILY_RELEASE_COPY}
               </Text>
-            ) : null}
-            <Text style={styles.footerCaption}>
-              {TEMPERED_DAILY_RELEASE_COPY}
-            </Text>
+            </View>
           </View>
-        </View>
-      </StandardLayout.Body>
-    </StandardLayout>
+        </StandardLayout.Body>
+      </StandardLayout>
+      <CopyrightedContentGuard active={!subscriptionLoading && isPro} />
+    </>
   );
 }
 

@@ -111,10 +111,11 @@ const td001: StandaloneWorkoutSource = {
   title: 'Find Your Five',
   description:
     'A back squat session built around one question: what does a hard five feel like today? Build to a heavy set of five with two reps left in the tank, back off for volume, then finish with a short, punchy AMRAP that keeps the legs out of it.',
-  category: 'Strength',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Lower Body', 'Strength', 'AMRAP'],
+  disciplines: ['Strength'],
+  bodyFocus: ['Lower Body'],
+  format: 'AMRAP',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['barbell', 'kettlebell', 'rower', 'dumbbell', 'ghd'],
   isPremium: true,
   logSchema: {
@@ -264,10 +265,11 @@ const td002: StandaloneWorkoutSource = {
   title: 'Station to Station',
   description:
     'A hybrid engine session with a race-day feel. Some quality pulling to start, then four rounds of running, sled and wall balls. Learn the pace you can repeat, not the pace you can survive once.',
-  category: 'Conditioning',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Cardio', 'Full Body', 'For Time'],
+  disciplines: ['Metcon', 'Conditioning', 'Gymnastics'],
+  bodyFocus: ['Full Body'],
+  format: 'For Time',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['barbell', 'pull-up bar', 'sled', 'medicine ball', 'bands'],
   isPremium: true,
   logSchema: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
@@ -414,10 +416,11 @@ const td003: StandaloneWorkoutSource = {
   title: 'Press Test',
   description:
     'A bench press session to find where you stand. Build to a heavy set of five, back off for volume, then take on an EMOM that blends gymnastics pulling with machine work. Shoulder blades pinned, feet planted, bar path straight.',
-  category: 'Strength',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Upper Body', 'Strength', 'EMOM'],
+  disciplines: ['Strength', 'Gymnastics'],
+  bodyFocus: ['Upper Body'],
+  format: 'EMOM',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['barbell', 'pull-up bar', 'ski erg', 'ghd', 'dumbbell', 'bands'],
   isPremium: true,
   logSchema: {
@@ -571,10 +574,11 @@ const td004: StandaloneWorkoutSource = {
   title: 'Fast Hips',
   description:
     'Light, fast and technical. A clean technique EMOM sharpens your positions without beating up the legs, then a three-round mixed-modal WOD gets you moving like an athlete. Speed over load all session.',
-  category: 'WOD',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Full Body', 'Olympic Lifting', 'For Time'],
+  disciplines: ['Metcon', 'Gymnastics', 'Olympic Lifting'],
+  bodyFocus: ['Full Body'],
+  format: 'For Time',
+  levels: ['Intermediate', 'Advanced'],
   equipment: [
     'barbell',
     'dumbbell',
@@ -714,10 +718,11 @@ const td005: StandaloneWorkoutSource = {
   title: 'Off the Floor',
   description:
     'A deadlift session to find your working five. Every rep starts from a dead stop, braced and patient off the floor. Then take your tired legs into a compromised-running finisher that feels a lot like the back half of a race.',
-  category: 'Strength',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Lower Body', 'Strength', 'For Time'],
+  disciplines: ['Strength'],
+  bodyFocus: ['Lower Body'],
+  format: 'For Time',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['barbell', 'kettlebell', 'bike', 'ghd'],
   isPremium: true,
   logSchema: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
@@ -855,10 +860,11 @@ const td006: StandaloneWorkoutSource = {
   title: 'Long Road',
   description:
     'Long and hybrid. Loaded carries replace the barbell, then a big chipper of rowing, kettlebells, sandbags, burpees and a run to finish. Break it into chunks early and keep moving.',
-  category: 'WOD',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Full Body', 'Chipper'],
+  disciplines: ['Metcon'],
+  bodyFocus: ['Full Body'],
+  format: 'Chipper',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['rower', 'kettlebell', 'sandbag', 'dumbbell'],
   isPremium: true,
   logSchema: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
@@ -1026,10 +1032,11 @@ const td007: StandaloneWorkoutSource = {
   title: 'Slow Burn',
   description:
     'A recovery session that still counts. Light tempo pressing for the upper body, a long Zone 2 piece across three machines, and an extended stretch. Nothing here should feel hard. Leave fresher than you arrived.',
-  category: 'Conditioning',
-  difficulty: 'Multiple Difficulties',
   estimatedTime: 60,
-  tags: ['Cardio', 'Upper Body', 'Intervals'],
+  disciplines: ['Conditioning'],
+  bodyFocus: ['Upper Body'],
+  format: 'Intervals',
+  levels: ['Intermediate', 'Advanced'],
   equipment: ['dumbbell', 'bike', 'rower', 'ski erg', 'bands', 'pull-up bar'],
   isPremium: true,
   logSchema: {
@@ -1044,6 +1051,7 @@ const td007: StandaloneWorkoutSource = {
         td007Strength,
         {
           name: 'WOD: Zone 2 x 30',
+          hrZone: 2,
           instructions:
             'Three 10 minute pieces, no rest between machines. Stay in Zone 2: you should be able to talk in full sentences the whole time. If you are breathing through your mouth, slow down. Log your total distance in your notes.',
           highlightInstructions: 'Conversational pace only',
@@ -1069,6 +1077,7 @@ const td007: StandaloneWorkoutSource = {
         td007Strength,
         {
           name: 'WOD: Zone 2 x 24',
+          hrZone: 2,
           instructions:
             'Three 8 minute pieces, no rest between machines. Stay at a pace where you can talk in full sentences. Log your total distance in your notes.',
           highlightInstructions: 'Conversational pace only',
@@ -1114,7 +1123,7 @@ export const temperedDailyWeek01Program: TemperedDailyWeek = {
   description:
     'Welcome to The Big Three. This week is about finding your numbers. Squat Monday, bench Wednesday and deadlift Friday each build to a heavy five with reps left in the tank, so write those weights down. Everything around them keeps your engine and skills ticking over. Short on time? Prioritise Monday, Wednesday and Friday.',
   primaryFocus: 'Strength',
-  otherFocuses: ['Lower Body', 'Upper Body', 'Cardio'],
+  otherFocuses: ['Lower Body', 'Upper Body', 'Conditioning'],
   nextWeekFocus: 'Strength – Accumulation',
   days: ['td_001', 'td_002', 'td_003', 'td_004', 'td_005', 'td_006', 'td_007'],
 };

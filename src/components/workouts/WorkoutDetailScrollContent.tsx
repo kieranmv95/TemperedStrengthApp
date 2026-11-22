@@ -6,9 +6,11 @@ import {
   SectionHeader,
   Tag,
 } from '@/src/components/ds';
+import { StartGymTimerButton } from '@/src/components/gymTimer/StartGymTimerButton';
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
-import { categoryFilterDisplayLabel } from '@/src/components/workouts/workoutsScreenConstants';
+import { HeartRateZoneChip } from '@/src/components/zones/HeartRateZoneChip';
 import { color } from '@/src/constants/tokens';
+import type { ZoneRange } from '@/src/types/heartRate';
 import type {
   DetailedMovement,
   Divider,
@@ -16,6 +18,7 @@ import type {
   WorkoutBlockBase,
   WorkoutMovement,
 } from '@/src/types/workouts';
+import { resolveWorkoutTimerConfig } from '@/src/utils/gymTimer';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -28,12 +31,16 @@ import {
   View,
 } from 'react-native';
 import { workoutDetailStyles as styles } from './workoutDetailStyles';
-import { CATEGORY_ICONS } from './workoutUiConstants';
+import {
+  levelsLabel,
+  primaryDisciplineIcon,
+  workoutDetailTagLabels,
+} from './workoutUiConstants';
 
 type WorkoutDetailScrollContentProps = {
   workout: SingleWorkout;
-  /** Overrides the app-wide category label, e.g. for Tempered Daily. */
-  categoryLabel?: string;
+  /** User's heart rate zones for blocks with `hrZone`; `null` until set up. */
+  zoneRanges: ZoneRange[] | null;
 };
 
 type WorkoutScaledBlockGroup = {
@@ -96,7 +103,10 @@ function isWarmupBlockName(name: string): boolean {
   );
 }
 
-function renderBlockBody(block: WorkoutBlockBase) {
+function renderBlockBody(
+  block: WorkoutBlockBase,
+  zoneRanges: ZoneRange[] | null
+) {
   return (
     <>
       {block.mobilityFlow && (
@@ -115,6 +125,9 @@ function renderBlockBody(block: WorkoutBlockBase) {
             });
           }}
         />
+      )}
+      {block.hrZone && (
+        <HeartRateZoneChip zone={block.hrZone} ranges={zoneRanges} />
       )}
       {block.instructions && (
         <Text style={styles.blockInstructions}>{block.instructions}</Text>
@@ -139,7 +152,8 @@ function renderWorkoutBlock(
   block: WorkoutBlockBase,
   key: string,
   expanded: boolean,
-  onToggle: () => void
+  onToggle: () => void,
+  zoneRanges: ZoneRange[] | null
 ) {
   if (block.optional) {
     return (
@@ -151,7 +165,7 @@ function renderWorkoutBlock(
         accessory={<Badge label="Optional" tone="neutral" />}
         accessibilityLabel={`${block.name}, optional`}
       >
-        {renderBlockBody(block)}
+        {renderBlockBody(block, zoneRanges)}
       </Collapsible>
     );
   }
@@ -164,7 +178,7 @@ function renderWorkoutBlock(
         expanded={expanded}
         onToggle={onToggle}
       >
-        {renderBlockBody(block)}
+        {renderBlockBody(block, zoneRanges)}
       </Collapsible>
     );
   }
@@ -174,14 +188,14 @@ function renderWorkoutBlock(
       <Text style={styles.blockName} accessibilityRole="header">
         {block.name}
       </Text>
-      {renderBlockBody(block)}
+      {renderBlockBody(block, zoneRanges)}
     </View>
   );
 }
 
 export function WorkoutDetailScrollContent({
   workout,
-  categoryLabel: categoryLabelOverride,
+  zoneRanges,
 }: WorkoutDetailScrollContentProps) {
   const [selectedScaleIndex, setSelectedScaleIndex] = useState(0);
   /** Expanded warm-up sections by block key; collapsed until opened. */
@@ -204,9 +218,7 @@ export function WorkoutDetailScrollContent({
     });
   };
 
-  const visibleTags = useMemo(() => {
-    return workout.tags;
-  }, [workout.tags]);
+  const visibleTags = workoutDetailTagLabels(workout);
 
   const scaledBlocks = useMemo(() => {
     if (!isScaledBlocks(workout.blocks)) return null;
@@ -227,9 +239,11 @@ export function WorkoutDetailScrollContent({
     return workout.blocks;
   }, [workout.blocks]);
 
-  const categoryLabel =
-    categoryLabelOverride ?? categoryFilterDisplayLabel(workout.category);
   const collabCtaLabel = collab?.linkCopy ? collab.linkCopy : 'Find out more';
+  const timerConfig = useMemo(
+    () => resolveWorkoutTimerConfig(workout),
+    [workout]
+  );
 
   return (
     <ScrollView
@@ -238,24 +252,18 @@ export function WorkoutDetailScrollContent({
     >
       <View style={styles.detailMetaRow}>
         <View style={styles.detailCategory}>
-          {workout.category === 'Rainhill' ? (
-            <Image
-              source={require('@/assets/images/logos/rainhill_icon.png')}
-              style={styles.categoryIconImage}
-            />
-          ) : (
-            <Ionicons
-              name={
-                CATEGORY_ICONS[
-                  workout.category
-                ] as keyof typeof Ionicons.glyphMap
-              }
-              size={14}
-              color={color.gold}
-            />
-          )}
-          <Text style={styles.detailCategoryText}>{categoryLabel}</Text>
+          <Ionicons
+            name={primaryDisciplineIcon(workout)}
+            size={14}
+            color={color.gold}
+          />
+          <Text style={styles.detailCategoryText}>
+            {workout.disciplines[0]}
+          </Text>
         </View>
+        {workout.special ? (
+          <Badge label={workout.special} tone="neutral" />
+        ) : null}
         <View
           style={styles.detailMetaItem}
           accessible
@@ -264,15 +272,18 @@ export function WorkoutDetailScrollContent({
           <Ionicons name="time-outline" size={16} color={color.textSecondary} />
           <Text style={styles.detailMetaText}>{workout.estimatedTime} min</Text>
         </View>
-        <Badge label={workout.difficulty} tone="neutral" />
+        <Badge label={levelsLabel(workout.levels)} tone="neutral" />
       </View>
 
       <Text style={styles.detailDescription}>{workout.description}</Text>
+
+      {timerConfig ? <StartGymTimerButton config={timerConfig} /> : null}
 
       {collab ? (
         <PressableCard
           variant="promo"
           accentColor={collab.linkAndBorderColor}
+          surfaceColor={collab.bgColor}
           showChevron={false}
           onPress={handleCollabPress}
           accessibilityLabel={`In collaboration with ${collab.name}. ${collabCtaLabel}.`}
@@ -283,16 +294,52 @@ export function WorkoutDetailScrollContent({
               <Image source={collab.image} style={styles.collabImage} />
             ) : null}
             <View style={styles.collabHeaderText}>
-              <Text style={styles.collabLabel}>In collaboration with</Text>
-              <Text style={styles.collabName}>{collab.name}</Text>
+              <Text
+                style={[
+                  styles.collabLabel,
+                  collab.inColabWithColor
+                    ? { color: collab.inColabWithColor }
+                    : null,
+                ]}
+              >
+                In collaboration with
+              </Text>
+              <Text
+                style={[
+                  styles.collabName,
+                  collab.nameColor ? { color: collab.nameColor } : null,
+                ]}
+              >
+                {collab.name}
+              </Text>
             </View>
           </View>
           {collab.description ? (
-            <Text style={styles.collabDescription}>{collab.description}</Text>
+            <Text
+              style={[
+                styles.collabDescription,
+                collab.descriptionColor
+                  ? { color: collab.descriptionColor }
+                  : null,
+              ]}
+            >
+              {collab.description}
+            </Text>
           ) : null}
           <View style={styles.collabCtaRow}>
-            <Ionicons name="open-outline" size={16} color={color.gold} />
-            <Text style={styles.collabCtaText}>{collabCtaLabel}</Text>
+            <Ionicons
+              name="open-outline"
+              size={16}
+              color={collab.nameColor ?? color.gold}
+            />
+            <Text
+              style={[
+                styles.collabCtaText,
+                collab.nameColor ? { color: collab.nameColor } : null,
+              ]}
+            >
+              {collabCtaLabel}
+            </Text>
           </View>
         </PressableCard>
       ) : null}
@@ -341,16 +388,24 @@ export function WorkoutDetailScrollContent({
 
           {scaledBlocks.selected.blocks.map((block, blockIndex) => {
             const key = `${workout.id}-scale-${scaledBlocks.safeIndex}-block-${blockIndex}`;
-            return renderWorkoutBlock(block, key, isBlockExpanded(key), () =>
-              toggleBlock(key)
+            return renderWorkoutBlock(
+              block,
+              key,
+              isBlockExpanded(key),
+              () => toggleBlock(key),
+              zoneRanges
             );
           })}
         </>
       ) : flatBlocks ? (
         flatBlocks.map((block, blockIndex) => {
           const key = `${workout.id}-block-${blockIndex}`;
-          return renderWorkoutBlock(block, key, isBlockExpanded(key), () =>
-            toggleBlock(key)
+          return renderWorkoutBlock(
+            block,
+            key,
+            isBlockExpanded(key),
+            () => toggleBlock(key),
+            zoneRanges
           );
         })
       ) : null}

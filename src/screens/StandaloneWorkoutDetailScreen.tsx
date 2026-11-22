@@ -1,6 +1,6 @@
+import { CopyrightedContentGuard } from '@/src/components/copyright/CopyrightedContentGuard';
 import { StandardLayout } from '@/src/components/ds';
 import { TemperedDailyLockedUpsell } from '@/src/components/temperedDaily/TemperedDailyLockedUpsell';
-import { getTemperedDailyCategoryLabel } from '@/src/components/temperedDaily/temperedDailyConstants';
 import { WorkoutDetailScrollContent } from '@/src/components/workouts/WorkoutDetailScrollContent';
 import { workoutDetailStyles as styles } from '@/src/components/workouts/workoutDetailStyles';
 import { color } from '@/src/constants/tokens';
@@ -9,6 +9,7 @@ import {
   temperedDailyProgram,
 } from '@/src/data/temperedDaily';
 import { getStandaloneWorkoutById } from '@/src/data/workouts';
+import { useHeartRateZones } from '@/src/hooks/useHeartRateZones';
 import { useRoles } from '@/src/hooks/useRoles';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { asStringId } from '@/src/utils/routeParams';
@@ -66,6 +67,7 @@ export default function StandaloneWorkoutDetailScreen() {
   }, [isHiddenTemperedDaily]);
 
   const { isPro, roles, isLoading: accessLoading } = useRoles();
+  const { ranges: zoneRanges } = useHeartRateZones();
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const viewSource =
@@ -218,14 +220,13 @@ export default function StandaloneWorkoutDetailScreen() {
             </Pressable>
           </View>
         ) : (
-          <WorkoutDetailScrollContent
-            workout={workout}
-            categoryLabel={
-              isTemperedDaily
-                ? getTemperedDailyCategoryLabel(workout.category)
-                : undefined
-            }
-          />
+          <>
+            <WorkoutDetailScrollContent
+              workout={workout}
+              zoneRanges={zoneRanges}
+            />
+            {workout.isPremium ? <CopyrightedContentGuard active /> : null}
+          </>
         )}
       </StandardLayout.Body>
     </StandardLayout>
