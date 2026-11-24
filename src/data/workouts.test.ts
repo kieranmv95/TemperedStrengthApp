@@ -8,6 +8,7 @@ import {
 import { STANDALONE_LOG_SCHEMA_BY_ID } from '@/src/data/standaloneLogSchemas';
 import { workouts as workoutsData } from '@/src/data/workout_data';
 import { allStandaloneWorkouts } from '@/src/data/workouts';
+import { resolveWorkoutTimerConfig } from '@/src/utils/gymTimer';
 import type { WorkoutLogSchema } from '@/src/types/workouts';
 import { blocksOfWorkout, mentionedHrZone } from '@/src/utils/workoutHrZones';
 
@@ -96,6 +97,63 @@ describe('bundled standalone workouts', () => {
         expect(allowed.has(eq)).toBe(true);
       }
     }
+  });
+
+  it('keeps the Tempered Daily sessions promoted into the library', () => {
+    const byId = (id: string) =>
+      allStandaloneWorkouts.find((workout) => workout.id === id);
+
+    const station = byId('td_002');
+    expect(station).toBeDefined();
+    if (!station) return;
+    expect(station.title).toBe('Station to Station');
+    expect(station.isPremium).toBe(true);
+    expect(station.disciplines).toEqual(['Hyrox', 'Metcon', 'Conditioning']);
+    expect(station.format).toBe('For Time');
+    expect(workoutMatchesDiscipline(station, 'Hyrox')).toBe(true);
+
+    const fastHips = byId('td_004');
+    expect(fastHips).toBeDefined();
+    if (!fastHips) return;
+    expect(fastHips.title).toBe('Fast Hips');
+    expect(fastHips.isPremium).toBe(true);
+    expect(fastHips.disciplines).toEqual([
+      'Metcon',
+      'Olympic Lifting',
+      'Gymnastics',
+    ]);
+    expect(workoutMatchesDiscipline(fastHips, 'Olympic Lifting')).toBe(true);
+
+    const longRoad = byId('td_006');
+    expect(longRoad).toBeDefined();
+    if (!longRoad) return;
+    expect(longRoad.title).toBe('Long Road');
+    expect(longRoad.isPremium).toBe(true);
+    expect(longRoad.disciplines).toEqual(['Metcon']);
+    expect(longRoad.format).toBe('Chipper');
+    expect(workoutMatchesDiscipline(longRoad, 'Metcon')).toBe(true);
+
+    expect(resolveWorkoutTimerConfig(station)).toEqual({
+      v: 1,
+      name: 'Station to Station',
+      source: { kind: 'standalone', workoutId: 'td_002' },
+      type: 'FOR_TIME',
+      config: { capSec: 30 * 60 },
+    });
+    expect(resolveWorkoutTimerConfig(fastHips)).toEqual({
+      v: 1,
+      name: 'Fast Hips',
+      source: { kind: 'standalone', workoutId: 'td_004' },
+      type: 'FOR_TIME',
+      config: { capSec: 18 * 60 },
+    });
+    expect(resolveWorkoutTimerConfig(longRoad)).toEqual({
+      v: 1,
+      name: 'Long Road',
+      source: { kind: 'standalone', workoutId: 'td_006' },
+      type: 'FOR_TIME',
+      config: { capSec: 30 * 60 },
+    });
   });
 
   it('includes HIIT Shred pro standalone copies p_55–p_78 (except removed p_75)', () => {

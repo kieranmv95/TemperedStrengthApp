@@ -1,10 +1,6 @@
 import type { SingleWorkout, TemperedDailyWeek } from '@/src/types/workouts';
 
 import {
-  temperedDailyWeek01,
-  temperedDailyWeek01Program,
-} from './workouts/temperedDaily_week01';
-import {
   temperedDailyWeek02,
   temperedDailyWeek02Program,
 } from './workouts/temperedDaily_week02';
@@ -52,7 +48,6 @@ import { withLogSchema } from './workouts';
 
 /** Ordered oldest to newest. A new week is a new week file plus one entry here. */
 export const temperedDailyProgram: TemperedDailyWeek[] = [
-  temperedDailyWeek01Program,
   temperedDailyWeek02Program,
   temperedDailyWeek03Program,
   temperedDailyWeek04Program,
@@ -68,7 +63,6 @@ export const temperedDailyProgram: TemperedDailyWeek[] = [
 
 /** Kept out of `workout_data.ts` so these never appear in browse, search or filters. */
 export const temperedDailyWorkouts: SingleWorkout[] = [
-  ...temperedDailyWeek01,
   ...temperedDailyWeek02,
   ...temperedDailyWeek03,
   ...temperedDailyWeek04,

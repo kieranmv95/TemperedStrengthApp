@@ -1,4 +1,27 @@
-import type { StandaloneWorkoutSource } from '@/src/types/workouts';
+import type {
+  StandaloneWorkoutSource,
+  WorkoutBlockBase,
+} from '@/src/types/workouts';
+
+const COOLDOWN_FLUSH: WorkoutBlockBase = {
+  name: 'Cooldown',
+  instructions:
+    'Bring the heart rate down before you stretch. Nasal breathing only. If you can not hold a conversation, slow down.',
+  movements: ['5 mins easy bike, row or walk'],
+};
+
+const STRETCH_FULL: WorkoutBlockBase = {
+  name: 'Stretch',
+  instructions:
+    'Hold each position for the full time. Breathe out slowly and sink a little deeper on every exhale.',
+  movements: [
+    '60s Couch Stretch each side',
+    '60s Pigeon Stretch each side',
+    '60s Lat Stretch on a rig or bench each side',
+    '60s Calf Stretch against a wall each side',
+    '60s Supine Twist each side',
+  ],
+};
 
 export const wods: StandaloneWorkoutSource[] = [
   {
@@ -1573,5 +1596,339 @@ export const wods: StandaloneWorkoutSource[] = [
       },
     ],
     equipment: ['medicine ball', 'kettlebell', 'box', 'dumbbell', 'bike'],
+  },
+  {
+    id: 'td_004',
+    title: 'Fast Hips',
+    description:
+      'Light, fast and technical. A clean technique EMOM sharpens your positions without beating up the legs, then a three-round mixed-modal WOD gets you moving like an athlete. Speed over load all session.',
+    estimatedTime: 60,
+    disciplines: ['Metcon', 'Olympic Lifting', 'Gymnastics'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Intermediate', 'Advanced'],
+    equipment: [
+      'barbell',
+      'dumbbell',
+      'box',
+      'pull-up bar',
+      'kettlebell',
+      'rower',
+    ],
+    isPremium: true,
+    logSchema: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+    timerConfig: {
+      v: 1,
+      name: 'Fast Hips',
+      source: { kind: 'standalone', workoutId: 'td_004' },
+      type: 'FOR_TIME',
+      config: { capSec: 18 * 60 },
+    },
+    blocks: [
+      {
+        scale: 'RX',
+        blocks: [
+          {
+            name: 'Warmup',
+            instructions:
+              'Speed starts with positions. Move through the clean in pieces with an empty bar before adding any weight.',
+            movements: [
+              '3 mins easy row',
+              '10 Inchworms',
+              '10 Jumping Squats (soft landings)',
+              'Empty Bar Clean Drills: 5 Muscle Cleans, 5 Front Squats, 5 Hang Power Cleans',
+            ],
+          },
+          {
+            name: 'Strength: Clean Technique EMOM 12',
+            loadExerciseId: 64,
+            instructions:
+              'Every minute on the minute for 12 minutes. Stay at {{60-70}} of your estimated power clean 1RM (RPE 6). Every rep should be fast and crisp. If the bar slows down or the catch gets messy, take weight off.',
+            highlightInstructions:
+              'Light and fast. This is practice, not testing.',
+            movements: [
+              {
+                name: 'Each minute',
+                value: '1 Hang Power Clean + 1 Power Clean + 1 Front Squat',
+                note: 'Hang from just above the knee. Elbows fast in the catch.',
+              },
+            ],
+          },
+          {
+            name: 'WOD: 3 Rounds For Time',
+            instructions:
+              'Three rounds for time, 18 minute cap. Push the run, stay smooth on the box and the bar.',
+            highlightInstructions: 'Score: total time · Cap 18 mins',
+            movements: [
+              '400m Run',
+              {
+                name: 'Alternating Dumbbell Snatch',
+                value: '16',
+                note: '22.5/15kg.',
+              },
+              {
+                name: 'Box Jump Overs',
+                value: '12',
+                note: '60/50cm. Step down is fine.',
+              },
+              '9 Toes to Bar',
+            ],
+          },
+          COOLDOWN_FLUSH,
+          STRETCH_FULL,
+          {
+            name: 'Additional Work',
+            optional: true,
+            instructions:
+              'Optional. 3 rounds, rest 45s between rounds. Core and shoulder stability.',
+            highlightInstructions: '3 Rounds · Optional',
+            movements: [
+              {
+                name: 'Single Arm Kettlebell Front Rack Carry',
+                value: '20m each side',
+              },
+              {
+                name: 'Single Arm Kettlebell Strict Press',
+                value: '8 each side',
+              },
+              '30s Hollow Rock',
+            ],
+          },
+        ],
+      },
+      {
+        scale: 'Scaled',
+        blocks: [
+          {
+            name: 'Warmup',
+            instructions:
+              'Speed starts with positions. Move through the clean in pieces with an empty bar before adding any weight.',
+            movements: [
+              '3 mins easy row',
+              '10 Inchworms',
+              '10 Jumping Squats (soft landings)',
+              'Empty Bar Clean Drills: 5 Muscle Cleans, 5 Front Squats, 5 Hang Power Cleans',
+            ],
+          },
+          {
+            name: 'Strength: Clean Technique EMOM 12',
+            instructions:
+              'Every minute on the minute for 12 minutes. Use a light barbell or a pair of dumbbells. Every rep fast and crisp. If you are new to the clean, stay with the dumbbell option.',
+            highlightInstructions:
+              'Light and fast. This is practice, not testing.',
+            movements: [
+              {
+                name: 'Each minute',
+                value: '2 Hang Power Cleans + 1 Front Squat',
+                note: 'Barbell, or 2 dumbbells.',
+              },
+            ],
+          },
+          {
+            name: 'WOD: 3 Rounds For Time',
+            instructions:
+              'Three rounds for time, 18 minute cap. Smooth and steady.',
+            highlightInstructions: 'Score: total time · Cap 18 mins',
+            movements: [
+              '300m Run',
+              {
+                name: 'Alternating Dumbbell Snatch',
+                value: '12',
+                note: '15/10kg.',
+              },
+              { name: 'Box Step Overs', value: '12', note: '50/40cm.' },
+              '9 Hanging Knee Raises',
+            ],
+          },
+          COOLDOWN_FLUSH,
+          STRETCH_FULL,
+          {
+            name: 'Additional Work',
+            optional: true,
+            instructions:
+              'Optional. 3 rounds, rest 45s between rounds. Core and shoulder stability.',
+            highlightInstructions: '3 Rounds · Optional',
+            movements: [
+              {
+                name: 'Single Arm Kettlebell Front Rack Carry',
+                value: '20m each side',
+              },
+              {
+                name: 'Single Arm Kettlebell Strict Press',
+                value: '8 each side',
+              },
+              '30s Hollow Rock',
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'td_006',
+    title: 'Long Road',
+    description:
+      'Long and hybrid. Loaded carries replace the barbell, then a big chipper of rowing, kettlebells, sandbags, burpees and a run to finish. Break it into chunks early and keep moving.',
+    estimatedTime: 60,
+    disciplines: ['Metcon'],
+    bodyFocus: ['Full Body'],
+    format: 'Chipper',
+    levels: ['Intermediate', 'Advanced'],
+    equipment: ['rower', 'kettlebell', 'sandbag', 'dumbbell'],
+    isPremium: true,
+    logSchema: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+    timerConfig: {
+      v: 1,
+      name: 'Long Road',
+      source: { kind: 'standalone', workoutId: 'td_006' },
+      type: 'FOR_TIME',
+      config: { capSec: 30 * 60 },
+    },
+    blocks: [
+      {
+        scale: 'RX',
+        blocks: [
+          {
+            name: 'Warmup',
+            instructions:
+              'Two easy rounds, then a few practice reps of every movement in the chipper.',
+            movements: [
+              '2 Rounds: 250m Row, 10 Air Squats, 10 Push-ups, 10 Kettlebell Deadlifts',
+              'Practice: 3 Sandbag to Shoulder each side, 5 Kettlebell Swings',
+            ],
+          },
+          {
+            name: 'Strength: Loaded Carries',
+            instructions:
+              '4 rounds, rest 60s between rounds. Heavy enough that the carries are a real effort, controlled enough that you never drop the load.',
+            highlightInstructions: '4 Rounds · No barbell today',
+            movements: [
+              {
+                name: 'Sandbag Bear Hug Carry',
+                value: '40m',
+                note: '70/50kg. No sandbag? Heavy kettlebell or dumbbell goblet carry.',
+              },
+              {
+                name: 'Overhead Plate Walk',
+                value: '20m',
+                note: '20/15kg plate, arms locked.',
+              },
+              '30s Side Plank each side',
+            ],
+          },
+          {
+            name: 'WOD: Chipper For Time',
+            instructions:
+              'Work through the list in order, 30 minute cap. Split the big numbers into sets from the start, for example 5 x 10 swings, and keep the rests short.',
+            highlightInstructions: 'Score: total time · Cap 30 mins',
+            movements: [
+              '1000m Row',
+              {
+                name: 'Kettlebell Swings',
+                value: '50',
+                note: '24/16kg, Russian (eye level).',
+              },
+              { type: 'divider' },
+              {
+                name: 'Sandbag to Shoulder',
+                value: '20',
+                note: '50/30kg. No sandbag? 20 Dumbbell Clean to Shoulder.',
+              },
+              '30 Burpees',
+              { type: 'divider' },
+              '800m Run',
+            ],
+          },
+          COOLDOWN_FLUSH,
+          STRETCH_FULL,
+          {
+            name: 'Additional Work',
+            optional: true,
+            instructions:
+              'Optional. 2 rounds, rest as needed. Short and simple to finish the session.',
+            highlightInstructions: '2 Rounds · Optional',
+            movements: [
+              '15 Reverse Flyes or Band Pull-Aparts',
+              '12 Hammer Curls',
+              '20 Calf Raises',
+            ],
+          },
+        ],
+      },
+      {
+        scale: 'Scaled',
+        blocks: [
+          {
+            name: 'Warmup',
+            instructions:
+              'Two easy rounds, then a few practice reps of every movement in the chipper.',
+            movements: [
+              '2 Rounds: 250m Row, 10 Air Squats, 10 Push-ups, 10 Kettlebell Deadlifts',
+              'Practice: 3 Sandbag to Shoulder each side, 5 Kettlebell Swings',
+            ],
+          },
+          {
+            name: 'Strength: Loaded Carries',
+            instructions:
+              '4 rounds, rest 60s between rounds. Choose a load you can carry the full distance without stopping.',
+            highlightInstructions: '4 Rounds · No barbell today',
+            movements: [
+              {
+                name: 'Sandbag Bear Hug Carry',
+                value: '40m',
+                note: '40/30kg. No sandbag? Kettlebell or dumbbell goblet carry.',
+              },
+              {
+                name: 'Overhead Plate Walk',
+                value: '20m',
+                note: '10/5kg plate, arms locked.',
+              },
+              '20s Side Plank each side',
+            ],
+          },
+          {
+            name: 'WOD: Chipper For Time',
+            instructions:
+              'Work through the list in order, 30 minute cap. Small sets, short rests.',
+            highlightInstructions: 'Score: total time · Cap 30 mins',
+            movements: [
+              '800m Row',
+              {
+                name: 'Kettlebell Swings',
+                value: '40',
+                note: '16/12kg, Russian (eye level).',
+              },
+              { type: 'divider' },
+              {
+                name: 'Sandbag to Shoulder',
+                value: '15',
+                note: '30/20kg. No sandbag? 15 Dumbbell Clean to Shoulder.',
+              },
+              {
+                name: 'Burpees',
+                value: '20',
+                note: 'Step back and step up if needed.',
+              },
+              { type: 'divider' },
+              '600m Run',
+            ],
+          },
+          COOLDOWN_FLUSH,
+          STRETCH_FULL,
+          {
+            name: 'Additional Work',
+            optional: true,
+            instructions:
+              'Optional. 2 rounds, rest as needed. Short and simple to finish the session.',
+            highlightInstructions: '2 Rounds · Optional',
+            movements: [
+              '15 Reverse Flyes or Band Pull-Aparts',
+              '12 Hammer Curls',
+              '20 Calf Raises',
+            ],
+          },
+        ],
+      },
+    ],
   },
 ];

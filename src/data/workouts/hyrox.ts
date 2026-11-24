@@ -1,4 +1,7 @@
-import type { StandaloneWorkoutSource } from '@/src/types/workouts';
+import type {
+  StandaloneWorkoutSource,
+  WorkoutBlockBase,
+} from '@/src/types/workouts';
 
 const replabCollab = {
   image: require('@/assets/images/collabs/replab.jpg'),
@@ -12,6 +15,26 @@ const replabCollab = {
   descriptionColor: '#B0B0B0',
   linkAndBorderColor: '#FFFFFF',
   inColabWithColor: '#888888',
+};
+
+const COOLDOWN_FLUSH: WorkoutBlockBase = {
+  name: 'Cooldown',
+  instructions:
+    'Bring the heart rate down before you stretch. Nasal breathing only. If you can not hold a conversation, slow down.',
+  movements: ['5 mins easy bike, row or walk'],
+};
+
+const STRETCH_FULL: WorkoutBlockBase = {
+  name: 'Stretch',
+  instructions:
+    'Hold each position for the full time. Breathe out slowly and sink a little deeper on every exhale.',
+  movements: [
+    '60s Couch Stretch each side',
+    '60s Pigeon Stretch each side',
+    '60s Lat Stretch on a rig or bench each side',
+    '60s Calf Stretch against a wall each side',
+    '60s Supine Twist each side',
+  ],
 };
 
 export const hyrox: StandaloneWorkoutSource[] = [
@@ -1726,5 +1749,172 @@ export const hyrox: StandaloneWorkoutSource[] = [
       },
     ],
     equipment: ['sled'],
+  },
+  {
+    id: 'td_002',
+    title: 'Station to Station',
+    description:
+      'A hybrid engine session with a race-day feel. Some quality pulling to start, then four rounds of running, sled and wall balls. Learn the pace you can repeat, not the pace you can survive once.',
+    estimatedTime: 60,
+    disciplines: ['Hyrox', 'Metcon', 'Conditioning'],
+    bodyFocus: ['Full Body'],
+    format: 'For Time',
+    levels: ['Intermediate', 'Advanced'],
+    equipment: ['barbell', 'pull-up bar', 'sled', 'medicine ball', 'bands'],
+    isPremium: true,
+    logSchema: { kind: 'duration', label: 'Total time', lowerIsBetter: true },
+    timerConfig: {
+      v: 1,
+      name: 'Station to Station',
+      source: { kind: 'standalone', workoutId: 'td_002' },
+      type: 'FOR_TIME',
+      config: { capSec: 30 * 60 },
+    },
+    blocks: [
+      {
+        scale: 'RX',
+        blocks: [
+          {
+            name: 'Warmup',
+            instructions:
+              'Get the legs moving and the lungs open. The pulling work comes first, so prep the shoulders too.',
+            movements: [
+              '400m easy jog',
+              '10 Walking Lunges with a twist',
+              '10 Band Pull-Aparts',
+              '10 Scapular Pull-ups',
+              '5 Air Squats to 5 Wall Ball Throws (light ball)',
+            ],
+          },
+          {
+            name: 'Strength: Row + Pull-up Superset',
+            instructions:
+              '4 sets. Move straight from rows into pull-ups, then rest 90s. Controlled, strict reps. This is about building a back that holds position when you are tired.',
+            highlightInstructions: '4 Sets · Rest 90s after each superset',
+            movements: [
+              {
+                name: 'Barbell Bent-Over Row',
+                value: '8 @ RPE 7',
+                note: 'Torso near parallel. Pull to the belly button.',
+              },
+              {
+                name: 'Strict Pull-ups',
+                value: '6–8',
+                note: 'Full dead hang at the bottom, chin over bar.',
+              },
+            ],
+          },
+          {
+            name: 'WOD: 4 Rounds For Time',
+            instructions:
+              'Four rounds for time, 30 minute cap. Run at a pace you could hold for all four rounds. The goal is that your last round is your fastest.',
+            highlightInstructions: 'Score: total time · Cap 30 mins',
+            movements: [
+              '800m Run',
+              {
+                name: 'Sled Push',
+                value: '20m',
+                note: 'Loaded so it moves steadily, not sprinting. No sled? 30 Heavy Dumbbell Walking Lunges.',
+              },
+              {
+                name: 'Wall Balls',
+                value: '20',
+                note: '9/6kg to a 3m/2.7m target.',
+              },
+            ],
+          },
+          COOLDOWN_FLUSH,
+          STRETCH_FULL,
+          {
+            name: 'Additional Work',
+            optional: true,
+            instructions:
+              'Optional. 3 rounds, rest 45s between rounds. Grip and core for race day.',
+            highlightInstructions: '3 Rounds · Optional',
+            movements: [
+              {
+                name: 'Farmers Carry',
+                value: '40m',
+                note: 'Heavy dumbbells or kettlebells.',
+              },
+              '12 Dead Bugs (6 each side)',
+              '30s Hollow Hold',
+            ],
+          },
+        ],
+      },
+      {
+        scale: 'Scaled',
+        blocks: [
+          {
+            name: 'Warmup',
+            instructions:
+              'Get the legs moving and the lungs open. The pulling work comes first, so prep the shoulders too.',
+            movements: [
+              '400m easy jog',
+              '10 Walking Lunges with a twist',
+              '10 Band Pull-Aparts',
+              '10 Scapular Pull-ups',
+              '5 Air Squats to 5 Wall Ball Throws (light ball)',
+            ],
+          },
+          {
+            name: 'Strength: Row + Pull-up Superset',
+            instructions:
+              '4 sets. Move straight from rows into the pull-up option, then rest 90s. Controlled reps with full range.',
+            highlightInstructions: '4 Sets · Rest 90s after each superset',
+            movements: [
+              {
+                name: 'Dumbbell Bent-Over Row',
+                value: '10 @ RPE 7',
+                note: 'Two dumbbells or barbell. Squeeze at the top.',
+              },
+              {
+                name: 'Ring Rows or Banded Pull-ups',
+                value: '8–10',
+                note: 'Walk your feet forward on ring rows to make them harder.',
+              },
+            ],
+          },
+          {
+            name: 'WOD: 4 Rounds For Time',
+            instructions:
+              'Four rounds for time, 30 minute cap. Even pacing. Walking is fine, stopping is not.',
+            highlightInstructions: 'Score: total time · Cap 30 mins',
+            movements: [
+              '600m Run',
+              {
+                name: 'Sled Push',
+                value: '15m',
+                note: 'Light to moderate load. No sled? 20 Dumbbell Walking Lunges.',
+              },
+              {
+                name: 'Wall Balls',
+                value: '15',
+                note: '6/4kg to a 2.7m/2.5m target.',
+              },
+            ],
+          },
+          COOLDOWN_FLUSH,
+          STRETCH_FULL,
+          {
+            name: 'Additional Work',
+            optional: true,
+            instructions:
+              'Optional. 3 rounds, rest 45s between rounds. Grip and core for race day.',
+            highlightInstructions: '3 Rounds · Optional',
+            movements: [
+              {
+                name: 'Farmers Carry',
+                value: '40m',
+                note: 'Heavy dumbbells or kettlebells.',
+              },
+              '12 Dead Bugs (6 each side)',
+              '30s Hollow Hold',
+            ],
+          },
+        ],
+      },
+    ],
   },
 ];

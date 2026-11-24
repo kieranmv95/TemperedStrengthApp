@@ -193,13 +193,14 @@ describe('temperedDailyWorkouts', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('ids run td_001 through td_084 and each week lists its own seven days', () => {
-    const expected = Array.from({ length: 84 }, (_, index) => {
-      return `td_${String(index + 1).padStart(3, '0')}`;
+  it('ids run td_008 through td_084 and each week lists its own seven days', () => {
+    const expected = Array.from({ length: 77 }, (_, index) => {
+      return `td_${String(index + 8).padStart(3, '0')}`;
     });
     expect(temperedDailyWorkouts.map((w) => w.id)).toEqual(expected);
     temperedDailyProgram.forEach((week, index) => {
-      expect(week.id).toBe(`td_week_${String(index + 1).padStart(3, '0')}`);
+      const weekNumber = index + 2;
+      expect(week.id).toBe(`td_week_${String(weekNumber).padStart(3, '0')}`);
       expect(week.days).toEqual(expected.slice(index * 7, index * 7 + 7));
     });
   });
@@ -251,7 +252,6 @@ describe('temperedDailyWorkouts', () => {
 
   it('tags the Zone 2 block in both scales of every recovery session', () => {
     const recoveryIds = [
-      'td_007',
       'td_014',
       'td_021',
       'td_028',
@@ -282,10 +282,10 @@ describe('temperedDailyWorkouts', () => {
   });
 
   it('uses the inline logSchema from the week file', () => {
-    const td001 = temperedDailyWorkouts.find((w) => w.id === 'td_001');
-    expect(td001?.logSchema).toEqual({
+    const td008 = temperedDailyWorkouts.find((w) => w.id === 'td_008');
+    expect(td008?.logSchema).toEqual({
       kind: 'amrap',
-      timeCapMinutes: 10,
+      timeCapMinutes: 14,
       roundsLabel: 'Rounds',
       extraRepsLabel: 'Extra reps',
     });

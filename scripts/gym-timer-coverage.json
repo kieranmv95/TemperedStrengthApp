@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-24T12:30:50.418Z",
-  "tagged": 196,
+  "generatedAt": "2026-11-24T12:48:39.557Z",
+  "tagged": 192,
   "skipped": 62,
   "rows": [
     {
@@ -684,6 +684,22 @@
       "timerType": "FOR_TIME"
     },
     {
+      "id": "td_004",
+      "title": "Fast Hips",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_006",
+      "title": "Long Road",
+      "format": "Chipper",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
       "id": "f_71",
       "title": "Performance Ritual",
       "format": "Chipper",
@@ -931,6 +947,14 @@
     {
       "id": "p_32",
       "title": "Hyrox Heavy Sled Day",
+      "format": "For Time",
+      "source": "standalone",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_002",
+      "title": "Station to Station",
       "format": "For Time",
       "source": "standalone",
       "status": "tagged",
@@ -1342,62 +1366,6 @@
       "source": "standalone",
       "status": "skipped_untimed",
       "reason": "no_timed_format_strength_or_skill"
-    },
-    {
-      "id": "td_001",
-      "title": "Find Your Five",
-      "format": "AMRAP",
-      "source": "tempered_daily",
-      "status": "tagged",
-      "timerType": "AMRAP"
-    },
-    {
-      "id": "td_002",
-      "title": "Station to Station",
-      "format": "For Time",
-      "source": "tempered_daily",
-      "status": "tagged",
-      "timerType": "FOR_TIME"
-    },
-    {
-      "id": "td_003",
-      "title": "Press Test",
-      "format": "EMOM",
-      "source": "tempered_daily",
-      "status": "tagged",
-      "timerType": "EMOM"
-    },
-    {
-      "id": "td_004",
-      "title": "Fast Hips",
-      "format": "For Time",
-      "source": "tempered_daily",
-      "status": "tagged",
-      "timerType": "FOR_TIME"
-    },
-    {
-      "id": "td_005",
-      "title": "Off the Floor",
-      "format": "For Time",
-      "source": "tempered_daily",
-      "status": "tagged",
-      "timerType": "FOR_TIME"
-    },
-    {
-      "id": "td_006",
-      "title": "Long Road",
-      "format": "Chipper",
-      "source": "tempered_daily",
-      "status": "tagged",
-      "timerType": "FOR_TIME"
-    },
-    {
-      "id": "td_007",
-      "title": "Slow Burn",
-      "format": "Intervals",
-      "source": "tempered_daily",
-      "status": "tagged",
-      "timerType": "ROUNDS"
     },
     {
       "id": "td_008",
