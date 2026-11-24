@@ -1,6 +1,7 @@
 import * as temperedDailyConstants from '@/src/components/temperedDaily/temperedDailyConstants';
 import { getTemperedDailyWorkoutLabels } from '@/src/components/temperedDaily/temperedDailyConstants';
 import { WORKOUT_EQUIPMENT_OPTIONS } from '@/src/components/workouts/workoutsScreenConstants';
+import { getExerciseById } from '@/src/data/exercises';
 import {
   temperedDailyProgram,
   temperedDailyWorkouts,
@@ -10,9 +11,25 @@ import {
   WORKOUT_BODY_FOCUSES,
   WORKOUT_DISCIPLINES,
   type SingleWorkout,
+  type WorkoutBlockBase,
 } from '@/src/types/workouts';
+import { blockHasLoadPercentTokens } from '@/src/utils/loadPercent';
 import { getTemperedDayDate, parseLocalDate } from '@/src/utils/temperedDaily';
 import { blocksOfWorkout, mentionedHrZone } from '@/src/utils/workoutHrZones';
+
+function scaledBlocks(
+  workout: SingleWorkout
+): { scale: string; block: WorkoutBlockBase }[] {
+  const rows: { scale: string; block: WorkoutBlockBase }[] = [];
+  for (const entry of workout.blocks) {
+    if ('blocks' in entry) {
+      for (const block of entry.blocks) {
+        rows.push({ scale: entry.scale, block });
+      }
+    }
+  }
+  return rows;
+}
 
 const BRAND_NAMES = /crossfit|hyrox/i;
 
@@ -176,6 +193,38 @@ describe('temperedDailyWorkouts', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
+  it('ids run td_001 through td_084 and each week lists its own seven days', () => {
+    const expected = Array.from({ length: 84 }, (_, index) => {
+      return `td_${String(index + 1).padStart(3, '0')}`;
+    });
+    expect(temperedDailyWorkouts.map((w) => w.id)).toEqual(expected);
+    temperedDailyProgram.forEach((week, index) => {
+      expect(week.id).toBe(`td_week_${String(index + 1).padStart(3, '0')}`);
+      expect(week.days).toEqual(expected.slice(index * 7, index * 7 + 7));
+    });
+  });
+
+  it('ties every load percentage to an exercise that exists', () => {
+    const problems: string[] = [];
+    for (const workout of temperedDailyWorkouts) {
+      for (const { scale, block } of scaledBlocks(workout)) {
+        const hasTokens = blockHasLoadPercentTokens(block);
+        const exerciseId = block.loadExerciseId;
+        if (hasTokens && typeof exerciseId !== 'number') {
+          problems.push(
+            `${workout.id} ${scale} "${block.name}" has a percentage and no loadExerciseId`
+          );
+        }
+        if (typeof exerciseId === 'number' && !getExerciseById(exerciseId)) {
+          problems.push(
+            `${workout.id} ${scale} "${block.name}" loadExerciseId ${exerciseId} is missing from the catalog`
+          );
+        }
+      }
+    }
+    expect(problems).toEqual([]);
+  });
+
   it('every workout follows the Tempered Daily conventions', () => {
     const allowedEquipment = new Set(WORKOUT_EQUIPMENT_OPTIONS);
     for (const w of temperedDailyWorkouts) {
@@ -210,6 +259,10 @@ describe('temperedDailyWorkouts', () => {
       'td_042',
       'td_049',
       'td_056',
+      'td_063',
+      'td_070',
+      'td_077',
+      'td_084',
     ];
     for (const id of recoveryIds) {
       const workout = temperedDailyWorkouts.find((w) => w.id === id);

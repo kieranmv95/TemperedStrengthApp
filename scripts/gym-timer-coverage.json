@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-18T07:37:33.369Z",
-  "tagged": 172,
-  "skipped": 58,
+  "generatedAt": "2026-11-24T12:30:50.418Z",
+  "tagged": 196,
+  "skipped": 62,
   "rows": [
     {
       "id": "ar_06",
@@ -1780,6 +1780,226 @@
     {
       "id": "td_056",
       "title": "Deep Breath",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_057",
+      "title": "Fast Off the Floor",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_058",
+      "title": "Pull Tall",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_059",
+      "title": "Drive Overhead",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_060",
+      "title": "Play Fast",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_061",
+      "title": "Hinge Speed",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_062",
+      "title": "Link It",
+      "format": "EMOM",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "td_063",
+      "title": "Soft Pedal",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_064",
+      "title": "Spring Loaded",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_065",
+      "title": "Stand Tall",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_066",
+      "title": "Dip and Drive",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_067",
+      "title": "Bounce Back",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_068",
+      "title": "Fast Floor",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_069",
+      "title": "Chain Reaction",
+      "format": "EMOM",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "td_070",
+      "title": "Easy Does It",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_071",
+      "title": "Heavier, Faster",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_072",
+      "title": "Pull Sharp",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_073",
+      "title": "Lock It Out",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_074",
+      "title": "Stay Springy",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_075",
+      "title": "Peak Speed",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "ROUNDS"
+    },
+    {
+      "id": "td_076",
+      "title": "Clean Link",
+      "format": "EMOM",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "td_077",
+      "title": "Slow Roll",
+      "format": "Intervals",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "INTERVALS"
+    },
+    {
+      "id": "td_078",
+      "title": "Power Clean Test",
+      "source": "tempered_daily",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "td_079",
+      "title": "Shake-Out",
+      "source": "tempered_daily",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "td_080",
+      "title": "Broad Jump Test",
+      "source": "tempered_daily",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "td_081",
+      "title": "Just Play",
+      "format": "EMOM",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "EMOM"
+    },
+    {
+      "id": "td_082",
+      "title": "Sprint Test",
+      "source": "tempered_daily",
+      "status": "skipped_untimed",
+      "reason": "no_timed_format_strength_or_skill"
+    },
+    {
+      "id": "td_083",
+      "title": "Victory Lap",
+      "format": "Chipper",
+      "source": "tempered_daily",
+      "status": "tagged",
+      "timerType": "FOR_TIME"
+    },
+    {
+      "id": "td_084",
+      "title": "Exhale",
       "format": "Intervals",
       "source": "tempered_daily",
       "status": "tagged",

@@ -825,7 +825,6 @@ export const temperedDailyWeek08Program: TemperedDailyWeek = {
     'Test week. Row on Monday, bike on Wednesday, run on Friday. RX tests a 2k row, 10 minutes of max calories on the bike and a 5k run. Scaled tests a 1k row, 8 minutes on the bike and a 3k run. Pace them smartly, empty the tank at the end and log every score. Everything in between is light, fun and designed to keep you fresh for the next test. Short on time? Do Monday, Wednesday and Friday, nothing else matters this week.',
   primaryFocus: 'Conditioning',
   otherFocuses: ['Full Body', 'Lower Body'],
-  // TODO: set once the next block's theme is decided.
-  nextWeekFocus: 'New block – revealed Monday',
+  nextWeekFocus: 'Power – Discovery',
   days: ['td_050', 'td_051', 'td_052', 'td_053', 'td_054', 'td_055', 'td_056'],
 };

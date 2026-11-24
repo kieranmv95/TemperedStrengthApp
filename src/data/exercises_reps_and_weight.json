@@ -79,6 +79,16 @@
     "youtube_id": "Io5l_Vb6HQM"
   },
   {
+    "description": "Dip slightly at the knees, then drive the barbell overhead using leg drive and lock out with straight arms.",
+    "equipment": "Barbell",
+    "id": 115,
+    "logging_type": "reps_and_weight",
+    "muscle": "Shoulders/Legs",
+    "name": "Barbell Push Press",
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "iaBVSJm78ko"
+  },
+  {
     "description": "Hinge forward, pull the bar to your lower chest, squeezing your shoulder blades together.",
     "equipment": "Barbell",
     "id": 7,
@@ -144,16 +154,6 @@
     "pattern": "Horizontal Push"
   },
   {
-    "description": "Lie flat, grip the bar with hands closer than shoulder-width apart, lower to chest and press up.",
-    "equipment": "Barbell",
-    "id": 87,
-    "logging_type": "reps_and_weight",
-    "muscle": "Triceps/Chest",
-    "name": "Close-Grip Bench Press",
-    "pattern": "Horizontal Push",
-    "youtube_id": "CMJCqnx6LMQ"
-  },
-  {
     "description": "Pull the bar from the floor to your shoulders, then drive it overhead in one sequence.",
     "equipment": "Barbell",
     "id": 63,
@@ -174,6 +174,26 @@
     "youtube_id": "8tapJVMw0rc"
   },
   {
+    "description": "Lie flat, grip the bar with hands closer than shoulder-width apart, lower to chest and press up.",
+    "equipment": "Barbell",
+    "id": 87,
+    "logging_type": "reps_and_weight",
+    "muscle": "Triceps/Chest",
+    "name": "Close-Grip Bench Press",
+    "pattern": "Horizontal Push",
+    "youtube_id": "CMJCqnx6LMQ"
+  },
+  {
+    "description": "Hold a heavy dumbbell in each hand at your sides and walk for distance or time, keeping your posture tall.",
+    "equipment": "Dumbbell",
+    "id": 92,
+    "logging_type": "reps_and_weight",
+    "muscle": "Full Body/Core",
+    "name": "DB Farmer Carry",
+    "pattern": "Carry",
+    "youtube_id": "6wsYZT5CaLA"
+  },
+  {
     "description": "Hold a dumbbell at chest height with both hands and squat to depth with an upright torso.",
     "equipment": "Dumbbell",
     "id": 74,
@@ -192,6 +212,16 @@
     "name": "DB Goblet Squat",
     "pattern": "Knee Dominant",
     "youtube_id": "qEWMziblznM"
+  },
+  {
+    "description": "Pull a dumbbell from the floor to shoulder height, then drive it overhead in one smooth motion.",
+    "equipment": "Dumbbell",
+    "id": 76,
+    "logging_type": "reps_and_weight",
+    "muscle": "Legs/Balance",
+    "name": "DB Jerk",
+    "pattern": "Olympic (Clean & Jerk)",
+    "youtube_id": "hB7tHx-6L6o"
   },
   {
     "description": "Swing a dumbbell from between your legs and pull it overhead in one smooth motion.",
@@ -224,6 +254,16 @@
     "youtube_id": "Fjhlsj76hPM"
   },
   {
+    "description": "In a push-up position with a dumbbell in each hand, row one dumbbell to your hip while the other arm stays planted, alternating sides.",
+    "equipment": "Dumbbell",
+    "id": 101,
+    "logging_type": "reps_and_weight",
+    "muscle": "Back/Core",
+    "name": "DB Renegade Row",
+    "pattern": "Horizontal Pull",
+    "youtube_id": "-V2YLzGaQMU"
+  },
+  {
     "description": "Hold dumbbells at your hips, hinge forward with a slight knee bend, then return to standing.",
     "equipment": "Dumbbell",
     "id": 23,
@@ -244,14 +284,14 @@
     "youtube_id": "eJKXqrnZnfU"
   },
   {
-    "description": "Pull a dumbbell from the floor to shoulder height, then drive it overhead in one smooth motion.",
+    "description": "Hold a dumbbell in each hand at shoulder height, squat down, then drive through your legs and press the dumbbells overhead in one movement.",
     "equipment": "Dumbbell",
-    "id": 76,
+    "id": 100,
     "logging_type": "reps_and_weight",
-    "muscle": "Legs/Balance",
-    "name": "DB Jerk",
+    "muscle": "Full Body",
+    "name": "DB Thruster",
     "pattern": "Olympic (Clean & Jerk)",
-    "youtube_id": "hB7tHx-6L6o"
+    "youtube_id": "LPCj2VK6-4s"
   },
   {
     "description": "Lie flat with a dumbbell in each hand, lower to chest level, then press up.",
@@ -271,6 +311,15 @@
     "name": "Dumbbell Bicep Curls",
     "pattern": "Isolation",
     "youtube_id": "dHovSwNWau0"
+  },
+  {
+    "description": "Lie flat with a dumbbell in each hand above your chest, lower them out to the sides in a wide arc with a slight bend in your elbows, then bring them back together.",
+    "equipment": "Dumbbell",
+    "id": 113,
+    "logging_type": "reps_and_weight",
+    "muscle": "Chest",
+    "name": "Dumbbell Flyes",
+    "pattern": "Horizontal Push"
   },
   {
     "description": "Place one hand and knee on a bench, pull the dumbbell to your hip with the other arm.",
@@ -320,16 +369,6 @@
     "name": "Front Squat",
     "pattern": "Olympic (Clean & Jerk)",
     "youtube_id": "kXXERV8zhAc"
-  },
-  {
-    "description": "Pull the bar from the floor and catch it overhead in a full squat position.",
-    "equipment": "Barbell",
-    "id": 57,
-    "logging_type": "reps_and_weight",
-    "muscle": "Full Body",
-    "name": "Snatch",
-    "pattern": "Olympic (Snatch)",
-    "youtube_id": "qR_oOyuDWNI"
   },
   {
     "description": "Bar on your upper back, hinge forward at the hips keeping your legs nearly straight, then return.",
@@ -406,6 +445,56 @@
     "name": "Incline DB Press",
     "pattern": "Horizontal Push",
     "youtube_id": "L3AfiCwunls"
+  },
+  {
+    "description": "Hinge at the hips, swing the kettlebell between your legs, then pull it to shoulder height using hip drive and a high elbow.",
+    "equipment": "Kettlebell",
+    "id": 96,
+    "logging_type": "reps_and_weight",
+    "muscle": "Full Body/Back",
+    "name": "KB Clean",
+    "pattern": "Hip Hinge",
+    "youtube_id": "7MtvXb1gCkc"
+  },
+  {
+    "description": "Hold a kettlebell by the horns at chest height and squat to depth, keeping your torso upright and elbows inside your knees.",
+    "equipment": "Kettlebell",
+    "id": 98,
+    "logging_type": "reps_and_weight",
+    "muscle": "Quadriceps",
+    "name": "KB Goblet Squat",
+    "pattern": "Knee Dominant",
+    "youtube_id": "7bjJo8bvmgc"
+  },
+  {
+    "description": "Hold a kettlebell by the handle with both hands and rotate it in a slow circle around your head, alternating directions each set.",
+    "equipment": "Kettlebell",
+    "id": 99,
+    "logging_type": "reps_and_weight",
+    "muscle": "Shoulders/Core",
+    "name": "KB Halo",
+    "pattern": "Core",
+    "youtube_id": "AqUzgM2HwG4"
+  },
+  {
+    "description": "With the kettlebell in the rack position at shoulder height, press it directly overhead to full lockout, then lower with control.",
+    "equipment": "Kettlebell",
+    "id": 97,
+    "logging_type": "reps_and_weight",
+    "muscle": "Shoulders/Core",
+    "name": "KB Press (Single Arm)",
+    "pattern": "Vertical Push",
+    "youtube_id": "95zhesdAGDM"
+  },
+  {
+    "description": "From lying flat with a kettlebell locked overhead, move through a precise series of positions to standing, keeping the bell overhead throughout.",
+    "equipment": "Kettlebell",
+    "id": 95,
+    "logging_type": "reps_and_weight",
+    "muscle": "Full Body/Core",
+    "name": "KB Turkish Get-Up",
+    "pattern": "Core",
+    "youtube_id": "MukkDX0WvJ8"
   },
   {
     "description": "Hinge at the hips and swing the kettlebell to shoulder height using hip drive.",
@@ -646,6 +735,16 @@
     "youtube_id": "UW-7ejZ98Hs"
   },
   {
+    "description": "Stand on one leg, hold a dumbbell, hinge forward until your torso is parallel, then return.",
+    "equipment": "Dumbbell",
+    "id": 88,
+    "logging_type": "reps_and_weight",
+    "muscle": "Glutes/Hamstrings",
+    "name": "Single-Leg DB Deadlift",
+    "pattern": "Hip Hinge",
+    "youtube_id": "MMsBXz1h1rE"
+  },
+  {
     "description": "Lie flat, hold the bar above your chest and lower it towards your forehead, then extend back up.",
     "equipment": "Barbell",
     "id": 54,
@@ -653,6 +752,16 @@
     "muscle": "Triceps",
     "name": "Skull Crushers",
     "pattern": "Isolation"
+  },
+  {
+    "description": "Pull the bar from the floor and catch it overhead in a full squat position.",
+    "equipment": "Barbell",
+    "id": 57,
+    "logging_type": "reps_and_weight",
+    "muscle": "Full Body",
+    "name": "Snatch",
+    "pattern": "Olympic (Snatch)",
+    "youtube_id": "qR_oOyuDWNI"
   },
   {
     "description": "Press the bar overhead from your shoulders and drop under it into a full overhead squat.",
@@ -722,16 +831,6 @@
     "youtube_id": "5mSIRsXAEZM"
   },
   {
-    "description": "Stand on one leg, hold a dumbbell, hinge forward until your torso is parallel, then return.",
-    "equipment": "Dumbbell",
-    "id": 88,
-    "logging_type": "reps_and_weight",
-    "muscle": "Glutes/Hamstrings",
-    "name": "Single-Leg DB Deadlift",
-    "pattern": "Hip Hinge",
-    "youtube_id": "MMsBXz1h1rE"
-  },
-  {
     "description": "Hold dumbbells at your sides, step onto a box or bench and drive through the front leg to stand.",
     "equipment": "Dumbbell",
     "id": 91,
@@ -739,94 +838,5 @@
     "muscle": "Quadriceps/Glutes",
     "name": "Weighted Step-ups",
     "pattern": "Knee Dominant"
-  },
-  {
-    "description": "Hold a heavy dumbbell in each hand at your sides and walk for distance or time, keeping your posture tall.",
-    "equipment": "Dumbbell",
-    "id": 92,
-    "logging_type": "reps_and_weight",
-    "muscle": "Full Body/Core",
-    "name": "DB Farmer Carry",
-    "pattern": "Carry",
-    "youtube_id": "6wsYZT5CaLA"
-  },
-  {
-    "description": "From lying flat with a kettlebell locked overhead, move through a precise series of positions to standing, keeping the bell overhead throughout.",
-    "equipment": "Kettlebell",
-    "id": 95,
-    "logging_type": "reps_and_weight",
-    "muscle": "Full Body/Core",
-    "name": "KB Turkish Get-Up",
-    "pattern": "Core",
-    "youtube_id": "MukkDX0WvJ8"
-  },
-  {
-    "description": "Hinge at the hips, swing the kettlebell between your legs, then pull it to shoulder height using hip drive and a high elbow.",
-    "equipment": "Kettlebell",
-    "id": 96,
-    "logging_type": "reps_and_weight",
-    "muscle": "Full Body/Back",
-    "name": "KB Clean",
-    "pattern": "Hip Hinge",
-    "youtube_id": "7MtvXb1gCkc"
-  },
-  {
-    "description": "With the kettlebell in the rack position at shoulder height, press it directly overhead to full lockout, then lower with control.",
-    "equipment": "Kettlebell",
-    "id": 97,
-    "logging_type": "reps_and_weight",
-    "muscle": "Shoulders/Core",
-    "name": "KB Press (Single Arm)",
-    "pattern": "Vertical Push",
-    "youtube_id": "95zhesdAGDM"
-  },
-  {
-    "description": "Hold a kettlebell by the horns at chest height and squat to depth, keeping your torso upright and elbows inside your knees.",
-    "equipment": "Kettlebell",
-    "id": 98,
-    "logging_type": "reps_and_weight",
-    "muscle": "Quadriceps",
-    "name": "KB Goblet Squat",
-    "pattern": "Knee Dominant",
-    "youtube_id": "7bjJo8bvmgc"
-  },
-  {
-    "description": "Hold a kettlebell by the handle with both hands and rotate it in a slow circle around your head, alternating directions each set.",
-    "equipment": "Kettlebell",
-    "id": 99,
-    "logging_type": "reps_and_weight",
-    "muscle": "Shoulders/Core",
-    "name": "KB Halo",
-    "pattern": "Core",
-    "youtube_id": "AqUzgM2HwG4"
-  },
-  {
-    "description": "Hold a dumbbell in each hand at shoulder height, squat down, then drive through your legs and press the dumbbells overhead in one movement.",
-    "equipment": "Dumbbell",
-    "id": 100,
-    "logging_type": "reps_and_weight",
-    "muscle": "Full Body",
-    "name": "DB Thruster",
-    "pattern": "Olympic (Clean & Jerk)",
-    "youtube_id": "LPCj2VK6-4s"
-  },
-  {
-    "description": "In a push-up position with a dumbbell in each hand, row one dumbbell to your hip while the other arm stays planted, alternating sides.",
-    "equipment": "Dumbbell",
-    "id": 101,
-    "logging_type": "reps_and_weight",
-    "muscle": "Back/Core",
-    "name": "DB Renegade Row",
-    "pattern": "Horizontal Pull",
-    "youtube_id": "-V2YLzGaQMU"
-  },
-  {
-    "description": "Lie flat with a dumbbell in each hand above your chest, lower them out to the sides in a wide arc with a slight bend in your elbows, then bring them back together.",
-    "equipment": "Dumbbell",
-    "id": 113,
-    "logging_type": "reps_and_weight",
-    "muscle": "Chest",
-    "name": "Dumbbell Flyes",
-    "pattern": "Horizontal Push"
   }
 ]

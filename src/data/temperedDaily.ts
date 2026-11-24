@@ -32,6 +32,22 @@ import {
   temperedDailyWeek08,
   temperedDailyWeek08Program,
 } from './workouts/temperedDaily_week08';
+import {
+  temperedDailyWeek09,
+  temperedDailyWeek09Program,
+} from './workouts/temperedDaily_week09';
+import {
+  temperedDailyWeek10,
+  temperedDailyWeek10Program,
+} from './workouts/temperedDaily_week10';
+import {
+  temperedDailyWeek11,
+  temperedDailyWeek11Program,
+} from './workouts/temperedDaily_week11';
+import {
+  temperedDailyWeek12,
+  temperedDailyWeek12Program,
+} from './workouts/temperedDaily_week12';
 import { withLogSchema } from './workouts';
 
 /** Ordered oldest to newest. A new week is a new week file plus one entry here. */
@@ -44,6 +60,10 @@ export const temperedDailyProgram: TemperedDailyWeek[] = [
   temperedDailyWeek06Program,
   temperedDailyWeek07Program,
   temperedDailyWeek08Program,
+  temperedDailyWeek09Program,
+  temperedDailyWeek10Program,
+  temperedDailyWeek11Program,
+  temperedDailyWeek12Program,
 ];
 
 /** Kept out of `workout_data.ts` so these never appear in browse, search or filters. */
@@ -56,6 +76,10 @@ export const temperedDailyWorkouts: SingleWorkout[] = [
   ...temperedDailyWeek06,
   ...temperedDailyWeek07,
   ...temperedDailyWeek08,
+  ...temperedDailyWeek09,
+  ...temperedDailyWeek10,
+  ...temperedDailyWeek11,
+  ...temperedDailyWeek12,
 ].map(withLogSchema);
 
 export function getTemperedDailyWorkoutById(
