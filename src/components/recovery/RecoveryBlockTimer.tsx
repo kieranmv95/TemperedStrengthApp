@@ -23,6 +23,7 @@ import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import React, {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -65,10 +66,24 @@ type RecoveryBlockTimerProps = {
   dose: RecoveryDose;
 };
 
+type TimerSnapshot = {
+  stepIndex: number;
+  endTime: number | null;
+  finished: boolean;
+};
+
 function describeStep(step: RecoveryTimerStep): string {
   return step.label
     ? `${step.label}, ${step.seconds} seconds`
     : `${step.seconds} seconds`;
+}
+
+function createIdleSnapshot(): TimerSnapshot {
+  return {
+    stepIndex: 0,
+    endTime: null,
+    finished: false,
+  };
 }
 
 export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
@@ -78,40 +93,53 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
     [dose]
   );
 
-  const [stepIndex, setStepIndex] = useState(0);
-  const [endTime, setEndTime] = useState<number | null>(null);
-  const [now, setNow] = useState(Date.now());
-  const [finished, setFinished] = useState(false);
+  const [snapshot, setSnapshot] = useState<TimerSnapshot>(createIdleSnapshot);
+  const [now, setNow] = useState(0);
+  const [trackedDose, setTrackedDose] = useState(dose);
   const advancingRef = useRef(false);
+  const snapshotRef = useRef(snapshot);
+  const stepsRef = useRef(steps);
 
-  const isRunning = endTime !== null && !finished;
+  if (trackedDose !== dose) {
+    setTrackedDose(dose);
+    setSnapshot(createIdleSnapshot());
+    setNow(0);
+  }
+
+  useLayoutEffect(() => {
+    snapshotRef.current = snapshot;
+    stepsRef.current = steps;
+  }, [snapshot, steps]);
+
+  useEffect(() => {
+    advancingRef.current = false;
+  }, [dose]);
+
+  const isRunning = snapshot.endTime !== null && !snapshot.finished;
 
   const remainingSeconds = useMemo(() => {
-    if (endTime === null) return null;
-    return Math.max(0, Math.ceil((endTime - now) / 1000));
-  }, [endTime, now]);
+    if (snapshot.endTime === null) return null;
+    return Math.max(0, Math.ceil((snapshot.endTime - now) / 1000));
+  }, [snapshot.endTime, now]);
 
-  const currentStep = steps[stepIndex];
+  const currentStep = steps[snapshot.stepIndex];
 
   const reset = useCallback(() => {
-    setStepIndex(0);
-    setEndTime(null);
-    setFinished(false);
+    setSnapshot(createIdleSnapshot());
     setNow(Date.now());
     advancingRef.current = false;
   }, []);
 
-  useEffect(() => {
-    reset();
-  }, [steps, reset]);
-
   const start = () => {
     if (steps.length === 0) return;
     advancingRef.current = false;
-    setStepIndex(0);
-    setFinished(false);
-    setEndTime(Date.now() + steps[0].seconds * 1000);
-    setNow(Date.now());
+    const startedAt = Date.now();
+    setSnapshot({
+      stepIndex: 0,
+      endTime: startedAt + steps[0].seconds * 1000,
+      finished: false,
+    });
+    setNow(startedAt);
     AccessibilityInfo.announceForAccessibility(
       `Timer started, ${describeStep(steps[0])}`
     );
@@ -122,20 +150,69 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
     AccessibilityInfo.announceForAccessibility('Timer stopped');
   };
 
+  const tick = useCallback(() => {
+    const current = snapshotRef.current;
+    const currentSteps = stepsRef.current;
+    const currentNow = Date.now();
+    setNow(currentNow);
+
+    if (current.endTime === null || current.finished) {
+      return;
+    }
+
+    const remaining = Math.max(
+      0,
+      Math.ceil((current.endTime - currentNow) / 1000)
+    );
+    if (remaining > 0) {
+      return;
+    }
+    if (advancingRef.current) {
+      return;
+    }
+    advancingRef.current = true;
+
+    if (current.stepIndex < currentSteps.length - 1) {
+      const nextIndex = current.stepIndex + 1;
+      const nextStartedAt = Date.now();
+      setSnapshot({
+        stepIndex: nextIndex,
+        endTime: nextStartedAt + currentSteps[nextIndex].seconds * 1000,
+        finished: false,
+      });
+      setNow(nextStartedAt);
+      advancingRef.current = false;
+      AccessibilityInfo.announceForAccessibility(
+        `Next, ${describeStep(currentSteps[nextIndex])}`
+      );
+      cueRecoveryTimer('work');
+      return;
+    }
+
+    setSnapshot({
+      stepIndex: current.stepIndex,
+      endTime: null,
+      finished: true,
+    });
+    advancingRef.current = false;
+    AccessibilityInfo.announceForAccessibility("Time's up");
+    cueRecoveryTimer('finish');
+  }, []);
+
   useEffect(() => {
     if (!isRunning) return;
-    const interval = setInterval(() => setNow(Date.now()), 250);
+    const interval = setInterval(tick, 250);
     return () => clearInterval(interval);
-  }, [isRunning]);
+  }, [isRunning, tick]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (state) => {
       if (state === 'active') {
-        setNow(Date.now());
+        tick();
       }
     });
     return () => subscription.remove();
-  }, []);
+  }, [tick]);
 
   useEffect(() => {
     if (!isRunning) return;
@@ -144,33 +221,6 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
       void deactivateRecoveryTimerKeepAwake();
     };
   }, [isRunning]);
-
-  useEffect(() => {
-    if (!isRunning || remainingSeconds === null || remainingSeconds > 0) {
-      return;
-    }
-    if (advancingRef.current) return;
-    advancingRef.current = true;
-
-    if (stepIndex < steps.length - 1) {
-      const nextIndex = stepIndex + 1;
-      setStepIndex(nextIndex);
-      setEndTime(Date.now() + steps[nextIndex].seconds * 1000);
-      setNow(Date.now());
-      advancingRef.current = false;
-      AccessibilityInfo.announceForAccessibility(
-        `Next, ${describeStep(steps[nextIndex])}`
-      );
-      cueRecoveryTimer('work');
-      return;
-    }
-
-    setEndTime(null);
-    setFinished(true);
-    advancingRef.current = false;
-    AccessibilityInfo.announceForAccessibility("Time's up");
-    cueRecoveryTimer('finish');
-  }, [isRunning, remainingSeconds, stepIndex, steps]);
 
   if (steps.length === 0) {
     return null;
@@ -219,7 +269,7 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
           ) : null}
           {steps.length > 1 ? (
             <Text style={timerStyles.stepProgress}>
-              Step {stepIndex + 1} of {steps.length}
+              Step {snapshot.stepIndex + 1} of {steps.length}
             </Text>
           ) : null}
           <Pressable
@@ -235,7 +285,7 @@ export function RecoveryBlockTimer({ dose }: RecoveryBlockTimerProps) {
             <Text style={timerStyles.secondaryButtonText}>Stop</Text>
           </Pressable>
         </>
-      ) : finished ? (
+      ) : snapshot.finished ? (
         <>
           <View style={timerStyles.completeRow}>
             <Ionicons name="checkmark-circle" size={22} color={color.success} />

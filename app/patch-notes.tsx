@@ -15,6 +15,15 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '3.5.2',
+    dateLabel: '24/11/2026',
+    notes: [
+      'Improved Android device compatibility',
+      'Removed unused photo and video permissions on Android',
+      'Stabilised recovery block timers',
+    ],
+  },
+  {
     version: '3.5.1',
     dateLabel: '22/11/2026',
     notes: ['Fixed bug on timers'],

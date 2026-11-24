@@ -2,7 +2,7 @@
   "expo": {
     "name": "tempered-strength-app",
     "slug": "tempered-strength-app",
-    "version": "3.5.1",
+    "version": "3.5.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "temperedstrengthapp",
@@ -24,6 +24,10 @@
       "permissions": [
         "android.permission.POST_NOTIFICATIONS",
         "android.permission.health.READ_RESTING_HEART_RATE"
+      ],
+      "blockedPermissions": [
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO"
       ]
     },
     "web": {
@@ -129,7 +133,8 @@
       ],
       "expo-sqlite",
       "expo-image",
-      "expo-status-bar"
+      "expo-status-bar",
+      "./plugins/withOptionalAndroidHardware.js"
     ],
     "experiments": {
       "typedRoutes": true,
