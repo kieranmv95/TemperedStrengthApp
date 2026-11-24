@@ -15,6 +15,11 @@ type PatchNote = {
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    version: '3.6.0',
+    dateLabel: '',
+    notes: ['Daily Programming now uses 1RM to show exact weight'],
+  },
+  {
     version: '3.5.2',
     dateLabel: '24/11/2026',
     notes: [
