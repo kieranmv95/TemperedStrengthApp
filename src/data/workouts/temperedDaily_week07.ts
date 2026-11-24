@@ -124,11 +124,12 @@ const td043: StandaloneWorkoutSource = {
         td043Warmup,
         {
           name: 'Strength: Back Squat',
+          loadExerciseId: 4,
           instructions:
-            '3 sets of 3 at 80% of your estimated 1RM, RPE 8. Rest 2–3 mins. Use safeties. Record your working weight in your notes.',
-          highlightInstructions: '3 x 3 @ 80% · RPE 8',
+            '3 sets of 3 at {{80}} of your estimated 1RM, RPE 8. Rest 2–3 mins. Use safeties. Record your working weight in your notes.',
+          highlightInstructions: '3 x 3 @ {{80}} · RPE 8',
           movements: [
-            { name: 'Back Squat', value: '3 x 3', note: '80% of estimated 1RM. Use safeties.' },
+            { name: 'Back Squat', value: '3 x 3', note: '{{80}} of estimated 1RM. Use safeties.' },
           ],
         },
         {
@@ -345,11 +346,12 @@ const td045: StandaloneWorkoutSource = {
         td045Warmup,
         {
           name: 'Strength: Strict Press',
+          loadExerciseId: 26,
           instructions:
-            '3 sets of 3 at 80% of your estimated 1RM, RPE 8. Rest 2–3 mins. Record your working weight in your notes.',
-          highlightInstructions: '3 x 3 @ 80% · RPE 8',
+            '3 sets of 3 at {{80}} of your estimated 1RM, RPE 8. Rest 2–3 mins. Record your working weight in your notes.',
+          highlightInstructions: '3 x 3 @ {{80}} · RPE 8',
           movements: [
-            { name: 'Strict Press', value: '3 x 3', note: '80% of estimated 1RM.' },
+            { name: 'Strict Press', value: '3 x 3', note: '{{80}} of estimated 1RM.' },
           ],
         },
         {
@@ -446,14 +448,15 @@ const td046: StandaloneWorkoutSource = {
         td046Warmup,
         {
           name: 'Strength: Clean and Jerk EMOM',
+          loadExerciseId: 63,
           instructions:
-            'Every minute for 8 minutes, 1 power clean plus 1 push jerk at 65–70% of your estimated clean and jerk, RPE 7. Crisp and fast.',
+            'Every minute for 8 minutes, 1 power clean plus 1 push jerk at {{65-70}} of your estimated clean and jerk, RPE 7. Crisp and fast.',
           highlightInstructions: 'EMOM 8 · RPE 7',
           movements: [
             {
               name: 'Power Clean + Push Jerk',
               value: '1 + 1',
-              note: '65–70% of estimated 1RM.',
+              note: '65–{{70}} of estimated 1RM.',
             },
           ],
         },
@@ -554,11 +557,12 @@ const td047: StandaloneWorkoutSource = {
         td047Warmup,
         {
           name: 'Strength: Deadlift',
+          loadExerciseId: 14,
           instructions:
-            '3 sets of 3 at 80% of your estimated 1RM, RPE 8. Rest 2–3 mins. Reset every rep. Record your working weight in your notes.',
-          highlightInstructions: '3 x 3 @ 80% · RPE 8',
+            '3 sets of 3 at {{80}} of your estimated 1RM, RPE 8. Rest 2–3 mins. Reset every rep. Record your working weight in your notes.',
+          highlightInstructions: '3 x 3 @ {{80}} · RPE 8',
           movements: [
-            { name: 'Deadlift', value: '3 x 3', note: '80% of estimated 1RM.' },
+            { name: 'Deadlift', value: '3 x 3', note: '{{80}} of estimated 1RM.' },
           ],
         },
         {

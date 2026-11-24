@@ -176,6 +176,11 @@ export type WorkoutBlockBase = {
   movements?: WorkoutMovement[];
   /** Block the user can skip, e.g. Additional Work. */
   optional?: boolean;
+  /**
+   * Exercise whose 1RM fills `{{percent}}` tokens in this block's copy.
+   * Required when any instructions / highlight / movement value / note uses tokens.
+   */
+  loadExerciseId?: number;
 };
 
 /** Bundled workout row in `workout_data.ts` before `logSchema` is merged in `workouts.ts`. */

@@ -125,11 +125,12 @@ const td036: StandaloneWorkoutSource = {
         td036Warmup,
         {
           name: 'Strength: Back Squat',
+          loadExerciseId: 4,
           instructions:
-            '4 sets of 5 at 72% of your estimated 1RM, around RPE 7. Rest 2 mins. Record your working weight in your notes.',
-          highlightInstructions: '4 x 5 @ 72% · RPE 7',
+            '4 sets of 5 at {{72}} of your estimated 1RM, around RPE 7. Rest 2 mins. Record your working weight in your notes.',
+          highlightInstructions: '4 x 5 @ {{72}} · RPE 7',
           movements: [
-            { name: 'Back Squat', value: '4 x 5', note: '72% of estimated 1RM.' },
+            { name: 'Back Squat', value: '4 x 5', note: '{{72}} of estimated 1RM.' },
           ],
         },
         {
@@ -359,11 +360,12 @@ const td038: StandaloneWorkoutSource = {
         td038Warmup,
         {
           name: 'Strength: Strict Press',
+          loadExerciseId: 26,
           instructions:
-            '4 sets of 5 at 72% of your estimated 1RM, RPE 7. Rest 2 mins. Record your working weight in your notes.',
-          highlightInstructions: '4 x 5 @ 72% · RPE 7',
+            '4 sets of 5 at {{72}} of your estimated 1RM, RPE 7. Rest 2 mins. Record your working weight in your notes.',
+          highlightInstructions: '4 x 5 @ {{72}} · RPE 7',
           movements: [
-            { name: 'Strict Press', value: '4 x 5', note: '72% of estimated 1RM.' },
+            { name: 'Strict Press', value: '4 x 5', note: '{{72}} of estimated 1RM.' },
           ],
         },
         {
@@ -466,11 +468,12 @@ const td039: StandaloneWorkoutSource = {
         td039Warmup,
         {
           name: 'Strength: Power Snatch EMOM',
+          loadExerciseId: 58,
           instructions:
-            'Every minute for 10 minutes, 2 power snatches at 60% of your estimated 1RM, RPE 6. Fast under the bar, lock out and stand tall.',
+            'Every minute for 10 minutes, 2 power snatches at {{60}} of your estimated 1RM, RPE 6. Fast under the bar, lock out and stand tall.',
           highlightInstructions: 'EMOM 10 · RPE 6',
           movements: [
-            { name: 'Power Snatch', value: '2 reps', note: '60% of estimated 1RM.' },
+            { name: 'Power Snatch', value: '2 reps', note: '{{60}} of estimated 1RM.' },
           ],
         },
         {
@@ -577,11 +580,12 @@ const td040: StandaloneWorkoutSource = {
         td040Warmup,
         {
           name: 'Strength: Deadlift',
+          loadExerciseId: 14,
           instructions:
-            '4 sets of 5 at 72% of your estimated 1RM, RPE 7. Rest 2 mins. Record your working weight in your notes.',
-          highlightInstructions: '4 x 5 @ 72% · RPE 7',
+            '4 sets of 5 at {{72}} of your estimated 1RM, RPE 7. Rest 2 mins. Record your working weight in your notes.',
+          highlightInstructions: '4 x 5 @ {{72}} · RPE 7',
           movements: [
-            { name: 'Deadlift', value: '4 x 5', note: '72% of estimated 1RM.' },
+            { name: 'Deadlift', value: '4 x 5', note: '{{72}} of estimated 1RM.' },
           ],
         },
         {

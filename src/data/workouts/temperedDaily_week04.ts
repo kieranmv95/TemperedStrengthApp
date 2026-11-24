@@ -72,7 +72,7 @@ const STRETCH_FULL: WorkoutBlockBase = {
 };
 
 const TEST_RULES =
-  'Rest 3–5 mins between heavy attempts. You get 3 attempts above 90%. A missed attempt counts as one of the 3. Never test to failure on a rep that looks unsafe. A good test day ends with a smooth top lift, not a grinder.';
+  'Rest 3–5 mins between heavy attempts. You get 3 attempts above {{90}}. A missed attempt counts as one of the 3. Never test to failure on a rep that looks unsafe. A good test day ends with a smooth top lift, not a grinder.';
 
 /* ========================================================================== */
 /*  td_022 — Back squat test                                                  */
@@ -121,28 +121,29 @@ const td022: StandaloneWorkoutSource = {
         td022Warmup,
         {
           name: 'Strength: Back Squat 1RM',
+          loadExerciseId: 4,
           instructions: `Build to a heavy single. Use safeties set just below the bottom of your squat, or spotters. ${TEST_RULES} Log your heaviest successful lift.`,
           highlightInstructions:
-            'Use safeties or spotters · 3 attempts above 90%',
+            'Use safeties or spotters · 3 attempts above {{90}}',
           movements: [
             {
               name: 'Build',
               value: '5 / 3 / 2 / 1 reps',
-              note: 'Roughly 40% → 60% → 70% → 80% of estimated 1RM. Rest 2 mins.',
+              note: 'Roughly {{40}} → {{60}} → {{70}} → {{80}} of estimated 1RM. Rest 2 mins.',
             },
             {
               name: 'Opener',
-              value: '1 @ ~90%',
+              value: '1 @ {{~90}}',
               note: 'A weight you are certain you will make.',
             },
             {
               name: 'Attempt 2',
-              value: '1 @ ~95–100%',
+              value: '1 @ {{~95-100}}',
               note: 'Around your previous best.',
             },
             {
               name: 'Attempt 3',
-              value: '1 @ ~100–103%',
+              value: '1 @ {{~100-103}}',
               note: 'Only if attempt 2 moved well. Jump 2.5–5kg.',
             },
           ],
@@ -165,6 +166,7 @@ const td022: StandaloneWorkoutSource = {
         td022Warmup,
         {
           name: 'Strength: Back Squat 3RM',
+          loadExerciseId: 4,
           instructions: `Build to a heavy set of 3 with good form. Use safeties or spotters. ${TEST_RULES} Log the weight of your heaviest successful triple.`,
           highlightInstructions:
             'Use safeties or spotters · 3 attempts at your heavy triple',
@@ -372,28 +374,29 @@ const td024: StandaloneWorkoutSource = {
         td024Warmup,
         {
           name: 'Strength: Bench Press 1RM',
+          loadExerciseId: 1,
           instructions: `Build to a heavy single with a spotter or safeties. Same set-up every attempt: feet planted, shoulder blades pinned, brief pause on the chest. ${TEST_RULES} Log your heaviest successful lift.`,
           highlightInstructions:
-            'Always use a spotter or safeties · 3 attempts above 90%',
+            'Always use a spotter or safeties · 3 attempts above {{90}}',
           movements: [
             {
               name: 'Build',
               value: '8 / 5 / 3 / 1 reps',
-              note: 'Roughly 40% → 60% → 70% → 80% of estimated 1RM. Rest 2 mins.',
+              note: 'Roughly {{40}} → {{60}} → {{70}} → {{80}} of estimated 1RM. Rest 2 mins.',
             },
             {
               name: 'Opener',
-              value: '1 @ ~90%',
+              value: '1 @ {{~90}}',
               note: 'A weight you are certain you will make.',
             },
             {
               name: 'Attempt 2',
-              value: '1 @ ~95–100%',
+              value: '1 @ {{~95-100}}',
               note: 'Around your previous best.',
             },
             {
               name: 'Attempt 3',
-              value: '1 @ ~100–103%',
+              value: '1 @ {{~100-103}}',
               note: 'Only if attempt 2 moved well. Jump 1–2.5kg.',
             },
           ],
@@ -416,6 +419,7 @@ const td024: StandaloneWorkoutSource = {
         td024Warmup,
         {
           name: 'Strength: Bench Press 3RM',
+          loadExerciseId: 1,
           instructions: `Build to a heavy set of 3 with a spotter or safeties. Barbell or dumbbells. ${TEST_RULES} Log the weight of your heaviest successful triple.`,
           highlightInstructions: 'Always use a spotter or safeties',
           movements: [
@@ -634,27 +638,28 @@ const td026: StandaloneWorkoutSource = {
         td026Warmup,
         {
           name: 'Strength: Deadlift 1RM',
+          loadExerciseId: 14,
           instructions: `Build to a heavy single. Conventional or sumo, whichever is your stronger pull. Lockout means hips and knees fully extended. ${TEST_RULES} Log your heaviest successful lift.`,
-          highlightInstructions: '3 attempts above 90% · No rounded back',
+          highlightInstructions: '3 attempts above {{90}} · No rounded back',
           movements: [
             {
               name: 'Build',
               value: '5 / 3 / 2 / 1 reps',
-              note: 'Roughly 40% → 60% → 70% → 80% of estimated 1RM. Rest 2 mins.',
+              note: 'Roughly {{40}} → {{60}} → {{70}} → {{80}} of estimated 1RM. Rest 2 mins.',
             },
             {
               name: 'Opener',
-              value: '1 @ ~90%',
+              value: '1 @ {{~90}}',
               note: 'A weight you are certain you will make.',
             },
             {
               name: 'Attempt 2',
-              value: '1 @ ~95–100%',
+              value: '1 @ {{~95-100}}',
               note: 'Around your previous best.',
             },
             {
               name: 'Attempt 3',
-              value: '1 @ ~100–103%',
+              value: '1 @ {{~100-103}}',
               note: 'Only if attempt 2 moved well. Jump 2.5–5kg.',
             },
           ],
@@ -676,6 +681,7 @@ const td026: StandaloneWorkoutSource = {
         td026Warmup,
         {
           name: 'Strength: Deadlift 3RM',
+          loadExerciseId: 14,
           instructions: `Build to a heavy set of 3. Barbell or trap bar. Reset every rep. ${TEST_RULES} Log the weight of your heaviest successful triple.`,
           highlightInstructions:
             '3 attempts at your heavy triple · No rounded back',

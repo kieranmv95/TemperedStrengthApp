@@ -126,14 +126,15 @@ const td029: StandaloneWorkoutSource = {
         td029Warmup,
         {
           name: 'Strength: Back Squat',
+          loadExerciseId: 4,
           instructions:
-            '3 sets of 5 at 70% of your estimated 1RM, around RPE 7. Rest 2 mins. Every rep should look the same. Record your working weight in your notes.',
-          highlightInstructions: '3 x 5 @ 70% · RPE 7',
+            '3 sets of 5 at {{70}} of your estimated 1RM, around RPE 7. Rest 2 mins. Every rep should look the same. Record your working weight in your notes.',
+          highlightInstructions: '3 x 5 @ {{70}} · RPE 7',
           movements: [
             {
               name: 'Back Squat',
               value: '3 x 5',
-              note: '70% of estimated 1RM. Rest 2 mins.',
+              note: '{{70}} of estimated 1RM. Rest 2 mins.',
             },
           ],
         },
@@ -359,11 +360,12 @@ const td031: StandaloneWorkoutSource = {
         td031Warmup,
         {
           name: 'Strength: Strict Press',
+          loadExerciseId: 26,
           instructions:
-            '3 sets of 5 at 70% of your estimated 1RM, RPE 7. Rest 2 mins. Squeeze the glutes, no leg drive. Record your working weight in your notes.',
-          highlightInstructions: '3 x 5 @ 70% · RPE 7',
+            '3 sets of 5 at {{70}} of your estimated 1RM, RPE 7. Rest 2 mins. Squeeze the glutes, no leg drive. Record your working weight in your notes.',
+          highlightInstructions: '3 x 5 @ {{70}} · RPE 7',
           movements: [
-            { name: 'Strict Press', value: '3 x 5', note: '70% of estimated 1RM.' },
+            { name: 'Strict Press', value: '3 x 5', note: '{{70}} of estimated 1RM.' },
           ],
         },
         {
@@ -473,11 +475,12 @@ const td032: StandaloneWorkoutSource = {
         td032Warmup,
         {
           name: 'Strength: Power Clean EMOM',
+          loadExerciseId: 64,
           instructions:
-            'Every minute for 10 minutes, 2 power cleans at 60–65% of your estimated 1RM, RPE 6. Fast elbows, land in a solid quarter squat. This is practice, not a test.',
+            'Every minute for 10 minutes, 2 power cleans at {{60-65}} of your estimated 1RM, RPE 6. Fast elbows, land in a solid quarter squat. This is practice, not a test.',
           highlightInstructions: 'EMOM 10 · RPE 6',
           movements: [
-            { name: 'Power Clean', value: '2 reps', note: '60–65% of estimated 1RM.' },
+            { name: 'Power Clean', value: '2 reps', note: '{{60-65}} of estimated 1RM.' },
           ],
         },
         {
@@ -590,11 +593,12 @@ const td033: StandaloneWorkoutSource = {
         td033Warmup,
         {
           name: 'Strength: Deadlift',
+          loadExerciseId: 14,
           instructions:
-            '3 sets of 5 at 70% of your estimated 1RM, RPE 7. Rest 2 mins. Reset every rep. Record your working weight in your notes.',
-          highlightInstructions: '3 x 5 @ 70% · RPE 7',
+            '3 sets of 5 at {{70}} of your estimated 1RM, RPE 7. Rest 2 mins. Reset every rep. Record your working weight in your notes.',
+          highlightInstructions: '3 x 5 @ {{70}} · RPE 7',
           movements: [
-            { name: 'Deadlift', value: '3 x 5', note: '70% of estimated 1RM.' },
+            { name: 'Deadlift', value: '3 x 5', note: '{{70}} of estimated 1RM.' },
           ],
         },
         {

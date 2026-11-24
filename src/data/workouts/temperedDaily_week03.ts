@@ -119,18 +119,19 @@ const td015: StandaloneWorkoutSource = {
         td015Warmup,
         {
           name: 'Strength: Back Squat 4x2',
+          loadExerciseId: 4,
           instructions:
-            'Warm up in 5–6 sets, then complete 4 sets of 2 at around 85% of your estimated 1RM (RPE 8). Every double should be fast and controlled. If the second rep slows right down, take 5kg off. Rest 3 mins between sets. Use safeties. Record your working weight in your notes.',
+            'Warm up in 5–6 sets, then complete 4 sets of 2 at around {{85}} of your estimated 1RM (RPE 8). Every double should be fast and controlled. If the second rep slows right down, take 5kg off. Rest 3 mins between sets. Use safeties. Record your working weight in your notes.',
           highlightInstructions: '4 x 2 · Rest 3 mins · Use safeties',
           movements: [
             {
               name: 'Ramp sets',
               value: '5 / 3 / 2 / 1 / 1 reps',
-              note: 'Roughly 40% → 55% → 65% → 75% → 80% of estimated 1RM.',
+              note: 'Roughly {{40}} → {{55}} → {{65}} → {{75}} → {{80}} of estimated 1RM.',
             },
             {
               name: 'Working sets',
-              value: '4 x 2 @ 85%',
+              value: '4 x 2 @ {{85}}',
               note: 'RPE 8. Two good reps left in every set.',
             },
           ],
@@ -360,18 +361,19 @@ const td017: StandaloneWorkoutSource = {
         td017Warmup,
         {
           name: 'Strength: Bench Press 4x2',
+          loadExerciseId: 1,
           instructions:
-            'Warm up in 5–6 sets, then complete 4 sets of 2 at around 85% of your estimated 1RM (RPE 8). Touch, brief pause, press. Always use a spotter or safeties. Rest 3 mins between sets. Record your working weight in your notes.',
+            'Warm up in 5–6 sets, then complete 4 sets of 2 at around {{85}} of your estimated 1RM (RPE 8). Touch, brief pause, press. Always use a spotter or safeties. Rest 3 mins between sets. Record your working weight in your notes.',
           highlightInstructions: '4 x 2 · Always use a spotter or safeties',
           movements: [
             {
               name: 'Ramp sets',
               value: '8 / 5 / 3 / 1 / 1 reps',
-              note: 'Roughly 40% → 55% → 65% → 75% → 80% of estimated 1RM.',
+              note: 'Roughly {{40}} → {{55}} → {{65}} → {{75}} → {{80}} of estimated 1RM.',
             },
             {
               name: 'Working sets',
-              value: '4 x 2 @ 85%',
+              value: '4 x 2 @ {{85}}',
               note: 'RPE 8. Two good reps left in every set.',
             },
           ],
@@ -488,8 +490,9 @@ const td018: StandaloneWorkoutSource = {
         td018Warmup,
         {
           name: 'Strength: Clean & Jerk EMOM 10',
+          loadExerciseId: 63,
           instructions:
-            'Every minute on the minute for 10 minutes. Stay at 60–65% of your estimated clean and jerk 1RM. Fast under the bar, locked out overhead, stable feet.',
+            'Every minute on the minute for 10 minutes. Stay at {{60-65}} of your estimated clean and jerk 1RM. Fast under the bar, locked out overhead, stable feet.',
           highlightInstructions:
             'Light and fast. This is practice, not testing.',
           movements: [
@@ -611,18 +614,19 @@ const td019: StandaloneWorkoutSource = {
         td019Warmup,
         {
           name: 'Strength: Conventional Deadlift 4x2',
+          loadExerciseId: 14,
           instructions:
-            'Warm up in 5–6 sets, then complete 4 sets of 2 at around 85% of your estimated 1RM (RPE 8). Full reset between reps. If your back rounds, the set is over. Rest 3 mins between sets. Record your working weight in your notes.',
+            'Warm up in 5–6 sets, then complete 4 sets of 2 at around {{85}} of your estimated 1RM (RPE 8). Full reset between reps. If your back rounds, the set is over. Rest 3 mins between sets. Record your working weight in your notes.',
           highlightInstructions: '4 x 2 · Full reset every rep',
           movements: [
             {
               name: 'Ramp sets',
               value: '5 / 3 / 2 / 1 / 1 reps',
-              note: 'Roughly 40% → 55% → 65% → 75% → 80% of estimated 1RM.',
+              note: 'Roughly {{40}} → {{55}} → {{65}} → {{75}} → {{80}} of estimated 1RM.',
             },
             {
               name: 'Working sets',
-              value: '4 x 2 @ 85%',
+              value: '4 x 2 @ {{85}}',
               note: 'RPE 8. Two good reps left in every set.',
             },
           ],

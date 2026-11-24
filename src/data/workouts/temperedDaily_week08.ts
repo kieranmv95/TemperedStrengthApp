@@ -431,11 +431,12 @@ const td053: StandaloneWorkoutSource = {
         td053Warmup,
         {
           name: 'Strength: Hang Power Snatch EMOM',
+          loadExerciseId: 58,
           instructions:
-            'Every minute for 8 minutes, 2 hang power snatches at 50–60% of your estimated 1RM, RPE 5–6. Fast, relaxed, perfect.',
+            'Every minute for 8 minutes, 2 hang power snatches at {{50-60}} of your estimated 1RM, RPE 5–6. Fast, relaxed, perfect.',
           highlightInstructions: 'EMOM 8 · RPE 5–6',
           movements: [
-            { name: 'Hang Power Snatch', value: '2 reps', note: '50–60% of estimated 1RM.' },
+            { name: 'Hang Power Snatch', value: '2 reps', note: '50–{{60}} of estimated 1RM.' },
           ],
         },
         {

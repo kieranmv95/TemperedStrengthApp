@@ -131,6 +131,7 @@ const td008: StandaloneWorkoutSource = {
         td008Warmup,
         {
           name: 'Strength: Back Squat 5x5',
+          loadExerciseId: 4,
           instructions:
             'Warm up to your working weight in 3–4 sets, then complete 5 sets of 5 at the same weight. The first set should feel like RPE 7 and the last like RPE 8. If the last set is slower than RPE 8, go lighter next time. Rest 2–3 mins between sets. Record your working weight in your notes.',
           highlightInstructions: '5 x 5 · Same weight every set',
@@ -138,11 +139,11 @@ const td008: StandaloneWorkoutSource = {
             {
               name: 'Ramp sets',
               value: '5 / 3 / 3 / 2 reps',
-              note: 'Roughly 40% → 55% → 65% → 70% of estimated 1RM.',
+              note: 'Roughly {{40}} → {{55}} → {{65}} → {{70}} of estimated 1RM.',
             },
             {
               name: 'Working sets',
-              value: '5 x 5 @ 72–78%',
+              value: '5 x 5 @ {{72-78}}',
               note: 'RPE 7 on set 1, RPE 8 by set 5.',
             },
           ],
@@ -425,6 +426,7 @@ const td010: StandaloneWorkoutSource = {
         td010Warmup,
         {
           name: 'Strength: Bench Press 5x5',
+          loadExerciseId: 1,
           instructions:
             'Warm up to your working weight in 3–4 sets, then complete 5 sets of 5 at the same weight. RPE 7 on set 1, RPE 8 by set 5. Touch the chest, pause briefly, press. Use a spotter or safeties. Rest 2–3 mins between sets. Record your working weight in your notes.',
           highlightInstructions: '5 x 5 · Always use a spotter or safeties',
@@ -432,11 +434,11 @@ const td010: StandaloneWorkoutSource = {
             {
               name: 'Ramp sets',
               value: '8 / 5 / 3 / 2 reps',
-              note: 'Roughly 40% → 55% → 65% → 70% of estimated 1RM.',
+              note: 'Roughly {{40}} → {{55}} → {{65}} → {{70}} of estimated 1RM.',
             },
             {
               name: 'Working sets',
-              value: '5 x 5 @ 72–78%',
+              value: '5 x 5 @ {{72-78}}',
               note: 'RPE 7 on set 1, RPE 8 by set 5.',
             },
           ],
@@ -579,8 +581,9 @@ const td011: StandaloneWorkoutSource = {
         td011Warmup,
         {
           name: 'Strength: Snatch Technique EMOM 12',
+          loadExerciseId: 58,
           instructions:
-            'Every minute on the minute for 12 minutes. Stay at 60–70% of your estimated power snatch 1RM (RPE 6). Every rep fast and crisp. If the bar drifts forward or the catch gets soft, take weight off.',
+            'Every minute on the minute for 12 minutes. Stay at {{60-70}} of your estimated power snatch 1RM (RPE 6). Every rep fast and crisp. If the bar drifts forward or the catch gets soft, take weight off.',
           highlightInstructions:
             'Light and fast. This is practice, not testing.',
           movements: [
@@ -706,6 +709,7 @@ const td012: StandaloneWorkoutSource = {
         td012Warmup,
         {
           name: 'Strength: Conventional Deadlift 5x5',
+          loadExerciseId: 14,
           instructions:
             'Warm up to your working weight in 3–4 sets, then complete 5 sets of 5 at the same weight. Dead stop on the floor every rep, no touch and go. RPE 7 on set 1, RPE 8 by set 5. Rest 2–3 mins between sets. Record your working weight in your notes.',
           highlightInstructions: '5 x 5 · Dead stop every rep',
@@ -713,11 +717,11 @@ const td012: StandaloneWorkoutSource = {
             {
               name: 'Ramp sets',
               value: '5 / 3 / 3 / 2 reps',
-              note: 'Roughly 40% → 55% → 65% → 70% of estimated 1RM.',
+              note: 'Roughly {{40}} → {{55}} → {{65}} → {{70}} of estimated 1RM.',
             },
             {
               name: 'Working sets',
-              value: '5 x 5 @ 72–78%',
+              value: '5 x 5 @ {{72-78}}',
               note: 'RPE 7 on set 1, RPE 8 by set 5.',
             },
           ],

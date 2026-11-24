@@ -131,6 +131,7 @@ const td001: StandaloneWorkoutSource = {
         td001Warmup,
         {
           name: 'Strength: Back Squat',
+          loadExerciseId: 4,
           instructions:
             'Build across 5–6 sets to a heavy set of 5 at RPE 8 (2 good reps left). Rest 2–3 mins between the heavier sets. Then drop the weight by 10% and complete 2 more sets of 5. Record your heaviest set of five in your notes.',
           highlightInstructions: 'Heaviest set = RPE 8. Not a max.',
@@ -138,12 +139,12 @@ const td001: StandaloneWorkoutSource = {
             {
               name: 'Ramp sets',
               value: '5 / 5 / 3 / 3 reps',
-              note: 'Roughly 40% → 55% → 65% → 72% of estimated 1RM.',
+              note: 'Roughly {{40}} → {{55}} → {{65}} → {{72}} of estimated 1RM.',
             },
             {
               name: 'Top set',
               value: '1 x 5 @ RPE 8',
-              note: 'Usually around 75–80% of 1RM.',
+              note: 'Usually around {{75-80}} of 1RM.',
             },
             {
               name: 'Back-off sets',
@@ -434,6 +435,7 @@ const td003: StandaloneWorkoutSource = {
         td003Warmup,
         {
           name: 'Strength: Bench Press',
+          loadExerciseId: 1,
           instructions:
             'Build across 5–6 sets to a heavy set of 5 at RPE 8 (2 good reps left). Rest 2–3 mins between the heavier sets. Then drop the weight by 10% and complete 2 more sets of 5. Touch the chest, pause briefly, press. Use a spotter on the heavy sets. Record your heaviest set of five in your notes.',
           highlightInstructions:
@@ -442,12 +444,12 @@ const td003: StandaloneWorkoutSource = {
             {
               name: 'Ramp sets',
               value: '8 / 5 / 3 / 3 reps',
-              note: 'Roughly 40% → 55% → 65% → 72% of estimated 1RM.',
+              note: 'Roughly {{40}} → {{55}} → {{65}} → {{72}} of estimated 1RM.',
             },
             {
               name: 'Top set',
               value: '1 x 5 @ RPE 8',
-              note: 'Usually around 75–80% of 1RM.',
+              note: 'Usually around {{75-80}} of 1RM.',
             },
             {
               name: 'Back-off sets',
@@ -596,8 +598,9 @@ const td004: StandaloneWorkoutSource = {
         td004Warmup,
         {
           name: 'Strength: Clean Technique EMOM 12',
+          loadExerciseId: 64,
           instructions:
-            'Every minute on the minute for 12 minutes. Stay at 60–70% of your estimated power clean 1RM (RPE 6). Every rep should be fast and crisp. If the bar slows down or the catch gets messy, take weight off.',
+            'Every minute on the minute for 12 minutes. Stay at {{60-70}} of your estimated power clean 1RM (RPE 6). Every rep should be fast and crisp. If the bar slows down or the catch gets messy, take weight off.',
           highlightInstructions:
             'Light and fast. This is practice, not testing.',
           movements: [
@@ -733,6 +736,7 @@ const td005: StandaloneWorkoutSource = {
         td005Warmup,
         {
           name: 'Strength: Conventional Deadlift',
+          loadExerciseId: 14,
           instructions:
             'Build across 5–6 sets to a heavy set of 5 at RPE 8 (2 good reps left). Reset at the bottom of every rep, no touch and go. Rest 2–3 mins between the heavier sets. Then drop 10% and complete 2 more sets of 5. Record your heaviest set of five in your notes.',
           highlightInstructions: 'Dead stop every rep. Heaviest set = RPE 8.',
@@ -740,12 +744,12 @@ const td005: StandaloneWorkoutSource = {
             {
               name: 'Ramp sets',
               value: '5 / 5 / 3 / 3 reps',
-              note: 'Roughly 40% → 55% → 65% → 72% of estimated 1RM.',
+              note: 'Roughly {{40}} → {{55}} → {{65}} → {{72}} of estimated 1RM.',
             },
             {
               name: 'Top set',
               value: '1 x 5 @ RPE 8',
-              note: 'Usually around 75–80% of 1RM.',
+              note: 'Usually around {{75-80}} of 1RM.',
             },
             {
               name: 'Back-off sets',
