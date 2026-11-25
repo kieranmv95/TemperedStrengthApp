@@ -1,9 +1,10 @@
 import { BottomSheet } from '@/src/components/ds';
+import { GlossaryText } from '@/src/components/glossary/GlossaryText';
 import { exerciseVideoStyles as styles } from '@/src/components/exercise/exerciseVideoStyles';
 import { getExerciseById } from '@/src/data/exercises';
 import { getYoutubeEmbedHtml, YOUTUBE_EMBED_ORIGIN } from '@/src/utils/youtube';
 import React, { useMemo, useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 type ExerciseVideoSheetProps = {
@@ -60,7 +61,10 @@ export function ExerciseVideoSheet({
           </View>
 
           {exercise.description ? (
-            <Text style={styles.description}>{exercise.description}</Text>
+            <GlossaryText
+              text={exercise.description}
+              style={styles.description}
+            />
           ) : null}
         </>
       ) : null}

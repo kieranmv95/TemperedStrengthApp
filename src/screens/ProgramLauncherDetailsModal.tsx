@@ -1,4 +1,6 @@
 import { Badge, Collapsible, SectionHeader } from '@/src/components/ds';
+import { GlossaryOverlayHost } from '@/src/components/glossary/GlossaryOverlayHost';
+import { GlossaryText } from '@/src/components/glossary/GlossaryText';
 import { YoutubeEmbed } from '@/src/components/exercise/YoutubeEmbed';
 import { color } from '@/src/constants/tokens';
 import type { Program } from '@/src/types/program';
@@ -47,6 +49,7 @@ export function ProgramLauncherDetailsModal({
   bottomInset,
 }: ProgramLauncherDetailsModalProps) {
   const [bodyChangesExpanded, setBodyChangesExpanded] = React.useState(false);
+  const dismissGlossaryRef = React.useRef<(() => boolean) | null>(null);
 
   const sessionsPerWeek = selectedProgram
     ? sessionsPerWeekFromProgram(selectedProgram)
@@ -71,19 +74,27 @@ export function ProgramLauncherDetailsModal({
     ? 'Upgrade to Pro to start'
     : 'Select start date';
 
+  const handleRequestClose = () => {
+    if (dismissGlossaryRef.current?.()) {
+      return;
+    }
+    onClose();
+  };
+
   return (
     <Modal
       visible={visible}
       transparent
       animationType="slide"
       statusBarTranslucent
-      onRequestClose={onClose}
+      onRequestClose={handleRequestClose}
     >
       <View style={styles.modalOverlay}>
-        <View
+        <GlossaryOverlayHost
           style={styles.sheet}
+          dismissRef={dismissGlossaryRef}
           accessibilityViewIsModal
-          onAccessibilityEscape={onClose}
+          onAccessibilityEscape={handleRequestClose}
         >
           <View style={styles.sheetHeader}>
             <View style={styles.sheetTitleRow}>
@@ -111,9 +122,10 @@ export function ProgramLauncherDetailsModal({
             style={styles.sheetScroll}
             contentContainerStyle={styles.sheetScrollContent}
           >
-            <Text style={styles.programDescription}>
-              {selectedProgram?.description}
-            </Text>
+            <GlossaryText
+              text={selectedProgram?.description ?? ''}
+              style={styles.programDescription}
+            />
 
             {selectedProgram?.bodyChangesSummary ? (
               <Collapsible
@@ -122,9 +134,10 @@ export function ProgramLauncherDetailsModal({
                 onToggle={() => setBodyChangesExpanded((v) => !v)}
                 style={styles.bodyChangesCard}
               >
-                <Text style={styles.bodyChangesText}>
-                  {selectedProgram.bodyChangesSummary}
-                </Text>
+                <GlossaryText
+                  text={selectedProgram.bodyChangesSummary}
+                  style={styles.bodyChangesText}
+                />
               </Collapsible>
             ) : null}
 
@@ -181,7 +194,7 @@ export function ProgramLauncherDetailsModal({
               <Text style={styles.primaryButtonText}>{primaryLabel}</Text>
             </Pressable>
           </View>
-        </View>
+        </GlossaryOverlayHost>
       </View>
     </Modal>
   );

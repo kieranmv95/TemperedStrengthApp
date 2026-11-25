@@ -114,8 +114,7 @@ export function calculatePlates(
   }
 
   const result: Plate[] = [];
-  const selectedPlates =
-    ownedPlates.length > 0 ? ownedPlates : availablePlates;
+  const selectedPlates = ownedPlates.length > 0 ? ownedPlates : availablePlates;
   const platesToUse = availablePlates.filter((plate) =>
     selectedPlates.includes(plate)
   );
@@ -145,5 +144,66 @@ export function calculatePlates(
     barWeight,
     achievedWeight: barWeight + platesWeight,
     targetWeight: weight,
+  };
+}
+
+export type OpenBarbellLoadOptions = {
+  /** Target total weight in the current display unit. Men's load when `womensWeight` is set. */
+  weight: number;
+  /** Women's prescribed total (same unit). The sheet opens on the load that matches the saved bar. */
+  womensWeight?: number | null;
+  /** Optional high end of a % range (same unit). Defaults the sheet to `weight`. */
+  rangeHighWeight?: number | null;
+  /** Optional label shown in the sheet title. */
+  label?: string;
+};
+
+export type ResolvedBarbellLoad = {
+  weight: number;
+  rangeLowWeight: number | null;
+  rangeHighWeight: number | null;
+  label: string | null;
+};
+
+function positiveWeight(value: number | null | undefined): number | null {
+  if (value === undefined || value === null) {
+    return null;
+  }
+  if (!Number.isFinite(value) || value <= 0) {
+    return null;
+  }
+  return value;
+}
+
+/**
+ * Sheet target for a tap on a load. A men's/women's pair opens on the load
+ * that matches the saved bar, with both available as chips. A percent range
+ * still opens on its low end.
+ */
+export function resolveBarbellSheetRequest(
+  options: OpenBarbellLoadOptions,
+  barType: BarType
+): ResolvedBarbellLoad | null {
+  const weight = positiveWeight(options.weight);
+  if (weight === null) {
+    return null;
+  }
+
+  const womens = positiveWeight(options.womensWeight);
+  if (womens !== null && womens !== weight) {
+    return {
+      weight: barType === 'female' ? womens : weight,
+      rangeLowWeight: Math.min(weight, womens),
+      rangeHighWeight: Math.max(weight, womens),
+      label: options.label ?? null,
+    };
+  }
+
+  const high = positiveWeight(options.rangeHighWeight);
+  return {
+    weight,
+    rangeLowWeight: high !== null ? weight : null,
+    rangeHighWeight: high,
+    label: options.label ?? null,
   };
 }

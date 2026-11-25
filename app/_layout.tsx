@@ -7,6 +7,7 @@ import { GymTimerProvider } from '@/src/hooks/gym-timer-context';
 import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
 import { BarbellLoadProvider } from '@/src/hooks/barbell-load-context';
+import { GlossaryTermProvider } from '@/src/components/glossary/GlossaryTermProvider';
 import { ToastProvider } from '@/src/hooks/toast-context';
 import { gymClockFont } from '@/src/constants/gymClock';
 import { color, fontFamily } from '@/src/constants/tokens';
@@ -133,143 +134,148 @@ export default function RootLayout() {
             <SubscriptionProvider>
               <SupplementReminderBridge />
               <ExerciseVideoProvider>
-                  <ToastProvider>
-                    <BarbellLoadProvider>
-                    <GymTimerProvider>
-                    <GymTimerQuickActions />
-                    <Stack>
-                      <Stack.Screen
-                        name="(tabs)"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="glossary"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="tools/one-rep-max"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="tools/one-rep-max-breakdown"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="tools/bar-loader"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="tools/creatine"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="tools/water-intake"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="tools/timers"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="checkin"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="shop"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="skills-and-cues"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="skill/[id]"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="workout"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="tempered-daily/index"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="competition"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="recovery"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="zones/index"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="patch-notes"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="dev/tokens"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="dev/components"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="account/general"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="account/program"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="account/health"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="account/redeem-promo"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="account/create-account"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="account/verify-otp"
-                        options={{ headerShown: false, gestureEnabled: false }}
-                      />
-                      <Stack.Screen
-                        name="onboarding"
-                        options={{
-                          headerShown: false,
-                          gestureEnabled: false,
-                          animation: 'fade',
-                        }}
-                      />
-                      <Stack.Screen
-                        name="paywall"
-                        options={{
-                          presentation: 'modal',
-                          title: 'Upgrade to Pro',
-                        }}
-                      />
-                      <Stack.Screen
-                        name="customer-center"
-                        options={{
-                          presentation: 'modal',
-                          title: 'Subscription',
-                        }}
-                      />
-                    </Stack>
-                    <StatusBar style="light" />
-                    </GymTimerProvider>
-                    </BarbellLoadProvider>
-                  </ToastProvider>
-                </ExerciseVideoProvider>
+                <ToastProvider>
+                  <BarbellLoadProvider>
+                    <GlossaryTermProvider>
+                      <GymTimerProvider>
+                        <GymTimerQuickActions />
+                        <Stack>
+                          <Stack.Screen
+                            name="(tabs)"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="glossary"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="tools/one-rep-max"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="tools/one-rep-max-breakdown"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="tools/bar-loader"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="tools/creatine"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="tools/water-intake"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="tools/timers"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="checkin"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="shop"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="skills-and-cues"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="skill/[id]"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="workout"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="tempered-daily/index"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="competition"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="recovery"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="zones/index"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="patch-notes"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="dev/tokens"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="dev/components"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="account/general"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="account/program"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="account/health"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="account/redeem-promo"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="account/create-account"
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="account/verify-otp"
+                            options={{
+                              headerShown: false,
+                              gestureEnabled: false,
+                            }}
+                          />
+                          <Stack.Screen
+                            name="onboarding"
+                            options={{
+                              headerShown: false,
+                              gestureEnabled: false,
+                              animation: 'fade',
+                            }}
+                          />
+                          <Stack.Screen
+                            name="paywall"
+                            options={{
+                              presentation: 'modal',
+                              title: 'Upgrade to Pro',
+                            }}
+                          />
+                          <Stack.Screen
+                            name="customer-center"
+                            options={{
+                              presentation: 'modal',
+                              title: 'Subscription',
+                            }}
+                          />
+                        </Stack>
+                        <StatusBar style="light" />
+                      </GymTimerProvider>
+                    </GlossaryTermProvider>
+                  </BarbellLoadProvider>
+                </ToastProvider>
+              </ExerciseVideoProvider>
             </SubscriptionProvider>
           </SyncManagerProvider>
         </ThemeProvider>

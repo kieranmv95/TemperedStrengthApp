@@ -1,4 +1,5 @@
 import { Badge, Tag } from '@/src/components/ds';
+import { GlossaryText } from '@/src/components/glossary/GlossaryText';
 import {
   color,
   elevation,
@@ -87,7 +88,7 @@ export function TemperedDailyComingSoon({
         ))}
       </View>
 
-      <Text style={styles.description}>{week.description}</Text>
+      <GlossaryText text={week.description} style={styles.description} />
 
       <View style={styles.benefits}>
         <Text style={styles.benefitsTitle}>

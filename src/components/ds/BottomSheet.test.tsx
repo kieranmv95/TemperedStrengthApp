@@ -1,5 +1,9 @@
 import { mockReduceMotion } from '@/jest/mockReduceMotion';
 import { BottomSheet } from '@/src/components/ds/BottomSheet';
+
+jest.mock('posthog-react-native', () => ({
+  usePostHog: () => ({ capture: jest.fn() }),
+}));
 import { motion } from '@/src/constants/tokens';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import React, { type ComponentRef } from 'react';

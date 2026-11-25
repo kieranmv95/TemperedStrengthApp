@@ -1,6 +1,6 @@
+import { GlossaryText } from '@/src/components/glossary/GlossaryText';
 import { getExerciseById } from '@/src/data/exercises';
 import type { Workout } from '@/src/types/program';
-import React from 'react';
 import { Text, View } from 'react-native';
 import { programLauncherStyles as styles } from './programLauncherStyles';
 
@@ -17,10 +17,10 @@ export function ProgramLauncherWorkoutPreviewRow({
 
   const exerciseNames = !isV2
     ? workout.exercises
-        .filter((ex) => ex.type === 'exercise')
-        .map((ex) => (ex as { id: number }).id)
-        .map((id) => getExerciseById(id)?.name)
-        .filter((name): name is string => name !== undefined)
+      .filter((ex) => ex.type === 'exercise')
+      .map((ex) => (ex as { id: number }).id)
+      .map((id) => getExerciseById(id)?.name)
+      .filter((name): name is string => name !== undefined)
     : [];
 
   const blockTitles = isV2
@@ -29,20 +29,27 @@ export function ProgramLauncherWorkoutPreviewRow({
 
   return (
     <View style={styles.workoutItem}>
-      <Text style={styles.workoutLabel} accessibilityRole="header">
-        {workout.label}
-      </Text>
-      {workout.description && (
-        <Text style={styles.workoutDescription}>{workout.description}</Text>
-      )}
+      <GlossaryText
+        text={workout.label}
+        style={styles.workoutLabel}
+        accessibilityRole="header"
+      />
+      {workout.description ? (
+        <GlossaryText
+          text={workout.description}
+          style={styles.workoutDescription}
+        />
+      ) : null}
       {exerciseNames.length > 0 ? (
-        <Text style={styles.workoutExercisesList}>
-          {exerciseNames.join(', ')}
-        </Text>
+        <GlossaryText
+          text={exerciseNames.join(', ')}
+          style={styles.workoutExercisesList}
+        />
       ) : blockTitles.length > 0 ? (
-        <Text style={styles.workoutExercisesList}>
-          {blockTitles.join(' · ')}
-        </Text>
+        <GlossaryText
+          text={blockTitles.join(' · ')}
+          style={styles.workoutExercisesList}
+        />
       ) : null}
       <View style={styles.workoutMeta}>
         <Text style={styles.workoutExercises}>

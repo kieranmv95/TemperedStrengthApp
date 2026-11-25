@@ -6,6 +6,7 @@ import {
   SectionHeader,
   Tag,
 } from '@/src/components/ds';
+import { GlossaryText } from '@/src/components/glossary/GlossaryText';
 import { StartGymTimerButton } from '@/src/components/gymTimer/StartGymTimerButton';
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
 import { HeartRateZoneChip } from '@/src/components/zones/HeartRateZoneChip';
@@ -182,11 +183,15 @@ function renderMovementRow(
       <View style={styles.movementBullet} />
       <View style={styles.movementTextColumn}>
         <Text style={styles.movementText}>
-          {`${detailed.name}: `}
+          <GlossaryText
+            text={`${detailed.name}: `}
+            style={styles.movementText}
+          />
           <LoadPercentText
             text={detailed.value}
             oneRmKg={load.oneRmKg}
             unit={load.unit}
+            weightContext={detailed.name}
           />
         </Text>
         {detailed.note ? (
@@ -194,6 +199,7 @@ function renderMovementRow(
             text={detailed.note}
             oneRmKg={load.oneRmKg}
             unit={load.unit}
+            weightContext={detailed.name}
             style={styles.movementNote}
           />
         ) : null}
@@ -322,9 +328,11 @@ function renderWorkoutBlock(
 
   return (
     <View key={key} style={styles.blockContainer}>
-      <Text style={styles.blockName} accessibilityRole="header">
-        {block.name}
-      </Text>
+      <GlossaryText
+        text={block.name}
+        style={styles.blockName}
+        accessibilityRole="header"
+      />
       {renderBlockBody(block, zoneRanges, load)}
     </View>
   );
@@ -477,7 +485,10 @@ export function WorkoutDetailScrollContent({
         <Badge label={levelsLabel(workout.levels)} tone="neutral" />
       </View>
 
-      <Text style={styles.detailDescription}>{workout.description}</Text>
+      <GlossaryText
+        text={workout.description}
+        style={styles.detailDescription}
+      />
 
       {timerConfig ? <StartGymTimerButton config={timerConfig} /> : null}
 
@@ -517,16 +528,15 @@ export function WorkoutDetailScrollContent({
             </View>
           </View>
           {collab.description ? (
-            <Text
+            <GlossaryText
+              text={collab.description}
               style={[
                 styles.collabDescription,
                 collab.descriptionColor
                   ? { color: collab.descriptionColor }
                   : null,
               ]}
-            >
-              {collab.description}
-            </Text>
+            />
           ) : null}
           <View style={styles.collabCtaRow}>
             <Ionicons
@@ -558,33 +568,46 @@ export function WorkoutDetailScrollContent({
         <>
           <View style={styles.scaleSection}>
             <SectionHeader title="Scalings" />
-            <View style={styles.scaleSegmentRow} accessibilityRole="radiogroup">
-              {scaledBlocks.all.map((s, i) => {
-                const isActive = i === scaledBlocks.safeIndex;
-                return (
-                  <Pressable
-                    key={`${i}-${s.scale}`}
-                    style={({ pressed }) => [
-                      styles.scaleSegment,
-                      pressed && !isActive && styles.scaleSegmentPressed,
-                      isActive && styles.scaleSegmentActive,
-                    ]}
-                    onPress={() => setSelectedScaleIndex(i)}
-                    accessibilityRole="radio"
-                    accessibilityLabel={`${s.scale} scaling`}
-                    accessibilityState={{ checked: isActive }}
-                  >
-                    <Text
-                      style={[
-                        styles.scaleSegmentText,
-                        isActive && styles.scaleSegmentTextActive,
+            <View
+              style={styles.scaleSegmentTrack}
+              accessibilityRole="radiogroup"
+            >
+              <ScrollView
+                horizontal
+                nestedScrollEnabled
+                directionalLockEnabled
+                alwaysBounceHorizontal={false}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.scaleSegmentRow}
+              >
+                {scaledBlocks.all.map((s, i) => {
+                  const isActive = i === scaledBlocks.safeIndex;
+                  return (
+                    <Pressable
+                      key={`${i}-${s.scale}`}
+                      style={({ pressed }) => [
+                        styles.scaleSegment,
+                        pressed && !isActive && styles.scaleSegmentPressed,
+                        isActive && styles.scaleSegmentActive,
                       ]}
+                      onPress={() => setSelectedScaleIndex(i)}
+                      accessibilityRole="radio"
+                      accessibilityLabel={`${s.scale} scaling`}
+                      accessibilityState={{ checked: isActive }}
                     >
-                      {s.scale}
-                    </Text>
-                  </Pressable>
-                );
-              })}
+                      <Text
+                        numberOfLines={1}
+                        style={[
+                          styles.scaleSegmentText,
+                          isActive && styles.scaleSegmentTextActive,
+                        ]}
+                      >
+                        {s.scale}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
             </View>
           </View>
 

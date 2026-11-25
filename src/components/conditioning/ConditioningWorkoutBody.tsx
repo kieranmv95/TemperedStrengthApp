@@ -1,3 +1,4 @@
+import { GlossaryText } from '@/src/components/glossary/GlossaryText';
 import { ActionChip, ProgressBar, Skeleton, Tag } from '@/src/components/ds';
 import { StartGymTimerButton } from '@/src/components/gymTimer/StartGymTimerButton';
 import { HeartRateZoneChip } from '@/src/components/zones/HeartRateZoneChip';
@@ -132,12 +133,17 @@ export function ConditioningWorkoutBody({
           <View key={block.id} style={styles.blockCard}>
             <View style={styles.blockHeader}>
               <View style={styles.blockTitleRow}>
-                <Text style={styles.blockTitle} accessibilityRole="header">
-                  {block.title}
-                </Text>
+                <GlossaryText
+                  text={block.title}
+                  style={styles.blockTitle}
+                  accessibilityRole="header"
+                />
                 <Tag label={blockTypeLabel(block)} />
               </View>
-              <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
+              <GlossaryText
+                text={formatBlockMeta(block)}
+                style={styles.blockMeta}
+              />
             </View>
 
             <View style={styles.blockActions}>
@@ -156,7 +162,10 @@ export function ConditioningWorkoutBody({
             ) : null}
 
             {block.instructions ? (
-              <Text style={styles.blockInstructions}>{block.instructions}</Text>
+              <GlossaryText
+                text={block.instructions}
+                style={styles.blockInstructions}
+              />
             ) : null}
 
             {block.type === 'cooldown' ? (
@@ -168,17 +177,22 @@ export function ConditioningWorkoutBody({
                 {block.movements.map((m) => (
                   <View key={m.id} style={styles.movementRow}>
                     <View style={styles.movementTopRow}>
-                      <Text style={styles.movementName}>
-                        {movementDisplayName(m)}
-                      </Text>
+                      <GlossaryText
+                        text={movementDisplayName(m)}
+                        style={styles.movementName}
+                      />
                       {m.prescription ? (
-                        <Text style={styles.movementPrescription}>
-                          {m.prescription}
-                        </Text>
+                        <GlossaryText
+                          text={m.prescription}
+                          style={styles.movementPrescription}
+                        />
                       ) : null}
                     </View>
                     {m.notes ? (
-                      <Text style={styles.movementNotes}>{m.notes}</Text>
+                      <GlossaryText
+                        text={m.notes}
+                        style={styles.movementNotes}
+                      />
                     ) : null}
                   </View>
                 ))}
@@ -241,7 +255,7 @@ function BulletList({ items }: BulletListProps) {
       {items.map((item, idx) => (
         <View key={idx} style={styles.warmupItem}>
           <View style={styles.warmupBullet} />
-          <Text style={styles.warmupText}>{item}</Text>
+          <GlossaryText text={item} style={styles.warmupText} />
         </View>
       ))}
     </View>
@@ -275,9 +289,10 @@ function ConditioningWarmupBlock({
         accessibilityState={{ expanded: isExpanded }}
       >
         <View style={styles.blockTitleRow}>
-          <Text style={[styles.blockTitle, styles.warmupTitleFlex]}>
-            {block.title}
-          </Text>
+          <GlossaryText
+            text={block.title}
+            style={[styles.blockTitle, styles.warmupTitleFlex]}
+          />
           <Tag label="Warm-up" />
           <ActionChip
             label={isExpanded ? 'Hide' : 'Show'}
@@ -288,7 +303,7 @@ function ConditioningWarmupBlock({
             accessibilityState={{ expanded: isExpanded }}
           />
         </View>
-        <Text style={styles.blockMeta}>{formatBlockMeta(block)}</Text>
+        <GlossaryText text={formatBlockMeta(block)} style={styles.blockMeta} />
       </Pressable>
 
       <View style={styles.blockActions}>
@@ -305,7 +320,10 @@ function ConditioningWarmupBlock({
             <HeartRateZoneChip zone={block.hrZone} ranges={zoneRanges} />
           ) : null}
           {block.instructions ? (
-            <Text style={styles.blockInstructions}>{block.instructions}</Text>
+            <GlossaryText
+              text={block.instructions}
+              style={styles.blockInstructions}
+            />
           ) : null}
           <BulletList items={block.description} />
         </>

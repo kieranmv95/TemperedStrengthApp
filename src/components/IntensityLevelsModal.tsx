@@ -8,7 +8,6 @@ import {
   typography,
 } from '@/src/constants/tokens';
 import { INTENSITY_LEVELS } from '@/src/screens/workoutScreenConstants';
-import React from 'react';
 import {
   Modal,
   Pressable,
@@ -47,7 +46,7 @@ export function IntensityLevelsModal({
         >
           <ScrollView contentContainerStyle={styles.intensityModalScroll}>
             <Text style={styles.intensityModalTitle} accessibilityRole="header">
-              Intensity levels
+              RPE levels
             </Text>
             <Text style={styles.intensityModalSubtitle}>
               How each level should feel during your session

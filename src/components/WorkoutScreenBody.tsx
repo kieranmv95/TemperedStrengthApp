@@ -5,6 +5,7 @@ import {
   ProgressBar,
   Tag,
 } from '@/src/components/ds';
+import { GlossaryText } from '@/src/components/glossary/GlossaryText';
 import { color, space } from '@/src/constants/tokens';
 import { useMotion } from '@/src/hooks/useMotion';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
@@ -43,10 +44,10 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
-import type { RestTimerStartPayload } from './ExerciseCard';
-import { ExerciseCard } from './ExerciseCard';
 import { ConditioningWorkoutBody } from './conditioning/ConditioningWorkoutBody';
 import { YoutubeEmbed } from './exercise/YoutubeEmbed';
+import type { RestTimerStartPayload } from './ExerciseCard';
+import { ExerciseCard } from './ExerciseCard';
 import { ProgramSessionStatusControls } from './ProgramSessionStatusControls';
 
 type WorkoutScreenBodyProps = {
@@ -221,9 +222,10 @@ export function WorkoutScreenBody({
               {currentWorkout.label}
             </Text>
             {currentWorkout.description ? (
-              <Text style={styles.description}>
-                {currentWorkout.description}
-              </Text>
+              <GlossaryText
+                text={currentWorkout.description}
+                style={styles.description}
+              />
             ) : null}
           </View>
 
@@ -282,7 +284,7 @@ export function WorkoutScreenBody({
           {showIntensity ? (
             <View style={styles.card}>
               <View style={styles.cardTitleRow}>
-                <Text style={styles.cardTitle}>Intensity</Text>
+                <GlossaryText text="RPE" style={styles.cardTitle} />
                 <Text
                   style={styles.intensityValue}
                   accessibilityLabel={`${currentWorkout.intensity} out of 10`}
@@ -295,16 +297,17 @@ export function WorkoutScreenBody({
                 accessibilityLabel="Intensity"
                 accessibilityValueText={`${currentWorkout.intensity} out of 10, ${intensityLevel.label}`}
               />
-              <Text style={styles.body}>
-                {intensityLevel.label}. {intensityLevel.feel}
-              </Text>
+              <GlossaryText
+                text={`${intensityLevel.label}. ${intensityLevel.feel}`}
+                style={styles.body}
+              />
               <Pressable
                 style={styles.textButton}
                 onPress={onIntensityInfoPress}
                 accessibilityRole="button"
               >
                 <Text style={styles.textButtonLabel}>
-                  View all intensity levels
+                  View all RPE levels
                 </Text>
               </Pressable>
             </View>
@@ -332,15 +335,16 @@ export function WorkoutScreenBody({
                     onToggle={() => toggleSection(`warmup-${index}`)}
                   >
                     {slot.warmup.additionalDescription ? (
-                      <Text style={styles.callout}>
-                        {slot.warmup.additionalDescription}
-                      </Text>
+                      <GlossaryText
+                        text={slot.warmup.additionalDescription}
+                        style={styles.callout}
+                      />
                     ) : null}
                     <View style={styles.list}>
                       {slot.warmup.description.map((item, itemIndex) => (
                         <View key={itemIndex} style={styles.listItem}>
                           <View style={styles.listBullet} />
-                          <Text style={styles.listText}>{item}</Text>
+                          <GlossaryText text={item} style={styles.listText} />
                         </View>
                       ))}
                     </View>
@@ -404,7 +408,7 @@ export function WorkoutScreenBody({
           </Collapsible>
 
           {(onOpenCopyWorkoutNotesModal && selectedDayIndex !== null) ||
-          currentWorkout.format !== 'v2' ? (
+            currentWorkout.format !== 'v2' ? (
             <View style={styles.notesActions}>
               {onOpenCopyWorkoutNotesModal && selectedDayIndex !== null ? (
                 <ActionChip
@@ -431,9 +435,9 @@ export function WorkoutScreenBody({
               styles.completeSessionButton,
               sessionStatus === 'completed' && styles.completeSessionButtonDone,
               pressed &&
-                (sessionStatus === 'completed'
-                  ? styles.completeSessionButtonDonePressed
-                  : styles.completeSessionButtonPressed),
+              (sessionStatus === 'completed'
+                ? styles.completeSessionButtonDonePressed
+                : styles.completeSessionButtonPressed),
             ]}
             accessibilityRole="button"
             accessibilityLabel="Mark session complete"
@@ -446,7 +450,7 @@ export function WorkoutScreenBody({
               style={[
                 styles.completeSessionButtonText,
                 sessionStatus === 'completed' &&
-                  styles.completeSessionButtonTextDone,
+                styles.completeSessionButtonTextDone,
               ]}
             >
               {sessionStatus === 'completed'

@@ -17,7 +17,7 @@ const PATCH_NOTES: PatchNote[] = [
   {
     version: '3.7.0',
     dateLabel: '28/11/2026',
-    notes: ['Port optimal plates into tempered strength'],
+    notes: ['Port optimal plates into tempered strength', 'integrate glossary terms into the app'],
   },
   {
     version: '3.6.0',

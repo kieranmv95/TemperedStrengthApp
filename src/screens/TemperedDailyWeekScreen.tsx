@@ -1,4 +1,5 @@
 import { CopyrightedContentGuard } from '@/src/components/copyright/CopyrightedContentGuard';
+import { GlossaryText } from '@/src/components/glossary/GlossaryText';
 import { Badge, SectionHeader, StandardLayout, Tag } from '@/src/components/ds';
 import { TemperedDailyComingSoon } from '@/src/components/temperedDaily/TemperedDailyComingSoon';
 import { TemperedDailyDayCard } from '@/src/components/temperedDaily/TemperedDailyDayCard';
@@ -101,7 +102,10 @@ export default function TemperedDailyWeekScreen() {
                   <Tag key={tag} label={tag} />
                 ))}
               </View>
-              <Text style={styles.description}>{week.description}</Text>
+              <GlossaryText
+                text={week.description}
+                style={styles.description}
+              />
               {todayIndex === null ? (
                 <Text style={styles.dropLine}>
                   {TEMPERED_DAILY_NEW_WEEK_DROPS}

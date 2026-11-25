@@ -1,3 +1,4 @@
+import { GlossaryText } from '@/src/components/glossary/GlossaryText';
 import { ExerciseVideoPlayButton } from '@/src/components/exercise/ExerciseVideoPlayButton';
 import { ActionChip, Tag } from '@/src/components/ds';
 import { PBDetectedModal } from '@/src/components/PBDetectedModal';
@@ -240,16 +241,26 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        <Text style={styles.exerciseName} accessibilityRole="header">
-          {exercise.name}
-        </Text>
+        <GlossaryText
+          text={exercise.name}
+          style={styles.exerciseName}
+          accessibilityRole="header"
+        />
         {additionalHeader || metaParts.length > 0 ? (
           <Text style={styles.metaLine}>
             {additionalHeader ? (
-              <Text style={styles.metaLineAccent}>{additionalHeader}</Text>
+              <GlossaryText
+                text={additionalHeader}
+                style={styles.metaLineAccent}
+              />
             ) : null}
             {additionalHeader && metaParts.length > 0 ? ' · ' : ''}
-            {metaParts.join(' · ')}
+            {metaParts.length > 0 ? (
+              <GlossaryText
+                text={metaParts.join(' · ')}
+                style={styles.metaLine}
+              />
+            ) : null}
           </Text>
         ) : null}
         {exerciseHasVideo(exercise) || isSwapped ? (
@@ -260,14 +271,13 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         ) : null}
         {description ? (
           <View style={styles.notes}>
-            <Text
+            <GlossaryText
+              text={description}
               style={styles.notesText}
               numberOfLines={
                 notesAreLong && !notesExpanded ? CLAMPED_NOTES_LINES : undefined
               }
-            >
-              {description}
-            </Text>
+            />
             {notesAreLong ? (
               <Pressable
                 onPress={() => setNotesExpanded((prev) => !prev)}
@@ -290,7 +300,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
       </View>
 
       <View style={styles.setsHeader}>
-        <Text style={styles.setsTitle}>Sets</Text>
+        <GlossaryText text="Sets" style={styles.setsTitle} />
         <View style={styles.setControls}>
           <Pressable
             style={({ pressed }) => [
@@ -384,10 +394,14 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           <Text style={[styles.columnLabel, styles.columnFlex]}>
             {`Weight (${weightUnit})`}
           </Text>
-          <Text style={[styles.columnLabel, styles.columnReps]}>
-            {repsLabel}
-          </Text>
-          <Text style={[styles.columnLabel, styles.columnRpe]}>RPE</Text>
+          <GlossaryText
+            text={repsLabel}
+            style={[styles.columnLabel, styles.columnReps]}
+          />
+          <GlossaryText
+            text="RPE"
+            style={[styles.columnLabel, styles.columnRpe]}
+          />
           <View style={styles.columnCheck} />
         </View>
       )}

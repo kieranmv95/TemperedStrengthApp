@@ -16,6 +16,7 @@ import {
   typography,
 } from '@/src/constants/tokens';
 import { getExerciseById } from '@/src/data/exercises';
+import { useBarbellLoad } from '@/src/hooks/barbell-load-context';
 import { useLargeText } from '@/src/hooks/useLargeText';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import type { PersonalBestHistoryEntry } from '@/src/types/personalBests';
@@ -53,6 +54,7 @@ const ENTRY_SKELETON_COUNT = 3;
 
 export default function RepMaxHistoryScreen() {
   const { unit: weightUnit } = useWeightUnit();
+  const { openBarbellLoad } = useBarbellLoad();
   const largeText = useLargeText();
   const { exerciseId: idParam, repMax: repParam } = useLocalSearchParams<{
     exerciseId: string | string[];
@@ -301,17 +303,33 @@ export default function RepMaxHistoryScreen() {
             }
             renderItem={({ item }) => {
               const weightText = formatWeightFromKg(item.weight, weightUnit);
+              const displayWeight = Number(
+                formatWeightValueFromKg(item.weight, weightUnit)
+              );
               const dateText = new Date(item.achievedAt).toLocaleString();
               return (
                 <View
                   style={[styles.entryCard, largeText && styles.entryStacked]}
                 >
-                  <View
-                    style={styles.rowMain}
-                    accessible
-                    accessibilityLabel={`${weightText}, ${dateText}`}
-                  >
-                    <Text style={styles.rowWeight}>{weightText}</Text>
+                  <View style={styles.rowMain}>
+                    <Pressable
+                      onPress={() => {
+                        openBarbellLoad({
+                          weight: displayWeight,
+                          label: `${tierLabel} ${exercise.name}`,
+                        });
+                      }}
+                      hitSlop={space.sm}
+                      style={({ pressed }) => [
+                        styles.rowWeightHit,
+                        pressed && styles.rowWeightPressed,
+                      ]}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Open bar loader for ${weightText}`}
+                      accessibilityHint="Shows which plates to load on the bar"
+                    >
+                      <Text style={styles.rowWeight}>{weightText}</Text>
+                    </Pressable>
                     <Text style={styles.rowDate}>{dateText}</Text>
                   </View>
                   <View style={styles.rowActions}>
@@ -589,9 +607,16 @@ const styles = StyleSheet.create({
     minWidth: 0,
     gap: space.xxs,
   },
+  rowWeightHit: {
+    alignSelf: 'flex-start',
+  },
   rowWeight: {
     ...typography.numericMedium,
-    color: color.textPrimary,
+    color: color.gold,
+    textDecorationLine: 'underline',
+  },
+  rowWeightPressed: {
+    opacity: 0.7,
   },
   rowDate: {
     ...typography.caption,

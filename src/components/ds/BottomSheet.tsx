@@ -30,6 +30,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
+import { GlossaryOverlayHost } from '@/src/components/glossary/GlossaryOverlayHost';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type BottomSheetProps = {
@@ -64,6 +65,7 @@ export function BottomSheet({
 }: BottomSheetProps) {
   const motionHelpers = useMotion();
   const insets = useSafeAreaInsets();
+  const dismissGlossaryRef = useRef<(() => boolean) | null>(null);
   const { height: windowHeight } = useWindowDimensions();
   const [mounted, setMounted] = useState(visible);
   const titleRef = useRef<ComponentRef<typeof Text>>(null);
@@ -124,6 +126,13 @@ export function BottomSheet({
     []
   );
 
+  const handleRequestClose = () => {
+    if (dismissGlossaryRef.current?.()) {
+      return;
+    }
+    onClose();
+  };
+
   const handleShow = () => {
     if (titleRef.current) {
       AccessibilityInfo.sendAccessibilityEvent(titleRef.current, 'focus');
@@ -164,78 +173,84 @@ export function BottomSheet({
       animationType="none"
       statusBarTranslucent
       navigationBarTranslucent
-      onRequestClose={onClose}
+      onRequestClose={handleRequestClose}
       onShow={handleShow}
       testID="bottom-sheet-modal"
     >
       {/* Modal content is a separate native window, so gestures need their own root. */}
-      <GestureHandlerRootView style={styles.root}>
-        <Animated.View
-          style={[styles.scrim, scrimStyle]}
-          accessibilityElementsHidden
-          importantForAccessibility="no-hide-descendants"
-        >
-          <Pressable
-            style={StyleSheet.absoluteFill}
-            onPress={onClose}
-            accessible={false}
-            testID="bottom-sheet-scrim"
-          />
-        </Animated.View>
-        <Animated.View
-          style={[
-            styles.sheet,
-            elevation.overlay,
-            { maxHeight: windowHeight * MAX_HEIGHT_RATIO },
-            sheetStyle,
-          ]}
-          onLayout={(event) => {
-            sheetHeight.set(event.nativeEvent.layout.height);
-          }}
-          accessibilityViewIsModal
-          onAccessibilityEscape={onClose}
-        >
-          <GestureDetector gesture={dragGesture}>
-            <View style={styles.header}>
-              <View style={styles.handle} />
-              <View style={styles.titleRow}>
-                <Text
-                  ref={titleRef}
-                  style={styles.title}
-                  accessibilityRole="header"
-                >
-                  {title}
-                </Text>
-                <Pressable
-                  onPress={onClose}
-                  style={styles.closeButton}
-                  hitSlop={space.xxs}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Close ${title}`}
-                >
-                  <Ionicons name="close" size={24} color={color.textPrimary} />
-                </Pressable>
-              </View>
-            </View>
-          </GestureDetector>
-          <ScrollView
-            style={styles.scroll}
-            contentContainerStyle={styles.scrollContent}
-            keyboardShouldPersistTaps="handled"
+      <GlossaryOverlayHost style={styles.root} dismissRef={dismissGlossaryRef}>
+        <GestureHandlerRootView style={styles.root}>
+          <Animated.View
+            style={[styles.scrim, scrimStyle]}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
           >
-            {children}
-          </ScrollView>
-          <View
+            <Pressable
+              style={StyleSheet.absoluteFill}
+              onPress={onClose}
+              accessible={false}
+              testID="bottom-sheet-scrim"
+            />
+          </Animated.View>
+          <Animated.View
             style={[
-              styles.footer,
-              footer ? styles.footerWithContent : null,
-              { paddingBottom: insets.bottom + space.sm },
+              styles.sheet,
+              elevation.overlay,
+              { maxHeight: windowHeight * MAX_HEIGHT_RATIO },
+              sheetStyle,
             ]}
+            onLayout={(event) => {
+              sheetHeight.set(event.nativeEvent.layout.height);
+            }}
+            accessibilityViewIsModal
+            onAccessibilityEscape={handleRequestClose}
           >
-            {footer}
-          </View>
-        </Animated.View>
-      </GestureHandlerRootView>
+            <GestureDetector gesture={dragGesture}>
+              <View style={styles.header}>
+                <View style={styles.handle} />
+                <View style={styles.titleRow}>
+                  <Text
+                    ref={titleRef}
+                    style={styles.title}
+                    accessibilityRole="header"
+                  >
+                    {title}
+                  </Text>
+                  <Pressable
+                    onPress={onClose}
+                    style={styles.closeButton}
+                    hitSlop={space.xxs}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Close ${title}`}
+                  >
+                    <Ionicons
+                      name="close"
+                      size={24}
+                      color={color.textPrimary}
+                    />
+                  </Pressable>
+                </View>
+              </View>
+            </GestureDetector>
+            <ScrollView
+              style={styles.scroll}
+              contentContainerStyle={styles.scrollContent}
+              keyboardShouldPersistTaps="handled"
+            >
+              {children}
+            </ScrollView>
+            <View
+              style={[
+                styles.footer,
+                footer ? styles.footerWithContent : null,
+                { paddingBottom: insets.bottom + space.sm },
+              ]}
+            >
+              {footer}
+            </View>
+          </Animated.View>
+        </GestureHandlerRootView>
+      </GlossaryOverlayHost>
     </Modal>
   );
 }

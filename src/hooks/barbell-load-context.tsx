@@ -3,6 +3,11 @@ import { BarbellLoadResultView } from '@/src/components/barbellLoad/BarbellLoadR
 import { color, space, typography } from '@/src/constants/tokens';
 import { useBarbellLoadPrefs } from '@/src/hooks/useBarbellLoadPrefs';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
+import {
+  resolveBarbellSheetRequest,
+  type OpenBarbellLoadOptions,
+  type ResolvedBarbellLoad,
+} from '@/src/utils/barbellLoad';
 import { formatDisplayWeight } from '@/src/utils/oneRepMax';
 import React, {
   createContext,
@@ -13,26 +18,14 @@ import React, {
 } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export type OpenBarbellLoadOptions = {
-  /** Target total weight in the current display unit. */
-  weight: number;
-  /** Optional high end of a % range (same unit). Defaults the sheet to `weight`. */
-  rangeHighWeight?: number | null;
-  /** Optional label shown in the sheet title context. */
-  label?: string;
-};
+export type { OpenBarbellLoadOptions } from '@/src/utils/barbellLoad';
 
 type BarbellLoadContextValue = {
   openBarbellLoad: (options: OpenBarbellLoadOptions) => void;
   closeBarbellLoad: () => void;
 };
 
-type SheetState = {
-  weight: number;
-  rangeLowWeight: number | null;
-  rangeHighWeight: number | null;
-  label: string | null;
-};
+type SheetState = ResolvedBarbellLoad;
 
 const BarbellLoadContext = createContext<BarbellLoadContextValue | null>(null);
 
@@ -53,25 +46,16 @@ export function BarbellLoadProvider({
     setSheet(null);
   }, []);
 
-  const openBarbellLoad = useCallback((options: OpenBarbellLoadOptions) => {
-    if (!Number.isFinite(options.weight) || options.weight <= 0) {
-      return;
-    }
-    const high =
-      options.rangeHighWeight !== undefined &&
-      options.rangeHighWeight !== null &&
-      Number.isFinite(options.rangeHighWeight) &&
-      options.rangeHighWeight > 0
-        ? options.rangeHighWeight
-        : null;
-
-    setSheet({
-      weight: options.weight,
-      rangeLowWeight: high !== null ? options.weight : null,
-      rangeHighWeight: high,
-      label: options.label ?? null,
-    });
-  }, []);
+  const openBarbellLoad = useCallback(
+    (options: OpenBarbellLoadOptions) => {
+      const resolved = resolveBarbellSheetRequest(options, barType);
+      if (resolved === null) {
+        return;
+      }
+      setSheet(resolved);
+    },
+    [barType]
+  );
 
   const value = useMemo(
     () => ({ openBarbellLoad, closeBarbellLoad }),

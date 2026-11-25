@@ -125,20 +125,26 @@ export const workoutDetailStyles = StyleSheet.create({
   scaleSection: {
     gap: space.xs,
   },
-  scaleSegmentRow: {
-    flexDirection: 'row',
-    padding: space.xxs,
-    gap: space.xxs,
+  scaleSegmentTrack: {
     backgroundColor: color.surface1,
     borderRadius: radius.pill,
+    overflow: 'hidden',
     ...elevation.raised,
   },
+  scaleSegmentRow: {
+    flexDirection: 'row',
+    flexGrow: 1,
+    alignItems: 'stretch',
+    padding: space.xxs,
+    gap: space.xxs,
+  },
   scaleSegment: {
-    flex: 1,
+    flexGrow: 1,
+    flexShrink: 0,
     minHeight: MIN_TARGET_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: space.xs,
+    paddingHorizontal: space.sm,
     borderRadius: radius.pill,
   },
   scaleSegmentPressed: {

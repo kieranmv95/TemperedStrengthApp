@@ -2,6 +2,7 @@ import {
   calculatePlates,
   getAvailablePlates,
   getBarbellWeight,
+  resolveBarbellSheetRequest,
 } from '@/src/utils/barbellLoad';
 
 describe('getBarbellWeight', () => {
@@ -100,5 +101,57 @@ describe('calculatePlates', () => {
     const withAll = calculatePlates(60, 'male', getAvailablePlates('kg'), 'kg');
     expect(withEmpty.plates).toEqual(withAll.plates);
     expect(withEmpty.achievedWeight).toBe(60);
+  });
+});
+
+describe('resolveBarbellSheetRequest', () => {
+  it('opens a men’s/women’s pair on the load that matches the saved bar', () => {
+    expect(
+      resolveBarbellSheetRequest(
+        { weight: 70, womensWeight: 50, label: '70kg/50kg' },
+        'male'
+      )
+    ).toEqual({
+      weight: 70,
+      rangeLowWeight: 50,
+      rangeHighWeight: 70,
+      label: '70kg/50kg',
+    });
+    expect(
+      resolveBarbellSheetRequest({ weight: 70, womensWeight: 50 }, 'female')
+        ?.weight
+    ).toBe(50);
+  });
+
+  it('keeps a percent range starting at the low end', () => {
+    expect(
+      resolveBarbellSheetRequest({ weight: 80, rangeHighWeight: 100 }, 'female')
+    ).toEqual({
+      weight: 80,
+      rangeLowWeight: 80,
+      rangeHighWeight: 100,
+      label: null,
+    });
+  });
+
+  it('ignores an empty or identical women’s load', () => {
+    expect(resolveBarbellSheetRequest({ weight: 60 }, 'female')).toEqual({
+      weight: 60,
+      rangeLowWeight: null,
+      rangeHighWeight: null,
+      label: null,
+    });
+    expect(
+      resolveBarbellSheetRequest({ weight: 60, womensWeight: 60 }, 'female')
+    ).toEqual({
+      weight: 60,
+      rangeLowWeight: null,
+      rangeHighWeight: null,
+      label: null,
+    });
+  });
+
+  it('rejects a non-positive target', () => {
+    expect(resolveBarbellSheetRequest({ weight: 0 }, 'male')).toBeNull();
   });
 });

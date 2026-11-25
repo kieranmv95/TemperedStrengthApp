@@ -1,4 +1,5 @@
 import { Badge, SectionHeader, Tag } from '@/src/components/ds';
+import { GlossaryText } from '@/src/components/glossary/GlossaryText';
 import {
   color,
   elevation,
@@ -87,7 +88,7 @@ export function TemperedDailyLockedUpsell({
           </Text>
         ) : null}
         <Text style={styles.workoutTitle}>{workout.title}</Text>
-        <Text style={styles.description}>{workout.description}</Text>
+        <GlossaryText text={workout.description} style={styles.description} />
         <View style={styles.metaRow}>
           <View style={styles.time}>
             <Ionicons
@@ -113,7 +114,7 @@ export function TemperedDailyLockedUpsell({
                 size={14}
                 color={color.textTertiary}
               />
-              <Text style={styles.blockName}>{block.name}</Text>
+              <GlossaryText text={block.name} style={styles.blockName} />
               {block.optional ? (
                 <Badge label="Optional" tone="neutral" />
               ) : null}
