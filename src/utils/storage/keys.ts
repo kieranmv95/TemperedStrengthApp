@@ -12,7 +12,6 @@ export const SWAP_COUNT_MONTH_KEY = 'swap_count_month';
 export const SWAP_COUNT_STATE_KEY = 'swap_count_state';
 export const WORKOUT_NOTES_KEY = 'workout_notes';
 export const FAVORITE_WORKOUTS_KEY = 'favorite_workouts';
-export const FAVORITE_ARTICLES_KEY = 'favorite_articles';
 export const REST_TIMER_KEY = 'rest_timer';
 export const ACTIVE_SESSION_KEY = 'active_session';
 export const COMPLETED_SESSIONS_KEY = 'completed_sessions';
@@ -22,6 +21,12 @@ export const STANDALONE_WORKOUT_LOGS_KEY = 'standalone_workout_logs';
 export const PERSONAL_BESTS_KEY = 'personal_bests';
 export const TRAINING_MAXES_KEY = 'training_maxes';
 export const WEIGHT_UNIT_KEY = 'weight_unit';
+/** Default Olympic bar for the bar loader: male (20 kg / 45 lb) or female (15 kg / 35 lb). */
+export const DEFAULT_BARBELL_KEY = 'default_barbell';
+/** Owned plate denominations in kg (JSON number array). Empty / missing = full catalog. */
+export const OWNED_PLATES_KG_KEY = 'owned_plates';
+/** Owned plate denominations in lb (JSON number array). Empty / missing = full catalog. */
+export const OWNED_PLATES_LB_KEY = 'owned_plates_lb';
 export const AUTO_REST_TIMERS_ENABLED_KEY = 'auto_rest_timers_enabled';
 export const AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY =
   'auto_pb_detection_in_programs_enabled';

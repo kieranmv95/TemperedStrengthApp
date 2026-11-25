@@ -136,11 +136,11 @@ const td008: StandaloneWorkoutSource = {
             'Warm up to your working weight in 3–4 sets, then complete 5 sets of 5 at the same weight. The first set should feel like RPE 7 and the last like RPE 8. If the last set is slower than RPE 8, go lighter next time. Rest 2–3 mins between sets. Record your working weight in your notes.',
           highlightInstructions: '5 x 5 · Same weight every set',
           movements: [
-            {
-              name: 'Ramp sets',
-              value: '5 / 3 / 3 / 2 reps',
-              note: 'Roughly {{40}} → {{55}} → {{65}} → {{70}} of estimated 1RM.',
-            },
+            { type: 'divider', note: 'Warm-up sets · based on 1RM' },
+            '5 @ {{40}}',
+            '3 @ {{55}}',
+            '3 @ {{65}}',
+            '2 @ {{70}}',
             {
               name: 'Working sets',
               value: '5 x 5 @ {{72-78}}',
@@ -431,11 +431,11 @@ const td010: StandaloneWorkoutSource = {
             'Warm up to your working weight in 3–4 sets, then complete 5 sets of 5 at the same weight. RPE 7 on set 1, RPE 8 by set 5. Touch the chest, pause briefly, press. Use a spotter or safeties. Rest 2–3 mins between sets. Record your working weight in your notes.',
           highlightInstructions: '5 x 5 · Always use a spotter or safeties',
           movements: [
-            {
-              name: 'Ramp sets',
-              value: '8 / 5 / 3 / 2 reps',
-              note: 'Roughly {{40}} → {{55}} → {{65}} → {{70}} of estimated 1RM.',
-            },
+            { type: 'divider', note: 'Warm-up sets · based on 1RM' },
+            '8 @ {{40}}',
+            '5 @ {{55}}',
+            '3 @ {{65}}',
+            '2 @ {{70}}',
             {
               name: 'Working sets',
               value: '5 x 5 @ {{72-78}}',
@@ -714,11 +714,11 @@ const td012: StandaloneWorkoutSource = {
             'Warm up to your working weight in 3–4 sets, then complete 5 sets of 5 at the same weight. Dead stop on the floor every rep, no touch and go. RPE 7 on set 1, RPE 8 by set 5. Rest 2–3 mins between sets. Record your working weight in your notes.',
           highlightInstructions: '5 x 5 · Dead stop every rep',
           movements: [
-            {
-              name: 'Ramp sets',
-              value: '5 / 3 / 3 / 2 reps',
-              note: 'Roughly {{40}} → {{55}} → {{65}} → {{70}} of estimated 1RM.',
-            },
+            { type: 'divider', note: 'Warm-up sets · based on 1RM' },
+            '5 @ {{40}}',
+            '3 @ {{55}}',
+            '3 @ {{65}}',
+            '2 @ {{70}}',
             {
               name: 'Working sets',
               value: '5 x 5 @ {{72-78}}',

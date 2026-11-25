@@ -6,14 +6,18 @@ import {
 import type { OnboardingProfile } from '@/src/types/onboarding';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { syncRemoveItem, syncSetItem } from '@/src/sync/syncStorage';
+import type { BarType } from '@/src/utils/barbellLoad';
 import {
   AUTO_PB_DETECTION_IN_PROGRAMS_ENABLED_KEY,
   AUTO_REST_TIMERS_ENABLED_KEY,
+  DEFAULT_BARBELL_KEY,
   DEV_HEALTH_MOCK_SCENARIO_KEY,
   DEV_PRO_OVERRIDE_ENABLED_KEY,
   LAST_KNOWN_PRO_KEY,
   ONBOARDED_KEY,
   ONBOARDING_PROFILE_KEY,
+  OWNED_PLATES_KG_KEY,
+  OWNED_PLATES_LB_KEY,
   PROGRAM_COOLDOWN_MODULE_ENABLED_KEY,
   PROGRAM_WARMUP_MODULE_ENABLED_KEY,
   PROMO_PRO_GRANT_KEY,
@@ -21,6 +25,8 @@ import {
 } from './keys';
 
 export type WeightUnit = 'kg' | 'lb';
+
+export type { BarType };
 
 export type PromoProGrant = {
   code: string;
@@ -221,6 +227,68 @@ export const setWeightUnit = async (unit: WeightUnit): Promise<void> => {
     await syncSetItem(WEIGHT_UNIT_KEY, unit);
   } catch (error) {
     console.error('Error setting weight unit:', error);
+    throw error;
+  }
+};
+
+export const getDefaultBarbell = async (): Promise<BarType> => {
+  try {
+    const raw = await AsyncStorage.getItem(DEFAULT_BARBELL_KEY);
+    return raw === 'female' || raw === 'male' ? raw : 'male';
+  } catch (error) {
+    console.error('Error getting default barbell:', error);
+    return 'male';
+  }
+};
+
+export const setDefaultBarbell = async (barType: BarType): Promise<void> => {
+  try {
+    await syncSetItem(DEFAULT_BARBELL_KEY, barType);
+  } catch (error) {
+    console.error('Error setting default barbell:', error);
+    throw error;
+  }
+};
+
+function ownedPlatesKey(unit: WeightUnit): string {
+  return unit === 'lb' ? OWNED_PLATES_LB_KEY : OWNED_PLATES_KG_KEY;
+}
+
+/**
+ * Returns stored owned denominations for the unit.
+ * Empty array means “use the full catalog” (handled by callers / calculatePlates).
+ */
+export const getOwnedPlates = async (unit: WeightUnit): Promise<number[]> => {
+  try {
+    const raw = await AsyncStorage.getItem(ownedPlatesKey(unit));
+    if (!raw) {
+      return [];
+    }
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+    return parsed.filter(
+      (value): value is number =>
+        typeof value === 'number' && Number.isFinite(value) && value > 0
+    );
+  } catch (error) {
+    console.error('Error getting owned plates:', error);
+    return [];
+  }
+};
+
+export const setOwnedPlates = async (
+  unit: WeightUnit,
+  plates: number[]
+): Promise<void> => {
+  try {
+    const filtered = plates.filter(
+      (value) => typeof value === 'number' && Number.isFinite(value) && value > 0
+    );
+    await syncSetItem(ownedPlatesKey(unit), JSON.stringify(filtered));
+  } catch (error) {
+    console.error('Error setting owned plates:', error);
     throw error;
   }
 };

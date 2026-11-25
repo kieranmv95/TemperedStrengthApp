@@ -114,11 +114,11 @@ const td078: StandaloneWorkoutSource = {
           instructions: `Build to a heavy single. Catch at or above parallel and stand up fully. Drop the bar from the shoulders onto bumper plates. ${TEST_RULES} Log your heaviest successful lift.`,
           highlightInstructions: 'Clear floor space · 3 attempts above {{90}}',
           movements: [
-            {
-              name: 'Build',
-              value: '3 / 2 / 1 / 1 reps',
-              note: 'Roughly {{40}} → {{60}} → {{70}} → {{80}} of estimated 1RM. Rest 2 mins.',
-            },
+            { type: 'divider', note: 'Build · based on 1RM · rest 2 mins' },
+            '3 @ {{40}}',
+            '2 @ {{60}}',
+            '1 @ {{70}}',
+            '1 @ {{80}}',
             {
               name: 'Opener',
               value: '1 @ {{~90}}',

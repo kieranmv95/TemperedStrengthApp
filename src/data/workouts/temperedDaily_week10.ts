@@ -148,11 +148,11 @@ const td064: StandaloneWorkoutSource = {
           instructions: `${POWER_INTENT} Build with a few singles to a fast working weight around {{50-60}} of your estimated power clean 1RM (RPE 6–7). Then 6 sets of 2 at that load. Rest 90–120s.`,
           highlightInstructions: '6 x 2 @ {{50-60}} · Fast singles first',
           movements: [
-            {
-              name: 'Build',
-              value: 'Singles',
-              note: 'Roughly {{40}} → {{50}} → {{55-60}}. Stop when it still feels fast.',
-            },
+            { type: 'divider', note: 'Build · singles · based on 1RM' },
+            '{{40}}',
+            '{{50}}',
+            '{{55-60}}',
+            { type: 'divider', note: 'Stop when it still feels fast.' },
             {
               name: 'Working sets',
               value: '6 x 2',

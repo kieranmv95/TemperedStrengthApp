@@ -21,7 +21,6 @@ export type SkillSummary = {
   videoCount: number;
   tipCount: number;
   cueCount: number;
-  articleCount: number;
   recoveryFlowCount: number;
   workoutCount: number;
 };
@@ -33,5 +32,4 @@ export type Skill = SkillSummary & {
   recoveryFlowIds?: string[];
   cues?: SkillCue[];
   workoutsIds?: string[];
-  articleSlugs?: string[];
 };

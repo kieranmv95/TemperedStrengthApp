@@ -4,7 +4,6 @@ import {
   ZONE_TILE_FOREGROUND,
 } from '@/src/components/zones/zoneColors';
 import { color } from '@/src/constants/tokens';
-import { TOGETHER_WE_LIFT } from '@/src/data/togetherWeLift';
 import {
   CONTRAST_MINIMUMS,
   contrastRatio,
@@ -351,25 +350,6 @@ const PAIRS: ContrastPair[] = [
     ]
   ),
 
-  // Together We Lift banner keeps the charity's brand background
-  {
-    name: 'Together We Lift title on brand background (banner)',
-    foreground: TOGETHER_WE_LIFT.colors.title,
-    background: TOGETHER_WE_LIFT.colors.background,
-    kind: 'text',
-  },
-  {
-    name: 'Together We Lift description on brand background (banner)',
-    foreground: TOGETHER_WE_LIFT.colors.description,
-    background: TOGETHER_WE_LIFT.colors.background,
-    kind: 'text',
-  },
-  {
-    name: 'Together We Lift chevron on brand background (banner)',
-    foreground: TOGETHER_WE_LIFT.colors.title,
-    background: TOGETHER_WE_LIFT.colors.background,
-    kind: 'nonText',
-  },
 ];
 
 describe('design token contrast (WCAG 2.2 AA)', () => {

@@ -4,6 +4,7 @@ import {
   formatLoadPercentSegment,
   parseLoadPercentSegments,
   resolveEstimatedOneRmKg,
+  resolveLoadPercentWeights,
   roundLoadToPlateIncrement,
   stringHasLoadPercentTokens,
 } from '@/src/utils/loadPercent';
@@ -143,6 +144,38 @@ describe('formatLoadPercentSegment', () => {
         'kg'
       )
     ).toBe('72–78% (43kg–47kg)');
+  });
+});
+
+describe('resolveLoadPercentWeights', () => {
+  it('returns null without a 1RM', () => {
+    expect(
+      resolveLoadPercentWeights(
+        { type: 'load', approx: false, low: 40, high: null },
+        null,
+        'kg'
+      )
+    ).toBeNull();
+  });
+
+  it('resolves a single percent', () => {
+    expect(
+      resolveLoadPercentWeights(
+        { type: 'load', approx: false, low: 40, high: null },
+        125,
+        'kg'
+      )
+    ).toEqual({ low: 50, high: null });
+  });
+
+  it('resolves a range with the same rounding as display text', () => {
+    expect(
+      resolveLoadPercentWeights(
+        { type: 'load', approx: false, low: 72, high: 78 },
+        125,
+        'kg'
+      )
+    ).toEqual({ low: 90, high: 97.5 });
   });
 });
 

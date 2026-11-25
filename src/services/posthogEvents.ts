@@ -36,13 +36,9 @@ export const posthogEventsNames = {
     decremented: 'program_timer_decremented',
   },
   content: {
-    articleView: 'article_view',
-    articleFavourite: 'article_favourite',
     glossaryView: 'glossary_view',
     toolView: 'tool_view',
     toolCalculate: 'tool_calculate',
-    togetherWeLiftSheetOpened: 'together_we_lift_sheet_opened',
-    togetherWeLiftLinkPressed: 'together_we_lift_link_pressed',
   },
   home: {
     /** User tapped a navigation target from the Home tab body. */

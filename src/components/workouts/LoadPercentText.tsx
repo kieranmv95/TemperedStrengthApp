@@ -1,7 +1,9 @@
 import { color } from '@/src/constants/tokens';
+import { useBarbellLoad } from '@/src/hooks/barbell-load-context';
 import {
   formatLoadPercentSegment,
   parseLoadPercentSegments,
+  resolveLoadPercentWeights,
   stringHasLoadPercentTokens,
 } from '@/src/utils/loadPercent';
 import type { WeightUnit } from '@/src/utils/storage';
@@ -17,7 +19,8 @@ type LoadPercentTextProps = {
 
 /**
  * Renders copy that may contain `{{percent}}` load tokens. Marked runs are gold;
- * when a 1RM is known, bracketed weights are included in the same gold run.
+ * when a 1RM is known, bracketed weights are included and underlined so they
+ * read as tappable — opening the bar loader sheet.
  */
 export function LoadPercentText({
   text,
@@ -25,6 +28,8 @@ export function LoadPercentText({
   unit,
   style,
 }: LoadPercentTextProps) {
+  const { openBarbellLoad } = useBarbellLoad();
+
   if (!stringHasLoadPercentTokens(text)) {
     return <Text style={style}>{text}</Text>;
   }
@@ -40,9 +45,34 @@ export function LoadPercentText({
             </Text>
           );
         }
+
+        const label = formatLoadPercentSegment(segment, oneRmKg, unit);
+        const weights = resolveLoadPercentWeights(segment, oneRmKg, unit);
+
+        if (weights === null) {
+          return (
+            <Text key={index} style={styles.load}>
+              {label}
+            </Text>
+          );
+        }
+
         return (
-          <Text key={index} style={styles.load}>
-            {formatLoadPercentSegment(segment, oneRmKg, unit)}
+          <Text
+            key={index}
+            style={styles.loadTappable}
+            onPress={() => {
+              openBarbellLoad({
+                weight: weights.low,
+                rangeHighWeight: weights.high,
+                label,
+              });
+            }}
+            accessibilityRole="button"
+            accessibilityLabel={`Open bar loader for ${label}`}
+            accessibilityHint="Shows which plates to load on the bar"
+          >
+            {label}
           </Text>
         );
       })}
@@ -54,5 +84,10 @@ const styles = StyleSheet.create({
   inherit: {},
   load: {
     color: color.gold,
+  },
+  loadTappable: {
+    color: color.gold,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
   },
 });

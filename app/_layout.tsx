@@ -6,8 +6,8 @@ import { ExerciseVideoProvider } from '@/src/hooks/exercise-video-context';
 import { GymTimerProvider } from '@/src/hooks/gym-timer-context';
 import { SubscriptionProvider } from '@/src/hooks/subscription-context';
 import { SyncManagerProvider } from '@/src/hooks/sync-manager-context';
+import { BarbellLoadProvider } from '@/src/hooks/barbell-load-context';
 import { ToastProvider } from '@/src/hooks/toast-context';
-import { TogetherWeLiftProvider } from '@/src/hooks/together-we-lift-context';
 import { gymClockFont } from '@/src/constants/gymClock';
 import { color, fontFamily } from '@/src/constants/tokens';
 import { initializeRevenueCat } from '@/src/services/revenueCatService';
@@ -132,9 +132,9 @@ export default function RootLayout() {
             <AccountPromptController />
             <SubscriptionProvider>
               <SupplementReminderBridge />
-              <TogetherWeLiftProvider>
-                <ExerciseVideoProvider>
+              <ExerciseVideoProvider>
                   <ToastProvider>
+                    <BarbellLoadProvider>
                     <GymTimerProvider>
                     <GymTimerQuickActions />
                     <Stack>
@@ -152,6 +152,10 @@ export default function RootLayout() {
                       />
                       <Stack.Screen
                         name="tools/one-rep-max-breakdown"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="tools/bar-loader"
                         options={{ headerShown: false }}
                       />
                       <Stack.Screen
@@ -200,10 +204,6 @@ export default function RootLayout() {
                       />
                       <Stack.Screen
                         name="zones/index"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="article/[id]"
                         options={{ headerShown: false }}
                       />
                       <Stack.Screen
@@ -267,9 +267,9 @@ export default function RootLayout() {
                     </Stack>
                     <StatusBar style="light" />
                     </GymTimerProvider>
+                    </BarbellLoadProvider>
                   </ToastProvider>
                 </ExerciseVideoProvider>
-              </TogetherWeLiftProvider>
             </SubscriptionProvider>
           </SyncManagerProvider>
         </ThemeProvider>

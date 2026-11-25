@@ -38,16 +38,6 @@ export const awards: Award[] = [
     threshold: 1,
   },
   {
-    id: 15,
-    name: 'The Reader',
-    badgeTitle: 'The Reader',
-    description: 'Read your first article',
-    isPro: false,
-    tier: 'silver',
-    group: 'articles_read',
-    threshold: 1,
-  },
-  {
     id: 16,
     name: 'Speaking the Lingo',
     badgeTitle: 'WTF?',

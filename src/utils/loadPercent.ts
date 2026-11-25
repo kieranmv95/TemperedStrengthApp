@@ -175,14 +175,50 @@ export function roundLoadToPlateIncrement(
   return Math.round(weight * 2) / 2;
 }
 
+function weightAtPercent(
+  oneRmKg: number,
+  percent: number,
+  unit: WeightUnit
+): number {
+  const raw = oneRepMaxKgToDisplay(oneRmKg * (percent / 100), unit);
+  return roundLoadToPlateIncrement(raw, unit);
+}
+
 function formatWeightAtPercent(
   oneRmKg: number,
   percent: number,
   unit: WeightUnit
 ): string {
-  const raw = oneRepMaxKgToDisplay(oneRmKg * (percent / 100), unit);
-  const display = roundLoadToPlateIncrement(raw, unit);
+  const display = weightAtPercent(oneRmKg, percent, unit);
   return formatDisplayWeight(display, unit).replace(' ', '');
+}
+
+/** Resolved display-unit weights for a load segment, when a 1RM is known. */
+export type ResolvedLoadWeights = {
+  low: number;
+  high: number | null;
+};
+
+/**
+ * Numeric loads for opening the bar loader. Same rounding as the gold display
+ * text. Returns null when there is no 1RM to resolve against.
+ */
+export function resolveLoadPercentWeights(
+  segment: Extract<LoadPercentSegment, { type: 'load' }>,
+  oneRmKg: number | null,
+  unit: WeightUnit
+): ResolvedLoadWeights | null {
+  if (oneRmKg === null) {
+    return null;
+  }
+  const low = weightAtPercent(oneRmKg, segment.low, unit);
+  if (segment.high === null) {
+    return { low, high: null };
+  }
+  return {
+    low,
+    high: weightAtPercent(oneRmKg, segment.high, unit),
+  };
 }
 
 /**

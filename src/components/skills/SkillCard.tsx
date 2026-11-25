@@ -21,14 +21,6 @@ function pluralize(count: number, singular: string, plural: string): string {
 function getSkillMetaItems(skill: SkillSummary): SkillMetaItem[] {
   const items: SkillMetaItem[] = [];
 
-  if (skill.articleCount > 0) {
-    items.push({
-      key: 'articles',
-      icon: 'newspaper-outline',
-      label: pluralize(skill.articleCount, 'article', 'articles'),
-    });
-  }
-
   if (skill.videoCount > 0) {
     items.push({
       key: 'videos',

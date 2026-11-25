@@ -31,7 +31,6 @@ const skillSummaryProjection = `
   "videoCount": count(videos[defined(youtubeId) && defined(name) && defined(description)]),
   "tipCount": count(tips),
   "cueCount": count(cues[defined(image.asset)]),
-  "articleCount": count(articleSlugs),
   "recoveryFlowCount": count(recoveryFlowIds),
   "workoutCount": count(workoutIds)
 `;
@@ -53,7 +52,6 @@ const skillDetailGroq = `*[_type == "skill" && slug.current == $id][0] {
     description,
     "imageUrl": image.asset->url
   },
-  articleSlugs,
   recoveryFlowIds,
   "workoutsIds": workoutIds
 }`;
@@ -78,7 +76,6 @@ type SanitySkillSummaryDoc = {
   videoCount?: number | null;
   tipCount?: number | null;
   cueCount?: number | null;
-  articleCount?: number | null;
   recoveryFlowCount?: number | null;
   workoutCount?: number | null;
 };
@@ -87,7 +84,6 @@ type SanitySkillDetailDoc = SanitySkillSummaryDoc & {
   videos?: SanitySkillVideoDoc[] | null;
   tips?: (string | null)[] | null;
   cues?: SanitySkillCueDoc[] | null;
-  articleSlugs?: (string | null)[] | null;
   recoveryFlowIds?: (string | null)[] | null;
   workoutsIds?: (string | null)[] | null;
 };
@@ -206,7 +202,6 @@ function mapSkillSummary(doc: SanitySkillSummaryDoc): SkillSummary | null {
     videoCount: asCount(doc.videoCount),
     tipCount: asCount(doc.tipCount),
     cueCount: asCount(doc.cueCount),
-    articleCount: asCount(doc.articleCount),
     recoveryFlowCount: asCount(doc.recoveryFlowCount),
     workoutCount: asCount(doc.workoutCount),
   };
@@ -221,7 +216,6 @@ function mapSkillDetail(doc: SanitySkillDetailDoc): Skill | null {
   const tips = mapStringList(doc.tips);
   const cues = mapCues(doc.cues);
   const videoIds = mapVideos(doc.videos);
-  const articleSlugs = mapStringList(doc.articleSlugs);
   const recoveryFlowIds = mapStringList(doc.recoveryFlowIds);
   const workoutsIds = mapStringList(doc.workoutsIds);
 
@@ -231,13 +225,11 @@ function mapSkillDetail(doc: SanitySkillDetailDoc): Skill | null {
     videoCount: videoIds?.length ?? summary.videoCount,
     tipCount: tips?.length ?? summary.tipCount,
     cueCount: cues?.length ?? summary.cueCount,
-    articleCount: articleSlugs?.length ?? summary.articleCount,
     recoveryFlowCount: recoveryFlowIds?.length ?? summary.recoveryFlowCount,
     workoutCount: workoutsIds?.length ?? summary.workoutCount,
     videoIds,
     tips,
     cues,
-    articleSlugs,
     recoveryFlowIds,
     workoutsIds,
   };
@@ -290,7 +282,6 @@ function normalizeSkillSummaryFromCache(raw: unknown): SkillSummary | null {
     videoCount: asCount(o.videoCount),
     tipCount: asCount(o.tipCount),
     cueCount: asCount(o.cueCount),
-    articleCount: asCount(o.articleCount),
     recoveryFlowCount: asCount(o.recoveryFlowCount),
     workoutCount: asCount(o.workoutCount),
   };
@@ -344,7 +335,6 @@ function normalizeSkillDetailFromCache(raw: unknown): Skill | null {
 
   const tips = mapStringList(o.tips);
   const videoIds = mapVideos(o.videoIds);
-  const articleSlugs = mapStringList(o.articleSlugs);
   const recoveryFlowIds = mapStringList(o.recoveryFlowIds);
   const workoutsIds = mapStringList(o.workoutsIds);
 
@@ -353,13 +343,11 @@ function normalizeSkillDetailFromCache(raw: unknown): Skill | null {
     videoCount: videoIds?.length ?? summary.videoCount,
     tipCount: tips?.length ?? summary.tipCount,
     cueCount: cues?.length ?? summary.cueCount,
-    articleCount: articleSlugs?.length ?? summary.articleCount,
     recoveryFlowCount: recoveryFlowIds?.length ?? summary.recoveryFlowCount,
     workoutCount: workoutsIds?.length ?? summary.workoutCount,
     videoIds,
     tips,
     cues,
-    articleSlugs,
     recoveryFlowIds,
     workoutsIds,
   };

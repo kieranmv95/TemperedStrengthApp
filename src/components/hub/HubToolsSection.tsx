@@ -9,19 +9,26 @@ import {
 } from '@/src/constants/tokens';
 import { TOOLS, type ToolDefinition, type ToolRoute } from '@/src/data/tools';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 const TOOL_TILE_WIDTH = 132;
-const ICON_WELL_SIZE = 36;
+const ICON_WELL_SIZE = 40;
 
 type ToolTileProps = {
   tool: ToolDefinition;
   onPress: () => void;
+  /** Explore grid: taller tile with a short blurb under the title. */
+  showBlurb?: boolean;
   fill?: boolean;
 };
 
-function ToolTile({ tool, onPress, fill = false }: ToolTileProps) {
+function ToolTile({
+  tool,
+  onPress,
+  showBlurb = false,
+  fill = false,
+}: ToolTileProps) {
   return (
     <Pressable
       onPress={onPress}
@@ -29,6 +36,7 @@ function ToolTile({ tool, onPress, fill = false }: ToolTileProps) {
         styles.tile,
         elevation.raised,
         fill ? styles.tileFill : styles.tileFixed,
+        showBlurb && styles.tileWithBlurb,
         pressed && styles.tilePressed,
       ]}
       accessibilityRole="button"
@@ -38,64 +46,49 @@ function ToolTile({ tool, onPress, fill = false }: ToolTileProps) {
       <View style={styles.iconWell}>
         <Ionicons
           name={tool.icon as keyof typeof Ionicons.glyphMap}
-          size={20}
+          size={22}
           color={color.gold}
         />
       </View>
-      <Text style={styles.tileLabel} numberOfLines={2}>
-        {tool.pillLabel}
-      </Text>
+      <View style={styles.copy}>
+        <Text style={styles.tileLabel} numberOfLines={2}>
+          {tool.pillLabel}
+        </Text>
+        {showBlurb ? (
+          <Text style={styles.tileBlurb} numberOfLines={3}>
+            {tool.blurb}
+          </Text>
+        ) : null}
+      </View>
     </Pressable>
   );
 }
 
 type HubToolsSectionProps = {
   onOpenTool: (route: ToolRoute) => void;
-  /** Home shows the scrolling tiles only, with no title or See all control. */
+  /** Home shows the scrolling tiles only, with no title. */
   tilesOnly?: boolean;
 };
 
 /**
- * Tools as a horizontal row where the next tile peeks in, or as a wrapped
- * grid after "See all".
+ * Explore shows the full tools grid with short blurbs. Home can pass
+ * `tilesOnly` for a compact horizontal row without the section header.
  */
 export function HubToolsSection({
   onOpenTool,
   tilesOnly = false,
 }: HubToolsSectionProps) {
-  const [showAll, setShowAll] = useState(false);
-  const expanded = showAll && !tilesOnly;
-
   return (
     <View style={styles.section}>
       {tilesOnly ? null : (
         <View style={styles.header}>
-          <SectionHeader
-            title="Tools"
-            actionLabel={showAll ? 'Show less' : 'See all'}
-            onActionPress={() => setShowAll((prev) => !prev)}
-            actionAccessibilityLabel={
-              showAll ? 'Show fewer tools' : 'See all tools'
-            }
-          />
+          <SectionHeader title="Tools" />
           <Text style={styles.description}>
             Calculators and training utilities that work offline.
           </Text>
         </View>
       )}
-      {expanded ? (
-        <View style={styles.grid}>
-          {TOOLS.map((tool) => (
-            <View key={tool.id} style={styles.gridCell}>
-              <ToolTile
-                tool={tool}
-                onPress={() => onOpenTool(tool.route)}
-                fill
-              />
-            </View>
-          ))}
-        </View>
-      ) : (
+      {tilesOnly ? (
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -111,6 +104,19 @@ export function HubToolsSection({
             />
           ))}
         </ScrollView>
+      ) : (
+        <View style={styles.grid}>
+          {TOOLS.map((tool) => (
+            <View key={tool.id} style={styles.gridCell}>
+              <ToolTile
+                tool={tool}
+                onPress={() => onOpenTool(tool.route)}
+                showBlurb
+                fill
+              />
+            </View>
+          ))}
+        </View>
       )}
     </View>
   );
@@ -144,9 +150,13 @@ const styles = StyleSheet.create({
   tile: {
     minHeight: MIN_TARGET_SIZE * 2,
     padding: space.sm,
-    gap: space.xs,
+    gap: space.sm,
     borderRadius: radius.md,
     backgroundColor: color.surface1,
+  },
+  tileWithBlurb: {
+    minHeight: MIN_TARGET_SIZE * 2.75,
+    padding: space.md,
   },
   tileFixed: {
     width: TOOL_TILE_WIDTH,
@@ -165,8 +175,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  copy: {
+    gap: space.xxs,
+  },
   tileLabel: {
     ...typography.calloutStrong,
     color: color.textPrimary,
+  },
+  tileBlurb: {
+    ...typography.caption,
+    color: color.textSecondary,
   },
 });

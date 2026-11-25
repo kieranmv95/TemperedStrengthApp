@@ -94,6 +94,11 @@ export function BlockLoadBasis({
           </Pressable>
         </View>
       </View>
+      {!editing ? (
+        <Text style={styles.tapHint}>
+          Tap a highlighted percentage or weight to see plates on the bar
+        </Text>
+      ) : null}
       {editing ? (
         <View style={styles.editor}>
           <Text style={styles.hint}>
@@ -152,6 +157,10 @@ const styles = StyleSheet.create({
     gap: space.sm,
   },
   hint: {
+    ...typography.caption,
+    color: color.textSecondary,
+  },
+  tapHint: {
     ...typography.caption,
     color: color.textSecondary,
   },

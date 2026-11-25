@@ -34,7 +34,7 @@ Production builds use `npm run build:ios:production` and
 - `app/` — Expo Router routes
 - `src/screens/` — screen implementations
 - `src/components/` — shared UI
-- `src/data/` — bundled programs, workouts, exercises, and Brief content
+- `src/data/` — bundled programs, workouts, exercises, and tools
 - `src/hooks/`, `src/services/`, `src/sync/` — app logic and integrations
 - `src/utils/` — storage, program, and formatting helpers
 

@@ -22,7 +22,7 @@ describe('HubToolsSection', () => {
     expect(onOpenTool).toHaveBeenCalledWith(firstTool.route);
   });
 
-  it('can show the scrolling tiles without a title or See all control', async () => {
+  it('can show the scrolling tiles without a title', async () => {
     await render(<HubToolsSection tilesOnly onOpenTool={jest.fn()} />);
     await act(async () => {});
 
@@ -33,26 +33,25 @@ describe('HubToolsSection', () => {
       )
     ).not.toBeOnTheScreen();
     expect(
-      screen.queryByRole('button', { name: 'See all tools' })
-    ).not.toBeOnTheScreen();
-    expect(
       screen.getByRole('button', { name: TOOLS[0].title })
     ).toBeOnTheScreen();
   });
 
-  it('switches between the peeking row and the full grid', async () => {
+  it('always shows the full tools grid on Explore', async () => {
     await render(<HubToolsSection onOpenTool={jest.fn()} />);
     await act(async () => {});
 
-    await fireEvent.press(
-      screen.getByRole('button', { name: 'See all tools' })
-    );
     expect(
-      screen.getByRole('button', { name: 'Show fewer tools' })
-    ).toBeOnTheScreen();
-    expect(screen.getAllByRole('button', { name: /./ }).length).toBeGreaterThan(
-      TOOLS.length
-    );
+      screen.queryByRole('button', { name: 'See all tools' })
+    ).not.toBeOnTheScreen();
+    expect(
+      screen.queryByRole('button', { name: 'Show fewer tools' })
+    ).not.toBeOnTheScreen();
+    for (const tool of TOOLS) {
+      expect(
+        screen.getByRole('button', { name: tool.title })
+      ).toBeOnTheScreen();
+    }
   });
 });
 

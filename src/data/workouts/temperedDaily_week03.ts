@@ -124,11 +124,12 @@ const td015: StandaloneWorkoutSource = {
             'Warm up in 5–6 sets, then complete 4 sets of 2 at around {{85}} of your estimated 1RM (RPE 8). Every double should be fast and controlled. If the second rep slows right down, take 5kg off. Rest 3 mins between sets. Use safeties. Record your working weight in your notes.',
           highlightInstructions: '4 x 2 · Rest 3 mins · Use safeties',
           movements: [
-            {
-              name: 'Ramp sets',
-              value: '5 / 3 / 2 / 1 / 1 reps',
-              note: 'Roughly {{40}} → {{55}} → {{65}} → {{75}} → {{80}} of estimated 1RM.',
-            },
+            { type: 'divider', note: 'Warm-up sets · based on 1RM' },
+            '5 @ {{40}}',
+            '3 @ {{55}}',
+            '2 @ {{65}}',
+            '1 @ {{75}}',
+            '1 @ {{80}}',
             {
               name: 'Working sets',
               value: '4 x 2 @ {{85}}',
@@ -366,11 +367,12 @@ const td017: StandaloneWorkoutSource = {
             'Warm up in 5–6 sets, then complete 4 sets of 2 at around {{85}} of your estimated 1RM (RPE 8). Touch, brief pause, press. Always use a spotter or safeties. Rest 3 mins between sets. Record your working weight in your notes.',
           highlightInstructions: '4 x 2 · Always use a spotter or safeties',
           movements: [
-            {
-              name: 'Ramp sets',
-              value: '8 / 5 / 3 / 1 / 1 reps',
-              note: 'Roughly {{40}} → {{55}} → {{65}} → {{75}} → {{80}} of estimated 1RM.',
-            },
+            { type: 'divider', note: 'Warm-up sets · based on 1RM' },
+            '8 @ {{40}}',
+            '5 @ {{55}}',
+            '3 @ {{65}}',
+            '1 @ {{75}}',
+            '1 @ {{80}}',
             {
               name: 'Working sets',
               value: '4 x 2 @ {{85}}',
@@ -619,11 +621,12 @@ const td019: StandaloneWorkoutSource = {
             'Warm up in 5–6 sets, then complete 4 sets of 2 at around {{85}} of your estimated 1RM (RPE 8). Full reset between reps. If your back rounds, the set is over. Rest 3 mins between sets. Record your working weight in your notes.',
           highlightInstructions: '4 x 2 · Full reset every rep',
           movements: [
-            {
-              name: 'Ramp sets',
-              value: '5 / 3 / 2 / 1 / 1 reps',
-              note: 'Roughly {{40}} → {{55}} → {{65}} → {{75}} → {{80}} of estimated 1RM.',
-            },
+            { type: 'divider', note: 'Warm-up sets · based on 1RM' },
+            '5 @ {{40}}',
+            '3 @ {{55}}',
+            '2 @ {{65}}',
+            '1 @ {{75}}',
+            '1 @ {{80}}',
             {
               name: 'Working sets',
               value: '4 x 2 @ {{85}}',

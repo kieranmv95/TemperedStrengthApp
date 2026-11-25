@@ -126,11 +126,11 @@ const td022: StandaloneWorkoutSource = {
           highlightInstructions:
             'Use safeties or spotters · 3 attempts above {{90}}',
           movements: [
-            {
-              name: 'Build',
-              value: '5 / 3 / 2 / 1 reps',
-              note: 'Roughly {{40}} → {{60}} → {{70}} → {{80}} of estimated 1RM. Rest 2 mins.',
-            },
+            { type: 'divider', note: 'Build · based on 1RM · rest 2 mins' },
+            '5 @ {{40}}',
+            '3 @ {{60}}',
+            '2 @ {{70}}',
+            '1 @ {{80}}',
             {
               name: 'Opener',
               value: '1 @ {{~90}}',
@@ -379,11 +379,11 @@ const td024: StandaloneWorkoutSource = {
           highlightInstructions:
             'Always use a spotter or safeties · 3 attempts above {{90}}',
           movements: [
-            {
-              name: 'Build',
-              value: '8 / 5 / 3 / 1 reps',
-              note: 'Roughly {{40}} → {{60}} → {{70}} → {{80}} of estimated 1RM. Rest 2 mins.',
-            },
+            { type: 'divider', note: 'Build · based on 1RM · rest 2 mins' },
+            '8 @ {{40}}',
+            '5 @ {{60}}',
+            '3 @ {{70}}',
+            '1 @ {{80}}',
             {
               name: 'Opener',
               value: '1 @ {{~90}}',
@@ -642,11 +642,11 @@ const td026: StandaloneWorkoutSource = {
           instructions: `Build to a heavy single. Conventional or sumo, whichever is your stronger pull. Lockout means hips and knees fully extended. ${TEST_RULES} Log your heaviest successful lift.`,
           highlightInstructions: '3 attempts above {{90}} · No rounded back',
           movements: [
-            {
-              name: 'Build',
-              value: '5 / 3 / 2 / 1 reps',
-              note: 'Roughly {{40}} → {{60}} → {{70}} → {{80}} of estimated 1RM. Rest 2 mins.',
-            },
+            { type: 'divider', note: 'Build · based on 1RM · rest 2 mins' },
+            '5 @ {{40}}',
+            '3 @ {{60}}',
+            '2 @ {{70}}',
+            '1 @ {{80}}',
             {
               name: 'Opener',
               value: '1 @ {{~90}}',

@@ -1,4 +1,3 @@
-import { SkillArticles } from '@/src/components/skills/SkillArticles';
 import { SkillCues } from '@/src/components/skills/SkillCues';
 import { SkillLockedTeaser } from '@/src/components/skills/SkillLockedTeaser';
 import { SkillMobilityFlows } from '@/src/components/skills/SkillMobilityFlows';
@@ -64,13 +63,6 @@ function getSkillDetailSections(
       count: skill.tipCount,
     },
     {
-      key: 'articles',
-      icon: 'newspaper-outline',
-      title: 'Articles',
-      resourceLabel: pluralize(skill.articleCount, 'article', 'articles'),
-      count: skill.articleCount,
-    },
-    {
       key: 'mobility',
       icon: 'body-outline',
       title: 'Mobility flows',
@@ -102,9 +94,6 @@ function renderSectionBody(skill: Skill, sectionKey: string) {
   }
   if (sectionKey === 'cues' && skill.cues) {
     return <SkillCues cues={skill.cues} />;
-  }
-  if (sectionKey === 'articles' && skill.articleSlugs) {
-    return <SkillArticles articleSlugs={skill.articleSlugs} />;
   }
   if (sectionKey === 'mobility' && skill.recoveryFlowIds) {
     return <SkillMobilityFlows recoveryFlowIds={skill.recoveryFlowIds} />;
