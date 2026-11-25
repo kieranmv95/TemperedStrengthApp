@@ -1,5 +1,7 @@
 import type { GlossaryTerm } from '@/src/types/brief';
 
+export { glossary } from './glossary';
+
 export const searchGlossary = (
   terms: GlossaryTerm[],
   query: string

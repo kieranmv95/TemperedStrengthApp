@@ -6,13 +6,16 @@ import {
   space,
   typography,
 } from '@/src/constants/tokens';
-import { getGlossaryByCategory, searchGlossary } from '@/src/data/brief';
-import { fetchGlossary } from '@/src/services/briefApiService';
+import {
+  getGlossaryByCategory,
+  glossary,
+  searchGlossary,
+} from '@/src/data/brief';
 import { increment } from '@/src/services/metricService';
 import type { GlossaryTerm } from '@/src/types/brief';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect, router } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { router } from 'expo-router';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Pressable,
   ScrollView,
@@ -21,12 +24,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {
-  AppFlatList,
-  FilterChip,
-  Skeleton,
-  StandardLayout,
-} from '@/src/components/ds';
+import { AppFlatList, FilterChip, StandardLayout } from '@/src/components/ds';
 
 type CategoryFilter = 'All' | GlossaryTerm['category'];
 
@@ -39,13 +37,7 @@ const CATEGORY_FILTERS: CategoryFilter[] = [
   'General',
 ];
 
-const TERM_PLACEHOLDER_HEIGHT = 56;
-const TERM_PLACEHOLDER_COUNT = 6;
-
 export default function GlossaryScreen() {
-  const [terms, setTerms] = useState<GlossaryTerm[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isOffline, setIsOffline] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
 
@@ -53,76 +45,19 @@ export default function GlossaryScreen() {
     increment('terminology_views');
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      let cancelled = false;
-
-      (async () => {
-        setIsLoading(true);
-        try {
-          const data = await fetchGlossary();
-          if (cancelled) return;
-          setTerms(data);
-          setIsOffline(false);
-        } catch {
-          if (cancelled) return;
-          setIsOffline(true);
-        } finally {
-          if (!cancelled) setIsLoading(false);
-        }
-      })();
-
-      return () => {
-        cancelled = true;
-      };
-    }, [])
-  );
-
   const filteredTerms = useMemo(() => {
-    let results = searchQuery ? searchGlossary(terms, searchQuery) : terms;
+    let results = searchQuery
+      ? searchGlossary(glossary, searchQuery)
+      : glossary;
 
     if (activeCategory !== 'All') {
       results = getGlossaryByCategory(results, activeCategory);
     }
 
     return [...results].sort((a, b) => a.term.localeCompare(b.term));
-  }, [searchQuery, activeCategory, terms]);
+  }, [searchQuery, activeCategory]);
 
   const renderContent = () => {
-    if (isLoading) {
-      return (
-        <View style={styles.loadingState}>
-          {Array.from({ length: TERM_PLACEHOLDER_COUNT }, (_, index) => (
-            <Skeleton
-              key={index}
-              width="100%"
-              height={TERM_PLACEHOLDER_HEIGHT}
-              radius="md"
-              accessibilityLabel={index === 0 ? 'Loading terms' : undefined}
-            />
-          ))}
-        </View>
-      );
-    }
-
-    if (isOffline) {
-      return (
-        <View style={styles.centeredState}>
-          <Ionicons
-            name="cloud-offline-outline"
-            size={48}
-            color={color.textTertiary}
-          />
-          <Text style={styles.emptyTitle} accessibilityRole="header">
-            Connect to the internet to see this
-          </Text>
-          <Text style={styles.emptyDescription}>
-            The glossary requires a connection to load.
-          </Text>
-        </View>
-      );
-    }
-
     if (filteredTerms.length === 0) {
       return (
         <View style={styles.centeredState}>
@@ -204,8 +139,9 @@ export default function GlossaryScreen() {
             const normalizedCategory = item ?? 'All';
             const count =
               normalizedCategory === 'All'
-                ? terms.length
-                : terms.filter((t) => t.category === normalizedCategory).length;
+                ? glossary.length
+                : glossary.filter((t) => t.category === normalizedCategory)
+                    .length;
 
             return (
               <FilterChip
@@ -269,10 +205,6 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
     color: color.textTertiary,
     marginBottom: space.sm,
-  },
-  loadingState: {
-    paddingTop: space.md,
-    gap: space.sm,
   },
   centeredState: {
     flex: 1,
