@@ -16,7 +16,7 @@ type PatchNote = {
 const PATCH_NOTES: PatchNote[] = [
   {
     version: '3.7.0',
-    dateLabel: '',
+    dateLabel: '28/11/2026',
     notes: ['Port optimal plates into tempered strength'],
   },
   {

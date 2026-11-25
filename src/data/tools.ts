@@ -28,9 +28,22 @@ export type ToolDefinition = {
   description: string;
   route: ToolRoute;
   icon: string;
+  /** Show a small "New" badge on Explore and Home tool tiles. */
+  isNew?: boolean;
 };
 
 export const TOOLS: ToolDefinition[] = [
+  {
+    id: 'bar-loader',
+    title: 'Bar Loader',
+    pillLabel: 'Bar Loader',
+    blurb: 'Plates for any target on the bar.',
+    description:
+      "See which plates to load on a men's or women's bar to hit a target weight.",
+    route: '/tools/bar-loader',
+    icon: 'barbell-outline',
+    isNew: true,
+  },
   {
     id: 'timers',
     title: 'Gym Timers',
@@ -52,16 +65,6 @@ export const TOOLS: ToolDefinition[] = [
     icon: 'checkbox-outline',
   },
   {
-    id: 'one-rep-max',
-    title: 'One Rep Max Estimator',
-    pillLabel: '1RM Estimator',
-    blurb: 'Estimate 1RM from a known set.',
-    description:
-      'Estimate your one-rep max from a known set and see training percentages.',
-    route: '/tools/one-rep-max',
-    icon: 'barbell-outline',
-  },
-  {
     id: 'one-rep-max-breakdown',
     title: 'One Rep Max Breakdown',
     pillLabel: '1RM Breakdown',
@@ -72,13 +75,13 @@ export const TOOLS: ToolDefinition[] = [
     icon: 'grid-outline',
   },
   {
-    id: 'bar-loader',
-    title: 'Bar Loader',
-    pillLabel: 'Bar Loader',
-    blurb: 'Plates for any target on the bar.',
+    id: 'one-rep-max',
+    title: 'One Rep Max Estimator',
+    pillLabel: '1RM Estimator',
+    blurb: 'Estimate 1RM from a known set.',
     description:
-      "See which plates to load on a men's or women's bar to hit a target weight.",
-    route: '/tools/bar-loader',
+      'Estimate your one-rep max from a known set and see training percentages.',
+    route: '/tools/one-rep-max',
     icon: 'layers-outline',
   },
   {

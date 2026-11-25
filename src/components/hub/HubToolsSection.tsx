@@ -1,4 +1,4 @@
-import { SectionHeader } from '@/src/components/ds';
+import { Badge, SectionHeader } from '@/src/components/ds';
 import {
   color,
   elevation,
@@ -12,7 +12,9 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-const TOOL_TILE_WIDTH = 132;
+/** Wide enough for "Bar Loader" on one line in the Home strip. */
+const TOOL_TILE_WIDTH = 156;
+const TOOL_TILE_GAP = space.sm;
 const ICON_WELL_SIZE = 40;
 
 type ToolTileProps = {
@@ -29,6 +31,10 @@ function ToolTile({
   showBlurb = false,
   fill = false,
 }: ToolTileProps) {
+  const accessibilityLabel = tool.isNew
+    ? `${tool.title}, new`
+    : tool.title;
+
   return (
     <Pressable
       onPress={onPress}
@@ -40,9 +46,14 @@ function ToolTile({
         pressed && styles.tilePressed,
       ]}
       accessibilityRole="button"
-      accessibilityLabel={tool.title}
+      accessibilityLabel={accessibilityLabel}
       accessibilityHint={tool.description}
     >
+      {tool.isNew ? (
+        <View style={styles.newBadge} pointerEvents="none">
+          <Badge label="New" tone="gold" accessibilityLabel="New tool" />
+        </View>
+      ) : null}
       <View style={styles.iconWell}>
         <Ionicons
           name={tool.icon as keyof typeof Ionicons.glyphMap}
@@ -51,7 +62,7 @@ function ToolTile({
         />
       </View>
       <View style={styles.copy}>
-        <Text style={styles.tileLabel} numberOfLines={2}>
+        <Text style={styles.tileLabel} numberOfLines={showBlurb ? 2 : 1}>
           {tool.pillLabel}
         </Text>
         {showBlurb ? (
@@ -93,7 +104,7 @@ export function HubToolsSection({
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.row}
-          snapToInterval={TOOL_TILE_WIDTH + space.sm}
+          snapToInterval={TOOL_TILE_WIDTH + TOOL_TILE_GAP}
           decelerationRate="fast"
         >
           {TOOLS.map((tool) => (
@@ -134,7 +145,7 @@ const styles = StyleSheet.create({
     color: color.textSecondary,
   },
   row: {
-    gap: space.sm,
+    gap: TOOL_TILE_GAP,
     paddingHorizontal: space.md,
   },
   grid: {
@@ -148,6 +159,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   tile: {
+    position: 'relative',
     minHeight: MIN_TARGET_SIZE * 2,
     padding: space.sm,
     gap: space.sm,
@@ -166,6 +178,12 @@ const styles = StyleSheet.create({
   },
   tilePressed: {
     backgroundColor: color.surface2,
+  },
+  newBadge: {
+    position: 'absolute',
+    top: space.xs,
+    right: space.xs,
+    zIndex: 1,
   },
   iconWell: {
     width: ICON_WELL_SIZE,

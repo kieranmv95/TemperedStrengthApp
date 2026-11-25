@@ -16,9 +16,10 @@ describe('HubToolsSection', () => {
     await act(async () => {});
 
     const firstTool = TOOLS[0];
-    await fireEvent.press(
-      screen.getByRole('button', { name: firstTool.title })
-    );
+    const firstName = firstTool.isNew
+      ? `${firstTool.title}, new`
+      : firstTool.title;
+    await fireEvent.press(screen.getByRole('button', { name: firstName }));
     expect(onOpenTool).toHaveBeenCalledWith(firstTool.route);
   });
 
@@ -32,9 +33,11 @@ describe('HubToolsSection', () => {
         'Calculators and training utilities that work offline.'
       )
     ).not.toBeOnTheScreen();
-    expect(
-      screen.getByRole('button', { name: TOOLS[0].title })
-    ).toBeOnTheScreen();
+    const firstTool = TOOLS[0];
+    const firstName = firstTool.isNew
+      ? `${firstTool.title}, new`
+      : firstTool.title;
+    expect(screen.getByRole('button', { name: firstName })).toBeOnTheScreen();
   });
 
   it('always shows the full tools grid on Explore', async () => {
@@ -48,10 +51,10 @@ describe('HubToolsSection', () => {
       screen.queryByRole('button', { name: 'Show fewer tools' })
     ).not.toBeOnTheScreen();
     for (const tool of TOOLS) {
-      expect(
-        screen.getByRole('button', { name: tool.title })
-      ).toBeOnTheScreen();
+      const name = tool.isNew ? `${tool.title}, new` : tool.title;
+      expect(screen.getByRole('button', { name })).toBeOnTheScreen();
     }
+    expect(screen.getByText('New')).toBeOnTheScreen();
   });
 });
 
