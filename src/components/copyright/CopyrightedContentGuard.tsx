@@ -4,8 +4,10 @@ import {
   space,
   typography,
 } from '@/src/constants/tokens';
+import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import {
   holdScreenCaptureProtection,
+  isScreenCaptureExemptEmail,
   subscribeToScreenshots,
 } from '@/src/services/screenCaptureProtection';
 import { useIsFocused } from 'expo-router';
@@ -32,13 +34,15 @@ type CopyrightedContentGuardProps = {
 
 /**
  * Blanks screenshots and recordings of the focused screen, and covers it
- * with a copyright notice when a screenshot is taken.
+ * with a copyright notice when a screenshot is taken. Signed-in owner
+ * accounts are exempt and can capture normally.
  */
 export function CopyrightedContentGuard({
   active,
 }: CopyrightedContentGuardProps) {
   const focused = useIsFocused();
-  const enabled = active && focused;
+  const { user } = useSyncManager();
+  const enabled = active && focused && !isScreenCaptureExemptEmail(user?.email);
   const [noticeVisible, setNoticeVisible] = useState(false);
 
   useEffect(() => {

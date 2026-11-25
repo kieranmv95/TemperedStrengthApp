@@ -1,5 +1,6 @@
 import {
   holdScreenCaptureProtection,
+  isScreenCaptureExemptEmail,
   resetScreenCaptureProtectionForTests,
   subscribeToScreenshots,
 } from '@/src/services/screenCaptureProtection';
@@ -89,6 +90,16 @@ describe('screenCaptureProtection', () => {
 
     unsubscribe();
     expect(remove).toHaveBeenCalledTimes(1);
+  });
+
+  it('exempts the owner accounts by email', () => {
+    expect(isScreenCaptureExemptEmail('kieran.venison@icloud.com')).toBe(true);
+    expect(isScreenCaptureExemptEmail('  Charlotte.Venison@iCloud.com ')).toBe(
+      true
+    );
+    expect(isScreenCaptureExemptEmail('someone@example.com')).toBe(false);
+    expect(isScreenCaptureExemptEmail(null)).toBe(false);
+    expect(isScreenCaptureExemptEmail(undefined)).toBe(false);
   });
 
   it('does nothing on web', async () => {

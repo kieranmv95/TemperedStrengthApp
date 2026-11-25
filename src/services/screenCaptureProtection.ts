@@ -4,6 +4,19 @@ type ScreenCaptureModule = typeof import('expo-screen-capture');
 
 const PROTECTION_KEY = 'copyrighted-content';
 
+/** Signed-in accounts that may screenshot and record copyrighted sessions. */
+const SCREEN_CAPTURE_EXEMPT_EMAILS = new Set([
+  'kieran.venison@icloud.com',
+  'charlotte.venison@icloud.com',
+]);
+
+export function isScreenCaptureExemptEmail(
+  email: string | null | undefined
+): boolean {
+  if (typeof email !== 'string') return false;
+  return SCREEN_CAPTURE_EXEMPT_EMAILS.has(email.trim().toLowerCase());
+}
+
 let moduleCache: ScreenCaptureModule | null | undefined;
 let holders = 0;
 let queue: Promise<void> = Promise.resolve();

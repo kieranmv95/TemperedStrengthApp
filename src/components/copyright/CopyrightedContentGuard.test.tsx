@@ -1,4 +1,5 @@
 import { CopyrightedContentGuard } from '@/src/components/copyright/CopyrightedContentGuard';
+import { useSyncManager } from '@/src/hooks/sync-manager-context';
 import { resetScreenCaptureProtectionForTests } from '@/src/services/screenCaptureProtection';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { useIsFocused } from 'expo-router';
@@ -8,6 +9,10 @@ jest.mock('expo-router', () => ({
   useIsFocused: jest.fn(() => true),
 }));
 
+jest.mock('@/src/hooks/sync-manager-context', () => ({
+  useSyncManager: jest.fn(),
+}));
+
 jest.mock('expo-screen-capture', () => ({
   preventScreenCaptureAsync: jest.fn(() => Promise.resolve()),
   allowScreenCaptureAsync: jest.fn(() => Promise.resolve()),
@@ -15,6 +20,7 @@ jest.mock('expo-screen-capture', () => ({
 }));
 
 const useIsFocusedMock = jest.mocked(useIsFocused);
+const useSyncManagerMock = jest.mocked(useSyncManager);
 const preventScreenCaptureAsync = jest.mocked(
   ScreenCapture.preventScreenCaptureAsync
 );
@@ -32,6 +38,9 @@ describe('CopyrightedContentGuard', () => {
     resetScreenCaptureProtectionForTests();
     jest.clearAllMocks();
     useIsFocusedMock.mockReturnValue(true);
+    useSyncManagerMock.mockReturnValue({
+      user: null,
+    } as ReturnType<typeof useSyncManager>);
   });
 
   it('blocks capture while the protected screen is focused', async () => {
@@ -39,6 +48,35 @@ describe('CopyrightedContentGuard', () => {
     await flush();
 
     expect(preventScreenCaptureAsync).toHaveBeenCalledTimes(1);
+    view.unmount();
+  });
+
+  it.each([
+    'kieran.venison@icloud.com',
+    'charlotte.venison@icloud.com',
+    'Kieran.Venison@iCloud.com',
+  ])('allows capture for signed-in %s', async (email) => {
+    useSyncManagerMock.mockReturnValue({
+      user: { email },
+    } as ReturnType<typeof useSyncManager>);
+
+    await render(<CopyrightedContentGuard active />);
+    await flush();
+
+    expect(preventScreenCaptureAsync).not.toHaveBeenCalled();
+    expect(addScreenshotListener).not.toHaveBeenCalled();
+  });
+
+  it('still blocks capture for other signed-in accounts', async () => {
+    useSyncManagerMock.mockReturnValue({
+      user: { email: 'someone@example.com' },
+    } as ReturnType<typeof useSyncManager>);
+
+    const view = await render(<CopyrightedContentGuard active />);
+    await flush();
+
+    expect(preventScreenCaptureAsync).toHaveBeenCalledTimes(1);
+    expect(addScreenshotListener).toHaveBeenCalledTimes(1);
     view.unmount();
   });
 
