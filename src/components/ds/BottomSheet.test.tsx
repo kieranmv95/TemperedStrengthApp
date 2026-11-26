@@ -1,14 +1,14 @@
 import { mockReduceMotion } from '@/jest/mockReduceMotion';
 import { BottomSheet } from '@/src/components/ds/BottomSheet';
-
-jest.mock('posthog-react-native', () => ({
-  usePostHog: () => ({ capture: jest.fn() }),
-}));
 import { motion } from '@/src/constants/tokens';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import React, { type ComponentRef } from 'react';
 import { AccessibilityInfo, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+jest.mock('posthog-react-native', () => ({
+  usePostHog: () => ({ capture: jest.fn() }),
+}));
 
 const SAFE_AREA_METRICS = {
   frame: { x: 0, y: 0, width: 390, height: 844 },

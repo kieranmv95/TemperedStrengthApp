@@ -11,7 +11,7 @@ import {
   getSupplements,
 } from '@/src/utils/storage/checkin';
 import { router } from 'expo-router';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
 
 const SUPPLEMENT_NOTIF_PREFIX = 'checkin_supp_';
@@ -241,16 +241,13 @@ export function setupSupplementNotificationResponseListener(): void {
  * Hook: rebuild reminders on foreground. Pass isPro from subscription context.
  */
 export function useSupplementReminderScheduler(isPro: boolean): void {
-  const isProRef = useRef(isPro);
-  isProRef.current = isPro;
-
   useEffect(() => {
     setupSupplementNotificationResponseListener();
-    void rebuildSupplementReminders({ isPro: isProRef.current });
+    void rebuildSupplementReminders({ isPro });
 
     const onChange = (state: AppStateStatus) => {
       if (state === 'active') {
-        void rebuildSupplementReminders({ isPro: isProRef.current });
+        void rebuildSupplementReminders({ isPro });
       }
     };
     const sub = AppState.addEventListener('change', onChange);

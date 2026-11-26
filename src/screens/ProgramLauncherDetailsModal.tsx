@@ -55,13 +55,14 @@ export function ProgramLauncherDetailsModal({
     ? sessionsPerWeekFromProgram(selectedProgram)
     : 0;
 
-  React.useEffect(() => {
-    if (!visible) {
-      setBodyChangesExpanded(false);
-      return;
-    }
+  // Collapse the section whenever the modal is shown/hidden or the program changes.
+  const expandedResetKey = `${visible}:${selectedProgram?.id ?? ''}`;
+  const [prevExpandedResetKey, setPrevExpandedResetKey] =
+    React.useState(expandedResetKey);
+  if (prevExpandedResetKey !== expandedResetKey) {
+    setPrevExpandedResetKey(expandedResetKey);
     setBodyChangesExpanded(false);
-  }, [visible, selectedProgram?.id]);
+  }
 
   const title = selectedProgram?.name || 'Program details';
   const weekCount = selectedProgram

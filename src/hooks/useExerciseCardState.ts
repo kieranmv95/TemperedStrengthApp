@@ -12,8 +12,7 @@ import {
   previewPersonalBestLog,
   repCountToTier,
 } from '@/src/utils/personalBests';
-import type { WeightUnit } from '@/src/utils/storage';
-import type { ReorderLoggedSetPayload } from '@/src/utils/storage';
+import type { ReorderLoggedSetPayload, WeightUnit } from '@/src/utils/storage';
 import {
   clearLoggedSet,
   getAutoPbDetectionInProgramsEnabled,
@@ -89,10 +88,12 @@ export function useExerciseCardState({
   const repsRef = useRef(reps);
   const rpesRef = useRef(rpes);
 
-  setStatesRef.current = setStates;
-  weightsRef.current = weights;
-  repsRef.current = reps;
-  rpesRef.current = rpes;
+  useEffect(() => {
+    setStatesRef.current = setStates;
+    weightsRef.current = weights;
+    repsRef.current = reps;
+    rpesRef.current = rpes;
+  }, [setStates, weights, reps, rpes]);
 
   const setScheme = programExercise?.setScheme ?? null;
   const defaultNumberOfSets = setScheme?.length ?? programExercise?.sets ?? 1;
@@ -205,9 +206,17 @@ export function useExerciseCardState({
     loadSwapCount();
   }, [isPro]);
 
+  const canLoadPbLedger =
+    !!exerciseId && exerciseLoggingType === 'reps_and_weight';
+
+  // No ledger applies to this exercise, so drop any previously loaded one
+  // (adjusted during render rather than in an effect).
+  if (!canLoadPbLedger && pbLedger !== null) {
+    setPbLedger(null);
+  }
+
   const loadPbLedger = useCallback(async () => {
     if (!exerciseId || exerciseLoggingType !== 'reps_and_weight') {
-      setPbLedger(null);
       return;
     }
     try {
@@ -220,11 +229,22 @@ export function useExerciseCardState({
   }, [exerciseId, exerciseLoggingType]);
 
   useEffect(() => {
-    loadPbLedger();
+    const refreshPbLedger = async () => {
+      await loadPbLedger();
+    };
+    refreshPbLedger();
   }, [loadPbLedger]);
 
-  useEffect(() => {
+  // Dismiss the prompt when the card shows a different exercise or slot
+  // (adjusted during render rather than in an effect).
+  const pbPromptKey = `${exerciseId}-${dayIndex}-${slotIndex}`;
+  const [prevPbPromptKey, setPrevPbPromptKey] = useState(pbPromptKey);
+  if (pbPromptKey !== prevPbPromptKey) {
+    setPrevPbPromptKey(pbPromptKey);
     setPbPrompt(null);
+  }
+
+  useEffect(() => {
     Object.values(pbDebounceRef.current).forEach((t) => {
       if (t) clearTimeout(t);
     });

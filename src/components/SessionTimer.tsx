@@ -28,11 +28,13 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
   const [elapsed, setElapsed] = useState(() => Date.now() - startedAt);
 
   useEffect(() => {
-    setElapsed(Date.now() - startedAt);
-    const interval = setInterval(() => {
-      setElapsed(Date.now() - startedAt);
-    }, 1000);
-    return () => clearInterval(interval);
+    const updateElapsed = () => setElapsed(Date.now() - startedAt);
+    const timeout = setTimeout(updateElapsed, 0);
+    const interval = setInterval(updateElapsed, 1000);
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(interval);
+    };
   }, [startedAt]);
 
   return (

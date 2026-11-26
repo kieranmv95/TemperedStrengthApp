@@ -98,8 +98,9 @@ type SyncManagerProviderProps = {
 };
 
 export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
-  const [isSessionReady, setIsSessionReady] = useState(false);
-  const [isReady, setIsReady] = useState(false);
+  // Without Supabase there is no session to restore, so we are ready at once.
+  const [isSessionReady, setIsSessionReady] = useState(!supabase);
+  const [isReady, setIsReady] = useState(!supabase);
   const [dataRevision, setDataRevision] = useState(0);
   const [syncError, setSyncError] = useState<string | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -125,11 +126,7 @@ export function SyncManagerProvider({ children }: SyncManagerProviderProps) {
   }, [markLocalDataUpdated]);
 
   useEffect(() => {
-    if (!supabase) {
-      setIsSessionReady(true);
-      setIsReady(true);
-      return;
-    }
+    if (!supabase) return;
     let mounted = true;
     void supabase.auth.getSession().then(async ({ data, error }) => {
       if (error) {

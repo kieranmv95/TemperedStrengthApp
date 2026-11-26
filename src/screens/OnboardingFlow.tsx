@@ -178,17 +178,24 @@ function OnboardingFlow() {
     };
   }, []);
 
-  useEffect(() => {
-    if (params.accountCreated !== '1') return;
-    setAccountChoiceMade(true);
-    setIntroDone(true);
-    setStepIndex(WELCOME_STEP_INDEX);
-  }, [params.accountCreated]);
+  // Jump to the welcome step when returning from account creation (including
+  // on first render). `null` means the param has not been handled yet.
+  const [handledAccountCreated, setHandledAccountCreated] = useState<
+    string | undefined | null
+  >(null);
+  if (handledAccountCreated !== params.accountCreated) {
+    setHandledAccountCreated(params.accountCreated);
+    if (params.accountCreated === '1') {
+      setAccountChoiceMade(true);
+      setIntroDone(true);
+      setStepIndex(WELCOME_STEP_INDEX);
+    }
+  }
 
-  useEffect(() => {
-    if (!skipAccountBackupStep || stepIndex !== ACCOUNT_STEP_INDEX) return;
+  // Never rest on the account-backup step when it should be skipped.
+  if (skipAccountBackupStep && stepIndex === ACCOUNT_STEP_INDEX) {
     setStepIndex(WELCOME_STEP_INDEX);
-  }, [skipAccountBackupStep, stepIndex]);
+  }
 
   const motionHelpers = useMotion();
   const stepOpacity = useSharedValue(1);

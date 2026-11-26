@@ -43,12 +43,15 @@ export function LogFormModal({
   const [notesActive, setNotesActive] = useState(false);
   const notesBlurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
+  // Reset transient UI state whenever the modal closes.
+  const [previousVisible, setPreviousVisible] = useState(visible);
+  if (previousVisible !== visible) {
+    setPreviousVisible(visible);
     if (!visible) {
       setWhenPickerVisible(false);
       setNotesActive(false);
     }
-  }, [visible]);
+  }
 
   useEffect(() => {
     const showEvent = 'keyboardWillShow';

@@ -2,6 +2,7 @@ import { getExerciseById } from '@/src/data/exercises';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
 import type { TrainingMaxesStore } from '@/src/types/trainingMaxes';
 import { modalSheetBottomPadding } from '@/src/utils/platform';
+import type { WeightUnit } from '@/src/utils/storage';
 import {
   formatWeightValueFromKg,
   parseUserWeightInputToKg,
@@ -38,6 +39,13 @@ type TrainingMaxModalProps = {
   bottomInset: number;
 };
 
+type SyncedProps = {
+  visible: boolean;
+  exerciseIds: number[];
+  initialValuesKg?: TrainingMaxesStore;
+  weightUnit: WeightUnit;
+};
+
 export function TrainingMaxModal({
   visible,
   exerciseIds,
@@ -51,23 +59,32 @@ export function TrainingMaxModal({
   const [inputs, setInputs] = React.useState<Record<number, string>>({});
   const [saving, setSaving] = React.useState(false);
 
-  React.useEffect(() => {
-    if (!visible) {
-      return;
+  // Reset the inputs whenever the modal opens, the lifts change, or the unit
+  // changes. exerciseIds identity is stable per program.
+  const [syncedProps, setSyncedProps] = React.useState<SyncedProps | null>(
+    null
+  );
+  if (
+    syncedProps === null ||
+    syncedProps.visible !== visible ||
+    syncedProps.exerciseIds !== exerciseIds ||
+    syncedProps.initialValuesKg !== initialValuesKg ||
+    syncedProps.weightUnit !== weightUnit
+  ) {
+    setSyncedProps({ visible, exerciseIds, initialValuesKg, weightUnit });
+    if (visible) {
+      const next: Record<number, string> = {};
+      for (const id of exerciseIds) {
+        const existing = initialValuesKg?.[id];
+        next[id] =
+          typeof existing === 'number' && existing > 0
+            ? formatWeightValueFromKg(existing, weightUnit)
+            : '';
+      }
+      setInputs(next);
+      setSaving(false);
     }
-    const next: Record<number, string> = {};
-    for (const id of exerciseIds) {
-      const existing = initialValuesKg?.[id];
-      next[id] =
-        typeof existing === 'number' && existing > 0
-          ? formatWeightValueFromKg(existing, weightUnit)
-          : '';
-    }
-    setInputs(next);
-    setSaving(false);
-    // exerciseIds identity is stable per program; re-run only when the modal
-    // opens, the lifts change, or the unit changes.
-  }, [visible, exerciseIds, initialValuesKg, weightUnit]);
+  }
 
   const parsedValues = React.useMemo(() => {
     const values: TrainingMaxesStore = {};

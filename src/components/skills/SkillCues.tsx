@@ -52,7 +52,6 @@ export function SkillCues({ cues }: SkillCuesProps) {
     if (viewerIndex == null) {
       return;
     }
-    setActiveIndex(viewerIndex);
     const frame = requestAnimationFrame(() => {
       viewerListRef.current?.scrollToIndex({
         index: viewerIndex,
@@ -61,6 +60,11 @@ export function SkillCues({ cues }: SkillCuesProps) {
     });
     return () => cancelAnimationFrame(frame);
   }, [viewerIndex]);
+
+  const openViewer = (index: number) => {
+    setActiveIndex(index);
+    setViewerIndex(index);
+  };
 
   const closeViewer = () => {
     setViewerIndex(null);
@@ -112,7 +116,7 @@ export function SkillCues({ cues }: SkillCuesProps) {
         {cues.map((cue, index) => (
           <Pressable
             key={`${index}-${cue.title ?? 'cue'}`}
-            onPress={() => setViewerIndex(index)}
+            onPress={() => openViewer(index)}
             accessibilityRole="button"
             accessibilityLabel={cueAccessibilityLabel(cue, index)}
             accessibilityHint="Opens the cue fullscreen"

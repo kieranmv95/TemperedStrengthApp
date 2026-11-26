@@ -45,7 +45,7 @@ import {
 } from '@/src/services/supplementReminders';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Pressable,
@@ -144,47 +144,47 @@ export function CheckinSupplementEditScreen({
   const [remindersEnabled, setRemindersEnabled] = useState(false);
   const [status, setStatus] = useState<SupplementStatus>('active');
 
-  const load = useCallback(async () => {
-    try {
-      const all = await getSupplements();
-      setOtherSupplements(all.filter((item) => item.id !== id));
-
-      if (!isEditing) {
-        return;
-      }
-      const existing = await getSupplement(id);
-      if (!existing) {
-        setError('That supplement no longer exists.');
-        return;
-      }
-      setCreatedAt(existing.createdAt);
-      setName(existing.name);
-      setBrand(existing.brand ?? '');
-      setForm(existing.form);
-      setDoseAmountText(String(existing.doseAmount));
-      setDoseUnit(existing.doseUnit);
-      setNotes(existing.notes ?? '');
-      setScheduleType(existing.schedule.type);
-      setDaysOfWeek(existing.schedule.daysOfWeek ?? []);
-      setIntervalDays(existing.schedule.intervalDays ?? 2);
-      setCycleOnDays(existing.schedule.cycleOnDays ?? 5);
-      setCycleOffDays(existing.schedule.cycleOffDays ?? 2);
-      setTimes(existing.schedule.times);
-      setStartDate(existing.schedule.startDate);
-      setEndDate(existing.schedule.endDate ?? '');
-      setRemindersEnabled(existing.remindersEnabled);
-      setStatus(existing.status);
-    } catch (loadError) {
-      console.error('Error loading supplement:', loadError);
-      setError('Could not load that supplement. Try again.');
-    } finally {
-      setLoading(false);
-    }
-  }, [id, isEditing]);
-
   useEffect(() => {
+    const load = async () => {
+      try {
+        const all = await getSupplements();
+        setOtherSupplements(all.filter((item) => item.id !== id));
+
+        if (!isEditing) {
+          return;
+        }
+        const existing = await getSupplement(id);
+        if (!existing) {
+          setError('That supplement no longer exists.');
+          return;
+        }
+        setCreatedAt(existing.createdAt);
+        setName(existing.name);
+        setBrand(existing.brand ?? '');
+        setForm(existing.form);
+        setDoseAmountText(String(existing.doseAmount));
+        setDoseUnit(existing.doseUnit);
+        setNotes(existing.notes ?? '');
+        setScheduleType(existing.schedule.type);
+        setDaysOfWeek(existing.schedule.daysOfWeek ?? []);
+        setIntervalDays(existing.schedule.intervalDays ?? 2);
+        setCycleOnDays(existing.schedule.cycleOnDays ?? 5);
+        setCycleOffDays(existing.schedule.cycleOffDays ?? 2);
+        setTimes(existing.schedule.times);
+        setStartDate(existing.schedule.startDate);
+        setEndDate(existing.schedule.endDate ?? '');
+        setRemindersEnabled(existing.remindersEnabled);
+        setStatus(existing.status);
+      } catch (loadError) {
+        console.error('Error loading supplement:', loadError);
+        setError('Could not load that supplement. Try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     void load();
-  }, [load]);
+  }, [id, isEditing]);
 
   const applySeed = (seed: SupplementSeed) => {
     setName(seed.name);

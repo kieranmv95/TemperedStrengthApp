@@ -10,7 +10,7 @@ import {
 } from '@/src/constants/tokens';
 import type { SkillVideo } from '@/src/types/skills';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   AccessibilityInfo,
   Pressable,
@@ -87,9 +87,12 @@ export function SkillVideos({ videos }: SkillVideosProps) {
     setShownIndex(activeIndex);
   }
 
-  useEffect(() => {
+  // Close the viewer when the videos change.
+  const [previousVideos, setPreviousVideos] = useState(videos);
+  if (previousVideos !== videos) {
+    setPreviousVideos(videos);
     setActiveIndex(null);
-  }, [videos]);
+  }
 
   if (videos.length === 0) {
     return null;

@@ -19,7 +19,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   FlatList,
   Linking,
@@ -83,11 +83,10 @@ export default function ShopScreen() {
 
   const categories = useMemo(() => sponsorAdShopCategories(ads), [ads]);
 
-  useEffect(() => {
-    if (activeCategory !== 'All' && !categories.includes(activeCategory)) {
-      setActiveCategory('All');
-    }
-  }, [activeCategory, categories]);
+  // Reset the filter when the selected category no longer exists
+  if (activeCategory !== 'All' && !categories.includes(activeCategory)) {
+    setActiveCategory('All');
+  }
 
   const categoryFilters = useMemo(
     () => [

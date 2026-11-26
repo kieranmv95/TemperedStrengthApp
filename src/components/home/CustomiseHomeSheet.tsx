@@ -91,20 +91,20 @@ function CustomiseHomeRow({
           runOnJS(onDragHandleTouch)(true);
         })
         .onStart(() => {
-          dragging.value = 1;
+          dragging.set(1);
         })
         .onUpdate((event) => {
-          translateY.value = event.translationY;
+          translateY.set(event.translationY);
         })
         .onEnd((event) => {
-          dragging.value = 0;
-          translateY.value = 0;
+          dragging.set(0);
+          translateY.set(0);
           runOnJS(onDragEnd)(index, event.translationY);
         })
         .onFinalize(() => {
-          if (dragging.value === 1) {
-            dragging.value = 0;
-            translateY.value = 0;
+          if (dragging.get() === 1) {
+            dragging.set(0);
+            translateY.set(0);
             runOnJS(onDragEnd)(index, 0);
           }
           runOnJS(onDragHandleTouch)(false);

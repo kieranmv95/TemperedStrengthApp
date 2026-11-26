@@ -51,7 +51,7 @@ function isDividerMovement(
 export function blockHasLoadPercentTokens(block: {
   instructions?: string;
   highlightInstructions?: string;
-  movements?: ReadonlyArray<LoadPercentMovement>;
+  movements?: readonly LoadPercentMovement[];
 }): boolean {
   if (block.instructions && stringHasLoadPercentTokens(block.instructions)) {
     return true;

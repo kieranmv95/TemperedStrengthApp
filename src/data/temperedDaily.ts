@@ -61,6 +61,16 @@ export const temperedDailyProgram: TemperedDailyWeek[] = [
   temperedDailyWeek12Program,
 ];
 
+/**
+ * Daily sessions mix several timed blocks, so each block derives its own
+ * clock at render time instead of one session timer.
+ */
+function withoutSessionTimer(workout: SingleWorkout): SingleWorkout {
+  const withoutTimer = { ...workout };
+  delete withoutTimer.timerConfig;
+  return withoutTimer;
+}
+
 /** Kept out of `workout_data.ts` so these never appear in browse, search or filters. */
 export const temperedDailyWorkouts: SingleWorkout[] = [
   ...temperedDailyWeek02,
@@ -74,7 +84,9 @@ export const temperedDailyWorkouts: SingleWorkout[] = [
   ...temperedDailyWeek10,
   ...temperedDailyWeek11,
   ...temperedDailyWeek12,
-].map(withLogSchema);
+]
+  .map(withLogSchema)
+  .map(withoutSessionTimer);
 
 export function getTemperedDailyWorkoutById(
   id: string

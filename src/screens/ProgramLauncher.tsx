@@ -3,7 +3,7 @@ import { useOnboardingProfile } from '@/src/hooks/useOnboardingProfile';
 import { increment } from '@/src/services/metricService';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getEffectiveBottomInset } from '@/src/utils/platform';
@@ -114,17 +114,6 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     ProgramDifficulty | 'all'
   >('all');
   const [selectedGoal, setSelectedGoal] = useState<ProgramGoal | 'all'>('all');
-
-  useEffect(() => {
-    if (!selectedProgram) return;
-    if (selectedProgram.daysSplit?.length) {
-      setSelectedWeekdays(
-        sortPatternByCalendarOrder([...selectedProgram.daysSplit])
-      );
-    } else {
-      setSelectedWeekdays([getProgramAnchorWeekdayKey(selectedProgram)]);
-    }
-  }, [selectedProgram]);
 
   const startDatePickerAllowedWeekdays = useMemo((): ProgramDaySplitKey[] => {
     if (!selectedProgram) {
@@ -263,15 +252,17 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     return map;
   }, [selectedCategory, selectedDifficulty]);
 
-  useEffect(() => {
-    if (!showDatePicker || !selectedProgram) return;
-    setStartDate(
-      nearestDateOnOrAfterAllowingWeekdays(
-        new Date(),
-        startDatePickerAllowedWeekdays
-      )
-    );
-  }, [showDatePicker, selectedProgram, startDatePickerAllowedWeekdays]);
+  const openDatePicker = () => {
+    if (selectedProgram) {
+      setStartDate(
+        nearestDateOnOrAfterAllowingWeekdays(
+          new Date(),
+          startDatePickerAllowedWeekdays
+        )
+      );
+    }
+    setShowDatePicker(true);
+  };
 
   const handleChangeStartDate = (d: Date) => {
     const chosen = normalizeToLocalMidnight(d);
@@ -319,6 +310,14 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
   };
 
   const handleSelectProgram = (program: Program) => {
+    // Re-selecting the same program keeps the weekdays already chosen.
+    if (program !== selectedProgram) {
+      setSelectedWeekdays(
+        program.daysSplit?.length
+          ? sortPatternByCalendarOrder([...program.daysSplit])
+          : [getProgramAnchorWeekdayKey(program)]
+      );
+    }
     setSelectedProgram(program);
     setShowProgramDetails(true);
   };
@@ -364,7 +363,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
             style: 'destructive',
             onPress: () => {
               setShowProgramDetails(false);
-              setShowDatePicker(true);
+              openDatePicker();
             },
           },
         ]
@@ -373,7 +372,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
     }
 
     setShowProgramDetails(false);
-    setShowDatePicker(true);
+    openDatePicker();
   };
 
   const commitProgramStart = async (
@@ -641,7 +640,7 @@ export const ProgramLauncher: React.FC<ProgramLauncherProps> = ({
           onClose={() => setShowWeekdayPicker(false)}
           onBack={() => {
             setShowWeekdayPicker(false);
-            setShowDatePicker(true);
+            openDatePicker();
           }}
           sessionsRequired={sessionsRequired}
           selectedWeekdays={selectedWeekdays}

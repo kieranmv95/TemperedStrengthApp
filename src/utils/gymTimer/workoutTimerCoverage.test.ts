@@ -8,7 +8,7 @@ type CoverageRow = {
   id: string;
   title: string;
   format?: string;
-  source: 'standalone' | 'tempered_daily';
+  source: 'standalone';
   status: 'tagged' | 'skipped_untimed';
   timerType?: string;
   reason?: string;
@@ -49,7 +49,11 @@ describe('workout gym timer coverage', () => {
     };
 
     consider(standaloneWorkouts, 'standalone');
-    consider(temperedDailyWorkouts, 'tempered_daily');
+
+    // Daily sessions are timed per block; see deriveDailyBlockTimerConfig.test.ts.
+    for (const w of temperedDailyWorkouts) {
+      expect(w.timerConfig).toBeUndefined();
+    }
 
     const tagged = rows.filter((r) => r.status === 'tagged');
     const skipped = rows.filter((r) => r.status === 'skipped_untimed');

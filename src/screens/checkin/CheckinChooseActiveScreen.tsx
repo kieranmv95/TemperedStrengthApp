@@ -17,7 +17,7 @@ import {
 import { rebuildSupplementReminders } from '@/src/services/supplementReminders';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 export function CheckinChooseActiveScreen() {
@@ -34,39 +34,39 @@ export function CheckinChooseActiveScreen() {
     string | null
   >(null);
 
-  const load = useCallback(async () => {
-    try {
-      const [catalogue, tracked, supplements] = await Promise.all([
-        getBehaviourCatalogue(),
-        getTrackedBehaviours(),
-        getSupplements(),
-      ]);
-      const behavioursById = new Map(
-        catalogue.behaviours.map((behaviour) => [behaviour.id, behaviour])
-      );
-      const nextCandidates: CatalogueBehaviour[] = [];
-      for (const item of tracked) {
-        const behaviour = behavioursById.get(item.behaviourId);
-        if (!behaviour || behaviour.deprecated || behaviour.sensitive) {
-          continue;
-        }
-        nextCandidates.push(behaviour);
-      }
-      setCandidates(nextCandidates);
-      setActiveSupplements(
-        supplements.filter((supplement) => supplement.status === 'active')
-      );
-    } catch (loadError) {
-      console.error('Error loading check-in lapse options:', loadError);
-      setError('Could not load your behaviours. Try again.');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
+    const load = async () => {
+      try {
+        const [catalogue, tracked, supplements] = await Promise.all([
+          getBehaviourCatalogue(),
+          getTrackedBehaviours(),
+          getSupplements(),
+        ]);
+        const behavioursById = new Map(
+          catalogue.behaviours.map((behaviour) => [behaviour.id, behaviour])
+        );
+        const nextCandidates: CatalogueBehaviour[] = [];
+        for (const item of tracked) {
+          const behaviour = behavioursById.get(item.behaviourId);
+          if (!behaviour || behaviour.deprecated || behaviour.sensitive) {
+            continue;
+          }
+          nextCandidates.push(behaviour);
+        }
+        setCandidates(nextCandidates);
+        setActiveSupplements(
+          supplements.filter((supplement) => supplement.status === 'active')
+        );
+      } catch (loadError) {
+        console.error('Error loading check-in lapse options:', loadError);
+        setError('Could not load your behaviours. Try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     void load();
-  }, [load]);
+  }, []);
 
   const toggleBehaviour = (behaviourId: string) => {
     setError(null);

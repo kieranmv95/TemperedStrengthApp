@@ -51,43 +51,45 @@ export function CheckinSettingsScreen() {
   const [activeCategory, setActiveCategory] =
     useState<BehaviourCategory | null>(null);
 
-  const load = useCallback(async () => {
-    try {
-      const settings = await getCheckinSettings();
-      const [catalogue, nextCategories, nextBehaviours, nextTracked] =
-        await Promise.all([
-          getBehaviourCatalogue(),
-          getVisibleCategories({
-            womensHealthVisible: settings.womensHealthVisible,
-          }),
-          getSelectableBehaviours({
-            womensHealthVisible: settings.womensHealthVisible,
-          }),
-          getTrackedBehaviours(),
-        ]);
-      setLabelsById(
-        new Map(
-          catalogue.behaviours.map((behaviour) => [
-            behaviour.id,
-            behaviour.label,
-          ])
-        )
-      );
-      setCategories(nextCategories);
-      setBehaviours(nextBehaviours);
-      setTracked(nextTracked);
-      setActiveCategory((current) => current ?? nextCategories[0]?.id ?? null);
-    } catch (loadError) {
-      console.error('Error loading check-in behaviours:', loadError);
-      setError('Could not load the behaviour list. Try again.');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
+    const load = async () => {
+      try {
+        const settings = await getCheckinSettings();
+        const [catalogue, nextCategories, nextBehaviours, nextTracked] =
+          await Promise.all([
+            getBehaviourCatalogue(),
+            getVisibleCategories({
+              womensHealthVisible: settings.womensHealthVisible,
+            }),
+            getSelectableBehaviours({
+              womensHealthVisible: settings.womensHealthVisible,
+            }),
+            getTrackedBehaviours(),
+          ]);
+        setLabelsById(
+          new Map(
+            catalogue.behaviours.map((behaviour) => [
+              behaviour.id,
+              behaviour.label,
+            ])
+          )
+        );
+        setCategories(nextCategories);
+        setBehaviours(nextBehaviours);
+        setTracked(nextTracked);
+        setActiveCategory(
+          (current) => current ?? nextCategories[0]?.id ?? null
+        );
+      } catch (loadError) {
+        console.error('Error loading check-in behaviours:', loadError);
+        setError('Could not load the behaviour list. Try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     void load();
-  }, [load]);
+  }, []);
 
   const persistOrder = useCallback(async (behaviourIds: string[]) => {
     setSaving(true);

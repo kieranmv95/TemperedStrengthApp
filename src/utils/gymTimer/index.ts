@@ -23,6 +23,10 @@ export {
   deriveWorkoutTimerConfig,
   isTimedWorkoutFormat,
 } from './deriveWorkoutTimerConfig';
+export {
+  deriveDailyBlockTimerConfig,
+  isTemperedDailyWorkoutId,
+} from './deriveDailyBlockTimerConfig';
 export { buildGymTimerSurfacePayload } from './gymTimerSurfacePayload';
 
 

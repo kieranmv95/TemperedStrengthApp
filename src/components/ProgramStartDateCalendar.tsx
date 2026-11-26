@@ -11,7 +11,7 @@ import {
   programSplitKeyToJsDay,
 } from '@/src/utils/programStartWeekday';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 const WEEKDAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -46,10 +46,13 @@ export const ProgramStartDateCalendar: React.FC<
     return new Date(v.getFullYear(), v.getMonth(), 1);
   });
 
-  useEffect(() => {
+  // Jump to the selected month whenever the selected date changes.
+  const [previousValue, setPreviousValue] = useState(value);
+  if (previousValue !== value) {
+    setPreviousValue(value);
     const v = normalizeToLocalMidnight(value);
     setVisibleMonth(new Date(v.getFullYear(), v.getMonth(), 1));
-  }, [value]);
+  }
 
   const allowedJsDays = useMemo(
     () => new Set(allowedWeekdays.map((k) => programSplitKeyToJsDay(k))),

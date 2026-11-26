@@ -39,20 +39,25 @@ export function GymTimerOverlay() {
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
   const windowLandscape = width > height;
+  const needsPaintedLandscape = forceLandscape && !windowLandscape;
   const [paintedLandscape, setPaintedLandscape] = useState(false);
+  const [prevNeedsPaintedLandscape, setPrevNeedsPaintedLandscape] =
+    useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
   const [now, setNow] = useState(0);
 
   // The app stays portrait. Ask the OS to rotate, and if it cannot (portrait
   // lock in the installed binary), turn the clock view itself after a beat.
+  if (needsPaintedLandscape !== prevNeedsPaintedLandscape) {
+    setPrevNeedsPaintedLandscape(needsPaintedLandscape);
+    setPaintedLandscape(false);
+  }
+
   useEffect(() => {
-    if (!forceLandscape || windowLandscape) {
-      setPaintedLandscape(false);
-      return;
-    }
+    if (!needsPaintedLandscape) return;
     const id = setTimeout(() => setPaintedLandscape(true), 400);
     return () => clearTimeout(id);
-  }, [forceLandscape, windowLandscape]);
+  }, [needsPaintedLandscape]);
 
   useEffect(() => {
     if (!runtime || runtime.viewState !== 'open') return;

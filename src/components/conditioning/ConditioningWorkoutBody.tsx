@@ -47,16 +47,20 @@ export function ConditioningWorkoutBody({
   const [loading, setLoading] = useState(true);
   const { ranges: zoneRanges } = useHeartRateZones();
 
-  const load = useCallback(async () => {
+  // Show the loading state again when switching to a different day.
+  const [loadedDayIndex, setLoadedDayIndex] = useState(dayIndex);
+  if (loadedDayIndex !== dayIndex) {
+    setLoadedDayIndex(dayIndex);
     setLoading(true);
-    const dayLogs = await getConditioningLogsForDay(dayIndex);
-    setLogs(dayLogs);
-    setLoading(false);
-  }, [dayIndex]);
+  }
 
   useEffect(() => {
-    load();
-  }, [load]);
+    void (async () => {
+      const dayLogs = await getConditioningLogsForDay(dayIndex);
+      setLogs(dayLogs);
+      setLoading(false);
+    })();
+  }, [dayIndex]);
 
   const completedCount = useMemo(() => {
     return Object.values(logs).filter((v) => v.completed).length;

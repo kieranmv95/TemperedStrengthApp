@@ -3,7 +3,7 @@ import { color } from '@/src/constants/tokens';
 import { useLargeText } from '@/src/hooks/useLargeText';
 import type { Exercise } from '@/src/types/exercise';
 import { Ionicons } from '@expo/vector-icons';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -67,7 +67,10 @@ export function ExerciseCardSetRow({
   const isRepsOnly = loggingType === 'reps';
   const isTime = loggingType === 'time';
   const largeText = useLargeText();
-  const [showWeight, setShowWeight] = useState(!isRepsOnly);
+  const hasWeight = weightValue.trim().length > 0;
+  const [showWeight, setShowWeight] = useState(!isRepsOnly || hasWeight);
+  const [prevIsRepsOnly, setPrevIsRepsOnly] = useState(isRepsOnly);
+  const [prevWeightValue, setPrevWeightValue] = useState(weightValue);
   const showOptionalWeightReset = isRepsOnly && showWeight;
   const translateY = useSharedValue(0);
   const dragging = useSharedValue(0);
@@ -80,15 +83,15 @@ export function ExerciseCardSetRow({
         ? 'failed'
         : 'default';
 
-  useEffect(() => {
-    if (!isRepsOnly) {
+  // Reveal the weight field when the logging type or weight changes (adjusted
+  // during render rather than in an effect).
+  if (isRepsOnly !== prevIsRepsOnly || weightValue !== prevWeightValue) {
+    setPrevIsRepsOnly(isRepsOnly);
+    setPrevWeightValue(weightValue);
+    if (!isRepsOnly || hasWeight) {
       setShowWeight(true);
-      return;
     }
-    if (weightValue.trim().length > 0) {
-      setShowWeight(true);
-    }
-  }, [isRepsOnly, weightValue]);
+  }
 
   const panGesture = useMemo(
     () =>
@@ -96,22 +99,22 @@ export function ExerciseCardSetRow({
         .activateAfterLongPress(180)
         .enabled(canReorder && !loading)
         .onStart(() => {
-          dragging.value = 1;
+          dragging.set(1);
           runOnJS(onDragStart)(setIndex);
         })
         .onUpdate((event) => {
-          translateY.value = event.translationY;
+          translateY.set(event.translationY);
         })
         .onEnd((event) => {
-          dragging.value = 0;
-          translateY.value = 0;
+          dragging.set(0);
+          translateY.set(0);
           runOnJS(onDragEnd)(setIndex, event.translationY);
         })
         .onFinalize(() => {
           // Interrupted after activate (no onEnd): release scroll lock.
-          if (dragging.value === 1) {
-            dragging.value = 0;
-            translateY.value = 0;
+          if (dragging.get() === 1) {
+            dragging.set(0);
+            translateY.set(0);
             runOnJS(onDragEnd)(setIndex, 0);
           }
         }),

@@ -498,7 +498,9 @@ export function useWorkoutScreenController() {
   }, [loadWorkoutForDay, selectedDayIndex]);
 
   useEffect(() => {
-    loadWorkoutData();
+    (async () => {
+      await loadWorkoutData();
+    })();
   }, [loadWorkoutData]);
 
   const loadRestTimerState = useCallback(async () => {
@@ -535,7 +537,9 @@ export function useWorkoutScreenController() {
   }, []);
 
   useEffect(() => {
-    loadRestTimerState();
+    (async () => {
+      await loadRestTimerState();
+    })();
   }, [loadRestTimerState]);
 
   const loadActiveSessionState = useCallback(async () => {
@@ -549,7 +553,9 @@ export function useWorkoutScreenController() {
   }, []);
 
   useEffect(() => {
-    loadActiveSessionState();
+    (async () => {
+      await loadActiveSessionState();
+    })();
   }, [loadActiveSessionState]);
 
   const finishSession = useCallback(async () => {

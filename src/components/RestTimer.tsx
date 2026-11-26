@@ -41,7 +41,7 @@ export const RestTimer: React.FC<RestTimerProps> = ({
   onRestart,
   onAdjust,
 }) => {
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
   const completedRef = useRef(false);
   const isRunning = timer.status === 'running';
   const largeText = useLargeText();
@@ -53,8 +53,9 @@ export const RestTimer: React.FC<RestTimerProps> = ({
   }, [timer.startedAt, timer.restTimeSeconds, now]);
 
   useEffect(() => {
-    setNow(Date.now());
     completedRef.current = false;
+    const timeout = setTimeout(() => setNow(Date.now()), 0);
+    return () => clearTimeout(timeout);
   }, [timer.startedAt, timer.status]);
 
   useEffect(() => {

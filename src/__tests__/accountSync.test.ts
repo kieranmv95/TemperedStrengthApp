@@ -3,6 +3,7 @@ import { captureAnalyticsEvent } from '@/src/services/posthogClient';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import {
   HAS_ACCOUNT_KEY,
+  OTP_LAST_SENT_AT_KEY,
   SYNC_QUEUE_KEY,
   SYNC_TS_PREFIX,
 } from '@/src/sync/constants';
@@ -24,7 +25,6 @@ import {
   OTP_RESEND_COOLDOWN_MS,
   recordOtpSent,
 } from '@/src/sync/accountStorage';
-import { OTP_LAST_SENT_AT_KEY } from '@/src/sync/constants';
 import { shouldSync } from '@/src/sync/syncedKeys';
 
 jest.mock('@/src/services/posthogClient', () => ({

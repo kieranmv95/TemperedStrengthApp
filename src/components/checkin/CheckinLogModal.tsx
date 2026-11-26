@@ -3,7 +3,7 @@ import { BottomSheet, FilterChip } from '@/src/components/ds';
 import { color } from '@/src/constants/tokens';
 import type { CatalogueBehaviour } from '@/src/types/checkin';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 const SCALE_VALUES = [1, 2, 3, 4, 5] as const;
@@ -17,6 +17,12 @@ type CheckinLogModalProps = {
   saving: boolean;
   onClose: () => void;
   onSave: (value: boolean | number | string) => void;
+};
+
+type SyncedInputs = {
+  visible: boolean;
+  behaviour: CatalogueBehaviour | null;
+  value: boolean | number | string | undefined;
 };
 
 function scaleEndpointLabel(
@@ -76,17 +82,25 @@ export function CheckinLogModal({
   const [quantity, setQuantity] = useState(0);
   const [pendingScale, setPendingScale] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (!visible || !behaviour) {
-      return;
+  // Sync the draft quantity/scale from the saved value whenever the modal
+  // opens or its behaviour or value changes.
+  const [syncedInputs, setSyncedInputs] = useState<SyncedInputs | null>(null);
+  if (
+    syncedInputs === null ||
+    syncedInputs.visible !== visible ||
+    syncedInputs.behaviour !== behaviour ||
+    syncedInputs.value !== value
+  ) {
+    setSyncedInputs({ visible, behaviour, value });
+    if (visible && behaviour) {
+      if (behaviour.responseType === 'quantity') {
+        setQuantity(typeof value === 'number' ? value : 0);
+      }
+      if (behaviour.responseType === 'scale_1_5') {
+        setPendingScale(typeof value === 'number' ? value : null);
+      }
     }
-    if (behaviour.responseType === 'quantity') {
-      setQuantity(typeof value === 'number' ? value : 0);
-    }
-    if (behaviour.responseType === 'scale_1_5') {
-      setPendingScale(typeof value === 'number' ? value : null);
-    }
-  }, [visible, behaviour, value]);
+  }
 
   if (!behaviour) {
     return null;

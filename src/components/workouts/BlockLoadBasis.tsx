@@ -6,7 +6,7 @@ import {
   parseLiftWeightToKg,
 } from '@/src/utils/oneRepMax';
 import type { WeightUnit } from '@/src/utils/storage';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 const ACTION_HIT_SLOP = { top: 10, bottom: 10, left: 10, right: 10 };
@@ -39,13 +39,24 @@ export function BlockLoadBasis({
     unit
   );
 
-  useEffect(() => {
-    if (!editing) {
-      return;
+  // While editing, reseed the input whenever editing starts or the 1RM or unit
+  // changes.
+  const [previousBasis, setPreviousBasis] = useState({
+    editing,
+    oneRmKg,
+    unit,
+  });
+  if (
+    previousBasis.editing !== editing ||
+    previousBasis.oneRmKg !== oneRmKg ||
+    previousBasis.unit !== unit
+  ) {
+    setPreviousBasis({ editing, oneRmKg, unit });
+    if (editing) {
+      setInput(String(oneRepMaxKgToDisplay(oneRmKg, unit)));
+      setError(null);
     }
-    setInput(String(oneRepMaxKgToDisplay(oneRmKg, unit)));
-    setError(null);
-  }, [editing, oneRmKg, unit]);
+  }
 
   const handleApply = () => {
     const kg = parseLiftWeightToKg(input, unit);

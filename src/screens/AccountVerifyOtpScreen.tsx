@@ -18,14 +18,6 @@ import {
 } from '@/src/sync/accountStorage';
 import { SyncPayloadTooLargeError } from '@/src/sync/syncEngine';
 
-function isAuthError(error: unknown): boolean {
-  return (
-    typeof error === 'object' &&
-    error !== null &&
-    '__isAuthError' in error &&
-    (error as { __isAuthError: unknown }).__isAuthError === true
-  );
-}
 import { router, useLocalSearchParams, type Href } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import {
@@ -39,6 +31,15 @@ import {
   TextInput,
   View,
 } from 'react-native';
+
+function isAuthError(error: unknown): boolean {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    '__isAuthError' in error &&
+    (error as { __isAuthError: unknown }).__isAuthError === true
+  );
+}
 
 export function AccountVerifyOtpScreen() {
   const params = useLocalSearchParams<{

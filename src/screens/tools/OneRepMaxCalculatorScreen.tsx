@@ -17,7 +17,7 @@ import {
 import type { WeightUnit } from '@/src/utils/storage';
 import { getWeightUnit } from '@/src/utils/storage';
 import { usePostHog } from 'posthog-react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
 import {
   AccessibilityInfo,
@@ -29,14 +29,52 @@ import {
 
 const TOOL = getToolById('one-rep-max')!;
 
+type OneRepMaxCalculation =
+  | { status: 'valid'; oneRmKg: number; reps: number }
+  | { status: 'invalid'; message: string };
+
+function calculateFromInputs(
+  liftInput: string,
+  repsInput: string,
+  weightUnit: WeightUnit
+): OneRepMaxCalculation {
+  const reps = parseInt(repsInput.trim(), 10);
+  const weightKg = parseLiftWeightToKg(liftInput, weightUnit);
+
+  if (weightKg === null) {
+    return { status: 'invalid', message: 'Enter a valid lift weight.' };
+  }
+  if (!Number.isInteger(reps) || reps < 1) {
+    return {
+      status: 'invalid',
+      message: 'Enter a whole number of reps (1 or more).',
+    };
+  }
+  if (reps >= 21) {
+    return {
+      status: 'invalid',
+      message: 'Reps must be below 21 for this formula.',
+    };
+  }
+
+  const oneRmKg = calculateOneRepMaxKg(weightKg, reps);
+  if (oneRmKg === null) {
+    return {
+      status: 'invalid',
+      message: 'Could not calculate. Check your inputs.',
+    };
+  }
+
+  return { status: 'valid', oneRmKg, reps };
+}
+
 export function OneRepMaxCalculatorScreen() {
   const posthog = usePostHog();
   const largeText = useLargeText();
   const [weightUnit, setWeightUnit] = useState<WeightUnit>('kg');
   const [liftInput, setLiftInput] = useState('100');
   const [repsInput, setRepsInput] = useState('1');
-  const [resultOneRmKg, setResultOneRmKg] = useState<number | null>(null);
-  const [validationError, setValidationError] = useState<string | null>(null);
+  const calculation = calculateFromInputs(liftInput, repsInput, weightUnit);
 
   useFocusEffect(
     useCallback(() => {
@@ -49,62 +87,29 @@ export function OneRepMaxCalculatorScreen() {
     }, [posthog])
   );
 
-  const runCalculation = useCallback(
-    (trackEvent: boolean) => {
-      const reps = parseInt(repsInput.trim(), 10);
-      const weightKg = parseLiftWeightToKg(liftInput, weightUnit);
-
-      if (weightKg === null) {
-        setValidationError('Enter a valid lift weight.');
-        setResultOneRmKg(null);
-        return;
-      }
-      if (!Number.isInteger(reps) || reps < 1) {
-        setValidationError('Enter a whole number of reps (1 or more).');
-        setResultOneRmKg(null);
-        return;
-      }
-      if (reps >= 21) {
-        setValidationError('Reps must be below 21 for this formula.');
-        setResultOneRmKg(null);
-        return;
-      }
-
-      const oneRmKg = calculateOneRepMaxKg(weightKg, reps);
-      if (oneRmKg === null) {
-        setValidationError('Could not calculate. Check your inputs.');
-        setResultOneRmKg(null);
-        return;
-      }
-
-      setValidationError(null);
-      setResultOneRmKg(oneRmKg);
-      if (trackEvent) {
-        AccessibilityInfo.announceForAccessibility(
-          `Your one-rep max is ${formatDisplayWeight(
-            oneRepMaxKgToDisplay(oneRmKg, weightUnit),
-            weightUnit
-          )}`
-        );
-        posthog.capture(posthogEventsNames.content.toolCalculate, {
-          tool_id: TOOL.id,
-          reps,
-          unit: weightUnit,
-        });
-      }
-    },
-    [liftInput, repsInput, weightUnit, posthog]
-  );
-
-  useEffect(() => {
-    runCalculation(false);
-  }, [runCalculation]);
-
   const handleCalculate = () => {
     Keyboard.dismiss();
-    runCalculation(true);
+    if (calculation.status !== 'valid') {
+      return;
+    }
+    const { oneRmKg, reps } = calculation;
+    AccessibilityInfo.announceForAccessibility(
+      `Your one-rep max is ${formatDisplayWeight(
+        oneRepMaxKgToDisplay(oneRmKg, weightUnit),
+        weightUnit
+      )}`
+    );
+    posthog.capture(posthogEventsNames.content.toolCalculate, {
+      tool_id: TOOL.id,
+      reps,
+      unit: weightUnit,
+    });
   };
 
+  const validationError =
+    calculation.status === 'invalid' ? calculation.message : null;
+  const resultOneRmKg =
+    calculation.status === 'valid' ? calculation.oneRmKg : null;
   const displayOneRm =
     resultOneRmKg !== null
       ? oneRepMaxKgToDisplay(resultOneRmKg, weightUnit)

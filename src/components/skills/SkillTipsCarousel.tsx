@@ -7,7 +7,7 @@ import {
   typography,
 } from '@/src/constants/tokens';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AccessibilityInfo, StyleSheet, Text, View } from 'react-native';
 
 type SkillTipsCarouselProps = {
@@ -17,9 +17,12 @@ type SkillTipsCarouselProps = {
 export function SkillTipsCarousel({ tips }: SkillTipsCarouselProps) {
   const [index, setIndex] = useState(0);
 
-  useEffect(() => {
+  // Return to the first tip when the tips change.
+  const [previousTips, setPreviousTips] = useState(tips);
+  if (previousTips !== tips) {
+    setPreviousTips(tips);
     setIndex(0);
-  }, [tips]);
+  }
 
   if (tips.length === 0) {
     return null;

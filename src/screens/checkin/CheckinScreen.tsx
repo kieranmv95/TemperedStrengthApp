@@ -259,7 +259,9 @@ export function CheckinScreen() {
     if (dataRevision < 1) {
       return;
     }
-    reloadForLocalDate();
+    void (async () => {
+      reloadForLocalDate();
+    })();
   }, [dataRevision, reloadForLocalDate]);
 
   // Catalogue updates are best-effort and must never hold up the screen.
@@ -290,7 +292,9 @@ export function CheckinScreen() {
     if (segment !== 'history') {
       return;
     }
-    void loadHistoryMonth(historyMonth);
+    void (async () => {
+      await loadHistoryMonth(historyMonth);
+    })();
   }, [segment, historyMonth, loadHistoryMonth]);
 
   const refreshAfterWrite = useCallback(

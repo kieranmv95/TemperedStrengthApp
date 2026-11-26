@@ -26,8 +26,8 @@ function getHealthKitModule(): HealthKitModule | null {
   }
   if (moduleCache === undefined) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       moduleCache =
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         require('@kingstinct/react-native-healthkit') as HealthKitModule;
     } catch (error) {
       console.error('Failed to load HealthKit:', error);

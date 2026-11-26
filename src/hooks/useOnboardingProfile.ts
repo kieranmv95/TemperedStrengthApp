@@ -33,7 +33,9 @@ export function useOnboardingProfile(): {
 
   useEffect(() => {
     if (dataRevision === 0) return;
-    void refresh();
+    (async () => {
+      await refresh();
+    })();
   }, [dataRevision, refresh]);
 
   return { profile, isLoading, refresh };

@@ -38,6 +38,14 @@ type NoteSourceRow = {
   preview: string;
 };
 
+type SyncedInputs = {
+  visible: boolean;
+  program: Program | null | undefined;
+  selectedDayIndex: number | null;
+  startDate: string | null;
+  workoutWeekPattern: ProgramDaySplitKey[] | null;
+};
+
 const PREVIEW_MAX = 72;
 
 function resolveWorkoutLabel(
@@ -83,57 +91,78 @@ export function CopyWorkoutNotesModal({
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState<NoteSourceRow[]>([]);
 
-  const loadRows = useCallback(async () => {
-    if (!program || selectedDayIndex === null) {
-      setLoading(false);
-      setRows([]);
-      return;
-    }
-    setLoading(true);
-    try {
-      const [all, sessionShifts] = await Promise.all([
-        getAllWorkoutNotes(),
-        getProgramSessionShiftsStore(),
-      ]);
-      const next: NoteSourceRow[] = [];
-      for (const [key, text] of Object.entries(all)) {
-        const dayIndex = parseInt(key, 10);
-        if (
-          Number.isNaN(dayIndex) ||
-          dayIndex === selectedDayIndex ||
-          text.trim() === ''
-        ) {
-          continue;
-        }
-        next.push({
-          dayIndex,
-          label: resolveWorkoutLabel(
-            program,
-            dayIndex,
-            startDate,
-            workoutWeekPattern,
-            sessionShifts
-          ),
-          text,
-          preview: buildPreview(text),
-        });
+  // Reset the loading state and rows whenever the modal opens or its source
+  // data changes; the effect below then fetches the notes.
+  const [syncedInputs, setSyncedInputs] = useState<SyncedInputs | null>(null);
+  if (
+    syncedInputs === null ||
+    syncedInputs.visible !== visible ||
+    syncedInputs.program !== program ||
+    syncedInputs.selectedDayIndex !== selectedDayIndex ||
+    syncedInputs.startDate !== startDate ||
+    syncedInputs.workoutWeekPattern !== workoutWeekPattern
+  ) {
+    setSyncedInputs({
+      visible,
+      program,
+      selectedDayIndex,
+      startDate,
+      workoutWeekPattern,
+    });
+    if (visible) {
+      if (!program || selectedDayIndex === null) {
+        setLoading(false);
+        setRows([]);
+      } else {
+        setLoading(true);
       }
-      // Show the most recent workout days first.
-      next.sort((a, b) => b.dayIndex - a.dayIndex);
-      setRows(next);
-    } catch (e) {
-      console.error('Error loading workout notes for copy modal:', e);
-      setRows([]);
-    } finally {
-      setLoading(false);
     }
-  }, [program, selectedDayIndex, startDate, workoutWeekPattern]);
+  }
 
   useEffect(() => {
-    if (visible) {
-      void loadRows();
+    if (!visible || !program || selectedDayIndex === null) {
+      return;
     }
-  }, [visible, loadRows]);
+    void (async () => {
+      try {
+        const [all, sessionShifts] = await Promise.all([
+          getAllWorkoutNotes(),
+          getProgramSessionShiftsStore(),
+        ]);
+        const next: NoteSourceRow[] = [];
+        for (const [key, text] of Object.entries(all)) {
+          const dayIndex = parseInt(key, 10);
+          if (
+            Number.isNaN(dayIndex) ||
+            dayIndex === selectedDayIndex ||
+            text.trim() === ''
+          ) {
+            continue;
+          }
+          next.push({
+            dayIndex,
+            label: resolveWorkoutLabel(
+              program,
+              dayIndex,
+              startDate,
+              workoutWeekPattern,
+              sessionShifts
+            ),
+            text,
+            preview: buildPreview(text),
+          });
+        }
+        // Show the most recent workout days first.
+        next.sort((a, b) => b.dayIndex - a.dayIndex);
+        setRows(next);
+      } catch (e) {
+        console.error('Error loading workout notes for copy modal:', e);
+        setRows([]);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [visible, program, selectedDayIndex, startDate, workoutWeekPattern]);
 
   const applyText = useCallback(
     (text: string) => {

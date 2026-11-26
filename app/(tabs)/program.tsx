@@ -9,23 +9,23 @@ export default function ProgramTabScreen() {
   const [activeProgramId, setActiveProgramId] = useState<string | null>(null);
   const [programStartDate, setProgramStartDate] = useState<string | null>(null);
 
-  const initializeApp = async () => {
-    try {
-      // Check program status
-      const programId = await getActiveProgramId();
-      const startDate = programId ? await getProgramStartDate() : null;
-      setHasProgram(!!programId);
-      setActiveProgramId(programId);
-      setProgramStartDate(startDate);
-    } catch (error) {
-      console.error('Error initializing app:', error);
-      setHasProgram(false);
-      setActiveProgramId(null);
-      setProgramStartDate(null);
-    }
-  };
-
   useEffect(() => {
+    const initializeApp = async () => {
+      try {
+        // Check program status
+        const programId = await getActiveProgramId();
+        const startDate = programId ? await getProgramStartDate() : null;
+        setHasProgram(!!programId);
+        setActiveProgramId(programId);
+        setProgramStartDate(startDate);
+      } catch (error) {
+        console.error('Error initializing app:', error);
+        setHasProgram(false);
+        setActiveProgramId(null);
+        setProgramStartDate(null);
+      }
+    };
+
     initializeApp();
   }, []);
 

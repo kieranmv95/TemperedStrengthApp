@@ -8,7 +8,7 @@ import {
   resolveLiveCompetitionActiveCategory,
   sortLiveCompetitionEntries,
 } from '@/src/utils/liveCompetition';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 const RANK_COLUMN_WIDTH = 32;
@@ -29,11 +29,14 @@ export function LiveCompetitionLeaderboard({
     () => categories[0] ?? ''
   );
 
-  useEffect(() => {
-    setActiveCategory((current) =>
-      resolveLiveCompetitionActiveCategory(categories, current)
-    );
-  }, [categories]);
+  // Keep the selected category valid when the available categories change.
+  const resolvedCategory = resolveLiveCompetitionActiveCategory(
+    categories,
+    activeCategory
+  );
+  if (resolvedCategory !== activeCategory) {
+    setActiveCategory(resolvedCategory);
+  }
 
   const rankedEntries = useMemo(() => {
     const categoryEntries = competition.entries.filter(

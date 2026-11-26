@@ -99,6 +99,7 @@ export function YouAccountSettingsScreen() {
   const [isUpdatingDevProOverride, setIsUpdatingDevProOverride] =
     useState(false);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
   const { deleteAccount, isConfigured, signOut, syncError, user } =
     useSyncManager();
   const {
@@ -126,7 +127,7 @@ export function YouAccountSettingsScreen() {
       ? Math.max(
         0,
         Math.ceil(
-          (Date.parse(promoProGrant.expiresAt) - Date.now()) /
+          (Date.parse(promoProGrant.expiresAt) - now) /
           (24 * 60 * 60 * 1000)
         )
       )
@@ -190,6 +191,7 @@ export function YouAccountSettingsScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
+      setNow(Date.now());
       checkProgramStatus();
       loadOnboardingState();
       if (tryConsumeSubscriptionRefreshCooldown()) {

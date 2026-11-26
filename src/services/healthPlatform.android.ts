@@ -27,8 +27,8 @@ function getHealthConnectModule(): HealthConnectModule | null {
   }
   if (moduleCache === undefined) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       moduleCache =
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         require('react-native-health-connect') as HealthConnectModule;
     } catch (error) {
       console.error('Failed to load Health Connect:', error);

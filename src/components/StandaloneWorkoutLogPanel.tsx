@@ -101,9 +101,15 @@ export function StandaloneWorkoutLogPanel({
     }
   }, [workout.id]);
 
+  // Show the loading state again when switching to a different workout.
+  const [loadedWorkoutId, setLoadedWorkoutId] = useState(workout.id);
+  if (loadedWorkoutId !== workout.id) {
+    setLoadedWorkoutId(workout.id);
+    setLoading(true);
+  }
+
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
     void (async () => {
       try {
         const data = await getStandaloneWorkoutLogsForWorkout(workout.id);

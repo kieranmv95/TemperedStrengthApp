@@ -11,7 +11,9 @@ import { StartGymTimerButton } from '@/src/components/gymTimer/StartGymTimerButt
 import { StandaloneWorkoutLogPanel } from '@/src/components/StandaloneWorkoutLogPanel';
 import { HeartRateZoneChip } from '@/src/components/zones/HeartRateZoneChip';
 import { color } from '@/src/constants/tokens';
+import { usePersonalBestsStore } from '@/src/hooks/usePersonalBestsStore';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
+import type { GymTimerConfig } from '@/src/types/gymTimer';
 import type { ZoneRange } from '@/src/types/heartRate';
 import type { PersonalBestsStore } from '@/src/types/personalBests';
 import type {
@@ -21,21 +23,19 @@ import type {
   WorkoutBlockBase,
   WorkoutMovement,
 } from '@/src/types/workouts';
-import { resolveWorkoutTimerConfig } from '@/src/utils/gymTimer';
+import {
+  deriveDailyBlockTimerConfig,
+  isTemperedDailyWorkoutId,
+  resolveWorkoutTimerConfig,
+} from '@/src/utils/gymTimer';
 import {
   blockHasLoadPercentTokens,
   resolveEstimatedOneRmKg,
 } from '@/src/utils/loadPercent';
-import { getPersonalBestsStore, type WeightUnit } from '@/src/utils/storage';
+import type { WeightUnit } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
-import { router, useFocusEffect } from 'expo-router';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { router } from 'expo-router';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Image,
   Linking,
@@ -227,10 +227,14 @@ function isWarmupBlockName(name: string): boolean {
 function renderBlockBody(
   block: WorkoutBlockBase,
   zoneRanges: ZoneRange[] | null,
-  load: BlockLoadContext
+  load: BlockLoadContext,
+  timerConfig: GymTimerConfig | null
 ) {
   return (
     <>
+      {timerConfig ? (
+        <StartGymTimerButton config={timerConfig} size="compact" />
+      ) : null}
       {block.mobilityFlow && (
         <ActionChip
           label={
@@ -302,7 +306,8 @@ function renderWorkoutBlock(
   expanded: boolean,
   onToggle: () => void,
   zoneRanges: ZoneRange[] | null,
-  load: BlockLoadContext
+  load: BlockLoadContext,
+  timerConfig: GymTimerConfig | null
 ) {
   if (block.optional) {
     return (
@@ -314,7 +319,7 @@ function renderWorkoutBlock(
         accessory={<Badge label="Optional" tone="neutral" />}
         accessibilityLabel={`${block.name}, optional`}
       >
-        {renderBlockBody(block, zoneRanges, load)}
+        {renderBlockBody(block, zoneRanges, load, timerConfig)}
       </Collapsible>
     );
   }
@@ -327,7 +332,7 @@ function renderWorkoutBlock(
         expanded={expanded}
         onToggle={onToggle}
       >
-        {renderBlockBody(block, zoneRanges, load)}
+        {renderBlockBody(block, zoneRanges, load, timerConfig)}
       </Collapsible>
     );
   }
@@ -339,9 +344,17 @@ function renderWorkoutBlock(
         style={styles.blockName}
         accessibilityRole="header"
       />
-      {renderBlockBody(block, zoneRanges, load)}
+      {renderBlockBody(block, zoneRanges, load, timerConfig)}
     </View>
   );
+}
+
+function blockTimerConfig(
+  block: WorkoutBlockBase,
+  workoutId: string,
+  isTemperedDaily: boolean
+): GymTimerConfig | null {
+  return isTemperedDaily ? deriveDailyBlockTimerConfig(block, workoutId) : null;
 }
 
 export function WorkoutDetailScrollContent({
@@ -354,32 +367,11 @@ export function WorkoutDetailScrollContent({
   const [expandedBlocks, setExpandedBlocks] = useState<Record<string, boolean>>(
     {}
   );
-  const [pbStore, setPbStore] = useState<PersonalBestsStore>({});
+  const { pbStore, refreshPersonalBests } = usePersonalBestsStore();
   /** Session-only 1RM overrides keyed by exercise id. Not written to PBs. */
   const [oneRmOverrides, setOneRmOverrides] = useState<Record<number, number>>(
     {}
   );
-  const pbRequest = useRef(0);
-
-  const refreshPersonalBests = useCallback(async () => {
-    const requestId = ++pbRequest.current;
-    try {
-      const store = await getPersonalBestsStore();
-      if (requestId !== pbRequest.current) {
-        return;
-      }
-      setPbStore(store);
-    } catch (error) {
-      console.error('Error loading personal bests for load breakdown:', error);
-    }
-  }, []);
-
-  useFocusEffect(
-    useCallback(() => {
-      void refreshPersonalBests();
-    }, [refreshPersonalBests])
-  );
-
   // Call the reload directly. Bumping a counter only so a focus-effect
   // callback changes is dropped by the React compiler, which left the
   // button on "Saving…" until the next focus.
@@ -405,10 +397,13 @@ export function WorkoutDetailScrollContent({
     });
   }, []);
 
-  useEffect(() => {
+  // A different workout starts on the first scale with no 1RM overrides.
+  const [scaleStateWorkoutId, setScaleStateWorkoutId] = useState(workout.id);
+  if (scaleStateWorkoutId !== workout.id) {
+    setScaleStateWorkoutId(workout.id);
     setSelectedScaleIndex(0);
     setOneRmOverrides({});
-  }, [workout.id]);
+  }
 
   const isBlockExpanded = (key: string) => expandedBlocks[key] ?? false;
   const toggleBlock = (key: string) => {
@@ -463,9 +458,11 @@ export function WorkoutDetailScrollContent({
   }, [loadExerciseIds, refreshPersonalBests]);
 
   const collabCtaLabel = collab?.linkCopy ? collab.linkCopy : 'Find out more';
+  const isTemperedDaily = isTemperedDailyWorkoutId(workout.id);
+  /** Daily sessions have several timed blocks, so each block carries its own timer. */
   const timerConfig = useMemo(
-    () => resolveWorkoutTimerConfig(workout),
-    [workout]
+    () => (isTemperedDaily ? null : resolveWorkoutTimerConfig(workout)),
+    [isTemperedDaily, workout]
   );
 
   return (
@@ -641,7 +638,8 @@ export function WorkoutDetailScrollContent({
               isBlockExpanded(key),
               () => toggleBlock(key),
               zoneRanges,
-              load
+              load,
+              blockTimerConfig(block, workout.id, isTemperedDaily)
             );
           })}
         </>
@@ -663,7 +661,8 @@ export function WorkoutDetailScrollContent({
             isBlockExpanded(key),
             () => toggleBlock(key),
             zoneRanges,
-            load
+            load,
+            blockTimerConfig(block, workout.id, isTemperedDaily)
           );
         })
       ) : null}

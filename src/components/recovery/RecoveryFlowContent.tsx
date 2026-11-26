@@ -13,7 +13,7 @@ import { getRecoveryDoseSteps } from '@/src/utils/recoveryDoseFormat';
 import { isTimeBasedRecoveryDose } from '@/src/utils/recoveryTimer';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   AccessibilityInfo,
   Pressable,
@@ -119,10 +119,13 @@ export function RecoveryFlowContent({ recovery }: RecoveryFlowContentProps) {
   const totalBlocks = blocks.length;
   const currentBlock = blocks[blockIndex];
 
-  useEffect(() => {
+  // Restart the flow when a different recovery session is shown.
+  const [previousRecoveryId, setPreviousRecoveryId] = useState(recovery.id);
+  if (previousRecoveryId !== recovery.id) {
+    setPreviousRecoveryId(recovery.id);
     setPhase('intro');
     setBlockIndex(0);
-  }, [recovery.id]);
+  }
 
   const showBackButton = phase === 'block' && blockIndex > 0;
 

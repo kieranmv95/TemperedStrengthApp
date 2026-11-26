@@ -31,17 +31,23 @@ export function TrainingMaxesCard({
   const [values, setValues] = React.useState<TrainingMaxesStore>({});
   const [editing, setEditing] = React.useState(false);
 
-  const loadValues = React.useCallback(async () => {
+  const loadValues = async () => {
     try {
       setValues(await getTrainingMaxesStore());
     } catch (error) {
       console.error('Error loading training maxes card:', error);
     }
-  }, []);
+  };
 
   React.useEffect(() => {
-    loadValues();
-  }, [loadValues]);
+    void (async () => {
+      try {
+        setValues(await getTrainingMaxesStore());
+      } catch (error) {
+        console.error('Error loading training maxes card:', error);
+      }
+    })();
+  }, []);
 
   const handleConfirm = async (next: TrainingMaxesStore) => {
     await setTrainingMaxes(next);

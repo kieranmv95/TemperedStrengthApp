@@ -103,6 +103,8 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
   );
   const [presets, setPresets] = useState<GymTimerPreset[]>([]);
   const [forceLandscape, setForceLandscape] = useState(false);
+  const viewState = runtime?.viewState;
+  const isTimerActive = runtime !== null && viewState !== 'closed';
   const runtimeRef = useRef<GymTimerRuntime | null>(null);
   const lastBeepSecRef = useRef<number | null>(null);
   const pausedKeepAwakeTimer = useRef<ReturnType<typeof setTimeout> | null>(
@@ -207,7 +209,7 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
   // lockAsync on every cold start races ScreenOrientationRegistry and can
   // crash; app.json already defaults to portrait.
   useEffect(() => {
-    if (!runtime || runtime.viewState !== 'open') {
+    if (viewState !== 'open') {
       return;
     }
     void ScreenOrientation.lockAsync(
@@ -218,10 +220,10 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
       // A portrait-only binary cannot rotate. The clock paints landscape
       // itself when the window stays portrait.
     });
-  }, [runtime?.viewState, forceLandscape]);
+  }, [viewState, forceLandscape]);
 
   useEffect(() => {
-    if (!runtime || runtime.viewState !== 'open') {
+    if (viewState !== 'open') {
       return;
     }
     return () => {
@@ -231,12 +233,12 @@ export function GymTimerProvider({ children }: { children: React.ReactNode }) {
         // Ignore. The overlay is already gone.
       });
     };
-  }, [runtime?.viewState]);
+  }, [viewState]);
 
-  useEffect(() => {
-    if (runtime && runtime.viewState !== 'closed') return;
+  // Landscape only applies while a timer is showing; reset it once it is gone.
+  if (!isTimerActive && forceLandscape) {
     setForceLandscape(false);
-  }, [runtime]);
+  }
 
   const handleSegmentCross = useCallback(
     async (next: GymTimerRuntime, finished: boolean) => {
