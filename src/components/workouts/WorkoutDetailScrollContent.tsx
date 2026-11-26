@@ -29,7 +29,13 @@ import {
 import { getPersonalBestsStore, type WeightUnit } from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useFocusEffect } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   Image,
   Linking,
@@ -349,15 +355,19 @@ export function WorkoutDetailScrollContent({
     {}
   );
   const [pbStore, setPbStore] = useState<PersonalBestsStore>({});
-  const [pbRevision, setPbRevision] = useState(0);
   /** Session-only 1RM overrides keyed by exercise id. Not written to PBs. */
   const [oneRmOverrides, setOneRmOverrides] = useState<Record<number, number>>(
     {}
   );
+  const pbRequest = useRef(0);
 
   const refreshPersonalBests = useCallback(async () => {
+    const requestId = ++pbRequest.current;
     try {
       const store = await getPersonalBestsStore();
+      if (requestId !== pbRequest.current) {
+        return;
+      }
       setPbStore(store);
     } catch (error) {
       console.error('Error loading personal bests for load breakdown:', error);
@@ -367,12 +377,15 @@ export function WorkoutDetailScrollContent({
   useFocusEffect(
     useCallback(() => {
       void refreshPersonalBests();
-    }, [refreshPersonalBests, pbRevision])
+    }, [refreshPersonalBests])
   );
 
+  // Call the reload directly. Bumping a counter only so a focus-effect
+  // callback changes is dropped by the React compiler, which left the
+  // button on "Saving…" until the next focus.
   const handlePbSaved = useCallback(() => {
-    setPbRevision((n) => n + 1);
-  }, []);
+    return refreshPersonalBests();
+  }, [refreshPersonalBests]);
 
   const handleOneRmOverride = useCallback(
     (exerciseId: number, oneRmKg: number) => {

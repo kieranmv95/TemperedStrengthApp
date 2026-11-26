@@ -12,7 +12,7 @@ const TIER_OPTIONS: readonly RepMax[] = [1, 3, 5];
 type BlockLoadPbPromptProps = {
   exerciseId: number;
   unit: WeightUnit;
-  onSaved: () => void;
+  onSaved: () => void | Promise<void>;
 };
 
 /**
@@ -46,10 +46,11 @@ export function BlockLoadPbPrompt({
       AccessibilityInfo.announceForAccessibility(
         `Saved ${exerciseName} personal best. Percentages updated.`
       );
-      onSaved();
+      await onSaved();
     } catch (err) {
       console.error('Error saving load-breakdown PB:', err);
       setError('Could not save. Try again.');
+    } finally {
       setSaving(false);
     }
   };
