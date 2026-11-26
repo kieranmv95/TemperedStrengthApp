@@ -11,6 +11,7 @@ export * from './storage/conditioning';
 export * from './storage/favorites';
 export * from './storage/standaloneLogs';
 export * from './storage/personalBests';
+export * from './storage/conditioningEfforts';
 export * from './storage/trainingMaxes';
 export * from './storage/checkin';
 export * from './storage/homeLayout';
@@ -49,3 +50,7 @@ export type {
   RepMax,
 } from '@/src/types/personalBests';
 export type { TrainingMaxesStore } from '@/src/types/trainingMaxes';
+export type {
+  ConditioningEffort,
+  ConditioningEffortsStore,
+} from '@/src/types/conditioningEfforts';

@@ -1,6 +1,8 @@
 import { captureAnalyticsEvent } from '@/src/services/posthogClient';
 import { posthogEventsNames } from '@/src/services/posthogEvents';
 import { getSupabaseClient } from '@/src/services/supabaseClient';
+import { clearConditioningEffortsDomainMeta } from '@/src/db/domains/conditioningEfforts/meta';
+import { clearAllConditioningEffortRows } from '@/src/db/domains/conditioningEfforts/repository';
 import { clearPersonalBestsDomainMeta } from '@/src/db/domains/personalBests/meta';
 import { clearAllPersonalBestRows } from '@/src/db/domains/personalBests/repository';
 import { clearWorkoutLogsDomainMeta } from '@/src/db/domains/workoutLogs/meta';
@@ -12,6 +14,11 @@ import {
   SYNC_QUEUE_KEY,
   SYNC_TS_PREFIX,
 } from './constants';
+import {
+  CONDITIONING_EFFORTS_TABLE,
+  pullConditioningEffortChanges,
+  pushDirtyConditioningEfforts,
+} from './domains/conditioningEfforts';
 import {
   ensurePersonalBestsCloudMigrated,
   PERSONAL_BEST_ENTRIES_TABLE,
@@ -347,6 +354,11 @@ export async function syncNow(userId: string): Promise<void> {
       failures
     );
     await runSyncStep(
+      'Conditioning efforts push failed:',
+      () => pushDirtyConditioningEfforts(userId),
+      failures
+    );
+    await runSyncStep(
       'Workout logs push failed:',
       () => pushDirtyWorkoutLogs(userId),
       failures
@@ -373,6 +385,11 @@ export async function syncNow(userId: string): Promise<void> {
     await runSyncStep(
       'Personal bests pull failed:',
       () => pullPersonalBestChanges(userId),
+      failures
+    );
+    await runSyncStep(
+      'Conditioning efforts pull failed:',
+      () => pullConditioningEffortChanges(userId),
       failures
     );
     await runSyncStep(
@@ -419,6 +436,14 @@ export async function remoteDataExists(userId: string): Promise<boolean> {
       tableHasRow(
         client
           .from(PERSONAL_BEST_ENTRIES_TABLE)
+          .select('id')
+          .eq('user_id', userId)
+          .limit(1)
+      ),
+    () =>
+      tableHasRow(
+        client
+          .from(CONDITIONING_EFFORTS_TABLE)
           .select('id')
           .eq('user_id', userId)
           .limit(1)
@@ -563,6 +588,8 @@ export async function clearSyncedLocalData(): Promise<void> {
   ]);
   await clearAllPersonalBestRows();
   await clearPersonalBestsDomainMeta();
+  await clearAllConditioningEffortRows();
+  await clearConditioningEffortsDomainMeta();
   await clearAllWorkoutLogSetRows();
   await clearWorkoutLogsDomainMeta();
 }

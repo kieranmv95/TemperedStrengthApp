@@ -11,11 +11,20 @@ import {
   space,
   typography,
 } from '@/src/constants/tokens';
+import {
+  CONDITIONING_ACTIVITIES,
+  type ConditioningActivity,
+} from '@/src/data/conditioningActivities';
 import { getAllExercises } from '@/src/data/exercises';
 import { useWeightUnit } from '@/src/hooks/useWeightUnit';
+import type { ConditioningEffortsStore } from '@/src/types/conditioningEfforts';
 import type { Exercise } from '@/src/types/exercise';
+import { listConditioningSummaryLines } from '@/src/utils/conditioningEfforts';
 import { listPersonalBestSummaryLines } from '@/src/utils/personalBests';
-import { getPersonalBestsStore } from '@/src/utils/storage';
+import {
+  getConditioningEffortsStore,
+  getPersonalBestsStore,
+} from '@/src/utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, router } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -31,6 +40,8 @@ import {
 
 const ROW_SKELETON_HEIGHT = 96;
 const ROW_SKELETON_COUNT = 4;
+
+type RecordKind = 'strength' | 'conditioning';
 
 export function YouPersonalBestsScreen() {
   const { unit: weightUnit } = useWeightUnit();
@@ -48,23 +59,31 @@ export function YouPersonalBestsScreen() {
   const [pbStore, setPbStore] = useState<Awaited<
     ReturnType<typeof getPersonalBestsStore>
   > | null>(null);
+  const [effortStore, setEffortStore] =
+    useState<ConditioningEffortsStore | null>(null);
+  const [recordKind, setRecordKind] = useState<RecordKind>('strength');
   const [searchQuery, setSearchQuery] = useState('');
   const [muscleFilter, setMuscleFilter] = useState<string>('All');
 
-  const loadPbStore = useCallback(async () => {
+  const loadRecords = useCallback(async () => {
     try {
-      const store = await getPersonalBestsStore();
+      const [store, efforts] = await Promise.all([
+        getPersonalBestsStore(),
+        getConditioningEffortsStore(),
+      ]);
       setPbStore(store);
+      setEffortStore(efforts);
     } catch (error) {
       console.error('Error loading personal bests:', error);
       setPbStore({});
+      setEffortStore({});
     }
   }, []);
 
   useFocusEffect(
     useCallback(() => {
-      loadPbStore();
-    }, [loadPbStore])
+      loadRecords();
+    }, [loadRecords])
   );
 
   const filteredPbExercises = useMemo(() => {
@@ -85,6 +104,18 @@ export function YouPersonalBestsScreen() {
       return true;
     });
   }, [repsExercises, muscleFilter, searchQuery]);
+
+  const filteredActivities = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) {
+      return CONDITIONING_ACTIVITIES;
+    }
+    return CONDITIONING_ACTIVITIES.filter(
+      (activity) =>
+        activity.name.toLowerCase().includes(query) ||
+        activity.equipment.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
 
   const renderPbRow = useCallback(
     ({ item }: { item: Exercise }) => {
@@ -131,14 +162,75 @@ export function YouPersonalBestsScreen() {
     [pbStore, weightUnit]
   );
 
+  const renderActivityRow = useCallback(
+    ({ item }: { item: ConditioningActivity }) => {
+      const lines = listConditioningSummaryLines(
+        Object.values(effortStore?.[item.id] ?? {}).flat(),
+        item
+      );
+      const summary =
+        lines.length === 0
+          ? 'No efforts logged'
+          : lines.map((line) => line.label).join(', ');
+      return (
+        <PressableCard
+          onPress={() => router.push(`/records/conditioning/${item.id}`)}
+          accessibilityLabel={`${item.name}, ${item.equipment}, ${summary}`}
+          accessibilityHint="Opens personal bests for this activity"
+        >
+          <View style={styles.pbRowText}>
+            <Text style={styles.pbRowTitle}>{item.name}</Text>
+            <Text style={styles.pbRowMeta}>{item.equipment}</Text>
+            {lines.length === 0 ? (
+              <Text style={styles.pbRowEmpty}>No efforts logged</Text>
+            ) : (
+              <View style={styles.pbRowValues}>
+                <Ionicons
+                  name="trophy"
+                  size={16}
+                  color={color.gold}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                />
+                {lines.map((line) => (
+                  <View
+                    key={`${item.id}-${line.distanceM}`}
+                    style={styles.pbValue}
+                  >
+                    <Text style={styles.pbValueText}>{line.label}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+        </PressableCard>
+      );
+    },
+    [effortStore]
+  );
+
   return (
     <StandardLayout
       title="Personal bests"
-      subtitle="Your personal records by exercise"
+      subtitle="Your personal records"
       disableScroll
       onBackPress={() => router.back()}
     >
       <StandardLayout.Filters>
+        <View style={styles.kindRow}>
+          <FilterChip
+            label="Strength"
+            selected={recordKind === 'strength'}
+            onPress={() => setRecordKind('strength')}
+            accessibilityLabel="Strength personal bests"
+          />
+          <FilterChip
+            label="Conditioning"
+            selected={recordKind === 'conditioning'}
+            onPress={() => setRecordKind('conditioning')}
+            accessibilityLabel="Conditioning personal bests"
+          />
+        </View>
         <View style={styles.search}>
           <Ionicons
             name="search"
@@ -149,14 +241,22 @@ export function YouPersonalBestsScreen() {
           />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search exercises"
+            placeholder={
+              recordKind === 'strength'
+                ? 'Search exercises'
+                : 'Search activities'
+            }
             placeholderTextColor={color.textTertiary}
             value={searchQuery}
             onChangeText={setSearchQuery}
             returnKeyType="search"
             autoCorrect={false}
             autoCapitalize="none"
-            accessibilityLabel="Search exercises"
+            accessibilityLabel={
+              recordKind === 'strength'
+                ? 'Search exercises'
+                : 'Search activities'
+            }
           />
           {searchQuery.length > 0 && (
             <Pressable
@@ -174,25 +274,27 @@ export function YouPersonalBestsScreen() {
           )}
         </View>
       </StandardLayout.Filters>
-      <StandardLayout.AdvancedFilters>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.muscleScroll}
-        >
-          {muscleOptions.map((m) => (
-            <FilterChip
-              key={m}
-              label={m}
-              selected={muscleFilter === m}
-              onPress={() => setMuscleFilter(m)}
-            />
-          ))}
-        </ScrollView>
-      </StandardLayout.AdvancedFilters>
+      {recordKind === 'strength' ? (
+        <StandardLayout.AdvancedFilters>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.muscleScroll}
+          >
+            {muscleOptions.map((m) => (
+              <FilterChip
+                key={m}
+                label={m}
+                selected={muscleFilter === m}
+                onPress={() => setMuscleFilter(m)}
+              />
+            ))}
+          </ScrollView>
+        </StandardLayout.AdvancedFilters>
+      ) : null}
 
       <StandardLayout.Body>
-        {pbStore === null ? (
+        {pbStore === null || effortStore === null ? (
           <View style={styles.skeletons}>
             {Array.from({ length: ROW_SKELETON_COUNT }, (_, index) => (
               <Skeleton
@@ -206,7 +308,7 @@ export function YouPersonalBestsScreen() {
               />
             ))}
           </View>
-        ) : (
+        ) : recordKind === 'strength' ? (
           <FlatList
             data={filteredPbExercises}
             keyExtractor={(item) => String(item.id)}
@@ -219,6 +321,19 @@ export function YouPersonalBestsScreen() {
               </Text>
             }
           />
+        ) : (
+          <FlatList
+            data={filteredActivities}
+            keyExtractor={(item) => item.id}
+            renderItem={renderActivityRow}
+            contentContainerStyle={styles.pbListContent}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <Text style={styles.emptyStateText}>
+                No activities match your search.
+              </Text>
+            }
+          />
         )}
       </StandardLayout.Body>
     </StandardLayout>
@@ -226,6 +341,11 @@ export function YouPersonalBestsScreen() {
 }
 
 const styles = StyleSheet.create({
+  kindRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: space.xs,
+  },
   search: {
     flexDirection: 'row',
     alignItems: 'center',

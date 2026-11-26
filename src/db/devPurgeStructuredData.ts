@@ -1,6 +1,8 @@
 // __DEV__ only: wipe structured domains from local SQLite and Supabase tables.
 import { clearCheckinDomainMeta } from '@/src/db/domains/checkin/meta';
 import { clearAllCheckinTables } from '@/src/db/domains/checkin/repository';
+import { clearConditioningEffortsDomainMeta } from '@/src/db/domains/conditioningEfforts/meta';
+import { clearAllConditioningEffortRows } from '@/src/db/domains/conditioningEfforts/repository';
 import { clearPersonalBestsDomainMeta } from '@/src/db/domains/personalBests/meta';
 import { clearAllPersonalBestRows } from '@/src/db/domains/personalBests/repository';
 import { clearWorkoutLogsDomainMeta } from '@/src/db/domains/workoutLogs/meta';
@@ -13,6 +15,7 @@ import {
   CHECKIN_SUPPLEMENTS_TABLE,
   CHECKIN_TRACKED_BEHAVIOURS_TABLE,
 } from '@/src/sync/domains/checkin/constants';
+import { CONDITIONING_EFFORTS_TABLE } from '@/src/sync/domains/conditioningEfforts/constants';
 import { PERSONAL_BEST_ENTRIES_TABLE } from '@/src/sync/domains/personalBests/constants';
 import { WORKOUT_LOG_SETS_TABLE } from '@/src/sync/domains/workoutLogs/constants';
 
@@ -21,18 +24,21 @@ export type StructuredDataPurgeResult = {
   remoteCleared: boolean;
   remoteSkippedReason: string | null;
   remotePersonalBestDeleted: number | null;
+  remoteConditioningDeleted: number | null;
   remoteWorkoutLogDeleted: number | null;
   remoteCheckinDeleted: number | null;
 };
 
 /**
- * Deletes personal best + workout log + check-in rows from device SQLite and,
- * when signed in, from Supabase. Resets domain_meta so a fresh migrate can run
- * again. Does not touch AsyncStorage / remaining KV keys.
+ * Deletes personal bests, conditioning efforts, workout logs, and check-ins from
+ * device SQLite and, when signed in, from Supabase. Resets domain_meta so a
+ * fresh migrate can run again. Does not touch AsyncStorage / remaining KV keys.
  */
 export async function purgeStructuredDataLocalAndRemote(): Promise<StructuredDataPurgeResult> {
   await clearAllPersonalBestRows();
   await clearPersonalBestsDomainMeta();
+  await clearAllConditioningEffortRows();
+  await clearConditioningEffortsDomainMeta();
   await clearAllWorkoutLogSetRows();
   await clearWorkoutLogsDomainMeta();
   await clearAllCheckinTables();
@@ -41,6 +47,7 @@ export async function purgeStructuredDataLocalAndRemote(): Promise<StructuredDat
   let remoteCleared = false;
   let remoteSkippedReason: string | null = null;
   let remotePersonalBestDeleted: number | null = null;
+  let remoteConditioningDeleted: number | null = null;
   let remoteWorkoutLogDeleted: number | null = null;
   let remoteCheckinDeleted: number | null = null;
 
@@ -61,6 +68,7 @@ export async function purgeStructuredDataLocalAndRemote(): Promise<StructuredDat
         remoteCleared: false,
         remoteSkippedReason,
         remotePersonalBestDeleted: null,
+        remoteConditioningDeleted: null,
         remoteWorkoutLogDeleted: null,
         remoteCheckinDeleted: null,
       };
@@ -74,6 +82,15 @@ export async function purgeStructuredDataLocalAndRemote(): Promise<StructuredDat
       throw pbError;
     }
     remotePersonalBestDeleted = pbCount ?? 0;
+
+    const { error: conditioningError, count: conditioningCount } = await client
+      .from(CONDITIONING_EFFORTS_TABLE)
+      .delete({ count: 'exact' })
+      .eq('user_id', userId);
+    if (conditioningError) {
+      throw conditioningError;
+    }
+    remoteConditioningDeleted = conditioningCount ?? 0;
 
     const { error: wlError, count: wlCount } = await client
       .from(WORKOUT_LOG_SETS_TABLE)
@@ -115,6 +132,7 @@ export async function purgeStructuredDataLocalAndRemote(): Promise<StructuredDat
     remoteCleared,
     remoteSkippedReason,
     remotePersonalBestDeleted,
+    remoteConditioningDeleted,
     remoteWorkoutLogDeleted,
     remoteCheckinDeleted,
   };

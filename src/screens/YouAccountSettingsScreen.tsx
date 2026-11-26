@@ -116,21 +116,20 @@ export function YouAccountSettingsScreen() {
   const promoExpiryLabel =
     isPromoPro && promoProGrant
       ? new Date(promoProGrant.expiresAt).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      })
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        })
       : null;
 
   const promoDaysRemaining =
     isPromoPro && promoProGrant
       ? Math.max(
-        0,
-        Math.ceil(
-          (Date.parse(promoProGrant.expiresAt) - now) /
-          (24 * 60 * 60 * 1000)
+          0,
+          Math.ceil(
+            (Date.parse(promoProGrant.expiresAt) - now) / (24 * 60 * 60 * 1000)
+          )
         )
-      )
       : null;
 
   const promoRemainingLabel =
@@ -338,7 +337,7 @@ export function YouAccountSettingsScreen() {
   const handleDevPurgeStructuredData = () => {
     Alert.alert(
       'Purge structured data',
-      'Deletes personal bests + workout logs from:\n\n• Local SQLite\n• Supabase tables (if signed in)\n\nDoes not clear AsyncStorage prefs/KV.\n\nCannot be undone.',
+      'Deletes personal bests, conditioning efforts, and workout logs from:\n\n• Local SQLite\n• Supabase tables (if signed in)\n\nDoes not clear AsyncStorage prefs/KV.\n\nCannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -351,10 +350,10 @@ export function YouAccountSettingsScreen() {
                   await import('@/src/db/devPurgeStructuredData');
                 const result = await purgeStructuredDataLocalAndRemote();
                 const localLine = result.localCleared
-                  ? 'Local SQLite: cleared (PBs + workout logs + check-in + domain meta).'
+                  ? 'Local SQLite: cleared (PBs + conditioning efforts + workout logs + check-in + domain meta).'
                   : 'Local SQLite: failed.';
                 const remoteLine = result.remoteCleared
-                  ? `Remote: deleted ${result.remotePersonalBestDeleted ?? 0} PB rows, ${result.remoteWorkoutLogDeleted ?? 0} set log rows, ${result.remoteCheckinDeleted ?? 0} check-in rows.`
+                  ? `Remote: deleted ${result.remotePersonalBestDeleted ?? 0} PB rows, ${result.remoteConditioningDeleted ?? 0} conditioning rows, ${result.remoteWorkoutLogDeleted ?? 0} set log rows, ${result.remoteCheckinDeleted ?? 0} check-in rows.`
                   : `Remote: skipped/failed — ${result.remoteSkippedReason ?? 'unknown'}`;
                 Alert.alert(
                   'Structured data purged',
@@ -452,10 +451,11 @@ export function YouAccountSettingsScreen() {
   };
 
   const signedInDescription = user
-    ? `${user.email ?? 'Your account'} · ${syncError
-      ? `Backup needs attention: ${syncError}`
-      : 'Data backup is active. Tap to sign out.'
-    }`
+    ? `${user.email ?? 'Your account'} · ${
+        syncError
+          ? `Backup needs attention: ${syncError}`
+          : 'Data backup is active. Tap to sign out.'
+      }`
     : '';
   const loginDescription = isConfigured
     ? 'Create or sign in to an account. Your data is not currently backed up.'

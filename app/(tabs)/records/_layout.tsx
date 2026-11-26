@@ -8,6 +8,7 @@ export default function RecordsLayout() {
       <Stack.Screen name="account" />
       <Stack.Screen name="personal-bests" />
       <Stack.Screen name="trophies" />
+      <Stack.Screen name="conditioning" />
       <Stack.Screen name="[exerciseId]" />
     </Stack>
   );
