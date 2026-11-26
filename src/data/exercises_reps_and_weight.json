@@ -838,5 +838,131 @@
     "muscle": "Quadriceps/Glutes",
     "name": "Weighted Step-ups",
     "pattern": "Knee Dominant"
+  },
+  {
+    "description": "Stand side-on to a low cable and raise the handle out to the side until your arm is parallel to the floor. Lower slowly without swinging.",
+    "equipment": "Cable",
+    "id": 123,
+    "logging_type": "reps_and_weight",
+    "muscle": "Shoulders",
+    "name": "Cable Lateral Raise",
+    "pattern": "Isolation"
+  },
+  {
+    "description": "Sit facing the pad of a reverse fly machine and pull the handles back and out with straight arms, squeezing your rear delts. Return under control.",
+    "equipment": "Machine",
+    "id": 124,
+    "logging_type": "reps_and_weight",
+    "muscle": "Rear Delts",
+    "name": "Rear Delt Fly Machine",
+    "pattern": "Isolation"
+  },
+  {
+    "description": "Hold dumbbells in front of your thighs and raise them with straight arms to shoulder height. Lower slowly without leaning back.",
+    "equipment": "Dumbbell",
+    "id": 125,
+    "logging_type": "reps_and_weight",
+    "muscle": "Shoulders",
+    "name": "Dumbbell Front Raise",
+    "pattern": "Isolation"
+  },
+  {
+    "description": "Sit in the dip machine with your hands on the handles and press down until your arms are straight. Return slowly to a deep, comfortable stretch.",
+    "equipment": "Machine",
+    "id": 126,
+    "logging_type": "reps_and_weight",
+    "muscle": "Triceps/Chest",
+    "name": "Machine Dip",
+    "pattern": "Horizontal Push"
+  },
+  {
+    "description": "Sit with your knees under the pad and the balls of your feet on the platform. Lower your heels for a full stretch, then press up onto your toes.",
+    "equipment": "Machine",
+    "id": 127,
+    "logging_type": "reps_and_weight",
+    "muscle": "Calves",
+    "name": "Seated Calf Raise",
+    "pattern": "Isolation"
+  },
+  {
+    "description": "Stand on one foot on the edge of a step holding a dumbbell in the same-side hand. Lower your heel for a full stretch, then rise onto your toes.",
+    "equipment": "Dumbbell",
+    "id": 128,
+    "logging_type": "reps_and_weight",
+    "muscle": "Calves",
+    "name": "Single-Leg Dumbbell Calf Raise",
+    "pattern": "Isolation"
+  },
+  {
+    "description": "Hold a single dumbbell at your side and walk with a tall posture, resisting any lean towards the weight. Switch hands halfway.",
+    "equipment": "Dumbbell",
+    "id": 129,
+    "logging_type": "reps_and_weight",
+    "muscle": "Full Body/Core",
+    "name": "Suitcase Carry",
+    "pattern": "Carry"
+  },
+  {
+    "description": "Clean one or two kettlebells to the racked position at your shoulders and walk with ribs down and elbows tucked.",
+    "equipment": "Kettlebell",
+    "id": 130,
+    "logging_type": "reps_and_weight",
+    "muscle": "Full Body/Core",
+    "name": "Front Rack Carry",
+    "pattern": "Carry"
+  },
+  {
+    "description": "Lie chest-down on an incline bench with a dumbbell in each hand. Row the weights towards your ribs, squeeze your shoulder blades together, then lower under control.",
+    "equipment": "Dumbbell",
+    "id": 131,
+    "logging_type": "reps_and_weight",
+    "muscle": "Back",
+    "name": "Chest-Supported Dumbbell Row",
+    "pattern": "Horizontal Pull"
+  },
+  {
+    "description": "Stand inside a hex bar with your feet hip-width apart. Hinge down, grip the handles with a flat back, and drive through your legs to stand tall.",
+    "equipment": "Trap Bar",
+    "id": 132,
+    "logging_type": "reps_and_weight",
+    "muscle": "Posterior Chain",
+    "name": "Trap Bar Deadlift",
+    "pattern": "Hip Hinge"
+  },
+  {
+    "description": "Set the pad just below your hips and cross your arms or hold a plate at your chest. Hinge forward at the hips, then raise your torso until your body is in a straight line.",
+    "equipment": "Machine",
+    "id": 133,
+    "logging_type": "reps_and_weight",
+    "muscle": "Hamstrings/Lower Back",
+    "name": "Back Extension",
+    "pattern": "Hip Hinge"
+  },
+  {
+    "description": "Face away from a low cable with the rope between your legs. Hinge back, then drive your hips forward and squeeze your glutes at the top.",
+    "equipment": "Cable",
+    "id": 134,
+    "logging_type": "reps_and_weight",
+    "muscle": "Glutes",
+    "name": "Cable Pull-Through",
+    "pattern": "Hip Hinge"
+  },
+  {
+    "description": "Wedge one end of a barbell into a corner and hold the other end at your shoulder. Press it up and slightly forward until your arm is straight, then lower under control.",
+    "equipment": "Barbell",
+    "id": 135,
+    "logging_type": "reps_and_weight",
+    "muscle": "Shoulders",
+    "name": "Landmine Press",
+    "pattern": "Vertical Push"
+  },
+  {
+    "description": "Stand side-on to a cable set at chest height and hold the handle at your sternum. Press it straight out and resist the rotation, then return.",
+    "equipment": "Cable",
+    "id": 136,
+    "logging_type": "reps_and_weight",
+    "muscle": "Obliques",
+    "name": "Pallof Press",
+    "pattern": "Core"
   }
 ]

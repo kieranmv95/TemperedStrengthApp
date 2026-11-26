@@ -233,5 +233,68 @@
     "name": "Inchworm",
     "pattern": "Core",
     "youtube_id": "2VBkhtq0B9k"
+  },
+  {
+    "description": "Hold a resistance band at chest height with straight arms and pull it apart by squeezing your shoulder blades together. Return slowly.",
+    "equipment": "Bodyweight",
+    "id": 116,
+    "logging_type": "reps",
+    "muscle": "Rear Delts",
+    "name": "Band Pull-Apart",
+    "pattern": "Isolation"
+  },
+  {
+    "description": "Set up in a push-up position with your hands together under your chest so your thumbs and index fingers form a diamond. Lower your chest to your hands, then press up.",
+    "equipment": "Bodyweight",
+    "id": 117,
+    "logging_type": "reps",
+    "muscle": "Triceps",
+    "name": "Diamond Push-up",
+    "pattern": "Horizontal Push"
+  },
+  {
+    "description": "Hang from parallel handles with palms facing each other and pull your chest towards the handles. Lower under control to a full hang.",
+    "equipment": "Bodyweight",
+    "id": 118,
+    "logging_type": "reps",
+    "muscle": "Back",
+    "name": "Neutral-Grip Pull-up",
+    "pattern": "Vertical Pull"
+  },
+  {
+    "description": "Kneel with your ankles anchored and your body straight from knees to head. Lower your torso towards the floor as slowly as you can using your hamstrings, then push or pull yourself back up.",
+    "equipment": "Bodyweight",
+    "id": 119,
+    "logging_type": "reps",
+    "muscle": "Hamstrings",
+    "name": "Nordic Hamstring Curl",
+    "pattern": "Hip Hinge"
+  },
+  {
+    "description": "Kick up into a handstand against a wall with your hands shoulder-width apart. Lower your head towards the floor, then press back to full lockout.",
+    "equipment": "Bodyweight",
+    "id": 120,
+    "logging_type": "reps",
+    "muscle": "Shoulders",
+    "name": "Handstand Push-up",
+    "pattern": "Vertical Push"
+  },
+  {
+    "description": "Lie on your back with arms pointing to the ceiling and knees bent over your hips. Lower the opposite arm and leg towards the floor while keeping your lower back pressed down, then switch sides.",
+    "equipment": "Bodyweight",
+    "id": 121,
+    "logging_type": "reps",
+    "muscle": "Abs",
+    "name": "Dead Bug",
+    "pattern": "Core"
+  },
+  {
+    "description": "Place your feet on a bench or box and your hands on the floor beneath your shoulders. Lower your chest to the floor, then push back up with your body in a straight line.",
+    "equipment": "Bodyweight",
+    "id": 122,
+    "logging_type": "reps",
+    "muscle": "Upper Chest",
+    "name": "Feet-Elevated Push-up",
+    "pattern": "Horizontal Push"
   }
 ]
